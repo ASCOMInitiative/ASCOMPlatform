@@ -429,7 +429,6 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         /// <inheritdoc/>
         public bool IsRegistered(string DriverID, string DriverType)
         {
-            bool IsRegisteredRet = default;
             // Confirm that the specified driver is registered
             System.Collections.Generic.SortedList<string, string> keys;
             string IndStr = "  ";
@@ -440,7 +439,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             // End If
             TL.LogStart(IndStr + "IsRegistered", IndStr + DriverID.ToString() + " ");
 
-            IsRegisteredRet = false; // Assume failure
+            bool IsRegisteredRet = false;
             if (string.IsNullOrEmpty(DriverID))
             {
                 TL.LogFinish("Null string so exiting False");

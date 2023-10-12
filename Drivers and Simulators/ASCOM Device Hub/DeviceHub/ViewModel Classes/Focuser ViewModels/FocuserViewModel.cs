@@ -285,9 +285,8 @@ namespace ASCOM.DeviceHub
 
 		private bool CanToggleFocuserConnected()
 		{
-			bool retval = false;
-
-			if ( !IsConnected )
+            bool retval;
+            if ( !IsConnected )
 			{
 				retval = FocuserID != null;
 			}

@@ -34,8 +34,10 @@ namespace TeleSimTester
         }
         static void Main(string[] args)
         {
-            TL = new TraceLogger("TeleSimTester");
-            TL.Enabled = true;
+            TL = new TraceLogger("TeleSimTester")
+            {
+                Enabled = true
+            };
             try
             {
                 util = new Util();
@@ -294,13 +296,15 @@ namespace TeleSimTester
             if (telescope.SiteLatitude < 0.0)
                 targetDec = -targetDec;
 
-            Transform transform = new Transform();
-            transform.SiteTemperature = 10.0;
-            transform.SitePressure = 0;
-            transform.SiteElevation = telescope.SiteElevation;
-            transform.SiteLatitude = telescope.SiteLatitude;
-            transform.SiteLongitude = telescope.SiteLongitude;
-            transform.Refraction = false;
+            Transform transform = new Transform
+            {
+                SiteTemperature = 10.0,
+                SitePressure = 0,
+                SiteElevation = telescope.SiteElevation,
+                SiteLatitude = telescope.SiteLatitude,
+                SiteLongitude = telescope.SiteLongitude,
+                Refraction = false
+            };
 
             LogMessage("ValidateCoordinates", Outcome.INFO, $"Set Transform topocentric coordinates - RA: {targetRaFromHa.ToHMS()}, Declination: {targetDec.ToDMS()}");
 

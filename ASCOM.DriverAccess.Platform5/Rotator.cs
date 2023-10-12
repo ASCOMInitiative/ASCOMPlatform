@@ -31,8 +31,10 @@ namespace ASCOM.DriverAccess
         /// <param name="rotatorId"></param>
         public Rotator(string rotatorId)
         {
-            TL = new TraceLogger("", "DriverAccessRotator");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessRotator")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(rotatorId, TL);
         }
 

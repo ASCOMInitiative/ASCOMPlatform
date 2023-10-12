@@ -575,9 +575,9 @@ namespace ASCOM.Utilities
 
         private void TxtDownloadTimeout_Validating(object sender, KeyEventArgs e)
         {
-            double DoubleValue = 0.0d;
             bool IsDouble;
 
+            double DoubleValue;
             IsDouble = double.TryParse(TxtDownloadTimeout.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, out DoubleValue);
             if (IsDouble & DoubleValue >= MINIMUM_UPDATE_RUN_TIME)
             {
@@ -596,9 +596,9 @@ namespace ASCOM.Utilities
 
         private void TxtManualLeapSeconds_Validating(object sender, KeyEventArgs e)
         {
-            double DoubleValue = 0.0d;
             bool IsDouble;
 
+            double DoubleValue;
             IsDouble = double.TryParse(TxtManualLeapSeconds.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, out DoubleValue);
             if (IsDouble & DoubleValue >= LeapSecondMinimumValue)
             {
@@ -622,9 +622,9 @@ namespace ASCOM.Utilities
 
         private void TxtDeltaUT1Manuals_Validating(object sender, KeyEventArgs e)
         {
-            double DoubleValue = 0.0d;
             bool IsDouble;
 
+            double DoubleValue;
             IsDouble = double.TryParse(TxtManualDeltaUT1.Text, NumberStyles.Float, CultureInfo.CurrentUICulture, out DoubleValue);
             if (IsDouble & DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE & DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE)
             {

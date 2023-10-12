@@ -30,10 +30,12 @@ namespace ASCOM.DeviceHub
 
             try
             {
-                WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
-                wp.length = Marshal.SizeOf( typeof( WINDOWPLACEMENT ) );
-                wp.flags = 0;
-                wp.showCmd = SW_SHOWNORMAL;
+                WINDOWPLACEMENT wp = new WINDOWPLACEMENT
+                {
+                    length = Marshal.SizeOf(typeof(WINDOWPLACEMENT)),
+                    flags = 0,
+                    showCmd = SW_SHOWNORMAL
+                };
                 wp.normalPosition.Left = (int)window.Left;
                 wp.normalPosition.Top = (int)window.Top;
                 wp.normalPosition.Bottom = (int)( window.Top + window.Height );
@@ -93,10 +95,12 @@ namespace ASCOM.DeviceHub
 			{
 				if ( _notifyIcon == null )
 				{
-					// Initialize NotifyIcon instance "on demand"
-					_notifyIcon = new NotifyIcon();
-					_notifyIcon.Icon = Icon.ExtractAssociatedIcon( Assembly.GetEntryAssembly().Location );
-					_notifyIcon.MouseClick += new MouseEventHandler( HandleNotifyIconOrBalloonClicked );
+                    // Initialize NotifyIcon instance "on demand"
+                    _notifyIcon = new NotifyIcon
+                    {
+                        Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location)
+                    };
+                    _notifyIcon.MouseClick += new MouseEventHandler( HandleNotifyIconOrBalloonClicked );
 					_notifyIcon.BalloonTipClicked += new EventHandler( HandleNotifyIconOrBalloonClicked );
 				}
 

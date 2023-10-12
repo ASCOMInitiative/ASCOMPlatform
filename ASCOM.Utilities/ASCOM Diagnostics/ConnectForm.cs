@@ -378,12 +378,11 @@ namespace ASCOM.Utilities
         private void btnGetProfile_Click(object sender, EventArgs e)
         {
             var Prof = new Profile();
-            string Result = "";
             txtStatus.Clear();
             TL = new TraceLogger("", "DiagnosticScript");
             TL.Enabled = true;
             Prof.DeviceType = CurrentDeviceType;
-            Result = Prof.GetProfileXML(txtDevice.Text);
+            string Result = Prof.GetProfileXML(txtDevice.Text);
             LogMsg("GetProfile", Result);
             LogMsg("Script", "Diagnostic Script Completed");
             TL.Enabled = false;

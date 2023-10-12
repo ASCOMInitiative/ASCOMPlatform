@@ -931,9 +931,8 @@ namespace ASCOM.DeviceHub
 		{
 			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
 			Exception except = null;
-			string msgEnd = "";
-
-			try
+            string msgEnd;
+            try
 			{
 				CheckDevice();
 				Status.Slewing = true;
@@ -1106,9 +1105,8 @@ namespace ASCOM.DeviceHub
 		{
 			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
 			Exception except = null;
-			string msgEnd = "";
-
-			try
+            string msgEnd;
+            try
 			{
 				CheckDevice();
 				Service.SlewToTargetAsync();
@@ -1138,9 +1136,8 @@ namespace ASCOM.DeviceHub
 		{
 			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
 			Exception except = null;
-			string msgEnd = "";
-
-			try
+            string msgEnd;
+            try
 			{
 				CheckDevice();
 				Service.SyncToAltAz( azimuth, altitude );

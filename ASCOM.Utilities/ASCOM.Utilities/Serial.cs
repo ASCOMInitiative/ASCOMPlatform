@@ -310,7 +310,6 @@ namespace ASCOM.Utilities
         /// </summary>
         public Serial()
         {
-            string TraceFileName = "";
             int WorkerThreads, CompletionThreads;
 
             SerSemaphore = new Semaphore(1, 1); // Create a new semaphore to control access to the serial port
@@ -330,7 +329,7 @@ namespace ASCOM.Utilities
             try
             {
                 SerialProfile = new RegistryAccess(); // Profile class that can retrieve the value of tracefile
-                TraceFileName = SerialProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME);
+                string TraceFileName = SerialProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME);
                 Logger = new TraceLogger(TraceFileName, "Serial");
                 if (!string.IsNullOrEmpty(TraceFileName))
                     Logger.Enabled = true;

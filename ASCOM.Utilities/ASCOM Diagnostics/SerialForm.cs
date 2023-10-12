@@ -18,7 +18,6 @@ namespace ASCOM.Utilities
             string[] Ports;
             Ports = SerPort.AvailableComPorts;
             SerPort.Dispose();
-            SerPort = null;
             foreach (string Port in Ports)
                 lstSerialASCOM.Items.Add(Interaction.IIf(string.IsNullOrEmpty(Port), "Bad value - Null or empty COM port name!", Port));
 

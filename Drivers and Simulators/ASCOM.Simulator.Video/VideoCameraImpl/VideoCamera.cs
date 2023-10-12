@@ -543,9 +543,8 @@ namespace Simulator.VideoCameraImpl
 		{
 			if (cameraState == VideoCameraState.videoCameraRunning)
 			{
-				double fps = 25;
-
-				switch(FrameRate)
+                double fps;
+                switch (FrameRate)
 				{
 					case VideoCameraFrameRate.PAL:
 						fps = 25.0;

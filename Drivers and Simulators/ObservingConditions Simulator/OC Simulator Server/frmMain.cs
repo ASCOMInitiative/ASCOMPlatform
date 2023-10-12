@@ -78,7 +78,6 @@ namespace ASCOM.Simulator
 
         private void btnEnable_Click(object sender, EventArgs e)
         {
-            Button btnEnable = (Button)sender;
             // Get the control values into variables in the Sensors array
             foreach (string property in OCSimulator.SimulatedProperties)
             {

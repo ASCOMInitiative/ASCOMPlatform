@@ -21,7 +21,6 @@ namespace ASCOM.Astrometry
         {
             short i, rc;
             double dummy = default, secdiff = default;
-            double tjd_last = 0.0d;
             double ltdb;
             double[] lpeb = new double[4], lveb = new double[4], lpes = new double[4], lves = new double[4];
             // Dim TL As New TraceLogger("", "get_earth_nov")
@@ -52,7 +51,6 @@ namespace ASCOM.Astrometry
             }
             catch (Exception )
             {
-                tjd_last = 0.0d;
                 throw;
             }
 
@@ -66,11 +64,9 @@ namespace ASCOM.Astrometry
             }
             catch (Exception )
             {
-                tjd_last = 0.0d;
                 throw;
             }
 
-            tjd_last = tjd;
             // End If
             tdb = ltdb;
             for (i = 0; i <= 2; i++)
@@ -430,8 +426,6 @@ namespace ASCOM.Astrometry
                         vbary[1] += ydot * f;
                         vbary[2] += zdot * f;
                     }
-
-                    tlast = tjd;
                 }
 
                 for (i = 0; i <= 2; i++)

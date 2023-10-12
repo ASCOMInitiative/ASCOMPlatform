@@ -286,12 +286,11 @@ namespace Microsoft.Samples.WinForms.Extras
 		/// </summary>
 		public DialogResult ShowDialog ( IWin32Window owner ) 
 		{
-			IntPtr pidlRoot = IntPtr.Zero;
 
-			// Get/find an owner HWND for this dialog
-			IntPtr hWndOwner;
+            // Get/find an owner HWND for this dialog
+            IntPtr hWndOwner;
 
-			if ( owner != null ) 
+            if ( owner != null ) 
 			{
 				hWndOwner = owner.Handle;
 			}
@@ -300,10 +299,11 @@ namespace Microsoft.Samples.WinForms.Extras
 				hWndOwner = Win32API.GetActiveWindow ( );
 			}
 
-			// Get the IDL for the specific startLocation
-			Win32API.Shell32.SHGetSpecialFolderLocation ( hWndOwner, (int) startLocation, out pidlRoot );
+            IntPtr pidlRoot;
+            // Get the IDL for the specific startLocation
+            Win32API.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)startLocation, out pidlRoot);
 
-			if (pidlRoot == IntPtr.Zero) 
+            if (pidlRoot == IntPtr.Zero) 
 			{
 				return DialogResult.Cancel;
 			}

@@ -622,7 +622,6 @@ namespace ASCOM.Utilities
         private void CreateLogFile()
         {
             int FileNameSuffix = 0;
-            bool ok = false;
             string FileNameBase, TodaysLogFilePath;
             switch (g_LogFileName ?? "")
             {
@@ -659,7 +658,7 @@ namespace ASCOM.Utilities
                     }
                     catch (IOException ex)
                     {
-                        ok = false;
+                        bool ok = false;
                         do
                         {
                             try
@@ -791,12 +790,11 @@ namespace ASCOM.Utilities
 
         private void LogMsgFormatter(string p_Test, string p_Msg, bool p_NewLine, bool p_RespectCrLf)
         {
-            string l_Msg = "";
             try
             {
                 p_Test = Strings.Left(p_Test + Strings.StrDup(g_IdentifierWidth, " "), g_IdentifierWidth);
 
-                l_Msg = Strings.Format(DateTime.Now, "HH:mm:ss.fff") + " " + MakePrintable(p_Test, p_RespectCrLf) + " " + MakePrintable(p_Msg, p_RespectCrLf);
+                string l_Msg = Strings.Format(DateTime.Now, "HH:mm:ss.fff") + " " + MakePrintable(p_Test, p_RespectCrLf) + " " + MakePrintable(p_Msg, p_RespectCrLf);
                 if (g_LogFile is not null)
                 {
                     if (p_NewLine)

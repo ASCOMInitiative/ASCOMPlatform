@@ -404,16 +404,16 @@ namespace ASCOM.Utilities
 
         private void RefreshKeyValues(string SubKey)
         {
-            int CurrentRow = 0;
-            int CurrentCell = 0;
             bool DoRefresh;
 
+            int CurrentRow;
+            int CurrentCell;
             try
             {
                 CurrentRow = KeyValues.CurrentRow.Index;
                 CurrentCell = KeyValues.CurrentCell.ColumnIndex;
             }
-            catch (NullReferenceException )
+            catch (NullReferenceException)
             {
                 CurrentRow = 0;
                 CurrentCell = 0;

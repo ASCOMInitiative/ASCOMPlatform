@@ -17,9 +17,11 @@ namespace ASCOM
 			progID = Focuser.Choose("ASCOM.Simulator.Focuser");		// Pre-select simulator (typ.)
 			if (progID != "")
             {
-			    Focuser F = new Focuser(progID);
-			    F.Link = true;
-			    Console.WriteLine("  Connected to " + progID);
+                Focuser F = new Focuser(progID)
+                {
+                    Link = true
+                };
+                Console.WriteLine("  Connected to " + progID);
 			    Console.WriteLine("  Current position is " + F.Position);
 				int nfp = (int)(0.7 * F.Position);
 				Console.Write("  Moving to " + nfp);
@@ -40,8 +42,10 @@ namespace ASCOM
 			progID = Telescope.Choose("ASCOM.Simulator.Telescope");
             if (progID != "")
             {
-                Telescope T = new Telescope(progID);
-                T.Connected = true;
+                Telescope T = new Telescope(progID)
+                {
+                    Connected = true
+                };
                 Console.WriteLine("  Connected to " + progID);
                 Console.WriteLine("  Current LST = " + U.HoursToHMS(T.SiderealTime));
 				Console.WriteLine("  Current RA  = " + U.HoursToHMS(T.RightAscension));
@@ -98,8 +102,10 @@ namespace ASCOM
 			progID = Camera.Choose("ASCOM.Simulator.Camera");
             if (progID != "")
             {
-                Camera C = new Camera(progID);
-                C.Connected = true;
+                Camera C = new Camera(progID)
+                {
+                    Connected = true
+                };
                 Console.WriteLine("  Connected to " + progID);
                 Console.WriteLine("  Description = " + C.Description);
                 Console.WriteLine("  Pixel size = " + C.PixelSizeX + " * " + C.PixelSizeY);
@@ -146,9 +152,11 @@ namespace ASCOM
 			progID = FilterWheel.Choose("ASCOM.Simulator.FilterWheel");
 			if (progID != "")
 			{
-				FilterWheel fw = new FilterWheel(progID);
-				fw.Connected = true;
-				Console.WriteLine("  Position = " + fw.Position);
+                FilterWheel fw = new FilterWheel(progID)
+                {
+                    Connected = true
+                };
+                Console.WriteLine("  Position = " + fw.Position);
 				string[] names = fw.Names;
 				Console.WriteLine("  There are " + names.Length + " filters:\r\n  ");
 				for (int i = 0; i < names.Length; i++)
@@ -166,9 +174,11 @@ namespace ASCOM
 			progID = Rotator.Choose("ASCOM.Simulator.Rotator");
 			if (progID != "")
 			{
-				Rotator R = new Rotator(progID);
-				R.Connected = true;
-				Console.WriteLine("  Position = " + R.Position);
+                Rotator R = new Rotator(progID)
+                {
+                    Connected = true
+                };
+                Console.WriteLine("  Position = " + R.Position);
 				float np = R.Position + 60;
 				if (np >= 360) np -= 360;
 				Console.Write("  Rotating to " + np.ToString("0"));
@@ -189,8 +199,10 @@ namespace ASCOM
 			progID = Dome.Choose("ASCOM.Simulator.Dome");
             if (progID != "")
             {
-                Dome D = new Dome(progID);
-                D.Connected = true;
+                Dome D = new Dome(progID)
+                {
+                    Connected = true
+                };
                 Console.WriteLine("  Description = " + D.Description);
                 Console.WriteLine("  Name = " + D.Name);
 				if (D.CanSetAzimuth)

@@ -356,11 +356,8 @@ namespace ASCOM.Utilities
 
             m_SettingsKey.Flush(); // Clean up registry keys
             m_SettingsKey.Close();
-            m_SettingsKey = null;
             m_HKCU.Flush();
             m_HKCU.Close();
-            m_HKCU = null;
-
             return l_Value;
         }
 
@@ -398,11 +395,8 @@ namespace ASCOM.Utilities
             }
             m_SettingsKey.Flush(); // Clean up registry keys
             m_SettingsKey.Close();
-            m_SettingsKey = null;
             m_HKCU.Flush();
             m_HKCU.Close();
-            m_HKCU = null;
-
             return l_Value;
         }
 
@@ -440,11 +434,8 @@ namespace ASCOM.Utilities
             }
             m_SettingsKey.Flush(); // Clean up registry keys
             m_SettingsKey.Close();
-            m_SettingsKey = null;
             m_HKCU.Flush();
             m_HKCU.Close();
-            m_HKCU = null;
-
             return l_Value;
         }
 
@@ -483,11 +474,8 @@ namespace ASCOM.Utilities
             }
             m_SettingsKey.Flush(); // Clean up registry keys
             m_SettingsKey.Close();
-            m_SettingsKey = null;
             m_HKCU.Flush();
             m_HKCU.Close();
-            m_HKCU = null;
-
             return l_Value;
         }
 
@@ -525,11 +513,8 @@ namespace ASCOM.Utilities
             }
             m_SettingsKey.Flush(); // Clean up registry keys
             m_SettingsKey.Close();
-            m_SettingsKey = null;
             m_HKCU.Flush();
             m_HKCU.Close();
-            m_HKCU = null;
-
             return l_Value;
         }
 
@@ -544,11 +529,8 @@ namespace ASCOM.Utilities
             m_SettingsKey.SetValue(p_Name, p_Value.ToString(), RegistryValueKind.String);
             m_SettingsKey.Flush(); // Clean up registry keys
             m_SettingsKey.Close();
-            m_SettingsKey = null;
             m_HKCU.Flush();
             m_HKCU.Close();
-            m_HKCU = null;
-
         }
 
         #endregion
@@ -1218,7 +1200,6 @@ namespace ASCOM.Utilities
                                 if (InProcServer is not null) // Clean up the PEReader class
                                 {
                                     InProcServer.Dispose();
-                                    InProcServer = null;
                                 }
                             }
                             else
@@ -1252,8 +1233,6 @@ namespace ASCOM.Utilities
                     TL.LogMessage("DriverCompatibility", "     Found 32bit ProgID registration");
                     CLSID = RK.GetValue("").ToString(); // Get the CLSID for this ProgID
                     RK.Close();
-                    RK = null;
-
                     if (OSBits() == Bitness.Bits64) // We want to test as if we are a 32bit app on a 64bit OS
                     {
                         try
@@ -1428,7 +1407,6 @@ namespace ASCOM.Utilities
                                 if (InProcServer is not null) // Clean up the PEReader class
                                 {
                                     InProcServer.Dispose();
-                                    InProcServer = null;
                                 }
                             }
                             else
@@ -1494,12 +1472,11 @@ namespace ASCOM.Utilities
 
         internal static string ConditionPlatformVersion(string PlatformVersion, RegistryAccess Profile, TraceLogger TL)
         {
-            string ConditionPlatformVersionRet = default;
             string ModuleFileName, ForcedFileNameKey;
             SortedList<string, string> ForcedFileNames, ForcedSeparators;
             PerformanceCounter PC;
 
-            ConditionPlatformVersionRet = PlatformVersion; // Set default action to return the supplied value
+            string ConditionPlatformVersionRet = PlatformVersion;
             try
             {
                 ModuleFileName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName); // Get the name of the executable without path or file extension

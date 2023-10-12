@@ -679,7 +679,7 @@ namespace ASCOM.Simulator
                     TL.LogMessage("AveragePeriodTimer", $"{Property} reading {sensorValue} added to reading collection. Before trim count: {beforeTrim}, After trim count: {afterTrim}");
                     foreach (TimeValue tv in Sensors[Property].Readings)
                     {
-                        TL.LogMessage("AveragePeriodTimer", $"  {Property} value at {tv.ObservationTime.ToString("hh:mm:ss.fff")} was {tv.SensorValue}");
+                        TL.LogMessage("AveragePeriodTimer", $"  {Property} value at {tv.ObservationTime:hh:mm:ss.fff} was {tv.SensorValue}");
                     }
                 }
             }

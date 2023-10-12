@@ -30,8 +30,10 @@ namespace ASCOM.DriverAccess
         /// <param name="focuserId"></param>
         public Focuser(string focuserId)
         {
-            TL = new TraceLogger("", "DriverAccessFocuser");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessFocuser")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(focuserId, TL);
         }
 

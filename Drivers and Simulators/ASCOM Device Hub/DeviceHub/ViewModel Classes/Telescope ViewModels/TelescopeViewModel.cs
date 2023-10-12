@@ -362,9 +362,8 @@ namespace ASCOM.DeviceHub
 
         private bool CanToggleTelescopeConnected()
         {
-			bool retval = false;
-
-			if ( !IsConnected )
+            bool retval;
+            if ( !IsConnected )
 			{
 				retval = TelescopeID != null;
 			}

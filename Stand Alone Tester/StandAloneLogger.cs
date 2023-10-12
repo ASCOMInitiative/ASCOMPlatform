@@ -36,8 +36,8 @@ namespace Stand_Alone_Tester
 
         public void LogMessage(string section, string message)
         {
-            Console.WriteLine($"{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss.fff")} {section} {message}");
-            logWriter.WriteLine($"{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss.fff")} {section} {message}");
+            Console.WriteLine($"{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff} {section} {message}");
+            logWriter.WriteLine($"{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff} {section} {message}");
         }
     }
 }

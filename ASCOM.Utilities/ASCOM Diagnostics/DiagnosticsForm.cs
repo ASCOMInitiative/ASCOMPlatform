@@ -275,7 +275,6 @@ namespace ASCOM.Utilities
         {
             string ASCOMPath;
             string ApplicationPath = "Path Not Set!";
-            var PathShell = new StringBuilder(260);
             string SuccessMessage;
 
             try
@@ -1369,11 +1368,9 @@ namespace ASCOM.Utilities
         private void SimulatorTests()
         {
             SimulatorDescriptor Sim;
-            string DiagnosticsFullVersionNumber;
             string DiagnosticsMajorMinorVersionNumber;
             string DiagnosticsMajorNumber;
 
-            DiagnosticsFullVersionNumber = DiagnosticsVersion.ToString();
             DiagnosticsMajorMinorVersionNumber = DiagnosticsVersion.Major.ToString() + "." + DiagnosticsVersion.Minor.ToString();
             DiagnosticsMajorNumber = DiagnosticsVersion.Major.ToString();
 
@@ -1636,8 +1633,6 @@ namespace ASCOM.Utilities
             string returnString;
             CoverStatus coverState;
             CalibratorStatus calibratorState;
-            var interfaceVersion = default(int);
-
             const string MAX_SLEW_RATE_PROFILE_NAME = "MaxSlewRate"; // Name of the Profile variable holding the maximum slew rate
 
             try
@@ -1708,7 +1703,7 @@ namespace ASCOM.Utilities
 
                         try
                         {
-                            interfaceVersion = DeviceObject.InterfaceVersion;
+                            int interfaceVersion = DeviceObject.InterfaceVersion;
                             Compare("TestSimulator", $"Can read {Sim.DeviceType} interface version: {interfaceVersion}", Conversions.ToString(true), Conversions.ToString(true));
                         }
                         catch (COMException ex1)
@@ -3108,9 +3103,6 @@ namespace ASCOM.Utilities
             const double DeltaT = 66.8d;
 
             Action(TestFunction.ToString());
-
-            rc = int.MaxValue; // Initialise to a silly value
-
             JDTest = TestJulianDate();
 
             Pos1[0] = 1d;
@@ -4016,9 +4008,6 @@ namespace ASCOM.Utilities
             const double DeltaT = 66.8d;
 
             Action(TestFunction.ToString());
-
-            rc = int.MaxValue; // Initialise to a silly value
-
             JDTest = TestJulianDate();
 
             Pos1[0] = 1d;
@@ -4959,16 +4948,14 @@ namespace ASCOM.Utilities
             BodyDescription EarthBody = new(), SunBody = new();
             var StarStruct = new CatEntry();
             var LocationStruct = new SiteInfo();
-            double[] Star, SKYPOS, POS, POS2, POSEarth, VEL2, POSNow, VEL;
-            Star = new double[11];
-            SKYPOS = new double[11];
+            double[] POS, POS2, POSEarth, VEL2, POSNow, VEL;
             POS = new double[4];
             VEL = new double[4];
             POSNow = new double[4];
             POS2 = new double[4];
             VEL2 = new double[4];
             POSEarth = new double[4];
-            double[] P = new double[6], FundArgsValue = new double[5];
+            double[] FundArgsValue = new double[5];
             double ZenithDistance = default, Azimuth = default, Tdb = default, LightTime = default, RATarget = default, DECTarget = default, JD, Distance = default;
             double RANow = default, DECNow = default, Hour = default, TdtJd = default, SecDiff = default, LongNutation = default, ObliqNutation = default, GreenwichSiderealTime = default, MObl = default, TObl = default, Eq = default, DPsi = default, DEpsilon = default;
             short RC, Year = default, Month = default, day = default;
@@ -5538,8 +5525,6 @@ namespace ASCOM.Utilities
             transform.SiteLongitude = 0.0d;
             transform.SetJ2000(0.0d, 0.0d); // Set coordinates 0.0,0.0
 
-            double ra = transform.RATopocentric; // Get the topocentric RA
-
             // Transform acceptable parameter range tests
             TransformExceptionTest(transform, TransformExceptionTestType.SiteLatitude, 0.0d, -91.0d, 91.0d);
             TransformExceptionTest(transform, TransformExceptionTestType.SiteLongitude, 0.0d, -181.0d, 181.0d);
@@ -5967,9 +5952,7 @@ namespace ASCOM.Utilities
         private void NovasComTest(string p_Name, double p_Num, double JD, double[] Results, double Tolerance)
         {
             var pl = new Astrometry.NOVASCOM.Planet();
-            Astrometry.Kepler.Ephemeris K = new(), KE = new();
-
-            var POSVECO = new double[6];
+            Astrometry.Kepler.Ephemeris KE = new();
             Astrometry.NOVASCOM.PositionVector pv;
             var site = new Astrometry.NOVASCOM.Site();
 
@@ -6036,7 +6019,6 @@ namespace ASCOM.Utilities
         {
             var K = new Astrometry.Kepler.Ephemeris();
             double[] POSVEC;
-            var u = new Util();
             int JDIndex = 0;
 
             const double STEPSIZE = 1000.0d;
@@ -8034,10 +8016,9 @@ namespace ASCOM.Utilities
 
         private void LogTimerResolution(string message)
         {
-            uint rc;
             int MinimumResolution = default, MaximimResolution = default, CurrentResolution = default;
 
-            rc = NtQueryTimerResolution(ref MinimumResolution, ref MaximimResolution, ref CurrentResolution);
+            _= NtQueryTimerResolution(ref MinimumResolution, ref MaximimResolution, ref CurrentResolution);
             TL.LogMessage("TimerResolution", string.Format("{0} - Current resolution: {1}, Minimum resolution: {2}, Maximum resolution: {3}", message, CurrentResolution / 10000.0d, MinimumResolution / 10000.0d, MaximimResolution / 10000.0d));
         }
 
@@ -10059,7 +10040,6 @@ namespace ASCOM.Utilities
         private void ScanGac()
         {
             IAssemblyEnum ae;
-            IAssemblyName an = null;
             Assembly ass;
             SortedList<string, string> AssemblyNames;
             AssemblyName assname;
@@ -10082,7 +10062,7 @@ namespace ASCOM.Utilities
                 TL.LogMessage("Assemblies", "Assemblies registered in the GAC");
                 ae = AssemblyCache.CreateGACEnum(); // Get an enumerator for the GAC assemblies
 
-                while (AssemblyCache.GetNextAssembly(ae, out an) == 0) // Enumerate the assemblies
+                while (AssemblyCache.GetNextAssembly(ae, out IAssemblyName an) == 0) // Enumerate the assemblies
                 {
                     try
                     {
@@ -10597,20 +10577,14 @@ namespace ASCOM.Utilities
                                     case "TYPELIB":
                                         {
                                             RKey = Registry.ClassesRoot.OpenSubKey("TypeLib").OpenSubKey(Conversions.ToString(p_Key.GetValue(ValueName)));
-                                            if (RKey is null)
-                                            {
-                                                RKey = Registry.ClassesRoot.OpenSubKey(@"Wow6432Node\TypeLib").OpenSubKey(Conversions.ToString(p_Key.GetValue(ValueName)));
-                                            }
+                                            RKey ??= Registry.ClassesRoot.OpenSubKey(@"Wow6432Node\TypeLib").OpenSubKey(Conversions.ToString(p_Key.GetValue(ValueName)));
 
                                             break;
                                         }
                                     case "APPID":
                                         {
                                             RKey = Registry.ClassesRoot.OpenSubKey("AppId").OpenSubKey(Conversions.ToString(p_Key.GetValue(ValueName)));
-                                            if (RKey is null)
-                                            {
-                                                RKey = Registry.ClassesRoot.OpenSubKey(@"Wow6432Node\AppId").OpenSubKey(Conversions.ToString(p_Key.GetValue(ValueName)));
-                                            }
+                                            RKey ??= Registry.ClassesRoot.OpenSubKey(@"Wow6432Node\AppId").OpenSubKey(Conversions.ToString(p_Key.GetValue(ValueName)));
 
                                             break;
                                         }
@@ -11026,10 +11000,9 @@ namespace ASCOM.Utilities
         /// <param name="ProductCode">Installer GUID uniquely identifying the product</param>
         /// <param name="Required">Flag determining whether to report an error or return a status message if the product isn't installed</param>
         /// <param name="Force32">Flag forcing use of 32bit registry on a 64bit OS</param>
-        /// <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
+        /// <param name="MSIInstaller">True if the installer is an MSI based installer, False if an InstallAware Native installer</param>
         /// <returns>Generic Sorted List of key value pairs. If not found returns an empty list</returns>
         /// <remarks></remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "The 'Required' parameter is used when DEBUG_TRACE is enabled.")]
         private SortedList<string, string> GetInstallInformation(string ProductCode, bool Required, bool Force32, bool MSIInstaller)
         {
             RegistryKey RegKey;
@@ -11701,7 +11674,6 @@ namespace ASCOM.Utilities
         private void ChooserToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             dynamic Chooser;
-            string Chosen;
             Type ChooserType;
 
             if (Utilities.Global.ApplicationBits() == Bitness.Bits32)
@@ -11710,7 +11682,6 @@ namespace ASCOM.Utilities
                 ChooserType = Type.GetTypeFromProgID("DriverHelper.Chooser");
                 Chooser = Activator.CreateInstance(ChooserType);
                 Chooser.DeviceType = "Telescope";
-                Chosen = Conversions.ToString(Chooser.Choose("ScopeSim.Telescope"));
             }
             else
             {
@@ -11721,10 +11692,8 @@ namespace ASCOM.Utilities
         private void ChooserNETToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Chooser Chooser;
-            string Chosen;
 
             Chooser = new Chooser() { DeviceType = "Telescope" };
-            Chosen = Chooser.Choose("ScopeSim.Telescope");
             Chooser.Dispose();
 
         }

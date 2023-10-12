@@ -145,8 +145,6 @@ namespace ASCOM.DriverConnect
         private void btnChoose_Click(System.Object sender, System.EventArgs e)
         {
             Chooser chooser = new Chooser();
-            string NewDevice = null;
-
             CurrentDeviceType = cmbDeviceType.SelectedItem.ToString();
             chooser.DeviceType = CurrentDeviceType;
 
@@ -156,7 +154,7 @@ namespace ASCOM.DriverConnect
                 txtDevice.Text = DefaultDevices[CurrentDeviceType.ToUpperInvariant()];
             }
 
-            NewDevice = chooser.Choose(CurrentDevice);
+            string NewDevice = chooser.Choose(CurrentDevice);
             if (!string.IsNullOrEmpty(NewDevice)) CurrentDevice = NewDevice;
 
             txtDevice.Text = CurrentDevice;

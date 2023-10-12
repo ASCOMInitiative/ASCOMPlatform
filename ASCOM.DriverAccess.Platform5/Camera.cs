@@ -31,8 +31,10 @@ namespace ASCOM.DriverAccess
         /// <param name="cameraId">The ProgID for the camera</param>
         public Camera(string cameraId)
         {
-            TL = new TraceLogger("", "DriverAccessCamera");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessCamera")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(cameraId, TL);
             _driverInterfaceVersion = InterfaceVersion;
         }

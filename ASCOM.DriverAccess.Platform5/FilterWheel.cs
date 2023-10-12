@@ -30,8 +30,10 @@ namespace ASCOM.DriverAccess
         /// <param name="filterWheelId"></param>
         public FilterWheel(string filterWheelId)
         {
-            TL = new TraceLogger("", "DriverAccessFilterWheel");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessFilterWheel")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(filterWheelId, TL);
         }
 

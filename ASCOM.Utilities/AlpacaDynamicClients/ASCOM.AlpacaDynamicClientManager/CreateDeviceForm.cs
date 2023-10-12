@@ -9,11 +9,11 @@ namespace ASCOM.DynamicRemoteClients
     /// </summary>
     public partial class CreateDeviceForm : Form
     {
-        private string deviceType;
-        private int deviceNumber;
-        private string progId;
-        private string localServerPath;
-        private TraceLogger TL;
+        private readonly string deviceType;
+        private readonly int deviceNumber;
+        private readonly string progId;
+        private readonly string localServerPath;
+        private readonly TraceLogger TL;
 
         /// <summary>
         /// Base initialiser for the create client form

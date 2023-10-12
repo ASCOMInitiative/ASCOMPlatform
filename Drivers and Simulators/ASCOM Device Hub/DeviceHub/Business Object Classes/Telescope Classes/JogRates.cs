@@ -134,20 +134,19 @@ namespace ASCOM.DeviceHub
 
 		private static string GetRateString( double rateValue )
 		{
-			string retval = null;
+            double factor = GetSiderealRateFactor(rateValue);
 
-			double factor = GetSiderealRateFactor( rateValue );
+            string retval;
+            if (factor < 100)
+            {
+                retval = $"{factor:###}X Sidereal";
+            }
+            else
+            {
+                retval = $"{rateValue:0.##} °/sec";
+            }
 
-			if ( factor < 100 )
-			{
-				retval = $"{factor:###}X Sidereal";
-			}
-			else 
-			{			
-				retval = $"{rateValue:0.##} °/sec";
-			}
-
-			return retval;
+            return retval;
 		}
 
 		private static double GetSiderealRateFactor( double rateValue )

@@ -336,11 +336,9 @@ namespace ASCOM.DeviceHub
 
 		private double ConvertTrackingRate( double rate, bool isRaRate, bool toNasaJplUnits )
 		{
-			double retval = Double.NaN;
+            double factor;
 
-			double factor;
-
-			if ( isRaRate )
+            if ( isRaRate )
 			{
 				factor = Globals.UTC_SECS_PER_SIDEREAL_SEC / ( 15.0 * 3600.0 );
 			}
@@ -349,20 +347,21 @@ namespace ASCOM.DeviceHub
 				factor = 1.0 / 3600.0;
 			}
 
-			if ( toNasaJplUnits )
-			{
-				// Convert a rate from from ASCOM units to NASA JPL units
+            double retval;
+            if (toNasaJplUnits)
+            {
+                // Convert a rate from from ASCOM units to NASA JPL units
 
-				retval = rate / factor;
-			}
-			else
-			{
-				// Convert a rate from NASA JPL units to ASCOM units.
+                retval = rate / factor;
+            }
+            else
+            {
+                // Convert a rate from NASA JPL units to ASCOM units.
 
-				retval = rate * factor;
-			}
+                retval = rate * factor;
+            }
 
-			return retval;
+            return retval;
 		}
 
 		private void RecalculateNewRates( bool useNasaJplUnits )

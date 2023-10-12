@@ -93,8 +93,7 @@ namespace GACInstall
                 // List ASCOM assemblies
                 SortedList<String, String> assemblyNames = new SortedList<String, String>();
                 IAssemblyEnum assemblyEnumerator = AssemblyCache.CreateGACEnum(); // Get an enumerator for the GAC assemblies
-                IAssemblyName iAssemblyName = null;
-
+                IAssemblyName iAssemblyName;
                 while ((AssemblyCache.GetNextAssembly(assemblyEnumerator, out iAssemblyName) == 0))
                 {
                     try
@@ -141,8 +140,6 @@ namespace GACInstall
                 return 0;
             }
 
-            // Must be install or uninstall
-            int result = 0; // Initialise return code to OK
 
             // Create an FUSION_INSTALL_REFERENCE struct and fill it with data
             // We use opaque scheme here
@@ -156,6 +153,9 @@ namespace GACInstall
             // Get an IAssemblyCache interface
             IAssemblyCache pCache = AssemblyCache.CreateAssemblyCache();
 
+
+            // Must be install or uninstall
+            int result;
             if (install)
             { // We are going to install an assembly
                 try

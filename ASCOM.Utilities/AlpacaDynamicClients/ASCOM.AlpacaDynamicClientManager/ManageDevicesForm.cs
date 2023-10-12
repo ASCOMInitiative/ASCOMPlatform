@@ -39,9 +39,9 @@ namespace ASCOM.DynamicRemoteClients
         private const string INCLUDE_ASCOM_REMOTE_DRIVERS = "Include ASCOM Remote Drivers"; private const bool INCLUDE_ASCOM_REMOTE_DRIVERS_DEFAULT = false;
 
         // Global variables within this class
-        private Utilities.TraceLogger TL;
-        private List<DynamicDriverRegistration> dynamicDrivers;
-        private ColouredCheckedListBox dynamicDriversCheckedListBox;
+        private readonly TraceLogger TL;
+        private readonly List<DynamicDriverRegistration> dynamicDrivers;
+        private readonly ColouredCheckedListBox dynamicDriversCheckedListBox;
 
         #region Initialise and Dispose
 
@@ -68,14 +68,16 @@ namespace ASCOM.DynamicRemoteClients
                 this.Load += ManageDevicesForm_Load;
 
                 // Configured the coloured checked list box               
-                dynamicDriversCheckedListBox = new ColouredCheckedListBox();
-                dynamicDriversCheckedListBox.Parent = this;
-                dynamicDriversCheckedListBox.FormattingEnabled = true;
-                dynamicDriversCheckedListBox.Location = new Point(41, 90);
-                dynamicDriversCheckedListBox.Name = "DynamicDriversCheckedListBox";
-                dynamicDriversCheckedListBox.Size = new Size(832, 334);
-                dynamicDriversCheckedListBox.TabStop = false;
-                dynamicDriversCheckedListBox.HorizontalScrollbar = true;
+                dynamicDriversCheckedListBox = new ColouredCheckedListBox
+                {
+                    Parent = this,
+                    FormattingEnabled = true,
+                    Location = new Point(41, 90),
+                    Name = "DynamicDriversCheckedListBox",
+                    Size = new Size(832, 334),
+                    TabStop = false,
+                    HorizontalScrollbar = true
+                };
 
                 // Initialise the "Include ..." checkboxes and then activate their event handlers
                 ChkIncludeAlpacaDynamicDrivers.Checked = ProfileAccess.GetBool(CONFIGRATION_SUBKEY, INCLUDE_ALPACA_DYNAMIC_DRIVERS, INCLUDE_ALPACA_DYNAMIC_DRIVERS_DEFAULT);
@@ -261,13 +263,13 @@ namespace ASCOM.DynamicRemoteClients
                         catch (UnauthorizedAccessException ex)
                         {
                             string errorMessage = $"Unable to delete driver file {driverFileName} because it is locked or in use.";
-                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex}");
                             MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         catch (Exception ex)
                         {
                             string errorMessage = $"Unable to delete driver file {driverFileName} - {ex.Message}";
-                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex}");
                             MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
@@ -280,7 +282,7 @@ namespace ASCOM.DynamicRemoteClients
                         catch (Exception ex)
                         {
                             string errorMessage = $"Unable to delete driver file {pdbFileName} - {ex.Message}";
-                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex}");
                             MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
@@ -293,7 +295,7 @@ namespace ASCOM.DynamicRemoteClients
                         catch (Exception ex)
                         {
                             string errorMessage = $"Unable to unregister driver {driver.ProgId} - {ex.Message}";
-                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex}");
                             MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
@@ -308,7 +310,7 @@ namespace ASCOM.DynamicRemoteClients
                         catch (Exception ex)
                         {
                             string errorMessage = $"Unable to remove driver initialised flag for {driver.ProgId} - {ex.Message}";
-                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex.ToString()}");
+                            TL.LogMessageCrLf("DeleteDrivers", $"{errorMessage} \r\n{ex}");
                             MessageBox.Show(errorMessage, "Alpaca Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
@@ -549,14 +551,16 @@ namespace ASCOM.DynamicRemoteClients
                 if (!File.Exists(driverExecutable))  // Driver DLL does not exist so flag as corrupted and suggest deletion
                 {
                     // Only add this driver to the list if it is not already in the list
-                    if (dynamicDrivers.Where(x => x.ProgId.ToLowerInvariant() == progId.ToLowerInvariant()).Count() == 0) // There are no drivers with this ProgID already in the list
+                    if (!dynamicDrivers.Where(x => x.ProgId.ToLowerInvariant() == progId.ToLowerInvariant()).Any()) // There are no drivers with this ProgID already in the list
                     {
                         // Create a new list entry
-                        DynamicDriverRegistration foundDriver = new();
-                        foundDriver.ProgId = progId;
-                        foundDriver.DeviceType = deviceType;
-                        foundDriver.Name = progId;
-                        foundDriver.InstallState = InstallationState.MissingDriver;
+                        DynamicDriverRegistration foundDriver = new()
+                        {
+                            ProgId = progId,
+                            DeviceType = deviceType,
+                            Name = progId,
+                            InstallState = InstallationState.MissingDriver
+                        };
                         foundDriver.Description = $"{foundDriver.ProgId} - Driver is COM registered but driver executable does not exist - Deletion recommended";
 
                         dynamicDrivers.Add(foundDriver);
@@ -575,11 +579,13 @@ namespace ASCOM.DynamicRemoteClients
                     if (!Com.Profile.IsRegistered(Common.Devices.ToDeviceType(deviceType), progId)) // The driver is not registered in the ASCOM Profile
                     {
                         // Create a new list entry
-                        DynamicDriverRegistration foundDriver = new();
-                        foundDriver.ProgId = progId;
-                        foundDriver.DeviceType = deviceType;
-                        foundDriver.Name = progId;
-                        foundDriver.InstallState = InstallationState.BadProfile;
+                        DynamicDriverRegistration foundDriver = new()
+                        {
+                            ProgId = progId,
+                            DeviceType = deviceType,
+                            Name = progId,
+                            InstallState = InstallationState.BadProfile
+                        };
                         foundDriver.Description = $"{foundDriver.ProgId} - Driver is COM registered but not ASCOM registered - Deletion recommended";
 
                         dynamicDrivers.Add(foundDriver);
@@ -641,7 +647,7 @@ namespace ASCOM.DynamicRemoteClients
                     }
                     catch (Exception ex)
                     {
-                        TL.LogMessageCrLf("ComUnregister", $"Exception retrieving CLSID, cannot proceed further: \r\n{ex.ToString()}");
+                        TL.LogMessageCrLf("ComUnregister", $"Exception retrieving CLSID, cannot proceed further: \r\n{ex}");
                     }
                 }
                 else
@@ -652,7 +658,7 @@ namespace ASCOM.DynamicRemoteClients
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("ComUnregister", $"Exception opening CLSID key, cannot proceed further: \r\n{ex.ToString()}");
+                TL.LogMessageCrLf("ComUnregister", $"Exception opening CLSID key, cannot proceed further: \r\n{ex}");
             }
         }
 
@@ -673,8 +679,7 @@ namespace ASCOM.DynamicRemoteClients
         /// <returns>True if the file can be accessed</returns>
         private bool FileIsAccessible(string filename)
         {
-            bool isAccessible = false; // Initialise the outcome to inaccessible
-
+            bool isAccessible;
             try
             {
                 if (File.Exists(filename)) // The specified file does exist so we can test whether it is possible to get exclusive access
@@ -700,7 +705,7 @@ namespace ASCOM.DynamicRemoteClients
                 isAccessible = false;
 
                 // Log the failure message to help with debugging but otherwise swallow the exception
-                TL.LogMessageCrLf("FileIsAccessible", $"Unable to get write access to driver file {filename} - {ex.ToString()}");
+                TL.LogMessageCrLf("FileIsAccessible", $"Unable to get write access to driver file {filename} - {ex}");
             }
 
             // Return the test outcome

@@ -729,8 +729,6 @@ namespace ASCOM.Astrometry.AstroUtils
                 XSymmetry = -b / (2.0d * a);
                 YExtreme = (a * XSymmetry + b) * XSymmetry + c;
                 Discriminant = b * b - 4.0d * a * c;
-
-                DeltaX = double.NaN;
                 Zero1 = double.NaN;
                 Zero2 = double.NaN;
                 NZeros = 0;

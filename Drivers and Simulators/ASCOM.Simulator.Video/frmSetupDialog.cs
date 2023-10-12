@@ -114,7 +114,7 @@ namespace ASCOM.Simulator
 
                 if (m_CurrentPropertyPageId != propPageId)
                 {
-                    SettingsPannel propPage = null;
+                    SettingsPannel propPage;
                     if (m_PropertyPages.TryGetValue(propPageId, out propPage))
                     {
                         LoadPropertyPage(propPage);

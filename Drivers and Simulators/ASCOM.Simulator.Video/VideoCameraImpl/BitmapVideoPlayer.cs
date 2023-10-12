@@ -122,9 +122,8 @@ namespace Simulator.VideoCameraImpl
 
 		private frmLoadingImages OpenProgressForm(IWin32Window ownerForm)
 		{
-			frmLoadingImages frmLoading = null;
-			frmLoading = new frmLoadingImages();
-			frmLoading.Show(ownerForm);
+            frmLoadingImages frmLoading = new frmLoadingImages();
+            frmLoading.Show(ownerForm);
 			frmLoading.Cursor = Cursors.WaitCursor;
 			frmLoading.Invalidate();
 

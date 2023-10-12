@@ -96,7 +96,7 @@ namespace ASCOM.Simulator
             catch (Exception ex)
             {
                 // Create a message to the user
-                string message = $"Exception while creating CoverCalibrator simulator: \r\n{ex.ToString()}";
+                string message = $"Exception while creating CoverCalibrator simulator: \r\n{ex}";
 
                 // Attempt to log the message
                 try

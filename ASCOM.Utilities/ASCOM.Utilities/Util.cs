@@ -159,7 +159,6 @@ namespace ASCOM.Utilities
         /// </remarks>
         public double DMSToDegrees(string DMS)
         {
-            double DMSToDegreesRet = default;
             // Refactored to use .NET regular expressions
             short sg;
             Regex rx;
@@ -193,7 +192,7 @@ namespace ASCOM.Utilities
             // rx.IgnoreCas = True
             // rx.Global = True
             ms = rx.Matches(DMS); // Find all number groups
-            DMSToDegreesRet = 0.0d; // Assume no numbers at all
+            double DMSToDegreesRet = 0.0d;
             if (ms.Count > 0) // At least one numeric part
             {
                 DMSToDegreesRet = Conversions.ToDouble(ms[0].Value); // Degrees
@@ -234,8 +233,7 @@ namespace ASCOM.Utilities
         /// </remarks>
         public double HMSToHours(string HMS)
         {
-            double HMSToHoursRet = default;
-            HMSToHoursRet = DMSToDegrees(HMS);
+            double HMSToHoursRet = DMSToDegrees(HMS);
             return HMSToHoursRet;
         }
 
@@ -262,8 +260,7 @@ namespace ASCOM.Utilities
         /// </remarks>
         public double HMSToDegrees(string HMS)
         {
-            double HMSToDegreesRet = default;
-            HMSToDegreesRet = DMSToDegrees(HMS) * 15.0d;
+            double HMSToDegreesRet = DMSToDegrees(HMS) * 15.0d;
             return HMSToDegreesRet;
         }
 
@@ -366,7 +363,6 @@ namespace ASCOM.Utilities
         /// </remarks>
         public string DegreesToDMS(double Degrees, string DegDelim, string MinDelim, string SecDelim, int SecDecimalDigits)
         {
-            string DegreesToDMSRet = default;
             string w, m, s;
             bool n;
             string f;
@@ -411,7 +407,7 @@ namespace ASCOM.Utilities
                 }
             }
 
-            DegreesToDMSRet = w + DegDelim + m + MinDelim + s + SecDelim;
+            string DegreesToDMSRet = w + DegDelim + m + MinDelim + s + SecDelim;
             if (n)
                 DegreesToDMSRet = "-" + DegreesToDMSRet;
             return DegreesToDMSRet;
@@ -679,7 +675,6 @@ namespace ASCOM.Utilities
         /// </remarks>
         public string DegreesToDM(double Degrees, string DegDelim, string MinDelim, int MinDecimalDigits)
         {
-            string DegreesToDMRet = default;
             string w, m, f;
             bool n;
             int i;
@@ -716,7 +711,7 @@ namespace ASCOM.Utilities
                 w = Strings.Format(Conversions.ToShort(w) + 1, "00"); // Carry to whole part
             }
 
-            DegreesToDMRet = w + DegDelim + m + MinDelim;
+            string DegreesToDMRet = w + DegDelim + m + MinDelim;
             if (n)
                 DegreesToDMRet = "-" + DegreesToDMRet;
             return DegreesToDMRet;
@@ -895,8 +890,7 @@ namespace ASCOM.Utilities
         {
             get
             {
-                string PlatformVersionRet = default;
-                PlatformVersionRet = myProfile.GetProfile("", "PlatformVersion");
+                string PlatformVersionRet = myProfile.GetProfile("", "PlatformVersion");
                 PlatformVersionRet = ConditionPlatformVersion(PlatformVersionRet, myProfile, TL); // Check for Forced Platform versions
                 TL.LogMessage("PlatformVersion Get", PlatformVersionRet);
                 return PlatformVersionRet;
@@ -1121,8 +1115,7 @@ namespace ASCOM.Utilities
         /// <remarks></remarks>
         public ArrayList ToStringCollection(string[] stringArray)
         {
-            ArrayList ToStringCollectionRet = default;
-            ToStringCollectionRet = new ArrayList();
+            ArrayList ToStringCollectionRet = new ArrayList();
             foreach (string item in stringArray)
                 ToStringCollectionRet.Add(item);
             return ToStringCollectionRet;
@@ -1136,8 +1129,7 @@ namespace ASCOM.Utilities
         /// <remarks></remarks>
         public ArrayList ToIntegerCollection(int[] integerArray)
         {
-            ArrayList ToIntegerCollectionRet = default;
-            ToIntegerCollectionRet = new ArrayList();
+            ArrayList ToIntegerCollectionRet = new ArrayList();
             foreach (int item in integerArray)
                 ToIntegerCollectionRet.Add(item);
             return ToIntegerCollectionRet;

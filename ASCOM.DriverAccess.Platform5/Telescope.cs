@@ -34,8 +34,10 @@ namespace ASCOM.DriverAccess
         /// <param name="telescopeId">The ProgID for the telescope</param>
         public Telescope(string telescopeId)
 		{
-            TL = new TraceLogger("", "DriverAccessTelescope");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessTelescope")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(telescopeId, TL);
 
             foreach (Type objInterface in _memberFactory.GetInterfaces)
@@ -55,9 +57,11 @@ namespace ASCOM.DriverAccess
         /// <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
         public static string Choose(string telescopeId)
         {
-			Chooser oChooser = new Chooser();
-			oChooser.DeviceType = "Telescope";			// Requires Helper 5.0.3 (May '07)
-			return oChooser.Choose(telescopeId);
+            Chooser oChooser = new Chooser
+            {
+                DeviceType = "Telescope"            // Requires Helper 5.0.3 (May '07)
+            };
+            return oChooser.Choose(telescopeId);
         }
         
         #endregion

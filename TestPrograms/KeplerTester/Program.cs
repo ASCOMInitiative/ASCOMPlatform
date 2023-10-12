@@ -52,12 +52,14 @@ namespace KeplerConsoleApp
                 LogMessage($"Orbital elements:\r\n{elements}\r\n");
 
                 // ASCOM Planet
-                Planet ascomComet = new Planet();
-                ascomComet.Type = BodyType.Comet;
-                ascomComet.Number = 9999;
-                ascomComet.Name = elements.Name;
-                ascomComet.DeltaT = deltaT;
-                ascomComet.Ephemeris = CreateCometEphemerisASCOM(elements, util, semiMajorAxis);
+                Planet ascomComet = new Planet
+                {
+                    Type = BodyType.Comet,
+                    Number = 9999,
+                    Name = elements.Name,
+                    DeltaT = deltaT,
+                    Ephemeris = CreateCometEphemerisASCOM(elements, util, semiMajorAxis)
+                };
 
                 // NOVASCOM PLANET
                 Type novascomCometType = Type.GetTypeFromProgID("NOVAS.Planet");
@@ -160,44 +162,49 @@ namespace KeplerConsoleApp
 
         static PositionVector VectorAddASCOM(PositionVector v1, PositionVector v2)
         {
-            PositionVector vecReturn = new PositionVector();
-            vecReturn.x = v1.x + v2.x;
-            vecReturn.y = v1.y + v2.y;
-            vecReturn.z = v1.z + v2.z;
+            PositionVector vecReturn = new PositionVector
+            {
+                x = v1.x + v2.x,
+                y = v1.y + v2.y,
+                z = v1.z + v2.z
+            };
 
             return vecReturn;
         }
 
         static dynamic VectorAddNOVAS(dynamic v1, dynamic v2)
         {
-            PositionVector vecReturn = new PositionVector();
-            vecReturn.x = v1.x + v2.x;
-            vecReturn.y = v1.y + v2.y;
-            vecReturn.z = v1.z + v2.z;
+            PositionVector vecReturn = new PositionVector
+            {
+                x = v1.x + v2.x,
+                y = v1.y + v2.y,
+                z = v1.z + v2.z
+            };
 
             return vecReturn;
         }
 
         static Ephemeris CreateCometEphemerisASCOM(OrbitalElements elements, Util util, double semiMajorAxis)
         {
-            Ephemeris kt = new Ephemeris();
+            Ephemeris kt = new Ephemeris
+            {
+                BodyType = BodyType.Comet,
 
-            kt.BodyType = BodyType.Comet;
-
-            kt.Name = elements.Name;
+                Name = elements.Name,
 
 
-            kt.Epoch = util.DateLocalToJulian(elements.PerihelionPassage);
+                Epoch = util.DateLocalToJulian(elements.PerihelionPassage),
 
-            kt.e = elements.OrbitalEccentricity;
-            //kt.G = 0;
-            //kt.H = 0;
-            kt.M = 0;
-            kt.n = 0;
-            kt.Peri = elements.ArgOfPerihelion;
-            kt.Node = elements.LongitudeOfAscNode;
-            kt.Incl = elements.Inclination;
-            kt.q = elements.PeriDistance;
+                e = elements.OrbitalEccentricity,
+                //kt.G = 0;
+                //kt.H = 0;
+                M = 0,
+                n = 0,
+                Peri = elements.ArgOfPerihelion,
+                Node = elements.LongitudeOfAscNode,
+                Incl = elements.Inclination,
+                q = elements.PeriDistance
+            };
 
             // Extra code to set the semi-major axis
             if (semiMajorAxis != 0.0) kt.a = semiMajorAxis;

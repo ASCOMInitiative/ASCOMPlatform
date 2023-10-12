@@ -895,8 +895,7 @@ namespace ASCOM.Simulator
         /// <returns>The instant or average value of a sensor depending on whether AveragePeriod is zero or greater than zero</returns>
         private static double GetPropertyValue(string PropertyName)
         {
-            double returnValue = BAD_VALUE; // Initialise return value to a bad value in case things go wrong!
-
+            double returnValue;
             if (averagePeriod == 0.0) // No averaging so return the current sensor value
             {
                 returnValue = GetDeviceSensorValue(PropertyName);

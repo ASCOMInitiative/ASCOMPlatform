@@ -578,7 +578,6 @@ namespace ASCOM.Astrometry
                 // closed form solution for W in terms of E.
                 //
                 E1 = M; // /* Initial guess is same as circular orbit. */
-                temp = 1.0d;
                 do
                 {
                     // The approximate area swept out in the ellipse

@@ -176,7 +176,6 @@ namespace Stand_Alone_Tester
         private static void CreateLogFile()
         {
             int FileNameSuffix = 0;
-            bool ok = false;
             string FileNameBase;
 
             //My.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
@@ -199,8 +198,10 @@ namespace Stand_Alone_Tester
             try
             {
                 SAL.LogMessage("CreateLogFile", "About to open stream writer on file: {g_LogFileActualName}");
-                g_LogFile = new StreamWriter(g_LogFileActualName, false);
-                g_LogFile.AutoFlush = true;
+                g_LogFile = new StreamWriter(g_LogFileActualName, false)
+                {
+                    AutoFlush = true
+                };
                 SAL.LogMessage("CreateLogFile", "File opened OK: {g_LogFileActualName}");
             }
             catch (IOException ex)
@@ -208,15 +209,17 @@ namespace Stand_Alone_Tester
                 SAL.LogMessage("CreateLogFile", "CAUGHT AN EXCEPTION OPENING: {g_LogFileActualName}");
                 SAL.LogMessage("CreateLogFile", ex.ToString());
 
-                ok = false;
+                bool ok = false;
                 do
                 {
                     try
                     {
                         g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
                         SAL.LogMessage("CreateLogFile", "About to open stream writer on file: {g_LogFileActualName}");
-                        g_LogFile = new StreamWriter(g_LogFileActualName, false);
-                        g_LogFile.AutoFlush = true;
+                        g_LogFile = new StreamWriter(g_LogFileActualName, false)
+                        {
+                            AutoFlush = true
+                        };
                         SAL.LogMessage("CreateLogFile", "File opened OK: {g_LogFileActualName}");
                         ok = true;
                     }
@@ -248,12 +251,11 @@ namespace Stand_Alone_Tester
 
         private static void LogMsgFormatter(string p_Test, string p_Msg, bool p_NewLine, bool p_RespectCrLf)
         {
-            string l_Msg = "";
             SAL.LogMessage("LogMsgFormatter", $"Logging message: {p_Test} {p_Msg}");
 
             p_Test = (p_Test + new string(' ', g_IdentifierWidth)).Substring(0, g_IdentifierWidth);
 
-            l_Msg = DateTime.Now.ToString("HH:mm:ss.fff") + " " + p_Test + " " + p_Msg;
+            string l_Msg = DateTime.Now.ToString("HH:mm:ss.fff") + " " + p_Test + " " + p_Msg;
             if (g_LogFile != null)
             {
                 if (p_NewLine)

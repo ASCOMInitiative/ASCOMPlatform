@@ -287,9 +287,8 @@ namespace ASCOM.DeviceHub
 
 		private bool CanToggleDomeConnected()
 		{
-			bool retval = false;
-
-			if ( !IsConnected )
+            bool retval;
+            if ( !IsConnected )
 			{
 				retval = DomeID != null;
 			}

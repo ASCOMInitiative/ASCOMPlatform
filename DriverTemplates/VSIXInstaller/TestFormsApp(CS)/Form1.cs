@@ -36,8 +36,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
             }
             else
             {
-                driver = new ASCOM.DriverAccess.TEMPLATEDEVICECLASS(Properties.Settings.Default.DriverId);
-                driver.Connected = true;
+                driver = new ASCOM.DriverAccess.TEMPLATEDEVICECLASS(Properties.Settings.Default.DriverId)
+                {
+                    Connected = true
+                };
             }
             SetUIState();
         }

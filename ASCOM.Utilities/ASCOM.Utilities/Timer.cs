@@ -190,13 +190,12 @@ namespace ASCOM.Utilities
 
         private bool ForceTimer(bool CurrentIsForm)
         {
-            bool ForceTimerRet = default;
             var Profile = new RegistryAccess();
             System.Collections.Generic.SortedList<string, string> ForcedSystemTimers;
             string ProcessFileName;
             bool ForceSystemTimer, MatchedName;
 
-            ForceTimerRet = !CurrentIsForm; // Set up default return value to supplied value. ForceTimer is opposite logic to IsForm, hence use of Not
+            bool ForceTimerRet = !CurrentIsForm;
             TL.LogMessage("ForceTimer", "Current IsForm: " + CurrentIsForm.ToString() + ", this makes the default ForceTimer value: " + ForceTimerRet);
 
             ProcessFileName = Process.GetCurrentProcess().MainModule.FileName.ToUpperInvariant(); // Get the current process processname
@@ -385,7 +384,6 @@ namespace ASCOM.Utilities
             if (IsForm)
             {
                 EventArgs ec;
-                ec = (EventArgs)e;
             }
             else
             {

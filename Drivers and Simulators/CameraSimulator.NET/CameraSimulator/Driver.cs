@@ -3018,9 +3018,8 @@ namespace ASCOM.Simulator
                 case string value2 when value2.Equals("RandomUInt16", StringComparison.InvariantCultureIgnoreCase):
                 case string value3 when value3.Equals("RandomInt32", StringComparison.InvariantCultureIgnoreCase):
                     Random random = new Random();
-                    int lowerBound = 0; // Random range lower bound
-                    int upperBound = 0; // Random range upper bound
-
+                    int lowerBound;
+                    int upperBound;
                     if (returnImageAs.ToLowerInvariant() == "randombyte") // Byte
                     {
                         lowerBound = Byte.MinValue;

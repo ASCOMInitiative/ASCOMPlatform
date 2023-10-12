@@ -688,11 +688,13 @@ namespace ASCOM.DynamicClients
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            ProcessStartInfo processStartInfo = new();
-            processStartInfo.Arguments = argument;
-            processStartInfo.WorkingDirectory = Environment.CurrentDirectory;
-            processStartInfo.FileName = Application.ExecutablePath;
-            processStartInfo.Verb = "runas";
+            ProcessStartInfo processStartInfo = new()
+            {
+                Arguments = argument,
+                WorkingDirectory = Environment.CurrentDirectory,
+                FileName = Application.ExecutablePath,
+                Verb = "runas"
+            };
             try
             {
                 TL?.LogMessage("IsAdministrator", $"Starting elevated process");

@@ -202,10 +202,11 @@ namespace PlatformUnitTests
         public void SetAsyncDriverAccess()
         {
             // Create a Switch simulator device
-            Switch switchSim = new Switch("ASCOM.Simulator.Switch");
-
-            // Connect
-            switchSim.Connected = true;
+            Switch switchSim = new Switch("ASCOM.Simulator.Switch")
+            {
+                // Connect
+                Connected = true
+            };
             Assert.IsTrue(switchSim.Connected);
 
             // Confirm that some devices are configured
@@ -240,10 +241,11 @@ namespace PlatformUnitTests
         public void SetAsyncValueDriverAccess()
         {
             // Create a Switch simulator device
-            Switch switchSim = new Switch("ASCOM.Simulator.Switch");
-
-            // Connect
-            switchSim.Connected = true;
+            Switch switchSim = new Switch("ASCOM.Simulator.Switch")
+            {
+                // Connect
+                Connected = true
+            };
             Assert.IsTrue(switchSim.Connected);
 
             // Confirm that some devices are configured
@@ -278,10 +280,11 @@ namespace PlatformUnitTests
         public void CancelAsyncDriverAccess()
         {
             // Create a Switch simulator device
-            Switch switchSim = new Switch("ASCOM.Simulator.Switch");
-
-            // Connect
-            switchSim.Connected = true;
+            Switch switchSim = new Switch("ASCOM.Simulator.Switch")
+            {
+                // Connect
+                Connected = true
+            };
             Assert.IsTrue(switchSim.Connected);
 
             // Confirm that some devices are configured

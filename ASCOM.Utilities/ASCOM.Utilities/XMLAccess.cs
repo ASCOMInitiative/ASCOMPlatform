@@ -604,7 +604,6 @@ namespace ASCOM.Utilities
 
         private SortedList<string, string> ReadValues(string p_SubKeyName)
         {
-            string ValueName = "";
 
             // Read all values in a key - SubKey has to be absolute from the profile store root
             var Retval = new SortedList<string, string>();
@@ -659,7 +658,7 @@ namespace ASCOM.Utilities
                                                 }
                                             case VALUE_ELEMENT_NAME: // Fount an element name
                                                 {
-                                                    ValueName = Reader.GetAttribute(NAME_ATTRIBUTE_NAME);
+                                                    string ValueName = Reader.GetAttribute(NAME_ATTRIBUTE_NAME);
                                                     Retval.Add(ValueName, Reader.GetAttribute(VALUE_ATTRIBUTE_NAME));
                                                     TL.LogMessage("    ReadValues", "    found " + ValueName + " = " + Retval[ValueName]); // Do nothing
                                                     break;
@@ -915,7 +914,6 @@ namespace ASCOM.Utilities
             swLocal.Stop();
             TL.LogMessage("  ElapsedTime " + _MigrateKey_RecurseDepth.ToString(), "  " + swLocal.ElapsedMilliseconds + " milliseconds, Completed Directory: " + p_ToDir);
             _MigrateKey_RecurseDepth -= 1; // Decrement the recursion depth counter
-            swLocal = null;
         }
 
         private void GetProfileMutex(string Method, string Parameters)

@@ -268,8 +268,7 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-			return offset;
+            return offset;
 		}
 
 		protected override void DoDispose()
@@ -479,9 +478,7 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-
-			DomeRadius = radius;
+            DomeRadius = radius;
 		}
 
 		#endregion
@@ -523,9 +520,7 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-
-			GemAxisOffset = offset;
+            GemAxisOffset = offset;
 		}
 
 		#endregion
@@ -567,9 +562,7 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-
-			AzimuthAccuracy = accuracy;
+            AzimuthAccuracy = accuracy;
 		}
 
 		#endregion
@@ -611,11 +604,10 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
 
-			// Don't allow a value less than 5 seconds.
+            // Don't allow a value less than 5 seconds.
 
-			SlaveInterval = Math.Max( interval, 5 );
+            SlaveInterval = Math.Max( interval, 5 );
 		}
 
 		#endregion

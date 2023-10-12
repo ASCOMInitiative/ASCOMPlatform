@@ -212,8 +212,10 @@ namespace Utilities
 
             try
             {
-                logFileStream = new StreamWriter(logFileActualName, false);
-                logFileStream.AutoFlush = true;
+                logFileStream = new StreamWriter(logFileActualName, false)
+                {
+                    AutoFlush = true
+                };
             }
             catch (IOException ex)
             {
@@ -223,8 +225,10 @@ namespace Utilities
                     try
                     {
                         logFileActualName = fileNameBase + fileNameSuffix.ToString() + ".txt";
-                        logFileStream = new StreamWriter(logFileActualName, false);
-                        logFileStream.AutoFlush = true;
+                        logFileStream = new StreamWriter(logFileActualName, false)
+                        {
+                            AutoFlush = true
+                        };
                         ok = true;
                     }
                     catch (IOException ex1)
@@ -241,14 +245,12 @@ namespace Utilities
         private string MakePrintable(string message, bool respectCrLf)
         {
             string l_Msg = "";
-            int i = 0;
-            int CharNo = 0;
-
+            int i;
             //Present any unprintable characters in [0xHH] format
             for (i = 0; i < message.Length; i++)
             {
                 string temp;
-                CharNo = message.Substring(i, 1).ToCharArray()[0];
+                int CharNo = message.Substring(i, 1).ToCharArray()[0];
                 switch (CharNo)
                 {
                     case 10:
@@ -291,13 +293,11 @@ namespace Utilities
         private string MakeHex(string message)
         {
             string l_Msg = "";
-            int i = 0;
-            int CharNo = 0;
-
+            int i;
             //Present all characters in [0xHH] format
             for (i = 0; i < message.Length; i++)
             {
-                CharNo = message.Substring(i, 1).ToCharArray()[0];
+                int CharNo = message.Substring(i, 1).ToCharArray()[0];
                 string temp = "00" + CharNo.ToString("0X");
                 l_Msg = l_Msg + "[" + temp.Substring(temp.Length - 3, 2) + "]";
             }
@@ -306,12 +306,11 @@ namespace Utilities
 
         private void LogMsgFormatter(string test, string message, bool newLine, bool respectCrLf)
         {
-            string l_Msg = "";
             try
             {
                 test = (test + "                              ").Substring(0, 25);
 
-                l_Msg = DateTime.Now.ToString("HH:mm:ss.fff") + " " + MakePrintable(test, respectCrLf) + " " + MakePrintable(message, respectCrLf);
+                string l_Msg = DateTime.Now.ToString("HH:mm:ss.fff") + " " + MakePrintable(test, respectCrLf) + " " + MakePrintable(message, respectCrLf);
                 if ((logFileStream != null))
                 {
                     if (newLine)

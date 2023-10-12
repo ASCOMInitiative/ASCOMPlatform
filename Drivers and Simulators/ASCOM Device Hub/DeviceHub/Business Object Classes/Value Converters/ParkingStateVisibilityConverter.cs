@@ -8,13 +8,12 @@ namespace ASCOM.DeviceHub
 	{
 		public object Convert( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
 		{
-			Visibility visibility = Visibility.Collapsed;
-			ParkingStateEnum state = (ParkingStateEnum)value;
+            ParkingStateEnum state = (ParkingStateEnum)value;
 			ParkingStateEnum visibleState = (ParkingStateEnum)parameter;
 
-			visibility =  ( state == visibleState ) ? Visibility.Visible : Visibility.Hidden;
+            Visibility visibility = state == visibleState ? Visibility.Visible : Visibility.Hidden;
 
-			return visibility;
+            return visibility;
 		}
 
 		public object ConvertBack( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )

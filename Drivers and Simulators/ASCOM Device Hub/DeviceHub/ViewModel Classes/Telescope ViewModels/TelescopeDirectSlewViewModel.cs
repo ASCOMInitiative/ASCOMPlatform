@@ -327,14 +327,13 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region EditRightAscensionCommand
+        #region EditRightAscensionCommand
 
-		private ICommand _editRightAscensionCommand;
+        private ICommand _editRightAscensionCommand;
 
 		public ICommand EditRightAscensionCommand
 		{
@@ -370,14 +369,13 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region EditAltitudeCommand
+        #region EditAltitudeCommand
 
-		private ICommand _editAltitudeCommand;
+        private ICommand _editAltitudeCommand;
 
 		public ICommand EditAltitudeCommand
 		{
@@ -413,14 +411,13 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region EditAzimuthCommand
+        #region EditAzimuthCommand
 
-		private ICommand _editAzimuthCommand;
+        private ICommand _editAzimuthCommand;
 
 		public ICommand EditAzimuthCommand
 		{
@@ -456,14 +453,13 @@ namespace ASCOM.DeviceHub
 			}
 
 			vm.Dispose();
-			vm = null;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region BeginDirectSlewCommand
+        #region BeginDirectSlewCommand
 
-		private RelayCommand _beginDirectSlewCommand;
+        private RelayCommand _beginDirectSlewCommand;
 
 		public RelayCommand BeginDirectSlewCommand
 		{

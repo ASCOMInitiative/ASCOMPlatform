@@ -30,8 +30,10 @@ namespace ASCOM.DriverAccess
         /// <param name="domeId">The progID of the dome to be instantiated</param>
         public Dome(string domeId)
         {
-            TL = new TraceLogger("", "DriverAccessDome");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessDome")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(domeId, TL);
         }
 

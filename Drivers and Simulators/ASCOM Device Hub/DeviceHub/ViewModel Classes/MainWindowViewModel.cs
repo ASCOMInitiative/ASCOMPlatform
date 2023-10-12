@@ -378,14 +378,13 @@ namespace ASCOM.DeviceHub
 			svc.ShowDialog( aboutVm );
 
 			aboutVm.Dispose();
-			aboutVm = null;
-		}
+        }
 
-		#endregion AboutCommand
+        #endregion AboutCommand
 
-		#region ViewHelpCommand
+        #region ViewHelpCommand
 
-		private ICommand _viewHelpCommand;
+        private ICommand _viewHelpCommand;
 
 		public ICommand ViewHelpCommand
 		{

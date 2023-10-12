@@ -667,7 +667,6 @@ namespace ASCOM.Utilities
 
         private void Throttle(string Key, CacheAction action, double CallFrequency)
         {
-            double remainingMilliSeconds = 0.0, minimumTimeBeforeNextCall = 0.0;
 
             // Validate parameters
             if (string.IsNullOrEmpty(Key)) throw new InvalidValueException("Supplied ASCOM Cache key is null or empty when adding an item.");
@@ -676,14 +675,13 @@ namespace ASCOM.Utilities
             if (CallFrequency < 0.0) throw new InvalidValueException(string.Format("Supplied ASCOM Cache maximum call frequency must be positive, supplied value is negative: {0}", CallFrequency));
             if ((CallFrequency > 0.0) & (CallFrequency < ALLOWABLE_THROTTLING_RATE_MINIMUM)) throw new InvalidValueException(string.Format("Supplied ASCOM Cache call frequency {0} is below the minimum supported value {1}", CallFrequency, ALLOWABLE_THROTTLING_RATE_MINIMUM));
             if (CallFrequency > ALLOWABLE_THROTTLING_RATE_MAXIMUM) throw new InvalidValueException(string.Format("Supplied ASCOM Cache call frequency {0} is above the maximum supported value {1}", CallFrequency, ALLOWABLE_THROTTLING_RATE_MAXIMUM));
-
-            DateTime lastAction = DateTime.MinValue; // Initialise variable so that we don'get a compiler warning later
-
             if (CallFrequency > 0.0) // Zero is a special value that specifies no call throttling
             {
                 // Throttling is required
                 try
                 {
+
+                    DateTime lastAction;
                     switch (action)
                     {
                         case CacheAction.CacheRead:
@@ -699,7 +697,7 @@ namespace ASCOM.Utilities
                     // If a "KeyNotFound exception was NOT generated above, this method has been called before and throttling is in effect, so we need to check whether sufficient time has 
                     // passed since the last call to allow this call to proceed immediately.
 
-                    minimumTimeBeforeNextCall = 1.0 / CallFrequency; // Calculate the minimum time duration between calls (in seconds) from the maximum call frequency
+                    double minimumTimeBeforeNextCall = 1.0 / CallFrequency;
 
                     TimeSpan timeFromLastCall = DateTime.Now.Subtract(lastAction); // Calculate how long it has been since the last Get method call and store as a TimeSpan value
                     if (timeFromLastCall.TotalSeconds <= minimumTimeBeforeNextCall) // Test whether sufficient time has passed to execute the next call immediately. If so then continue with no delay
@@ -735,7 +733,7 @@ namespace ASCOM.Utilities
                                 }
 
                                 // Now sleep the remaining few milliseconds
-                                remainingMilliSeconds = delayMilliSeconds - DateTime.Now.Subtract(startTime).TotalMilliseconds; // Calculate the remaining time in milliseconds
+                                double remainingMilliSeconds = delayMilliSeconds - DateTime.Now.Subtract(startTime).TotalMilliseconds;
                                 if (remainingMilliSeconds > timerResolutionCurrent)
                                 {
                                     Thread.Sleep(Convert.ToInt32(remainingMilliSeconds)); // Sleep any outstanding milliseconds

@@ -43,14 +43,16 @@ namespace ASCOM.DynamicRemoteClients
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException); // Set the un-handled exception mode to force all exceptions to go through our handler.
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
 
-            TL = new Utilities.TraceLogger("", "AlpacaDynamicClientManager");
-            TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT);
+            TL = new Utilities.TraceLogger("", "AlpacaDynamicClientManager")
+            {
+                Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+            };
 
             try
             {
                 string commandParameter = ""; // Initialise the supplied parameter to empty string
 
-                TL.LogMessage("Main", $"Number of parameters: {args.Count()}");
+                TL.LogMessage("Main", $"Number of parameters: {args.Length}");
                 foreach (string arg in args)
                 {
                     TL.LogMessage("Main", $"Received parameter: \"{arg}\"");
@@ -199,11 +201,13 @@ namespace ASCOM.DynamicRemoteClients
             int exitCode = int.MinValue;
 
             // Set local server run time values
-            ProcessStartInfo start = new();
-            start.Arguments = serverParameter; // Specify the server command parameter
-            start.FileName = localServerExe; // Set the full local server executable path
-            start.WindowStyle = ProcessWindowStyle.Hidden; // Don't show a window while the command runs
-            start.CreateNoWindow = true;
+            ProcessStartInfo start = new()
+            {
+                Arguments = serverParameter, // Specify the server command parameter
+                FileName = localServerExe, // Set the full local server executable path
+                WindowStyle = ProcessWindowStyle.Hidden, // Don't show a window while the command runs
+                CreateNoWindow = true
+            };
 
             // Run the external process & wait for it to finish
             TL.LogMessage("RunLocalServer", $"Starting server with parameter {serverParameter}...");

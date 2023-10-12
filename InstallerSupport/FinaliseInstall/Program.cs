@@ -115,8 +115,10 @@ namespace FinaliseInstall
         {
             try
             {
-                TL = new Utilities.TraceLogger("FinaliseInstall"); // Create a trace logger so we can log what happens
-                TL.Enabled = true;
+                TL = new Utilities.TraceLogger("FinaliseInstall")
+                {
+                    Enabled = true
+                }; // Create a trace logger so we can log what happens
 
                 LogMessage("FinaliseInstall", "Starting finalise process");
 

@@ -209,13 +209,13 @@ namespace ASCOM.Utilities
         /// </remarks>
         public ArrayList RegisteredDevices(string DeviceType)
         {
-            System.Collections.Generic.SortedList<string, string> RegDevs = null;
             var RetVal = new ArrayList();
             if (string.IsNullOrEmpty(DeviceType)) // Null value and empty string are invalid DeviceTypes
             {
                 TL.LogMessage("RegisteredDevices", "Empty string or Nothing supplied as DeviceType");
                 throw new Exceptions.InvalidValueException("Empty string or Nothing supplied as DeviceType");
             }
+            System.Collections.Generic.SortedList<string, string> RegDevs;
             try
             {
                 RegDevs = ProfileStore.EnumKeys(DeviceType + " Drivers"); // Get Key-Class pairs
@@ -715,7 +715,6 @@ namespace ASCOM.Utilities
         #region Support code
         private bool IsRegisteredPrv(string DriverID, bool Indent)
         {
-            bool IsRegisteredPrvRet = default;
             // Confirm that the specified driver is registered
             System.Collections.Generic.SortedList<string, string> keys;
             string IndStr = "";
@@ -725,7 +724,7 @@ namespace ASCOM.Utilities
 
             TL.LogStart(IndStr + "IsRegistered", IndStr + DriverID.ToString() + " ");
 
-            IsRegisteredPrvRet = false; // Assume failure
+            bool IsRegisteredPrvRet = false;
             if (string.IsNullOrEmpty(DriverID))
             {
                 TL.LogFinish("Null string so exiting False");
@@ -761,9 +760,8 @@ namespace ASCOM.Utilities
 
         private string MakeKey(string BaseKey, string SubKey)
         {
-            string MakeKeyRet = default;
             // Create a full path to a sub-key given the driver name and type 
-            MakeKeyRet = m_sDeviceType + " Drivers";
+            string MakeKeyRet = m_sDeviceType + " Drivers";
             if (!string.IsNullOrEmpty(BaseKey))
                 MakeKeyRet = MakeKeyRet + @"\" + BaseKey; // Allow blank BaseKey (See SubKeys())
             if (!string.IsNullOrEmpty(SubKey))

@@ -29,8 +29,10 @@ namespace ASCOM.DriverAccess
         /// <param name = "switchId"></param>
         public Switch(string switchId)
         {
-            TL = new TraceLogger("", "DriverAccessSwitch");
-            TL.Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT);
+            TL = new TraceLogger("", "DriverAccessSwitch")
+            {
+                Enabled = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+            };
             _memberFactory = new MemberFactory(switchId, TL);
         }
 

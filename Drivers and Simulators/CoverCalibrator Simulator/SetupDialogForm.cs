@@ -74,7 +74,7 @@ namespace ASCOM.Simulator
             CmbCalibratorInitialisationState.SelectedItem = CoverCalibrator.CalibratorStateInitialisationValue.ToString();
             CmbCoverInitialisationState.SelectedItem = CoverCalibrator.CoverStateInitialisationValue.ToString();
 
-            LblSynchBehaviourTime.Text = $"* Methods will be synchronous from 0.0 and {CoverCalibrator.SYNCHRONOUS_BEHAVIOUR_LIMIT.ToString("0.0")} seconds and asynchronous above this.";
+            LblSynchBehaviourTime.Text = $"* Methods will be synchronous from 0.0 and {CoverCalibrator.SYNCHRONOUS_BEHAVIOUR_LIMIT:0.0} seconds and asynchronous above this.";
         }
 
     }
