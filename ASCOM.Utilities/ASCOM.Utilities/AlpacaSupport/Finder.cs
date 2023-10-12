@@ -27,18 +27,19 @@ namespace ASCOM.Utilities
         private Dictionary<IPAddress, UdpClient> ipV6Discoveryclients = new Dictionary<IPAddress, UdpClient>(); // Collection Of IP v6 clients For the various link local And localhost network
 
         /// <summary>
-    /// A cache of all endpoints found by the server
-    /// </summary>
+        /// A cache of all endpoints found by the server
+        /// </summary>
         public List<IPEndPoint> CachedEndpoints { get; private set; } = new List<IPEndPoint>();
 
         #region Initialisation and Dispose
         /// <summary>
-    /// Creates a Alpaca Finder object that sends out a search request for Alpaca devices
-    /// The results will be sent to the callback and stored in the cache
-    /// Calling search and concatenating the results reduces the chance that a UDP packet is lost
-    /// This may require firewall access
-    /// </summary>
-    /// <param name="callback">A callback function to receive the endpoint result</param>
+        /// Creates a Alpaca Finder object that sends out a search request for Alpaca devices
+        /// The results will be sent to the callback and stored in the cache
+        /// Calling search and concatenating the results reduces the chance that a UDP packet is lost
+        /// This may require firewall access
+        /// </summary>
+        /// <param name="callback">A callback function to receive the endpoint result</param>
+        /// <param name="traceLogger">Trace logger for debugging</param>
         internal Finder(Action<IPEndPoint, AlpacaDiscoveryResponse> callback, TraceLogger traceLogger)
         {
             TL = traceLogger; // Save the trace logger object
@@ -64,7 +65,7 @@ namespace ASCOM.Utilities
                         {
                             dev.Value.Close();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }
@@ -76,7 +77,7 @@ namespace ASCOM.Utilities
                         {
                             dev.Value.Close();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }
@@ -100,8 +101,8 @@ namespace ASCOM.Utilities
         #region Public methods
 
         /// <summary>
-    /// Resends the search request
-    /// </summary>
+        /// Resends the search request
+        /// </summary>
         public void Search(int discoveryport, bool ipV4Enabled, bool ipV6Enabled)
         {
             if (ipV4Enabled)
@@ -111,8 +112,8 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Clears the cached IP Endpoints in CachedEndpoints
-    /// </summary>
+        /// Clears the cached IP Endpoints in CachedEndpoints
+        /// </summary>
         public void ClearCache()
         {
             CachedEndpoints.Clear();
@@ -235,9 +236,9 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-    /// Send out discovery message on the IPv6 multicast group
-    /// This dual targets NetStandard 2.0 and NetFX 3.5 so no Async Await
-    /// </summary>
+        /// Send out discovery message on the IPv6 multicast group
+        /// This dual targets NetStandard 2.0 and NetFX 3.5 so no Async Await
+        /// </summary>
         private void SendDiscoveryMessageIpV6(int discoveryPort)
         {
             LogMessage("SearchIPv6", $"Sending IPv6 discovery broadcasts");
@@ -286,7 +287,7 @@ namespace ASCOM.Utilities
                                         ipV6Discoveryclients[uni.Address].Send(Encoding.ASCII.GetBytes(Constants.DISCOVERY_MESSAGE), Encoding.ASCII.GetBytes(Constants.DISCOVERY_MESSAGE).Length, new IPEndPoint(IPAddress.Parse(Constants.ALPACA_DISCOVERY_IPV6_MULTICAST_ADDRESS), discoveryPort));
                                         LogMessage("SearchIPv6", $"Sent multicast IPv6 discovery packet");
                                     }
-                                    catch (SocketException __unusedSocketException1__)
+                                    catch (SocketException)
                                     {
                                     }
                                 }
@@ -330,9 +331,9 @@ namespace ASCOM.Utilities
 
 
         /// <summary>
-    /// This callback is shared between IPv4 and IPv6
-    /// </summary>
-    /// <param name="ar"></param>
+        /// This callback is shared between IPv4 and IPv6
+        /// </summary>
+        /// <param name="ar"></param>
         private void FinderDiscoveryCallback(IAsyncResult ar)
         {
             try
@@ -370,7 +371,7 @@ namespace ASCOM.Utilities
             }
 
             // Ignore these, they can occur after the Finder is disposed
-            catch (ObjectDisposedException __unusedObjectDisposedException1__)
+            catch (ObjectDisposedException)
             {
             }
             catch (Exception ex)

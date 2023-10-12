@@ -91,6 +91,9 @@ namespace ASCOM.Utilities
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Finalise the Chooser
+        /// </summary>
         ~Chooser()
         {
             // Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.

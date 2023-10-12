@@ -10,7 +10,9 @@ namespace ASCOM.Utilities
     {
         #region Windows Form Designer generated code 
         // Required by the Windows Form Designer
+#pragma warning disable CS0649 // Field 'ChooserForm.components' is never assigned to, and will always have its default value null
         private System.ComponentModel.IContainer components;
+#pragma warning restore CS0649 // Field 'ChooserForm.components' is never assigned to, and will always have its default value null
         public PictureBox picASCOM;
         public Button BtnCancel;
         public Button BtnOK;

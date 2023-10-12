@@ -159,7 +159,7 @@ namespace ASCOM.Utilities
         /// List the device types registered in the Profile store
         /// </summary>
         /// <value>List of registered device types</value>
-        /// <returns>A sorted arraylist of device type strings</returns>
+        /// <returns>A sorted array-list of device type strings</returns>
         /// <remarks>Use this to find the types of device that are registered in the Profile store.
         /// <para>Device types are returned without the suffix " Devices" that is used in key names within the 
         /// profile store; this allows direct use of returned device types inside For Each loops as shown in 
@@ -220,7 +220,7 @@ namespace ASCOM.Utilities
             {
                 RegDevs = ProfileStore.EnumKeys(DeviceType + " Drivers"); // Get Key-Class pairs
             }
-            catch (NullReferenceException ex) // Catch exception thrown if the DeviceType is an invalid value
+            catch (NullReferenceException) // Catch exception thrown if the DeviceType is an invalid value
             {
                 TL.LogMessage("RegisteredDevices", "WARNING: there are no devices of type: \"" + DeviceType + "\" registered on this system");
                 RegDevs = new System.Collections.Generic.SortedList<string, string>(); // Return an empty list
@@ -297,12 +297,12 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve a string value from the profile using the supplied subkey for the given Driver ID 
+        /// Retrieve a string value from the profile using the supplied sub-key for the given Driver ID 
         /// and variable name. Set and return the default value if the requested variable name has not yet been set.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
-        /// <param name="SubKey">Subkey from the profile root from which to read the value</param>
+        /// <param name="SubKey">Sub-key from the profile root from which to read the value</param>
         /// <param name="DefaultValue">Default value to be used if there is no value currently set</param>
         /// <returns>Retrieved variable value</returns>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
@@ -320,7 +320,7 @@ namespace ASCOM.Utilities
         {
             // Get a profile value
             string Rtn;
-            TL.LogMessage("GetValue", "Driver: " + DriverID + " Name: " + Name + " Subkey: \"" + SubKey + "\"" + " DefaultValue: \"" + DefaultValue + "\"");
+            TL.LogMessage("GetValue", "Driver: " + DriverID + " Name: " + Name + " Sub-key: \"" + SubKey + "\"" + " DefaultValue: \"" + DefaultValue + "\"");
 
             CheckRegistered(DriverID);
             Rtn = ProfileStore.GetProfile(MakeKey(DriverID, SubKey), Name, DefaultValue);
@@ -330,12 +330,12 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
+        /// Writes a string value to the profile using the supplied sub-key for the given Driver ID and variable name.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to write to</param>
         /// <param name="Name">Name of the variable whose value is to be written</param>
         /// <param name="Value">The string value to be written</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
         /// <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
         /// <exception cref="Exceptions.RestrictedAccessException">Thrown if Name and SubKey are both empty strings. This 
@@ -344,7 +344,7 @@ namespace ASCOM.Utilities
         public void WriteValue(string DriverID, string Name, string Value, string SubKey)
         {
             // Create or update a profile value
-            TL.LogMessage("WriteValue", "Driver: " + DriverID + " Name: " + Name + " Value: " + Value + " Subkey: \"" + SubKey + "\"");
+            TL.LogMessage("WriteValue", "Driver: " + DriverID + " Name: " + Name + " Value: " + Value + " Sub-key: \"" + SubKey + "\"");
             if (Value is null)
             {
                 TL.LogMessage("WriteProfile", "WARNING - Supplied data value is Nothing, not empty string");
@@ -361,10 +361,10 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Return a list of the (unnamed and named variables) under the given DriverID and subkey.
+        /// Return a list of the (unnamed and named variables) under the given DriverID and sub-key.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <returns>An ArrayList of KeyValuePairs</returns>
         /// <remarks>The returned object contains entries for each value. For each entry, 
         /// the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
@@ -377,7 +377,7 @@ namespace ASCOM.Utilities
             var RetVal = new ArrayList();
             // Return a hash table of all values in a given key
             System.Collections.Generic.SortedList<string, string> Vals;
-            TL.LogMessage("Values", "Driver: " + DriverID + " Subkey: \"" + SubKey + "\"");
+            TL.LogMessage("Values", "Driver: " + DriverID + " Sub-key: \"" + SubKey + "\"");
             CheckRegistered(DriverID);
             Vals = ProfileStore.EnumProfile(MakeKey(DriverID, SubKey));
             TL.LogMessage("  Values", "  Returning " + Vals.Count + " values");
@@ -390,18 +390,18 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Delete the value from the registry. Name may be an empty string for the unnamed value. Value will be deleted from the subkey supplied.
+        /// Delete the value from the registry. Name may be an empty string for the unnamed value. Value will be deleted from the sub-key supplied.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
         /// <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
         /// <remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key. </remarks>
         public void DeleteValue(string DriverID, string Name, string SubKey)
         {
             // Delete a value
-            TL.LogMessage("DeleteValue", "Driver: " + DriverID + " Name: " + Name + " Subkey: \"" + SubKey + "\"");
+            TL.LogMessage("DeleteValue", "Driver: " + DriverID + " Name: " + Name + " Sub-key: \"" + SubKey + "\"");
             CheckRegistered(DriverID);
             ProfileStore.DeleteProfile(MakeKey(DriverID, SubKey), Name);
         }
@@ -410,14 +410,14 @@ namespace ASCOM.Utilities
         /// Create a registry key for the given DriverID.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
         /// <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
         /// <remarks>If the SubKey argument contains a \ separated path, the intermediate keys will be created if needed. </remarks>
         public void CreateSubKey(string DriverID, string SubKey)
         {
-            // Create a subkey
-            TL.LogMessage("CreateSubKey", "Driver: " + DriverID + " Subkey: \"" + SubKey + "\"");
+            // Create a sub-key
+            TL.LogMessage("CreateSubKey", "Driver: " + DriverID + " Sub-key: \"" + SubKey + "\"");
             CheckRegistered(DriverID);
             ProfileStore.CreateKey(MakeKey(DriverID, SubKey));
         }
@@ -426,7 +426,7 @@ namespace ASCOM.Utilities
         /// Return a list of the sub-keys under the given DriverID
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <returns>An ArrayList of key-value pairs</returns>
         /// <remarks>The returned object contains entries for each sub-key. For each KeyValuePair in the list, 
         /// the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
@@ -437,11 +437,11 @@ namespace ASCOM.Utilities
             var RetVal = new ArrayList();
             System.Collections.Generic.SortedList<string, string> SKeys;
 
-            TL.LogMessage("SubKeys", "Driver: " + DriverID + " Subkey: \"" + SubKey + "\"");
+            TL.LogMessage("SubKeys", "Driver: " + DriverID + " Sub-key: \"" + SubKey + "\"");
             if (!string.IsNullOrEmpty(DriverID))
                 CheckRegistered(DriverID);
             SKeys = ProfileStore.EnumKeys(MakeKey(DriverID, SubKey));
-            TL.LogMessage("  SubKeys", "  Returning " + SKeys.Count + " subkeys");
+            TL.LogMessage("  SubKeys", "  Returning " + SKeys.Count + " sub-keys");
             foreach (System.Collections.Generic.KeyValuePair<string, string> kvp in SKeys)
             {
                 TL.LogMessage("  SubKeys", "  " + kvp.Key + " = " + kvp.Value);
@@ -454,14 +454,14 @@ namespace ASCOM.Utilities
         /// Delete a registry key for the given DriverID. SubKey may contain \ separated path to key to be deleted.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
         /// <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
         /// <remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
         public void DeleteSubKey(string DriverID, string SubKey)
         {
-            // Delete a subkey
-            TL.LogMessage("DeleteSubKey", "Driver: " + DriverID + " Subkey: \"" + SubKey + "\"");
+            // Delete a sub-key
+            TL.LogMessage("DeleteSubKey", "Driver: " + DriverID + " Sub-key: \"" + SubKey + "\"");
             CheckRegistered(DriverID);
             ProfileStore.DeleteKey(MakeKey(DriverID, SubKey));
         }
@@ -473,7 +473,7 @@ namespace ASCOM.Utilities
         /// <returns>Device profile encoded in XML</returns>
         /// <remarks>Please see the code examples in this help file for a description of how to use this method.
         /// <para>The format of the returned XML is shown below. The SubKey element repeats for as many subkeys as are present while the Value element with its
-        /// Name and Data members repeats as often as there are values in a particular subkey.</para>
+        /// Name and Data members repeats as often as there are values in a particular sub-key.</para>
         /// <para><pre>
         /// &lt;?xml version="1.0" encoding="utf-8" ?&gt; 
         /// &lt;ASCOMProfileAL&gt;
@@ -642,11 +642,11 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+        /// Retrieve a string value from the profile using the supplied sub-key for the given Driver ID and variable name.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
-        /// <param name="SubKey">Subkey from the profile root from which to read the value</param>
+        /// <param name="SubKey">Sub-key from the profile root from which to read the value</param>
         /// <returns>Retrieved variable value</returns>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
         /// <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
@@ -762,7 +762,7 @@ namespace ASCOM.Utilities
         private string MakeKey(string BaseKey, string SubKey)
         {
             string MakeKeyRet = default;
-            // Create a full path to a subkey given the driver name and type 
+            // Create a full path to a sub-key given the driver name and type 
             MakeKeyRet = m_sDeviceType + " Drivers";
             if (!string.IsNullOrEmpty(BaseKey))
                 MakeKeyRet = MakeKeyRet + @"\" + BaseKey; // Allow blank BaseKey (See SubKeys())

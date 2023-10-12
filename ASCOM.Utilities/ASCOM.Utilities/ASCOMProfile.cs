@@ -22,18 +22,20 @@ namespace ASCOM.Utilities
         private SortedList<string, SortedList<string, string>> Subkey;
 
         #region New and IDisposable
+
+        /// <summary>
+        ///  Create an ASCOM Profile class
+        /// </summary>
         public ASCOMProfile()
         {
             Subkey = new SortedList<string, SortedList<string, string>>();
-            // Subkey.Add("", New SortedList(Of String, String)) 'Set the default value to unset
-            // Subkey("")("") = ""
         }
         #endregion
 
         /// <summary>
-        /// Add a new subkey
+        /// Add a new sub-key
         /// </summary>
-        /// <param name="SubKeyName">Name of the subkey</param>
+        /// <param name="SubKeyName">Name of the sub-key</param>
         /// <remarks></remarks>
         public void AddSubkey(string SubKeyName)
         {
@@ -42,7 +44,7 @@ namespace ASCOM.Utilities
                 Subkey.Add(SubKeyName, new SortedList<string, string>());
                 SetValue(SubKeyName, "", ""); // Set the default value to uninitialised
             }
-            catch (ArgumentException ex) // Ignore this exception which occurs when the subkey has already been added
+            catch (ArgumentException) // Ignore this exception which occurs when the sub-key has already been added
             {
             }
         }
@@ -69,9 +71,9 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Removes a complete subkey
+        /// Removes a complete sub-key
         /// </summary>
-        /// <param name="SubKeyName">Subkey to be removed</param>
+        /// <param name="SubKeyName">Sub-key to be removed</param>
         /// <remarks></remarks>
         public void RemoveSubKey(string SubKeyName)
         {
@@ -79,7 +81,7 @@ namespace ASCOM.Utilities
             {
                 Subkey.Remove(SubKeyName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -96,9 +98,9 @@ namespace ASCOM.Utilities
             {
                 try
                 {
-                    Subkey[SubKeyName].Remove(ValueName); // Catch exception oif they value doesn't exist
+                    Subkey[SubKeyName].Remove(ValueName); // Catch exception if they value doesn't exist
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -109,7 +111,7 @@ namespace ASCOM.Utilities
         /// </summary>
         /// <param name="Name">Name of the value to set</param>
         /// <param name="Value">Value to be set</param>
-        /// <param name="SubKeyName">"Subkey continaining the value</param>
+        /// <param name="SubKeyName">"Sub-key containing the value</param>
         /// <remarks>Changing a value with this method does NOT change the underlying profile store, only the value in this class.
         /// In order to persist the new value, the class should be written back to the profile store through Profile.SetProfile.</remarks>
         public void SetValue(string Name, string Value, string SubKeyName)
@@ -144,7 +146,7 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Retrieve a registry value from the driver top level subkey
+        /// Retrieve a registry value from the driver top level sub-key
         /// </summary>
         /// <param name="Name">Name of the value </param>
         /// <returns>String value</returns>
@@ -156,7 +158,7 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Remove a value from the driver top level subkey
+        /// Remove a value from the driver top level sub-key
         /// </summary>
         /// <param name="ValueName">Name of the value to be removed</param>
         /// <remarks></remarks>
@@ -167,7 +169,7 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Set a value in the driver top level subkey
+        /// Set a value in the driver top level sub-key
         /// </summary>
         /// <param name="Name">Name of the value to set</param>
         /// <param name="Value">Value to be set</param>
@@ -180,23 +182,32 @@ namespace ASCOM.Utilities
         #endregion
 
         #region IXMLSerialisable Implementation
+
+        /// <summary>
+        /// Return the XML schema
+        /// </summary>
+        /// <returns></returns>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public System.Xml.Schema.XmlSchema GetSchema()
         {
             return default;
         }
 
+        /// <summary>
+        /// Read XML
+        /// </summary>
+        /// <param name="reader">XML reader</param>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public void ReadXml(System.Xml.XmlReader reader)
         {
             string CurrentSubKey = "";
             string CurrentName = "";
             Subkey.Clear(); // Make sure we are starting with an empty collection in case the user has already played with this object
-            while (reader.Read()) // Read the xml stream
+            while (reader.Read()) // Read the XML stream
             {
                 switch (reader.Name ?? "") // Determine what to do based on the element name
                 {
-                    case XML_SUBKEYNAME_ELEMENTNAME: // This is a subkey element so get itand save for future use when adding values
+                    case XML_SUBKEYNAME_ELEMENTNAME: // This is a sub-key element so get it and save for future use when adding values
                         {
                             CurrentSubKey = reader.ReadString();
                             Subkey.Add(CurrentSubKey, new SortedList<string, string>()); // Create a new 
@@ -214,7 +225,7 @@ namespace ASCOM.Utilities
                         }
                     case XML_DATA_ELEMENTNAME:
                         {
-                            Subkey[CurrentSubKey].Add(CurrentName, reader.ReadString()); // This is a value element so add it using the saved subkey and name
+                            Subkey[CurrentSubKey].Add(CurrentName, reader.ReadString()); // This is a value element so add it using the saved sub-key and name
                                                                                          // Ignore
                             break;
                         }
@@ -227,13 +238,17 @@ namespace ASCOM.Utilities
             }
         }
 
+        /// <summary>
+        /// Write XML to the writer
+        /// </summary>
+        /// <param name="writer">XML writer</param>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public void WriteXml(System.Xml.XmlWriter writer)
         {
             foreach (string key in Subkey.Keys)
             {
                 writer.WriteStartElement(XML_SUBKEY_ELEMENTNAME); // Start the SubKey element
-                writer.WriteElementString(XML_SUBKEYNAME_ELEMENTNAME, key); // Write the subkey name
+                writer.WriteElementString(XML_SUBKEYNAME_ELEMENTNAME, key); // Write the sub-key name
                 writer.WriteElementString(XML_DEFAULTVALUE_ELEMENTNAME, Subkey[key][""]); // Write the default value
                 writer.WriteStartElement(XML_VALUES_ELEMENTNAME); // Start the values element
                 foreach (KeyValuePair<string, string> kvp in Subkey[key]) // Write name values pairs except for default value
@@ -247,7 +262,7 @@ namespace ASCOM.Utilities
                     }
                 }
                 writer.WriteEndElement(); // Close the values element
-                writer.WriteEndElement(); // Close the subkey element
+                writer.WriteEndElement(); // Close the sub-key element
             }
         }
         #endregion

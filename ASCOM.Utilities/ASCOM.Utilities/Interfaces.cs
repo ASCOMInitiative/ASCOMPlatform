@@ -197,6 +197,9 @@ namespace ASCOM.Utilities.Interfaces
     [ComVisible(true)]
     public interface IAlpacaDiscovery
     {
+        /// <summary>
+        /// Flag indicating when discovery is complete
+        /// </summary>
         [DispId(1)]
         bool DiscoveryComplete { get; }
 
@@ -302,7 +305,7 @@ namespace ASCOM.Utilities.Interfaces
         [DispId(1)]
         string Key { get; set; }
         /// <summary>
-        /// Value memeber of a key value pair
+        /// Value member of a key value pair
         /// </summary>
         /// <value>Value</value>
         /// <returns>Value as string</returns>
@@ -322,7 +325,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <summary>
         /// Writes the time and identifier to the log, leaving the line ready for further content through LogContinue and LogFinish
         /// </summary>
-        /// <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+        /// <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
         /// <param name="Message">Message to log</param>
         /// <remarks><para>Use this to start a log line where you want to write further information on the line at a later time.</para>
         /// <para>E.g. You might want to use this to record that an action has started and then append the word OK if all went well.
@@ -330,7 +333,7 @@ namespace ASCOM.Utilities.Interfaces
         /// successful when you started. If you just used LogMsg you would have ended up with two log lines, one showing 
         /// the start of the transaction and the next the outcome.</para>
         /// <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// </remarks>
         [DispId(1)]
         void LogStart(string Identifier, string Message);
@@ -343,7 +346,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <remarks>
         /// <para>This can be called multiple times to build up a complex log line if required.</para>
         /// <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// </remarks>
         [DispId(2)]
         void LogContinue(string Message, bool HexDump); // Append a full hex dump of the supplied string without a new line
@@ -360,12 +363,12 @@ namespace ASCOM.Utilities.Interfaces
         /// <summary>
         /// Closes a line started by LogStart with the supplied message and a hex translation of the message
         /// </summary>
-        /// <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+        /// <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
         /// <param name="Message">The final message to terminate the line</param>
         /// <param name="HexDump">True to append a hex translation of the message at the end of the message</param>
         /// <remarks>
         /// <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// </remarks>
         [DispId(4)]
         void LogMessage(string Identifier, string Message, bool HexDump); // Append a full hex dump of the supplied string with a new line
@@ -384,7 +387,7 @@ namespace ASCOM.Utilities.Interfaces
         /// Logs an issue, closing any open line and opening a continuation line if necessary after the 
         /// issue message.
         /// </summary>
-        /// <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+        /// <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
         /// <param name="Message">Message to log</param>
         /// <remarks>Use this for reporting issues that you don't want to appear on a line already opened 
         /// with StartLine</remarks>
@@ -398,7 +401,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
         /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the 
         /// information of interest.
-        /// <para><b>Note </b>This command is only required if the tracelogger constructor is called with no
+        /// <para><b>Note </b>This command is only required if the trace logger constructor is called with no
         /// parameters. It is provided for use in COM clients that can not call constructors with parameters.
         /// If you are writing a COM client then create the trace logger as:</para>
         /// <code>
@@ -433,11 +436,11 @@ namespace ASCOM.Utilities.Interfaces
         /// <summary>
         /// Displays a message respecting carriage return and linefeed characters
         /// </summary>
-        /// <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+        /// <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
         /// <param name="Message">The final message to terminate the line</param>
         /// <remarks>
         /// <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// </remarks>
         [DispId(10)]
         void LogMessageCrLf(string Identifier, string Message); // Append a full hex dump of the supplied string with a new line
@@ -447,7 +450,7 @@ namespace ASCOM.Utilities.Interfaces
         /// </summary>
         /// <value>Path to the log directory</value>
         /// <returns>String path</returns>
-        /// <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
+        /// <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
         [DispId(11)]
         string LogFilePath { get; set; }
 
@@ -463,7 +466,7 @@ namespace ASCOM.Utilities.Interfaces
     } // Interface to Utilities.TraceLogger
 
     /// <summary>
-    /// Addiitonal methods that are only visible to .NET clients and not to COM clients
+    /// Additional methods that are only visible to .NET clients and not to COM clients
     /// </summary>
     /// <remarks></remarks>
     [ComVisible(false)]
@@ -476,7 +479,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <remarks>
         /// <para>This can be called multiple times to build up a complex log line if required.</para>
         /// <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// <para>This overload is not available through COM, please use 
         /// "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
         /// with HexDump set False to achieve this effect.</para>
@@ -490,7 +493,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <remarks>
         /// <para>Can only be called once for each line started by LogStart.</para>
         /// <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// <para>This overload is not available through COM, please use 
         /// "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
         /// with HexDump set False to achieve this effect.</para>
@@ -500,12 +503,12 @@ namespace ASCOM.Utilities.Interfaces
         /// <summary>
         /// Logs a complete message in one call
         /// </summary>
-        /// <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+        /// <param name="Identifier">Identifies the meaning of the message e.g. name of module or method logging the message.</param>
         /// <param name="Message">Message to log</param>
         /// <remarks>
-        /// <para>Use this for straightforward logging requrements. Writes all information in one command.</para>
+        /// <para>Use this for straightforward logging requirements. Writes all information in one command.</para>
         /// <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
-        /// Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        /// Possible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         /// <para>This overload is not available through COM, please use 
         /// "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
         /// with HexDump set False to achieve this effect.</para>
@@ -536,7 +539,7 @@ namespace ASCOM.Utilities.Interfaces
         string DeviceType { get; set; }
 
         /// <summary>
-        /// Select ASCOM driver to use including pre-selecting one in the dropdown list
+        /// Select ASCOM driver to use including pre-selecting one in the drop-down list
         /// </summary>
         /// <param name="DriverProgID">Driver to preselect in the chooser dialogue</param>
         /// <returns>Driver ID of chosen driver</returns>
@@ -547,14 +550,14 @@ namespace ASCOM.Utilities.Interfaces
     } // Interface to Utilities.Chooser
 
     /// <summary>
-    /// Addiitonal methods that are only visible to .NET clients and not to COM clients
+    /// Additional methods that are only visible to .NET clients and not to COM clients
     /// </summary>
     /// <remarks></remarks>
     [ComVisible(false)]
     public interface IChooserExtra
     {
         /// <summary>
-        /// Select ASCOM driver to use without pre-selecting in the dropdown list
+        /// Select ASCOM driver to use without pre-selecting in the drop-down list
         /// </summary>
         /// <returns>Driver ID of chosen driver</returns>
         /// <remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
@@ -565,14 +568,14 @@ namespace ASCOM.Utilities.Interfaces
     }
 
     /// <summary>
-    /// Interface to the .NET Util component
+    /// Interface to the .NET Utilities component
     /// </summary>
     /// <remarks></remarks>
     [Guid("DF41946E-EE14-40f7-AA66-DD8A92E36EF2")]
     [ComVisible(true)]
     public interface IUtil
     {
-        // Interface for the new larger Util class including overloads to replace optional parameters
+        // Interface for the new larger Utilities class including overloads to replace optional parameters
         /// <summary>
         /// Pauses for a given interval in milliseconds.
         /// </summary>
@@ -598,7 +601,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <para>If there are more than three numeric tokens, only the first three are considered, the remainder 
         /// are ignored. Left to right positionally, the tokens are assumed to represent units (degrees or hours), 
         /// minutes, and seconds. If only two tokens are present, they are assumed to be units and minutes, and if 
-        /// only one token is present, it is assumed to be units. Any token can have a fractionsl part. Of course it 
+        /// only one token is present, it is assumed to be units. Any token can have a fractional part. Of course it 
         /// would not be normal (for example) for both the minutes and seconds parts to have fractional parts, but it 
         /// would be legal. So 00:30.5:30 would convert to 1.0 unit. </para>
         /// <para>Note that plain units, for example 23.128734523 are acceptable to the method. </para>
@@ -621,7 +624,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <para>If there are more than three numeric tokens, only the first three are considered, the remainder 
         /// are ignored. Left to right positionally, the tokens are assumed to represent units (degrees or hours), 
         /// minutes, and seconds. If only two tokens are present, they are assumed to be units and minutes, and if 
-        /// only one token is present, it is assumed to be units. Any token can have a fractionsl part. </para>
+        /// only one token is present, it is assumed to be units. Any token can have a fractional part. </para>
         /// 
         /// <para>Of course it would not be normal (for example) for both the minutes and seconds parts to have 
         /// fractional parts, but it would be legal. So 00:30.5:30 would convert to 1.0 unit. Note that plain units, 
@@ -645,7 +648,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <para>If there are more than three numeric tokens, only the first three are considered, the remainder 
         /// are ignored. Left to right positionally, the tokens are assumed to represent units (degrees or hours), 
         /// minutes, and seconds. If only two tokens are present, they are assumed to be units and minutes, and if 
-        /// only one token is present, it is assumed to be units. Any token can have a fractionsl part. </para>
+        /// only one token is present, it is assumed to be units. Any token can have a fractional part. </para>
         /// 
         /// <para>Of course it would not be normal (for example) for both the minutes and seconds parts to have 
         /// fractional parts, but it would be legal. So 00:30.5:30 would convert to 1.0 unit. Note that plain units, 
@@ -893,7 +896,7 @@ namespace ASCOM.Utilities.Interfaces
 
         /// <summary>
         /// Converts a safearray of integers to a collection that can be used in scripting languages.
-        /// This is required to handle properties that are returned as safearrays of integers, for  example FilterWheel.FocusOffsets
+        /// This is required to handle properties that are returned as safe-arrays of integers, for  example FilterWheel.FocusOffsets
         /// SafeArrays don't work in scripting languages.
         /// </summary>
         /// <param name="integerArray">array of integers</param>
@@ -903,11 +906,11 @@ namespace ASCOM.Utilities.Interfaces
         ArrayList ToIntegerCollection(int[] integerArray);
 
         /// <summary>
-        /// Convert an array of .NET built-in types to an equivalent Variant arrray (array of .NET Objects)
+        /// Convert an array of .NET built-in types to an equivalent Variant array (array of .NET Objects)
         /// </summary>
         /// <param name="SuppliedObject">The array to convert to variant types</param>
         /// <returns>A Variant array</returns>
-        /// <exception cref="InvalidValueException">If the supplied array contains elements of an unsuported Type.</exception>
+        /// <exception cref="InvalidValueException">If the supplied array contains elements of an unsupported Type.</exception>
         /// <exception cref="InvalidValueException">If the array rank is outside the range 1 to 5.</exception>
         /// <exception cref="InvalidValueException">If the supplied object is not an array.</exception>
         /// <remarks>This function will primarily be of use to Scripting Language programmers who need to convert Camera and Video ImageArrays from their native types to Variant types. If this is not done, 
@@ -991,7 +994,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <summary>
         /// Calculate the humidity given the ambient temperature and dew point
         /// </summary>
-        /// <param name="DewPoint">Dewpoint in degrees C</param>
+        /// <param name="DewPoint">Dew-point in degrees C</param>
         /// <param name="AmbientTemperature">Ambient temperature in degrees C</param>
         /// <returns>Humidity expressed in percent (0.0 .. 100.0)</returns>
         [DispId(34)]
@@ -1010,7 +1013,7 @@ namespace ASCOM.Utilities.Interfaces
     } // Interface to Utilities.Util
 
     /// <summary>
-    /// Addiitonal methods that are only visible to .NET clients and not to COM clients
+    /// Additional methods that are only visible to .NET clients and not to COM clients
     /// </summary>
     /// <remarks></remarks>
     [ComVisible(false)]
@@ -1087,7 +1090,7 @@ namespace ASCOM.Utilities.Interfaces
         /// </remarks>
         string HoursToHMS(double Hours);
         /// <summary>
-        /// Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimters MM:SS
+        /// Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimiters MM:SS
         /// </summary>
         /// <param name="Hours">The hours value to convert</param>
         /// <param name="HrsDelim">The delimiter string separating hours and minutes </param>
@@ -1142,7 +1145,7 @@ namespace ASCOM.Utilities.Interfaces
         /// </remarks>
         string DegreesToDM(double Degrees);
         /// <summary>
-        /// Convert degrees to sexagesimal degrees and minutes with the default minutes delimeter MM'
+        /// Convert degrees to sexagesimal degrees and minutes with the default minutes delimiter MM'
         /// </summary>
         /// <param name="Degrees">The degrees value to convert</param>
         /// <param name="DegDelim">The delimiter string separating degrees </param>
@@ -1210,7 +1213,7 @@ namespace ASCOM.Utilities.Interfaces
         string HoursToHM(double Hours, string HrsDelim, string MinDelim);
 
         /// <summary>
-        /// Convert degrees to sexagesimal hours, minutes, and seconds with default delimters of HH:MM:SS
+        /// Convert degrees to sexagesimal hours, minutes, and seconds with default delimiters of HH:MM:SS
         /// </summary>
         /// <param name="Degrees">The degrees value to convert</param>
         /// <returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
@@ -1386,7 +1389,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
         /// null value.</exception>
         /// <remarks>
-        /// Use this to find all the registerd devices of a given type that are in the Profile store.
+        /// Use this to find all the registered devices of a given type that are in the Profile store.
         /// <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
         /// an empty list will be returned</para>
         /// <para><b>Platform 6</b> Profile.RegisteredDevices was introduced in Platform 5.5 as a read only property that took
@@ -1400,10 +1403,10 @@ namespace ASCOM.Utilities.Interfaces
         ArrayList RegisteredDevices(string DeviceType);
 
         /// <summary>
-        /// Confirms whether a specific driver is registered ort unregistered in the profile store
+        /// Confirms whether a specific driver is registered or unregistered in the profile store
         /// </summary>
-        /// <param name="DriverID">String reprsenting the device's ProgID</param>
-        /// <returns>Boolean indicating registered or unregisteredstate of the supplied DriverID</returns>
+        /// <param name="DriverID">String representing the device's ProgID</param>
+        /// <returns>Boolean indicating registered or unregistered state of the supplied DriverID</returns>
         /// <remarks></remarks>
         [DispId(4)]
         bool IsRegistered(string DriverID);
@@ -1426,17 +1429,17 @@ namespace ASCOM.Utilities.Interfaces
         void Unregister(string DriverID);
 
         /// <summary>
-        /// Retrieve a string value from the profile using the supplied subkey for the given Driver ID 
+        /// Retrieve a string value from the profile using the supplied sub-key for the given Driver ID 
         /// and variable name. Set and return the default value if the requested variable name has not yet been set.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
-        /// <param name="SubKey">Subkey from the profile root from which to read the value</param>
+        /// <param name="SubKey">Sub-key from the profile root from which to read the value</param>
         /// <param name="DefaultValue">Default value to be used if there is no value currently set</param>
         /// <returns>Retrieved variable value</returns>
         /// <remarks>
         /// <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-        /// <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+        /// <para>Does not provide access to other registry data types such as binary and double-word. </para>
         /// <para>If a default value is supplied and the value is not already present in the profile store,
         /// the default value will be set in the profile store and then returned as the value of the 
         /// DriverID/SubKey/Name. If the default value is set to null (C#) or Nothing (VB) then no value will
@@ -1447,21 +1450,21 @@ namespace ASCOM.Utilities.Interfaces
         string GetValue(string DriverID, string Name, string SubKey, string DefaultValue);
 
         /// <summary>
-        /// Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
+        /// Writes a string value to the profile using the supplied sub-key for the given Driver ID and variable name.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
         /// <param name="Value">The string value to be written</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <remarks></remarks>
         [DispId(8)]
         void WriteValue(string DriverID, string Name, string Value, string SubKey);
 
         /// <summary>
-        /// Return a list of the (unnamed and named variables) under the given DriverID and subkey.
+        /// Return a list of the (unnamed and named variables) under the given DriverID and sub-key.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root from which to return values</param>
+        /// <param name="SubKey">Sub-key from the profile root from which to return values</param>
         /// <returns>An ArrayList of KeyValuePair objects.</returns>
         /// <remarks>The returned object contains entries for each value. For each entry, 
         /// the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
@@ -1473,11 +1476,11 @@ namespace ASCOM.Utilities.Interfaces
         ArrayList Values(string DriverID, string SubKey);
 
         /// <summary>
-        /// Delete the value from the registry. Name may be an empty string for the unnamed value. Value will be deleted from the subkey supplied.
+        /// Delete the value from the registry. Name may be an empty string for the unnamed value. Value will be deleted from the sub-key supplied.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key. </remarks>
         [DispId(10)]
         void DeleteValue(string DriverID, string Name, string SubKey);
@@ -1486,7 +1489,7 @@ namespace ASCOM.Utilities.Interfaces
         /// Create a registry key for the given DriverID.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <remarks>If the SubKey argument contains a \ separated path, the intermediate keys will be created if needed. </remarks>
         [DispId(11)]
         void CreateSubKey(string DriverID, string SubKey);
@@ -1495,7 +1498,7 @@ namespace ASCOM.Utilities.Interfaces
         /// Return a list of the sub-keys under the given DriverID (for COM clients)
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to search for subkeys</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to search for sub-keys</param>
         /// <returns>An ArrayList of key-value pairs</returns>
         /// <remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
         /// the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
@@ -1508,7 +1511,7 @@ namespace ASCOM.Utilities.Interfaces
         /// Delete a registry key for the given DriverID. SubKey may contain \ separated path to key to be deleted.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
-        /// <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        /// <param name="SubKey">Sub-key from the profile root in which to write the value</param>
         /// <remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
         [DispId(13)]
         void DeleteSubKey(string DriverID, string SubKey);
@@ -1540,7 +1543,7 @@ namespace ASCOM.Utilities.Interfaces
     } // Interface to Utilities.Profile
 
     /// <summary>
-    /// Addiitonal methods that are only visible to .NET clients and not to COM clients
+    /// Additional methods that are only visible to .NET clients and not to COM clients
     /// </summary>
     /// <remarks></remarks>
     [ComVisible(false)]
@@ -1550,7 +1553,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <summary>
         /// Migrate the ASCOM profile from registry to file store
         /// </summary>
-        /// <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
+        /// <param name="CurrentPlatformVersion">The platform version number of the current profile store being migrated</param>
         /// <remarks></remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         void MigrateProfile(string CurrentPlatformVersion);
@@ -1575,7 +1578,7 @@ namespace ASCOM.Utilities.Interfaces
         /// <returns>Retrieved variable value</returns>
         /// <remarks>
         /// <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-        /// <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+        /// <para>Does not provide access to other registry data types such as binary and double-word. </para>
         /// <para>This overload is not available through COM, please use 
         /// "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
         /// with SubKey set to empty string achieve this effect.</para>
@@ -1583,15 +1586,15 @@ namespace ASCOM.Utilities.Interfaces
         string GetValue(string DriverID, string Name);
 
         /// <summary>
-        /// Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+        /// Retrieve a string value from the profile using the supplied sub-key for the given Driver ID and variable name.
         /// </summary>
         /// <param name="DriverID">ProgID of the device to read from</param>
         /// <param name="Name">Name of the variable whose value is retrieved</param>
-        /// <param name="SubKey">Subkey from the profile root from which to read the value</param>
+        /// <param name="SubKey">Sub-key from the profile root from which to read the value</param>
         /// <returns>Retrieved variable value</returns>
         /// <remarks>
         /// <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-        /// <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+        /// <para>Does not provide access to other registry data types such as binary and double-word. </para>
         /// </remarks>
         string GetValue(string DriverID, string Name, string SubKey);
 
@@ -1635,7 +1638,7 @@ namespace ASCOM.Utilities.Interfaces
         /// Read an entire device profile and return it as an XML encoded string
         /// </summary>
         /// <param name="DriverId">The ProgID of the device</param>
-        /// <returns>Device profile represented as a recusrive class</returns>
+        /// <returns>Device profile represented as a recursive class</returns>
         /// <remarks>Returns a whole driver profile encoded as an XML string</remarks>
         ASCOMProfile GetProfile(string DriverId);
 
@@ -1644,7 +1647,7 @@ namespace ASCOM.Utilities.Interfaces
         /// </summary>
         /// <param name="DriverId">The ProgID of the device</param>
         /// <param name="XmlProfileKey">A class representing the profile</param>
-        /// <remarks>Set a whole device Profile in one call using a recusrive ProfileKey class</remarks>
+        /// <remarks>Set a whole device Profile in one call using a recursive ProfileKey class</remarks>
         void SetProfile(string DriverId, ASCOMProfile XmlProfileKey);
     }
 
@@ -1734,7 +1737,7 @@ namespace ASCOM.Utilities.Interfaces
         /// </summary>
         /// <value>Integer, serial port timeout in seconds</value>
         /// <returns>Integer, serial port timeout in seconds.</returns>
-        /// <remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
+        /// <remarks>The minimum delay timeout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
         [DispId(9)]
         int ReceiveTimeout { get; set; }
         /// <summary>

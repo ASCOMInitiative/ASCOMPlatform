@@ -58,7 +58,7 @@ namespace ASCOM.Utilities
         internal const Serial.WaitType SERIAL_WAIT_TYPE_DEFAULT = Serial.WaitType.WaitForSingleObject;
         internal const string SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE = "Suppress Alpaca Driver Admin Dialogue";
         internal const bool SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT = false;
-        internal const string PROFILE_MUTEX_NAME = "ASCOMProfileMutex"; // Name and timout value for the Profile mutex than ensures only one profile action happens at a time
+        internal const string PROFILE_MUTEX_NAME = "ASCOMProfileMutex"; // Name and time-out value for the Profile mutex than ensures only one profile action happens at a time
         internal const int PROFILE_MUTEX_TIMEOUT = 5000;
 
         // Trace settings values, these are used to persist trace values on a per user basis
@@ -78,18 +78,18 @@ namespace ASCOM.Utilities
 
         // RegistryAccess constants
         internal const string REGISTRY_ROOT_KEY_NAME = @"SOFTWARE\ASCOM"; // Location of ASCOM profile in HKLM registry hive
-        internal const string REGISTRY_5_BACKUP_SUBKEY = "Platform5Original"; // Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
-        internal const string REGISTRY_55_BACKUP_SUBKEY = "Platform55Original"; // Location that the original Plartform 5.5 Profile will be copied to before removing Platform 5 and 5.5
+        internal const string REGISTRY_5_BACKUP_SUBKEY = "Platform5Original"; // Location that the original Platform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
+        internal const string REGISTRY_55_BACKUP_SUBKEY = "Platform55Original"; // Location that the original Platform 5.5 Profile will be copied to before removing Platform 5 and 5.5
         internal const string PLATFORM_VERSION_NAME = "PlatformVersion";
         // XML constants used by XMLAccess and RegistryAccess classes
         internal const string COLLECTION_DEFAULT_VALUE_NAME = "***** DefaultValueName *****"; // Name identifier label
         internal const string COLLECTION_DEFAULT_UNSET_VALUE = "===== ***** UnsetValue ***** ====="; // Value identifier label
-        internal const string VALUES_FILENAME = "Profile.xml"; // Name of file to contain profile xml information
-        internal const string VALUES_FILENAME_ORIGINAL = "ProfileOriginal.xml"; // Name of file to contain original profile xml information
-        internal const string VALUES_FILENAME_NEW = "ProfileNew.xml"; // Name of file to contain original profile xml information
+        internal const string VALUES_FILENAME = "Profile.xml"; // Name of file to contain profile XML information
+        internal const string VALUES_FILENAME_ORIGINAL = "ProfileOriginal.xml"; // Name of file to contain original profile XML information
+        internal const string VALUES_FILENAME_NEW = "ProfileNew.xml"; // Name of file to contain original profile XML information
 
         internal const string PROFILE_NAME = "Profile"; // Name of top level XML element
-        internal const string SUBKEY_NAME = "SubKey"; // Profile subkey element name
+        internal const string SUBKEY_NAME = "SubKey"; // Profile sub-key element name
         internal const string DEFAULT_ELEMENT_NAME = "DefaultElement"; // Default value label
         internal const string VALUE_ELEMENT_NAME = "Element"; // Profile value element name
         internal const string NAME_ATTRIBUTE_NAME = "Name"; // Profile value name attribute
@@ -127,7 +127,7 @@ namespace ASCOM.Utilities
 
         // TraceLogger - Per user configuration value names
         internal const string TRACELOGGER_DEFAULT_FOLDER = "TraceLogger Default Folder";
-        
+
         // Other constants
         internal const double ABSOLUTE_ZERO_CELSIUS = -273.15d;
         internal const string TRACE_LOGGER_PATH = @"\ASCOM"; // Path to TraceLogger directory from My Documents
@@ -337,19 +337,19 @@ namespace ASCOM.Utilities
                     l_Value = (WaitType)Conversions.ToInteger(Enum.Parse(typeof(WaitType), m_SettingsKey.GetValue(p_Name).ToString()));
                 }
             }
-            catch (IOException ex) // Value doesn't exist so create it
+            catch (IOException) // Value doesn't exist so create it
             {
                 try
                 {
                     SetName(p_Name, p_DefaultValue.ToString());
                     l_Value = p_DefaultValue;
                 }
-                catch (Exception ex1) // Unable to create value so just return the default value
+                catch (Exception) // Unable to create value so just return the default value
                 {
                     l_Value = p_DefaultValue;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 l_Value = p_DefaultValue;
             }
@@ -380,19 +380,19 @@ namespace ASCOM.Utilities
                     l_Value = Conversions.ToBoolean(m_SettingsKey.GetValue(p_Name));
                 }
             }
-            catch (IOException ex) // Value doesn't exist so create it
+            catch (IOException) // Value doesn't exist so create it
             {
                 try
                 {
                     SetName(p_Name, p_DefaultValue.ToString());
                     l_Value = p_DefaultValue;
                 }
-                catch (Exception ex1) // Unable to create value so just return the default value
+                catch (Exception) // Unable to create value so just return the default value
                 {
                     l_Value = p_DefaultValue;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 l_Value = p_DefaultValue;
             }
@@ -422,19 +422,19 @@ namespace ASCOM.Utilities
                     l_Value = m_SettingsKey.GetValue(p_Name).ToString();
                 }
             }
-            catch (IOException ex) // Value doesn't exist so create it
+            catch (IOException) // Value doesn't exist so create it
             {
                 try
                 {
                     SetName(p_Name, p_DefaultValue.ToString());
                     l_Value = p_DefaultValue;
                 }
-                catch (Exception ex1) // Unable to create value so just return the default value
+                catch (Exception) // Unable to create value so just return the default value
                 {
                     l_Value = p_DefaultValue;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 l_Value = p_DefaultValue;
             }
@@ -465,19 +465,19 @@ namespace ASCOM.Utilities
                     l_Value = Conversions.ToDouble(p_Key.GetValue(p_Name));
                 }
             }
-            catch (IOException ex) // Value doesn't exist so create it
+            catch (IOException) // Value doesn't exist so create it
             {
                 try
                 {
                     SetName(p_Name, p_DefaultValue.ToString());
                     l_Value = p_DefaultValue;
                 }
-                catch (Exception ex1) // Unable to create value so just return the default value
+                catch (Exception) // Unable to create value so just return the default value
                 {
                     l_Value = p_DefaultValue;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 l_Value = p_DefaultValue;
             }
@@ -507,19 +507,19 @@ namespace ASCOM.Utilities
                     l_Value = Conversions.ToDate(m_SettingsKey.GetValue(p_Name));
                 }
             }
-            catch (IOException ex) // Value doesn't exist so create it
+            catch (IOException) // Value doesn't exist so create it
             {
                 try
                 {
                     SetName(p_Name, p_DefaultValue.ToString());
                     l_Value = p_DefaultValue;
                 }
-                catch (Exception ex1) // Unable to create value so just return the default value
+                catch (Exception) // Unable to create value so just return the default value
                 {
                     l_Value = p_DefaultValue;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 l_Value = p_DefaultValue;
             }
@@ -616,11 +616,11 @@ namespace ASCOM.Utilities
                     string ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_ERRORS;
                     string MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_MESSAGES;
 
-                    // Write to backup eventlog message and error logs
+                    // Write to backup event log message and error logs
                     File.AppendAllText(ErrorLog, TodaysDateTime + " ErrorCode: 0x" + Conversion.Hex(ex.ErrorCode) + " NativeErrorCode: 0x" + Conversion.Hex(ex.NativeErrorCode) + " " + ex.ToString() + Microsoft.VisualBasic.Constants.vbCrLf);
                     File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + Microsoft.VisualBasic.Constants.vbCrLf);
                 }
-                catch (Exception ex1) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
 
                 }
@@ -634,11 +634,11 @@ namespace ASCOM.Utilities
                     string ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_ERRORS;
                     string MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_MESSAGES;
 
-                    // Write to backup eventlog message and error logs
+                    // Write to backup event log message and error logs
                     File.AppendAllText(ErrorLog, TodaysDateTime + " " + ex.ToString() + Microsoft.VisualBasic.Constants.vbCrLf);
                     File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + Microsoft.VisualBasic.Constants.vbCrLf);
                 }
-                catch (Exception ex1) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
 
                 }
@@ -1012,6 +1012,7 @@ namespace ASCOM.Utilities
         /// </summary>
         /// <param name="ProgID">ProgID of the driver to be assessed</param>
         /// <param name="RequiredBitness">Application bitness for which application compatibility should be tested</param>
+        /// <param name="TL">Trace logger for debugging</param>
         /// <returns>String compatibility message or empty string if driver is fully compatible</returns>
         /// <remarks></remarks>
         internal static string DriverCompatibilityMessage(string ProgID, Bitness RequiredBitness, TraceLogger TL)
@@ -1039,7 +1040,7 @@ namespace ASCOM.Utilities
 
             TL.LogMessage("DriverCompatibility", "     ProgID: " + ProgID + ", Bitness: " + RequiredBitness.ToString());
             // Parse the COM registry section to determine whether this ProgID is an in-process DLL server.
-            // If it is then parse the executable to determine whether it is a 32bit only driver and gie a suitable message if it is
+            // If it is then parse the executable to determine whether it is a 32bit only driver and give a suitable message if it is
             // Picks up some COM registration issues as well as a by-product.
             if (RequiredBitness == Bitness.Bits64) // We have a 64bit application so check to see whether this is a 32bit only driver
             {
@@ -1075,7 +1076,7 @@ namespace ASCOM.Utilities
 
                             if (Strings.Trim(InprocFilePath).ToUpperInvariant() == "MSCOREE.DLL") // We have an assembly, most likely in the GAC so get the actual file location of the assembly
                             {
-                                // If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
+                                // If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assembly name, 
                                 TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL");
 
                                 AssemblyFullName = RKInprocServer32.GetValue("Assembly", "").ToString(); // Get the full name
@@ -1085,7 +1086,7 @@ namespace ASCOM.Utilities
                                     try
                                     {
                                         LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName);
-                                        // OK that wen't well so we have an MSIL version!
+                                        // OK that went well so we have an MSIL version!
                                         InprocFilePath = LoadedAssembly.CodeBase; // Get the codebase for testing below
                                         TL.LogMessage("DriverCompatibilityMSIL", "     Found file path: " + InprocFilePath);
                                         TL.LogMessage("DriverCompatibilityMSIL", "     Found full name: " + LoadedAssembly.FullName + " ");
@@ -1109,7 +1110,7 @@ namespace ASCOM.Utilities
                                         try
                                         {
                                             LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName + ", processorArchitecture=x86");
-                                            // OK that wen't well so we have an x86 only version!
+                                            // OK that went well so we have an x86 only version!
                                             InprocFilePath = LoadedAssembly.CodeBase; // Get the codebase for testing below
                                             TL.LogMessage("DriverCompatibilityX86", "     Found file path: " + InprocFilePath);
                                             Modules = LoadedAssembly.GetLoadedModules();
@@ -1132,7 +1133,7 @@ namespace ASCOM.Utilities
                                             try
                                             {
                                                 LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName + ", processorArchitecture=x64");
-                                                // OK that wen't well so we have an x64 only version!
+                                                // OK that went well so we have an x64 only version!
                                                 InprocFilePath = LoadedAssembly.CodeBase; // Get the codebase for testing below
                                                 TL.LogMessage("DriverCompatibilityX64", "     Found file path: " + InprocFilePath);
                                                 Modules = LoadedAssembly.GetLoadedModules();
@@ -1147,7 +1148,7 @@ namespace ASCOM.Utilities
                                                     TL.LogMessage("DriverCompatibilityX64", "     Kind Not PE Executable");
                                             }
 
-                                            catch (Exception ex2)
+                                            catch (Exception)
                                             {
                                                 // Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
                                                 TL.LogMessageCrLf("DriverCompatibilityX64", ex1.ToString());
@@ -1204,7 +1205,7 @@ namespace ASCOM.Utilities
                                         CompatibilityMessage = "This 64bit capable driver is only registered as a 32bit COM driver." + Microsoft.VisualBasic.Constants.vbCrLf + DRIVER_AUTHOR_MESSAGE_INSTALLER;
                                     }
                                 }
-                                catch (FileNotFoundException ex) // Cannot open the file
+                                catch (FileNotFoundException) // Cannot open the file
                                 {
                                     CompatibilityMessage = "Cannot find the driver executable: " + Microsoft.VisualBasic.Constants.vbCrLf + "\"" + InprocFilePath + "\"";
                                 }
@@ -1230,7 +1231,7 @@ namespace ASCOM.Utilities
                         else
                         {
                             // Please leave this empty clause here so the logic is clear!
-                        } // This is not an inprocess DLL so no need to test further and no error message to return
+                        } // This is not an in-process DLL so no need to test further and no error message to return
                     }
                     else // Cannot find a CLSID entry
                     {
@@ -1259,7 +1260,7 @@ namespace ASCOM.Utilities
                         {
                             RK32 = CreateClsidKey($@"CLSID\{CLSID}", Bitness.Bits32);
                         }
-                        catch (Exception ex) // Ignore any exceptions, they just mean the operation wasn't successful
+                        catch (Exception) // Ignore any exceptions, they just mean the operation wasn't successful
                         {
                         }
 
@@ -1267,7 +1268,7 @@ namespace ASCOM.Utilities
                         {
                             RK64 = CreateClsidKey($@"CLSID\{CLSID}", Bitness.Bits64);
                         }
-                        catch (Exception ex) // Ignore any exceptions, they just mean the operation wasn't successful
+                        catch (Exception) // Ignore any exceptions, they just mean the operation wasn't successful
                         {
                         }
 
@@ -1312,7 +1313,7 @@ namespace ASCOM.Utilities
                                     try
                                     {
                                         LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName);
-                                        // OK that wen't well so we have an MSIL version!
+                                        // OK that went well so we have an MSIL version!
                                         InprocFilePath = LoadedAssembly.CodeBase; // Get the codebase for testing below
                                         TL.LogMessage("DriverCompatibilityMSIL", "     Found file path: " + InprocFilePath);
                                         TL.LogMessage("DriverCompatibilityMSIL", "     Found full name: " + LoadedAssembly.FullName + " ");
@@ -1336,7 +1337,7 @@ namespace ASCOM.Utilities
                                         try
                                         {
                                             LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName + ", processorArchitecture=x86");
-                                            // OK that wen't well so we have an x86 only version!
+                                            // OK that went well so we have an x86 only version!
                                             InprocFilePath = LoadedAssembly.CodeBase; // Get the codebase for testing below
                                             TL.LogMessage("DriverCompatibilityX86", "     Found file path: " + InprocFilePath);
                                             Modules = LoadedAssembly.GetLoadedModules();
@@ -1359,7 +1360,7 @@ namespace ASCOM.Utilities
                                             try
                                             {
                                                 LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName + ", processorArchitecture=x64");
-                                                // OK that wen't well so we have an x64 only version!
+                                                // OK that went well so we have an x64 only version!
                                                 InprocFilePath = LoadedAssembly.CodeBase; // Get the codebase for testing below
                                                 TL.LogMessage("DriverCompatibilityX64", "     Found file path: " + InprocFilePath);
                                                 Modules = LoadedAssembly.GetLoadedModules();
@@ -1374,7 +1375,7 @@ namespace ASCOM.Utilities
                                                     TL.LogMessage("DriverCompatibilityX64", "     Kind Not PE Executable");
                                             }
 
-                                            catch (Exception ex2)
+                                            catch (Exception)
                                             {
                                                 // Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
                                                 TL.LogMessageCrLf("DriverCompatibilityX64", ex1.ToString());
@@ -1414,7 +1415,7 @@ namespace ASCOM.Utilities
                                         CompatibilityMessage = "This is a 64bit only driver and is not compatible with this 32bit application." + Microsoft.VisualBasic.Constants.vbCrLf + DRIVER_AUTHOR_MESSAGE_DRIVER;
                                     }
                                 }
-                                catch (FileNotFoundException ex) // Cannot open the file
+                                catch (FileNotFoundException) // Cannot open the file
                                 {
                                     CompatibilityMessage = "Cannot find the driver executable: " + Microsoft.VisualBasic.Constants.vbCrLf + "\"" + InprocFilePath + "\"";
                                 }
@@ -1498,7 +1499,7 @@ namespace ASCOM.Utilities
             SortedList<string, string> ForcedFileNames, ForcedSeparators;
             PerformanceCounter PC;
 
-            ConditionPlatformVersionRet = PlatformVersion; // Set default action to return the supplied vaue
+            ConditionPlatformVersionRet = PlatformVersion; // Set default action to return the supplied value
             try
             {
                 ModuleFileName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName); // Get the name of the executable without path or file extension

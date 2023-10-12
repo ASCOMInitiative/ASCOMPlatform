@@ -120,12 +120,12 @@ namespace ASCOM.Utilities
                     l_Value = Conversions.ToBoolean(m_SettingsKey.GetValue(p_Name));
                 }
             }
-            catch (System.IO.IOException ex) // Value doesn't exist so create it
+            catch (System.IO.IOException) // Value doesn't exist so create it
             {
                 SetName(m_SettingsKey, p_Name, p_DefaultValue.ToString());
                 l_Value = p_DefaultValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // LogMsg("GetBool", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
                 l_Value = p_DefaultValue;
@@ -143,12 +143,12 @@ namespace ASCOM.Utilities
                     l_Value = m_SettingsKey.GetValue(p_Name).ToString();
                 }
             }
-            catch (System.IO.IOException ex) // Value doesn't exist so create it
+            catch (System.IO.IOException) // Value doesn't exist so create it
             {
                 SetName(m_SettingsKey, p_Name, p_DefaultValue.ToString());
                 l_Value = p_DefaultValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // LogMsg("GetString", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
                 l_Value = p_DefaultValue;
@@ -166,12 +166,12 @@ namespace ASCOM.Utilities
                     l_Value = Conversions.ToDouble(p_Key.GetValue(p_Name));
                 }
             }
-            catch (System.IO.IOException ex) // Value doesn't exist so create it
+            catch (System.IO.IOException) // Value doesn't exist so create it
             {
                 SetName(p_Key, p_Name, p_DefaultValue.ToString());
                 l_Value = p_DefaultValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // LogMsg("GetDouble", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
                 l_Value = p_DefaultValue;
@@ -188,12 +188,12 @@ namespace ASCOM.Utilities
                     l_Value = Conversions.ToDate(m_SettingsKey.GetValue(p_Name));
                 }
             }
-            catch (System.IO.IOException ex) // Value doesn't exist so create it
+            catch (System.IO.IOException) // Value doesn't exist so create it
             {
                 SetName(m_SettingsKey, p_Name, p_DefaultValue.ToString());
                 l_Value = p_DefaultValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // LogMsg("GetDate", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
                 l_Value = p_DefaultValue;

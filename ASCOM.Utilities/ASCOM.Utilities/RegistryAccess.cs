@@ -292,7 +292,7 @@ namespace ASCOM.Utilities
 
                 p_SubKeyName = Strings.Trim(p_SubKeyName); // Normalise the string:
                 switch (p_SubKeyName ?? "")  // Null path so do nothing
-                                             // Create the subkey
+                                             // Create the sub-key
                 {
                     case var @case when @case == "":
                         {
@@ -347,12 +347,12 @@ namespace ASCOM.Utilities
         void IAccess.DeleteKey(string p_SubKeyName) => DeleteKey(p_SubKeyName);
 
         /// <summary>
-        /// Rename a subkey by copying its contents to the new name and deleting the original key
+        /// Rename a sub-key by copying its contents to the new name and deleting the original key
         /// </summary>
         /// <param name="CurrentSubKeyName">Current key name</param>
         /// <param name="NewSubKeyName">New key name</param>
-        /// <remarks>The original version of this method just renamed the key and copied its values, however it did not copy any of the current key's subkeys. 
-        /// As of Platform 6.5 SP1 the method recursively calls itself in order to copy any subkeys and their values as well.</remarks>
+        /// <remarks>The original version of this method just renamed the key and copied its values, however it did not copy any of the current key's sub-keys. 
+        /// As of Platform 6.5 SP1 the method recursively calls itself in order to copy any sub-keys and their values as well.</remarks>
         internal void RenameKey(string CurrentSubKeyName, string NewSubKeyName)
         {
             // Rename a key by creating a copy of the original key with the new name then deleting the original key
@@ -376,15 +376,15 @@ namespace ASCOM.Utilities
                     WriteProfile(NewSubKeyName, Value.Key, Value.Value);
                 }
 
-                // Copy subkeys recursively
+                // Copy sub-keys recursively
                 Keys = EnumKeys(CurrentSubKeyName);
                 foreach (KeyValuePair<string, string> Key in Keys)
                 {
-                    TL.LogMessage("RenameKey", $@"Recursively copying subkey ""{CurrentSubKeyName}\{Key.Key}"" to ""{NewSubKeyName}\{Key.Key}""");
+                    TL.LogMessage("RenameKey", $@"Recursively copying sub-key ""{CurrentSubKeyName}\{Key.Key}"" to ""{NewSubKeyName}\{Key.Key}""");
                     RenameKey($@"{CurrentSubKeyName}\{Key.Key}", $@"{NewSubKeyName}\{Key.Key}");
                 }
 
-                // Delete the original subkey
+                // Delete the original sub-key
                 DeleteKey(CurrentSubKeyName);
             }
             else // Key already exists so throw an exception
@@ -446,7 +446,7 @@ namespace ASCOM.Utilities
                 {
                     try // If there is an error reading the data don't include in the returned list
                     {
-                        // Create the new subkey and get a handle to it
+                        // Create the new sub-key and get a handle to it
                         switch (p_SubKeyName ?? "")
                         {
                             case var @case when @case == "":
@@ -503,11 +503,11 @@ namespace ASCOM.Utilities
                 TL.LogMessage("EnumProfile", "SubKey: \"" + p_SubKeyName + "\"");
 
 
-                // Get a registry handle to the specified subkey. This may be null if the subkey doesn't exist
+                // Get a registry handle to the specified sub-key. This may be null if the sub-key doesn't exist
                 registrySubKey = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName));
 
-                // Test whether the registry handle is null, i.e. whether or not the registry subkey exists
-                if (!(registrySubKey == null)) // The subkey does exist so retrieve its value's names
+                // Test whether the registry handle is null, i.e. whether or not the registry sub-key exists
+                if (!(registrySubKey == null)) // The sub-key does exist so retrieve its value's names
                 {
                     Values = registrySubKey.GetValueNames();
                     foreach (string Value in Values)
@@ -516,7 +516,7 @@ namespace ASCOM.Utilities
                 else
                 {
                     // No action because the return value already contains an empty list 
-                } // The subkey doesn't exist
+                } // The sub-key doesn't exist
 
                 sw.Stop();
                 TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
@@ -554,13 +554,13 @@ namespace ASCOM.Utilities
                 RetVal = string.Empty; // Initialise return value to empty string
                 try
                 {
-                    // This section re-written to avoid NullReferenceExceptions when the specified subkey does not exist and when the requested value is missing
+                    // This section re-written to avoid NullReferenceExceptions when the specified sub-key does not exist and when the requested value is missing
 
-                    // Get a registry handle to the specified subkey. This may be null if the subkey doesn't exist
+                    // Get a registry handle to the specified sub-key. This may be null if the sub-key doesn't exist
                     registrySubKey = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName));
 
-                    // Test whether the registry handle is null, i.e. whether or not the registry subkey exists
-                    if (!(registrySubKey == null)) // The subkey does exist so retrieve the specified value
+                    // Test whether the registry handle is null, i.e. whether or not the registry sub-key exists
+                    if (!(registrySubKey == null)) // The sub-key does exist so retrieve the specified value
                     {
                         profileValue = registrySubKey.GetValue(p_ValueName);
 
@@ -582,7 +582,7 @@ namespace ASCOM.Utilities
                         }
                         TL.LogMessage("  Value", "\"" + RetVal + "\"");
                     }
-                    else if (p_DefaultValue is not null) // The subkey doesn't exist so test whether we have been supplied with a default value
+                    else if (p_DefaultValue is not null) // The sub-key doesn't exist so test whether we have been supplied with a default value
                                                          // We have been supplied a default value so set it and then return it
                     {
                         WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue);
@@ -594,7 +594,7 @@ namespace ASCOM.Utilities
                         TL.LogMessage("  Value", "Value not yet set and no default value supplied, returning empty string");
                     }
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
                     if (p_DefaultValue is not null) // We have been supplied a default value so set it and then return it
                     {
@@ -969,7 +969,7 @@ namespace ASCOM.Utilities
 
         private string CleanSubKey(string SubKey)
         {
-            // Remove leading "\" if it exists as this is not legal in a subkey name. "\" in the middle of a subkey name is legal however
+            // Remove leading "\" if it exists as this is not legal in a sub-key name. "\" in the middle of a sub-key name is legal however
             if (Strings.Left(SubKey, 1) == @"\")
                 return Strings.Mid(SubKey, 2);
             return SubKey;
@@ -1008,14 +1008,14 @@ namespace ASCOM.Utilities
             foreach (string SubKey in SubKeys)
             {
                 Value = FromKey.OpenSubKey(SubKey).GetValue("", "").ToString();
-                // LogMessage("  CopyRegistry", "  Processing subkey: " & SubKey & " " & Value)
-                NewFromKey = FromKey.OpenSubKey(SubKey); // Create the new subkey and get a handle to it
-                NewToKey = ToKey.CreateSubKey(SubKey); // Create the new subkey and get a handle to it
+                // LogMessage("  CopyRegistry", "  Processing sub-key: " & SubKey & " " & Value)
+                NewFromKey = FromKey.OpenSubKey(SubKey); // Create the new sub-key and get a handle to it
+                NewToKey = ToKey.CreateSubKey(SubKey); // Create the new sub-key and get a handle to it
                 if (!string.IsNullOrEmpty(Value))
                     NewToKey.SetValue("", Value); // Set the default value if present
                 CopyRegistry(NewFromKey, NewToKey); // Recursively process each key
             }
-            // swLocal.Stop() : LogMessage("  CopyRegistry", "  Completed subkey: " & FromKey.Name & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
+            // swLocal.Stop() : LogMessage("  CopyRegistry", "  Completed sub-key: " & FromKey.Name & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
             _CopyRegistry_RecurseDepth -= 1; // Decrement the recursion depth counter
                                              // swLocal = Nothing
             try
@@ -1490,8 +1490,8 @@ namespace ASCOM.Utilities
             RegistryKey NewKey;
             foreach (KeyValuePair<string, string> SubKey in SubKeys)
             {
-                LogMessage("  Copy55ToRegistry", "  Processing subkey: " + SubKey.Key + " " + SubKey.Value);
-                NewKey = RegistryTarget.CreateSubKey(SubKey.Key); // Create the new subkey and get a handle to it
+                LogMessage("  Copy55ToRegistry", "  Processing sub-key: " + SubKey.Key + " " + SubKey.Value);
+                NewKey = RegistryTarget.CreateSubKey(SubKey.Key); // Create the new sub-key and get a handle to it
                 if (!string.IsNullOrEmpty(SubKey.Value))
                     NewKey.SetValue("", SubKey.Value); // Set the default value if present
                 Copy55(CurrentSubKey + @"\" + SubKey.Key, Prof55, NewKey); // Recursively process each key
@@ -1500,7 +1500,7 @@ namespace ASCOM.Utilities
                 NewKey = null;
             }
             swLocal.Stop();
-            LogMessage("  Copy55ToRegistry", "  Completed subkey: " + CurrentSubKey + " " + _Copy55_RecurseDepth.ToString() + ",  Elapsed time: " + swLocal.ElapsedMilliseconds + " milliseconds");
+            LogMessage("  Copy55ToRegistry", "  Completed sub-key: " + CurrentSubKey + " " + _Copy55_RecurseDepth.ToString() + ",  Elapsed time: " + swLocal.ElapsedMilliseconds + " milliseconds");
             _Copy55_RecurseDepth -= 1; // Decrement the recursion depth counter
         }
 
@@ -1612,7 +1612,6 @@ namespace ASCOM.Utilities
         // <Obsolete("Replace with Microsoft.Win32.RegistryKey.OpenBaseKey method in Framework 4", False)> _
         internal RegistryKey OpenSubKey3264(RegistryHive ParentKey, string SubKeyName, bool Writeable, RegWow64Options Options)
         {
-            int SubKeyHandle;
             var Result = default(int);
             RegistryKey resultKey;
 

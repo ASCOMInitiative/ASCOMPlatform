@@ -12,77 +12,223 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
 {
 
     #region VB6HelperInterfaces
+
+    /// <summary>
+    /// Profile access interface
+    /// </summary>
     [Guid("87D14110-BEB7-43ff-991E-AAA11C44E5AF")]
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     [ComVisible(true)]
     public interface IProfileAccess
     {
+        /// <summary>
+        /// Get a Profile value
+        /// </summary>
+        /// <param name="p_SubKeyName"></param>
+        /// <param name="p_ValueName"></param>
+        /// <param name="CName"></param>
+        /// <returns></returns>
         [DispId(1)]
         string GetProfile(string p_SubKeyName, string p_ValueName, string CName);
+
+        /// <summary>
+        /// Write profile value
+        /// </summary>
+        /// <param name="p_SubKeyName">Sub-key name</param>
+        /// <param name="p_ValueName">Value name</param>
+        /// <param name="p_ValueData">Value to be written</param>
+        /// <param name="CName"></param>
         [DispId(2)]
         void WriteProfile(string p_SubKeyName, string p_ValueName, string p_ValueData, ref string CName);
+
+        /// <summary>
+        /// Get list of Profile values
+        /// </summary>
+        /// <param name="p_SubKeyName">Sub-key name</param>
+        /// <param name="CName">Parameter not used</param>
+        /// <returns>ArrayList of <see cref="KeyValuePair"/> objects.</returns>
         [DispId(3)]
-        ArrayList EnumProfile(string p_SubKeyName, string CName); // Scripting.Dictionary 'Hashtable
+        ArrayList EnumProfile(string p_SubKeyName, string CName);
+
+        /// <summary>
+        /// Delete a Profile value
+        /// </summary>
+        /// <param name="p_SubKeyName">Sub-key name</param>
+        /// <param name="p_ValueName">Value name</param>
+        /// <param name="CName">Parameter not used</param>
         [DispId(4)]
         void DeleteProfile(string p_SubKeyName, string p_ValueName, string CName);
+
+        /// <summary>
+        /// Create a Profile sub-key
+        /// </summary>
+        /// <param name="p_SubKeyName">Sub-key name</param>
+        /// <param name="CName">Parameter not used</param>
         [DispId(5)]
         void CreateKey(string p_SubKeyName, string CName);
+
+        /// <summary>
+        /// Return a list of sub-key names
+        /// </summary>
+        /// <param name="p_SubKeyName">Starting sub-key.</param>
+        /// <param name="CName">Parameter not used</param>
+        /// <returns>ArrayList of <see cref="KeyValuePair"/> containing sub-key names and associated default values</returns>
         [DispId(6)]
-        ArrayList EnumKeys(string p_SubKeyName, string CName); // Scripting.Dictionary 'Hashtable
+        ArrayList EnumKeys(string p_SubKeyName, string CName);
+
+        /// <summary>
+        /// Delete a Profile sub-key
+        /// </summary>
+        /// <param name="p_SubKeyName">Name of sub-key to delete</param>
+        /// <param name="CName">Parameter not used</param>
         [DispId(7)]
         void DeleteKey(string p_SubKeyName, string CName);
+
+        /// <summary>
+        /// Flag whether a driver ProgID has been registered
+        /// </summary>
+        /// <param name="p_DriverID">Driver ProgID</param>
+        /// <param name="p_DriverType">ASCOM device type</param>
+        /// <returns>True if the driver is already registered</returns>
         [DispId(8)]
         bool IsRegistered(string p_DriverID, string p_DriverType);
     }
 
+    /// <summary>
+    /// Serial component support
+    /// </summary>
     [Guid("ABE720E6-9C2C-47e9-8476-6CE5A3F994E2")]
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     [ComVisible(true)]
     public interface ISerialSupport
     {
+        /// <summary>
+        /// Clear buffers
+        /// </summary>
         [DispId(1)]
         void ClearBuffers();
+
+        /// <summary>
+        /// Connect or disconnect the serial device
+        /// </summary>
         [DispId(2)]
         bool Connected { get; set; }
+
+        /// <summary>
+        /// Serial port number
+        /// </summary>
         [DispId(3)]
         short Port { get; set; }
+
+        /// <summary>
+        /// Port speed
+        /// </summary>
         [DispId(4)]
         int PortSpeed { get; set; }
+
+        /// <summary>
+        /// Receive a string from the serial device
+        /// </summary>
+        /// <returns>The received string</returns>
         [DispId(5)]
         string Receive();
+
+        /// <summary>
+        /// Receive a byte from the serial device
+        /// </summary>
+        /// <returns>The received character</returns>
         [DispId(6)]
         byte ReceiveByte();
+
+        /// <summary>
+        /// Receive a specified number of characters from the device
+        /// </summary>
+        /// <param name="p_Count">Number of characters to receive</param>
+        /// <returns>The received string</returns>
         [DispId(7)]
         string ReceiveCounted(short p_Count);
+
+        /// <summary>
+        /// Receive a specified number of bytes from the serial device
+        /// </summary>
+        /// <param name="p_Count">Number of characters to receive</param>
+        /// <returns>Byte array of characters</returns>
         [DispId(8)]
         byte[] ReceiveCountedBinary(short p_Count);
+
+        /// <summary>
+        /// Wait for the specified character string to be received and return all received characters
+        /// </summary>
+        /// <param name="p_Terminator">Terminating character string</param>
+        /// <returns>The received characters as a string including the terminator</returns>
         [DispId(9)]
         string ReceiveTerminated(string p_Terminator);
+
+        /// <summary>
+        /// Wait for the specified character string to be received and return all received characters
+        /// </summary>
+        /// <param name="p_Terminator">Terminating character string</param>
+        /// <returns>The received characters as a byte array including the terminator</returns>
         [DispId(10)]
         byte[] ReceiveTerminatedBinary(ref byte[] p_Terminator);
+
+        /// <summary>
+        /// The serial device timeout (seconds)
+        /// </summary>
         [DispId(11)]
         short ReceiveTimeout { get; set; }
+
+        /// <summary>
+        /// The serial device timeout (milli-seconds)
+        /// </summary>
         [DispId(12)]
         int ReceiveTimeoutMs { get; set; }
+
+        /// <summary>
+        /// Send the specified characters to the serial device
+        /// </summary>
+        /// <param name="p_Data">Data to send</param>
         [DispId(13)]
         void Transmit(string p_Data);
+
+        /// <summary>
+        /// Send the specified characters to the serial device
+        /// </summary>
+        /// <param name="p_Data">Data to send</param>
         [DispId(14)]
         void TransmitBinary(byte[] p_Data);
     }
 
+    /// <summary>
+    /// Chooser support interface
+    /// </summary>
     [Guid("5E3A9439-A1A4-4d8d-8658-53E2470C69F6")]
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     [ComVisible(true)]
     public interface IChooserSupport
     {
+        /// <summary>
+        /// Device type
+        /// </summary>
         [DispId(1)]
         string DeviceType { get; set; }
+
+        /// <summary>
+        /// Select a driver
+        /// </summary>
+        /// <param name="CurrentDriverID">Driver ProgID</param>
+        /// <returns></returns>
         [DispId(2)]
         string Choose(string CurrentDriverID = "");
     }
+
     #endregion
 
     #region ProfileAccess
+
+    /// <summary>
+    /// Profile access class
+    /// </summary>
     [ProgId("DriverHelper.ProfileAccess")]
     [ComVisible(true)]
     [Guid("f0acf8ea-ddeb-4869-ae33-b25d4d6195b6")]
@@ -106,18 +252,18 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         private bool LastResult; // Cache values to improve IsRegistered performance
 
         #region New and IDisposable Support
-        // Create a new instance and instanciate the XMLAccess object to do all the hard work
-        // MyBase.New()
-        // Try
-        // Profile = New ASCOM.Utilities.XMLAccess("Unspecified Component")
-        // Catch ex As Exception
-        // MsgBox("HelperProfile " & ex.ToString)
-        // End Try
+
+        /// <summary>
+        /// Create a new ProfileAccess instance
+        /// </summary>
         public ProfileAccess() : this("Unspecified Component")
         {
         }
 
-        // As New() excpet that it allows the calling component to identify itself, this name is used in error messages
+        /// <summary>
+        /// Create a new ProfileAccess instance
+        /// </summary>
+        /// <param name="ComponentName">Name of this component for debugging purposes</param>
         public ProfileAccess(string ComponentName) : base()
         {
             try
@@ -135,7 +281,10 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
 
         private bool disposedValue = false;        // To detect redundant calls
 
-        // IDisposable
+        /// <summary>
+        /// Dispose of the object
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -163,7 +312,9 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             disposedValue = true;
         }
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of the object
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -171,6 +322,9 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Finaliser
+        /// </summary>
         ~ProfileAccess()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -181,6 +335,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
 
         #region ProfileAccess Implementation
 
+        /// <inheritdoc/>
         public string GetProfile(string p_SubKeyName, string p_ValueName, string CName)
         {
             // Get a single profile value
@@ -195,6 +350,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return Ret;
         }
 
+        /// <inheritdoc/>
         public void WriteProfile(string p_SubKeyName, string p_ValueName, string p_ValueData, ref string CName)
         {
             // Write a single profile value
@@ -204,6 +360,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             Profile.WriteProfile(p_SubKeyName, p_ValueName, p_ValueData);
         }
 
+        /// <inheritdoc/>
         public ArrayList EnumProfile(string p_SubKeyName, string CName)
         {
             // Enumerate values within a given profile key
@@ -222,6 +379,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public void DeleteProfile(string p_SubKeyName, string p_ValueName, string CName)
         {
             // Delete a profile key
@@ -230,6 +388,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             Profile.DeleteProfile(p_SubKeyName, p_ValueName);
         }
 
+        /// <inheritdoc/>
         public void CreateKey(string p_SubKeyName, string CName)
         {
             // Create a new profile key
@@ -238,6 +397,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             Profile.CreateKey(p_SubKeyName);
         }
 
+        /// <inheritdoc/>
         public ArrayList EnumKeys(string p_SubKeyName, string CName)
         {
             // Enuerate the subkeys in a specified key
@@ -257,6 +417,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public void DeleteKey(string p_SubKeyName, string CName)
         {
             // Delete a key and all its contents
@@ -265,6 +426,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             Profile.DeleteKey(p_SubKeyName);
         }
 
+        /// <inheritdoc/>
         public bool IsRegistered(string DriverID, string DriverType)
         {
             bool IsRegisteredRet = default;
@@ -322,10 +484,13 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
 
     }
 
-
     #endregion
 
     #region SerialSupport
+
+    /// <summary>
+    /// Support for the serial class
+    /// </summary>
     [ProgId("DriverHelper.SerialSupport")]
     [ComVisible(true)]
     [Guid("114EBEC4-7887-4ab9-B750-98BB5F1C8A8F")]
@@ -341,8 +506,12 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         private string TraceFilename;
         private TraceLogger TL;
         private bool DebugTrace;
+
         #region New and IDisposable Support
-        // Create a new instance and instanciate the Serial object to do all the hard work
+
+        /// <summary>
+        /// Create a new instance
+        /// </summary>
         public SerialSupport() : base()
         {
 
@@ -380,7 +549,10 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
 
         private bool disposedValue = false;        // To detect redundant calls
 
-        // IDisposable
+        /// <summary>
+        /// Dispose of the instance
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -404,7 +576,9 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             disposedValue = true;
         }
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of the instance
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -412,6 +586,9 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Class finaliser
+        /// </summary>
         ~SerialSupport()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -422,6 +599,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
 
         #region SerialSupport Implementation
 
+        /// <inheritdoc/>
         public void ClearBuffers()
         {
             var sw = new Stopwatch();
@@ -431,6 +609,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             TL.LogMessage("ClearBuffers", Strings.Format(sw.ElapsedMilliseconds, "0").PadLeft(4) + "ms");
         }
 
+        /// <inheritdoc/>
         public bool Connected
         {
             get
@@ -453,6 +632,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
+        /// <inheritdoc/>
         public short Port
         {
             get
@@ -475,6 +655,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
+        /// <inheritdoc/>
         public int PortSpeed
         {
             get
@@ -611,6 +792,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
+        /// <inheritdoc/>
         public string Receive()
         {
             var sw = new Stopwatch();
@@ -622,6 +804,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public byte ReceiveByte()
         {
             var sw = new Stopwatch();
@@ -633,6 +816,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public string ReceiveCounted(short p_Count)
         {
             var sw = new Stopwatch();
@@ -644,6 +828,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public byte[] ReceiveCountedBinary(short p_Count)
         {
             var sw = new Stopwatch();
@@ -657,6 +842,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public string ReceiveTerminated(string p_Terminator)
         {
             var sw = new Stopwatch();
@@ -668,6 +854,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public byte[] ReceiveTerminatedBinary(ref byte[] p_Terminator)
         {
             var sw = new Stopwatch();
@@ -681,6 +868,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             return RetVal;
         }
 
+        /// <inheritdoc/>
         public short ReceiveTimeout
         {
             get
@@ -703,6 +891,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
+        /// <inheritdoc/>
         public int ReceiveTimeoutMs
         {
             get
@@ -725,6 +914,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
+        /// <inheritdoc/>
         public void Transmit(string p_Data)
         {
             var sw = new Stopwatch();
@@ -734,6 +924,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             TL.LogMessage("Transmit", Strings.Format(sw.ElapsedMilliseconds, "0").PadLeft(4) + "ms " + p_Data);
         }
 
+        /// <inheritdoc/>
         public void TransmitBinary(byte[] p_Data)
         {
             var sw = new Stopwatch();
@@ -744,12 +935,17 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             sw.Stop();
             TL.LogMessage("TransmitBinary", Strings.Format(sw.ElapsedMilliseconds, "0").PadLeft(4) + "ms " + TextEncoding.GetString(p_Data));
         }
-        #endregion
 
+        #endregion
     }
+
     #endregion
 
     #region ChooserSupport
+
+    /// <summary>
+    /// ChooserSupport class
+    /// </summary>
     [ProgId("DriverHelper.ChooserSupport")]
     [ComVisible(true)]
     [Guid("9289B6A5-CAF1-4da1-8A36-999BEBCDD5E9")]
@@ -765,7 +961,10 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         private bool disposedValue = false;        // To detect redundant calls
 
         #region New, IDisposable and Finalize
-        // Create a new instance and instanciate the XMLAccess object to do all the hard work
+
+        /// <summary>
+        /// Create a new instance and instantiate the XMLAccess object to do all the hard work
+        /// </summary>
         public ChooserSupport() : base()
         {
             try
@@ -780,7 +979,10 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
-        // IDisposable
+        /// <summary>
+        /// Dispose of the class
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -798,7 +1000,9 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             disposedValue = true;
         }
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of the class
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -806,14 +1010,22 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Class finaliser
+        /// </summary>
         ~ChooserSupport()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
             Dispose(false);
         }
+
         #endregion
 
         #region ChooserSupport Implementation
+
+        /// <summary>
+        /// Device type
+        /// </summary>
         public string DeviceType
         {
             get
@@ -828,6 +1040,11 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
         }
 
+        /// <summary>
+        /// Select the driver
+        /// </summary>
+        /// <param name="CurrentDriverID">Driver ProgID</param>
+        /// <returns></returns>
         public string Choose(string CurrentDriverID = "")
         {
             try
@@ -840,9 +1057,11 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
                 return "EXCEPTION VALUE";
             }
         }
+
         #endregion
 
     }
+
     #endregion
 
 }

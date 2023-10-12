@@ -6,6 +6,9 @@ namespace ASCOM.Utilities
 {
     public partial class CheckedMessageBox
     {
+        /// <summary>
+        /// Create a checked message box
+        /// </summary>
         public CheckedMessageBox()
         {
 

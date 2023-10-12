@@ -273,6 +273,9 @@ namespace ASCOM.Utilities
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Finaliser
+        /// </summary>
         ~Timer()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.

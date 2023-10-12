@@ -24,17 +24,65 @@ namespace ASCOM.Utilities
     [ComVisible(true)]
     public enum SerialSpeed : int // Defined at ACOM.Utilities level
     {
+
+        /// <summary>
+        /// 300 baud
+        /// </summary>
         ps300 = 300,
+
+        /// <summary>
+        /// 1200 baud
+        /// </summary>
         ps1200 = 1200,
+
+        /// <summary>
+        /// 2400 baud
+        /// </summary>
         ps2400 = 2400,
+
+        /// <summary>
+        /// 4800 baud
+        /// </summary>
         ps4800 = 4800,
+
+        /// <summary>
+        /// 9600 baud
+        /// </summary>
         ps9600 = 9600,
+
+        /// <summary>
+        /// 14400 baud
+        /// </summary>
         ps14400 = 14400,
+
+        /// <summary>
+        /// 19200 baud
+        /// </summary>
         ps19200 = 19200,
+
+        /// <summary>
+        /// 28800 baud
+        /// </summary>
         ps28800 = 28800,
+
+        /// <summary>
+        /// 38400 baud
+        /// </summary>
         ps38400 = 38400,
+
+        /// <summary>
+        /// 57600 baud
+        /// </summary>
         ps57600 = 57600,
+
+        /// <summary>
+        /// 115200 baud
+        /// </summary>
         ps115200 = 115200,
+
+        /// <summary>
+        /// 230400 baud
+        /// </summary>
         ps230400 = 230400
     }
 
@@ -186,28 +234,23 @@ namespace ASCOM.Utilities
         private SerialParity m_Parity;
         private SerialStopBits m_StopBits;
 
-        private string TraceFile; // Current trace file name
         private bool disposed = false; // IDisposable variable to detect redundant calls
         private bool DebugTrace = false; // Flag specifying type of information to record in log file
         private Stopwatch ts = new Stopwatch();
 
         private TraceLogger Logger;
         private System.Text.Encoding TextEncoding;
-        private string m_SerTraceFile = SERIAL_DEFAULT_FILENAME; // Set the default trace file name
 
         private RegistryAccess SerialProfile = null;
         private System.Collections.Generic.SortedList<string, string> ForcedCOMPorts;
         private System.Collections.Generic.SortedList<string, string> IgnoredCOMPorts;
 
         private Semaphore SerSemaphore;
-        private bool SerPortInUse = false;
-
         private Semaphore CallCountSemaphore = new Semaphore(1, 1);
         private long CallCount; // Counter for calls to this component
 
         private const int TIMEOUT_NUMBER = Microsoft.VisualBasic.Constants.vbObjectError + 0x402;
         private const string TIMEOUT_MESSAGE = "Timed out waiting for received data";
-        private const int SEMAPHORE_TIMEOUT = 1000;
 
         // Serial port parameters
         private const int SERIALPORT_ENCODING = 1252;
@@ -261,6 +304,10 @@ namespace ASCOM.Utilities
         #endregion
 
         #region New and IDisposable Support
+
+        /// <summary>
+        /// Serial class
+        /// </summary>
         public Serial()
         {
             string TraceFileName = "";
@@ -325,6 +372,9 @@ namespace ASCOM.Utilities
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Class finaliser
+        /// </summary>
         ~Serial()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -1694,7 +1744,7 @@ namespace ASCOM.Utilities
                             Logger.LogFinish(Received);
                         }
                     }
-                    catch (InvalidValueException ex)
+                    catch (InvalidValueException )
                     {
                         Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(TData.TransactionID) + "EXCEPTION - Terminator cannot be a null string");
                         throw;
@@ -1849,7 +1899,7 @@ namespace ASCOM.Utilities
                             Logger.LogFinish(Received, true);
                         }
                     }
-                    catch (InvalidValueException ex)
+                    catch (InvalidValueException )
                     {
                         Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "EXCEPTION - Terminator cannot be a null string");
                         throw;
@@ -2314,7 +2364,7 @@ namespace ASCOM.Utilities
                             else if (DebugTrace)
                                 Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Skiping probe as port  " + PortName + " is already known to exist");
                         }
-                        catch (UnauthorizedAccessException ex)
+                        catch (UnauthorizedAccessException )
                         {
                             // Port exists but is in use so add it to the list
                             RetVal.Add(PortName);
@@ -2767,7 +2817,9 @@ namespace ASCOM.Utilities
             public byte ResultByte;
             public byte[] ResultByteArray;
             public string ResultString;
+#pragma warning disable CS0649 // Field 'Serial.ThreadData.ResultChar' is never assigned to, and will always have its default value
             public char ResultChar;
+#pragma warning restore CS0649 // Field 'Serial.ThreadData.ResultChar' is never assigned to, and will always have its default value
 
             // AvailableCOMPorts value
             public System.Collections.Generic.List<string> AvailableCOMPorts;

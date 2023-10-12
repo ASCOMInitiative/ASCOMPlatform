@@ -669,7 +669,7 @@ namespace ASCOM.Utilities
                                 g_LogFile.AutoFlush = true;
                                 ok = true;
                             }
-                            catch (IOException ex1)
+                            catch (IOException)
                             {
                                 // Ignore IO exceptions and try the next filename
                             }

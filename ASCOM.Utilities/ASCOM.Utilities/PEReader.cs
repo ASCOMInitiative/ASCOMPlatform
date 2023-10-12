@@ -68,7 +68,7 @@ namespace ASCOM.Utilities
             EFI_BOOT_SERVICE_DRIVER = 11, // EFI driver with boot services.
             EFI_RUNTIME_DRIVER = 12, // EFI driver with run-time services.
             EFI_ROM = 13, // EFI ROM image.
-            XBOX = 14, // Xbox sy stem.
+            XBOX = 14, // Xbox system.
             UNKNOWN_15 = 15, // Unknown allocation
             WINDOWS_BOOT_APPLICATION = 16 // Boot application.
         }
@@ -99,7 +99,7 @@ namespace ASCOM.Utilities
             internal ushort e_oeminfo; // 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
             internal ushort[] e_res2; // Reserved words
-            internal uint e_lfanew; // File address of new exe header
+            internal uint e_lfanew; // File address of new EXE header
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -239,10 +239,10 @@ namespace ASCOM.Utilities
             internal uint EntryPointToken;
             internal IMAGE_DATA_DIRECTORY Resources;        // // Binding information
             internal IMAGE_DATA_DIRECTORY StrongNameSignature;
-            internal IMAGE_DATA_DIRECTORY CodeManagerTable;        // // Regular fixup and binding information
+            internal IMAGE_DATA_DIRECTORY CodeManagerTable;        // // Regular fix-up and binding information
             internal IMAGE_DATA_DIRECTORY VTableFixups;
             internal IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
-            internal IMAGE_DATA_DIRECTORY ManagedNativeHeader;        // // Precompiled image info (internal use only - set to zero)
+            internal IMAGE_DATA_DIRECTORY ManagedNativeHeader;        // // Pre-compiled image info (internal use only - set to zero)
         }
         #endregion
 
@@ -255,9 +255,7 @@ namespace ASCOM.Utilities
         private BinaryReader reader;
         private Stream stream;
         private bool IsAssembly = false;
-        private AssemblyName AssemblyInfo;
         private Assembly SuppliedAssembly;
-        private string AssemblyDeterminationType;
         private bool OS32BitCompatible = false;
         private Bitness ExecutableBitness;
 
@@ -272,7 +270,7 @@ namespace ASCOM.Utilities
 
             if (Strings.Left(FileName, 5).ToUpperInvariant() == "FILE:")
             {
-                // Convert uri to local path if required, uri paths are not supported by FileStream - this method allows file names with # characters to be passed through
+                // Convert Uri to local path if required, URI paths are not supported by FileStream - this method allows file names with # characters to be passed through
                 var u = new Uri(FileName);
                 FileName = u.LocalPath + Uri.UnescapeDataString(u.Fragment).Replace("/", @"\\");
             }
@@ -286,9 +284,9 @@ namespace ASCOM.Utilities
             {
                 SuppliedAssembly = Assembly.ReflectionOnlyLoadFrom(FileName);
                 IsAssembly = true; // We got here without an exception so it must be an assembly
-                TL.LogMessage("PEReader.IsAssembly", "Found an assembly because it loaded Ok to the reflection context: " + IsAssembly);
+                TL.LogMessage("PEReader.IsAssembly", "Found an assembly because it loaded OK to the reflection context: " + IsAssembly);
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 TL.LogMessage("PEReader.IsAssembly", "FileNotFoundException: File not found so this is NOT an assembly: " + IsAssembly);
             }
@@ -385,7 +383,7 @@ namespace ASCOM.Utilities
                 }
             }
 
-            catch (FileLoadException ex2) // This is an assembly but that has already been loaded so flag it as an assembly
+            catch (FileLoadException) // This is an assembly but that has already been loaded so flag it as an assembly
             {
                 IsAssembly = true;
                 TL.LogMessage("PEReader.IsAssembly", "FileLoadException: Assembly already loaded so this is an assembly: " + IsAssembly);
@@ -404,7 +402,7 @@ namespace ASCOM.Utilities
 
             reader.BaseStream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin); // Skip MS-DOS stub and seek reader to NT Headers
             ntHeaders.Signature = MarshalBytesTo<uint>(reader); // Read NT Headers
-            if (ntHeaders.Signature != 0x4550L) // Make sure we have 'PE' in the pe signature 
+            if (ntHeaders.Signature != 0x4550L) // Make sure we have 'PE' in the PE signature 
             {
                 throw new InvalidOperationException("Invalid portable executable signature in NT header.");
             }
@@ -476,7 +474,7 @@ namespace ASCOM.Utilities
                             TextBase = SectionHeader.PointerToRawData;
                     }
 
-                    if (NumberOfHeadersToCheck >= CLR_HEADER + 1) // Only test if the number of headers meets or exceeds the lcoation of the CLR header
+                    if (NumberOfHeadersToCheck >= CLR_HEADER + 1) // Only test if the number of headers meets or exceeds the location of the CLR header
                     {
                         if (ntHeaders.OptionalHeader32.DataDirectory[CLR_HEADER].VirtualAddress > 0L)
                         {
@@ -535,7 +533,7 @@ namespace ASCOM.Utilities
                         ExecutableBitness = Bitness.BitsMSIL;
                     }
                 }
-                else // Must be an x64 assmebly
+                else // Must be an x64 assembly
                 {
                     TL.LogMessage("PEReader.Bitness", "Found \"64bit Required\" assembly");
                     ExecutableBitness = Bitness.Bits64;
@@ -623,7 +621,7 @@ namespace ASCOM.Utilities
                         stream.Dispose();
                         stream = null;
                     }
-                    catch (Exception ex) // Swallow any exceptions here
+                    catch (Exception) // Swallow any exceptions here
                     {
                     }
                 }

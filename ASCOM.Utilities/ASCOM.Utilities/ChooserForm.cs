@@ -13,7 +13,6 @@ using System.Threading;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-//using Newtonsoft.Json.Serialization;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -43,7 +42,7 @@ namespace ASCOM.Utilities
         private const int CHOOSER_LIST_WIDTH_NEW_ALPACA = 600; // Width of the Chooser list when new Alpaca devices are present
 
         // Chooser persistence constants
-        internal const string CONFIGRATION_SUBKEY = @"Chooser\Configuration"; // Store configuration in a subkey under the Chooser key
+        internal const string CONFIGRATION_SUBKEY = @"Chooser\Configuration"; // Store configuration in a sub-key under the Chooser key
         private const string ALPACA_ENABLED = "Alpaca enabled";
         private const bool ALPACA_ENABLED_DEFAULT = false;
         internal const string ALPACA_DISCOVERY_PORT = "Alpaca discovery port";
@@ -217,7 +216,7 @@ namespace ASCOM.Utilities
             // Create a trace logger
             TL = new TraceLogger("", "ChooserForm");
             TL.IdentifierWidth = 50;
-            TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT); // Enable the trace logger if Util trace is enabled
+            TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT); // Enable the trace logger if Utility trace is enabled
 
             profile = new Profile();
 
@@ -623,14 +622,14 @@ namespace ASCOM.Utilities
                 MethodInfo methodInfo = ProgIdType.GetMethod("Dispose");
                 methodInfo.Invoke(oDrv, new object[] { });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             try
             {
                 Marshal.ReleaseComObject(oDrv);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -1045,8 +1044,10 @@ namespace ASCOM.Utilities
         /// <summary>
         /// Creates a new Alpaca driver instance with the given descriptive name
         /// </summary>
-        /// <param name="deviceDescription"></param>
-        /// <returns></returns>
+        /// <param name="newProgId">Driver ProgID</param>
+        /// <param name="deviceNumber">Device number</param>
+        /// <param name="deviceDescription">Device description</param>
+        /// <returns>The device ProgID</returns>
         private string CreateNewAlpacaDriver(string newProgId, int deviceNumber, string deviceDescription)
         {
             // Create the new Alpaca Client appending the device description if required 
@@ -1277,7 +1278,7 @@ namespace ASCOM.Utilities
                 // Enumerate the available drivers, and load their descriptions and ProgIDs into the driversList generic sorted list collection. Key is ProgID, value is friendly name.
                 try
                 {
-                    // Get Key-Class pairs in the subkey "{DeviceType} Drivers" e.g. "Telescope Drivers"
+                    // Get Key-Class pairs in the sub-key "{DeviceType} Drivers" e.g. "Telescope Drivers"
                     var driverList = registryAccess.EnumKeys(deviceTypeValue + " Drivers");
                     TL.LogMessage("DiscoverAlpacaDevices", $"Returned {driverList.Count} COM drivers");
 
@@ -1388,7 +1389,7 @@ namespace ASCOM.Utilities
                                 {
                                     deviceUniqueId = profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_UNIQUEID);
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device unique ID. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     continue; // Don't process this driver further, move on to the next driver
@@ -1403,7 +1404,7 @@ namespace ASCOM.Utilities
                                         continue; // Don't process this driver further, move on to the next driver
                                     }
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device IP address. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     continue; // Don't process this driver further, move on to the next driver
@@ -1413,7 +1414,7 @@ namespace ASCOM.Utilities
                                 {
                                     deviceIPPort = Convert.ToInt32(profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_PORT_NUMBER));
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device IP Port. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     continue; // Don't process this driver further, move on to the next driver
@@ -1423,7 +1424,7 @@ namespace ASCOM.Utilities
                                 {
                                     deviceNumber = Convert.ToInt32(profile.GetValue(arrayListDevice.Key, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER));
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     MessageBox.Show($"{arrayListDevice.Key} - Unable to read the device number. This driver should be deleted and re-created", "Dynamic Driver Corrupted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     continue; // Don't process this driver further, move on to the next driver

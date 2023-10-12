@@ -46,6 +46,9 @@ namespace ASCOM.Utilities
         #region New and IDisposable Support
         private bool disposedValue = false;        // To detect redundant calls
 
+        /// <summary>
+        /// Create a Utility object
+        /// </summary>
         public Util() : base()
         {
             myProfile = new RegistryAccess();
@@ -89,6 +92,9 @@ namespace ASCOM.Utilities
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Finaliser
+        /// </summary>
         ~Util()
         {
             // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
@@ -146,7 +152,7 @@ namespace ASCOM.Utilities
         /// <para>If there are more than three numeric tokens, only the first three are considered, the remainder 
         /// are ignored. Left to right positionally, the tokens are assumed to represent units (degrees or hours), 
         /// minutes, and seconds. If only two tokens are present, they are assumed to be units and minutes, and if 
-        /// only one token is present, it is assumed to be units. Any token can have a fractionsl part. Of course it 
+        /// only one token is present, it is assumed to be units. Any token can have a fractional part. Of course it 
         /// would not be normal (for example) for both the minutes and seconds parts to have fractional parts, but it 
         /// would be legal. So 00:30.5:30 would convert to 1.0 unit. </para>
         /// <para>Note that plain units, for example 23.128734523 are acceptable to the method. </para>
@@ -220,7 +226,7 @@ namespace ASCOM.Utilities
         /// <para>If there are more than three numeric tokens, only the first three are considered, the remainder 
         /// are ignored. Left to right positionally, the tokens are assumed to represent units (degrees or hours), 
         /// minutes, and seconds. If only two tokens are present, they are assumed to be units and minutes, and if 
-        /// only one token is present, it is assumed to be units. Any token can have a fractionsl part. </para>
+        /// only one token is present, it is assumed to be units. Any token can have a fractional part. </para>
         /// 
         /// <para>Of course it would not be normal (for example) for both the minutes and seconds parts to have 
         /// fractional parts, but it would be legal. So 00:30.5:30 would convert to 1.0 unit. Note that plain units, 
@@ -248,7 +254,7 @@ namespace ASCOM.Utilities
         /// <para>If there are more than three numeric tokens, only the first three are considered, the remainder 
         /// are ignored. Left to right positionally, the tokens are assumed to represent units (degrees or hours), 
         /// minutes, and seconds. If only two tokens are present, they are assumed to be units and minutes, and if 
-        /// only one token is present, it is assumed to be units. Any token can have a fractionsl part. </para>
+        /// only one token is present, it is assumed to be units. Any token can have a fractional part. </para>
         /// 
         /// <para>Of course it would not be normal (for example) for both the minutes and seconds parts to have 
         /// fractional parts, but it would be legal. So 00:30.5:30 would convert to 1.0 unit. Note that plain units, 
@@ -432,7 +438,7 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimters MM:SS
+        /// Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimiters MM:SS
         /// </summary>
         /// <param name="Hours">The hours value to convert</param>
         /// <param name="HrsDelim">The delimiter string separating hours and minutes </param>
@@ -509,7 +515,7 @@ namespace ASCOM.Utilities
         #region DegreesToHMS
         // Public Overloads Function DegreesToHMS(ByVal Degrees As Double, Optional ByVal HrsDelim As String = ":", Optional ByVal MinDelim As String = ":", Optional ByVal SecDelim As String = "", Optional ByVal SecDecimalDigits As Short = 0) As String Implements IUtil.DegreesToHMS
         /// <summary>
-        /// Convert degrees to sexagesimal hours, minutes, and seconds with default delimters of HH:MM:SS
+        /// Convert degrees to sexagesimal hours, minutes, and seconds with default delimiters of HH:MM:SS
         /// </summary>
         /// <param name="Degrees">The degrees value to convert</param>
         /// <returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
@@ -624,7 +630,7 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Convert degrees to sexagesimal degrees and minutes with the default minutes delimeter MM'
+        /// Convert degrees to sexagesimal degrees and minutes with the default minutes delimiter MM'
         /// </summary>
         /// <param name="Degrees">The degrees value to convert</param>
         /// <param name="DegDelim">The delimiter string separating degrees </param>
@@ -867,7 +873,7 @@ namespace ASCOM.Utilities
 
         #endregion
 
-        #region Util 2 Implementation
+        #region Util2 Implementation
 
         /// <summary>
         /// Current Platform version in Major.Minor form
@@ -877,7 +883,7 @@ namespace ASCOM.Utilities
         /// because the ASCOM Platform is used internationally and some countries use characters other 
         /// than point as the decimal separator. 
         /// <para>If your application tries to convert 5.5 into a Double value when running on a PC localised to 
-        /// France, you will get an exception because the French decimal separater is comma and 5.5 is not 
+        /// France, you will get an exception because the French decimal separator is comma and 5.5 is not 
         /// a valid representation of a decimal number in that locale.</para>
         /// <para>If you still wish to turn the Platform Version into a Double value, you can use an 
         /// approach such as this:</para>
@@ -964,7 +970,7 @@ namespace ASCOM.Utilities
         {
             get
             {
-                if (!string.IsNullOrEmpty(myProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME))) // Thereis a filename so tracing is enabled
+                if (!string.IsNullOrEmpty(myProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME))) // There is a filename so tracing is enabled
                 {
                     return true;
                 }
@@ -1153,7 +1159,7 @@ namespace ASCOM.Utilities
         /// <item>hecto Pascals (hPa) &lt;==&gt; milli bar(mbar) &lt;==&gt; mm of mercury &lt;==&gt; inches of mercury</item>
         /// <item>mm per hour &lt;==&gt; inches per hour</item>
         /// </list>
-        /// <para>Knots conversions use the international nautical mile definition (1 nautical mile = 1852m) rather than the orginal UK or US Admiralty definitions.</para>
+        /// <para>Knots conversions use the international nautical mile definition (1 nautical mile = 1852m) rather than the original UK or US Admiralty definitions.</para>
         /// <para>For convenience, milli bar and hecto Pascals are shown as separate units even though they have numerically identical values and there is a 1:1 conversion between them.</para>
         /// </remarks>
         public double ConvertUnits(double InputValue, Units FromUnits, Units ToUnits)
@@ -1384,8 +1390,6 @@ namespace ASCOM.Utilities
             {
                 throw new InvalidOperationException("From and to units are not of the same type. From: " + FromUnits.ToString() + ", To: " + ToUnits.ToString());
             }
-
-            return 0.0d;
         }
 
         /// <summary>
@@ -1419,7 +1423,7 @@ namespace ASCOM.Utilities
             Pw = Pws * RelativeHumidity / 100.0d; // Calculate measured vapor pressure, Pw
             Td = Tn / (m / Math.Log10(Pw / A) - 1.0d); // Finally, calculate dew-point in °C
 
-            TL.LogMessage("Humidity2DewPoint", "DewPoint: " + Td + ", Given Relative Humidity: " + RelativeHumidity + ", Given Ambient temperaure: " + AmbientTemperature + ", Pws: " + Pws + ", Pw: " + Pw);
+            TL.LogMessage("Humidity2DewPoint", "DewPoint: " + Td + ", Given Relative Humidity: " + RelativeHumidity + ", Given Ambient temperature: " + AmbientTemperature + ", Pws: " + Pws + ", Pw: " + Pw);
 
             return Td;
         }
@@ -1451,7 +1455,7 @@ namespace ASCOM.Utilities
                 throw new InvalidValueException("DewPoint2Humidity - Ambient temperature is < " + ABSOLUTE_ZERO_CELSIUS + "C or > 100.0C: " + AmbientTemperature.ToString());
 
             RH = 100.0d * Math.Pow(10.0d, m * (DewPoint / (DewPoint + Tn) - AmbientTemperature / (AmbientTemperature + Tn)));
-            TL.LogMessage("DewPoint2Humidity", "RH: " + RH + ", Given Dew point: " + DewPoint + ", Given Ambient temperaure: " + AmbientTemperature);
+            TL.LogMessage("DewPoint2Humidity", "RH: " + RH + ", Given Dew point: " + DewPoint + ", Given Ambient temperature: " + AmbientTemperature);
 
             return RH;
         }
@@ -1472,7 +1476,7 @@ namespace ASCOM.Utilities
             SeaLevelPressure = Pressure / Math.Pow(1.0d - 0.0000225577d * FromAltitudeAboveMeanSeaLevel, 5.25588d);
             ActualPressure = SeaLevelPressure * Math.Pow(1.0d - 0.0000225577d * ToAltitudeAboveMeanSeaLevel, 5.25588d);
 
-            TL.LogMessage("ConvertPressure", "SeaLevelPressure: " + SeaLevelPressure + ", ActualPressure: " + ActualPressure + ", Given Presure: " + Pressure + ", Given FromAltitudeAboveMeanSeaLevel: " + FromAltitudeAboveMeanSeaLevel + ", Given ToAltitudeAboveMeanSeaLevel: " + ToAltitudeAboveMeanSeaLevel);
+            TL.LogMessage("ConvertPressure", "SeaLevelPressure: " + SeaLevelPressure + ", ActualPressure: " + ActualPressure + ", Given Pressure: " + Pressure + ", Given FromAltitudeAboveMeanSeaLevel: " + FromAltitudeAboveMeanSeaLevel + ", Given ToAltitudeAboveMeanSeaLevel: " + ToAltitudeAboveMeanSeaLevel);
 
             return ActualPressure;
         }

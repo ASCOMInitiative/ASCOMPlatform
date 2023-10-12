@@ -39,10 +39,12 @@ namespace ASCOM.Utilities
         /// <summary>
         /// Initialiser called to create an item for a new Alpaca driver i.e. one that is not already fronted by a COM driver 
         /// </summary>
+        /// <param name="deviceUniqueId">The device unique ID</param>
         /// <param name="deviceNumber">The Alpaca device access number</param>
         /// <param name="hostName">The host name (or IP address) used to access the Alpaca device</param>
         /// <param name="port">The Alpaca port number</param>
-        /// <param name="ascomName">The device's display name</param>
+        /// <param name="ascomName">The device's description</param>
+        /// <param name="displayName">Description to show in the Chooser list</param>
         public ChooserItem(string deviceUniqueId, int deviceNumber, string hostName, int port, string ascomName, string displayName) : this()
         {
             DeviceUniqueID = deviceUniqueId;
