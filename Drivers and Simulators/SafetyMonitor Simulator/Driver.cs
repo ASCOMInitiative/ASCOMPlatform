@@ -49,7 +49,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver version number
         /// </summary>
-        private const string driverVersion = "6.0";
+        private const string driverVersion = "7.0";
 
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.

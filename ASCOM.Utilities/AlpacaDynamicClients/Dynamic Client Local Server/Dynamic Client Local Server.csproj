@@ -27,8 +27,8 @@
 		<Product>Alpaca Simulators Local Server</Product>
 		<Description>ASCOM Local Server for Alpaca Simulators</Description>
 		<Copyright>Copyright © 2023 The ASCOM Initiative</Copyright>
-		<AssemblyVersion>6.6.0.0</AssemblyVersion>
-		<FileVersion>6.6.0.0</FileVersion>
+		<AssemblyVersion>7.0.0.0</AssemblyVersion>
+		<FileVersion>7.0.0.0</FileVersion>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<PreBuildEvent />

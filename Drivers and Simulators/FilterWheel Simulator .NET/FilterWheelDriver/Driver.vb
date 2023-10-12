@@ -83,7 +83,7 @@ Public Class FilterWheel
 
     Public ReadOnly Property DriverVersion As String Implements IFilterWheelV3.DriverVersion
         Get
-            Return "6.0"
+            Return "7.0"
         End Get
     End Property
 

@@ -1,5 +1,5 @@
-﻿// Set to true to debug this code, otherwise leave false!
-#define DEBUG_TRACE
+﻿// Uncomment to debug this code, otherwise leave false!
+//#define DEBUG_TRACE
 
 using System;
 using System.Collections;
