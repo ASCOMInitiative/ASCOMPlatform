@@ -62,7 +62,7 @@ namespace ASCOM.Astrometry
         private const string SCHEDULER_SERVICE_NAME = "Schedule";
 
         // Downloaded leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
-        private SortedList<double, double> DownloadedLeapSecondValues = new SortedList<double, double>(); // Initialise to an empty list
+        private SortedList<double, double> DownloadedLeapSecondValues = new(); // Initialise to an empty list
 
         #endregion
 

@@ -236,7 +236,7 @@ namespace ASCOM.Utilities
 
         private bool disposed = false; // IDisposable variable to detect redundant calls
         private bool DebugTrace = false; // Flag specifying type of information to record in log file
-        private Stopwatch ts = new Stopwatch();
+        private Stopwatch ts = new();
 
         private TraceLogger Logger;
         private System.Text.Encoding TextEncoding;
@@ -246,7 +246,7 @@ namespace ASCOM.Utilities
         private System.Collections.Generic.SortedList<string, string> IgnoredCOMPorts;
 
         private Semaphore SerSemaphore;
-        private Semaphore CallCountSemaphore = new Semaphore(1, 1);
+        private Semaphore CallCountSemaphore = new(1, 1);
         private long CallCount; // Counter for calls to this component
 
         private const int TIMEOUT_NUMBER = Microsoft.VisualBasic.Constants.vbObjectError + 0x402;

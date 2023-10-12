@@ -22,9 +22,9 @@ namespace ASCOM.Utilities
         private TraceLogger TL;
         private readonly Action<IPEndPoint, AlpacaDiscoveryResponse> callbackFunctionDelegate;
 
-        private Dictionary<IPAddress, UdpClient> ipV4DiscoveryClients = new Dictionary<IPAddress, UdpClient>(); // Collection Of IP v4 clients For the various link local And localhost network
+        private Dictionary<IPAddress, UdpClient> ipV4DiscoveryClients = new(); // Collection Of IP v4 clients For the various link local And localhost network
 
-        private Dictionary<IPAddress, UdpClient> ipV6Discoveryclients = new Dictionary<IPAddress, UdpClient>(); // Collection Of IP v6 clients For the various link local And localhost network
+        private Dictionary<IPAddress, UdpClient> ipV6Discoveryclients = new(); // Collection Of IP v6 clients For the various link local And localhost network
 
         /// <summary>
         /// A cache of all endpoints found by the server
@@ -401,7 +401,7 @@ namespace ASCOM.Utilities
         {
             if (TL is not null)
             {
-                string indentSpaces = new string(' ', Thread.CurrentThread.ManagedThreadId * Constants.NUMBER_OF_THREAD_MESSAGE_INDENT_SPACES);
+                string indentSpaces = new(' ', Thread.CurrentThread.ManagedThreadId * Constants.NUMBER_OF_THREAD_MESSAGE_INDENT_SPACES);
                 TL.LogMessage($"Finder - {method}", $"{indentSpaces}{Thread.CurrentThread.ManagedThreadId} - {message}");
             }
         }

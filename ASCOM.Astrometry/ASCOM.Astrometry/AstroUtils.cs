@@ -612,7 +612,7 @@ namespace ASCOM.Astrometry.AstroUtils
             int NZeros;
             var Observer = new OnSurface();
             var Retval = new ArrayList();
-            List<double> BodyRises = new List<double>(), BodySets = new List<double>();
+            List<double> BodyRises = new(), BodySets = new();
             BodyInfo BodyInfoMinus1, BodyInfo0, BodyInfoPlus1;
             DateTime TestDate;
 
@@ -990,7 +990,7 @@ namespace ASCOM.Astrometry.AstroUtils
             var Obj3 = new Object3();
             var Location = new OnSurface();
             var Cat = new CatEntry3();
-            SkyPos SunPosition = new SkyPos(), MoonPosition = new SkyPos();
+            SkyPos SunPosition = new(), MoonPosition = new();
             var Obs = new Observer();
             double Phi, Inc, k, DeltaT;
 
@@ -1067,7 +1067,7 @@ namespace ASCOM.Astrometry.AstroUtils
             var Obj3 = new Object3();
             var Location = new OnSurface();
             var Cat = new CatEntry3();
-            SkyPos SunPosition = new SkyPos(), MoonPosition = new SkyPos();
+            SkyPos SunPosition = new(), MoonPosition = new();
             var Obs = new Observer();
             double PositionAngle, DeltaT;
 

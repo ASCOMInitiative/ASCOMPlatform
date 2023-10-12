@@ -33,8 +33,8 @@ namespace ASCOM.Astrometry.NOVASCOM
     public class Earth : IEarth
     {
 
-        private PositionVector m_BaryPos = new PositionVector(), m_HeliPos = new PositionVector();
-        private VelocityVector m_BaryVel = new VelocityVector(), m_HeliVel = new VelocityVector();
+        private PositionVector m_BaryPos = new(), m_HeliPos = new();
+        private VelocityVector m_BaryVel = new(), m_HeliVel = new();
         private double m_BaryTime, m_MeanOb, m_EquOfEqu, m_NutLong, m_NutObl, m_TrueOb;
         private IEphemeris m_EarthEph;
         private bool m_Valid; // Object has valid values
@@ -1151,7 +1151,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         private bool xOk, yOk, zOk, RADecOk, AzElOk;
         private double[] PosVec = new double[3];
         private double m_RA, m_DEC, m_Dist, m_Light, m_Alt, m_Az;
-        private NOVAS31 Nov31 = new NOVAS31();
+        private NOVAS31 Nov31 = new();
 
         /// <summary>
         /// Create a new, uninitialised position vector
@@ -1910,7 +1910,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         private BodyDescription m_earth;
         private short hr;
         private double[] m_earthephdisps = new double[5];
-        private NOVAS31 Nov31 = new NOVAS31();
+        private NOVAS31 Nov31 = new();
 
         /// <summary>
         /// Initialise a new instance of the star class
@@ -2667,7 +2667,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </remarks>
         public void SetHipparcos(double RA, double Dec, double ProMoRA, double ProMoDec, double Parallax, double RadVel)
         {
-            CatEntry hip = new CatEntry(), fk5 = new CatEntry();
+            CatEntry hip = new(), fk5 = new();
 
             hip.RA = RA;
             hip.Dec = Dec;
@@ -2712,7 +2712,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         private bool m_xv, m_yv, m_zv, m_cv;
         private double[] m_v = new double[3];
         private double m_VRA, m_RadVel, m_VDec;
-        private NOVAS31 Nov31 = new NOVAS31();
+        private NOVAS31 Nov31 = new();
 
         /// <summary>
         /// Creates a new velocity vector object

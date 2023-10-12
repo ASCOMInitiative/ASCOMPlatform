@@ -344,7 +344,7 @@ namespace ASCOM.DynamicClients
              */
 
             // Initialise the list of driver types
-            List<Type> types = new List<Type>
+            List<Type> types = new()
             {
                 // GenerateTypeWithAttributes("SafetyMonitor", new Guid("612961b5-b611-4de2-970f-847eafa18fee"), "ASCOM.Dynamic1.SafetyMonitor",
                 //    "ASCOM SafetyMonitor Driver for DynamicDemo", typeof(ASCOM.AlpacaSim.SafetyMonitor.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
@@ -959,7 +959,7 @@ namespace ASCOM.DynamicClients
             try
             {
                 TL?.LogMessage("SetupDialog", "Creating setup form");
-                using (SetupDialogForm setupForm = new SetupDialogForm(TL))
+                using (SetupDialogForm setupForm = new(TL))
                 {
                     // Pass the setup dialogue data into the form
                     setupForm.DriverDisplayName = state.DriverDisplayName;

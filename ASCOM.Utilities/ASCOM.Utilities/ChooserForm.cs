@@ -87,7 +87,7 @@ namespace ASCOM.Utilities
         private List<ChooserItem> chooserList;
         private string driverIsCompatible = "";
         private string currentWarningTitle, currentWarningMesage;
-        private List<AscomDevice> alpacaDevices = new List<AscomDevice>();
+        private List<AscomDevice> alpacaDevices = new();
         private ChooserItem selectedChooserItem;
         private Process _ClientManagerProcess;
         private Type ProgIdType;

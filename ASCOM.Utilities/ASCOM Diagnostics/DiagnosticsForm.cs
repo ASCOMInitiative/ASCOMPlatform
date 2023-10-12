@@ -157,7 +157,7 @@ namespace ASCOM.Utilities
 
         #region Variables
         private int NMatches, NNonMatches, NExceptions;
-        private List<string> ErrorList = new List<string>();
+        private List<string> ErrorList = new();
 
         private TraceLogger TL;
         private RegistryAccess ASCOMRegistryAccess;
@@ -3097,10 +3097,10 @@ namespace ASCOM.Utilities
             var CatEnt = new CatEntry3();
             var ObjectJupiter = new Object3();
             var Observer = new Observer();
-            SkyPos skypos = new SkyPos(), SkyPos1 = new SkyPos();
+            SkyPos skypos = new(), SkyPos1 = new();
             var OnSurf = new OnSurface();
             double RA = default, Dec = default, Dis = default, JD, GST = default, JDTest;
-            BodyDescription BodyJupiter = new BodyDescription(), BodyEarth = new BodyDescription();
+            BodyDescription BodyJupiter = new(), BodyEarth = new();
             var Si = new SiteInfo();
             double[] Pos = new double[3], Pos1 = new double[3], Pos2 = new double[3], Vel = new double[3], PosObj = new double[3], PosObs = new double[3], PosBody = new double[3], VelObs = new double[3];
             var Utl = new Util();
@@ -4005,10 +4005,10 @@ namespace ASCOM.Utilities
             var CatEnt = new CatEntry3();
             var ObjectJupiter = new Object3();
             var Observer = new Observer();
-            SkyPos skypos = new SkyPos(), SkyPos1 = new SkyPos();
+            SkyPos skypos = new(), SkyPos1 = new();
             var OnSurf = new OnSurface();
             double RA = default, Dec = default, Dis = default, JD, GST = default, JDTest, DeltaTResult1, DeltaTResult2;
-            BodyDescription BodyJupiter = new BodyDescription(), BodyEarth = new BodyDescription();
+            BodyDescription BodyJupiter = new(), BodyEarth = new();
             var Si = new SiteInfo();
             double[] Pos = new double[3], Pos1 = new double[3], Pos2 = new double[3], Vel = new double[3], PosObj = new double[3], PosObs = new double[3], PosBody = new double[3], VelObs = new double[3];
             var Utl = new Util();
@@ -4956,7 +4956,7 @@ namespace ASCOM.Utilities
         {
             // Dim transform As Transform.Transform = New Transform.Transform
             var u = new Util();
-            BodyDescription EarthBody = new BodyDescription(), SunBody = new BodyDescription();
+            BodyDescription EarthBody = new(), SunBody = new();
             var StarStruct = new CatEntry();
             var LocationStruct = new SiteInfo();
             double[] Star, SKYPOS, POS, POS2, POSEarth, VEL2, POSNow, VEL;
@@ -5220,8 +5220,8 @@ namespace ASCOM.Utilities
             short Year = default, Month = default, Day = default;
             var CatName = new byte[3];
             int rc;
-            BodyDescription SS_Object = new BodyDescription(), Earth = new BodyDescription();
-            CatEntry Star = new CatEntry(), NewCat = new CatEntry();
+            BodyDescription SS_Object = new(), Earth = new();
+            CatEntry Star = new(), NewCat = new();
             var Utl = new Util();
             Action(TestFunction.ToString());
             Earth.Number = Body.Earth;
@@ -5967,7 +5967,7 @@ namespace ASCOM.Utilities
         private void NovasComTest(string p_Name, double p_Num, double JD, double[] Results, double Tolerance)
         {
             var pl = new Astrometry.NOVASCOM.Planet();
-            Astrometry.Kepler.Ephemeris K = new Astrometry.Kepler.Ephemeris(), KE = new Astrometry.Kepler.Ephemeris();
+            Astrometry.Kepler.Ephemeris K = new(), KE = new();
 
             var POSVECO = new double[6];
             Astrometry.NOVASCOM.PositionVector pv;
@@ -6196,7 +6196,7 @@ namespace ASCOM.Utilities
 
                 TL.LogMessage("ProfileTest", "Testing Profile.SubKeys");
                 keys = AscomUtlProf.SubKeys(TestScope, "");
-                List<KeyValuePair> keysList = new List<KeyValuePair>(keys.Cast<KeyValuePair>());
+                List<KeyValuePair> keysList = new(keys.Cast<KeyValuePair>());
                 this.Compare("ProfileTest", "Create SubKey1", keysList[0].Key.ToString() + keysList[0].Value.ToString(), "SubKey1");
                 this.Compare("ProfileTest", "Create SubKey2", keysList[1].Key.ToString() + keysList[1].Value.ToString(), "SubKey2");
                 this.Compare("ProfileTest", "Create SubKey3", keysList[2].Key.ToString() + keysList[2].Value.ToString(), "SubKey3");
@@ -6529,7 +6529,7 @@ namespace ASCOM.Utilities
 
                 Status("Profile multi-tasking tests");
 
-                Profile P1 = new Profile(), P2 = new Profile();
+                Profile P1 = new(), P2 = new();
                 string R1, R2;
 
                 P1.Register(TestScope, "Multi access tester");
@@ -11731,7 +11731,7 @@ namespace ASCOM.Utilities
 
         private void ListAvailableCOMPortsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SerialForm serialForm = new SerialForm();
+            SerialForm serialForm = new();
             serialForm.ShowDialog();
         }
 
@@ -11862,7 +11862,7 @@ namespace ASCOM.Utilities
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            VersionForm versionForm = new VersionForm();
+            VersionForm versionForm = new();
             versionForm.ShowDialog();
         }
 
@@ -11899,7 +11899,7 @@ namespace ASCOM.Utilities
         private void SetLogFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Create a folder browser dialogue
-            System.Windows.Forms.FolderBrowserDialog folderDlg = new FolderBrowserDialog();
+            System.Windows.Forms.FolderBrowserDialog folderDlg = new();
 
             // Set the starting path to the current value using the Documents folder as a fall-back if no location has yet been set
             folderDlg.SelectedPath = Global.GetString(TRACELOGGER_DEFAULT_FOLDER, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
@@ -11950,7 +11950,7 @@ namespace ASCOM.Utilities
 
         private bool RunningInVM(bool WriteToLog)
         {
-            using (ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher("Select * from Win32_ComputerSystem"))
+            using (ManagementObjectSearcher searcher = new("Select * from Win32_ComputerSystem"))
             {
                 using (ManagementObjectCollection items = searcher.Get())
                 {

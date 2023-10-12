@@ -26,7 +26,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string UNIQUEID_PROFILENAME = "UniqueID";
 
         // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
-        private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "CoverCalibrator", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
+        private static readonly List<string> supportedDeviceTypes = new() { "Camera", "CoverCalibrator", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
 
         static Utilities.TraceLogger TL;
 
@@ -199,7 +199,7 @@ namespace ASCOM.DynamicRemoteClients
             int exitCode = int.MinValue;
 
             // Set local server run time values
-            ProcessStartInfo start = new ProcessStartInfo();
+            ProcessStartInfo start = new();
             start.Arguments = serverParameter; // Specify the server command parameter
             start.FileName = localServerExe; // Set the full local server executable path
             start.WindowStyle = ProcessWindowStyle.Hidden; // Don't show a window while the command runs
@@ -231,7 +231,7 @@ namespace ASCOM.DynamicRemoteClients
             Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             // Create a trace logger and log the exception 
-            TraceLogger TL = new TraceLogger("DynamicClientThreadException",true)
+            TraceLogger TL = new("DynamicClientThreadException",true)
             {
                 Enabled = true
             };
@@ -254,7 +254,7 @@ namespace ASCOM.DynamicRemoteClients
             Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             // Create a trace logger and log the exception 
-            TraceLogger TL = new TraceLogger("DynamicClientUnhandledException",true)
+            TraceLogger TL = new("DynamicClientUnhandledException",true)
             {
                 Enabled = true
             };

@@ -44,13 +44,13 @@ namespace ASCOM.Utilities
         private System.Threading.Timer discoveryCompleteTimer;
 
         // Private variables
-        private Dictionary<IPEndPoint, AlpacaDevice> alpacaDeviceList = new Dictionary<IPEndPoint, AlpacaDevice>(); // List of discovered Alpaca devices keyed on IP:Port
+        private Dictionary<IPEndPoint, AlpacaDevice> alpacaDeviceList = new(); // List of discovered Alpaca devices keyed on IP:Port
         private bool disposedValue = false; // To detect redundant Dispose() method calls
         private double discoveryTime; // Length of the discovery phase before it times out
         private bool tryDnsNameResolution; // Flag indicating whether to attempt name resolution on the host IP address
         private DateTime discoveryStartTime; // Time at which the start discovery command was received
         private bool discoveryCompleteValue; // Discovery completion status
-        private readonly object deviceListLockObject = new object(); // Lock object to synchronise access to the Alpaca device list collection, which is not a thread safe collection
+        private readonly object deviceListLockObject = new(); // Lock object to synchronise access to the Alpaca device list collection, which is not a thread safe collection
 
         #endregion
 

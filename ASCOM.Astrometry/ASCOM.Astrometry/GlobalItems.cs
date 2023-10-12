@@ -168,7 +168,7 @@ namespace ASCOM.Astrometry
 
         // Not available constants
         internal const double DOUBLE_VALUE_NOT_AVAILABLE = double.MinValue;
-        internal readonly static DateTime DATE_VALUE_NOT_AVAILABLE = new DateTime(1, 1, 1);
+        internal readonly static DateTime DATE_VALUE_NOT_AVAILABLE = new(1, 1, 1);
         internal const string NOT_DOWNLOADED = "Not downloaded";
         internal const string NEVER_UPDATED = "Never";
 

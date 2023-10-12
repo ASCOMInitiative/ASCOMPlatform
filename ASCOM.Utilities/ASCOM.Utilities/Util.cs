@@ -37,7 +37,7 @@ namespace ASCOM.Utilities
         // 23-Feb-09 pwgs    5.1.0 - Refactored for Utilities
         // ---------------------------------------------------------------------
 
-        private Stopwatch m_StopWatch = new Stopwatch(); // Create a high resolution timing device
+        private Stopwatch m_StopWatch = new(); // Create a high resolution timing device
         private string m_SerTraceFile = SERIAL_DEFAULT_FILENAME; // Set the default trace file name
         private TraceLogger TL;
 

@@ -769,8 +769,8 @@ namespace ASCOM.Astrometry.NOVAS
         public static short GetEarth(double tjd, ref BodyDescription earth, ref double tdb, ref double[] bary_earthp, ref double[] bary_earthv, ref double[] helio_earthp, ref double[] helio_earthv)
         {
             short rc;
-            PosVector vbary_earthp = new PosVector(), vhelio_earthp = new PosVector();
-            VelVector vbary_earthv = new VelVector(), vhelio_earthv = new VelVector();
+            PosVector vbary_earthp = new(), vhelio_earthp = new();
+            VelVector vbary_earthv = new(), vhelio_earthv = new();
             if (Is64Bit())
             {
                 var argearth = BodyDescToShort(earth);

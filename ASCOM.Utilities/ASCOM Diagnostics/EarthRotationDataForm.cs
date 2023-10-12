@@ -58,16 +58,16 @@ namespace ASCOM.Utilities
         private double LeapSecondMinimumValue;
 
         // Initialise drop-down list options
-        private List<string> dataDownloadSources = new List<string>() { Astrometry.GlobalItems.EARTH_ROTATION_INTERNET_DATA_SOURCE_0 };
+        private List<string> dataDownloadSources = new() { Astrometry.GlobalItems.EARTH_ROTATION_INTERNET_DATA_SOURCE_0 };
         // EARTH_ROTATION_INTERNET_DATA_SOURCE_0,
         // EARTH_ROTATION_INTERNET_DATA_SOURCE_1,
         // EARTH_ROTATION_INTERNET_DATA_SOURCE_2,
         // EARTH_ROTATION_INTERNET_DATA_SOURCE_3,
         // EARTH_ROTATION_INTERNET_DATA_SOURCE_4
 
-        private List<string> ut1Sources = new List<string>() { Astrometry.GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, Astrometry.GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1, Astrometry.GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, Astrometry.GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, Astrometry.GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 };
+        private List<string> ut1Sources = new() { Astrometry.GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, Astrometry.GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1, Astrometry.GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, Astrometry.GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1, Astrometry.GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 };
 
-        private List<string> scheduleRepeatOptions = new List<string>() { Astrometry.GlobalItems.SCHEDULE_REPEAT_NONE, Astrometry.GlobalItems.SCHEDULE_REPEAT_DAILY, Astrometry.GlobalItems.SCHEDULE_REPEAT_WEEKLY, Astrometry.GlobalItems.SCHEDULE_REPEAT_MONTHLY };
+        private List<string> scheduleRepeatOptions = new() { Astrometry.GlobalItems.SCHEDULE_REPEAT_NONE, Astrometry.GlobalItems.SCHEDULE_REPEAT_DAILY, Astrometry.GlobalItems.SCHEDULE_REPEAT_WEEKLY, Astrometry.GlobalItems.SCHEDULE_REPEAT_MONTHLY };
 
         /// <summary>
         /// EarthRotationDataForm initiator

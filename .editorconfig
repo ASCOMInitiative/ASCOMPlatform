@@ -2,7 +2,7 @@
 csharp_indent_labels = one_less_than_current
 csharp_space_around_binary_operators = before_and_after
 csharp_using_directive_placement = outside_namespace:silent
-csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_simple_using_statement = true:none
 csharp_prefer_braces = true:silent
 csharp_style_namespace_declarations = block_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
@@ -50,6 +50,9 @@ csharp_style_prefer_primary_constructors = true:suggestion
 
 # VSSpell001: Spell Check
 dotnet_diagnostic.VSSpell001.severity = none
+
+# IDE0063: Use simple 'using' statement
+dotnet_diagnostic.IDE0063.severity = none
 
 [*.vb]
 [*.{cs,vb}]

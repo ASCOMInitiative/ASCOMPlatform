@@ -763,25 +763,25 @@ namespace ASCOM.Astrometry
 
 
         // /* January 5.0, 1987 */
-        internal static Orbit mercury = new Orbit("Mercury", 2446800.5d, 7.0048d, 48.177d, 29.074d, 0.387098d, 4.09236d, 0.205628d, 198.7199d, 2446800.5d, -0.42d, 3.36d, Mer404Data.mer404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit mercury = new("Mercury", 2446800.5d, 7.0048d, 48.177d, 29.074d, 0.387098d, 4.09236d, 0.205628d, 198.7199d, 2446800.5d, -0.42d, 3.36d, Mer404Data.mer404, 0.0d, 0.0d, 0.0d);
 
         // /* Note the calculated apparent visual magnitude for Venus is not very accurate. */
-        internal static Orbit venus = new Orbit("Venus", 2446800.5d, 3.3946d, 76.561d, 54.889d, 0.723329d, 1.60214d, 0.006757d, 9.0369d, 2446800.5d, -4.4d, 8.34d, Ven404Data.ven404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit venus = new("Venus", 2446800.5d, 3.3946d, 76.561d, 54.889d, 0.723329d, 1.60214d, 0.006757d, 9.0369d, 2446800.5d, -4.4d, 8.34d, Ven404Data.ven404, 0.0d, 0.0d, 0.0d);
 
         // /* Fixed numerical values will be used for earth if read in from a file named earth.orb.  See kfiles.c, kep.h. */
-        internal static Orbit earthplanet = new Orbit("Earth", 2446800.5d, 0.0d, 0.0d, 102.884d, 0.999999d, 0.985611d, 0.016713d, 1.1791d, 2446800.5d, -3.86d, 0.0d, Ear404Data.ear404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit earthplanet = new("Earth", 2446800.5d, 0.0d, 0.0d, 102.884d, 0.999999d, 0.985611d, 0.016713d, 1.1791d, 2446800.5d, -3.86d, 0.0d, Ear404Data.ear404, 0.0d, 0.0d, 0.0d);
 
-        internal static Orbit mars = new Orbit("Mars", 2446800.5d, 1.8498d, 49.457d, 286.343d, 1.52371d, 0.524023d, 0.093472d, 53.1893d, 2446800.5d, -1.52d, 4.68d, Mar404Data.mar404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit mars = new("Mars", 2446800.5d, 1.8498d, 49.457d, 286.343d, 1.52371d, 0.524023d, 0.093472d, 53.1893d, 2446800.5d, -1.52d, 4.68d, Mar404Data.mar404, 0.0d, 0.0d, 0.0d);
 
-        internal static Orbit jupiter = new Orbit("Jupiter", 2446800.5d, 1.3051d, 100.358d, 275.129d, 5.20265d, 0.0830948d, 0.0481d, 344.5086d, 2446800.5d, -9.4d, 98.44d, Jup404Data.jup404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit jupiter = new("Jupiter", 2446800.5d, 1.3051d, 100.358d, 275.129d, 5.20265d, 0.0830948d, 0.0481d, 344.5086d, 2446800.5d, -9.4d, 98.44d, Jup404Data.jup404, 0.0d, 0.0d, 0.0d);
 
-        internal static Orbit saturn = new Orbit("Saturn", 2446800.5d, 2.4858d, 113.555d, 337.969d, 9.5405d, 0.033451d, 0.052786d, 159.6327d, 2446800.5d, -8.88d, 82.73d, Sat404Data.sat404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit saturn = new("Saturn", 2446800.5d, 2.4858d, 113.555d, 337.969d, 9.5405d, 0.033451d, 0.052786d, 159.6327d, 2446800.5d, -8.88d, 82.73d, Sat404Data.sat404, 0.0d, 0.0d, 0.0d);
 
-        internal static Orbit uranus = new Orbit("Uranus", 2446800.5d, 0.7738d, 73.994d, 98.746d, 19.2233d, 0.0116943d, 0.045682d, 84.8516d, 2446800.5d, -7.19d, 35.02d, Ura404Data.ura404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit uranus = new("Uranus", 2446800.5d, 0.7738d, 73.994d, 98.746d, 19.2233d, 0.0116943d, 0.045682d, 84.8516d, 2446800.5d, -7.19d, 35.02d, Ura404Data.ura404, 0.0d, 0.0d, 0.0d);
 
-        internal static Orbit neptune = new Orbit("Neptune", 2446800.5d, 1.7697d, 131.677d, 250.623d, 30.1631d, 0.00594978d, 0.009019d, 254.2568d, 2446800.5d, -6.87d, 33.5d, Nep404Data.nep404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit neptune = new("Neptune", 2446800.5d, 1.7697d, 131.677d, 250.623d, 30.1631d, 0.00594978d, 0.009019d, 254.2568d, 2446800.5d, -6.87d, 33.5d, Nep404Data.nep404, 0.0d, 0.0d, 0.0d);
 
-        internal static Orbit pluto = new Orbit("Pluto", 2446640.5d, 17.1346d, 110.204d, 114.21d, 39.4633d, 0.0039757d, 0.248662d, 355.0554d, 2446640.5d, -1.0d, 2.07d, Plu404Data.plu404, 0.0d, 0.0d, 0.0d);
+        internal static Orbit pluto = new("Pluto", 2446640.5d, 17.1346d, 110.204d, 114.21d, 39.4633d, 0.0039757d, 0.248662d, 355.0554d, 2446640.5d, -1.0d, 2.07d, Plu404Data.plu404, 0.0d, 0.0d, 0.0d);
         #endregion
 
         #region GPlan

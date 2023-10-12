@@ -1238,7 +1238,7 @@ namespace ASCOM.Utilities
                 LogMessage("CanonicalizeDacl", "***** Rules are not canonical, restructuring them *****");
                 TL.BlankLine();
 
-                foreach (CommonAce ace in descriptor.DiscretionaryAcl)
+                foreach (CommonAce ace in descriptor.DiscretionaryAcl.Cast<CommonAce>())
                 {
                     count += 1;
                     LogMessage("CanonicalizeDacl", "Processing ACE " + count);

@@ -117,7 +117,7 @@ namespace ASCOM.Astrometry.Kepler
         private bool m_bNumberValid;
         private BodyType m_Type; // Type of body
         private bool m_bTypeValid;
-        private KeplerGlobalCode.Orbit m_e = new KeplerGlobalCode.Orbit(0.0d); // Elements, etc for minor planets/comets, etc.
+        private KeplerGlobalCode.Orbit m_e = new(0.0d); // Elements, etc for minor planets/comets, etc.
         // Public Shared TL As TraceLogger
         // gplan variables
         private double[,] ss = new double[19, 32], cc = new double[19, 32];

@@ -300,7 +300,7 @@ namespace ASCOM.DynamicRemoteClients
                         // Remove the Chooser flag indicating that this driver has been configured
                         try
                         {
-                            using (RegistryAccess registryAccess = new RegistryAccess())
+                            using (RegistryAccess registryAccess = new())
                             {
                                 registryAccess.DeleteProfile("Chooser", $"{driver.ProgId} Init");
                             }
@@ -359,8 +359,8 @@ namespace ASCOM.DynamicRemoteClients
         /// </summary>
         private void FindInstalledDrivers()
         {
-            Regex dynamicDriverProgidParseRegex = new Regex(DYNAMIC_DRIVER_PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            Regex remoteDriverProgidParseRegex = new Regex(REMOTE_DRIVER_PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex dynamicDriverProgidParseRegex = new(DYNAMIC_DRIVER_PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex remoteDriverProgidParseRegex = new(REMOTE_DRIVER_PROGID_PARSE_REGEX_STRING, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             string dynamicDriverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + CreateAlpacaClients.ALPACA_CLIENT_LOCAL_SERVER_PATH;
             string remoteDriverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + ASCOM_REMOTE_CLIENT_LOCAL_SERVER_PATH;
@@ -389,7 +389,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (dynamicDriverMatch.Success)
                         {
                             // Create a new data class to hold information about this dynamic driver
-                            DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
+                            DynamicDriverRegistration foundDriver = new();
 
                             try
                             {
@@ -445,7 +445,7 @@ namespace ASCOM.DynamicRemoteClients
                         if (remoteDrivermatch.Success)
                         {
                             // Create a new data class to hold information about this dynamic driver
-                            DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
+                            DynamicDriverRegistration foundDriver = new();
 
                             try
                             {
@@ -552,7 +552,7 @@ namespace ASCOM.DynamicRemoteClients
                     if (dynamicDrivers.Where(x => x.ProgId.ToLowerInvariant() == progId.ToLowerInvariant()).Count() == 0) // There are no drivers with this ProgID already in the list
                     {
                         // Create a new list entry
-                        DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
+                        DynamicDriverRegistration foundDriver = new();
                         foundDriver.ProgId = progId;
                         foundDriver.DeviceType = deviceType;
                         foundDriver.Name = progId;
@@ -575,7 +575,7 @@ namespace ASCOM.DynamicRemoteClients
                     if (!Com.Profile.IsRegistered(Common.Devices.ToDeviceType(deviceType), progId)) // The driver is not registered in the ASCOM Profile
                     {
                         // Create a new list entry
-                        DynamicDriverRegistration foundDriver = new DynamicDriverRegistration();
+                        DynamicDriverRegistration foundDriver = new();
                         foundDriver.ProgId = progId;
                         foundDriver.DeviceType = deviceType;
                         foundDriver.Name = progId;

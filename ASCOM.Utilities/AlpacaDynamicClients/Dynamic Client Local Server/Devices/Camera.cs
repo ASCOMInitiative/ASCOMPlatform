@@ -1027,7 +1027,7 @@ namespace ASCOM.DynamicClients
                 List<string> gains = client.Gains.ToList<string>();
                 TL.LogMessage("Gains", string.Format("Returning {0} gains", gains.Count));
 
-                ArrayList returnValues = new ArrayList();
+                ArrayList returnValues = new();
                 foreach (string gain in gains)
                 {
                     returnValues.Add(gain);
@@ -1066,7 +1066,7 @@ namespace ASCOM.DynamicClients
                 List<string> modes = client.ReadoutModes.ToList<string>();
                 TL.LogMessage("ReadoutModes", string.Format("Returning {0} modes", modes.Count));
 
-                ArrayList returnValues = new ArrayList();
+                ArrayList returnValues = new();
                 foreach (string gain in modes)
                 {
                     returnValues.Add(gain);
@@ -1132,7 +1132,7 @@ namespace ASCOM.DynamicClients
                 List<string> offsets = client.Offsets.ToList<string>();
                 TL.LogMessage("Offsets", string.Format("Returning {0} Offsets", offsets.Count));
 
-                ArrayList returnValues = new ArrayList();
+                ArrayList returnValues = new();
                 foreach (string offset in offsets)
                 {
                     returnValues.Add(offset);

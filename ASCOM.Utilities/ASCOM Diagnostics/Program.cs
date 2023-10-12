@@ -31,7 +31,7 @@ namespace ASCOM.Utilities
         {
             try
             {
-                using (TraceLogger logger = new TraceLogger("DiagnosticsException"))
+                using (TraceLogger logger = new("DiagnosticsException"))
                 {
                     logger.Enabled = true;
                     Exception ex = eventArgs.ExceptionObject as Exception;
@@ -55,7 +55,7 @@ namespace ASCOM.Utilities
         {
             try
             {
-                using (TraceLogger logger = new TraceLogger("DiagnosticsThreadException"))
+                using (TraceLogger logger = new("DiagnosticsThreadException"))
                 {
                     logger.Enabled = true;
                     logger.LogMessageCrLf("Diagnostics", $"An un-handled thread exception occurred, please report this on the ASCOM-Talk groups.io forum: {eventArgs.Exception.Message}.\r\n{eventArgs.Exception}");
