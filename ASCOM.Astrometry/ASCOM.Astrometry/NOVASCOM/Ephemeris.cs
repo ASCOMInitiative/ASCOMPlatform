@@ -361,7 +361,7 @@ namespace ASCOM.Astrometry
                 for (i = 0; i <= 2; i++)
                 {
                     qjd = tjd + (i - 1.0d) * 0.1d;
-                    sun_eph_nov(qjd, ras, decs, diss);
+                    sun_eph_nov(qjd, ref ras, ref decs, ref diss);
                     RADec2Vector(ras, decs, diss, ref pos1);
                     Precession(qjd, pos1, GlobalItems.J2000BASE, ref pos);
                     p[i, 0] = -pos[0];
@@ -452,7 +452,7 @@ namespace ASCOM.Astrometry
             }
         }
 
-        private static void sun_eph_nov(double jd, double ra, double dec, double dis)
+        private static void sun_eph_nov(double jd, ref double ra, ref double dec, ref double dis)
         {
             int i;
 
