@@ -2244,7 +2244,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{8B5E10D8-34C9-4E1A-91B1-FB77F59D1B59}
+{9290C9BD-D534-4D3B-B407-2D279170CE3D}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2254,9 +2254,9 @@ FALSE
 AscomPlatform700
 TRUE
 TRUE
-|
+|Sectigo_20231013130838
 |C:\CodeSigningCertificate\petercodesign.pfx
-http://timestamp.digicert.com|
+http://timestamp.digicert.com|D:\Downloads\peter2023.cer
 https://ascom-standards.org
 UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE
 $
@@ -2280,7 +2280,7 @@ checknet4.8_x86 .mia
 CleanRegistry.mia
 $
 FALSE
-P8tris9000cdK
+olDi11PI?621b4mt
 FALSE
 FALSE
 true
