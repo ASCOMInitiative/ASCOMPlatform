@@ -45,23 +45,6 @@ static class FocuserHardware
     }
 
     /// <summary>
-    /// State of the connection to the focuser.
-    /// </summary>
-    internal static bool Link
-    {
-        get
-        {
-            LogMessage("Link Get", Connected.ToString());
-            return Connected; // Direct function to the connected method, the Link method is just here for backwards compatibility
-        }
-        set
-        {
-            LogMessage("Link Set", value.ToString());
-            Connected = value; // Direct function to the connected method, the Link method is just here for backwards compatibility
-        }
-    }
-
-    /// <summary>
     /// Maximum increment size allowed by the focuser;
     /// i.e. the maximum number of steps allowed in one move operation.
     /// </summary>
