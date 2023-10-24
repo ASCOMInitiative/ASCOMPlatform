@@ -1,0 +1,11 @@
+<configuration>
+   <runtime>
+      <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+         <dependentAssembly>
+            <assemblyIdentity name="ASCOM.Exceptions" publicKeyToken="565de7938946fba7" culture="neutral" />
+            <bindingRedirect oldVersion="1.0.0.0-6.0.65535.65535" 
+                             newVersion="6.0.0.0" />
+         </dependentAssembly>
+      </assemblyBinding>
+   </runtime>
+</configuration>
