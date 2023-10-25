@@ -9,7 +9,7 @@ class DeviceObservingConditions
     #region IObservingConditions Implementation
 
     /// <summary>
-    /// Gets and sets the time period over which observations wil be averaged
+    /// Gets and sets the time period over which observations will be averaged
     /// </summary>
     public double AveragePeriod
     {

@@ -14,7 +14,7 @@ static class ObservingConditionsHardware
     private static Dictionary<DateTime, double> winds = new Dictionary<DateTime, double>();
 
     /// <summary>
-    /// Gets and sets the time period over which observations wil be averaged
+    /// Gets and sets the time period over which observations will be averaged
     /// </summary>
     internal static double AveragePeriod
     {
