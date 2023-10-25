@@ -14,6 +14,7 @@ using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Utilities;
 using System.Collections;
 using System.Windows.Forms;
+using ASCOM.DeviceInterface;
 
 namespace TEMPLATENAMESPACE
 {
@@ -70,7 +71,7 @@ namespace TEMPLATENAMESPACE
         }
 
         /// <summary>
-        /// Place device initialisation code here
+        /// Place device initialisation code here that delivers the selected ASCOM <see cref="Devices."/>
         /// </summary>
         /// <remarks>Called every time a new instance of the driver is created.</remarks>
         internal static void InitialiseHardware()
