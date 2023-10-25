@@ -80,8 +80,7 @@ class DeviceFocuser
         {
             try
             {
-                CheckConnected("Link Get");
-                bool link = FocuserHardware.Link;
+                bool link = Connected;
                 LogMessage("Link Get", link.ToString());
                 return link;
             }
@@ -95,9 +94,8 @@ class DeviceFocuser
         {
             try
             {
-                CheckConnected("Link Set");
                 LogMessage("Link Set", value.ToString());
-                FocuserHardware.Link = value;
+                Connected = value;
             }
             catch (Exception ex)
             {
