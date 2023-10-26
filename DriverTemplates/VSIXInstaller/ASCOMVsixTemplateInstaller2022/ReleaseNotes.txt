@@ -1,6 +1,9 @@
 ﻿This Release
 The local server template name been changed from local server to ASCOM Driver
 
+Release 6.6.4191
+Fix an issue in the Focuser template due to implementation of the Link command, which caused Conform to fail the initial build of the driver.
+
 Release 6.6.3713
 To conform with the ASCOM SafetyMonitor device specification the SafetyMonitor driver template now defaults IsSafe to False when the driver is not connected.
 Local server drivers are the most effective way to deliver drivers because they provide built-in "hub" functionality and isolate the driver from the application by running it in a separate process.
