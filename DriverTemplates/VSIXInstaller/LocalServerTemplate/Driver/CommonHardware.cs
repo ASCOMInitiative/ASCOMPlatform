@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using System.Collections.Generic;
 using ASCOM.Astrometry;
+using ASCOM.Astrometry.NOVAS;
 
 namespace TEMPLATENAMESPACE
 {
