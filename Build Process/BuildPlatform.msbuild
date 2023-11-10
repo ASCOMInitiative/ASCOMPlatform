@@ -8,15 +8,22 @@
 		<BuildType>ReleaseCandidate</BuildType>
 	</PropertyGroup>
 
+	<!-- Determine when or not to sign code True to sign, anything elser not to sign. -->
+	<PropertyGroup>
+		<SignCode>False</SignCode>
+	</PropertyGroup>
+
 	<!--  Set values according to type of build -->
 	<Choose>
 		<When Condition=" '$(BuildType)'=='Release' ">
 			<PropertyGroup>
 				<!-- GIT Branch to Check Out -->
 				<GitCheckoutBranch>master</GitCheckoutBranch>
+				<OmniSimCheckoutBranch>main</OmniSimCheckoutBranch>
 
-				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
-				<Configuration>Release</Configuration>
+				<!--  Specify Release or Debug builds (Platform Debug not working at 25/10/21) -->
+				<PlatformConfiguration>Release</PlatformConfiguration>
+				<OmniSimConfiguration>Debug</OmniSimConfiguration>
 
 				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation></BuildTypeAnnotation>
@@ -26,9 +33,11 @@
 			<PropertyGroup>
 				<!-- GIT Branch to Check Out -->
 				<GitCheckoutBranch>platform7</GitCheckoutBranch>
+				<OmniSimCheckoutBranch>buildtest</OmniSimCheckoutBranch>
 
-				<!--  Specify Release or Debug builds (Debug not working at 25/10/21) -->
-				<Configuration>Release</Configuration>
+				<!--  Specify Release or Debug builds (Platform Debug not working at 25/10/21) -->
+				<PlatformConfiguration>Release</PlatformConfiguration>
+				<OmniSimConfiguration>Debug</OmniSimConfiguration>
 
 				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation>beta</BuildTypeAnnotation>
@@ -36,7 +45,27 @@
 		</When>
 	</Choose>
 
+	<!--  Set values according to whether or not we are signing executables -->
+	<Choose>
+		<When Condition="'$(SignCode)'=='True'">
+			<PropertyGroup>
+				<!-- Set InstallAware options -->
+				<MIAOptions>/r</MIAOptions>
+			</PropertyGroup>
+		</When>
+		<Otherwise>
+			<PropertyGroup>
+				<!-- Set InstallAware options -->
+				<MIAOptions>/nosign /r</MIAOptions>
+			</PropertyGroup>
+		</Otherwise>
+	</Choose>
+
+	<!-- Set properties Platform properties -->
 	<PropertyGroup>
+
+		<!-- GitHub URL from which to make the Platform clone -->
+		<GitRepositoryPath>https://github.com/ASCOMInitiative/ASCOMPlatform.git</GitRepositoryPath>
 
 		<!-- Directory in which to export the latest ASCOM code base from GitHub-->
 		<CheckoutDirectoryRelative>Export</CheckoutDirectoryRelative>
@@ -45,9 +74,6 @@
 		<!-- Name and full path to a file that will hold the build number associated with this build -->
 		<BuildNumberFileName>LastBuildNumber.txt</BuildNumberFileName>
 		<BuildNumberFile>$(CheckoutDirectory)\$(BuildNumberFileName)</BuildNumberFile>
-
-		<!-- GitHub URL from which to make the clone -->
-		<GitRepositoryPath>https://github.com/ASCOMInitiative/ASCOMPlatform.git</GitRepositoryPath>
 
 		<!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
 		<BuildBaseDate>January 1,2011</BuildBaseDate>
@@ -59,7 +85,7 @@
 		<MIALanguageFolder>C:\Program Files (x86)\InstallAware X15 Creators Update\trans</MIALanguageFolder>
 		<ASCOMSharedStringsDirectory>Releases\ASCOM 6\Translated InstallAware Shared Strings</ASCOMSharedStringsDirectory>
 
-		<!-- Names and locations of solution and project files used by this build script-->
+		<!-- Names and locations of solution and project files used for building the Platform -->
 		<PlatformVSSolution>ASCOM Platform.sln</PlatformVSSolution>
 		<PlatformHelpProject>Help\ASCOMPlatform.shfbproj</PlatformHelpProject>
 		<DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
@@ -69,30 +95,47 @@
 		<DeveloperInstallerDirectory>InstallerDeveloper</DeveloperInstallerDirectory>
 		<PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
 		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-		<FindGUIDsDirectory>InstallerSupport\Find GUIDs\bin\$(Configuration)</FindGUIDsDirectory>
-		<RemoveASCOMDirectory>InstallerSupport\Remove ASCOM\bin\$(Configuration)</RemoveASCOMDirectory>
+		<FindGUIDsDirectory>InstallerSupport\Find GUIDs\bin\$(PlatformConfiguration)</FindGUIDsDirectory>
+		<RemoveASCOMDirectory>InstallerSupport\Remove ASCOM\bin\$(PlatformConfiguration)</RemoveASCOMDirectory>
 		<RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
 		<RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
 		<RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
 		<VersionFile>$(CheckoutDirectory)\$(PlatformInstallerDirectory)\MasterPlatformVersion.txt</VersionFile>
 		<VSIXInstallerFileName>ASCOMVsixTemplateInstaller</VSIXInstallerFileName>
 		<VSIXInstallerFileType>vsix</VSIXInstallerFileType>
-		<VSIXInstallerFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2019>
+		<VSIXInstallerFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\bin\$(PlatformConfiguration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2019>
 		<VSIXManifestFile2019>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2019\source.extension.vsixmanifest</VSIXManifestFile2019>
-		<VSIXInstallerFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\bin\$(Configuration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2022>
+		<VSIXInstallerFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\bin\$(PlatformConfiguration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2022>
 		<VSIXManifestFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\source.extension.vsixmanifest</VSIXManifestFile2022>
 		<PackageVersionFile>Directory.Build.props</PackageVersionFile>
 		<ASCOMExceptionsPackageFolder>Interfaces\ASCOMExceptions\bin\Release</ASCOMExceptionsPackageFolder>
 		<BuildEnvironmentPackageFolder>BuildEnvironment\bin\Release</BuildEnvironmentPackageFolder>
+		<GacInstallFile>$(CheckoutDirectory)\InstallerSupport\GACInstall\bin\$(PlatformConfiguration)\GacInstall.exe</GacInstallFile>
 		
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
 
 		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
-		<SignToolBase256>signtool sign /a /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase256>
+		<!-- <SignToolBase256>signtool sign /a /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256</SignToolBase256> -->
+		<SignToolBase256>signtool sign /v /tr http://timestamp.sectigo.com /td sha256 /fd sha256 /n "Peter Simpson"</SignToolBase256>
 
 	</PropertyGroup>
 
+	<!-- Set OmniSim properties -->
+	<PropertyGroup>
+		<!-- GitHub URL from which to make the Omni Simulator clone -->
+		<OmniSimRepositoryPath>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimRepositoryPath>
+
+		<!-- Directory in which to export the latest ASCOM OmniSim code base from GitHub-->
+		<OmniSimCheckoutDirectoryRelative>OmniSim</OmniSimCheckoutDirectoryRelative>
+		<OmniSimCheckoutDirectory>$(MSBuildProjectDirectory)\$(CheckoutDirectoryRelative)\$(OmniSimCheckoutDirectoryRelative)</OmniSimCheckoutDirectory>
+		<OmniSimProjectDirectory>$(OmniSimCheckoutDirectory)\ASCOM.Alpaca.Simulators</OmniSimProjectDirectory>
+		
+		<!-- Names and locations of solution and project files used for building the OmniSims -->
+		<OmniSimVSSolution>ASCOM.Alpaca.Simulators.sln</OmniSimVSSolution>
+		<OmniSimVSProject>ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>
+	</PropertyGroup>
+	
 	<!-- Main build target for this build -->
 	<Target Name="Build">
 
@@ -135,6 +178,31 @@
 
 		<!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
 		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
+
+		<!-- Clone a fresh copy of the OmniSim Git repository  -->
+		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(OmniSimCheckoutBranch) $(OmniSimRepositoryPath) $(CheckoutDirectoryRelative)\$(OmniSimCheckoutDirectoryRelative)"/>
+
+		<!-- Publish the x86 OmniSims -->
+		<MSBuild Projects="$(OmniSimProjectDirectory)\$(OmniSimVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(OmniSimConfiguration);
+			Platform=Any CPU;
+			PublishSingleFile=true;
+			DebugType=embedded;
+			PublishDir=..\publish\x86;
+			DefineConstants=ASCOM_COM;
+			RuntimeIdentifier=win-x86"/>
+
+		<!-- Publish the x64 OmniSims -->
+		<MSBuild Projects="$(OmniSimProjectDirectory)\$(OmniSimVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(OmniSimConfiguration);
+			Platform=Any CPU;
+			PublishSingleFile=true;
+			DebugType=embedded;
+			PublishDir=..\publish\x64;
+			DefineConstants=ASCOM_COM;
+			RuntimeIdentifier=win-x64"/>
 
 		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get latest commit accross all branches. -->
 		<Exec Command="git.exe rev-list --all --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
@@ -233,11 +301,14 @@
 		<Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' ContinueOnError="WarnAndContinue" />
 
 		<!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=Mixed Platforms" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(PlatformConfiguration);Platform=Mixed Platforms" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(PlatformConfiguration);Platform=Mixed Platforms" />
 
 		<!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" 
+			ConsoleToMSBuild="true" 
+			Condition="'$(SignCode)'=='True'"
+			WorkingDirectory="$(CheckoutDirectory)" />
 		<ItemGroup>
 			<RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
 		</ItemGroup>
@@ -250,19 +321,37 @@
 		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
 		<!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=x64" />
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(PlatformConfiguration);Platform=x64" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(PlatformConfiguration);Platform=x64" />
 
-		<!-- Sign the executables that support the installation process, these are not automatically signed by the InstallAware build process -->
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<!-- Sign the executables that support the Platform installation process, these are not automatically signed by the InstallAware build process -->
+			<!-- Condition="'$(SignCode)'=='True'" -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.exe&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
 
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)" />
+		<!-- Sign the executables that support the Developer installation process, these are not automatically signed by the InstallAware build process -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
+
+		<!-- Sign the GACInstall executable that supports the Platform installation process because it  must be singed always to avoid anti-virus alerts. -->
+		<Exec Command="$(SignToolBase256) &quot;$(GacInstallFile)&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.dll&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
 
 		<!-- Build the help files for Platform and Developer.-->
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
-		<MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(Configuration);Platform=AnyCPU" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=$(PlatformConfiguration);Platform=AnyCPU" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=$(PlatformConfiguration);Platform=AnyCPU" />
 
 		<!-- Update the file version numbers in the InstallAware project files -->
 		<ItemGroup>
@@ -288,8 +377,18 @@
 		<Exec Command='Rename "$(CheckoutDirectory)\$(DeveloperHelpDirectory)\index.html" "Index.html" ' />
 
 		<!-- Build the InstallAware installers -->
-		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
-		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
+		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" $(MIAOptions)' />
+		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" $(MIAOptions)' />
+
+		<!-- Sign the Platform and developer installer executables if we are not signing everything - required to satisfy anti-virus. -->
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\single\*.exe&quot;" 
+			ConsoleToMSBuild="true" 
+			Condition="'$(SignCode)'!='True'"
+			WorkingDirectory="$(CheckoutDirectory)" />
+		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\single\*.exe&quot;" 
+			ConsoleToMSBuild="true" 
+			Condition="'$(SignCode)'!='True'"
+			WorkingDirectory="$(CheckoutDirectory)" />
 
 		<!-- Copy the installers back to the build root directory -->
 		<Sleep Milliseconds="1000" />
