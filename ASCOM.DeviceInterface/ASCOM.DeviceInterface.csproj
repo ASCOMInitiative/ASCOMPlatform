@@ -13,18 +13,24 @@
 		<AssemblyTitle>ASCOM Device Interfaces</AssemblyTitle>
 		<Company>ASCOM</Company>
 		<Product>ASCOM.DeviceInterfaces</Product>
-		<Description>ASCOM Device Interfaces for Platform 7</Description>
+		<Description>ASCOM device interfaces for Platform 7</Description>
 		<Copyright>Copyright © ASCOM Initiative 2023</Copyright>
 		<AssemblyVersion>6.0.0.0</AssemblyVersion>
 		<FileVersion>6.0.0.0</FileVersion>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<DocumentationFile>ASCOM.DeviceInterfaces.xml</DocumentationFile>
 		<RegisterForComInterop>false</RegisterForComInterop>
-		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Title>ASCOM device interfaces for Platform 7.</Title>
+		<Authors>Peter Simpson</Authors>
+		<PackageIcon>Bug 300 Borderless.png</PackageIcon>
+		<PackageReadmeFile></PackageReadmeFile>
+		<PackageReleaseNotes>Initial beta release.</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="ASCOM.DeviceInterfaces.xml" />
+		<None Remove="ASCOM.DeviceInterfaces.xml" />
+		<None Remove="ReadMe.md" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
@@ -39,11 +45,20 @@
 			<Version>4.3.0</Version>
 		</PackageReference>
 	</ItemGroup>
+
+	<!-- NOTE PrivateAssets=All stops these dependencies being included in the package that is created. The dependencies are only required in order to support links to utility methods within the XML help text. -->
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" />
+		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.63" />
+		<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.63" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\ASCOM Art\Bug 300 Borderless.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
