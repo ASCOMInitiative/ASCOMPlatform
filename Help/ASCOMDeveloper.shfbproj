@@ -124,7 +124,7 @@
       <NamespaceSummaryItem name="ASCOM.DeviceInterface.DeviceState" isDocumented="True">Device state helper classes returned by client toolkit instances.</NamespaceSummaryItem>
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET Framework 4.8</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>

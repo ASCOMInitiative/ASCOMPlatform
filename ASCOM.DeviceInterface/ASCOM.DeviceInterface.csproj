@@ -35,25 +35,25 @@
 	<ItemGroup>
 		<Compile Include="..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-		<PackageReference Include="System.Dynamic.Runtime">
-			<Version>4.3.0</Version>
-		</PackageReference>
-	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="System.Dynamic.Runtime">
-			<Version>4.3.0</Version>
-		</PackageReference>
-	</ItemGroup>
 
-	<!-- NOTE PrivateAssets=All stops these dependencies being included in the package that is created. The dependencies are only required in order to support links to utility methods within the XML help text. -->
+	<!-- NOTE PrivateAssets=All prevents the Utilities / Tools dependencies from being included as package dependencies in the output DeviceInterface package. 
+		 NOTE The dependencies are only required in order to support links to utility methods within the XML help text. 
+		 NOTE The links are only required to work when the Help files are built at compile time and are not required to work at runtime. -->
+	
+	<!-- Select the correct reference depending on which framework is being built -->
+	<Choose>
+		<When Condition="'$(TargetFramework)' == 'net35'">
+			<ItemGroup>
+				<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
+			</ItemGroup>
+		</When>
+		<Otherwise>
+			<ItemGroup>
+				<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.63" PrivateAssets="All" />
+			</ItemGroup>
+		</Otherwise>
+	</Choose>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.63" PrivateAssets="All" />
-	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\ASCOM Art\Bug 300 Borderless.png">
 			<Pack>True</Pack>
