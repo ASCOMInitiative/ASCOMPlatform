@@ -1,4 +1,4 @@
-Comment: ASCOM Platform installation script
+Comment: ASCOM Platform installation script 
 Comment: NOTE: The required Platform version number is read at build time by this script from the MasterPlatformVersion.txt file that is maintained through the main Visual Studio project
  
 Comment: The installer must be started in 32bit MSI mode
@@ -659,6 +659,14 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable MYPROGRESS to 20
 end
 [END REGION]
+ 
+Comment: Clean up Platform 6 start menu entries that aren't removed by the uninstaller.
+Set Variable NATIVE_ENGINE to TRUE
+Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform 6
+Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform 6 (at end of file)
+Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform 6
+Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform 6 (at end of file)
+Set Variable NATIVE_ENGINE to FALSE
  
 [DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
