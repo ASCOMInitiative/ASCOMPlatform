@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 
 #if NET35
 using ASCOM.Utilities;
+#elif NET472
+using ASCOM.Utilities;
 #else
 using Util = ASCOM.Tools.Utilities;
 #endif

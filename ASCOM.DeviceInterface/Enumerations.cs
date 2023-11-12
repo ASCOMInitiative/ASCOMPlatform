@@ -279,7 +279,7 @@ namespace ASCOM.DeviceInterface
     /// </summary>
     /// <remarks>
     /// <para><c>Pier side</c> is a GEM-specific term that has historically caused much confusion.
-    /// As of Platform 6, the PierSide property is defined to refer to the telescope pointing state. Please see <see cref="ITelescopeV3.SideOfPier" /> for
+    /// As of Platform 6, the PierSide property is defined to refer to the telescope pointing state. Please see <see cref="ITelescopeV4.SideOfPier" /> for
     /// much more information on this topic.</para>
     /// <para>In order to support Dome slaving, where it is important to know on which side of the pier the mount is actually located, ASCOM has adopted the
     /// convention that the Normal pointing state will be the state where the mount is on the East side of the pier, looking West with the counterweights below

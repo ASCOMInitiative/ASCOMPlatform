@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 
 #if NET35
 using ASCOM.Utilities;
+#elif NET472
+using ASCOM.Utilities;
 #else
 using Util = ASCOM.Tools.Utilities;
 #endif
@@ -19,7 +21,7 @@ namespace ASCOM.DeviceInterface
     /// for astronomical purposes for things such as determining if it is safe to open or operate the observing system,
     /// for recording astronomical data or determining refraction corrections.
     /// </summary>
-    /// <remarks>It is NOT intended as a general purpose environmental sensor system. The <see cref="IObservingConditions.Action">Action</see> method and
+    /// <remarks>It is NOT intended as a general purpose environmental sensor system. The <see cref="Action">Action</see> method and
     /// <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property can be used to extend your driver to present any further sensors that you need.
     /// </remarks>
     [ComVisible(true)]

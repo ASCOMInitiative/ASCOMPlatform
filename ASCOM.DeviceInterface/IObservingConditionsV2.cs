@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 
 #if NET35
 using ASCOM.Utilities;
+#elif NET472
+using ASCOM.Utilities;
 #else
 using Util = ASCOM.Tools.Utilities;
 #endif
@@ -19,8 +21,8 @@ namespace ASCOM.DeviceInterface
     /// for astronomical purposes for things such as determining if it is safe to open or operate the observing system,
     /// for recording astronomical data or determining refraction corrections.
     /// </summary>
-    /// <remarks>It is NOT intended as a general purpose environmental sensor system. The <see cref="IObservingConditions.Action">Action</see> method and
-    /// <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property can be used to extend your driver to present any further sensors that you need.
+    /// <remarks>It is NOT intended as a general purpose environmental sensor system. The <see cref="Action">Action</see> method and
+    /// <see cref="SupportedActions">SupportedActions</see> property can be used to extend your driver to present any further sensors that you need.
     /// </remarks>
     [ComVisible(true)]
     [Guid("4A0FB13E-D2DC-40CB-A5EA-0EA04CEC4D56")]
@@ -598,7 +600,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
 		/// <p style="color:red"><b>Must Not throw a MethodNotImplementedException when the specified sensor Is implemented but must throw a MethodNotImplementedException when the specified sensor Is Not implemented.</b></p>
-		/// <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
+		/// <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditionsV2"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
 		/// <para>Return a negative value to indicate that no valid value has ever been received from the hardware.</para>
 		/// <para>If an empty string is supplied as the PropertyName, the driver must return the time since the most recent update of any sensor. A MethodNotImplementedException must not be thrown in this circumstance.</para>
 		/// </remarks>
@@ -616,7 +618,7 @@ namespace ASCOM.DeviceInterface
 		/// <remarks>
 		/// <p style="color:red"><b>Must Not throw a MethodNotImplementedException when the specified sensor Is implemented
 		/// but must throw a MethodNotImplementedException when the specified sensor Is Not implemented.</b></p>
-		/// <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
+		/// <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditionsV2"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
 		/// <para>If the sensor is implemented, this must return a valid string, even if the driver is not connected, so that applications can use this to determine what sensors are available.</para>
 		/// <para>If the sensor is not implemented, this must throw a MethodNotImplementedException.</para>
 		/// </remarks>

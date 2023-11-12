@@ -251,7 +251,7 @@ namespace ASCOM.DriverAccess
 		/// <para>Raises an exception if ambient temperature is not available. Commonly available on focusers with a built-in temperature compensation mode.</para>
 		/// <para><b>Clarification - October 2019</b></para>
 		/// <para>Historically no units were specified for this property. Henceforth, if applications need to process the supplied temperature, they should proceed on the basis that the 
-		/// units are degrees Celsius for consistency with <see cref="IObservingConditions.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
+		/// units are degrees Celsius for consistency with <see cref="IObservingConditionsV2.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
 		/// </remarks>
 		public double Temperature
         {

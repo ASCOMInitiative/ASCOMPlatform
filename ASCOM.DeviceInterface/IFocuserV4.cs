@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 
 #if NET35
 using ASCOM.Utilities;
+#elif NET472
+using ASCOM.Utilities;
 #else
 using Util = ASCOM.Tools.Utilities;
 #endif
@@ -12,11 +14,11 @@ namespace ASCOM.DeviceInterface
 {
 
     /// <summary>
-    /// Provides universal access to Focuser drivers - Updated to IFocuserV3 - see remarks below
+    /// Provides universal access to Focuser drivers - Updated to IFocuserV3 and later - see remarks below
     /// </summary>
     /// <remarks>
     /// <para><b>SPECIFICATION REVISION - Platform 6.4</b></para>
-    /// <para>The method signatures in the revised interface specification are identical to the preceeding IFocuserV2, however, the IFocuserV3.Move command must
+    /// <para>The method signatures in the revised interface specification are identical to the preceding IFocuserV2, however, the IFocuserV3.Move command must
     /// no longer throw an InvalidOperationException exception if a Move is attempted when temperature compensation is enabled.</para>
     /// </remarks>
     [Guid("4F93D41E-4139-499D-8804-8F2C1A6B9FC0")]
@@ -381,7 +383,7 @@ namespace ASCOM.DeviceInterface
 		/// <para>Raises an exception if ambient temperature is not available. Commonly available on focusers with a built-in temperature compensation mode.</para>
 		/// <para><b>Clarification - October 2019</b></para>
 		/// <para>Historically no units were specified for this property. Henceforth, if applications need to process the supplied temperature, they should proceed on the basis that the
-		/// units are degrees Celsius for consistency with <see cref="IObservingConditions.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
+		/// units are degrees Celsius for consistency with <see cref="IObservingConditionsV2.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
 		/// </remarks>
 		double Temperature { get; }
 

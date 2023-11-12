@@ -18,7 +18,6 @@
 		<AssemblyVersion>6.0.0.0</AssemblyVersion>
 		<FileVersion>6.0.0.0</FileVersion>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<DocumentationFile>ASCOM.DeviceInterfaces.xml</DocumentationFile>
 		<RegisterForComInterop>false</RegisterForComInterop>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,6 +26,7 @@
 		<PackageIcon>Bug 300 Borderless.png</PackageIcon>
 		<PackageReadmeFile></PackageReadmeFile>
 		<PackageReleaseNotes>Initial beta release.</PackageReleaseNotes>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="ASCOM.DeviceInterfaces.xml" />
@@ -43,6 +43,11 @@
 	<!-- Select the correct reference depending on which framework is being built -->
 	<Choose>
 		<When Condition="'$(TargetFramework)' == 'net35'">
+			<ItemGroup>
+				<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
+			</ItemGroup>
+		</When>
+		<When Condition="'$(TargetFramework)' == 'net472'">
 			<ItemGroup>
 				<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
 			</ItemGroup>

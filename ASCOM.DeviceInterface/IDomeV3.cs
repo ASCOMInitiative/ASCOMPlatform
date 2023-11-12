@@ -31,25 +31,25 @@ namespace ASCOM.DeviceInterface
     /// </para>
     /// <list type="bullet">
     /// <item>
-    /// <see cref="IDomeV2.OpenShutter" /> and <see cref="IDomeV2.CloseShutter" /> open and close the roof
+    /// <see cref="OpenShutter" /> and <see cref="CloseShutter" /> open and close the roof
     /// </item>
     /// <item>
-    /// <see cref="IDomeV2.CanFindHome" />, <see cref="IDomeV2.CanPark" />, <see cref="IDomeV2.CanSetAltitude" />,
-    /// <see cref="IDomeV2.CanSetAzimuth" />, <see cref="IDomeV2.CanSetPark" />, <see cref="IDomeV2.CanSlave" /> and
-    /// <see cref="IDomeV2.CanSyncAzimuth" /> all return <c>false</c>.
+    /// <see cref="CanFindHome" />, <see cref="CanPark" />, <see cref="CanSetAltitude" />,
+    /// <see cref="CanSetAzimuth" />, <see cref="CanSetPark" />, <see cref="CanSlave" /> and
+    /// <see cref="CanSyncAzimuth" /> all return <c>false</c>.
     /// </item>
-    /// <item><see cref="IDomeV2.CanSetShutter" /> returns <c>true</c>.</item>
-    /// <item><see cref="IDomeV2.ShutterStatus" /> should be implemented.</item>
+    /// <item><see cref="CanSetShutter" /> returns <c>true</c>.</item>
+    /// <item><see cref="ShutterStatus" /> should be implemented.</item>
     /// <item>
-    /// <see cref="IDomeV2.AbortSlew" /> should stop the roof or shutter.
-    /// </item>
-    /// <item>
-    /// <see cref="IDomeV2.FindHome" />, <see cref="IDomeV2.Park" />, <see cref="IDomeV2.SetPark" />,
-    /// <see cref="IDomeV2.SlewToAltitude" />, <see cref="IDomeV2.SlewToAzimuth" /> and
-    /// <see cref="IDomeV2.SyncToAzimuth" /> all throw <see cref="MethodNotImplementedException" />
+    /// <see cref="AbortSlew" /> should stop the roof or shutter.
     /// </item>
     /// <item>
-    /// <see cref="IDomeV2.Altitude" /> and <see cref="IDomeV2.Azimuth" /> throw  <see cref="PropertyNotImplementedException" />
+    /// <see cref="FindHome" />, <see cref="Park" />, <see cref="SetPark" />,
+    /// <see cref="SlewToAltitude" />, <see cref="SlewToAzimuth" /> and
+    /// <see cref="SyncToAzimuth" /> all throw <see cref="MethodNotImplementedException" />
+    /// </item>
+    /// <item>
+    /// <see cref="Altitude" /> and <see cref="Azimuth" /> throw  <see cref="PropertyNotImplementedException" />
     /// </item>
     /// </list>
     /// </remarks>

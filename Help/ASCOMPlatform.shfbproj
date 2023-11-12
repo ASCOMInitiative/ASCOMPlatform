@@ -28,10 +28,21 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-23, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
-        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
-        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
-        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
-      </Filter>
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV3" filterName="ICameraV3" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICoverCalibratorV1" filterName="ICoverCalibratorV1" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IDomeV2" filterName="IDomeV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFilterWheelV2" filterName="IFilterWheelV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV3" filterName="IFocuserV3" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IObservingConditions" filterName="IObservingConditions" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV3" filterName="IRotatorV3" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISafetyMonitor" filterName="ISafetyMonitor" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISwitchV2" filterName="ISwitchV2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
+</Filter>
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>True</Preliminary>

@@ -46,41 +46,41 @@
  			<list class="ordered">
 			  <listItem>		    		
 	    		<para>
-		    		When designing your driver you need to choose which type of coordinates you will accept and the <codeEntityReference>T:ASCOM.DeviceInterface.ITelescopeV3</codeEntityReference>
-		    		interface provides the <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.DoesRefraction</codeEntityReference> and 
-		    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> properties for this purpose. The full range of coordinate systems recognised are described here: 
+		    		When designing your driver you need to choose which type of coordinates you will accept and the <codeEntityReference>T:ASCOM.DeviceInterface.ITelescopeV4</codeEntityReference>
+		    		interface provides the <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.DoesRefraction</codeEntityReference> and 
+		    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.EquatorialSystem</codeEntityReference> properties for this purpose. The full range of coordinate systems recognised are described here: 
 		    		<codeEntityReference>T:ASCOM.DeviceInterface.EquatorialCoordinateType</codeEntityReference>.
 		    		Usually you would accept one or more of <legacyBold>J2000</legacyBold>, <legacyBold>Topocentric</legacyBold> or <legacyBold>Observed</legacyBold> coordinates at your discretion.
 		    		To specify a particular coordinate type you must set the properties as below:
 		    		<list class="bullet">
 			    		<listItem>
 				    		<para>
-					    		<legacyBold>J2000.0</legacyBold> - Set <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> to 
+					    		<legacyBold>J2000.0</legacyBold> - Set <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.EquatorialSystem</codeEntityReference> to 
 					    		<codeEntityReference>F:ASCOM.DeviceInterface.EquatorialCoordinateType.equJ2000</codeEntityReference> and 
-					    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.DoesRefraction</codeEntityReference> to <codeInline>True</codeInline>.
+					    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.DoesRefraction</codeEntityReference> to <codeInline>True</codeInline>.
 					    		Your driver / mount will correct the supplied coordinates for aberration, precession, nutation and refraction.
 				    		</para>
 				    		</listItem>
 			    		<listItem>
 				    		<para>
-					    		<legacyBold>TOPOCENTRIC</legacyBold> - Set <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> to
+					    		<legacyBold>TOPOCENTRIC</legacyBold> - Set <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.EquatorialSystem</codeEntityReference> to
 					    		<codeEntityReference>F:ASCOM.DeviceInterface.EquatorialCoordinateType.equTopocentric</codeEntityReference> and
-					    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.DoesRefraction</codeEntityReference> to <codeInline>True</codeInline>.
+					    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.DoesRefraction</codeEntityReference> to <codeInline>True</codeInline>.
 					    		Your driver / mount will correct the supplied coordinates for refraction.
 				    		</para>
 				    	</listItem>
 			    		<listItem>
 				    		<para>
-					    		<legacyBold>OBSERVED</legacyBold> -Set <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> to 
+					    		<legacyBold>OBSERVED</legacyBold> -Set <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.EquatorialSystem</codeEntityReference> to 
 					    		<codeEntityReference>F:ASCOM.DeviceInterface.EquatorialCoordinateType.equTopocentric</codeEntityReference> and
-					    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.DoesRefraction</codeEntityReference> to <codeInline>False</codeInline>.
+					    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.DoesRefraction</codeEntityReference> to <codeInline>False</codeInline>.
 					    		Your driver / mount will use the coordinates as supplied.
 				    		</para>
 			    		</listItem>
 		    		</list>
 	    		</para>
 	    		<para>If you wish the user to be able to select the coordinate type that your driver will receive, you can implement Set methods for the 
-	    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.EquatorialSystem</codeEntityReference> and <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV3.DoesRefraction</codeEntityReference> properties.
+	    		<codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.EquatorialSystem</codeEntityReference> and <codeEntityReference>P:ASCOM.DeviceInterface.ITelescopeV4.DoesRefraction</codeEntityReference> properties.
 	    		Your driver / mount should then process the coordinates as described above.</para>
 			  </listItem>
 			  <listItem><para>"Apparent place" differs from topocentric because of diurnal aberration, a sub-arcsecond effect.</para></listItem>

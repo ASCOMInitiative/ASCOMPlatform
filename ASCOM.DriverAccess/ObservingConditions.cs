@@ -12,8 +12,8 @@ namespace ASCOM.DriverAccess
     /// for recording astronomical data or determining refraction corrections.
     /// </summary>
     /// <remarks>It is NOT intended as a general purpose environmental sensor system.
-    /// The <see cref="IObservingConditions.Action">Action</see> method and 
-    /// <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property 
+    /// The <see cref="IObservingConditionsV2.Action">Action</see> method and 
+    /// <see cref="IObservingConditionsV2.SupportedActions">SupportedActions</see> property 
     /// can be used to add driver-specific sensors.
     /// </remarks>
     public class ObservingConditions : AscomDriver, IObservingConditions
@@ -372,7 +372,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Must NOT throw a MethodNotImplementedException when the specified sensor is implemented but must throw a MethodNotImplementedException when the specified sensor is not implemented.</b></p>
-        ///<para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
+        ///<para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditionsV2"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
         /// <para>Return a negative value to indicate that no valid value has ever been received from the hardware.</para>
         /// <para>If an empty string is supplied as the PropertyName, the driver must return the time since the most recent update of any sensor. A MethodNotImplementedException must not be thrown in this circumstance.</para>
         /// </remarks>
@@ -393,7 +393,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// <p style="color:red"><b>Must NOT throw a MethodNotImplementedException when the specified sensor is implemented 
         /// but must throw a MethodNotImplementedException when the specified sensor is not implemented.</b></p>
-        /// <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
+        /// <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditionsV2"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
         /// <para>If the sensor is implemented, this must return a valid string, even if the driver is not connected, so that applications can use this to determine what sensors are available.</para>
         /// <para>If the sensor is not implemented, this must throw a MethodNotImplementedException.</para>
         /// </remarks>

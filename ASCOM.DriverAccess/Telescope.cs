@@ -1834,13 +1834,13 @@ namespace ASCOM.DriverAccess
     }
 
     /// <summary>
-    /// A collection of rates at which the telescope may be moved about the specified axis by the <see cref="ITelescopeV3.MoveAxis" /> method.
+    /// A collection of rates at which the telescope may be moved about the specified axis by the <see cref="ITelescopeV4.MoveAxis" /> method.
     /// This is only used if the telescope interface version is 2 or 3
     /// </summary>
-    /// <remarks><para>See the description of the <see cref="ITelescopeV3.MoveAxis" /> method for more information.</para>
-    /// <para>This method must return an empty collection if <see cref="ITelescopeV3.MoveAxis" /> is not supported.</para>
+    /// <remarks><para>See the description of the <see cref="ITelescopeV4.MoveAxis" /> method for more information.</para>
+    /// <para>This method must return an empty collection if <see cref="ITelescopeV4.MoveAxis" /> is not supported.</para>
     /// <para>The values used in <see cref="IRate" /> members must be non-negative; forward and backward motion is achieved by the application
-    /// applying an appropriate sign to the returned <see cref="IRate" /> values in the <see cref="ITelescopeV3.MoveAxis" /> command.</para>
+    /// applying an appropriate sign to the returned <see cref="IRate" /> values in the <see cref="ITelescopeV4.MoveAxis" /> command.</para>
     /// </remarks>
     public class AxisRates : ASCOM.DeviceInterface.IAxisRates, IEnumerator
     {

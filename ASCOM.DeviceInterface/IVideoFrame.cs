@@ -16,6 +16,8 @@ using System.Runtime.InteropServices;
 
 #if NET35
 using ASCOM.Utilities;
+#elif NET472
+using ASCOM.Utilities;
 #else
 using Util = ASCOM.Tools.Utilities;
 #endif
@@ -38,7 +40,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
-		/// <para>The application must inspect the Safearray parameters to determine the dimensions and also the <see cref="P:ASCOM.DeviceInterface.IVideo.SensorType"/> to determine if the image is <b>Color</b> or not.
+		/// <para>The application must inspect the Safearray parameters to determine the dimensions and also the <see cref="P:ASCOM.DeviceInterface.IVideoV2.SensorType"/> to determine if the image is <b>Color</b> or not.
 		/// The following table should be used to determine the format of the data:</para>
 		/// <para>
 		/// <table style="width:76.24%;" cellspacing="0" width="76.24%">
@@ -56,7 +58,7 @@ namespace ASCOM.DeviceInterface
 		/// <tr>
 		/// <td>1; int[]</td>
 		/// <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
-		/// <td>A row major <b>ImageArray[Pixels]</b> of <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
+		/// <td>A row major <b>ImageArray[Pixels]</b> of <see cref="P:ASCOM.DeviceInterface.IVideoV2.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideoV2.Width"/> elements. The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
 		/// and the second last pixel in the array is the second last pixels from the last horizontal row.</td>
 		/// </tr>
 		/// <tr>
@@ -67,12 +69,12 @@ namespace ASCOM.DeviceInterface
 		/// <tr>
 		/// <td>2; int[,]</td>
 		/// <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
-		/// <td><b>ImageArray[Height, Width]</b> of <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements.</td>
+		/// <td><b>ImageArray[Height, Width]</b> of <see cref="P:ASCOM.DeviceInterface.IVideoV2.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideoV2.Width"/> elements.</td>
 		/// </tr>
 		/// <tr>
 		/// <td>2; int[,]</td>
 		/// <td><b>Color</b></td>
-		/// <td><b>ImageArray[NumPlane, Pixels]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The order of the three colour planes is
+		/// <td><b>ImageArray[NumPlane, Pixels]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideoV2.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideoV2.Width"/> elements. The order of the three colour planes is
 		/// first is <b>R</b>, the second is <b>G</b> and third is <b>B</b>. The pixels in second dimension of the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel is the second pixel from the first horizontal row
 		/// and the second last pixel is the second last pixels from the last horizontal row.</td>
 		/// </tr>
@@ -84,7 +86,7 @@ namespace ASCOM.DeviceInterface
 		/// <tr>
 		/// <td>3; int[,,]</td>
 		/// <td><b>Color</b></td>
-		/// <td><b>ImageArray[NumPlane, Height, Width]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The order of the three colour planes is
+		/// <td><b>ImageArray[NumPlane, Height, Width]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideoV2.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideoV2.Width"/> elements. The order of the three colour planes is
 		/// first is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</td>
 		/// </tr>
 		/// </table>
