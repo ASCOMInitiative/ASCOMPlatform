@@ -1092,8 +1092,6 @@ Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics
 Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
 Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
 Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM.Tools.dll to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM.Common.dll to $TARGETDIR$\Tools
 Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
 Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
 Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
