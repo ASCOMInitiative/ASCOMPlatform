@@ -49,6 +49,8 @@ moon.bmp
 readme.rtf
 RemoveASCOM.exe
 RemoveASCOM.pdb
+RemoveOldTemplates.exe
+RemoveOldTemplates.pdb
 SetACL.exe
 SetACL.pdb
 setup.bmp
@@ -1029,6 +1031,14 @@ $
 
 
 
+
+
+
+
+
+
+
+
 B
 
 
@@ -1592,6 +1602,154 @@ B
 
 
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2242,7 +2400,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{7230411D-09EE-4C0D-A2E4-421348F06CDD}
+{640297BF-728D-4E2D-BCCF-4B852F8A9DE8}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
