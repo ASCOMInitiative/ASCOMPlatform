@@ -24,6 +24,7 @@ Set Variable PROGRESSTEXT to Installing $TITLE$
 Set Variable APPLYINSTALLSUCCESS to 
 Set Variable CFA to 
 Set Variable CFABYPASS to 
+Set Variable PROGRESSMODETYPE to MARQUEE
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
@@ -1998,6 +1999,7 @@ Set Variable PROGRESSTEXT to Platform install complete.
 Comment: Install developer documentation and components
  
 [DEFINE REGION: Remove old developer template assemblies]
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
 Set Variable MYPROGRESS to 10
 Set Variable PROGRESSTEXT to Installing developer components
  
@@ -2014,6 +2016,7 @@ Write into Text File $SETUPLOG$ from Value Finished cleaning templates - Return 
 Comment: Set developer content install directory and start menu folder
 Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 7 Developer Components
 Set Variable DEVELOPERMENU to ASCOM Platform for Developers
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
 Set Variable MYPROGRESS to 25
 Set Variable PROGRESSTEXT to Installing developer reference assemblies.
 Write into Text File $SETUPLOG$ from Value $TIME$ Developer content target folder: $TARGETDIR$ (at end of file)
@@ -2046,6 +2049,7 @@ Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions
 Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
 Set Variable PROGRESS to 40
 Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
 Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
@@ -2147,6 +2151,9 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to ht
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
 Set Variable NATIVE_ENGINE to FALSE
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+Set Variable PROGRESS to 50
+Set Variable PROGRESSTEXT to Installing developer content.
 Set Variable MYPROGRESS to 100
 Write into Text File $SETUPLOG$ from Value $TIME$ Applying install... (at end of file)
 Apply Install
