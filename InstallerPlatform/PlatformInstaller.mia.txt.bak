@@ -41,11 +41,11 @@ if Variable LOGPATHREGISTRY Equals (Ignore Case)
   Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
   if Variable REMOVE Equals (Ignore Case) FALSE
     Comment: We are installing the Platform
-    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
+    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform7Install$DISKSPACE$.txt
     Write into Text File $SETUPLOG$ from Value Installing using default log location: $MYDOCUMENTS$\ASCOM (at end of file)
   else
     Comment: We are uninstalling the Platform
-    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Uninstall$DISKSPACE$.txt
+    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform7Uninstall$DISKSPACE$.txt
     Write into Text File $SETUPLOG$ from Value Uninstalling using default log location: $MYDOCUMENTS$\ASCOM (at end of file)
   end
 else

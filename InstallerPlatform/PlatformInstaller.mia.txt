@@ -53,11 +53,11 @@ else
   Run Program CMD.EXE /c MKDIR "$LOGPATHREGISTRY$" (WAIT)
   if Variable REMOVE Equals (Ignore Case) FALSE
     Comment: We are installing the Platform
-    Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform6Install$DISKSPACE$.txt
+    Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform7Install$DISKSPACE$.txt
     Write into Text File $SETUPLOG$ from Value Installing using configured log location: $LOGPATHREGISTRY$ (at end of file)
   else
     Comment: We are uninstalling the Platform
-    Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform6Uninstall$DISKSPACE$.txt
+    Set Variable SETUPLOG to $LOGPATHREGISTRY$\ASCOMPlatform7Uninstall$DISKSPACE$.txt
     Write into Text File $SETUPLOG$ from Value Uninstalling using configured log location: $LOGPATHREGISTRY$ (at end of file)
   end
 end
