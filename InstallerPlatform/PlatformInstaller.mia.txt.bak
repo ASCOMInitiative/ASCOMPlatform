@@ -647,30 +647,6 @@ if Variable REQUIRESUPGRADE Equals TRUE
     end
   end
    
-  Comment: Uninstall the Platform 6 developer tools if present.
-  Set Variable UNINSTALLER to 
-  Set Variable REMOVEOLD to 
-  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\UninstallString into UNINSTALLER
-  if Variable UNINSTALLER Equals 
-    Write into Text File $SETUPLOG$ from Value $TIME$ Developer tools not installed so no need to uninstall. (at end of file)
-  else
-    Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling developer tools from : $UNINSTALLER$ (at end of file)
-    Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
-    Write into Text File $SETUPLOG$ from Value Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
-    if Variable UNINSTALLCODE not Equals 0
-      MessageBox: $TITLE$ Setup, Unable to uninstall old version of Develoiper Tools. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$Error: $UNINSTALLCODE$
-      Terminate Installation
-    end
-    if Variable REMOVEOLD Equals REBOOT
-      MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
-      if Variable REBOOTNOW Equals OK
-        Reboot Computer and Resume Setup
-      else
-        Terminate Installation
-      end
-    end
-  end
-   
   Comment: Return the original state of WINERRORUISTATE
   if Variable WINERRORUISTATE Equals 
     Set Variable WINERRORUISTATE to Remove
@@ -687,10 +663,36 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable MYPROGRESS to 20
 end
  
+Comment: Uninstall the Platform 6 developer tools if present.
+Set Variable UNINSTALLER to 
+Set Variable REMOVEOLD to 
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\UninstallString into UNINSTALLER
+if Variable UNINSTALLER Equals 
+  Write into Text File $SETUPLOG$ from Value $TIME$ Developer tools not installed so no need to uninstall. (at end of file)
+else
+  Set Variable PROGRESSTEXT to Uninstalling developer tools...
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling developer tools from : $UNINSTALLER$ (at end of file)
+  Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
+  if Variable UNINSTALLCODE not Equals 0
+    MessageBox: $TITLE$ Setup, Unable to uninstall old version of Develoiper Tools. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$Error: $UNINSTALLCODE$
+    Terminate Installation
+  end
+  if Variable REMOVEOLD Equals REBOOT
+    MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+    if Variable REBOOTNOW Equals OK
+      Reboot Computer and Resume Setup
+    else
+      Terminate Installation
+    end
+  end
+end
+ 
 [END REGION]
  
 [DEFINE REGION: Remove any items left from previous instals]
  
+Set Variable MYPROGRESS to 23
 Comment: Clean up start menu entries that may not have been aren't removed by the uninstaller.
 Set Variable NATIVE_ENGINE to TRUE
 Recursively Delete Files $SHORTCUTFILESALL$ASCOM Diagnostics.lnk
@@ -747,7 +749,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Removing old template wizard d
  
 Comment: Clean up old template files that may not have been uninstalled.
 Run Program $SUPPORTDIR$\InstallTemplates.exe /cleanup (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value Finished cleaning templates - Return Code: $RC$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Finished cleaning templates - Return Code: $RC$ (at end of file)
  
 [DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
@@ -1713,6 +1715,7 @@ Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uni
 Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
 Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
 Delete Files $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\*.tlb (when uninstalling)
 Delete Files $PLATFORMTARGETDIR$\Tools\*.avi (when uninstalling)
  
 [END REGION]
@@ -2274,6 +2277,7 @@ if Variable SILENT Equals FALSE
   end
    
   Comment: Show the user guide if we are not removing and not repairing the install
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
   if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
     if Variable MAINTENANCE not Equals (Ignore Case) TRUE
       Comment: Display the user guide if Acrobat is installed

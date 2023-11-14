@@ -41,11 +41,11 @@ if Variable LOGPATHREGISTRY Equals (Ignore Case)
   Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
   if Variable REMOVE Equals (Ignore Case) FALSE
     Comment: We are installing the Platform
-    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
+    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform7Install$DISKSPACE$.txt
     Write into Text File $SETUPLOG$ from Value Installing using default log location: $MYDOCUMENTS$\ASCOM (at end of file)
   else
     Comment: We are uninstalling the Platform
-    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform6Uninstall$DISKSPACE$.txt
+    Set Variable SETUPLOG to $MYDOCUMENTS$ASCOM\ASCOMPlatform7Uninstall$DISKSPACE$.txt
     Write into Text File $SETUPLOG$ from Value Uninstalling using default log location: $MYDOCUMENTS$\ASCOM (at end of file)
   end
 else
@@ -673,7 +673,7 @@ else
   Set Variable PROGRESSTEXT to Uninstalling developer tools...
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling developer tools from : $UNINSTALLER$ (at end of file)
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
-  Write into Text File $SETUPLOG$ from Value Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
   if Variable UNINSTALLCODE not Equals 0
     MessageBox: $TITLE$ Setup, Unable to uninstall old version of Develoiper Tools. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$Error: $UNINSTALLCODE$
     Terminate Installation
@@ -749,7 +749,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Removing old template wizard d
  
 Comment: Clean up old template files that may not have been uninstalled.
 Run Program $SUPPORTDIR$\InstallTemplates.exe /cleanup (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value Finished cleaning templates - Return Code: $RC$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Finished cleaning templates - Return Code: $RC$ (at end of file)
  
 [DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
@@ -2277,6 +2277,7 @@ if Variable SILENT Equals FALSE
   end
    
   Comment: Show the user guide if we are not removing and not repairing the install
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
   if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
     if Variable MAINTENANCE not Equals (Ignore Case) TRUE
       Comment: Display the user guide if Acrobat is installed

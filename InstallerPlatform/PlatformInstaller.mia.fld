@@ -1,7 +1,6 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
 Prepare for Installation or Uninstallation
-Finish Setup Dialogue
 Check Application Pre-Requisites
 Platform 6 Content
 Platform 6 files
@@ -9,17 +8,15 @@ Platform 5.5 files
 Platform 5 files
 Set Registry Keys
 Platform 6.1 files
-Set up log file and variables
 Platform 6.2 files
+Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Create shortcuts
+Remove 32bit components
 Maintenance Dialogue
 ASCOM Device Hub
 MSI installer support if required
 Platform validation
 Inno driver installer creator
 Developer documentation
-Validate installation
-Remove 64bit components
-Remove 32bit components
