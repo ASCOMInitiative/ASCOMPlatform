@@ -10217,7 +10217,7 @@ namespace ASCOM.Utilities
         {
             string ASCOMPath = @"C:\Program Files\ASCOM\Platform 7 Developer Components\"; // Default location
             var PathShell = new StringBuilder(260);
-            string ASCOMPathComponents5, ASCOMPathComponents55, ASCOMPathComponents6, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources;
+            string ASCOMPathComponents5, ASCOMPathComponents55, ASCOMPathComponents7, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources;
 
             try
             {
@@ -10256,7 +10256,7 @@ namespace ASCOM.Utilities
                 {
                     ASCOMPathComponents5 = ASCOMPath + @"Components\Platform5\";
                     ASCOMPathComponents55 = ASCOMPath + @"Components\Platform55\";
-                    ASCOMPathComponents6 = ASCOMPath + @"Components\Platform7\";
+                    ASCOMPathComponents7 = ASCOMPath + @"Components\Platform7\";
                     ASCOMPathDocs = ASCOMPath + @"Developer Documentation\";
                     ASCOMPathInstallerGenerator = ASCOMPath + @"Installer Generator\";
                     ASCOMPathResources = ASCOMPath + @"Installer Generator\Resources\";
@@ -10267,19 +10267,18 @@ namespace ASCOM.Utilities
                     FileDetails(ASCOMPathComponents55, "ASCOM.DriverAccess.dll");
                     FileDetails(ASCOMPathComponents55, "ASCOM.Exceptions.dll");
                     FileDetails(ASCOMPathComponents55, "ASCOM.Utilities.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.Astrometry.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.Attributes.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.Controls.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.DeviceInterfaces.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.DriverAccess.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.Exceptions.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.Internal.Extensions.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.SettingsProvider.dll");
-                    FileDetails(ASCOMPathComponents6, "ASCOM.Utilities.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.Astrometry.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.Attributes.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.Controls.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.DeviceInterfaces.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.DriverAccess.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.Exceptions.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.Internal.Extensions.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.SettingsProvider.dll");
+                    FileDetails(ASCOMPathComponents7, "ASCOM.Utilities.dll");
                     FileDetails(ASCOMPathDocs, "Algorithms.pdf");
                     FileDetails(ASCOMPathDocs, "Bug72T-sm.jpg");
-                    FileDetails(ASCOMPathDocs, "DriverInstallers.html");
-                    FileDetails(ASCOMPathDocs, "NOVAS_C3.0_Guide.pdf");
+                    FileDetails(ASCOMPathDocs, "NOVAS_C3.1_Guide.pdf");
                     FileDetails(ASCOMPathDocs, "Platform 6 Client-Driver Interaction V2.pdf");
                     FileDetails(ASCOMPathDocs, "Platform Evolution.pdf");
                     FileDetails(ASCOMPathDocs, "PlatformDeveloperHelp.chm");
