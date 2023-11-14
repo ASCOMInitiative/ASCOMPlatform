@@ -15,8 +15,6 @@
 		<Product>ASCOM.DeviceInterfaces</Product>
 		<Description>ASCOM device interfaces for Platform 7</Description>
 		<Copyright>Copyright © ASCOM Initiative 2023</Copyright>
-		<AssemblyVersion>6.0.0.0</AssemblyVersion>
-		<FileVersion>6.0.0.0</FileVersion>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<RegisterForComInterop>false</RegisterForComInterop>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
