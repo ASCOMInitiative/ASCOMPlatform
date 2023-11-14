@@ -254,14 +254,24 @@ if Variable SHORTCUTFILESALL Equals
   Set Variable SHORTCUTFILESALL to $SHORTCUTFILES$
 end
  
-Comment: Setup up shortcut locations
-if Variable ALLUSERS Equals (Ignore Case) TRUE
-  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$$ASCOMSTARTMENU$
-  Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
-else
-  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$$ASCOMSTARTMENU$
-  Set Variable DESKTOPFOLDER to $DESKTOPDIR$
-end
+Set Variable ALLUSERS to TRUE
+ 
+Comment: Set start menu variables
+Set Variable PLATFORMMENU to ASCOM Platform
+Set Variable DEVELOPERMENU to ASCOM Platform for Developers
+ 
+Comment: Set shortcut locations
+Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$$PLATFORMMENU$
+Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
+ 
+Comment: Set the Platform and developer target directories
+Set Variable PLATFORMTARGETDIR to $PROGRAMFILES$ASCOM\Platform 7
+Set Variable DEVELOPERTARGETDIR to $PROGRAMFILES$ASCOM\Platform 7 Developer Components
+Set Variable VSREFERENCEFILES to $DEVELOPERTARGETDIR$\Components\Platform7
+ 
+Write into Text File $SETUPLOG$ from Value $TIME$ Developer content target folder: $PLATFORMTARGETDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer links to $DEVELOPERMENU$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer content files to $VSREFERENCEFILES$ (at end of file)
  
 Get Folder Location System->Desktop Directory into DESKTOPDIR
 Get Common Folder Location System->Desktop Directory into DESKTOPDIRALL
@@ -288,14 +298,6 @@ if Variable WIN64MODE Equals TRUE
 else
   Set Variable GACREF to SOFTWARE\Microsoft\Fusion\References
 end
- 
-Comment: Set  up start menu variables, ASCOMSTARTMENU is the name of the Platform folder
-Set Variable ASCOMSTARTMENU to ASCOM Platform
-Set Variable ALLUSERS to TRUE
- 
-Comment: Set the Target directory and start menu folder
-Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 7
-Set Variable STARTMENU to $TITLE$
  
 Comment: Set the installation cache location
 Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
@@ -347,9 +349,9 @@ Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFiles: $SHORTCUTFILES$
 Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDir: $DESKTOPDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDirAll: $DESKTOPDIRALL$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ ASCOMStartMenu: $ASCOMSTARTMENU$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ PLATFORMMENU: $PLATFORMMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Target Directory: $TARGETDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Target Directory: $PLATFORMTARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Documents Directory: $MYDOCUMENTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -586,6 +588,7 @@ Set Variable MYPROGRESS to 3
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platform 6 install if present]
+ 
 Comment: Ensure that we remove previous Platform 6 versions built using either MSI or Native install
 Set Variable REQUIRESUPGRADE to FALSE
 Comment: Native install requires upgrade
@@ -644,6 +647,28 @@ if Variable REQUIRESUPGRADE Equals TRUE
     end
   end
    
+  Comment: Uninstall the Platform 6 developer tools if present.
+  Set Variable UNINSTALLER to 
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\UninstallString into UNINSTALLER
+  Write into Text File $SETUPLOG$ from Value Uninstaller location: $UNINSTALLER$ (at end of file)
+  if Variable UNINSTALLER not Equals 
+    Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling developer tools from : $UNINSTALLER$ (at end of file)
+    Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
+    Write into Text File $SETUPLOG$ from Value Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
+    if Variable UNINSTALLCODE not Equals 0
+      MessageBox: $TITLE$ Setup, Unable to uninstall old version of Develoiper Tools. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$Error: $UNINSTALLCODE$
+      Terminate Installation
+    end
+    if Variable REMOVEOLD Equals REBOOT
+      MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+      if Variable REBOOTNOW Equals OK
+        Reboot Computer and Resume Setup
+      else
+        Terminate Installation
+      end
+    end
+  end
+   
   Comment: Return the original state of WINERRORUISTATE
   if Variable WINERRORUISTATE Equals 
     Set Variable WINERRORUISTATE to Remove
@@ -659,39 +684,68 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable MAINTENANCE to FALSE
   Set Variable MYPROGRESS to 20
 end
+ 
 [END REGION]
+ 
+[DEFINE REGION: Remove any items left from previous instals]
  
 Comment: Clean up start menu entries that may not have been aren't removed by the uninstaller.
 Set Variable NATIVE_ENGINE to TRUE
-Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform
-Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform (at end of file)
-Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform
-Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform (at end of file)
+Recursively Delete Files $SHORTCUTFILESALL$ASCOM Diagnostics.lnk
+ 
+Remove Directory (including all its files and subfolders) $SHORTCUTFILES$$PLATFORMMENU$
+Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$$PLATFORMMENU$ (at end of file)
+Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$$PLATFORMMENU$
+Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$$PLATFORMMENU$ (at end of file)
+ 
+Remove Directory (including all its files and subfolders) $SHORTCUTFILES$$DEVELOPERMENU$
+Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$$DEVELOPERMENU$ (at end of file)
+Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$$DEVELOPERMENU$
+Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$$DEVELOPERMENU$ (at end of file)
+ 
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform 6
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform 6 (at end of file)
 Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform 6
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform 6 (at end of file)
+ 
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform 7
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform 7 (at end of file)
 Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform 7
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform 7 (at end of file)
+ 
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform Developer Components
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform Developer Components (at end of file)
 Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform Developer Components
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform Developer Components (at end of file)
+ 
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Developer Information
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Developer Information (at end of file)
 Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Developer Information
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Developer Information (at end of file)
+ 
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform 6 Developer Components
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform 6 Developer Components (at end of file)
 Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform 6 Developer Components
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform 6 Developer Components (at end of file)
+ 
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$ASCOM Platform 7 Developer Components
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$ASCOM Platform 7 Developer Components (at end of file)
 Remove Directory (including all its files and subfolders) $SHORTCUTFILESALL$ASCOM Platform 7 Developer Components
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILESALL$ASCOM Platform 7 Developer Components (at end of file)
+ 
 Set Variable NATIVE_ENGINE to FALSE
+ 
+Set Variable PROGRESSTEXT to Cleaning old developer components
+ 
+Comment: Remove old assemblies that may not have been uninstalled by previous istallers - Two attempts just to make sure!
+Run Program $SUPPORTDIR$\GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
+Write into Text File $SETUPLOG$ from Value $TIME$ Removing old template wizard dll  - Attempt 1 - Return Code: $RC$ (at end of file)
+Run Program $SUPPORTDIR$\GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
+Write into Text File $SETUPLOG$ from Value $TIME$ Removing old template wizard dll  - Attempt 2 - Return Code: $RC$ (at end of file)
+ 
+Comment: Clean up old template files that may not have been uninstalled.
+Run Program $SUPPORTDIR$\InstallTemplates.exe /cleanup (WAIT, get result into variable RC)
+Write into Text File $SETUPLOG$ from Value Finished cleaning templates - Return Code: $RC$ (at end of file)
  
 [DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
@@ -949,6 +1003,8 @@ end
  
 [END REGION]
  
+[END REGION]
+ 
 [DEFINE REGION: Install Application Pre-Requisites if required]
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
@@ -1122,17 +1178,17 @@ Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions
 Comment: Platform 6 Tools
 Install Files ..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
 Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
-Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
-Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
-Install Files ..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
-Install Files ..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
+Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $PLATFORMTARGETDIR$\Tools\DriverConnect64
+Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $PLATFORMTARGETDIR$\Tools\DriverConnect64
+Install Files ..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $PLATFORMTARGETDIR$\Tools\DriverConnect32
+Install Files ..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $PLATFORMTARGETDIR$\Tools\DriverConnect32
 Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
-Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $PLATFORMTARGETDIR$\Tools
 Comment: Platform 6 Simulators
 Comment: Camera simulator
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
@@ -1167,7 +1223,7 @@ Comment: Dome simulator
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 Comment: Platform Update Checker
-Install Files ..\CheckForUpdates.js to $TARGETDIR$\Tools
+Install Files ..\CheckForUpdates.js to $PLATFORMTARGETDIR$\Tools
 [END REGION]
  
 [DEFINE REGION: Platform 6.1 files]
@@ -1232,9 +1288,11 @@ Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COM
 [END REGION]
  
 [DEFINE REGION: Earth Rotation Date Update]
-Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
+ 
+Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $PLATFORMTARGETDIR$\Tools
+Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $PLATFORMTARGETDIR$\Tools
+ 
 [END REGION]
  
 [DEFINE REGION: Alpaca Support for Chooser]
@@ -1255,16 +1313,16 @@ Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Dev
 Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Add the client creator executable and the dependencies that must be present in order to allow the dynamic compilation to succeed
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $TARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $TARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
  
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $TARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
+Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
  
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.deps.json to $COMMONFILES$\ASCOM\AlpacaDynamicClients
@@ -1297,10 +1355,10 @@ Install Files ..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device 
 [END REGION]
  
 [DEFINE REGION: Platform validation]
-Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.exe to $TARGETDIR$\Tools\Validation
-Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.pdb to $TARGETDIR$\Tools\Validation
-Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe to $TARGETDIR$\Tools\Validation
-Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.pdb to $TARGETDIR$\Tools\Validation
+Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.exe to $PLATFORMTARGETDIR$\Tools\Validation
+Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.pdb to $PLATFORMTARGETDIR$\Tools\Validation
+Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe to $PLATFORMTARGETDIR$\Tools\Validation
+Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.pdb to $PLATFORMTARGETDIR$\Tools\Validation
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]
@@ -1308,13 +1366,107 @@ Comment: Platform Documents
 Install Files ..\InstallerContent\Help.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\InstallerContent\Internet.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\InstallerContent\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
-Install Files ..\InstallerContent\Compatible Software (web).url to $TARGETDIR$\Docs
-Install Files ..\InstallerContent\Drivers and Downloads (web).url to $TARGETDIR$\Docs
-Install Files ..\Help\Output\Platform\PlatformHelp.chm to $TARGETDIR$\Docs
-Install Files ..\InstallerContent\Support (web).url to $TARGETDIR$\Docs
-Install Files ..\InstallerContent\ASCOM User Guide.pdf to $TARGETDIR$\Docs
-Install Files ..\InstallerContent\Supported Devices (web).url to $TARGETDIR$\Docs
-Install Files ..\InstallerContent\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
+Install Files ..\InstallerContent\Compatible Software (web).url to $PLATFORMTARGETDIR$\Docs
+Install Files ..\InstallerContent\Drivers and Downloads (web).url to $PLATFORMTARGETDIR$\Docs
+Install Files ..\Help\Output\Platform\PlatformHelp.chm to $PLATFORMTARGETDIR$\Docs
+Install Files ..\InstallerContent\Support (web).url to $PLATFORMTARGETDIR$\Docs
+Install Files ..\InstallerContent\ASCOM User Guide.pdf to $PLATFORMTARGETDIR$\Docs
+Install Files ..\InstallerContent\Supported Devices (web).url to $PLATFORMTARGETDIR$\Docs
+Install Files ..\InstallerContent\Docs\Bug72T-sm.jpg to $PLATFORMTARGETDIR$\Docs
+[END REGION]
+ 
+[DEFINE REGION: Visual Studio assembly references]
+Comment: Platform 6.4 references
+Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$
+Comment: Platform 6.1 references
+Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $VSREFERENCEFILES$
+Comment: Platform 6 references
+Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+Set Variable MYPROGRESS to 25
+Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
+Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
+Comment: Platform 5.5 references
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.xml to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.xml to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.xml to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $DEVELOPERTARGETDIR$\Components\Platform55\
+Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $DEVELOPERTARGETDIR$\Components\Platform55\
+Comment: Platform 5 references
+Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $DEVELOPERTARGETDIR$\Components\Platform5
+Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $DEVELOPERTARGETDIR$\Components\Platform5
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+Set Variable MYPROGRESS to 30
+Set Variable PROGRESSTEXT to Installing developer content.
+[END REGION]
+ 
+[DEFINE REGION: Developer documentation]
+Comment: Platform 7 Documentation
+Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\Platform Evolution.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\NOVAS\Algorithms.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+Set Variable MYPROGRESS to 40
+Install Files ..\Doc\tip.gif to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Doc\Bug72T-sm.jpg to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Script Help Files\Script56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Script Help Files\wsh-56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+Set Variable MYPROGRESS to 50
+Install Files ..\Help\Output\Developer\PlatformDeveloperHelp.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Platform 6 SP1 Documentation
+Install Files ..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Platform 6 SP2 Files
+Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $DEVELOPERTARGETDIR$\Sample Scripts
+Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $DEVELOPERTARGETDIR$\Sample Scripts
+Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs to $DEVELOPERTARGETDIR$\Sample Scripts
+Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $DEVELOPERTARGETDIR$\Sample Scripts
+Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $DEVELOPERTARGETDIR$\Sample Scripts
+Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $DEVELOPERTARGETDIR$\Sample Scripts
+Comment: Platform 6.1 Documentation
+Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+[END REGION]
+ 
+[DEFINE REGION: Inno driver installer creator]
+Install Files ..\Doc\DriverInstallers.html to $PLATFORMTARGETDIR$\Developer Documentation
+Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $DEVELOPERTARGETDIR$\Installer Generator
+Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $DEVELOPERTARGETDIR$\Installer Generator
+Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $DEVELOPERTARGETDIR$\Installer Generator
+Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $DEVELOPERTARGETDIR$\Installer Generator
+Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
+Set Variable MYPROGRESS to 60
+Install Files ..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $DEVELOPERTARGETDIR$\Installer Generator
+Install Files ..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $DEVELOPERTARGETDIR$\Installer Generator\Resources
+Install Files ..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $DEVELOPERTARGETDIR$\Installer Generator\Resources
+Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 [END REGION]
  
 [DEFINE REGION: Set Registry Keys]
@@ -1455,19 +1607,36 @@ Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH 
 Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
+ 
+Comment: Visual Studio reference pointers to ASCOM assemblies
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 7\, $DEVELOPERTARGETDIR$\Components\Platform7
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $DEVELOPERTARGETDIR$\Components\Platform55
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $DEVELOPERTARGETDIR$\Components\Platform5
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 7\, $DEVELOPERTARGETDIR$\Components\Platform7
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5.5\, $DEVELOPERTARGETDIR$\Components\Platform55
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5\, $DEVELOPERTARGETDIR$\Components\Platform5
+ 
+Comment: Update developer tool version information
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
+Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
+ 
 [END REGION]
  
 [DEFINE REGION: Create shortcuts]
+ 
 Comment: Create menu shortcuts - Do this after the main MSI install has run so we pick up correct icons from applications
 Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native mode (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 if Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP Equals TRUE
-  Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+  Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $PLATFORMTARGETDIR$\Tools\ASCOM Diagnostics.exe
 end
 if Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP Equals TRUE
-  Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+  Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
 end
  
 Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
@@ -1476,13 +1645,13 @@ Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $C
 Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
-Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
-Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
-Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
+Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf
+Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $PLATFORMTARGETDIR$\Tools\CheckForUpdates.js
+Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
 Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
 Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $PLATFORMTARGETDIR$\Tools\ASCOM Diagnostics.exe
 Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
 Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
 Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
@@ -1512,6 +1681,25 @@ else
 end
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
+ 
+Comment: Developer shortcuts
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to $DEVELOPERTARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $DEVELOPERTARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Fundamental Astrometry Theory Paper to $DEVELOPERTARGETDIR$\Developer Documentation\Algorithms.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create multiple versions of a driver to $DEVELOPERTARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $DEVELOPERTARGETDIR$\Developer Documentation\Platform Evolution.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform 6 Client-Driver Interaction V2 to $DEVELOPERTARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Video Driver Developer Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver Install Script Generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $DEVELOPERTARGETDIR$\Developer Documentation\Templates.html
+ 
 Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
@@ -1523,7 +1711,7 @@ Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uni
 Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
 Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
 Delete Files $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\*.tlb (when uninstalling)
-Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
+Delete Files $PLATFORMTARGETDIR$\Tools\*.avi (when uninstalling)
  
 [END REGION]
  
@@ -1797,7 +1985,7 @@ if Variable SUCCESS not Equals ERROR
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Newtonsoft JSON Support (at end of file)
    
   Set Variable PROGRESSTEXT to Initialising earth rotation data
-  Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
+  Run Program $PLATFORMTARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Initialise earth rotation data (at end of file)
   if Variable RC not Equals 0
     MessageBox: Initialise Earth Rotation Data, An error has occured while initialising the earth rotation data scheduled task, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
@@ -1978,186 +2166,26 @@ if Variable SUCCESS not Equals ERROR
   end
   [END REGION]
    
+  [DEFINE REGION: Validate installation]
+   
   Comment: Run basic 32bit Platform validation
   Set Variable PROGRESSTEXT to Validate 32bit Platform operation
-  Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
+  Run Program $PLATFORMTARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform (at end of file)
    
   Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
   if Variable WIN64MODE Equals TRUE
     Set Variable PROGRESSTEXT to Validate 64bit Platform operation
-    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
+    Run Program $PLATFORMTARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform64 (at end of file)
   end
    
+  [END REGION]
+   
 end
+ 
 Set Variable MYPROGRESS to 100
 Set Variable PROGRESSTEXT to Platform install complete.
- 
-[END REGION]
- 
-Comment: Install developer documentation and components
- 
-[DEFINE REGION: Remove old developer template assemblies]
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 10
-Set Variable PROGRESSTEXT to Installing developer components
- 
-Comment: Remove old assemblies that may not have been uninstalled by previous istallers - Two attempts just to make sure!
-Run Program $TARGETDIR$\Internal\ASCOM.Internal.GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$ Removing old template wizard dll  - Attempt 1 - Return Code: $RC$ (at end of file)
-Run Program $TARGETDIR$\Internal\ASCOM.Internal.GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$ Removing old template wizard dll  - Attempt 2 - Return Code: $RC$ (at end of file)
- 
-Comment: Clean up old template files that may not have been uninstalled.
-Run Program $SUPPORTDIR$\InstallTemplates.exe /cleanup (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value Finished cleaning templates - Return Code: $RC$ (at end of file)
- 
-Comment: Set developer content install directory and start menu folder
-Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 7 Developer Components
-Set Variable DEVELOPERMENU to ASCOM Platform for Developers
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 20
-Set Variable PROGRESSTEXT to Installing developer reference assemblies.
-Write into Text File $SETUPLOG$ from Value $TIME$ Developer content target folder: $TARGETDIR$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer links to $DEVELOPERMENU$ (at end of file)
- 
-[END REGION]
-[DEFINE REGION: Add Visual Studio assembly references]
-Comment: Set the VS Reference filles folder location
-Set Variable VSREFERENCEFILES to $TARGETDIR$\Components\Platform7
-Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer content files to $VSREFERENCEFILES$ (at end of file)
-Comment: Platform 6.4 references
-Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$
-Comment: Platform 6.1 references
-Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $VSREFERENCEFILES$
-Comment: Platform 6 references
-Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$
-Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 25
-Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
-Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
-Comment: Platform 5.5 references
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.xml to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
-Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $TARGETDIR$\Components\Platform55\
-Comment: Platform 5 references
-Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
-Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform5
-Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 7\, $TARGETDIR$\Components\Platform7
-Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
-Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
-Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 7\, $TARGETDIR$\Components\Platform7
-Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
-Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 30
-Set Variable PROGRESSTEXT to Installing developer content.
-[END REGION]
-[DEFINE REGION: Install developer documentation]
-Comment: Platform 7 Documentation
-Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 40
-Install Files ..\Doc\tip.gif to $TARGETDIR$\Developer Documentation
-Install Files ..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 50
-Install Files ..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
-Comment: Platform 6 SP1 Documentation
-Install Files ..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $TARGETDIR$\Developer Documentation
-Comment: Platform 6 SP2 Files
-Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $TARGETDIR$\Sample Scripts
-Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $TARGETDIR$\Sample Scripts
-Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs to $TARGETDIR$\Sample Scripts
-Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $TARGETDIR$\Sample Scripts
-Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $TARGETDIR$\Sample Scripts
-Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $TARGETDIR$\Sample Scripts
-Comment: Platform 6.1 Documentation
-Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $TARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $TARGETDIR$\Developer Documentation
-[END REGION]
-[DEFINE REGION: Install the Inno driver installer creator]
-Install Files ..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation
-Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $TARGETDIR$\Installer Generator
-Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
-Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
-Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 60
-Install Files ..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
-Install Files ..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
-Install Files ..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $TARGETDIR$\Installer Generator\Resources
-Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $TARGETDIR$\Installer Generator\Resources
-[END REGION]
-[DEFINE REGION: Update Developer Tools installation information in Profile]
-Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
-Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
-Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$
-Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
-Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
-Set Variable MYPROGRESS to 80
-[END REGION]
-[DEFINE REGION: Add developer shortcuts]
-Comment: Create shortcuts through the native engine so that we can use variables in the icon path field.
-Set Variable NATIVE_ENGINE to TRUE
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to $TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Fundamental Astrometry Theory Paper to $TARGETDIR$\Developer Documentation\Algorithms.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create multiple versions of a driver to $TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $TARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $TARGETDIR$\Developer Documentation\Platform Evolution.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Video Driver Developer Documentation to $TARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Settings Provider Documentation to $TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver Install Script Generator to $TARGETDIR$\Installer Generator\InstallerGen.exe
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
-Set Variable NATIVE_ENGINE to FALSE
-Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
-Set Variable MYPROGRESS to 95
-Set Variable PROGRESSTEXT to Installing developer content.
-Write into Text File $SETUPLOG$ from Value $TIME$ Applying install... (at end of file)
-Apply Install
-Set Variable MYPROGRESS to 100
-Write into Text File $SETUPLOG$ from Value $TIME$ Completed install (at end of file)
  
 [END REGION]
  
@@ -2256,13 +2284,13 @@ if Variable SILENT Equals FALSE
       if Variable ACROBATKEY not Equals 
         Comment: Acrobat is installed
         Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
-        Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        Run Program $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf 
       else
         Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
         if Variable OSCURRENTBUILD Greater Than 9600
           Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
           Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
-          Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+          Run Program $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf 
         else
           Comment: We are not running on Windows 10 so display an error message.
           Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
