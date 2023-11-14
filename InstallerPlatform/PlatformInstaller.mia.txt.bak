@@ -649,9 +649,11 @@ if Variable REQUIRESUPGRADE Equals TRUE
    
   Comment: Uninstall the Platform 6 developer tools if present.
   Set Variable UNINSTALLER to 
+  Set Variable REMOVEOLD to 
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\UninstallString into UNINSTALLER
-  Write into Text File $SETUPLOG$ from Value Uninstaller location: $UNINSTALLER$ (at end of file)
-  if Variable UNINSTALLER not Equals 
+  if Variable UNINSTALLER Equals 
+    Write into Text File $SETUPLOG$ from Value $TIME$ Developer tools not installed so no need to uninstall. (at end of file)
+  else
     Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling developer tools from : $UNINSTALLER$ (at end of file)
     Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
     Write into Text File $SETUPLOG$ from Value Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
@@ -1980,9 +1982,6 @@ if Variable SUCCESS not Equals ERROR
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
   Comment: Run Program $NGEN32$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
   Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Support Utilities (at end of file)
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Newtonsoft.Json- v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Newtonsoft JSON Support (at end of file)
    
   Set Variable PROGRESSTEXT to Initialising earth rotation data
   Run Program $PLATFORMTARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
@@ -2138,9 +2137,6 @@ if Variable SUCCESS not Equals ERROR
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
     Comment: Run Program $NGEN64$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Support Utilities (at end of file)
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Newtonsoft.Json- v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Newtonsoft JSON Support (at end of file)
      
     Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
     Set Variable PROGRESSTEXT to Installing additional Platform 5.5 files required for 64bit systems
