@@ -5,7 +5,6 @@ Check Application Pre-Requisites
 Platform 6 Content
 Platform 6 files
 Platform 5.5 files
-Platform 5 files
 Set Registry Keys
 Platform 6.1 files
 Platform 6.2 files
@@ -18,5 +17,17 @@ Maintenance Dialogue
 ASCOM Device Hub
 MSI installer support if required
 Platform validation
-Inno driver installer creator
 Developer documentation
+Visual Studio assembly references
+Alpaca Support for Chooser
+Install Application Pre-Requisites if required
+Remove Previous Platforms 4 and 5 if present
+Remove any items left from previous instals
+Remove Previous Platform 6 install if present
+Clean up any remaining simulator COM entries
+Specify additional clean-up required when uninstalling
+Validate installation
+Finish Setup Dialogue
+Platform 5 files
+Inno driver installer creator
+Set up log file and variables

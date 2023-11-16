@@ -5,9 +5,6 @@ Comment: The installer must be started in 32bit MSI mode
 Set Variable NATIVE_ENGINE to FALSE
 Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
  
-Comment: Set the required minimum Visual C Runtime version number
-Set Variable MINIMUM_VC_RUNTIME_VERSION to 14.32.31332.0
- 
 [DEFINE REGION: Set up log file and variables]
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
@@ -1026,8 +1023,6 @@ if Variable RC not Equals 0
 end
 [END REGION]
  
-[DEFINE REGION: Install New Platform version]
- 
 [DEFINE REGION: Clean up any remaining simulator COM entries]
 Comment: Clean up any remaining 32bit COM registry entries
 Set Variable PROGRESSTEXT to Cleaning simulator COM entries
@@ -1044,6 +1039,9 @@ end
 [END REGION]
  
 Comment: ***** Start of Platform Installation *****
+ 
+[DEFINE REGION: Platform 5 files]
+ 
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Write into Text File $SETUPLOG$ from Value   (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Start of Platform installation (at end of file)
@@ -1051,7 +1049,6 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Start of Platform installation
 Comment: Create the main ASCOM folder in Common Files
 Create Folder $COMMONFILES$\ASCOM
  
-[DEFINE REGION: Platform 5 files]
 Comment: Type libraries
 Install Files ..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
 Install Files ..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
@@ -1459,7 +1456,17 @@ Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Docum
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 [END REGION]
  
+[DEFINE REGION: Install the OmniSimulators]
+ 
+Install Files ..\OmniSimulators\publish\AnyCPU\*.* to $PLATFORMTARGETDIR$\OmniSimulators
+Install Files ..\OmniSimulators\publish\AnyCPU\wwwroot\*.* to $PLATFORMTARGETDIR$\OmniSimulators\wwwroot, include subfolders
+Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x86\*.* to $PLATFORMTARGETDIR$\OmniSimulators\runtimes\win-x86, include subfolders
+Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x64\*.* to $PLATFORMTARGETDIR$\OmniSimulators\runtimes\win-x64, include subfolders
+ 
+[END REGION]
+ 
 [DEFINE REGION: Inno driver installer creator]
+ 
 Install Files ..\Doc\DriverInstallers.html to $PLATFORMTARGETDIR$\Developer Documentation
 Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $DEVELOPERTARGETDIR$\Installer Generator
 Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $DEVELOPERTARGETDIR$\Installer Generator
@@ -1471,6 +1478,7 @@ Install Files ..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameter
 Install Files ..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 Install Files ..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $DEVELOPERTARGETDIR$\Installer Generator\Resources
+ 
 [END REGION]
  
 [DEFINE REGION: Set Registry Keys]
@@ -1732,6 +1740,14 @@ Comment: Process COM registrations and other activities if the MSI install was s
 if Variable SUCCESS not Equals ERROR
    
   [DEFINE REGION: Non-MSI installation activities]
+   
+  Comment: Register the Omni-Simulators
+  Run Program $PLATFORMTARGETDIR$\OmniSimulators\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
+  if Variable RC not Equals 0
+    MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
+  end
+   
   Comment: Register Platform 5 components
   Set Variable MYPROGRESS to 21
   Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0
@@ -2185,8 +2201,6 @@ end
  
 Set Variable MYPROGRESS to 100
 Set Variable PROGRESSTEXT to Platform install complete.
- 
-[END REGION]
  
 [DEFINE REGION: Finish Setup Dialogue]
 label: Finish Setup
