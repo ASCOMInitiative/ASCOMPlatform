@@ -1121,9 +1121,6 @@ $
 
 
 
-
-
-
 B
 
 
@@ -1728,6 +1725,17 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -1819,9 +1827,15 @@ B
 
 
 
+
+
+
+
+
+
+
+
 B
-
-
 
 
 
@@ -2471,7 +2485,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{DC079188-C8FB-4B97-928B-546B90E2DF9C}
+{73D598E4-24B5-4069-90C2-C754F425B694}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help

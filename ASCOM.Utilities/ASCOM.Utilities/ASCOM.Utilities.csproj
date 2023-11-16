@@ -105,6 +105,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System">
       <Name>System</Name>
@@ -281,13 +282,6 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Resources\ASCOMAlpacaMidRes.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

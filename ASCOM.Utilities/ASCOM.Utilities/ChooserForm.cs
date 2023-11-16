@@ -572,15 +572,13 @@ namespace ASCOM.Utilities
                 bConnected = false;
                 try
                 {
-                    PropertyInfo propertyInfo = ProgIdType.GetProperty("Connected");
-                    bConnected = Conversions.ToBoolean(propertyInfo.GetValue(oDrv, new object[] { }));
+                    bConnected = (bool)ProgIdType.InvokeMember("Connected", BindingFlags.GetProperty, null, oDrv, new object[0]);
                 }
                 catch
                 {
                     try
                     {
-                        PropertyInfo propertyInfo = ProgIdType.GetProperty("Link");
-                        bConnected = Conversions.ToBoolean(propertyInfo.GetValue(oDrv, new object[] { }));
+                        bConnected = (bool)ProgIdType.InvokeMember("Link", BindingFlags.GetProperty, null, oDrv, new object[0]);
                     }
                     catch
                     {
@@ -596,8 +594,7 @@ namespace ASCOM.Utilities
                     try
                     {
                         WarningTooltipClear(); // Clear warning tool tip before entering setup so that the dialogue doesn't interfere with or obscure the setup dialogue.
-                        MethodInfo methodInfo = ProgIdType.GetMethod("SetupDialog");
-                        methodInfo.Invoke(oDrv, new object[] { });
+                        ProgIdType.InvokeMember("SetupDialog", BindingFlags.InvokeMethod, null, oDrv, new object[0]);
                     }
                     catch (Exception ex) // Something went wrong in the SetupDialog method so display an error message.
                     {
@@ -619,8 +616,7 @@ namespace ASCOM.Utilities
             // Clean up and release resources
             try
             {
-                MethodInfo methodInfo = ProgIdType.GetMethod("Dispose");
-                methodInfo.Invoke(oDrv, new object[] { });
+                ProgIdType.InvokeMember("Dispose", BindingFlags.InvokeMethod, null, oDrv, new object[0]);
             }
             catch (Exception)
             {
