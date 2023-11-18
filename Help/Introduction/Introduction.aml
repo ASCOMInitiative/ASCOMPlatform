@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-		<title>Introduction - ASCOM-Platform 6.6 SP2</title>
+		<title>Introduction - ASCOM Platform 7.0</title>
 		<para>
-			Please see <link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" /> for a detailed list of changes and fixes in Platform 6.6 SP2 for both developers and Platform users.
+			Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" /> for a detailed list of changes and fixes for both developers and Platform users.
 		</para>
 
 		<para>
@@ -15,12 +15,12 @@
 			every aspect of Platform functionality.
 		</para>
 
-		<section address="Introduction-Users-Platform-6">
-			<title>Key changes in Platform 6.6 SP2</title>
+		<section address="Introduction-Users-Platform-7">
+			<title>Key changes in Platform 7</title>
 			<content>
 				<list class="bullet">
 					<listItem>
-						This is a bug fix release with no major changes. A detailed list of fixes is given here: <link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" />.
+						This is a bug fix release with no major changes. A detailed list of fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.
 					</listItem>
 				</list>
 			</content>
@@ -30,7 +30,7 @@
 			<title>Operating System Compatibility</title>
 			<content>
 				<para>
-					Platform 6.6 SP2 requires Windows 7 or later together with .NET Framework 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
+					Platform 7 requires Windows 7 or later together with .NET Framework 4.8 and .NET 8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
 				</para>
 			</content>
 		</section>
@@ -64,7 +64,7 @@
 						See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
 					</listItem>
 					<listItem>
-						This platform appears as <quoteInline>ASCOM Platform 6.6 SP2</quoteInline> in the Apps and add/remove programs dialogues
+						This platform appears as <quoteInline>ASCOM Platform 7</quoteInline> in the Apps and add/remove programs dialogues
 					</listItem>
 					<listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
 				</list>

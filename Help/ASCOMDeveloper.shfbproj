@@ -36,65 +36,66 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-23, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry" isExposed="True">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.EarthRotationParameters" filterName="EarthRotationParameters" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVAS" isExposed="False">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVAS.NOVAS31" filterName="NOVAS31" isExposed="True" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVASCOM" isExposed="False">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Earth" filterName="Earth" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Planet" filterName="Planet" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.PositionVector" filterName="PositionVector" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Site" filterName="Site" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Star" filterName="Star" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.VelocityVector" filterName="VelocityVector" isExposed="True" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.SOFA" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.SOFA.ISOFA" filterName="ISOFA" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.Transform" isExposed="False">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.Transform.Transform" filterName="Transform" isExposed="True" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Controls" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Controls.ICadencedControl" filterName="ICadencedControl" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV3" filterName="ICameraV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICoverCalibratorV1" filterName="ICoverCalibratorV1" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IDomeV2" filterName="IDomeV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFilterWheelV2" filterName="IFilterWheelV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV3" filterName="IFocuserV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IObservingConditions" filterName="IObservingConditions" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV3" filterName="IRotatorV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISafetyMonitor" filterName="ISafetyMonitor" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISwitchV2" filterName="ISwitchV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
-  <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
-    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
-    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
-    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
-  </Filter>
-  <Filter entryType="Class" fullName="ASCOM.Utilities.CheckedMessageBox" filterName="CheckedMessageBox" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserAlpacaConfigurationForm" filterName="ChooserAlpacaConfigurationForm" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserCustomToolStripRenderer" filterName="ChooserCustomToolStripRenderer" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserItem" filterName="ChooserItem" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.ICache" filterName="ICache" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.ICacheExtra" filterName="ICacheExtra" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
-    <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
-  </Filter>
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.Interfaces" isExposed="False" />
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" /></ApiFilter>
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.EarthRotationParameters" filterName="EarthRotationParameters" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVAS" isExposed="False">
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVAS.NOVAS31" filterName="NOVAS31" isExposed="True" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVASCOM" isExposed="False">
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Earth" filterName="Earth" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Planet" filterName="Planet" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.PositionVector" filterName="PositionVector" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Site" filterName="Site" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Star" filterName="Star" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.VelocityVector" filterName="VelocityVector" isExposed="True" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.SOFA" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.SOFA.ISOFA" filterName="ISOFA" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.Transform" isExposed="False">
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.Transform.Transform" filterName="Transform" isExposed="True" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Controls" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Controls.ICadencedControl" filterName="ICadencedControl" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV3" filterName="ICameraV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICoverCalibratorV1" filterName="ICoverCalibratorV1" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IDomeV2" filterName="IDomeV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFilterWheelV2" filterName="IFilterWheelV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV3" filterName="IFocuserV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IObservingConditions" filterName="IObservingConditions" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV3" filterName="IRotatorV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISafetyMonitor" filterName="ISafetyMonitor" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISwitchV2" filterName="ISwitchV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
+        <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
+          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
+          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
+          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
+        </Filter>
+        <Filter entryType="Class" fullName="ASCOM.Utilities.CheckedMessageBox" filterName="CheckedMessageBox" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserAlpacaConfigurationForm" filterName="ChooserAlpacaConfigurationForm" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserCustomToolStripRenderer" filterName="ChooserCustomToolStripRenderer" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.Utilities.ChooserItem" filterName="ChooserItem" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.Utilities.ICache" filterName="ICache" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.Utilities.ICacheExtra" filterName="ICacheExtra" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
+          <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
+        </Filter>
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.Interfaces" isExposed="False" />
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
+    </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>True</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -341,6 +342,7 @@
     <None Include="Examples\Serial.aml" />
     <None Include="Version History\Version 5.5.1.aml" />
     <None Include="Version History\Version 6.5.aml" />
+    <None Include="Version History\Version 7.0.aml" />
     <None Include="Version History\Version Template.aml" />
     <None Include="Version History\Version Summary.aml" />
     <None Include="Introduction\ASCOM Platform for COM.aml" />

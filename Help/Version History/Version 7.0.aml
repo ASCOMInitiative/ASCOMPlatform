@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4eb05978-d9b4-4465-896b-e9ed09bff8c1" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<section address="Intro70">
+			<title>Introduction</title>
+			<content>
+				<para>
+					In line with previous Platform installers, 7.0 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs. The Platform
+					environment pre-requisites are listed here <link xlink:href="#PreReqs70">Platform Prerequisites</link>.
+				</para>
+			</content>
+		</section>
+
+		<section address="Changes70">
+			<title>Changes in 7.0 - For Everyone</title>
+			<content>
+				<list class="bullet">
+					<listItem>TBC.</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="IssuesFixedPlatform70">
+			<title>Issues Fixed in 7.0 - Platform</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						Installer
+						<list class="bullet">
+							<listItem>TBC.</listItem>
+						</list>
+					</listItem>
+					<listItem>TBC.</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="ChangesDeveloper70">
+			<title>Key Changes in 7.0 - For Developers</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						Documentation
+						<list class="bullet">
+							<listItem>TBC.</listItem>
+						</list>
+					</listItem>
+					<listItem>TBC.</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="IssuesFixedDeveloper70">
+			<title>Issues Fixed in 7.0 - For Developers</title>
+			<content>
+				<list class="bullet">
+					<listItem>TBC.</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="BreakingChanges70">
+			<title>Breaking Changes (For Developers) in Platform 6.6 SP2</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						None.
+					</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="KnownIssuesDevelopment70">
+			<title>Known Limitations - Developers</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully
+						accessible through COM from scripting languages because a number of parameters are passed by reference or use
+						structures that do not pass across the COM interface. Two work rounds are available:
+						<list class="ordered">
+							<listItem>Use the Transform component in the ASCOM.Astrometry.Transform namespace, it is fully COM compatible.</listItem>
+							<listItem>
+								Create your own COM presentation component that encapsulates the SOFA or NOVAS 3.1 functions that you require
+								and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your
+								scripting application.
+							</listItem>
+						</list>
+					</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="PreReqs70">
+			<title>Platform Prerequisites</title>
+			<content>
+				<para>Platform 7.0 requires the following .NET framework version and library:</para>
+				<list class="bullet">
+					<listItem>.NET 8 Runtime</listItem>
+					<listItem>.NET Framework 4.8</listItem>
+					<listItem>For WIndows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
+				</list>
+				<para>
+					The installer will advise you if your PC does not have the required support and will request that you install or enable it before continuing with the installation.
+					<externalLink>
+						<linkText>Microsoft Download Centre</linkText>
+						<linkAlternateText>https://www.microsoft.com/downloads</linkAlternateText>
+						<linkUri>https://www.microsoft.com/downloads</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+					<externalLink>
+						<linkText>.NET 8 Runtime</linkText>
+						<linkAlternateText>https://dotnet.microsoft.com/en-us/download/dotnet/8.0</linkAlternateText>
+						<linkUri>https://dotnet.microsoft.com/en-us/download/dotnet/8.0</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+				</para>
+			</content>
+		</section>
+	</developerConceptualDocument>
+</topic>
