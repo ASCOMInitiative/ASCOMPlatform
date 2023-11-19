@@ -1655,11 +1655,10 @@ Comment: Shortcuts have to be created in native mode in order to get the ASCOM s
 Set Variable NATIVE_ENGINE to TRUE
 Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
 Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
-Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
-Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
+Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf
-Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $PLATFORMTARGETDIR$\Tools\CheckForUpdates.js
-Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
 Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
 Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
 Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe

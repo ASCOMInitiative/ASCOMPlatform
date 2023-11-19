@@ -1671,7 +1671,6 @@ Create Shortcut
 Create Shortcut
 Create Shortcut
 Create Shortcut
-Create Shortcut
 If
 Create Shortcut
 Create Shortcut
@@ -3981,7 +3980,6 @@ $
 {D4CF13E7-C1D1-4ACC-A2DA-2CC95ED4A9ED}
 {8932B917-47EE-46BD-B10F-A7F228844059}
 {5C5050BA-5805-4AF4-A864-E92F53AAEB3A}
-{3F595A84-BEE5-412B-90D0-687D10F7B638}
 {C85ECDEB-80E8-4592-8745-813C05443560}
 {E8DB6673-1522-4784-BCAD-A16F3972FF65}
 {AEF497BA-8AD7-4818-98FA-9FCF2A584DB3}
@@ -12480,23 +12478,13 @@ $COMMONFILES$\ASCOM\Platform\Internet.ico|FALSE
 |
 0|
 {C85ECDEB-80E8-4592-8745-813C05443560}
-$PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
-Help and Device Interface Standards
-$SHORTCUTFOLDER$
-
-
-
-
-|
-0|
-{3F595A84-BEE5-412B-90D0-687D10F7B638}
-$PLATFORMTARGETDIR$\Tools\CheckForUpdates.js|FALSE
-Check for Updates
+$PLATFORMTARGETDIR$\Docs\PlatformHelp.chm|FALSE
+ASCOM Platform Help
 $SHORTCUTFOLDER$|FALSE
 
 
 |FALSE
-$COMMONFILES$\ASCOM\Platform\Internet.ico|FALSE
+|FALSE
 |
 0|
 {5C5050BA-5805-4AF4-A864-E92F53AAEB3A}
@@ -12511,7 +12499,7 @@ $COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 0|
 {8932B917-47EE-46BD-B10F-A7F228844059}
 http://www.ascom-standards.org/Downloads/Index.htm|FALSE
-ASCOM Drivers and Downloads
+Drivers and Downloads
 $SHORTCUTFOLDER$|FALSE
 
 
@@ -12521,7 +12509,7 @@ $COMMONFILES$\ASCOM\Platform\Internet.ico|FALSE
 0|
 {D4CF13E7-C1D1-4ACC-A2DA-2CC95ED4A9ED}
 http://ascom-standards.org/Community/Partners.htm|FALSE
-ASCOM Compatible Software
+Compatible Software
 $SHORTCUTFOLDER$|FALSE
 
 
@@ -17980,7 +17968,6 @@ C
 
 
 
-
 C
 C
 
@@ -18303,7 +18290,6 @@ C
 
 
 $
-
 
 
 
