@@ -186,7 +186,7 @@ namespace ASCOM.Utilities
         /// <summary>
         /// Return the XML schema
         /// </summary>
-        /// <returns></returns>
+        /// <returns>XML schema.</returns>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public System.Xml.Schema.XmlSchema GetSchema()
         {

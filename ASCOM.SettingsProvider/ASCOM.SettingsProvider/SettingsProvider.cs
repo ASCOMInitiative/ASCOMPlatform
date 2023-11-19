@@ -22,7 +22,7 @@ namespace ASCOM
     {
         /// <summary>
         ///   A reference to an ASCOM profile provider. Normally, this will be the default implementation defined in
-        ///   <see cref = "ASCOM.Utilities.Profile" />, but unit tests can also use dependency injection to provide
+        ///   <see cref = "Profile" />, but unit tests can also use dependency injection to provide
         ///   a mock provider. This value will be initialized (once) in the constructor.
         /// </summary>
         readonly IProfile ascomProfile;
@@ -34,7 +34,7 @@ namespace ASCOM
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "SettingsProvider" /> class with the default
-        ///   profile provider <see cref = "ASCOM.Utilities.Profile" />.
+        ///   profile provider <see cref = "Profile" />.
         /// </summary>
         public SettingsProvider()
         {
@@ -45,7 +45,7 @@ namespace ASCOM
         ///   Initializes a new instance of the <see cref = "SettingsProvider" /> class with the supplied
         ///   Profile Provider. This is useful for injecting a mock profile object during unit testing.
         /// </summary>
-        /// <param name = "profileProvider">The <see cref = "IProfile" /> to be used.</param>
+        /// <param name = "profileProvider">The IProfile component to be used.</param>
         public SettingsProvider(IProfile profileProvider)
         {
             ascomProfile = profileProvider;

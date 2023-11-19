@@ -5,8 +5,8 @@
       <title>Acknowledgements</title>
       <content>
         <para>
-          I would like to gratefully acknowledge Daniel Van Noord, Rick Burke, Tim Long, Chris Rowland, Chris Norman, Rob Morgan and Bob Denny for constructive
-          discussions, knowledge transfer, help in design and for testing development versions of Platform 6.
+          I would like to gratefully acknowledge Daniel Van Noord, Bob Denny and everyone who fed back on the asynchronous methods proposal for constructive
+          discussions, knowledge transfer, help in design and for testing development versions of Platform 7.
         </para>
         <para>Thanks all!</para>
         <para>Peter Simpson</para>

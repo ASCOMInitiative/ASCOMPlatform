@@ -7,8 +7,10 @@
       	<content>
       	
       	<para>
-      		Please see <link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" /> for a detailed list of changes and fixes for both developers and Platform users.
+      		Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" /> for a detailed list of changes and fixes for both developers and Platform users.
         </para>
+
+		<para>***** TBC *****</para>
       	
       	<para>Platform 7 builds on the architectural changes introduced in Platform 6 and introduces a set of common methods that 
       	will be available in all drivers. These have been based on the methods already implemented in the Telescope interface together
@@ -20,7 +22,6 @@
 
    	<relatedTopics>
 		<link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" />
-		<link xlink:href="e7734c14-0562-4010-b0c9-ddb5055cd318" />
 		<externalLink>
 			<linkText>ASCOM Initiative Web Site</linkText>
 			<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>

@@ -216,7 +216,18 @@ namespace ASCOM.DriverAccess
 
         #region ICoverCalibratorV2 members
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Flag showing whether a calibrator brightness state change is in progress. 
+        /// </summary>
+        /// <returns>
+        /// False while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
+        /// </returns>
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// <para>
+        /// This property must throw an exception ff an issue arises while changing calibrator brightness. The exception must continue to be thrown until a new <see cref="CalibratorOn(int)"/> or
+        /// <see cref="CalibratorOff"/> command is received.</para>
+        /// </remarks>
         public bool CalibratorReady
         {
             get
@@ -233,7 +244,15 @@ namespace ASCOM.DriverAccess
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Flag showing whether the cover is moving. 
+        /// </summary>
+        /// <returns>
+        /// True while the cover is in motion following an <see cref="OpenCover"/> or <see cref="CloseCover"/> command.
+        /// </returns>
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
+        /// </remarks>
         public bool CoverMoving
         {
             get

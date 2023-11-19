@@ -18,11 +18,6 @@
     <OutputPath>Output\platform\</OutputPath>
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
-      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
-      <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
-      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" />
-      <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.xml" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b 2010-23, The ASCOM Initiative</CopyrightText>
@@ -43,7 +38,13 @@
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
 </Filter>
-    </ApiFilter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities.Interfaces" isExposed="True">
+  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAlpacaDevice" filterName="IAlpacaDevice" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAlpacaDeviceExtra" filterName="IAlpacaDeviceExtra" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAlpacaDiscovery" filterName="IAlpacaDiscovery" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAscomDevice" filterName="IAscomDevice" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" /></ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>True</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -55,19 +56,13 @@
     <ProjectLinkType>Local</ProjectLinkType>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <ComponentConfigurations>
-      <ComponentConfig id="Code Block Component" enabled="True">
-        <component id="Code Block Component">
-          <basePath value="{@HtmlEncProjectFolder}" />
-          <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
-          <allowMissingSource value="false" />
-          <removeRegionMarkers value="false" />
-          <colorizer syntaxFile="{@CoreComponentsFolder}Colorizer\highlight.xml" styleFile="{@CoreComponentsFolder}Colorizer\highlight.xsl" stylesheet="{@CoreComponentsFolder}Colorizer\highlight.css" scriptFile="{@CoreComponentsFolder}Colorizer\highlight.js" disabled="{@DisableCodeBlockComponent}" language="cs" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
-        </component>
-      </ComponentConfig>
     </ComponentConfigurations>
     <ProjectSummary>ASCOM Platform Documentation</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
+      <PlugInConfig id="Additional Content Only" enabled="True">
+        <configuration />
+      </PlugInConfig>
     </PlugInConfigurations>
     <FeedbackEMailAddress>
     </FeedbackEMailAddress>
@@ -181,14 +176,6 @@
       <AlternateText>Camera V 2 State Diagram</AlternateText>
       <CopyToMedia>True</CopyToMedia>
     </Image>
-    <Image Include="Introduction\ManufLogos.png">
-      <CopyToMedia>False</CopyToMedia>
-      <ImageId>ManufLogos</ImageId>
-    </Image>
-    <Image Include="Introduction\logo_resharper.png">
-      <ImageId>logo_resharper</ImageId>
-      <AlternateText>logo resharper</AlternateText>
-    </Image>
     <Image Include="Tools and Features\COMPortSettings.png">
       <ImageId>COMPortSettings</ImageId>
       <AlternateText>COMPort Settings</AlternateText>
@@ -206,6 +193,7 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Version History\Version 7.0.aml" />
     <None Include="Version History\Version 6.6 SP2.aml" />
     <None Include="Version History\Version 6.6 SP1.aml" />
     <None Include="Version History\Version 6.6.aml" />
@@ -238,7 +226,6 @@
     <None Include="Version History\Version 5.5.1.aml" />
     <None Include="Version History\Version Template.aml" />
     <None Include="Version History\Version Summary.aml" />
-    <None Include="Introduction\ASCOM Platform for COM.aml" />
     <None Include="Introduction\ASCOM Platform for .NET.aml" />
     <None Include="Version History\Version 5.5 Release.aml" />
     <None Include="Introduction\Introduction.aml" />

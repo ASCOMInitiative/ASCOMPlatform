@@ -323,7 +323,15 @@ namespace ASCOM.DriverAccess
 
         #region ISwitchV3 members
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Set a boolean switch's state asynchronously
+        /// </summary>
+		/// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+        /// <param name="id">Switch number.</param>
+        /// <param name="state">New boolean state.</param>
+		/// <remarks>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// </remarks>
         public void SetAsync(short id, bool state)
         {
             // Call the device's SetAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -338,7 +346,16 @@ namespace ASCOM.DriverAccess
             throw new MethodNotImplementedException($"DriverAccess.Switch - SetAsync is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Set a switch's value asynchronously
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <param name="value">New double value.</param>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// </remarks>
         public void SetAsyncValue(short id, double value)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -353,7 +370,15 @@ namespace ASCOM.DriverAccess
             throw new MethodNotImplementedException($"DriverAccess - SetAsyncValue is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Flag indicating whether this switch can operate asynchronously.
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <returns>True if the switch can operate asynchronously.</returns>
+        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+		/// <remarks>
+        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+		/// </remarks>
         public bool CanAsync(short id)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
@@ -367,7 +392,15 @@ namespace ASCOM.DriverAccess
             return false;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Completion variable for asynchronous switch state change operations.
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
+        /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
+		/// <remarks>
+        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+		/// </remarks>
         public bool StateChangeComplete(short id)
         {
             // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -381,7 +414,14 @@ namespace ASCOM.DriverAccess
             throw new MethodNotImplementedException($"DriverAccess - StateChangeComplete is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Cancels an in-progress asynchronous state change operation.
+        /// </summary>
+        /// <param name="id">Switch number.</param>
+        /// <remarks>
+        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/>.</b></p>
+		/// This method must be implemented if it is possible for the device to cancel an asynchronous state change operation, otherwise it must throw a <see cref="MethodNotImplementedException"/>.
+        /// </remarks>
         public void CancelAsync(short id)
         {
             // Call the device's CancelAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
