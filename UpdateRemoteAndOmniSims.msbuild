@@ -1,0 +1,106 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Required Import to use MSBuild Community Tasks -->
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+	<PropertyGroup>
+		<!-- Set OmniSim properties -->
+		<OmniSimRepositorytBranch>buildtest</OmniSimRepositorytBranch>
+		<OmniSimBuildConfiguration>Debug</OmniSimBuildConfiguration>
+		<OmniSimGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimGitRepositoryURL>
+		<OmniSimDirectory>$(MSBuildStartupDirectory)\OmniSimulators</OmniSimDirectory>
+		<OmniSimVSProject>$(OmniSimDirectory)\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>
+
+		<!-- Set ASCOM Remote properties -->
+		<AscomRemoteRepositorytBranch>develop</AscomRemoteRepositorytBranch>
+		<AscomRemoteBuildConfiguration>release</AscomRemoteBuildConfiguration>
+		<AscomRemoteGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOMRemote.git</AscomRemoteGitRepositoryURL>
+		<AscomRemoteDirectory>$(MSBuildStartupDirectory)\AscomRemote</AscomRemoteDirectory>
+		<AscomRemoteVSProject>$(AscomRemoteDirectory)\Remote Server\Remote Server.csproj</AscomRemoteVSProject>
+		<SetNetworkPermissionsVSProject>$(AscomRemoteDirectory)\SetNetworkPermissions\SetNetworkPermissions.csproj</SetNetworkPermissionsVSProject>
+
+		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
+		<SignToolBase256>signtool sign /v /tr http://timestamp.sectigo.com /td sha256 /fd sha256 /n "Peter Simpson"</SignToolBase256>
+	</PropertyGroup>
+	
+	<!-- Main build target for this build -->
+	<Target Name="Build">
+		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
+		<RemoveDir Directories="$(AscomRemoteDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
+
+		<!-- Stop the build with an error if we can't clear the directory by this point -->
+		<RemoveDir Directories="$(AscomRemoteDirectory)" ContinueOnError="false" />
+
+		<!-- Create the export directory ready for cloning  -->
+		<MakeDir Directories="$(AscomRemoteDirectory)"/>
+
+		<!-- Clone a fresh copy of the ASCOM Remote Git repository  -->
+		<GitClient Command="clone" LocalPath="$(AscomRemoteDirectory)" Arguments="-b $(AscomRemoteRepositorytBranch) $(AscomRemoteGitRepositoryURL) $(AscomRemoteDirectory)"/>
+
+		<!-- Publish ASCOM Remote AnyCPU -->
+		<MSBuild Projects="$(AscomRemoteVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(AscomRemoteBuildConfiguration);
+			DefineConstants=PLATFORM_BUILD;
+			Platform=Any CPU;
+			OutputDir=builds\AnyCpu\;
+			PublishDir=..\publish\AscomRemote\AnyCPU\;
+			DebugType=embedded" />
+		<Message Text="Completed building ASCOM Remote AnyCPU." />
+
+		<!-- Publish ASCOM Remote x86 -->
+		<MSBuild Projects="$(AscomRemoteVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(AscomRemoteBuildConfiguration);
+			DefineConstants=PLATFORM_BUILD;
+			Platform=x86;
+			OutputDir=builds\x86\;
+			PublishDir=..\publish\AscomRemote\x86\;
+			DebugType=embedded" />
+
+		<!-- Publish ASCOM Remote AnyCPU -->
+		<MSBuild Projects="$(SetNetworkPermissionsVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(AscomRemoteBuildConfiguration);
+			Platform=x86;
+			OutputDir=builds\x86\;
+			PublishDir=..\publish\SetNetworkPermissions\x86\;
+			DebugType=embedded" />
+
+		<Message Text="Completed building SetNetworkPermissions 32bit." />
+		
+
+	
+	
+	
+	
+		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
+		<RemoveDir Directories="$(OmniSimDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
+
+		<!-- Stop the build with an error if we can't clear the directory by this point -->
+		<RemoveDir Directories="$(OmniSimDirectory)" ContinueOnError="false" />
+
+		<!-- Create the export directory ready for cloning  -->
+		<MakeDir Directories="$(OmniSimDirectory)"/>
+
+		<!-- Clone a fresh copy of the OmniSim Git repository  -->
+		<GitClient Command="clone" LocalPath="$(OmniSimDirectory)" Arguments="-b $(OmniSimRepositorytBranch) $(OmniSimGitRepositoryURL) $(OmniSimDirectory)"/>
+
+		<!-- Publish the OmniSims DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
+		<MSBuild Projects="$(OmniSimVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(OmniSimBuildConfiguration);
+			DefineConstants=ASCOM_COM;
+			Platform=Any CPU;
+			DebugType=embedded;
+			PublishDir=..\publish\AnyCPU" />
+
+		<Message Text="Completed building the Omni-Simulators." />
+		
+
+
+
+	</Target>
+</Project>
