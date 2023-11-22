@@ -9,12 +9,14 @@ Platform 6 files
 Platform 5.5 files
 Set Registry Keys
 Platform 6.1 files
+Set up log file and variables
 Platform 6.2 files
 Remove Previous Platform 6 install if present
 Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
+Non-MSI installation activities - 32bit
 Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
@@ -26,7 +28,5 @@ Inno driver installer creator
 Developer documentation
 Visual Studio assembly references
 Validate installation
-Platform 5 files
-Set up log file and variables
 Remove any items left from previous instals
-Non-MSI installation activities - 32bit
+Platform 5 files

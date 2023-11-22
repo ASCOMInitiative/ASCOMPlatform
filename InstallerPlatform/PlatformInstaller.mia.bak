@@ -11585,7 +11585,7 @@ FALSE
 {350DFB5A-39B8-429B-B4A1-94954A013AEC}
 ..\OmniSimulators\publish\AnyCPU\*.*
 FALSE|
-$PROGRAMFILES64$ASCOM\OmniSimulators
+$PROGRAMFILES64$ASCOM\OmniSimulator
 FALSE
 FALSE
 FALSE
@@ -11598,7 +11598,7 @@ FALSE
 {BE557FC4-8D2D-4849-BAE8-773E6E00864C}
 ..\OmniSimulators\publish\AnyCPU\wwwroot\*.*
 TRUE|
-$PROGRAMFILES64$ASCOM\OmniSimulators\wwwroot
+$PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot
 FALSE
 FALSE
 FALSE
@@ -11611,7 +11611,7 @@ FALSE
 {C07E5AA5-7497-4ED8-A84C-50675B45F690}
 ..\OmniSimulators\publish\AnyCPU\runtimes\win-x86\*.*
 TRUE|
-$PROGRAMFILES64$ASCOM\OmniSimulators\runtimes\win-x86
+$PROGRAMFILES64$ASCOM\OmniSimulator\runtimes\win-x86
 FALSE
 FALSE
 FALSE
@@ -11624,7 +11624,7 @@ FALSE
 {61607559-9F3C-493D-85EA-9E9A5836B236}
 ..\OmniSimulators\publish\AnyCPU\runtimes\win-x64\*.*
 TRUE|
-$PROGRAMFILES64$ASCOM\OmniSimulators\runtimes\win-x64
+$PROGRAMFILES64$ASCOM\OmniSimulator\runtimes\win-x64
 FALSE
 FALSE
 FALSE
