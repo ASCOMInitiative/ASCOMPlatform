@@ -340,6 +340,8 @@ Write into Text File $SETUPLOG$ from Value $TIME$ NGen32: $NGEN32$ (at end of fi
 Write into Text File $SETUPLOG$ from Value $TIME$ NGen64: $NGEN64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ ProgramFiles: $PROGRAMFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ CommonFiles: $COMMONFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ ProgramFiles64: $PROGRAMFILES64$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ CommonFiles64: $COMMONFILES64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ GAC Assembly Reference Path: $GACREF$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFiles: $SHORTCUTFILES$ (at end of file)
@@ -348,7 +350,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDir: $DESKTOPDIR$ (at e
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDirAll: $DESKTOPDIRALL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ PLATFORMMENU: $PLATFORMMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Target Directory: $PLATFORMTARGETDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Platform Target Directory: $PLATFORMTARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Documents Directory: $MYDOCUMENTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -1458,10 +1460,35 @@ Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf 
  
 [DEFINE REGION: Install the OmniSimulators]
  
-Install Files ..\OmniSimulators\publish\AnyCPU\*.* to $PLATFORMTARGETDIR$\OmniSimulators
-Install Files ..\OmniSimulators\publish\AnyCPU\wwwroot\*.* to $PLATFORMTARGETDIR$\OmniSimulators\wwwroot, include subfolders
-Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x86\*.* to $PLATFORMTARGETDIR$\OmniSimulators\runtimes\win-x86, include subfolders
-Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x64\*.* to $PLATFORMTARGETDIR$\OmniSimulators\runtimes\win-x64, include subfolders
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulators  (at end of file)
+Apply Install (get result into variable RC)
+Write into Text File $SETUPLOG$ from Value $TIME$  Apply install RC: $RC$ (at end of file)
+Set Variable NATIVE_ENGINE to TRUE
+Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.*  to $PROGRAMFILES$ASCOM\SetNetworkPermissions
+Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\runtimes\win-x86\*.* to $PROGRAMFILES$ASCOM\SetNetworkPermissions\runtimes\win-x86, include subfolders
+Apply Install (get result into variable RC)
+if Variable WIN64MODE Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
+end
+ 
+Install Files ..\OmniSimulators\publish\AnyCPU\*.* to $PROGRAMFILES64$ASCOM\OmniSimulators
+Install Files ..\OmniSimulators\publish\AnyCPU\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulators\wwwroot, include subfolders
+Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\OmniSimulators\runtimes\win-x86, include subfolders
+Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\OmniSimulators\runtimes\win-x64, include subfolders
+ 
+Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\*.* to $PROGRAMFILES64$ASCOM\RemoteServer
+Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\runtimes\win-x86\*.*  to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x86, include subfolders
+Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x64, include subfolders
+Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit
+Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
+if Variable WIN64MODE Equals TRUE
+  Write into Text File $SETUPLOG$ from Value $TIME$ WIN64MODE is true, restoring 32bit mode (at end of file)
+  Apply Install (get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$  Apply install, mode = 64bit, RC: $RC$ (at end of file)
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+end
+ 
+Set Variable NATIVE_ENGINE to TRUE
  
 [END REGION]
  
@@ -1653,13 +1680,14 @@ end
  
 Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
 Set Variable NATIVE_ENGINE to TRUE
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
 Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
 Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
-Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
-Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
+Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf
-Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $PLATFORMTARGETDIR$\Tools\CheckForUpdates.js
-Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
 Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
 Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
 Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
@@ -1739,13 +1767,15 @@ Write into Text File $SETUPLOG$ from Value  (at end of file)
 Comment: Process COM registrations and other activities if the MSI install was successful
 if Variable SUCCESS not Equals ERROR
    
-  [DEFINE REGION: Non-MSI installation activities]
+  [DEFINE REGION: Non-MSI installation activities - 32bit]
    
   Comment: Register the Omni-Simulators
-  Run Program $PLATFORMTARGETDIR$\OmniSimulators\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
-  if Variable RC not Equals 0
-    MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
+  if Variable WIN64MODE not Equals TRUE
+    Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
+    end
   end
    
   Comment: Register Platform 5 components
@@ -2018,6 +2048,14 @@ if Variable SUCCESS not Equals ERROR
   if Variable WIN64MODE Equals TRUE
      
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
+     
+    Comment: Register 64bit Omni-Simulators
+    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
+    if Variable RC not Equals 0
+      MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
+    end
+     
     Comment: Register core components
     Set Variable MYPROGRESS to 75
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
