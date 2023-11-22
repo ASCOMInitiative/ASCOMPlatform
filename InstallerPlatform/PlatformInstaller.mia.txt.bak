@@ -1458,12 +1458,12 @@ Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Docum
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 [END REGION]
  
-[DEFINE REGION: Install the OmniSimulators]
+[DEFINE REGION: Install ASCOM Remote Server and the OmniSimulators]
  
-Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulators  (at end of file)
 Apply Install (get result into variable RC)
 Write into Text File $SETUPLOG$ from Value $TIME$  Apply install RC: $RC$ (at end of file)
 Set Variable NATIVE_ENGINE to TRUE
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing network permissions unitility to: $PROGRAMFILES64$ASCOM\SetNetworkPermissions (at end of file)
 Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.*  to $PROGRAMFILES$ASCOM\SetNetworkPermissions
 Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\runtimes\win-x86\*.* to $PROGRAMFILES$ASCOM\SetNetworkPermissions\runtimes\win-x86, include subfolders
 Apply Install (get result into variable RC)
@@ -1471,11 +1471,13 @@ if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
 end
  
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulator (at end of file)
 Install Files ..\OmniSimulators\publish\AnyCPU\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator
 Install Files ..\OmniSimulators\publish\AnyCPU\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
 Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\runtimes\win-x86, include subfolders
 Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\runtimes\win-x64, include subfolders
  
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
 Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\*.* to $PROGRAMFILES64$ASCOM\RemoteServer
 Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\runtimes\win-x86\*.*  to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x86, include subfolders
 Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x64, include subfolders

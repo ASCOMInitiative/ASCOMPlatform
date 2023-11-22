@@ -16,7 +16,6 @@ Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
-Non-MSI installation activities - 32bit
 Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
@@ -27,6 +26,11 @@ Platform validation
 Inno driver installer creator
 Developer documentation
 Visual Studio assembly references
-Validate installation
 Remove any items left from previous instals
 Platform 5 files
+Install ASCOM Remote Server and the OmniSimulators
+Create shortcuts
+Non-MSI activities - 64bit
+Non-MSI activities - 32bit
+Finalise installation.
+Validate installation
