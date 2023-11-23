@@ -3,7 +3,7 @@ Comment: NOTE: The required Platform version number is read at build time by thi
  
 Comment: The installer must be started in 32bit MSI mode
 Set Variable NATIVE_ENGINE to FALSE
-Set Variable NATIVE_OVERWRITE_OLDER to TRUE
+Set Variable NATIVE_OVERWRITE to ALWAYS
 Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
  
 [DEFINE REGION: Set up log file and variables]
@@ -1047,6 +1047,8 @@ end
  
 [DEFINE REGION: Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.]
  
+Set Variable NATIVE_ENGINE to TRUE
+ 
 if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
 end
@@ -1079,12 +1081,15 @@ if Variable WIN64MODE Equals TRUE
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 end
  
+Comment: Clean any remaining directories from earlier installations.
 Write into Text File $SETUPLOG$ from Value $TIME$ Deleting any remaining old setup files (at end of file)
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 6
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
 Apply Install
+ 
+Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
  
