@@ -5687,7 +5687,7 @@ Uninstall the stand-alone OmniSimulator if present.
 {B377B76D-55E5-40F3-832B-131F6DBD0325}
 
 {881FB429-A8B9-481E-BF21-7C89D90154B3}
-Only uninstall the Inno installers when we are installing.
+Only uninstall the Inno installers when installing.
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 

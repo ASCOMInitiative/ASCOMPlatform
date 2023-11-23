@@ -756,7 +756,7 @@ if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
 end
  
-Comment: Only uninstall the Inno installers when we are installing.
+Comment: Only uninstall the Inno installers when installing.
 if Variable REMOVE Equals FALSE
    
   Comment: Uninstall the stand-alone ASCOM Remote Server if present.
