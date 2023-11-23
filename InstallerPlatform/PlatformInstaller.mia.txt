@@ -1029,6 +1029,7 @@ end
 [END REGION]
  
 [DEFINE REGION: Clean up any remaining simulator COM entries]
+ 
 Comment: Clean up any remaining 32bit COM registry entries
 Set Variable PROGRESSTEXT to Cleaning simulator COM entries
 Write into Text File $SETUPLOG$ from Value $TIME$ Cleaning simulator 32bit COM entries (at end of file)
@@ -1041,6 +1042,7 @@ if Variable WIN64MODE Equals TRUE
   Include Script: CleanRegistry
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 end
+ 
 [END REGION]
  
 [DEFINE REGION: Uninstall any ASCOM Remote or OmniSumulatort Inno installations]
@@ -1057,6 +1059,7 @@ if Variable FILEEXISTS not Equals
   Set Variable PROGRESSTEXT to Uninstalling old ASCOM Remote version
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone Remote Server installation. (at end of file)
   Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\RemoteServer\*.*
   Apply Install
 end
  
@@ -1068,12 +1071,17 @@ if Variable FILEEXISTS not Equals
   Set Variable PROGRESSTEXT to Uninstalling old Omni-Simulators version
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone OmniServer installation. (at end of file)
   Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\OmniSimulator\*.*
   Apply Install
 end
  
 if Variable WIN64MODE Equals TRUE
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 end
+ 
+Write into Text File $SETUPLOG$ from Value $TIME$ Deleting SetNetworkPermissions files. (at end of file)
+Recursively Delete Files $PROGRAMFILES$ASCOM\SetNetworkPermissions\*.*
+Apply Install
  
 [END REGION]
  
