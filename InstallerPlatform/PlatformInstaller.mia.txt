@@ -1045,7 +1045,7 @@ end
  
 [END REGION]
  
-[DEFINE REGION: Uninstall any ASCOM Remote or OmniSumulatort Inno installations]
+[DEFINE REGION: Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.]
  
 if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
@@ -1059,7 +1059,7 @@ if Variable FILEEXISTS not Equals
   Set Variable PROGRESSTEXT to Uninstalling old ASCOM Remote version
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone Remote Server installation. (at end of file)
   Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
-  Recursively Delete Files $PROGRAMFILES64$ASCOM\RemoteServer\*.*
+  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\RemoteServer
   Apply Install
 end
  
@@ -1071,7 +1071,7 @@ if Variable FILEEXISTS not Equals
   Set Variable PROGRESSTEXT to Uninstalling old Omni-Simulators version
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone OmniServer installation. (at end of file)
   Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
-  Recursively Delete Files $PROGRAMFILES64$ASCOM\OmniSimulator\*.*
+  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\OmniSimulato
   Apply Install
 end
  
@@ -1079,8 +1079,11 @@ if Variable WIN64MODE Equals TRUE
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 end
  
-Write into Text File $SETUPLOG$ from Value $TIME$ Deleting SetNetworkPermissions files. (at end of file)
-Recursively Delete Files $PROGRAMFILES$ASCOM\SetNetworkPermissions\*.*
+Write into Text File $SETUPLOG$ from Value $TIME$ Deleting any remaining old setup files (at end of file)
+Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 6
+Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7
+Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
+Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
 Apply Install
  
 [END REGION]
