@@ -11,12 +11,10 @@ Set Registry Keys
 Platform 6.1 files
 Set up log file and variables
 Platform 6.2 files
-Remove Previous Platform 6 install if present
 Non-MSI activities - 64bit
 Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
-Remove Previous Platforms 4 and 5 if present
 Non-MSI activities - 32bit
 Create shortcuts
 Remove 32bit components
@@ -30,7 +28,9 @@ Inno driver installer creator
 Developer documentation
 Visual Studio assembly references
 Validate installation
-Finalise installation.
-Remove any items left from previous instals
 Platform 5 files
-Clean up any remaining simulator COM entries
+Finalise installation.
+Remove Previous Platforms 4 and 5 if present
+Remove Previous Platform 6 install if present
+Uninstall items installed by this installer
+Remove any items left from previous instals

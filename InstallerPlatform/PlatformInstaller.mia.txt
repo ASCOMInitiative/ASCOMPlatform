@@ -753,38 +753,8 @@ Comment: Clean up old template files that may not have been uninstalled.
 Run Program $SUPPORTDIR$\InstallTemplates.exe /cleanup (WAIT, get result into variable RC)
 Write into Text File $SETUPLOG$ from Value $TIME$ Finished cleaning templates - Return Code: $RC$ (at end of file)
  
-if Variable WIN64MODE Equals TRUE
-  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
-end
+[END REGION]
  
-Comment: Only uninstall the Inno installers when installing.
-if Variable REMOVE Equals FALSE
-   
-  Comment: Uninstall the stand-alone ASCOM Remote Server if present.
-  Set Variable UNINSTALLER to $PROGRAMFILES64$ASCOM\RemoteServer\unins000.exe
-  Find All Files in path $UNINSTALLER$, write result into variable FILEEXISTS
-  Write into Text File $SETUPLOG$ from Value $TIME$ Remote Server uninstaller: $UNINSTALLER$, File exists: $FILEEXISTS$ (at end of file)
-  if Variable FILEEXISTS not Equals 
-    Set Variable PROGRESSTEXT to Uninstalling old ASCOM Remote version
-    Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone Remote Server installation. (at end of file)
-    Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
-  end
-   
-  Comment: Uninstall the stand-alone OmniSimulator if present.
-  Set Variable UNINSTALLER to $PROGRAMFILES64$ASCOM\OmniSimulator\unins000.exe
-  Find All Files in path $UNINSTALLER$, write result into variable FILEEXISTS
-  Write into Text File $SETUPLOG$ from Value $TIME$ OmniSimulator uninstaller: $UNINSTALLER$, File exists: $FILEEXISTS$ (at end of file)
-  if Variable FILEEXISTS not Equals 
-    Set Variable PROGRESSTEXT to Uninstalling old Omni-Simulators version
-    Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone OmniServer installation. (at end of file)
-    Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
-  end
-   
-  if Variable WIN64MODE Equals TRUE
-    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-  end
-   
-end
 [DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
 if Variable MAINTENANCE not Equals TRUE
@@ -1041,8 +1011,6 @@ end
  
 [END REGION]
  
-[END REGION]
- 
 [DEFINE REGION: Install Application Pre-Requisites if required]
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
@@ -1073,6 +1041,40 @@ if Variable WIN64MODE Equals TRUE
   Include Script: CleanRegistry
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 end
+[END REGION]
+ 
+[DEFINE REGION: Uninstall any ASCOM Remote or OmniSumulatort Inno installations]
+ 
+if Variable WIN64MODE Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
+end
+ 
+Comment: Uninstall the stand-alone ASCOM Remote Server if present.
+Set Variable UNINSTALLER to $PROGRAMFILES64$ASCOM\RemoteServer\unins000.exe
+Find All Files in path $UNINSTALLER$, write result into variable FILEEXISTS
+Write into Text File $SETUPLOG$ from Value $TIME$ Remote Server uninstaller: $UNINSTALLER$, File exists: $FILEEXISTS$ (at end of file)
+if Variable FILEEXISTS not Equals 
+  Set Variable PROGRESSTEXT to Uninstalling old ASCOM Remote version
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone Remote Server installation. (at end of file)
+  Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
+  Apply Install
+end
+ 
+Comment: Uninstall the stand-alone OmniSimulator if present.
+Set Variable UNINSTALLER to $PROGRAMFILES64$ASCOM\OmniSimulator\unins000.exe
+Find All Files in path $UNINSTALLER$, write result into variable FILEEXISTS
+Write into Text File $SETUPLOG$ from Value $TIME$ OmniSimulator uninstaller: $UNINSTALLER$, File exists: $FILEEXISTS$ (at end of file)
+if Variable FILEEXISTS not Equals 
+  Set Variable PROGRESSTEXT to Uninstalling old Omni-Simulators version
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone OmniServer installation. (at end of file)
+  Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
+  Apply Install
+end
+ 
+if Variable WIN64MODE Equals TRUE
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+end
+ 
 [END REGION]
  
 Comment: ***** Start of Platform Installation *****
