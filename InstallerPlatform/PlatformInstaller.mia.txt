@@ -2274,6 +2274,10 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
   end
    
+  Write into Text File $SETUPLOG$ from Value $TIME$ Deleting unused Platform 6 folder - $PROGRAMFILES$ASCOM\Platform 6 (at end of file)
+  Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 6
+  Apply Install
+   
   [END REGION]
    
   [DEFINE REGION: Validate installation]

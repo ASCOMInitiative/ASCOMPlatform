@@ -1062,7 +1062,6 @@ if Variable FILEEXISTS not Equals
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone Remote Server installation. (at end of file)
   Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
   Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\RemoteServer
-  Apply Install
 end
  
 Comment: Uninstall the stand-alone OmniSimulator if present.
@@ -1074,7 +1073,6 @@ if Variable FILEEXISTS not Equals
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling stand-alone OmniServer installation. (at end of file)
   Run Program $UNINSTALLER$ /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART (WAIT, get result into variable RC)
   Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\OmniSimulato
-  Apply Install
 end
  
 if Variable WIN64MODE Equals TRUE
@@ -1087,7 +1085,6 @@ Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Pl
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
-Apply Install
  
 Set Variable NATIVE_ENGINE to FALSE
  

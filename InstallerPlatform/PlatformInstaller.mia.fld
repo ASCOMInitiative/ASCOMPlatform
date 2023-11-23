@@ -12,7 +12,6 @@ Platform 6.1 files
 Set up log file and variables
 Platform 6.2 files
 Remove Previous Platform 6 install if present
-Non-MSI activities - 64bit
 Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
@@ -33,4 +32,3 @@ Visual Studio assembly references
 Validate installation
 Remove any items left from previous instals
 Platform 5 files
-Finalise installation.
