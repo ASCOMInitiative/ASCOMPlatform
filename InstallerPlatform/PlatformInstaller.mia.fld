@@ -11,6 +11,7 @@ Set Registry Keys
 Platform 6.1 files
 Set up log file and variables
 Platform 6.2 files
+Remove Previous Platform 6 install if present
 Non-MSI activities - 64bit
 Remove 64bit components
 ASCOM Cache
@@ -29,6 +30,7 @@ Inno driver installer creator
 Developer documentation
 Visual Studio assembly references
 Validate installation
-Install ASCOM Remote Server and the OmniSimulators
 Finalise installation.
-Remove Previous Platform 6 install if present
+Remove any items left from previous instals
+Platform 5 files
+Clean up any remaining simulator COM entries
