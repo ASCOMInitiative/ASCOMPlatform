@@ -2047,6 +2047,8 @@ End
 Comment
 Code Folding Region
 Comment
+Code Folding Region
+Comment
 If
 Comment
 Set 64 Bit Mode
@@ -2207,6 +2209,8 @@ Set 64 Bit Mode
 End
 Code Folding Region
 Comment
+Code Folding Region
+Comment
 Comment
 Set Variable
 Run Program
@@ -2219,6 +2223,7 @@ Set Variable
 End
 Set Variable
 End
+Comment
 Code Folding Region
 Comment
 Code Folding Region
@@ -4407,6 +4412,8 @@ $
 {8C71CF43-3F3A-4FF7-BA0B-3DE83A70B44C}
 {8831609D-C050-4D36-88FC-EC0F64FA3214}
 {09C2A4AE-3731-4814-8440-2252B8B47715}
+{E8669FA6-80D0-4096-A4C3-74244894D9EB}
+{B18A4AE3-6BC8-4922-ABA2-F230D5D7B776}
 {4C8ECA52-39A8-4F20-BB3E-795D313ABC6B}
 {E11F6036-6A9F-4435-BA5D-423C1690B8EA}
 {AD2B261C-0D79-49E2-A1E2-33A516A82E05}
@@ -4570,6 +4577,8 @@ $
 {9799B9BC-7694-40EC-AD01-44B41061805E}
 {4A36E089-96CD-49AB-BB3E-DED9CE86B50E}
 {C26B3C25-F1EC-40C9-8A17-04C99257609C}
+{FE04EDF5-58F0-4360-96D0-406A2A295598}
+{95E1846C-8E17-4B4B-9227-D144CF1171AA}
 {187D7D93-2E19-40AE-8A1F-CA20DBF4EBB3}
 {A2775E16-C9E8-4F6B-A018-0132C46BFBF0}
 {82A63150-4278-4A73-A762-1D3F17D529C0}
@@ -4582,7 +4591,8 @@ $
 {88F50D8B-32E0-4ABB-AD2F-F317DDB9E534}
 {B766865F-0559-4D30-86AA-8B20D11902B3}
 {396288EF-F917-4DC3-9DFD-DD714DF559BC}
-{6C6B6FD5-8C8E-4C97-99AE-40B2BEDB9676}
+{4186DACD-4A70-4BF0-8F2C-A138F56188FA}
+{6A25C72C-3F8B-4939-B7F7-D95A41B4E439}
 {07C4AD42-94B8-4CC9-8827-479ED310465A}
 {573D385F-E7BD-47C0-903D-308B96B82A82}
 {AFB33A6C-D620-4C5C-800D-DA091CB452A2}
@@ -5587,6 +5597,12 @@ Register the Omni-Simulators
 {4072B079-DDC0-47F3-A708-8EAF3CA3BF53}
 Register 64bit Omni-Simulators
 {222FC047-A9D4-49A4-91D8-77851861A325}
+
+{E8669FA6-80D0-4096-A4C3-74244894D9EB}
+
+{4186DACD-4A70-4BF0-8F2C-A138F56188FA}
+
+{95E1846C-8E17-4B4B-9227-D144CF1171AA}
 
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
@@ -15830,10 +15846,7 @@ FALSE
 
 {E11F6036-6A9F-4435-BA5D-423C1690B8EA}
 TRUE
-Extra activities if on a 64bit system
-{6C6B6FD5-8C8E-4C97-99AE-40B2BEDB9676}
-FALSE
-Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+Non-MSI activities - 64bit
 {BE9BD426-AD4F-4D1D-BDAA-BF899E01B907}
 TRUE
 Uninstall items installed by this installer
@@ -15863,7 +15876,7 @@ TRUE
 Remove Previous Platforms 4 and 5 if present
 {203AAE1A-9191-4196-8DCE-BA5D0A289E92}
 TRUE
-Non-MSI installation activities - 32bit
+Non-MSI activities - 32bit
 {672C730D-04DA-4782-947E-1DAAA80AFCDF}
 FALSE
 Copy of Copy of Copy of Copy of Copy of 
@@ -15963,6 +15976,15 @@ Install ASCOM Remote Server and the OmniSimulators
 {544FC869-47C1-4CFB-9DD0-1BF5D18370F2}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{B18A4AE3-6BC8-4922-ABA2-F230D5D7B776}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{FE04EDF5-58F0-4360-96D0-406A2A295598}
+TRUE
+Finalise installation.
+{6A25C72C-3F8B-4939-B7F7-D95A41B4E439}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {F1670508-8739-4F56-8ADD-2DA803A33113}
 DISKSPACE
 C:
@@ -18474,8 +18496,13 @@ C
 
 
 
+
+
 C
 C
+
+
+
 
 
 
@@ -18641,6 +18668,11 @@ C
 
 
 $
+
+
+
+
+
 
 
 

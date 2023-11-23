@@ -1769,7 +1769,7 @@ Write into Text File $SETUPLOG$ from Value  (at end of file)
 Comment: Process COM registrations and other activities if the MSI install was successful
 if Variable SUCCESS not Equals ERROR
    
-  [DEFINE REGION: Non-MSI installation activities - 32bit]
+  [DEFINE REGION: Non-MSI activities - 32bit]
    
   Comment: Register the Omni-Simulators
   if Variable WIN64MODE not Equals TRUE
@@ -2045,7 +2045,9 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ASCOMERROR to $ASCOMERROR$Earth rotation data scheduled job issue. RC: $RC$
   end
    
-  [DEFINE REGION: Extra activities if on a 64bit system]
+  [END REGION]
+   
+  [DEFINE REGION: Non-MSI activities - 64bit]
   Comment: Extra registration of 64bit components if on 64bit system
   if Variable WIN64MODE Equals TRUE
      
@@ -2207,6 +2209,8 @@ if Variable SUCCESS not Equals ERROR
   end
   [END REGION]
    
+  [DEFINE REGION: Finalise installation.]
+   
   Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
   Set Variable PROGRESSTEXT to Finalising install
   Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
@@ -2219,6 +2223,7 @@ if Variable SUCCESS not Equals ERROR
     end
     Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
   end
+   
   [END REGION]
    
   [DEFINE REGION: Validate installation]
