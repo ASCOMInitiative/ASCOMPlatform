@@ -1106,6 +1106,7 @@ Install Files ..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMM
 Install Files ..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
 Install Files ..\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
 Install Files ..\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
+Comment: Comment: OK TO HERE
 Comment: Type library installer
 Install Files ..\InstallerContent\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
 Comment: Redistributable support files
@@ -1121,6 +1122,9 @@ Install Assembly ..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global 
 Comment: Install Assembly ..\InstallerContent\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Assembly ..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
 Install Assembly ..\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
+Apply Install (get result into variable SUCCESS)
+GoTo Label: Finish Setup
+ 
 Comment: Platform 5 simulators
 Install Files ..\InstallerContent\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
 Install Files ..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
@@ -1148,7 +1152,7 @@ if Variable INSTALL_POTH Equals TRUE
   Install Files ..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
 end
 [END REGION]
- 
+Comment: BAD HERE
 [DEFINE REGION: Platform 5.5 files]
 Comment: Updated helpers that use Platform 5.5 support
 Install Files ..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
@@ -1810,6 +1814,7 @@ Delete Files $PLATFORMTARGETDIR$\Tools\*.avi (when uninstalling)
  
 Comment: Run the installation
 Apply Install (get result into variable SUCCESS)
+GoTo Label: Finish Setup
  
 Comment: Save the installation success value and log status outcomes
 Set Variable MYPROGRESS to 20
@@ -2274,9 +2279,6 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
   end
    
-  Write into Text File $SETUPLOG$ from Value $TIME$ Deleting unused Platform 6 folder - $PROGRAMFILES$ASCOM\Platform 6 (at end of file)
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 6
-  Apply Install
    
   [END REGION]
    
@@ -2295,6 +2297,9 @@ if Variable SUCCESS not Equals ERROR
   end
    
   [END REGION]
+  Write into Text File $SETUPLOG$ from Value $TIME$ Deleting unused Platform 6 folder - $PROGRAMFILES$ASCOM\Platform 6 (at end of file)
+  Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 6
+  Apply Install
    
 end
  
