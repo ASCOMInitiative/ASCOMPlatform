@@ -38,28 +38,29 @@
 		<!-- Clone a fresh copy of the ASCOM Remote Git repository  -->
 		<GitClient Command="clone" LocalPath="$(AscomRemoteDirectory)" Arguments="-b $(AscomRemoteRepositorytBranch) $(AscomRemoteGitRepositoryURL) $(AscomRemoteDirectory)"/>
 
-		<!-- Publish ASCOM Remote AnyCPU -->
+		<!-- Publish 32bit ASCOM Remote -->
 		<MSBuild Projects="$(AscomRemoteVSProject)"
 			Targets="restore;rebuild;publish" 
 			Properties="Configuration=$(AscomRemoteBuildConfiguration);
 			DefineConstants=PLATFORM_BUILD;
 			Platform=Any CPU;
-			OutputDir=builds\AnyCpu\;
-			PublishDir=..\publish\AscomRemote\AnyCPU\;
+			RuntimeIdentier=win-x86;
+			PublishDir=..\publish\AscomRemote\x86\;
 			DebugType=embedded" />
-		<Message Text="Completed building ASCOM Remote AnyCPU." />
+		<Message Text="Completed building ASCOM Remote x86." />
 
-		<!-- Publish ASCOM Remote x86 -->
+		<!-- Publish 64bit ASCOM Remote -->
 		<MSBuild Projects="$(AscomRemoteVSProject)"
 			Targets="restore;rebuild;publish" 
 			Properties="Configuration=$(AscomRemoteBuildConfiguration);
 			DefineConstants=PLATFORM_BUILD;
-			Platform=x86;
-			OutputDir=builds\x86\;
-			PublishDir=..\publish\AscomRemote\x86\;
+			Platform=Any CPU;
+			RuntimeIdentier=win-x64;
+			PublishDir=..\publish\AscomRemote\x64\;
 			DebugType=embedded" />
+		<Message Text="Completed building ASCOM Remote x64." />
 
-		<!-- Publish ASCOM Remote AnyCPU -->
+		<!-- Publish SetNetworkPermissions x86 -->
 		<MSBuild Projects="$(SetNetworkPermissionsVSProject)"
 			Targets="restore;rebuild;publish" 
 			Properties="Configuration=$(AscomRemoteBuildConfiguration);
@@ -69,11 +70,6 @@
 			DebugType=embedded" />
 
 		<Message Text="Completed building SetNetworkPermissions 32bit." />
-		
-
-	
-	
-	
 	
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
 		<RemoveDir Directories="$(OmniSimDirectory)" ContinueOnError="true" />
@@ -88,19 +84,30 @@
 		<!-- Clone a fresh copy of the OmniSim Git repository  -->
 		<GitClient Command="clone" LocalPath="$(OmniSimDirectory)" Arguments="-b $(OmniSimRepositorytBranch) $(OmniSimGitRepositoryURL) $(OmniSimDirectory)"/>
 
-		<!-- Publish the OmniSims DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
+		<!-- Publish a 32bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
 		<MSBuild Projects="$(OmniSimVSProject)"
 			Targets="restore;rebuild;publish" 
 			Properties="Configuration=$(OmniSimBuildConfiguration);
 			DefineConstants=ASCOM_COM;
 			Platform=Any CPU;
+			RuntimeIdentier=win-x86;
 			DebugType=embedded;
-			PublishDir=..\publish\AnyCPU" />
+			PublishDir=..\publish\x86\" />
 
-		<Message Text="Completed building the Omni-Simulators." />
+		<Message Text="Completed building the Omni-Simulators 32bit." />
+
+		<!-- Publish a 64bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
+		<MSBuild Projects="$(OmniSimVSProject)"
+			Targets="restore;rebuild;publish" 
+			Properties="Configuration=$(OmniSimBuildConfiguration);
+			DefineConstants=ASCOM_COM;
+			Platform=Any CPU;
+			RuntimeIdentier=win-x64;
+			DebugType=embedded;
+			PublishDir=..\publish\x64\" />
+
+		<Message Text="Completed building the Omni-Simulators 64bit." />
 		
-
-
 
 	</Target>
 </Project>
