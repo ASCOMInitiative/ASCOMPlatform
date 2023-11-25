@@ -366,6 +366,7 @@ Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]
  
 [DEFINE REGION: Check Application Requirements]
+ 
 Get System Setting Administrator Rights into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
   MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -425,8 +426,25 @@ Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to
 Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
-Comment: Include Script: check_vcruntime_x86
-Comment: Include Script: check_vcruntime_x64
+ 
+Comment: Check whether .NET 6 is installed
+Set Variable NET_DESKTOP_VERSION to 7.0.13
+Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.WindowsDesktop.App\$NET_DESKTOP_VERSION$\*.json, write result into variable RC
+if Variable RC not Equals 
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET desktop v$NET_DESKTOP_VERSION$ (at end of file)
+else
+  Set Variable PRELIST to $PRELIST$$NEWLINE$.NET version $NET_DESKTOP_VERSION$ 
+end
+ 
+Set Variable NET_ASP_VERSION to 6.0.25
+Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.AspNetCore.App\$NET_ASP_VERSION$\*.json, write result into variable RC
+if Variable RC not Equals 
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET ASP v$NET_ASP_VERSION$ (at end of file)
+else
+  Set Variable PRELIST to $PRELIST$$NEWLINE$ASP.NET version $NET_ASP_VERSION$ 
+  Write into Text File $SETUPLOG$ from Value $TIME$ ASP.NET v$NET_ASP_VERSION$ not found (at end of file)
+end
+ 
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 Comment: Install setup pre-requisites
