@@ -2,6 +2,7 @@ Comment: ASCOM Platform installation script
 Comment: NOTE: The required Platform version number is read at build time by this script from the MasterPlatformVersion.txt file that is maintained through the main Visual Studio project
  
 Comment: The installer must be started in 32bit MSI mode
+Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 7
 Set Variable NATIVE_ENGINE to FALSE
 Set Variable NATIVE_OVERWRITE to ALWAYS
 Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
@@ -241,6 +242,9 @@ if Variable WIN64MODE Equals TRUE
   Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
   Set Variable REGASM64 to $WINDIR$Microsoft.NET\Framework64\$FRAMEWORK$\regasm.exe
   Set Variable NGEN64 to $WINDIR$Microsoft.NET\Framework64\$FRAMEWORK$\ngen.exe
+else
+  Get Folder Location System->Program Files Directory into PROGRAMFILES64
+  Get Common Folder Location System->Program Files Directory into COMMONFILES64
 end
  
 Comment: Setup up further global variables
@@ -1106,24 +1110,22 @@ Install Files ..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMM
 Install Files ..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
 Install Files ..\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
 Install Files ..\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
-Comment: Comment: OK TO HERE
+ 
 Comment: Type library installer
 Install Files ..\InstallerContent\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
+ 
 Comment: Redistributable support files
 Install Files ..\InstallerContent\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
 Install Files ..\InstallerContent\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
 Install Files ..\InstallerContent\msvbvm60.dll to $WINSYSDIR$ (Never Overwrite)
 Install Files ..\InstallerContent\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
+ 
 Comment: Platform 5 assemblies
-Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
 Install Files ..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
 Install Files ..\InstallerSupport\RedirectionPolicies\Policy.1.0.DriverAccess.xml to $COMMONFILES$\ASCOM\Platform\v5.5
 Install Assembly ..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
-Comment: Install Assembly ..\InstallerContent\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Assembly ..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
 Install Assembly ..\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
-Apply Install (get result into variable SUCCESS)
-GoTo Label: Finish Setup
  
 Comment: Platform 5 simulators
 Install Files ..\InstallerContent\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
@@ -1152,7 +1154,7 @@ if Variable INSTALL_POTH Equals TRUE
   Install Files ..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
 end
 [END REGION]
-Comment: BAD HERE
+ 
 [DEFINE REGION: Platform 5.5 files]
 Comment: Updated helpers that use Platform 5.5 support
 Install Files ..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
@@ -1353,31 +1355,6 @@ Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.T
 [END REGION]
  
 [DEFINE REGION: Alpaca Support for Chooser]
-Comment: Add Alpaca support assemblies to the GAC
-Comment: Install Assembly ..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to Global Assembly Cache
-Comment: Install Files ..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.pdb to $WINDIR$\Symbols\dll
-Comment: Install Assembly ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.dll to Global Assembly Cache
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Shared Resources\bin\Release\ASCOM.AlpacaSharedResources.pdb to $WINDIR$\Symbols\dll
-Comment: Add the dynamic client driver files
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.pdb to $WINDIR$\Symbols\dll
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe.config to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\RestSharp.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Alpaca.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\Newtonsoft.Json.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Add the client creator executable and the dependencies that must be present in order to allow the dynamic compilation to succeed
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.exe to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\ASCOM.AlpacaDynamicClientManager.pdb to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\ASCOM.Newtonsoft.Json\bin\Release\net35\ASCOM.Newtonsoft.Json.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\RestSharp.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Device Base Classes\bin\Release\ASCOM.AlpacaClientDeviceBaseClasses.dll to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Alpaca Client Local Server\bin\Release\ASCOM.AlpacaClientLocalServer.exe to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager
  
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
  
@@ -1570,13 +1547,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entr
  
 Comment: Create registry keys
 Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
-Comment: Apply Install (get result into variable SUCCESS)
-Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Created base registry key: $SUCCESS$ (at end of file)
-Comment:  
-Comment: Set Read Write Permissions on Registry Key "HKLM\SOFTWARE\ASCOM\" for BUILTIN\USERS
-Comment: Apply Install (get result into variable SUCCESS)
-Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Set registry permissions: $SUCCESS$ (at end of file)
-Comment:  
+ 
 Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
 Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
@@ -1736,26 +1707,26 @@ end
  
 Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
 Set Variable NATIVE_ENGINE to TRUE
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
-Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
-Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $PLATFORMTARGETDIR$\Tools\ASCOM Diagnostics.exe
+Create Shortcut $SHORTCUTFOLDER$\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
+Create Shortcut $SHORTCUTFOLDER$\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
 Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
 Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
 Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $PLATFORMTARGETDIR$\Tools\ASCOM Diagnostics.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+Create Shortcut $SHORTCUTFOLDER$\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
+Create Shortcut $SHORTCUTFOLDER$\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+Create Shortcut $SHORTCUTFOLDER$\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
 if Variable INSTALL_PIPE Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
@@ -1814,7 +1785,6 @@ Delete Files $PLATFORMTARGETDIR$\Tools\*.avi (when uninstalling)
  
 Comment: Run the installation
 Apply Install (get result into variable SUCCESS)
-GoTo Label: Finish Setup
  
 Comment: Save the installation success value and log status outcomes
 Set Variable MYPROGRESS to 20
@@ -2297,9 +2267,6 @@ if Variable SUCCESS not Equals ERROR
   end
    
   [END REGION]
-  Write into Text File $SETUPLOG$ from Value $TIME$ Deleting unused Platform 6 folder - $PROGRAMFILES$ASCOM\Platform 6 (at end of file)
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 6
-  Apply Install
    
 end
  

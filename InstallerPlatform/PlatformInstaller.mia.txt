@@ -242,6 +242,9 @@ if Variable WIN64MODE Equals TRUE
   Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
   Set Variable REGASM64 to $WINDIR$Microsoft.NET\Framework64\$FRAMEWORK$\regasm.exe
   Set Variable NGEN64 to $WINDIR$Microsoft.NET\Framework64\$FRAMEWORK$\ngen.exe
+else
+  Get Folder Location System->Program Files Directory into PROGRAMFILES64
+  Get Common Folder Location System->Program Files Directory into COMMONFILES64
 end
  
 Comment: Setup up further global variables
@@ -1490,27 +1493,38 @@ Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf 
  
 Apply Install (get result into variable RC)
 Write into Text File $SETUPLOG$ from Value $TIME$  Apply install RC: $RC$ (at end of file)
+ 
+Comment: Install SetNetworkPermissions
 Set Variable NATIVE_ENGINE to TRUE
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing network permissions unitility to: $PROGRAMFILES64$ASCOM\SetNetworkPermissions (at end of file)
 Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.*  to $PROGRAMFILES$ASCOM\SetNetworkPermissions
 Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\runtimes\win-x86\*.* to $PROGRAMFILES$ASCOM\SetNetworkPermissions\runtimes\win-x86, include subfolders
 Apply Install (get result into variable RC)
+ 
+Comment: Switch to 64bit mode if running on a 64bit OS
 if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
 end
  
+Comment: Install Omni-Simulators
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulator (at end of file)
 Install Files ..\OmniSimulators\publish\AnyCPU\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator
 Install Files ..\OmniSimulators\publish\AnyCPU\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
 Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\runtimes\win-x86, include subfolders
 Install Files ..\OmniSimulators\publish\AnyCPU\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\runtimes\win-x64, include subfolders
  
+Comment: Install ASCOM Remote
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
 Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\*.* to $PROGRAMFILES64$ASCOM\RemoteServer
 Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\runtimes\win-x86\*.*  to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x86, include subfolders
 Install Files ..\AscomRemote\publish\AscomRemote\AnyCPU\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x64, include subfolders
-Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit
-Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
+Comment: Only install ASCOM Remote 32bit version on a 64bit OS.
+if Variable WIN64MODE Equals TRUE
+  Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit
+  Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
+end
+ 
+Comment: Switch back to 32bit mode if running on a 64bit OS.
 if Variable WIN64MODE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ WIN64MODE is true, restoring 32bit mode (at end of file)
   Apply Install (get result into variable RC)
@@ -1704,26 +1718,27 @@ end
  
 Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
 Set Variable NATIVE_ENGINE to TRUE
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
-Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
-Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $PLATFORMTARGETDIR$\Tools\ASCOM Diagnostics.exe
+Create Shortcut $SHORTCUTFOLDER$\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
+Create Shortcut $SHORTCUTFOLDER$\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
 Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $PLATFORMTARGETDIR$\Docs\ASCOM User Guide.pdf
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $PLATFORMTARGETDIR$\Docs\PlatformHelp.chm
 Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
 Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $PLATFORMTARGETDIR$\Tools\ASCOM Diagnostics.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+Create Shortcut $SHORTCUTFOLDER$\Profile Explorer to $PLATFORMTARGETDIR$\Tools\ProfileExplorer.exe
+Create Shortcut $SHORTCUTFOLDER$\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+Create Shortcut $SHORTCUTFOLDER$\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+ 
 if Variable INSTALL_PIPE Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
@@ -1731,6 +1746,7 @@ else
   Delete Files $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor.lnk" (when installing)
   Delete Files $SHORTCUTFOLDER$\Tools\Pipe Help.lnk" (when installing)
 end
+ 
 if Variable INSTALL_POTH Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
@@ -1738,11 +1754,13 @@ else
   Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub.lnk" (when installing)
   Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help.lnk" (when installing)
 end
+ 
 if Variable INSTALL_DOMECONTROLHUB Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
 else
   Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control.lnk" (when installing)
 end
+ 
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
  
@@ -1798,7 +1816,7 @@ if Variable SUCCESS not Equals ERROR
     Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
     if Variable RC not Equals 0
-      MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
+      MessageBalloon: Omni-Simulators, Omni-Simulator registration error RC: $RC$
     end
   end
    
