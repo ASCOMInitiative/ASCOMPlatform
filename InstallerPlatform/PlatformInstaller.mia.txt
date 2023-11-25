@@ -433,7 +433,9 @@ Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.WindowsDesktop.Ap
 if Variable RC not Equals 
   Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET desktop v$NET_DESKTOP_VERSION$ (at end of file)
 else
+  Set Variable PREREQ to TRUE
   Set Variable PRELIST to $PRELIST$$NEWLINE$.NET version $NET_DESKTOP_VERSION$ 
+  Write into Text File $SETUPLOG$ from Value $TIME$ .NET desktop v$NET_DESKTOP_VERSION$ not found (at end of file)
 end
  
 Set Variable NET_ASP_VERSION to 6.0.25
@@ -441,6 +443,7 @@ Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.AspNetCore.App\$N
 if Variable RC not Equals 
   Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET ASP v$NET_ASP_VERSION$ (at end of file)
 else
+  Set Variable PREREQ to TRUE
   Set Variable PRELIST to $PRELIST$$NEWLINE$ASP.NET version $NET_ASP_VERSION$ 
   Write into Text File $SETUPLOG$ from Value $TIME$ ASP.NET v$NET_ASP_VERSION$ not found (at end of file)
 end

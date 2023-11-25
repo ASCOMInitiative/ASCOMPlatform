@@ -1,4 +1,5 @@
-﻿Main Setup Dialogue
+﻿Check Application Requirements
+Main Setup Dialogue
 Prepare for Installation or Uninstallation
 Finish Setup Dialogue
 Specify additional clean-up required when uninstalling
@@ -32,4 +33,3 @@ Remove any items left from previous instals
 Platform 5 files
 Finalise installation.
 Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.
-Check Application Requirements
