@@ -428,7 +428,6 @@ Include Script
 Include Script
 Comment
 Comment
-Set Variable
 Find All Files
 If
 Write to Text File
@@ -441,7 +440,6 @@ Write to Text File
 End
 End
 Comment
-Set Variable
 Find All Files
 If
 Write to Text File
@@ -2879,7 +2877,6 @@ $
 {31DC43E5-600A-4241-A08E-686ED1D9BE06}
 {0B6D4172-C746-4FAE-BA02-C959BC22C283}
 {E6BC5147-640C-4123-834D-B6241C66860E}
-{10A3E238-FE95-4C73-A7BA-2388DB959F43}
 {0432DE97-B334-42EA-8CD2-A3180ADE2A51}
 {F2D63CE5-CAF9-49AE-8782-3D5E47F011E6}
 {2661FF33-F4A8-49B1-B98C-FF83E3811973}
@@ -2892,7 +2889,6 @@ $
 {C6337D58-1E5F-4209-A8CD-387E0B071C6A}
 {10633418-98E2-437B-8B4A-E89107E57AFD}
 {29B96A2D-CB62-4B62-9244-E7AC8637847D}
-{70F59252-DCE8-4C8F-AE80-9C16DD94227B}
 {4D33E7C1-788A-4C93-BB4A-4CD7CA73F5E9}
 {B194E245-C364-4770-919F-D127B59F01B0}
 {62CE7A85-4174-48E1-9B67-78FD1C5E87AD}
@@ -7092,16 +7088,10 @@ TARGETDIR
 $PROGRAMFILES$ASCOM\Platform 7
 {C3A41F18-6014-4C5F-95A4-3E964C52C0EC}
 PRELIST$MYAH$MYAH$FALSE
-$PRELIST$$NEWLINE$.NET version $NET_DESKTOP_VERSION$ 
-{10A3E238-FE95-4C73-A7BA-2388DB959F43}
-NET_DESKTOP_VERSION$MYAH$MYAH$FALSE
-7.0.13
-{70F59252-DCE8-4C8F-AE80-9C16DD94227B}
-NET_ASP_VERSION$MYAH$MYAH$FALSE
-6.0.25
+$PRELIST$$NEWLINE$.NET version 7 runtime (will install automatically)
 {CCDCE19C-86A8-4AE8-AD14-7AACEB7FCA19}
 PRELIST$MYAH$MYAH$FALSE
-$PRELIST$$NEWLINE$ASP.NET version $NET_ASP_VERSION$ 
+$PRELIST$$NEWLINE$ASP.NET version 7 (installs automatically).
 {457C81A9-59C8-461F-8640-0968D975C992}
 PREREQ
 TRUE
@@ -12732,7 +12722,7 @@ TRUE
 {6AFB986A-4664-42E7-91E4-40D2D6F6FB78}
 cmd
 
-/c winget install winget install Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements --wait
+/c winget install Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements --wait
 0
 $MYAH_UACEX$
 
@@ -12743,7 +12733,7 @@ TRUE
 {DF35E95D-A376-4824-B8FC-1F5DC4786DA8}
 cmd
 
-/c winget install Microsoft.DotNet.AspNetCore.6 --accept-package-agreements --accept-source-agreements --wait
+/c winget install Microsoft.DotNet.HostingBundle.6 --accept-package-agreements --accept-source-agreements --wait
 0
 $MYAH_UACEX$
 
@@ -15882,7 +15872,7 @@ FALSE
 TRUE
 {2661FF33-F4A8-49B1-B98C-FF83E3811973}
 $SETUPLOG$
-$TIME$ Found .NET desktop v$NET_DESKTOP_VERSION$
+$TIME$ Found .NET desktop v6
 FALSE
 TRUE
 {62CE7A85-4174-48E1-9B67-78FD1C5E87AD}
@@ -15897,7 +15887,7 @@ FALSE
 TRUE
 {BB31FD49-0913-41B9-916E-E6A7F92617B0}
 $SETUPLOG$
-$TIME$ .NET desktop v$NET_DESKTOP_VERSION$ not found
+$TIME$ .NET desktop v7 not found. RC: $RC$
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
@@ -16234,7 +16224,7 @@ FALSE
 FALSE
 FILEEXISTS
 {0432DE97-B334-42EA-8CD2-A3180ADE2A51}
-$PROGRAMFILES64$dotnet\shared\Microsoft.WindowsDesktop.App\$NET_DESKTOP_VERSION$\*.json
+$PROGRAMFILES64$dotnet\shared\Microsoft.WindowsDesktop.App\6*\*.json
 FALSE
 FALSE
 RC
@@ -17004,31 +16994,29 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
 
 
 
@@ -19025,8 +19013,6 @@ C
 
 
 $
-
-
 
 
 

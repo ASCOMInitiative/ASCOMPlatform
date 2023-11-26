@@ -428,31 +428,29 @@ Include Script: checknet351
 Include Script: checknet4.8_x86 
  
 Comment: Check whether .NET 6 is installed
-Set Variable NET_DESKTOP_VERSION to 7.0.13
-Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.WindowsDesktop.App\$NET_DESKTOP_VERSION$\*.json, write result into variable RC
-if Variable RC not Equals 
-  Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET desktop v$NET_DESKTOP_VERSION$ (at end of file)
-else
-  Run Program elevated under UAC cmd /c winget install winget install Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements --wait (WAIT, get result into variable RC)
-  if Variable RC not Equals 
-    Set Variable PREREQ to TRUE
-    Set Variable PRELIST to $PRELIST$$NEWLINE$.NET version $NET_DESKTOP_VERSION$ 
-    Write into Text File $SETUPLOG$ from Value $TIME$ .NET desktop v$NET_DESKTOP_VERSION$ not found (at end of file)
-  end
-end
- 
-Set Variable NET_ASP_VERSION to 6.0.25
-Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.AspNetCore.App\$NET_ASP_VERSION$\*.json, write result into variable RC
-if Variable RC not Equals 
-  Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET ASP v$NET_ASP_VERSION$ (at end of file)
-else
-  Run Program elevated under UAC cmd /c winget install Microsoft.DotNet.AspNetCore.6 --accept-package-agreements --accept-source-agreements --wait (WAIT, get result into variable RC)
-  if Variable RC not Equals 
-    Set Variable PREREQ to TRUE
-    Set Variable PRELIST to $PRELIST$$NEWLINE$ASP.NET version $NET_ASP_VERSION$ 
-    Write into Text File $SETUPLOG$ from Value $TIME$ ASP.NET v$NET_ASP_VERSION$ not found (at end of file)
-  end
-end
+Comment: Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.WindowsDesktop.App\6*\*.json, write result into variable RC
+Comment: if Variable RC not Equals 
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET desktop v6 (at end of file)
+Comment: else
+Comment: Run Program elevated under UAC cmd /c winget install Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements --wait (WAIT, get result into variable RC)
+Comment: if Variable RC not Equals 
+Comment: Set Variable PREREQ to TRUE
+Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$.NET version 7 runtime (will install automatically)
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ .NET desktop v7 not found. RC: $RC$ (at end of file)
+Comment: end
+Comment: end
+Comment:  
+Comment: Find All Files in path $PROGRAMFILES64$dotnet\shared\Microsoft.AspNetCore.App\$NET_ASP_VERSION$\*.json, write result into variable RC
+Comment: if Variable RC not Equals 
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Found .NET ASP v$NET_ASP_VERSION$ (at end of file)
+Comment: else
+Comment: Run Program elevated under UAC cmd /c winget install Microsoft.DotNet.HostingBundle.6 --accept-package-agreements --accept-source-agreements --wait (WAIT, get result into variable RC)
+Comment: if Variable RC not Equals 
+Comment: Set Variable PREREQ to TRUE
+Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$ASP.NET version 7 (installs automatically).
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ ASP.NET v$NET_ASP_VERSION$ not found (at end of file)
+Comment: end
+Comment: end
  
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
