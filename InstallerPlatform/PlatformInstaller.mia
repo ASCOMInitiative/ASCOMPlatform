@@ -11677,7 +11677,7 @@ FALSE
 FALSE
 {ACDFF0AD-CD56-444C-A644-62BBF1AB0205}
 ..\AscomRemote\publish\SetNetworkPermissions\x86\*.* 
-FALSE|
+TRUE|
 $PROGRAMFILES$ASCOM\SetNetworkPermissions
 FALSE
 FALSE
@@ -11703,7 +11703,7 @@ FALSE
 FALSE
 {EF07DAB0-CEE6-4B4D-82D8-FB9C833A031B}
 ..\AscomRemote\publish\AscomRemote\x64\*.*
-FALSE|
+TRUE|
 $PROGRAMFILES64$ASCOM\RemoteServer
 FALSE
 FALSE
@@ -11742,7 +11742,7 @@ FALSE
 FALSE
 {D128A5B9-A501-4679-BE6B-BB882D06EE48}
 ..\AscomRemote\publish\AscomRemote\x86\*.*
-FALSE|
+TRUE|
 $PROGRAMFILES64$ASCOM\RemoteServer\32bit
 FALSE
 FALSE
@@ -11820,7 +11820,7 @@ FALSE
 FALSE
 {C3362471-3FBD-4E13-9B1D-03E72D8EE315}
 ..\AscomRemote\publish\AscomRemote\x86\*.*
-FALSE|
+TRUE|
 $PROGRAMFILES64$ASCOM\RemoteServer
 FALSE
 FALSE
@@ -13107,7 +13107,7 @@ ASCOM Omni-Simulators
 $SHORTCUTFILESALL$|FALSE
 
 
-|FALSE
+$PROGRAMFILES64$ASCOM\OmniSimulator|FALSE
 $COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 |
 0|
@@ -13117,7 +13117,7 @@ ASCOM Remote Server
 $SHORTCUTFILESALL$|FALSE
 
 
-|FALSE
+$PROGRAMFILES64$ASCOM\RemoteServer|FALSE
 $COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 |
 0|
@@ -18029,6 +18029,27 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+C
 
 
 
@@ -18046,29 +18067,8 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C
+C
 
 C
 C
