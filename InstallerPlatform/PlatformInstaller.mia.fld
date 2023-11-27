@@ -2,7 +2,6 @@
 Main Setup Dialogue
 Prepare for Installation or Uninstallation
 Finish Setup Dialogue
-Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
 Platform 6 files
@@ -21,7 +20,6 @@ Remove Previous Platforms 4 and 5 if present
 Non-MSI activities - 32bit
 Create shortcuts
 Remove 32bit components
-Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
 ASCOM Device Hub
@@ -36,3 +34,5 @@ Remove any items left from previous instals
 Platform 5 files
 Finalise installation.
 Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.
+Install ASCOM Remote Server and the OmniSimulators
+Install Application Pre-Requisites if required
