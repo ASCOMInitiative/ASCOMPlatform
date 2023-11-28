@@ -1179,34 +1179,49 @@ $
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2600,7 +2615,7 @@ COMMONFILES64
 COMMONFILES32
 $
 1
-8
+6
 TRUE
 
 ASCOM Initiative
@@ -2613,7 +2628,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{D93433BE-7FED-49D9-B640-94E005234878}
+{16C495BC-1DC9-4CCF-B951-2C958F515CA4}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
