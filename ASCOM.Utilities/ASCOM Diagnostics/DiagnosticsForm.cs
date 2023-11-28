@@ -283,7 +283,7 @@ namespace ASCOM.Utilities
                 TL = new TraceLogger("", "Diagnostics") { Enabled = true };
 
                 transform = new Astrometry.Transform.Transform(); // Create a new Transform component for this run
-                AstroUtil = new Astrometry.AstroUtils.AstroUtils();
+                AstroUtil = new Astrometry.AstroUtils.AstroUtils(TL);
                 Nov3 = new Astrometry.NOVAS.NOVAS3();
                 Nov31 = new Astrometry.NOVAS.NOVAS31();
                 AscomUtil = new Util();
