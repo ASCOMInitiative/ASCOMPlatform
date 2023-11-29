@@ -1576,8 +1576,54 @@ Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap s
 Comment: Value name changed from Leap Seconds to Manual Leap Seconds in Platform 6.4 so remove the old value
 Delete Registry VALUE HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds
 Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Manual Leap Seconds, $LEAPSECONDS$
+ 
 Comment: Force use of the ASCOM-STANDARDS download site because of unavailability of the USNO sites and the new NASA site security policy.
 Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Download Task Data Source, https://download.ascom-standards.org/earthrot/
+ 
+Comment: Pre-populate leap second data so that DeltaUT1 functions correctly before an automatic download has run.
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2436934.5, 1.417818
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2437300.5, 1.422818
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2437512.5, 1.372818
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2437665.5, 1.845858
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438334.5, 1.945858
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438395.5, 3.24013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438486.5, 3.34013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438639.5, 3.44013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438761.5, 3.54013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438820.5, 3.64013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2438942.5, 3.74013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2439004.5, 3.84013
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2439126.5, 4.31317
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2439887.5, 4.21317
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2441317.5, 10
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2441499.5, 11
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2441683.5, 12
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2442048.5, 13
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2442413.5, 14
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2442778.5, 15
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2443144.5, 16
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2443509.5, 17
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2443874.5, 18
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2444239.5, 19
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2444786.5, 20
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2445151.5, 21
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2445516.5, 22
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2446247.5, 23
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2447161.5, 24
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2447892.5, 25
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2448257.5, 26
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2448804.5, 27
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2449169.5, 28
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2449534.5, 29
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2450083.5, 30
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2450630.5, 31
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2451179.5, 32
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2453736.5, 33
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2454832.5, 34
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2456109.5, 35
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2457204.5, 36
+Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Latest Leap Second Data\2457754.5, 37
+ 
 Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
 Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
