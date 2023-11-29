@@ -1023,6 +1023,20 @@ if Variable REMOVE Equals TRUE
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
      
+    Comment: Remove the Program Files\ASCOM folder if it is empty
+    Find All Files in path $PROGEAMFILES64$ASCOM\*.* (include subfolders), write result into variable FILEEXISTS
+    if Variable FILEEXISTS Equals 
+      Comment: No other files or folders so remove the ASCOM folder.
+      Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM
+    end
+     
+    Comment: Remove the Program Files(x86)\ASCOM folder if it is empty
+    Find All Files in path $PROGEAMFILES$ASCOM\*.* (include subfolders), write result into variable FILEEXISTS
+    if Variable FILEEXISTS Equals 
+      Comment: No other files or folders so remove the ASCOM folder.
+      Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM
+    end
+     
     Comment: Return to 32bit mode on a 64bit OS
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   else
@@ -1034,6 +1048,13 @@ if Variable REMOVE Equals TRUE
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
+     
+    Comment: Remove the Program Files\ASCOM folder if it is empty
+    Find All Files in path $PROGEAMFILES$ASCOM\*.* (include subfolders), write result into variable FILEEXISTS
+    if Variable FILEEXISTS Equals 
+      Comment: No other files or folders so remove the ASCOM folder.
+      Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM
+    end
   end
    
   Comment: Bypass the installation code and go to the finish dialogue
