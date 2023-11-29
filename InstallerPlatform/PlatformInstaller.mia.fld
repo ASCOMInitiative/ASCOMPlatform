@@ -6,9 +6,11 @@ Check Application Pre-Requisites
 Platform 6 Content
 Platform 6 files
 Platform 5.5 files
+Set Registry Keys
 Platform 6.1 files
 Set up log file and variables
 Platform 6.2 files
+Remove Previous Platform install if present
 Non-MSI activities - 64bit
 Remove 64bit components
 ASCOM Cache
@@ -21,16 +23,14 @@ Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
 ASCOM Device Hub
+Clean up any remaining simulator COM entries
 MSI installer support if required
 Platform validation
 Inno driver installer creator
 Developer documentation
 Visual Studio assembly references
 Validate installation
+Remove any items left from previous instals
 Platform 5 files
 Finalise installation.
-Set Registry Keys
-Clean up any remaining simulator COM entries
 Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.
-Remove any items left from previous instals
-Remove Previous Platform install if present

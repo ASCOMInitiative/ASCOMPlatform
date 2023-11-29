@@ -593,7 +593,7 @@ Include Script: setupmsi31
 Set Variable MYPROGRESS to 3
 [END REGION]
  
-[DEFINE REGION: Remove Previous Platform 6 install if present]
+[DEFINE REGION: Remove Previous Platform install if present]
  
 Comment: Ensure that we remove previous Platform 6 versions built using either MSI or Native install
 Set Variable REQUIRESUPGRADE to FALSE
@@ -1008,6 +1008,27 @@ if Variable REMOVE Equals TRUE
   MessageBalloon: , 
   Set Variable PROGRESSTEXT to Finished uninstalling Platform 7
   Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 7 (at end of file)
+   
+  Comment: Ensure that all items installed by the installer are removed.
+  if Variable WIN64MODE Equals TRUE
+    Comment: 64bit OS
+    Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
+  end
+   
+  Comment: Install Omni-Simulators
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\OmniSimulator\*.*
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\Remote Server\*.*
+   
+  if Variable WIN64MODE Equals TRUE
+    Comment: 64bit OS
+    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+  end
+   
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\Platform 7\*.*
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\Platform 7 Developer Components\*.*
+  Recursively Delete Files $PROGRAMFILES64$ASCOM\SetNetworkPermissions\*.*
+   
+   
    
   Comment: Bypass the installation code and go to the finish dialogue
   GoTo Label: Finish Setup
