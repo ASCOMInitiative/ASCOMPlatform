@@ -1010,24 +1010,31 @@ if Variable REMOVE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 7 (at end of file)
    
   Comment: Ensure that all items installed by the installer are removed.
-  Comment: Switch to 64bit mode on a 64bit OS
   if Variable WIN64MODE Equals TRUE
+    Comment: Switch to 64bit mode on a 64bit OS
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
-  end
-   
-  Comment: Remove Omni-Simulators and ASCOM Remote
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\OmniSimulator
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\RemoteServer
-   
-  Comment: Return to 32bit mode on a 64bit OS
-  if Variable WIN64MODE Equals TRUE
+     
+    Comment: Remove Omni-Simulators and ASCOM Remote
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\OmniSimulator
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\RemoteServer
+     
+    Comment: Remove other Platform 7 content
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
+     
+    Comment: Return to 32bit mode on a 64bit OS
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+  else
+    Comment: Remove Omni-Simulators and ASCOM Remote
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\OmniSimulator
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\RemoteServer
+     
+    Comment: Remove other Platform 7 content
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Platform 7 Developer Components
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
   end
-   
-  Comment: Remove other Platform 7 content
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\Platform 7
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\Platform 7 Developer Components
-  Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\SetNetworkPermissions
    
   Comment: Bypass the installation code and go to the finish dialogue
   GoTo Label: Finish Setup
