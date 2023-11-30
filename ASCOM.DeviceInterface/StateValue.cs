@@ -7,6 +7,9 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Data class to hold a single operational state name and value
     /// </summary>
+    [Guid("75D7FB37-D7FF-4164-8707-FB9E4B542311")]
+    [ClassInterface(ClassInterfaceType.None)]
+    [ComVisible(true)]
     public class StateValue : IStateValue
     {
         /// <summary>

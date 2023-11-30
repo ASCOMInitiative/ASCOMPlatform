@@ -383,7 +383,6 @@ namespace ASCOM.Utilities
         {
             if (IsForm)
             {
-                EventArgs ec;
             }
             else
             {

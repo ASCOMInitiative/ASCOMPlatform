@@ -122,7 +122,6 @@
     <Compile Include="DeviceState Classes\ObservingConditionsState.cs" />
     <Compile Include="DeviceState Classes\RotatorState.cs" />
     <Compile Include="DeviceState Classes\SafetyMonitorState.cs" />
-    <Compile Include="DeviceState Classes\StateValue.cs" />
     <Compile Include="DeviceState Classes\TelescopeState.cs" />
     <Compile Include="DeviceState Classes\VideoState.cs" />
     <Compile Include="Dome.cs">

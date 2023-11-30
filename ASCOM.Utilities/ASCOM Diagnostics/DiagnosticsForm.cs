@@ -11101,10 +11101,13 @@ namespace ASCOM.Utilities
 
                 RegKey.Close();
             }
+#if DEBUG_TRACE
             catch (Exception ex)
             {
-#if DEBUG_TRACE
                 TL.LogMessageCrLf("Exception", ex.ToString());
+#else
+            catch
+            {
 #endif
                 // If Not RetVal.ContainsKey(INST_DISPLAY_NAME) Then RetVal.Add(INST_DISPLAY_NAME, "Unknown name")
                 // If Not RetVal.ContainsKey(INST_DISPLAY_VERSION) Then RetVal.Add(INST_DISPLAY_VERSION, "Unknown version")

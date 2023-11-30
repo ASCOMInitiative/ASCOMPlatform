@@ -45,7 +45,7 @@ namespace RemoveASCOM
 /// <see cref="IAssemblyName.GetDisplayName"/>
 /// </summary>
     [Flags()]
-    public enum ASM_DISPLAY_FLAGS
+    internal enum ASM_DISPLAY_FLAGS
     {
         VERSION = 0x1,
         CULTURE = 0x2,
@@ -57,7 +57,7 @@ namespace RemoveASCOM
     }
 
     [Flags()]
-    public enum ASM_CMP_FLAGS
+    internal enum ASM_CMP_FLAGS
     {
         NAME = 0x1,
         MAJOR_VERSION = 0x2,
@@ -72,10 +72,10 @@ namespace RemoveASCOM
     }
 
     /// <summary>
-/// The ASM_NAME enumeration property ID describes the valid names of the name-value pairs in an assembly name. 
-/// See the .NET Framework SDK for a description of these properties. 
-/// </summary>
-    public enum ASM_NAME
+    /// The ASM_NAME enumeration property ID describes the valid names of the name-value pairs in an assembly name. 
+    /// See the .NET Framework SDK for a description of these properties. 
+    /// </summary>
+    internal enum ASM_NAME
     {
         ASM_NAME_PUBLIC_KEYField = 0,
         ASM_NAME_PUBLIC_KEY_TOKENField,
@@ -103,7 +103,7 @@ namespace RemoveASCOM
     /// <summary>
 /// <see cref="IAssemblyCache.UninstallAssembly"/>
 /// </summary>
-    public enum IASSEMBLYCACHE_UNINSTALL_DISPOSITION
+    internal enum IASSEMBLYCACHE_UNINSTALL_DISPOSITION
     {
         IASSEMBLYCACHE_UNINSTALL_DISPOSITION_UNKNOWNField = 0,
         // Added by PWGS not officially part of the ENUM
@@ -116,32 +116,32 @@ namespace RemoveASCOM
     }
 
     /// <summary>
-/// <see cref="IAssemblyCache.QueryAssemblyInfo"/>
-/// </summary>
-    public enum QUERYASMINFO_FLAG
+    /// <see cref="IAssemblyCache.QueryAssemblyInfo"/>
+    /// </summary>
+    internal enum QUERYASMINFO_FLAG
     {
         QUERYASMINFO_FLAG_VALIDATEField = 1,
         QUERYASMINFO_FLAG_GETSIZEField = 2
     }
 
     /// <summary>
-/// <see cref="IAssemblyCache.InstallAssembly"/>
-/// </summary>
-    public enum IASSEMBLYCACHE_INSTALL_FLAG
+    /// <see cref="IAssemblyCache.InstallAssembly"/>
+    /// </summary>
+    internal enum IASSEMBLYCACHE_INSTALL_FLAG
     {
         IASSEMBLYCACHE_INSTALL_FLAG_REFRESHField = 1,
         IASSEMBLYCACHE_INSTALL_FLAG_FORCE_REFRESHField = 2
     }
 
     /// <summary>
-/// The CREATE_ASM_NAME_OBJ_FLAGS enumeration contains the following values: 
-/// 	CANOF_PARSE_DISPLAY_NAME - If this flag is specified, the szAssemblyName parameter is a full assembly name and is parsed to 
-/// 		the individual properties. If the flag is not specified, szAssemblyName is the "Name" portion of the assembly name.
-/// 	CANOF_SET_DEFAULT_VALUES - If this flag is specified, certain properties, such as processor architecture, are set to 
-/// 		their default values.
-/// 	<see cref="AssemblyCache.CreateAssemblyNameObject"/>
-/// </summary>
-    public enum CREATE_ASM_NAME_OBJ_FLAGS
+    /// The CREATE_ASM_NAME_OBJ_FLAGS enumeration contains the following values: 
+    /// 	CANOF_PARSE_DISPLAY_NAME - If this flag is specified, the szAssemblyName parameter is a full assembly name and is parsed to 
+    /// 		the individual properties. If the flag is not specified, szAssemblyName is the "Name" portion of the assembly name.
+    /// 	CANOF_SET_DEFAULT_VALUES - If this flag is specified, certain properties, such as processor architecture, are set to 
+    /// 		their default values.
+    /// 	<see cref="AssemblyCache.CreateAssemblyNameObject"/>
+    /// </summary>
+    internal enum CREATE_ASM_NAME_OBJ_FLAGS
     {
         CANOF_PARSE_DISPLAY_NAME = 0x1,
         CANOF_SET_DEFAULT_VALUES = 0x2
@@ -154,7 +154,7 @@ namespace RemoveASCOM
 /// ASM_CACHE_DOWNLOAD - Enumerates the assemblies that have been downloaded on-demand or that have been shadow-copied.
 /// </summary>
     [Flags()]
-    public enum ASM_CACHE_FLAGS
+    internal enum ASM_CACHE_FLAGS
     {
         ASM_CACHE_ZAP = 0x1,
         ASM_CACHE_GAC = 0x2,
@@ -189,7 +189,7 @@ namespace RemoveASCOM
 /// 				for opaque references when you remove this.
 /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct FusionInstallReference
+    internal struct FusionInstallReference
     {
         public uint cbSize;
         public uint dwFlags;
@@ -213,7 +213,7 @@ namespace RemoveASCOM
 /// 		ASSEMBLYINFO_FLAG__PAYLOADRESIDENT - Never set in the current version of the .NET Framework.
 /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct AssemblyInfo
+    internal struct AssemblyInfo
     {
         public uint cbAssemblyInfo;
         public uint dwAssemblyFlags;
@@ -222,7 +222,7 @@ namespace RemoveASCOM
         public uint cchBuf;
     }
 
-    public struct RemoveOutcome
+    internal struct RemoveOutcome
     {
         public int ReturnCode;
         public IASSEMBLYCACHE_UNINSTALL_DISPOSITION Disposition;
@@ -231,7 +231,7 @@ namespace RemoveASCOM
 
     #endregion
 
-    public class AssemblyCache
+    internal class AssemblyCache
     {
         #region DLL Entries
 
@@ -501,7 +501,7 @@ namespace RemoveASCOM
     [ComImport()]
     [Guid("e707dcde-d1cd-11d2-bab9-00c04f8eceae")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IAssemblyCache
+    internal interface IAssemblyCache
     {
         /// <summary>
     /// The IAssemblyCache::UninstallAssembly method removes a reference to an assembly from the GAC. 
@@ -591,7 +591,7 @@ namespace RemoveASCOM
     [ComImport()]
     [Guid("CD193BC0-B4BC-11d2-9833-00C04FC31D2E")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IAssemblyName
+    internal interface IAssemblyName
     {
         /// <summary>
     /// The IAssemblyName::SetProperty method adds a name-value pair to the assembly name, or, if a name-value pair 
@@ -703,7 +703,7 @@ namespace RemoveASCOM
     [ComImport()]
     [Guid("21b8916c-f28e-11d2-a473-00c04f8ef448")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IAssemblyEnum
+    internal interface IAssemblyEnum
     {
         /// <summary>
     /// The IAssemblyEnum::GetNextAssembly method enumerates the assemblies in the GAC. 
@@ -740,7 +740,7 @@ namespace RemoveASCOM
     [ComImport()]
     [Guid("582dac66-e678-449f-aba6-6faaec8a9394")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IInstallReferenceItem
+    internal interface IInstallReferenceItem
     {
         /// <summary>
     /// The IInstallReferenceItem::GetReference method returns a FUSION_INSTALL_REFERENCE structure. 
@@ -763,7 +763,7 @@ namespace RemoveASCOM
     [ComImport()]
     [Guid("56b1a988-7c0c-4aa2-8639-c3eb5a90226f")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IInstallReferenceEnum
+    internal interface IInstallReferenceEnum
     {
         /// <summary>
     /// IInstallReferenceEnum::GetNextInstallReferenceItem returns the next reference information for an assembly. 
