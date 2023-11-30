@@ -1004,10 +1004,10 @@ if Variable REMOVE Equals TRUE
     end
   end
    
-  Set Variable MYPROGRESS to 100
   MessageBalloon: , 
-  Set Variable PROGRESSTEXT to Finished uninstalling Platform 7
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 7 (at end of file)
+  Set Variable MYPROGRESS to 95
+  Set Variable PROGRESSTEXT to Removing Omni-Simulators and ASCOM Remote
+  Set Variable NATIVE_ENGINE to TRUE
    
   Comment: Ensure that all items installed by the installer are removed.
   if Variable WIN64MODE Equals TRUE
@@ -1025,6 +1025,7 @@ if Variable REMOVE Equals TRUE
      
     Comment: Remove the Program Files\ASCOM folder if it is empty
     Find All Files in path $PROGEAMFILES64$ASCOM\*.* (include subfolders), write result into variable FILEEXISTS
+    Write into Text File $SETUPLOG$ from Value $TIME$ Removing 64bit ASCOM directory from: $PROGRAMFILES64$ASCOM, WHICH CONTAINS FILES: ==>$FILEEXISTS$<== (at end of file)
     if Variable FILEEXISTS Equals 
       Comment: No other files or folders so remove the ASCOM folder.
       Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM
@@ -1032,6 +1033,7 @@ if Variable REMOVE Equals TRUE
      
     Comment: Remove the Program Files(x86)\ASCOM folder if it is empty
     Find All Files in path $PROGEAMFILES$ASCOM\*.* (include subfolders), write result into variable FILEEXISTS
+    Write into Text File $SETUPLOG$ from Value $TIME$ Removing 32bit ASCOM directory from: $PROGRAMFILES$ASCOM, WHICH CONTAINS FILES: ==>$FILEEXISTS$<== (at end of file)
     if Variable FILEEXISTS Equals 
       Comment: No other files or folders so remove the ASCOM folder.
       Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM
@@ -1040,7 +1042,7 @@ if Variable REMOVE Equals TRUE
     Comment: Return to 32bit mode on a 64bit OS
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   else
-    Comment: Remove Omni-Simulators and ASCOM Remote
+    Comment: 32bit OS: Remove Omni-Simulators and ASCOM Remote
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\OmniSimulator
     Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\RemoteServer
      
@@ -1051,10 +1053,16 @@ if Variable REMOVE Equals TRUE
      
     Comment: Remove the Program Files\ASCOM folder if it is empty
     Find All Files in path $PROGEAMFILES$ASCOM\*.* (include subfolders), write result into variable FILEEXISTS
+    Write into Text File $SETUPLOG$ from Value $TIME$ Removing ASCOM directory from: $PROGRAMFILES$ASCOM, WHICH CONTAINS FILES: ==>$FILEEXISTS$<== (at end of file)
     if Variable FILEEXISTS Equals 
       Comment: No other files or folders so remove the ASCOM folder.
       Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM
     end
+     
+    Set Variable MYPROGRESS to 100
+    MessageBalloon: , 
+    Set Variable PROGRESSTEXT to Finished uninstalling Platform 7
+    Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 7 (at end of file)
   end
    
   Comment: Bypass the installation code and go to the finish dialogue
