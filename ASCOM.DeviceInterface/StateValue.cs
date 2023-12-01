@@ -1,8 +1,7 @@
-﻿using ASCOM.DeviceInterface;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.DriverAccess
+namespace ASCOM.DeviceInterface
 {
     /// <summary>
     /// Data class to hold a single operational state name and value
