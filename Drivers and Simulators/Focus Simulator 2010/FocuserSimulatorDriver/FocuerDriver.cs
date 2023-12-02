@@ -556,7 +556,7 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IEnumerable DeviceState
         {
             get
             {

@@ -562,7 +562,7 @@ namespace ASCOM.DynamicClients
             }
         }
 
-        public ArrayList DeviceState
+        public IEnumerable DeviceState
         {
             get
             {

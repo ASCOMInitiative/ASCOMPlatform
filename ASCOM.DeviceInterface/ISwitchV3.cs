@@ -465,7 +465,7 @@ namespace ASCOM.DeviceInterface
 		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
 		/// </para>
         /// </remarks>
-        ArrayList DeviceState { get; }
+        IEnumerable DeviceState { get; }
 
         /// <summary>
         /// Set a boolean switch's state asynchronously

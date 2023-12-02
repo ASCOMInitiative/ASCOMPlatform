@@ -179,7 +179,7 @@ Public Class FilterWheel
         End Get
     End Property
 
-    Public ReadOnly Property DeviceState As ArrayList Implements IFilterWheelV3.DeviceState
+    Public ReadOnly Property DeviceState As IEnumerable Implements IFilterWheelV3.DeviceState
         Get
             Dim returnValue As ArrayList = New ArrayList()
 

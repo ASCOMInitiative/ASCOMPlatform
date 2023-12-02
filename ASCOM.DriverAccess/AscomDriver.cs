@@ -350,7 +350,7 @@ namespace ASCOM.DriverAccess
 		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
 		/// </para>
         /// </remarks>
-        public ArrayList DeviceState
+        public IEnumerable DeviceState
         {
             get
             {
