@@ -1783,6 +1783,14 @@ namespace ASCOM.Simulator
         }
 
         #endregion
+
+        public ComTest GetComTest()
+        {
+            ComTest retVal=new ComTest();
+            retVal.Add("Telescope","test value!");
+            return retVal;
+        }
+
     }
 
     #region Data classes

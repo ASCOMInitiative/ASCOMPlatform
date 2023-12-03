@@ -1206,5 +1206,10 @@ namespace ASCOM.DynamicClients
         }
 
         #endregion
+        public DeviceInterface.ComTest GetComTest()
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }

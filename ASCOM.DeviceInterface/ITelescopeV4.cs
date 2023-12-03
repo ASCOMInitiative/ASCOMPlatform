@@ -1319,5 +1319,11 @@ namespace ASCOM.DeviceInterface
 
         #endregion
 
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <returns></returns>
+        ComTest GetComTest();
+
     }
 }
