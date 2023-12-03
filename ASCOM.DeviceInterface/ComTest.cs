@@ -47,9 +47,15 @@ namespace ASCOM.DeviceInterface
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            IEnumerator enumerator = list.GetEnumerator();
-            enumerator.Reset();
-            return enumerator;
+            foreach (KeyValuePair<string, string> value in list)
+            {
+                yield return value;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         /// <summary>
