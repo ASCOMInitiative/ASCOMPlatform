@@ -1513,7 +1513,7 @@ namespace ASCOM.DriverAccess
         public ComTest GetComTest()
         {
             ComTest retVal = new ComTest();
-            retVal.Add("Telescope", "test value!");
+            retVal.Add(new StateValue("DriverAccess","Additional value"));
             return retVal;
         }
 
