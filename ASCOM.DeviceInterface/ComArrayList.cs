@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.OLE.Interop;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace ASCOM.DeviceInterface
     [Guid("E67780D1-7C92-442C-8DCA-FCD06718427D")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class ComArrayList : ArrayList, IComArrayList
+    public class ComArrayList : ArrayList, IComArrayList, IProvideClassInfo
     {
         /// <summary>
         /// Create a ComArrayList instance
@@ -27,6 +28,17 @@ namespace ASCOM.DeviceInterface
         /// Return the number of items
         /// </summary>
         /// <returns>ArrayList.Count</returns>
+        [DispId(1)]
         public int NumberOfItems() => base.Count;
+
+        /// <summary>
+        /// Return type information
+        /// </summary>
+        /// <param name="ppTI"></param>
+        [DispId(2)]
+        public void GetClassInfo(out Type ppTI)
+        {
+            ppTI = typeof(ComArrayList);
+        }
     }
 }
