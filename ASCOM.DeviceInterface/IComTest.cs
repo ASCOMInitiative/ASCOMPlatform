@@ -10,7 +10,7 @@ namespace ASCOM.DeviceInterface
     /// <summary>
     /// ComArrayList interface
     /// </summary>
-    [Guid("6720258E-E5B1-4160-BE34-95484A496E3B")]
+    [Guid("F0A3D52D-7FF1-4889-9E3F-274ACBBE3393")]
     [ComVisible(true)]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface IComTest
