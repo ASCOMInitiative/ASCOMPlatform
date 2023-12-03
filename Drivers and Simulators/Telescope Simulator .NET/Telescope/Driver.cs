@@ -203,7 +203,7 @@ namespace ASCOM.Simulator
                 CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "DeviceState", false);
 
                 // Create an array list to hold the IStateValue entries
-                ArrayList deviceState = new ArrayList();
+                ComArrayList deviceState = new ComArrayList();
 
                 // Add one entry for each operational state, if possible
                 try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
