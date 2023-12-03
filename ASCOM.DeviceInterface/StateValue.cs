@@ -6,6 +6,7 @@ namespace ASCOM.DeviceInterface
     /// <summary>
     /// Data class to hold a single operational state name and value
     /// </summary>
+    [Serializable]
     [Guid("75D7FB37-D7FF-4164-8707-FB9E4B542311")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
