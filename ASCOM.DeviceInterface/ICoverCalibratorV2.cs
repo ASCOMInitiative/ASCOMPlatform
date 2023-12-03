@@ -384,7 +384,7 @@ namespace ASCOM.DeviceInterface
 		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
 		/// </para>
         /// </remarks>
-        IEnumerable DeviceState { get; }
+        ArrayList DeviceState { get; }
 
         /// <summary>
         /// Flag showing whether a calibrator brightness state change is in progress. 

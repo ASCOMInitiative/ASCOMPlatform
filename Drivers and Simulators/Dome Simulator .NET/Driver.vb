@@ -923,7 +923,7 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property DeviceState As IEnumerable Implements IDomeV3.DeviceState
+    Public ReadOnly Property DeviceState As ArrayList Implements IDomeV3.DeviceState
         Get
             Dim returnValue As ArrayList = New ArrayList()
 

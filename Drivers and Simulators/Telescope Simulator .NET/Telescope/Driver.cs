@@ -195,7 +195,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Return the device's operational state in one call
         /// </summary>
-        public IEnumerable DeviceState
+        public ArrayList DeviceState
         {
             get
             {
