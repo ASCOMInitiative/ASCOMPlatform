@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.OLE.Interop;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace ASCOM.DeviceInterface
     [Guid("E67780D1-7C92-442C-8DCA-FCD06718427D")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class ComArrayList : ArrayList, IComArrayList, IProvideClassInfo
+    public class ComArrayList : ArrayList, IComArrayList
     {
         /// <summary>
         /// Create a ComArrayList instance
