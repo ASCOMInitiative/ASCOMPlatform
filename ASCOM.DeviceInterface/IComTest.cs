@@ -13,7 +13,7 @@ namespace ASCOM.DeviceInterface
     [Guid("F0A3D52D-7FF1-4889-9E3F-274ACBBE3393")]
     [ComVisible(true)]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
-    public interface IComTest
+    public interface IComTest : IEnumerable
     {
         /// <summary>
         /// Number of items in the ArrayList
@@ -33,11 +33,5 @@ namespace ASCOM.DeviceInterface
         /// <param name="name"></param>
         /// <param name="value"></param>
         void Add(string name, string value);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator GetEnumerator();
     }
 }

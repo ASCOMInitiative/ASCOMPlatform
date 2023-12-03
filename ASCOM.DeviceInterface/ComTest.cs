@@ -16,7 +16,7 @@ namespace ASCOM.DeviceInterface
     [ComVisible(true)]
     public class ComTest : IComTest
     {
-        Dictionary<string,string> list = new Dictionary<string, string> { { "Default1", "Value1" }, { "Default2", "Value2" } };
+        Dictionary<string, string> list = new Dictionary<string, string> { { "Default1", "Value1" }, { "Default2", "Value2" } };
 
         /// <summary>
         /// Create a ComTest instance
@@ -47,7 +47,9 @@ namespace ASCOM.DeviceInterface
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            return list.GetEnumerator();
+            IEnumerator enumerator = list.GetEnumerator();
+            enumerator.Reset();
+            return enumerator;
         }
 
         /// <summary>
