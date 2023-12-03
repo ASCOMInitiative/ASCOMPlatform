@@ -16,7 +16,7 @@ namespace ASCOM.DeviceInterface
     [ComVisible(true)]
     public class ComTest : IComTest
     {
-        Dictionary<string, string> list = new Dictionary<string, string> { { "Default1", "Value1" }, { "Default2", "Value2" } };
+        ArrayList list = new ArrayList { new StateValue("Default 1","Value 1"), new StateValue("Default 2","Value 2")};
 
         /// <summary>
         /// Create a ComTest instance
@@ -36,9 +36,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void Add(string name, string value)
+        public void Add(StateValue stateValue)
         {
-            list.Add(name, value);
+            list.Add(stateValue);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ASCOM.DeviceInterface
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            foreach (KeyValuePair<string, string> value in list)
+            foreach (StateValue value in list)
             {
                 yield return value;
             }
@@ -65,9 +65,9 @@ namespace ASCOM.DeviceInterface
         public string GetValues()
         {
             string retVal = "";
-            foreach (KeyValuePair<string, string> item in list)
+            foreach (StateValue item in list)
             {
-                retVal += $"{item.Key} = {item.Value}\r\n";
+                retVal += $"{item.Name} = {item.Value}\r\n";
             }
 
             return retVal;

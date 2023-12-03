@@ -1787,7 +1787,7 @@ namespace ASCOM.Simulator
         public ComTest GetComTest()
         {
             ComTest retVal=new ComTest();
-            retVal.Add("Telescope","test value!");
+            retVal.Add(new StateValue("GetComTest","Additional value"));
             return retVal;
         }
 
