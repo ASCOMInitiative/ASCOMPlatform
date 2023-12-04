@@ -63,10 +63,6 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="17.8.37221" />
-	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
 	</ItemGroup>
