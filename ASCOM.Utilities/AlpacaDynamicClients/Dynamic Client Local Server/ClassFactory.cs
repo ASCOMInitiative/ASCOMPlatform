@@ -30,8 +30,8 @@ namespace ASCOM.DynamicClients
         #region Access to ole32.dll functions for class factories
 
         // Define two common GUID objects for public usage.
-        public static Guid IID_IUnknown = new("{00000000-0000-0000-C000-000000000046}");
-        public static Guid IID_IDispatch = new("{00020400-0000-0000-C000-000000000046}");
+        public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
+        public static Guid IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
 
         [Flags]
         private enum CLSCTX : uint
@@ -192,7 +192,7 @@ namespace ASCOM.DynamicClients
         /// </summary>
         void IClassFactory.CreateInstance(IntPtr pUnkOuter, ref Guid riid, out IntPtr ppvObject)
         {
-            IntPtr nullPtr = new(0);
+            IntPtr nullPtr = new IntPtr(0);
             ppvObject = nullPtr;
 
             // Handle specific requests for implemented interfaces

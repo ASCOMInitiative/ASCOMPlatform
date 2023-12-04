@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<!-- Set OmniSim properties -->
-		<OmniSimRepositorytBranch>buildtest</OmniSimRepositorytBranch>
-		<OmniSimBuildConfiguration>Debug</OmniSimBuildConfiguration>
+		<OmniSimRepositorytBranch>devicestatefix</OmniSimRepositorytBranch>
+		<OmniSimBuildConfiguration>Release</OmniSimBuildConfiguration>
 		<OmniSimGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimGitRepositoryURL>
 		<OmniSimDirectory>$(MSBuildStartupDirectory)\OmniSimulators</OmniSimDirectory>
 		<OmniSimVSProject>$(OmniSimDirectory)\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>
@@ -43,19 +43,27 @@
 			Targets="restore;rebuild;publish" 
 			Properties="Configuration=$(AscomRemoteBuildConfiguration);
 			DefineConstants=PLATFORM_BUILD;
-			Platform=Any CPU;
-			RuntimeIdentier=win-x86;
+			Platform=AnyCPU;
+			OutputDir=builds\Ascomremote\x86\;
+			RuntimeIdentifier=win-x86;
+			SelfContained=true;
 			PublishDir=..\publish\AscomRemote\x86\;
 			DebugType=embedded" />
 		<Message Text="Completed building ASCOM Remote x86." />
 
+		<!-- Remove obj and bin folders from previous build to get a new clean compile -->
+		<RemoveDir Directories="$(AscomRemoteDirectory)\Remote Server\obj" ContinueOnError="False" />
+		<RemoveDir Directories="$(AscomRemoteDirectory)\Remote Server\bin" ContinueOnError="False" />
+
 		<!-- Publish 64bit ASCOM Remote -->
 		<MSBuild Projects="$(AscomRemoteVSProject)"
-			Targets="restore;rebuild;publish" 
+			Targets="clean;restore;rebuild;publish" 
 			Properties="Configuration=$(AscomRemoteBuildConfiguration);
 			DefineConstants=PLATFORM_BUILD;
 			Platform=Any CPU;
-			RuntimeIdentier=win-x64;
+			OutputDir=builds\AscomRemote\x64\;
+			RuntimeIdentifier=win-x64;
+			SelfContained=true;
 			PublishDir=..\publish\AscomRemote\x64\;
 			DebugType=embedded" />
 		<Message Text="Completed building ASCOM Remote x64." />
@@ -64,13 +72,13 @@
 		<MSBuild Projects="$(SetNetworkPermissionsVSProject)"
 			Targets="restore;rebuild;publish" 
 			Properties="Configuration=$(AscomRemoteBuildConfiguration);
-			Platform=x86;
+			Platform=AnyCPU;
 			OutputDir=builds\x86\;
+			RuntimeIdentifier=win-x86;
+			SelfContained=true;
 			PublishDir=..\publish\SetNetworkPermissions\x86\;
 			DebugType=embedded" />
 
-		<Message Text="Completed building SetNetworkPermissions 32bit." />
-	
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
 		<RemoveDir Directories="$(OmniSimDirectory)" ContinueOnError="true" />
 		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
@@ -84,29 +92,17 @@
 		<!-- Clone a fresh copy of the OmniSim Git repository  -->
 		<GitClient Command="clone" LocalPath="$(OmniSimDirectory)" Arguments="-b $(OmniSimRepositorytBranch) $(OmniSimGitRepositoryURL) $(OmniSimDirectory)"/>
 
-		<!-- Publish a 32bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
-		<MSBuild Projects="$(OmniSimVSProject)"
-			Targets="restore;rebuild;publish" 
-			Properties="Configuration=$(OmniSimBuildConfiguration);
-			DefineConstants=ASCOM_COM;
-			Platform=Any CPU;
-			RuntimeIdentier=win-x86;
-			DebugType=embedded;
-			PublishDir=..\publish\x86\" />
-
-		<Message Text="Completed building the Omni-Simulators 32bit." />
+		<!-- Publish a 32bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; 			TrimMode=full; -->
+		<Exec Command="dotnet publish -c Release -r win-x86 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -o ..\publish\x86" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
 
 		<!-- Publish a 64bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
-		<MSBuild Projects="$(OmniSimVSProject)"
-			Targets="restore;rebuild;publish" 
-			Properties="Configuration=$(OmniSimBuildConfiguration);
-			DefineConstants=ASCOM_COM;
-			Platform=Any CPU;
-			RuntimeIdentier=win-x64;
-			DebugType=embedded;
-			PublishDir=..\publish\x64\" />
+		<Exec Command="dotnet publish -c Release -r win-x64 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -o ..\publish\x64" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
 
-		<Message Text="Completed building the Omni-Simulators 64bit." />
+		<Message Text="Completed building the Omni-Simulators." />
 		
 
 	</Target>

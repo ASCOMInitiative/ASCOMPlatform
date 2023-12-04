@@ -3,7 +3,7 @@
 		<ProductVersion>8.0.50727</ProductVersion>
 		<OutputType>WinExe</OutputType>
 		<AssemblyName>DynamicClientServer</AssemblyName>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net472</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<FileUpgradeFlags />
 		<UpgradeBackupLocation />
@@ -88,5 +88,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
 	  <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="System.Security" />
 	</ItemGroup>
 </Project>

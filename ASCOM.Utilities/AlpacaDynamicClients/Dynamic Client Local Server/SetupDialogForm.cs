@@ -27,10 +27,10 @@ namespace ASCOM.DynamicClients
         private bool selectByMouse = false; // Variable to help select the whole contents of a numeric up-down box when tabbed into our selected by mouse
 
         // Create validating regular expression
-        readonly Regex validHostnameRegex = ValidateHostNameRegex();
+        readonly Regex validHostnameRegex = new Regex(@"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", RegexOptions.IgnoreCase | RegexOptions.Compiled);//ValidateHostNameRegex();
 
         // Set up a regular expression to parse out the IP address from n IPV6 address string, removing the scope id %XX element.
-        readonly Regex cleanIpV6Address = CleanIpV6Address();
+        readonly Regex cleanIpV6Address = new Regex(@"([a-zA-Z0-9[:]*)([%a-zA-Z0-9]*)([]])", RegexOptions.IgnoreCase | RegexOptions.Compiled);//CleanIpV6Address();
 
         #endregion
 
@@ -271,7 +271,7 @@ namespace ASCOM.DynamicClients
                 string setupUrl = $"{cmbServiceType.Text.ToLowerInvariant()}://{CleanUrl(addressList.Text)}:{numPort.Value}/setup";
                 TL.LogMessage(LogLevel.Debug, "MainSetupURL", $"{setupUrl}");
 
-                ProcessStartInfo psi = new()
+                ProcessStartInfo psi = new ProcessStartInfo()
                 {
                     FileName = setupUrl,
                     UseShellExecute = true
@@ -292,7 +292,7 @@ namespace ASCOM.DynamicClients
                 string setupUrl = $"{cmbServiceType.Text.ToLowerInvariant()}://{CleanUrl(addressList.Text)}:{numPort.Value}/setup/v1/{DeviceType.ToLowerInvariant()}/{numRemoteDeviceNumber.Value}/setup";
                 TL.LogMessage(LogLevel.Debug, "DeviceSetupURL", $"{setupUrl}");
 
-                ProcessStartInfo psi = new()
+                ProcessStartInfo psi = new ProcessStartInfo()
                 {
                     FileName = setupUrl,
                     UseShellExecute = true
@@ -560,15 +560,15 @@ namespace ASCOM.DynamicClients
 
         #endregion
 
-        #region Regex Partial Classes
+        //#region Regex Partial Classes
 
-        [GeneratedRegex("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-GB")]
-        private static partial Regex ValidateHostNameRegex();
+        //[GeneratedRegex("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-GB")]
+        //private static partial Regex ValidateHostNameRegex();
 
-        [GeneratedRegex("([a-zA-Z0-9[:]*)([%a-zA-Z0-9]*)([]])", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-GB")]
-        private static partial Regex CleanIpV6Address();
+        //[GeneratedRegex("([a-zA-Z0-9[:]*)([%a-zA-Z0-9]*)([]])", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-GB")]
+        //private static partial Regex CleanIpV6Address();
 
-        #endregion
+        //#endregion
 
     }
 }

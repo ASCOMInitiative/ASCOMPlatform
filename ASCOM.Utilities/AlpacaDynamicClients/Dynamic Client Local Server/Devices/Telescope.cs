@@ -56,7 +56,7 @@ namespace ASCOM.DynamicClients
                 state = new DynamicClientState(driverProgId, deviceType, driverDisplayName);
 
                 // Set up a trace logger
-                TL = new TraceLogger(state.ProgId[6..], false)
+                TL = new TraceLogger(state.ProgId.Substring(6), false)
                 {
                     Enabled = state.TraceState
                 };
@@ -157,7 +157,7 @@ namespace ASCOM.DynamicClients
             else // Show dialogue
             {
                 AlpacaTelescope newclient = Server.SetupDialogue<AlpacaTelescope>(state, TL);
-                if (newclient is not null)
+                if (!(newclient is null))
                 {
                     // Dispose of the old client
                     try
@@ -184,7 +184,7 @@ namespace ASCOM.DynamicClients
                 try
                 {
                     CheckConnected($"SupportedActions");
-                    ArrayList actions = new(client.SupportedActions.ToList<string>());
+                    ArrayList actions = new ArrayList(client.SupportedActions.ToList<string>());
                     LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
                     return actions;
                 }
@@ -569,7 +569,7 @@ namespace ASCOM.DynamicClients
                 try
                 {
                     // Initialise the return ArrayList
-                    ArrayList returnValue = new();
+                    ArrayList returnValue = new ArrayList();
 
                     // Get the device state from the Alpaca device
                     List<StateValue> deviceState = client.DeviceState;
@@ -657,7 +657,7 @@ namespace ASCOM.DynamicClients
             {
 
                 // Create a new axis rate collection object to hold the client's response values
-                AxisRates returnValue = new(Axis);
+                AxisRates returnValue = new AxisRates(Axis);
 
                 // Query the client and iterate over the returned rate collection
                 foreach (IRate axisRate in client.AxisRates((TelescopeAxis)Axis))
@@ -1126,7 +1126,7 @@ namespace ASCOM.DynamicClients
             get
             {
                 // Create a intermediate list to hold the drive rates from the client because this works better than an array in the following foreach loop
-                List<DeviceInterface.DriveRates> ratesList = new();
+                List<DeviceInterface.DriveRates> ratesList = new List<DeviceInterface.DriveRates>();
 
                 // Get the tracking rates from the client and copy them to the intermediate list
                 foreach (DriveRate driveRate in client.TrackingRates)
@@ -1135,7 +1135,7 @@ namespace ASCOM.DynamicClients
                 }
 
                 // Create a new TrackingRates return object
-                TrackingRates trackingRates = new();
+                TrackingRates trackingRates = new TrackingRates();
 
                 // Populate the TrackingRates object with the list of drive rates
                 trackingRates.SetRates(ratesList.ToArray());

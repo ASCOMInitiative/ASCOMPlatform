@@ -70,7 +70,7 @@ namespace ASCOM.DynamicClients
         // Additional Properties
         public DeviceTypes DeviceType { get; set; } = DeviceTypes.Video; // Deliberately initialised to a value that is invalid for Alpaca to detect failure to initialise later in the client!
 
-        public uint ClientId { get; set; } = (uint)Random.Shared.Next(1, 65536);  // Creates a random client ID in the range 1::65535
+        public uint ClientId { get; set; } = (uint)new Random().Next(1,65536);  // Creates a random client ID in the range 1::65535
 
         public string ProgId { get; set; }
 

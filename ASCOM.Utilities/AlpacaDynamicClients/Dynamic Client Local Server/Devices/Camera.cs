@@ -56,7 +56,7 @@ namespace ASCOM.DynamicClients
                 state = new DynamicClientState(driverProgId, deviceType, driverDisplayName);
 
                 // Set up a trace logger
-                TL = new TraceLogger(state.ProgId[6..], false)
+                TL = new TraceLogger(state.ProgId.Substring(6), false)
                 {
                     Enabled = state.TraceState
                 };
@@ -157,7 +157,7 @@ namespace ASCOM.DynamicClients
             else // Show dialogue
             {
                 AlpacaCamera newclient = Server.SetupDialogue<AlpacaCamera>(state, TL);
-                if (newclient is not null)
+                if (!(newclient is null))
                 {
                     // Dispose of the old client
                     try
@@ -184,7 +184,7 @@ namespace ASCOM.DynamicClients
                 try
                 {
                     CheckConnected($"SupportedActions");
-                    ArrayList actions = new(client.SupportedActions.ToList<string>());
+                    ArrayList actions = new ArrayList(client.SupportedActions.ToList<string>());
                     LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
                     return actions;
                 }
@@ -569,7 +569,7 @@ namespace ASCOM.DynamicClients
                 try
                 {
                     // Initialise the return ArrayList
-                    ArrayList returnValue = new();
+                    ArrayList returnValue = new ArrayList();
 
                     // Get the device state from the Alpaca device
                     List<StateValue> deviceState = client.DeviceState;
@@ -1027,7 +1027,7 @@ namespace ASCOM.DynamicClients
                 List<string> gains = client.Gains.ToList<string>();
                 TL.LogMessage("Gains", string.Format("Returning {0} gains", gains.Count));
 
-                ArrayList returnValues = new();
+                ArrayList returnValues = new ArrayList();
                 foreach (string gain in gains)
                 {
                     returnValues.Add(gain);
@@ -1066,7 +1066,7 @@ namespace ASCOM.DynamicClients
                 List<string> modes = client.ReadoutModes.ToList<string>();
                 TL.LogMessage("ReadoutModes", string.Format("Returning {0} modes", modes.Count));
 
-                ArrayList returnValues = new();
+                ArrayList returnValues = new ArrayList();
                 foreach (string gain in modes)
                 {
                     returnValues.Add(gain);
@@ -1132,7 +1132,7 @@ namespace ASCOM.DynamicClients
                 List<string> offsets = client.Offsets.ToList<string>();
                 TL.LogMessage("Offsets", string.Format("Returning {0} Offsets", offsets.Count));
 
-                ArrayList returnValues = new();
+                ArrayList returnValues = new ArrayList();
                 foreach (string offset in offsets)
                 {
                     returnValues.Add(offset);

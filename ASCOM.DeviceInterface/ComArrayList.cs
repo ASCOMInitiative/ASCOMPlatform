@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.OLE.Interop;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,5 @@ namespace ASCOM.DeviceInterface
         /// <returns>ArrayList.Count</returns>
         [DispId(1)]
         public int NumberOfItems() => base.Count;
-
-        /// <summary>
-        /// Return type information
-        /// </summary>
-        /// <param name="ppTI"></param>
-        [DispId(2)]
-        public void GetClassInfo(out Type ppTI)
-        {
-            ppTI = typeof(ComArrayList);
-        }
     }
 }

@@ -56,7 +56,7 @@ namespace ASCOM.DynamicClients
                 state = new DynamicClientState(driverProgId, deviceType, driverDisplayName);
 
                 // Set up a trace logger
-                TL = new TraceLogger(state.ProgId[6..], false)
+                TL = new TraceLogger(state.ProgId.Substring(6), false)
                 {
                     Enabled = state.TraceState
                 };
@@ -157,7 +157,7 @@ namespace ASCOM.DynamicClients
             else // Show dialogue
             {
                 AlpacaSwitch newclient = Server.SetupDialogue<AlpacaSwitch>(state, TL);
-                if (newclient is not null)
+                if (!(newclient is null))
                 {
                     // Dispose of the old client
                     try
@@ -184,7 +184,7 @@ namespace ASCOM.DynamicClients
                 try
                 {
                     CheckConnected($"SupportedActions");
-                    ArrayList actions = new(client.SupportedActions.ToList<string>());
+                    ArrayList actions = new ArrayList(client.SupportedActions.ToList<string>());
                     LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
                     return actions;
                 }
@@ -569,7 +569,7 @@ namespace ASCOM.DynamicClients
                 try
                 {
                     // Initialise the return ArrayList
-                    ArrayList returnValue = new();
+                    ArrayList returnValue = new ArrayList();
 
                     // Get the device state from the Alpaca device
                     List<StateValue> deviceState = client.DeviceState;

@@ -37,7 +37,7 @@ namespace ASCOM.DynamicClients
         private static List<Type> driverTypes; // Served COM object types
         private static List<ClassFactory> classFactories; // Served COM object class factories
         private static readonly string localServerAppId = "{ec90cd67-0083-46ed-a65b-907a85982dfb}"; // Our AppId
-        private static readonly Object lockObject = new(); // Counter lock object
+        private static readonly object lockObject = new object(); // Counter lock object
         private static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
         private static Task GCTask; // The garbage collection task
         private static CancellationTokenSource GCTokenSource; // Token source used to end periodic garbage collection.
@@ -269,8 +269,8 @@ namespace ASCOM.DynamicClients
                     {
                         TL?.LogMessage("ExitIf", $"Server started by COM so shutting down the Windows message loop on the main process to end the local server.");
 
-                        UIntPtr wParam = new(0);
-                        IntPtr lParam = new(0);
+                        UIntPtr wParam = new UIntPtr(0);
+                        IntPtr lParam = new IntPtr(0);
                         PostThreadMessage(mainThreadId, 0x0012, wParam, lParam);
                     }
                 }
@@ -288,7 +288,7 @@ namespace ASCOM.DynamicClients
         private static bool PopulateListOfAscomDrivers()
         {
             // Initialise the driver types list
-            driverTypes = new();
+            driverTypes = new List<Type>();
 
             try
             {
@@ -344,7 +344,7 @@ namespace ASCOM.DynamicClients
              */
 
             // Initialise the list of driver types
-            List<Type> types = new()
+            List<Type> types = new List<Type>()
             {
                 // GenerateTypeWithAttributes("SafetyMonitor", new Guid("612961b5-b611-4de2-970f-847eafa18fee"), "ASCOM.Dynamic1.SafetyMonitor",
                 //    "ASCOM SafetyMonitor Driver for DynamicDemo", typeof(ASCOM.AlpacaSim.SafetyMonitor.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
@@ -674,7 +674,7 @@ namespace ASCOM.DynamicClients
             get
             {
                 WindowsIdentity userIdentity = WindowsIdentity.GetCurrent();
-                WindowsPrincipal userPrincipal = new(userIdentity);
+                WindowsPrincipal userPrincipal = new WindowsPrincipal(userIdentity);
                 bool isAdministrator = userPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
 
                 TL?.LogMessage("IsAdministrator", isAdministrator.ToString());
@@ -688,7 +688,7 @@ namespace ASCOM.DynamicClients
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            ProcessStartInfo processStartInfo = new()
+            ProcessStartInfo processStartInfo = new ProcessStartInfo()
             {
                 Arguments = argument,
                 WorkingDirectory = Environment.CurrentDirectory,
@@ -725,11 +725,11 @@ namespace ASCOM.DynamicClients
         private static bool RegisterClassFactories()
         {
             TL?.LogMessage("RegisterClassFactories", $"Registering class factories");
-            classFactories = new();
+            classFactories = new List<ClassFactory>();
             foreach (Type driverType in driverTypes)
             {
                 TL?.LogMessage("RegisterClassFactories", $"  Creating class factory for: {driverType.Name}");
-                ClassFactory factory = new(driverType); // Use default context & flags
+                ClassFactory factory = new ClassFactory(driverType); // Use default context & flags
                 classFactories.Add(factory);
 
                 TL?.LogMessage("RegisterClassFactories", $"  Registering class factory for: {driverType.Name}");
@@ -831,7 +831,7 @@ namespace ASCOM.DynamicClients
         {
             // Create the garbage collection object
             TL?.LogMessage("StartGarbageCollection", $"Creating garbage collector with interval: {interval} seconds");
-            GarbageCollection garbageCollector = new(interval);
+            GarbageCollection garbageCollector = new GarbageCollection(interval);
 
             // Create a cancellation token and start the garbage collection task 
             TL?.LogMessage("StartGarbageCollection", $"Starting garbage collector thread");
@@ -961,7 +961,7 @@ namespace ASCOM.DynamicClients
             try
             {
                 TL?.LogMessage("SetupDialog", "Creating setup form");
-                using (SetupDialogForm setupForm = new(TL))
+                using (SetupDialogForm setupForm = new SetupDialogForm(TL))
                 {
                     // Pass the setup dialogue data into the form
                     setupForm.DriverDisplayName = state.DriverDisplayName;
