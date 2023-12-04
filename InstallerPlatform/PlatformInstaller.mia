@@ -10794,7 +10794,7 @@ FALSE
 FALSE
 FALSE
 {5BC223B4-41C9-4CD4-A1FF-4030340DDECB}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.exe
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10807,7 +10807,7 @@ FALSE
 FALSE
 FALSE
 {26185D86-3854-4AFE-8379-CB29139D5ADE}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.deps.json
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.deps.json
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10820,7 +10820,7 @@ FALSE
 FALSE
 FALSE
 {C16F6135-E32E-4EEA-A5C3-4CF9A0F0FE59}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10833,7 +10833,7 @@ FALSE
 FALSE
 FALSE
 {C9387C61-E0B7-42D1-95AF-5920C49A03CF}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\DynamicClientServer.runtimeconfig.json
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10846,7 +10846,7 @@ FALSE
 FALSE
 FALSE
 {B10D3499-8E20-430A-83B8-CAB7D1AA4531}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Alpaca.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Alpaca.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10859,7 +10859,7 @@ FALSE
 FALSE
 FALSE
 {FB7DF0B0-2740-49ED-9083-3B4BFAD4C38C}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Com.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Com.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10872,7 +10872,7 @@ FALSE
 FALSE
 FALSE
 {45682A68-7226-42EC-B197-D15E8342B442}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Common.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Common.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10885,7 +10885,7 @@ FALSE
 FALSE
 FALSE
 {6676A912-0297-4EC5-AA64-F9A73E2C4C48}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Tools.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Tools.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10898,7 +10898,7 @@ FALSE
 FALSE
 FALSE
 {A5F2544D-46CB-4FC1-B27C-FE380D1F9F2C}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10911,7 +10911,7 @@ FALSE
 FALSE
 FALSE
 {46AFCB44-3136-4C61-B4DB-F6C3CA5CC082}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.DeviceInterfaces.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.pdb
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10924,7 +10924,7 @@ FALSE
 FALSE
 FALSE
 {01FBFAB5-EC8C-47D7-BEE5-CE3916CA2B25}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.dll
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -10937,7 +10937,7 @@ FALSE
 FALSE
 FALSE
 {B0B34BC1-5C76-4E9C-827A-D267EE7E72B8}
-..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net7.0-windows\ASCOM.Exceptions.pdb
+..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.pdb
 FALSE|
 $COMMONFILES$\ASCOM\AlpacaDynamicClients
 FALSE
@@ -18471,8 +18471,8 @@ C
 
 
 
-
-
+C
+C
 
 
 
