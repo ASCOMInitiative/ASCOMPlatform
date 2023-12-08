@@ -769,7 +769,7 @@ namespace ASCOM.DeviceHub
 				//{
 				//	SlewToAltitude( targetAltitude );
 				//}, CancellationToken.None );
-				SlewToAzimuth( targetAltitude );
+				SlewToAltitude( targetAltitude );
 				moving = true;
 			}
 
