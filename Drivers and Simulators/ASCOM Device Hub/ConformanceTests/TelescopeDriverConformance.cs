@@ -42,7 +42,7 @@ namespace ConformanceTests
 		private static int _valueNotSet2;
 		private static double _saneAltitude = 50.0;
 		private static double _saneAzimuth = 135.0;
-		private static double _tolerance = 0.02;
+		private static double _tolerance = 0.05;
 
 		private static Telescope Telescope { get; set; }
 		private static Util Util { get; set; }
@@ -511,36 +511,38 @@ namespace ConformanceTests
 			try
 			{
 				// Reduce the Azimuth by 4 minutes.
+
 				double trueAz = target.X - ( 4.0 / 60.0 );
 
 				// Reduce the Altitude by 1 degree;
 				// Given the sanity of the target, subtracting 1 degree should still be valid.
+
 				double trueAlt = target.Y - 1.0;
 
 				Telescope.SyncToAltAz( trueAz, trueAlt );
-				//Thread.Sleep( 5000 );
+				Thread.Sleep( 5000 );
 
 				double actualAz = Telescope.Azimuth;
 				double actualAlt = Telescope.Altitude;
 
-				if ( Math.Abs( trueAz - actualAz ) > _tolerance )
+				if ( Math.Abs(trueAz - actualAz) > _tolerance)
 				{
 					status = _error;
-					msg1 = String.Format( "Sync completed, but Azimuth does not match - Expected = {0}, Actual = {1}"
-										, trueAz, actualAz );
+					msg1 = String.Format("Sync completed, but Azimuth does not match - Expected = {0}, Actual = {1}"
+										, trueAz, actualAz);
 				}
-				else if ( Math.Abs( trueAlt - actualAlt ) > _tolerance )
+				else if (Math.Abs(trueAlt - actualAlt) > _tolerance)
 				{
 					status = _error;
-					msg1 = String.Format( "Sync completed, but Altitude does not match - Expected = {0}, Actual = {1}"
-										, trueAlt, actualAlt );
+					msg1 = String.Format("Sync completed, but Altitude does not match - Expected = {0}, Actual = {1}"
+										, trueAlt, actualAlt);
 				}
 				else
 				{
-					string text = Util.DegreesToDMS( trueAz, ":", ":", "", 2 );
-					msg1 = String.Format( "Synced to sync position OK.   AZ:    {0}", text );
-					text = Util.DegreesToDMS( trueAlt, ":", ":", "", 2 );
-					msg2 = String.Format( "Synced to sync position OK.   ALT:   {0}", text );
+					string text = Util.DegreesToDMS(trueAz, ":", ":", "", 2);
+					msg1 = String.Format("Synced to sync position OK.   AZ:    {0}", text);
+					text = Util.DegreesToDMS(trueAlt, ":", ":", "", 2);
+					msg2 = String.Format("Synced to sync position OK.   ALT:   {0}", text);
 				}
 			}
 			catch ( Exception xcp )

@@ -4,7 +4,7 @@
 ;
 
 #define MyAppName "ASCOM.DeviceHub"
-#define MyAppVersion "6.6.1.3"
+#define MyAppVersion "6.6.1.4"
 #define MyDestSubdirName "DeviceHub"
 ; #define MyPlatformRoot "D:\Github Repos\ASCOMPlatform\"
 #define MyPlatformRoot "D:\My Projects\Visual Studio 2022\Ascom\"
@@ -28,8 +28,8 @@ OutputBaseFilename={#MyAppName}({#MyAppVersion})_setup
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
-WizardImageFile="D:\Github Repos\ASCOMPlatform\Driver Inst\InstallerGen\Graphics\WizardImage.bmp"
-LicenseFile="D:\Github Repos\ASCOMPlatform\Driver Inst\InstallerGen\License\CreativeCommons.txt"
+WizardImageFile="D:\Github Repos\ASCOM\Platform\Driver Inst\InstallerGen\Graphics\WizardImage.bmp"
+LicenseFile="D:\Github Repos\ASCOM\Platform\Driver Inst\InstallerGen\License\CreativeCommons.txt"
 UninstallFilesDir="{cf}\ASCOM\Uninstall\{#MyDestSubdirName}"
 ; SourceDir="{#MyPlatformRoot}Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release"
 SourceDir="{#MyPlatformRoot}ASCOMDeviceHub\DeviceHub\bin\Release"
