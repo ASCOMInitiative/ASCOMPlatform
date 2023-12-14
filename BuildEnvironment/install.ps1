@@ -4,7 +4,7 @@ without throwing any exceptions. When building on a build server, or on a comput
 it may be useful to execute this script as a build step prior to running any unit tests, or calling any code that relies on
 ASCOM.Utilities.Profile. The alternative is to install the ASCOM Platform on the build agent.
 
-NOTE: This script equires elevated permissions because it creates registry keys in the LocalMachine hive.
+NOTE: This script requires elevated permissions because it creates registry keys in the LocalMachine hive.
 #>
 
 $wow = Test-Path HKLM:\SOFTWARE\Wow6432Node

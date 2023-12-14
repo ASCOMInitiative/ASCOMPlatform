@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\Interfaces\ASCOMExceptions\ASCOMBoarderless.png">
+		<None Include="..\ASCOM.Exceptions\ASCOMBoarderless.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
@@ -49,10 +49,10 @@
 		<ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" PrivateAssets="All" />
+		<ProjectReference Include="..\ASCOM.Exceptions\ASCOM.Exceptions.csproj" />
 		<ProjectReference Include="..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
-		<ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" PrivateAssets="All" />
 	</ItemGroup>
 
 	<PropertyGroup>

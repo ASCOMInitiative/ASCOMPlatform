@@ -139,14 +139,13 @@
       <Project>{3b6c23f5-c590-4385-86bb-98b604b565ba}</Project>
       <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Exceptions\ASCOM.Exceptions.csproj">
+      <Project>{6fd62ea4-8b79-4805-85ec-35178759c405}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
       <Project>{7B9B8BE0-9517-0548-11D2-27B6261AB180}</Project>
       <Name>ASCOM.Utilities</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\RotatorServer\RotatorServer.csproj">

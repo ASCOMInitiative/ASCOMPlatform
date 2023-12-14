@@ -189,11 +189,6 @@
       <Name>ASCOM.Utilities</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.ico" />
