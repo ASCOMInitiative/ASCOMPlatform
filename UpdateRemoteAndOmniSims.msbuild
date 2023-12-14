@@ -6,7 +6,7 @@
 	<PropertyGroup>
 		<!-- Set OmniSim properties -->
 		<OmniSimRepositorytBranch>devicestatefix</OmniSimRepositorytBranch>
-		<OmniSimBuildConfiguration>Release</OmniSimBuildConfiguration>
+		<OmniSimBuildConfiguration>Debug</OmniSimBuildConfiguration>
 		<OmniSimGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimGitRepositoryURL>
 		<OmniSimDirectory>$(MSBuildStartupDirectory)\OmniSimulators</OmniSimDirectory>
 		<OmniSimVSProject>$(OmniSimDirectory)\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>

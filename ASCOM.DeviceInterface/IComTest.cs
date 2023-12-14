@@ -30,8 +30,7 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="value">Value</param>
         void Add(StateValue value);
     }
 }

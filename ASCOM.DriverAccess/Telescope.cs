@@ -1509,15 +1509,6 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-
-        public ComTest GetComTest()
-        {
-            ComTest retVal = new ComTest();
-            retVal.Add(new StateValue("DriverAccess","Additional value"));
-            return retVal;
-        }
-
-
     }
 
     #endregion

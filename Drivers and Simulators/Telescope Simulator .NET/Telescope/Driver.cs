@@ -203,7 +203,7 @@ namespace ASCOM.Simulator
                 CheckCapability(TelescopeHardware.InterfaceVersion >= 4, "DeviceState", false);
 
                 // Create an array list to hold the IStateValue entries
-                ComArrayList deviceState = new ComArrayList();
+                ArrayList deviceState = new ArrayList();
 
                 // Add one entry for each operational state, if possible
                 try { deviceState.Add(new StateValue(nameof(ITelescopeV4.Altitude), Altitude)); } catch { }
@@ -1783,13 +1783,6 @@ namespace ASCOM.Simulator
         }
 
         #endregion
-
-        public ComTest GetComTest()
-        {
-            ComTest retVal=new ComTest();
-            retVal.Add(new StateValue("GetComTest","Additional value"));
-            return retVal;
-        }
 
     }
 
