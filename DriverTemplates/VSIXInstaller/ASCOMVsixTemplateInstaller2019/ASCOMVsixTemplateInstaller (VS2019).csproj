@@ -56,17 +56,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.6.36389" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.8.37222" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Threading">
-      <Version>17.6.40</Version>
+      <Version>17.8.14</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.Vsixsigntool">
       <Version>16.2.29116.78</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Validation">
-      <Version>17.6.11</Version>
+      <Version>17.8.8</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +123,7 @@
     <VsixSignTool>$(NuGetPackageRoot)Microsoft.VSSDK.Vsixsigntool\16.2.29116.78\tools\vssdk\vsixsigntool.exe</VsixSignTool>
     <VsixSignCommand>$(VsixSignTool) sign /f $(SIGN_CERTIFICATE) /sha1 $(SIGN_CERT_HASH) /fd sha256 /csp "eToken Base Cryptographic Provider" /k "Sectigo_20231013130838" </VsixSignCommand>
   </PropertyGroup>
-    <!--
+  <!--
   <Target Name="AfterBuild" DependsOnTargets="CoreCompile">
     <Message Text="Signing $(TargetVsixContainer)" />
     <Exec Command="$(VsixSignCommand) &quot;$(MSBuildProjectDirectory)\$(TargetVsixContainer)&quot;" />

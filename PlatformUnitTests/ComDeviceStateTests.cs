@@ -1,13 +1,126 @@
 ﻿using ASCOM.DeviceInterface;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ASCOM.DriverAccess;
+using System.Collections.Generic;
+using Xunit.Abstractions;
+using Xunit;
 
 namespace PlatformUnitTests
 {
-    [TestClass]
+    //[TestClass]
     public class ComDeviceStateTests
     {
-        [TestMethod]
+        private readonly ITestOutputHelper output;
+
+        public ComDeviceStateTests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
+
+
+        [Fact]
+        public void StateCollection_ForEach()
+        {
+            const string STATE_NAME_0 = "State name 1";
+            const string STATE_NAME_1 = "State name 2";
+            const int STATE_VALUE_0 = 1;
+            const double STATE_VALUE_1 = 3.14159;
+
+            StateValueCollection collection = new StateValueCollection
+            {
+                new StateValue(STATE_NAME_0, STATE_VALUE_0)
+            };
+            collection.Add(STATE_NAME_1, STATE_VALUE_1);
+
+            output.WriteLine($"Collection count: {collection.Count}");
+            Assert.Equal(2, collection.Count);
+
+            output.WriteLine($"ForEach test");
+            foreach (IStateValue value in collection)
+            {
+                if (value == null)
+                {
+                    output.WriteLine($"ForEach - Returned value is null");
+                }
+                else
+                {
+                    output.WriteLine($"Found {value.Name} = {value.Value}");
+                }
+            }
+
+            collection.Dispose();
+
+        }
+
+        [Fact]
+        public void StateCollection_ForNext()
+        {
+            const string STATE_NAME_0 = "State name 1";
+            const string STATE_NAME_1 = "State name 2";
+            const int STATE_VALUE_0 = 1;
+            const double STATE_VALUE_1 = 3.14159;
+
+            StateValueCollection collection = new StateValueCollection
+            {
+                new StateValue(STATE_NAME_0, STATE_VALUE_0)
+            };
+            collection.Add(STATE_NAME_1, STATE_VALUE_1);
+
+            output.WriteLine($"Collection count: {collection.Count}");
+            Assert.Equal(2, collection.Count);
+
+            output.WriteLine($"For..Next test");
+            for (int i = 0; i <= 1; i++)
+            {
+                output.WriteLine($"Found {collection[i].Name} = {collection[i].Value}");
+
+                if (i == 0)
+                {
+                    Assert.Equal(STATE_NAME_0, collection[i].Name);
+                    Assert.Equal(STATE_VALUE_0, collection[i].Value);
+                }
+                else
+                {
+                    Assert.Equal(STATE_NAME_1, collection[i].Name);
+                    Assert.Equal(STATE_VALUE_1, collection[i].Value);
+                }
+            }
+
+            collection.Dispose();
+
+        }
+
+        [Fact]
+        public void StateCollection_Using()
+        {
+            const string STATE_NAME_0 = "State name 1";
+            const string STATE_NAME_1 = "State name 2";
+            const int STATE_VALUE_0 = 1;
+            const double STATE_VALUE_1 = 3.14159;
+
+            output.WriteLine($"Using test");
+
+            using (StateValueCollection collection1 = new StateValueCollection())
+            {
+                collection1.Add(STATE_NAME_0, STATE_VALUE_0);
+                collection1.Add(STATE_NAME_1, STATE_VALUE_1);
+
+                foreach (IStateValue value in collection1)
+                {
+                    if (value == null)
+                    {
+                        output.WriteLine($"ForEach - Returned value is null");
+                    }
+                    else
+                    {
+                        output.WriteLine($"Found {value.Name} = {value.Value}");
+                    }
+                }
+            }
+        }
+
+        [Fact]
         public void CameraTest()
         {
             using (Camera device = new Camera("ASCOM.Simulator.Camera"))
@@ -17,24 +130,24 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 CameraDeviceState deviceState = device.CameraDeviceState;
 
-                Assert.IsTrue(deviceState.CameraState.HasValue);
-                Assert.IsTrue(deviceState.CCDTemperature.HasValue);
-                Assert.IsTrue(deviceState.CoolerPower.HasValue);
-                Assert.IsTrue(deviceState.HeatSinkTemperature.HasValue);
-                Assert.IsTrue(deviceState.ImageReady.HasValue);
-                Assert.IsTrue(deviceState.IsPulseGuiding.HasValue);
-                Assert.IsTrue(deviceState.PercentCompleted.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.CameraState.HasValue);
+                Assert.True(deviceState.CCDTemperature.HasValue);
+                Assert.True(deviceState.CoolerPower.HasValue);
+                Assert.True(deviceState.HeatSinkTemperature.HasValue);
+                Assert.True(deviceState.ImageReady.HasValue);
+                Assert.True(deviceState.IsPulseGuiding.HasValue);
+                Assert.True(deviceState.PercentCompleted.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void CoverCalibratorTest()
         {
             using (CoverCalibrator device = new CoverCalibrator("ASCOM.Simulator.CoverCalibrator"))
@@ -44,22 +157,22 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 CoverCalibratorState deviceState = device.CoverCalibratorState;
 
-                Assert.IsTrue(deviceState.Brightness.HasValue);
-                Assert.IsTrue(deviceState.CalibratorReady.HasValue);
-                Assert.IsTrue(deviceState.CalibratorState.HasValue);
-                Assert.IsTrue(deviceState.CoverMoving.HasValue);
-                Assert.IsTrue(deviceState.CoverState.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.Brightness.HasValue);
+                Assert.True(deviceState.CalibratorReady.HasValue);
+                Assert.True(deviceState.CalibratorState.HasValue);
+                Assert.True(deviceState.CoverMoving.HasValue);
+                Assert.True(deviceState.CoverState.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DomeTest()
         {
             using (Dome device = new Dome("ASCOM.Simulator.Dome"))
@@ -69,22 +182,22 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 DomeState deviceState = device.DomeState;
 
-                Assert.IsTrue(deviceState.Altitude.HasValue);
-                Assert.IsTrue(deviceState.AtHome.HasValue);
-                Assert.IsTrue(deviceState.AtPark.HasValue);
-                Assert.IsTrue(deviceState.Azimuth.HasValue);
-                Assert.IsTrue(deviceState.ShutterStatus.HasValue);
-                Assert.IsTrue(deviceState.Slewing.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.Altitude.HasValue);
+                Assert.True(deviceState.AtHome.HasValue);
+                Assert.True(deviceState.AtPark.HasValue);
+                Assert.True(deviceState.Azimuth.HasValue);
+                Assert.True(deviceState.ShutterStatus.HasValue);
+                Assert.True(deviceState.Slewing.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
-        [TestMethod]
+        [Fact]
         public void FilterWheelTest()
         {
             using (FilterWheel device = new FilterWheel("ASCOM.Simulator.FilterWheel"))
@@ -94,17 +207,17 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 FilterWheelState deviceState = device.FilterWheelState;
 
-                Assert.IsTrue(deviceState.Position.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.Position.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
-        [TestMethod]
+        [Fact]
         public void FocuserTest()
         {
             using (Focuser device = new Focuser("ASCOM.Simulator.Focuser"))
@@ -114,20 +227,20 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 FocuserState deviceState = device.FocuserState;
 
-                Assert.IsTrue(deviceState.IsMoving.HasValue);
-                Assert.IsTrue(deviceState.Position.HasValue);
-                Assert.IsTrue(deviceState.Temperature.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.IsMoving.HasValue);
+                Assert.True(deviceState.Position.HasValue);
+                Assert.True(deviceState.Temperature.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ObservingConditionsTest()
         {
             using (ObservingConditions device = new ObservingConditions("ASCOM.Simulator.ObservingConditions"))
@@ -137,30 +250,30 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 ObservingConditionsState deviceState = device.ObservingConditionsState;
 
-                Assert.IsTrue(deviceState.CloudCover.HasValue);
-                Assert.IsTrue(deviceState.DewPoint.HasValue);
-                Assert.IsTrue(deviceState.Humidity.HasValue);
-                Assert.IsTrue(deviceState.Pressure.HasValue);
-                Assert.IsTrue(deviceState.RainRate.HasValue);
-                Assert.IsTrue(deviceState.SkyBrightness.HasValue);
-                Assert.IsTrue(deviceState.SkyQuality.HasValue);
-                Assert.IsTrue(deviceState.SkyTemperature.HasValue);
-                Assert.IsTrue(deviceState.StarFWHM.HasValue);
-                Assert.IsTrue(deviceState.Temperature.HasValue);
-                Assert.IsTrue(deviceState.WindDirection.HasValue);
-                Assert.IsTrue(deviceState.WindGust.HasValue);
-                Assert.IsTrue(deviceState.WindSpeed.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.CloudCover.HasValue);
+                Assert.True(deviceState.DewPoint.HasValue);
+                Assert.True(deviceState.Humidity.HasValue);
+                Assert.True(deviceState.Pressure.HasValue);
+                Assert.True(deviceState.RainRate.HasValue);
+                Assert.True(deviceState.SkyBrightness.HasValue);
+                Assert.True(deviceState.SkyQuality.HasValue);
+                Assert.True(deviceState.SkyTemperature.HasValue);
+                Assert.True(deviceState.StarFWHM.HasValue);
+                Assert.True(deviceState.Temperature.HasValue);
+                Assert.True(deviceState.WindDirection.HasValue);
+                Assert.True(deviceState.WindGust.HasValue);
+                Assert.True(deviceState.WindSpeed.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void RotatorTest()
         {
             using (Rotator device = new Rotator("ASCOM.Simulator.Rotator"))
@@ -170,20 +283,20 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 RotatorState deviceState = device.RotatorState;
 
-                Assert.IsTrue(deviceState.IsMoving.HasValue);
-                Assert.IsTrue(deviceState.MechanicalPosition.HasValue);
-                Assert.IsTrue(deviceState.Position.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.IsMoving.HasValue);
+                Assert.True(deviceState.MechanicalPosition.HasValue);
+                Assert.True(deviceState.Position.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SafetyMonitorTest()
         {
             using (SafetyMonitor device = new SafetyMonitor("ASCOM.Simulator.SafetyMonitor"))
@@ -193,18 +306,18 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 SafetyMonitorState deviceState = device.SafetyMonitorState;
 
-                Assert.IsTrue(deviceState.IsSafe.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.IsSafe.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void VideoTest()
         {
             using (Video device = new Video("ASCOM.Simulator.Video"))
@@ -214,19 +327,19 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 VideoState deviceState = device.VideoState;
 
-                Assert.IsTrue(deviceState.CameraState.HasValue);
-                Assert.AreEqual(nameof(IVideoV2.CameraState), nameof(VideoState.CameraState));
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.CameraState.HasValue);
+                Assert.Equal(nameof(IVideoV2.CameraState), nameof(VideoState.CameraState));
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TelescopeTest()
         {
             using (Telescope device = new Telescope("ASCOM.Simulator.Telescope"))
@@ -236,23 +349,23 @@ namespace PlatformUnitTests
                 {
                     System.Threading.Thread.Sleep(100);
                 } while (device.Connecting);
-                Assert.IsTrue(device.Connected);
+                Assert.True(device.Connected);
 
                 TelescopeState deviceState = device.TelescopeState;
 
-                Assert.IsTrue(deviceState.Altitude.HasValue);
-                Assert.IsTrue(deviceState.AtHome.HasValue);
-                Assert.IsTrue(deviceState.AtPark.HasValue);
-                Assert.IsTrue(deviceState.Azimuth.HasValue);
-                Assert.IsTrue(deviceState.Declination.HasValue);
-                Assert.IsTrue(deviceState.IsPulseGuiding.HasValue);
-                Assert.IsTrue(deviceState.RightAscension.HasValue);
-                Assert.IsTrue(deviceState.SideOfPier.HasValue);
-                Assert.IsTrue(deviceState.SiderealTime.HasValue);
-                Assert.IsTrue(deviceState.Slewing.HasValue);
-                Assert.IsTrue(deviceState.Tracking.HasValue);
-                Assert.IsTrue(deviceState.UTCDate.HasValue);
-                Assert.IsTrue(deviceState.TimeStamp.HasValue);
+                Assert.True(deviceState.Altitude.HasValue);
+                Assert.True(deviceState.AtHome.HasValue);
+                Assert.True(deviceState.AtPark.HasValue);
+                Assert.True(deviceState.Azimuth.HasValue);
+                Assert.True(deviceState.Declination.HasValue);
+                Assert.True(deviceState.IsPulseGuiding.HasValue);
+                Assert.True(deviceState.RightAscension.HasValue);
+                Assert.True(deviceState.SideOfPier.HasValue);
+                Assert.True(deviceState.SiderealTime.HasValue);
+                Assert.True(deviceState.Slewing.HasValue);
+                Assert.True(deviceState.Tracking.HasValue);
+                Assert.True(deviceState.UTCDate.HasValue);
+                Assert.True(deviceState.TimeStamp.HasValue);
 
                 device.Disconnect();
             }
