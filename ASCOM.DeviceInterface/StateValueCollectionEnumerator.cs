@@ -91,7 +91,7 @@ namespace ASCOM.DeviceInterface
 
                 // Validate the current index value
                 if (index < 0)
-                    throw new ASCOM.InvalidOperationException($"StateValueCollection.Current - No value has yet been selected.");
+                    throw new InvalidOperationException($"StateValueCollection.Current - No value has yet been selected.");
 
                 if (index > stateValues.Length)
                     throw new InvalidOperationException($"StateValueCollection.Current - The requested index ({index}) is greater than the number of values in the collection ({stateValues.Length}).");

@@ -119,7 +119,7 @@ namespace ASCOM.DeviceInterface
                 logger.LogMessage("This", $"Index: {index}, Count: {stateValues.Length}");
 
                 if ((index < 0) || (index >= stateValues.Length))
-                    throw new ASCOM.InvalidValueException("StateValueCollection.Index", index.ToString(CultureInfo.CurrentCulture), $"1 to {stateValues.Length.ToString(CultureInfo.CurrentCulture)}");
+                    throw new InvalidValueException("StateValueCollection.Index", index.ToString(CultureInfo.CurrentCulture), $"1 to {stateValues.Length.ToString(CultureInfo.CurrentCulture)}");
                 try
                 {
                     logger.LogMessage("This", $"Returning index: {index}");
