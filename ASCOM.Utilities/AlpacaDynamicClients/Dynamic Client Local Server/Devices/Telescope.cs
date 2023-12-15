@@ -1,6 +1,6 @@
 ﻿using ASCOM.Alpaca.Clients;
 using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
+using ASCOM.DeviceInterface;
 using ASCOM.Common.Interfaces;
 using System;
 using System.Collections;
@@ -15,7 +15,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class Telescope : ReferenceCountedObjectBase, DeviceInterface.ITelescopeV4, IDisposable
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV4, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.Telescope;
@@ -562,29 +562,17 @@ namespace ASCOM.DynamicClients
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
                 try
                 {
-                    // Initialise the return ArrayList
-                    ArrayList returnValue = new ArrayList();
-
                     // Get the device state from the Alpaca device
-                    List<StateValue> deviceState = client.DeviceState;
+                    List<Common.DeviceInterfaces.StateValue> deviceState = client.DeviceState;
                     LogMessage("DeviceState", $"Received {deviceState.Count} values");
 
-                    // Parse the returned values and store in the ArrayList
-                    foreach (StateValue value in deviceState)
-                    {
-                        LogMessage("DeviceState", $"  {value.Name} = {value.Value} - Kind: {value.Value.GetType().Name}");
-                        returnValue.Add(value);
-                    }
-
-                    LogMessage("DeviceState", $"Return value has {returnValue.Count} values");
-
-                    return returnValue;
+                    return new StateValueCollection(deviceState.ToPlatformStateValue());
                 }
                 catch (Exception ex)
                 {
@@ -660,7 +648,7 @@ namespace ASCOM.DynamicClients
                 AxisRates returnValue = new AxisRates(Axis);
 
                 // Query the client and iterate over the returned rate collection
-                foreach (IRate axisRate in client.AxisRates((TelescopeAxis)Axis))
+                foreach (IRate axisRate in client.AxisRates((Common.DeviceInterfaces.TelescopeAxis)Axis))
                 {
                     returnValue.Add(axisRate.Minimum, axisRate.Maximum, TL);
                 }
@@ -693,7 +681,7 @@ namespace ASCOM.DynamicClients
 
         public bool CanMoveAxis(DeviceInterface.TelescopeAxes Axis)
         {
-            return client.CanMoveAxis((TelescopeAxis)Axis);
+            return client.CanMoveAxis((Common.DeviceInterfaces.TelescopeAxis)Axis);
         }
 
         public bool CanPark
@@ -909,7 +897,7 @@ namespace ASCOM.DynamicClients
 
         public void MoveAxis(DeviceInterface.TelescopeAxes Axis, double Rate)
         {
-            client.MoveAxis((TelescopeAxis)Axis, Rate);
+            client.MoveAxis((Common.DeviceInterfaces.TelescopeAxis)Axis, Rate);
         }
 
         public void Park()
@@ -920,7 +908,7 @@ namespace ASCOM.DynamicClients
 
         public void PulseGuide(DeviceInterface.GuideDirections Direction, int Duration)
         {
-            client.PulseGuide((GuideDirection)Direction, Duration);
+            client.PulseGuide((Common.DeviceInterfaces.GuideDirection)Direction, Duration);
         }
 
         public double RightAscension
@@ -957,7 +945,7 @@ namespace ASCOM.DynamicClients
             }
             set
             {
-                client.SideOfPier = (PointingState)value;
+                client.SideOfPier = (Common.DeviceInterfaces.PointingState)value;
             }
         }
 
@@ -1117,7 +1105,7 @@ namespace ASCOM.DynamicClients
             }
             set
             {
-                client.TrackingRate = (DriveRate)value;
+                client.TrackingRate = (Common.DeviceInterfaces.DriveRate)value;
             }
         }
 
@@ -1129,7 +1117,7 @@ namespace ASCOM.DynamicClients
                 List<DeviceInterface.DriveRates> ratesList = new List<DeviceInterface.DriveRates>();
 
                 // Get the tracking rates from the client and copy them to the intermediate list
-                foreach (DriveRate driveRate in client.TrackingRates)
+                foreach (Common.DeviceInterfaces.DriveRate driveRate in client.TrackingRates)
                 {
                     ratesList.Add((DeviceInterface.DriveRates)driveRate);
                 }

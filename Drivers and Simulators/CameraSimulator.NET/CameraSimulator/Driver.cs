@@ -2588,7 +2588,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Return the device's operational state in one call
         /// </summary>
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
@@ -2596,7 +2596,7 @@ namespace ASCOM.Simulator
                 CheckSupportedInThisInterfaceVersion("DeviceState", 4);
 
                 // Create an array list to hold the IStateValue entries
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
 
                 // Add one entry for each operational state, if possible
                 try { deviceState.Add(new StateValue(nameof(ICameraV4.CameraState), CameraState)); } catch { }
@@ -2609,7 +2609,7 @@ namespace ASCOM.Simulator
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 // Return the overall device state
-                return deviceState;
+                return new StateValueCollection(deviceState); ;
             }
         }
 

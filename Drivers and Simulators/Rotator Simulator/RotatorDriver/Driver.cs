@@ -19,6 +19,7 @@ using ASCOM.DeviceInterface;
 using System.Collections;
 using System;
 using ASCOM.DriverAccess;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulator
 {
@@ -208,18 +209,18 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
 
                 try { deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), IsMoving)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), MechanicalPosition)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IRotatorV4.Position), Position)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                return new StateValueCollection(deviceState);
             }
         }
 

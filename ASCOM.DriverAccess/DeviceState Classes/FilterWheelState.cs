@@ -25,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// <param name="TL">Debug TraceLogger instance. The type of this parameter is Object - see remarks.</param>
         /// <remarks>This class supports .NET Framework 3.5, 4.x and .NET Standard 2.0. In order to avoid use of dynamic and inclusion of projects or packages that define the TraceLogger
         /// component, the TL parameter is typed as an object and a reflection method is used to call the LogMessage member.</remarks>
-        public FilterWheelState(ArrayList deviceStateArrayList, object TL)
+        public FilterWheelState(IStateValueCollection deviceStateArrayList, object TL)
         {
             LogMessage(className, $"Received {deviceStateArrayList.Count} items");
 

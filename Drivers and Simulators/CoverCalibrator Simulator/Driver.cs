@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
 using ASCOM.DriverAccess;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulator
 {
@@ -489,11 +490,11 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.Brightness), Brightness)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorState), CalibratorState)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorReady), CalibratorReady)); } catch { }
@@ -501,7 +502,7 @@ namespace ASCOM.Simulator
                 try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverMoving), CoverMoving)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                return new StateValueCollection(deviceState);
             }
         }
 

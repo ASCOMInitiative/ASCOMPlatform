@@ -1,6 +1,6 @@
 ﻿using ASCOM.Alpaca.Clients;
 using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
+using ASCOM.DeviceInterface;
 using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
 using System;
@@ -562,29 +562,17 @@ namespace ASCOM.DynamicClients
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
                 try
                 {
-                    // Initialise the return ArrayList
-                    ArrayList returnValue = new ArrayList();
-
                     // Get the device state from the Alpaca device
-                    List<StateValue> deviceState = client.DeviceState;
+                    List<Common.DeviceInterfaces.StateValue> deviceState = client.DeviceState;
                     LogMessage("DeviceState", $"Received {deviceState.Count} values");
 
-                    // Parse the returned values and store in the ArrayList
-                    foreach (StateValue value in deviceState)
-                    {
-                        LogMessage("DeviceState", $"  {value.Name} = {value.Value} - Kind: {value.Value.GetType().Name}");
-                        returnValue.Add(value);
-                    }
-
-                    LogMessage("DeviceState", $"Return value has {returnValue.Count} values");
-
-                    return returnValue;
+                    return new StateValueCollection(deviceState.ToPlatformStateValue());
                 }
                 catch (Exception ex)
                 {

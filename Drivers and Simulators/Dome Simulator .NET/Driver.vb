@@ -923,9 +923,9 @@ Public Class Dome
         End Get
     End Property
 
-    Public ReadOnly Property DeviceState As ArrayList Implements IDomeV3.DeviceState
+    Public ReadOnly Property DeviceState As IStateValueCollection Implements IDomeV3.DeviceState
         Get
-            Dim returnValue As ArrayList = New ArrayList()
+            Dim returnValue As List(Of StateValue) = New List(Of StateValue)
 
             If g_bCanSetAltitude Then
                 Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Altitude), g_dDomeAlt)) : Catch : End Try
@@ -939,7 +939,7 @@ Public Class Dome
             Try : returnValue.Add(New StateValue(NameOf(IDomeV3.Slewing), Slewing)) : Catch : End Try
             Try : returnValue.Add(New StateValue(DateTime.Now)) : Catch : End Try
 
-            Return returnValue
+            Return New StateValueCollection(returnValue)
         End Get
     End Property
 

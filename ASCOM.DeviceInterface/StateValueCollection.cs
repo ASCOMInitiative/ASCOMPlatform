@@ -51,6 +51,23 @@ namespace ASCOM.DeviceInterface
             logger.LogMessage("Init", $"Count: {stateValues.Length}");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public StateValueCollection(List<StateValue> list)
+        {
+            logger.LogMessage("Init", $"List<StateValue>");
+            IStateValue[] stateValues = new StateValue[list.Count];
+
+            int index = -1;
+            foreach (StateValue stateValue in list)
+            {
+                stateValues[index++] = stateValue;
+            }
+
+            logger.LogMessage("Init", $"Count: {stateValues.Length}");
+        }
+
         #endregion
 
         #region Add members to the collection

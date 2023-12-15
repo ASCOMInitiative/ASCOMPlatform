@@ -179,14 +179,15 @@ Public Class FilterWheel
         End Get
     End Property
 
-    Public ReadOnly Property DeviceState As ArrayList Implements IFilterWheelV3.DeviceState
+    Public ReadOnly Property DeviceState As IStateValueCollection Implements IFilterWheelV3.DeviceState
         Get
-            Dim returnValue As ArrayList = New ArrayList()
+            Dim returnValue As List(Of StateValue) = New List(Of StateValue)
 
             Try : returnValue.Add(New StateValue(NameOf(IFilterWheelV3.Position), Position)) : Catch : End Try
             Try : returnValue.Add(New StateValue(DateTime.Now)) : Catch : End Try
 
-            Return returnValue
+            Return New StateValueCollection(returnValue)
+
         End Get
     End Property
 

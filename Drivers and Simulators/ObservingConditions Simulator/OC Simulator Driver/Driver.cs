@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.DriverAccess;
@@ -254,11 +255,11 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
 
                 try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
@@ -275,7 +276,7 @@ namespace ASCOM.Simulator
                 try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindGust), WindGust)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                return new StateValueCollection(deviceState);
             }
         }
 

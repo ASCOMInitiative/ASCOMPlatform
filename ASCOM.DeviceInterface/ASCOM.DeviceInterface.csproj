@@ -46,9 +46,10 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
 		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
 	</ItemGroup>
+	<!-- <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">  -->
+	<!-- <ItemGroup> -->
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<!-- <PackageReference Include="ASCOM.Tools" Version="1.0.109-rc.63" PrivateAssets="All" /> -->
-	  <PackageReference Include="ASCOM.Tools" Version="1.0.111-rc.39" PrivateAssets="All" />
+		<PackageReference Include="ASCOM.Tools" Version="1.0.113-rc.2" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>

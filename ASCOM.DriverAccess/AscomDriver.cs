@@ -3,6 +3,8 @@ using ASCOM.Utilities;
 using System.Collections;
 using System.Threading.Tasks;
 using static ASCOM.Utilities.Global;
+using ASCOM.DeviceInterface;
+using System.Collections.Generic;
 
 namespace ASCOM.DriverAccess
 {
@@ -350,19 +352,25 @@ namespace ASCOM.DriverAccess
 		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
 		/// </para>
         /// </remarks>
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
                 // Determine whether this device has DeviceState support
                 if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device
                 {
-                    return memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }).ComObjToArrayList();
+                    IStateValueCollection result= memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }) as IStateValueCollection;
+                    List<IStateValue> values= new List<IStateValue>();
+                    foreach (IStateValue obj in result)
+                    {
+                        values.Add(obj);
+                    }
+                    return new StateValueCollection(values);
                 }
                 else // We are presenting a Platform 6 or earlier device
                 {
                     // Return an empty ArrayList because this feature isn't supported
-                    return new ArrayList();
+                    return new StateValueCollection();
                 }
             }
         }

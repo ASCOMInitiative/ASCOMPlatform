@@ -28,6 +28,7 @@ using ASCOM.Simulator.Properties;
 using ASCOM.Simulator.Utils;
 using Simulator.VideoCameraImpl;
 using ASCOM.DriverAccess;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulator
 {
@@ -809,19 +810,18 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
-                // Create an array list to hold the IStateValue entries
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
 
                 // Add one entry for each operational state, if possible
                 try { deviceState.Add(new StateValue(nameof(IVideoV2.CameraState), CameraState)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
                 // Return the overall device state
-                return deviceState;
+                return new StateValueCollection(deviceState);
 
             }
         }

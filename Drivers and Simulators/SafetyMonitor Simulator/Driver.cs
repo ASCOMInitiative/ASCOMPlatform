@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using ASCOM.Utilities;
 using ASCOM.DeviceInterface;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulator
 {
@@ -251,15 +252,16 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
+
                 try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                return new StateValueCollection(deviceState);
             }
         }
 

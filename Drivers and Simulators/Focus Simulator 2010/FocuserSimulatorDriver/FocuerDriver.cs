@@ -8,6 +8,7 @@ using ASCOM.Utilities;
 using System.Globalization;
 using static ASCOM.Utilities.Global;
 using ASCOM.DriverAccess;
+using System.Collections.Generic;
 
 namespace ASCOM.Simulator
 {
@@ -556,18 +557,18 @@ namespace ASCOM.Simulator
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
-                ArrayList deviceState = new ArrayList();
+                List<IStateValue> deviceState = new List<IStateValue>();
 
                 try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
                 try { deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), Temperature)); } catch { }
                 try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
 
-                return deviceState;
+                return new StateValueCollection(deviceState);
             }
         }
 

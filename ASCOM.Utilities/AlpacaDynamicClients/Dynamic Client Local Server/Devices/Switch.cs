@@ -1,7 +1,6 @@
 ﻿using ASCOM.Alpaca.Clients;
 using ASCOM.Common;
-using ASCOM.Common.DeviceInterfaces;
-using ASCOM.Common.Interfaces;
+using ASCOM.DeviceInterface;
 using ASCOM.Tools;
 using System;
 using System.Collections;
@@ -15,7 +14,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class Switch : ReferenceCountedObjectBase, DeviceInterface.ISwitchV3, IDisposable
+    public class Switch : ReferenceCountedObjectBase, ISwitchV3, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.Switch;
@@ -60,8 +59,6 @@ namespace ASCOM.DynamicClients
                 {
                     Enabled = state.TraceState
                 };
-                if (state.DebugTraceState)
-                    TL.SetMinimumLoggingLevel(LogLevel.Debug);
 
                 LogMessage(deviceType.ToString(), $"Starting driver initialisation for ProgID: {driverProgId}, Description: {driverDisplayName}");
 
@@ -562,29 +559,17 @@ namespace ASCOM.DynamicClients
             }
         }
 
-        public ArrayList DeviceState
+        public IStateValueCollection DeviceState
         {
             get
             {
                 try
                 {
-                    // Initialise the return ArrayList
-                    ArrayList returnValue = new ArrayList();
-
                     // Get the device state from the Alpaca device
-                    List<StateValue> deviceState = client.DeviceState;
+                    List<Common.DeviceInterfaces.StateValue> deviceState = client.DeviceState;
                     LogMessage("DeviceState", $"Received {deviceState.Count} values");
 
-                    // Parse the returned values and store in the ArrayList
-                    foreach (StateValue value in deviceState)
-                    {
-                        LogMessage("DeviceState", $"  {value.Name} = {value.Value} - Kind: {value.Value.GetType().Name}");
-                        returnValue.Add(value);
-                    }
-
-                    LogMessage("DeviceState", $"Return value has {returnValue.Count} values");
-
-                    return returnValue;
+                    return new StateValueCollection(deviceState.ToPlatformStateValue());
                 }
                 catch (Exception ex)
                 {
@@ -669,7 +654,7 @@ namespace ASCOM.DynamicClients
         public void SetAsync(short id, bool state)
         {
             // Call the device's SetAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("SetAsync", "Issuing SetAsync command");
                 client.SetAsync(id, state);
@@ -683,7 +668,7 @@ namespace ASCOM.DynamicClients
         public void SetAsyncValue(short id, double value)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("SetAsyncValue", "Issuing SetAsyncValue command");
                 client.SetAsyncValue(id, value);
@@ -697,7 +682,7 @@ namespace ASCOM.DynamicClients
         public bool CanAsync(short id)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
-            if (DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("CanAsync", "Getting CanAsync property");
                 return client.CanAsync(id);
@@ -710,7 +695,7 @@ namespace ASCOM.DynamicClients
         public bool StateChangeComplete(short id)
         {
             // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("StateChangeComplete", "Getting StateChangeComplete property");
                 return client.StateChangeComplete(id);
@@ -723,7 +708,7 @@ namespace ASCOM.DynamicClients
         public void CancelAsync(short id)
         {
             // Call the device's CancelAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
-            if (DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("CancelAsync", "Issuing CancelAsync command");
                 client.CancelAsync(id);
@@ -760,18 +745,7 @@ namespace ASCOM.DynamicClients
         private void LogMessage(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Information, identifier, message);
-        }
-
-        /// <summary>
-        /// Log helper function that writes debug messages to the driver
-        /// </summary>
-        /// <param name="identifier">Identifier such as method name</param>
-        /// <param name="message">Message to be logged.</param>
-        private void LogDebug(string identifier, string message)
-        {
-            // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Debug, identifier, message);
+            TL?.LogMessage(identifier, message);
         }
 
         #endregion
