@@ -359,13 +359,8 @@ namespace ASCOM.DriverAccess
                 // Determine whether this device has DeviceState support
                 if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device
                 {
-                    IStateValueCollection result= memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { }) as IStateValueCollection;
-                    List<IStateValue> values= new List<IStateValue>();
-                    foreach (IStateValue obj in result)
-                    {
-                        values.Add(obj);
-                    }
-                    return new StateValueCollection(values);
+                    // Return the state value collection to the caller
+                    return (IStateValueCollection)memberFactory.CallMember(1, "DeviceState", new Type[] { }, new object[] { });
                 }
                 else // We are presenting a Platform 6 or earlier device
                 {
