@@ -1,0 +1,605 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ASCOM.Cache</name>
+    </assembly>
+    <members>
+        <member name="T:ASCOM.Utilities.Cache">
+            <summary>
+            ASCOM caching component with automatic stale item removal and call rate limiting - <i>this component must be disposed when the driver is closing down. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</i>
+            </summary>
+            <remarks><para>Astronomy applications are becoming increasingly sophisticated and frequently employ multi-threading techniques that place increasingly high call rate burdens on drivers. 
+            Much hardware remains of modest processing capacity and performance can suffer if hardware controllers have to process an excessive number of requests for information and one of the
+            jobs of the driver is to protect the hardware from this kind of situation. Caching is a helpful technique to combat excessive polling of values that don't change frequently and this 
+            component provides a conveniently packaged capability to ease driver development.</para>
+            <para>This cache will store items against specified keys for configurable periods of time and, when an item exceeds its specified retention time, it will automatically be removed by the cache.</para>
+            <para>Some applications poll at very high rates, so the cache provides an optional rate limiting capability that can delay execution of "set" and "get" methods to enforce a maximum number of actions per second.</para>
+            <para>The cache "get" methods will either return the requested item, if present, or will throw a NotInCacheException exception, indicating that the driver should poll the hardware and store the value 
+            in the cache before returning it to the caller.</para>
+            <para>Clients using the cache through COM e.g. from scripting languages , Delphi etc. will find that for each group of overloaded methods e.g. GetDouble, only the method with the largest number of parameters
+            is available. This is due to a COM limitation that doesn't allow access to method overloads. .NET clients have access to all overloads.</para>
+            <para>Code example</para>
+            <code>
+            using ASCOM.Utilities;
+            using ASCOM.Utilities.Exceptions;
+            
+            Class Driver
+                const string RIGHT_ASCENSION = "Right Ascension";
+                Cache myCache = new Cache();
+                ...
+                double RightAscension
+                {
+                    get
+                    {
+                        try
+                        {
+                            return cache.GetDouble(RIGHT_ASCENSION); // Get the RA value from the cache, if present, without limiting the number of reads per second
+                            // or return cache.GetDouble(RIGHT_ASCENSION, 5.0); // Get the RA value from the cache, if present, limiting the number of reads of this value to 5 per second
+                        }
+                        catch (NotInCacheException) // Exception thrown because requested value is not in the cache - so get it from hardware, save to the cache and return the value
+                        {
+                            double newRA = ... // Get value from hardware
+                            cache.SetDouble(RIGHT_ASCENSION, newRA, 1.0); // Save the new value to the cache with a timeout of 1 second
+                            return newRA;
+                        }
+                    }
+                }
+            </code>
+            </remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.#ctor">
+            <summary>
+            Default initialiser that does not assign a TraceLogger unless the cache tracing flag is set.
+            </summary>
+            <remarks>COM (as opposed to .NET) applications must use this initialiser because parameterised initialisers can not be used by COM applications.
+            <para>Cache tracing can be enabled through the "Trace Cache" option that is set through the Chooser or Diagnostics menus. This will cause the cache to create a separate 
+            log in the same directory as the application's own log.</para></remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.#ctor(ASCOM.Utilities.TraceLogger)">
+            <summary>
+            Inititialiser that takes a reference to the calling application's trace logger. This ensures that trace output will
+            appear in context with the applications's own log messages, making it easier to debug the application.
+            </summary>
+            <remarks>The initialiser will accept null (Nothing) as a valid reference, this will suppress all cache logging.
+            <para>Due to COM limitations, this initialiser can only be used by .NET applications. COM applications should use the parameterless constructor and, if required,
+            enable cache tracing through the "Trace Cache" option that can be set through the Chooser or Diagnostics menus. This will cause the cache to create a separate 
+            log in the same directory as the application's own log.</para></remarks>
+            <param name="CallersLogger">Reference to the call's trace logger instance.</param>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Dispose(System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Dispose">
+            <summary>
+            Reset the PC's timing resolution, if changed, and cleanly dispose of the cache's working memory.
+            </summary>
+            <remarks>
+            <para>Windows PCs use regular interrupts to manage timers and form events; a common repeat period is 15.6 milliseconds, which corresponds to 64 interupts per second. Microsoft chose this as a general purpose compromise between 
+            timer resolution and UI responsiveness, which are better served with higher interrupt frequencies and power consumption, which is improved with lower interrupt frequencies. Among other things, the interrupt frequency determnines the resolution of 
+            the Windows "Sleep" method, which this cache uses to effect throttling.</para>
+            <para>If a PC is using the standard 15.6ms interrupt period, sleep times will be rounded up to the nearest 15.6ms making a 1ms sleep last 15.6ms and a 16ms sleep last 31.2ms etc.
+            To work round this, if required, the cache can increase the sleep timing resolution to the maximum supported by the PC or 1ms, whichever is the larger. The sleep resolution will only be changed when the 
+            first GetXXX or SetXXX call is made that specifies a non-zero value for MaximumCallFrequency. If all calls specify a MaximumCallFrequency of 0.0, the cache will not change the timing resolution.</para>
+            <para>The Cache.Dispose() method should be called when the driver is closing down in order to restore the original timing resolution. If this isn't done, Windows will still restore 
+            the original value when the overall application terminates, but it remains good practice to dispose of objects at the proper time.</para>
+            </remarks>
+        </member>
+        <member name="P:ASCOM.Utilities.Cache.PumpMessagesInterval">
+            <summary>
+            Get or set the interval, in milliseconds, between calls to Application.DoEvents to pump Windows messages when throttling the cache read rate.
+            </summary>
+            <remarks>Setting this property to zero will prevent any message pumping by the cache while waiting. The default value of the property is zero.</remarks>
+            <exception cref="T:ASCOM.InvalidValueException">When PumpMessagesInterval is set less than 0.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.ClearCache">
+            <summary>
+            Remove all items from the cache.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Remove(System.String)">
+            <summary>
+            Remove a an item with a specific name from the cache
+            </summary>
+            <param name="Key">Name of the item to remove.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <remarks>No exception is thrown if the specified item does not exist.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Get(System.String,System.Double)">
+            <summary>
+            Retrieve an object from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <returns>The requested object if present in the cache or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetDouble(System.String,System.Double)">
+            <summary>
+            Retrieve a double value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <returns>The requested double value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetInt(System.String,System.Double)">
+            <summary>
+            Retrieve an integer value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <returns>The requested integer value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetBool(System.String,System.Double)">
+            <summary>
+            Retrieve a boolean value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <returns>The requested boolean value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetString(System.String,System.Double)">
+            <summary>
+            Retrieve a string value from the cache with the given name, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="MaximumCallFrequency">Maximum number of retrievals per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <returns>The requested string value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Set(System.String,System.Object,System.Double,System.Double)">
+            <summary>
+            Save an object in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Object to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetDouble(System.String,System.Double,System.Double,System.Double)">
+            <summary>
+            Save a double value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Double value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetInt(System.String,System.Int32,System.Double,System.Double)">
+            <summary>
+            Save an integer value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Integer value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetBool(System.String,System.Boolean,System.Double,System.Double)">
+            <summary>
+            Save a boolean value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Boolean value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetString(System.String,System.String,System.Double,System.Double)">
+            <summary>
+            Save a string value in the cache with the given name and time to live, restricting maximum call frequency to the range 2 to 1000 calls per second if required.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">String value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <param name="MaximumCallFrequency">Maximum number of set calls per second that are to be allowed for this item. A value of 0.0 will disable throttling. See <see cref="M:ASCOM.Utilities.Cache.Dispose"/> for further information.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When MaximumCallFrequency is not 0.0 and is outside the range 2.0 to 1000.0.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Get(System.String)">
+            <summary>
+            Immediatley retrieve an object from the cache with the given name with no throttling.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <returns>The requested object, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetDouble(System.String)">
+            <summary>
+            Immediatley retrieve a double value from the cache with the given name with no throttling.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <returns>The requested double value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetInt(System.String)">
+            <summary>
+            Immediatley retrieve an integer value from the cache with the given name with no throttling.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <returns>The requested integer value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetBool(System.String)">
+            <summary>
+            Immediatley retrieve a boolean value from the cache with the given name with no throttling.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <returns>The requested boolean value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.GetString(System.String)">
+            <summary>
+            Immediatley retrieve a string value from the cache with the given name with no throttling.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <returns>The requested string value, if present in the cache, or a "NotInCacheException" if there is no item in the cache that has the supplied name.</returns>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.Utilities.Exceptions.NotInCacheException">When there is no item in the cache with the supplied key.</exception>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.Set(System.String,System.Object,System.Double)">
+            <summary>
+            Save an object in the cache with the given name and time to live.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Object to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetDouble(System.String,System.Double,System.Double)">
+            <summary>
+            Save a double value in the cache with the given name and time to live.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Double value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetInt(System.String,System.Int32,System.Double)">
+            <summary>
+            Save an integer value in the cache with the given name and time to live.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Integer value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetBool(System.String,System.Boolean,System.Double)">
+            <summary>
+            Save a boolean value in the cache with the given name and time to live.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">Boolean value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Cache.SetString(System.String,System.String,System.Double)">
+            <summary>
+            Save a string value in the cache with the given name and time to live.
+            </summary>
+            <param name="Key">Name of this item in the cache. The key is case sensitive.</param>
+            <param name="Value">String value to be stored in the cache.</param>
+            <param name="CacheTime">Time in seconds before the item will be automatically removed from the cache.</param>
+            <exception cref="T:ASCOM.InvalidValueException">When Key is null or empty.</exception>
+            <exception cref="T:ASCOM.InvalidValueException">When CacheTime is negative.</exception>
+            <remarks>Any existing item in the cache with the same name will be overwritten.</remarks>
+        </member>
+        <member name="T:ASCOM.Utilities.CpuID">
+            <summary>
+            Class to obtain CPUID information from Intel and AMD processors
+            </summary>
+        </member>
+        <member name="M:ASCOM.Utilities.CpuID.Invoke(System.Int32)">
+            <summary>
+            Invoke the code that will read the requested CPUId leaf data and return it to managed memory
+            </summary>
+            <param name="leaf">Requested processor leaf</param>
+            <returns>A CpuId structure containing the EAX, EBX, ECX and EDX register values.</returns>
+            <remarks>This class is marked internal to keep it out of the ASCOM Help file. It can be accessed from other Platform assemblies by
+            including an "InternalsVisibleToAttribute" for each external component that requires access. At January 2018 this is just Diagnostics.</remarks>
+        </member>
+        <member name="T:ASCOM.Utilities.CpuID.CpuIdResult">
+            <summary>
+            Structure to hold the returned CPUId data
+            </summary>
+        </member>
+        <member name="F:ASCOM.Utilities.CpuID.x86CodeBytes">
+            <summary>
+            Machine code for 32bit systems
+            </summary>
+        </member>
+        <member name="F:ASCOM.Utilities.CpuID.x64CodeBytes">
+            <summary>
+            Machine code for 64bit systems
+            </summary>
+        </member>
+        <member name="T:ASCOM.Utilities.ICache">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ASCOM.Utilities.ICache.PumpMessagesInterval">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.Remove(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.ClearCache">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.Set(System.String,System.Object,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+            <param name="MaximumCallFrequency"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.Get(System.String,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="MaximumCallFrequency"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.SetDouble(System.String,System.Double,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+            <param name="MaximumCallFrequency"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.GetDouble(System.String,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="MaximumCallFrequency"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.SetInt(System.String,System.Int32,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+            <param name="MaximumCallFrequency"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.GetInt(System.String,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="MaximumCallFrequency"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.SetString(System.String,System.String,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+            <param name="MaximumCallFrequency"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.GetString(System.String,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="MaximumCallFrequency"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.SetBool(System.String,System.Boolean,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+            <param name="MaximumCallFrequency"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICache.GetBool(System.String,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="MaximumCallFrequency"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASCOM.Utilities.ICacheExtra">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.GetDouble(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.GetInt(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.GetString(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.GetBool(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.Set(System.String,System.Object,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.SetDouble(System.String,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.SetInt(System.String,System.Int32,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.SetString(System.String,System.String,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+        </member>
+        <member name="M:ASCOM.Utilities.ICacheExtra.SetBool(System.String,System.Boolean,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="Key"></param>
+            <param name="Value"></param>
+            <param name="CacheTime"></param>
+        </member>
+        <member name="T:ASCOM.Utilities.Exceptions.NotInCacheException">
+            <summary>
+            Exception thrown when a requested item is not present in the ASCOM cache.
+            </summary>
+            <remarks>When returned through COM, the exception number is hex 0x8004040D.</remarks>
+        </member>
+        <member name="M:ASCOM.Utilities.Exceptions.NotInCacheException.#ctor(System.String)">
+            <summary>
+            Create a new ASCOM NotInCacheException exception using the specified text message
+            </summary>
+            <param name = "message">Descriptive text describing the cause of the exception</param>
+        </member>
+        <member name="M:ASCOM.Utilities.Exceptions.NotInCacheException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new ASCOM NotInCacheException exception using the specified text message and inner exception.
+            </summary>
+            <param name = "message">Descriptive text describing the cause of the exception</param>
+            <param name = "inner">The inner exception that led to throwing this exception</param>
+        </member>
+        <member name="M:ASCOM.Utilities.Exceptions.NotInCacheException.#ctor">
+            <summary>
+            Initializes a new instance of the ASCOM NotInCacheException exception with no message.
+            Sets the COM HResult to <see cref = "F:ASCOM.ErrorCodes.UnspecifiedError" />.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Utilities.Exceptions.NotInCacheException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the ASCOM NotInCacheException exception.
+            </summary>
+            <param name = "info">The <see cref = "T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param>
+            <param name = "context">The <see cref = "T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.</param>
+            <exception cref = "T:System.ArgumentNullException">
+            The <paramref name = "info" /> parameter is null.
+            </exception>
+            <exception cref = "T:System.Runtime.Serialization.SerializationException">
+              The class name is null or <see cref = "P:System.Exception.HResult" /> is zero (0).
+            </exception>
+        </member>
+        <member name="P:ASCOM.Utilities.Exceptions.NotInCacheException.Number">
+            <summary>
+            The COM error code for this exception (hex 0x8004040D)
+            </summary>
+        </member>
+        <member name="T:ASCOM.Utilities.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Utilities.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Utilities.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>

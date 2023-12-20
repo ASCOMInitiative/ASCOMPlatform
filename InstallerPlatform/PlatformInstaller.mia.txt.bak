@@ -1247,9 +1247,9 @@ Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDI
 Install Assembly ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
 Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
 Comment: Install Files ..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
-Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
-Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
+Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
@@ -1490,8 +1490,8 @@ Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$
 Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
 Set Variable MYPROGRESS to 25
-Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
-Install Files ..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$
+Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$
 Comment: Platform 5.5 references
 Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $DEVELOPERTARGETDIR$\Components\Platform55\
 Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml to $DEVELOPERTARGETDIR$\Components\Platform55\

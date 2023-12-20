@@ -9065,7 +9065,7 @@ FALSE
 FALSE
 FALSE
 {AFFAC2E3-131B-42AB-A0DB-6055EB18D1FC}
-..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.pdb
+..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -9078,7 +9078,7 @@ FALSE
 FALSE
 FALSE
 {0808F9DA-4556-4B78-8A2F-902825998095}
-..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -11574,7 +11574,7 @@ FALSE
 FALSE
 FALSE
 {373962B1-948A-41EB-951D-5E1ABF43A0C2}
-..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.xml
+..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -11587,7 +11587,7 @@ FALSE
 FALSE
 FALSE
 {78AC6A06-ED84-42EA-B514-00D543355F24}
-..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
 FALSE|
 $VSREFERENCEFILES$
 FALSE
@@ -16370,7 +16370,7 @@ TRUE
 TRUE
 
 {9D6171F5-D1AF-4295-936D-1D9FF8E5AB1F}
-..\Interfaces\ASCOMExceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
 TRUE
 
 {1F7F0B19-8C68-4676-8D62-2733FBD50DD8}
