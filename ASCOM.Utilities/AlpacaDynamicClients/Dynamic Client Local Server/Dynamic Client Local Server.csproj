@@ -29,7 +29,7 @@
 		<Copyright>Copyright © 2023 The ASCOM Initiative</Copyright>
 		<AssemblyVersion>7.0.0.0</AssemblyVersion>
 		<FileVersion>7.0.0.0</FileVersion>
-		<PlatformTarget>AnyCPU</PlatformTarget>
+		<PlatformTarget>x86</PlatformTarget>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<PreBuildEvent />
 		<PostBuildEvent />
