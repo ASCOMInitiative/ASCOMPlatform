@@ -67,7 +67,7 @@ namespace ASCOM.Utilities
         private const bool ALPACA_MULTI_THREADED_CHOOSER_DEFAULT = true;
 
         // Alpaca integration constants
-        private const string ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH = @"ASCOM\Platform 7\Tools\AlpacaDynamicClientManager";
+        private const string ALPACA_DYNAMIC_CLIENT_MANAGER_RELATIVE_PATH = @"ASCOM\Platform\Tools\AlpacaDynamicClientManager";
         private const string ALPACA_DYNAMIC_CLIENT_MANAGER_EXE_NAME = "ASCOM.AlpacaDynamicClientManager.exe";
         private const string DRIVER_PROGID_BASE = "ASCOM.AlpacaDynamic"; // This value must match the same named constant in the Dynamic Client Local Server project LocalServer.cs file
 
