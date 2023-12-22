@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 #if NETSTANDARD2_0
-using ASCOM.Tools;
+//using ASCOM.Tools;
 #else
 using ASCOM.Utilities;
 #endif
@@ -22,11 +22,11 @@ namespace ASCOM.DeviceInterface
     {
         private IStateValue[] stateValues;
 
-#if NETSTANDARD2_0
-        TraceLogger logger = new TraceLogger("StateValueCollection", true);
-#else
-        TraceLogger logger = new TraceLogger("StateValueCollection");
-#endif
+//#if NETSTANDARD2_0
+//        TraceLogger logger = new TraceLogger("StateValueCollection", true);
+//#else
+//        TraceLogger logger = new TraceLogger("StateValueCollection");
+//#endif
 
         #region Initialisers
 
@@ -35,10 +35,10 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         public StateValueCollection()
         {
-            logger.LogMessage("Init", $"No parameters");
+            //logger.LogMessage("Init", $"No parameters");
 
             stateValues = new IStateValue[0];
-            logger.LogMessage("Init", $"Count: {stateValues.Length}");
+            //logger.LogMessage("Init", $"Count: {stateValues.Length}");
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         public StateValueCollection(List<IStateValue> list)
         {
-            logger.LogMessage("Init", $"List<IStateValue>");
+            //logger.LogMessage("Init", $"List<IStateValue>");
             stateValues = list.ToArray<IStateValue>();
-            logger.LogMessage("Init", $"Count: {stateValues.Length}");
+            //logger.LogMessage("Init", $"Count: {stateValues.Length}");
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         public StateValueCollection(List<StateValue> list)
         {
-            logger.LogMessage("Init", $"List<StateValue>");
+            //logger.LogMessage("Init", $"List<StateValue>");
             IStateValue[] stateValues = new StateValue[list.Count];
 
             int index = -1;
@@ -65,7 +65,7 @@ namespace ASCOM.DeviceInterface
                 stateValues[index++] = stateValue;
             }
 
-            logger.LogMessage("Init", $"Count: {stateValues.Length}");
+            //logger.LogMessage("Init", $"Count: {stateValues.Length}");
         }
 
         #endregion
@@ -81,7 +81,7 @@ namespace ASCOM.DeviceInterface
         {
             Array.Resize(ref stateValues, stateValues.Length + 1);
             stateValues[stateValues.Length - 1] = value;
-            logger.LogMessage("Add IStateValue", $"Count: {stateValues.Length}");
+            //logger.LogMessage("Add IStateValue", $"Count: {stateValues.Length}");
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace ASCOM.DeviceInterface
             StateValue stateValue = new StateValue(name, value);
             Array.Resize(ref stateValues, stateValues.Length + 1);
             stateValues[stateValues.Length - 1] = stateValue;
-            logger.LogMessage("Add Name, Value", $"Count: {stateValues.Length}");
+            //logger.LogMessage("Add Name, Value", $"Count: {stateValues.Length}");
         }
 
         #endregion
@@ -108,7 +108,7 @@ namespace ASCOM.DeviceInterface
         {
             get
             {
-                logger.LogMessage("Count", $"Returning count: {stateValues.Length}");
+                //logger.LogMessage("Count", $"Returning count: {stateValues.Length}");
                 return stateValues.Length;
             }
         }
@@ -119,8 +119,9 @@ namespace ASCOM.DeviceInterface
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            logger.LogMessage("GetEnumerator", $"Count: {stateValues.Length}");
-            return new StateValueCollectionEnumerator(stateValues, logger);
+            //logger.LogMessage("GetEnumerator", $"Count: {stateValues.Length}");
+            //return new StateValueCollectionEnumerator(stateValues, logger);
+            return new StateValueCollectionEnumerator(stateValues);
         }
 
         /// <summary>
@@ -133,17 +134,17 @@ namespace ASCOM.DeviceInterface
         {
             get
             {
-                logger.LogMessage("This", $"Index: {index}, Count: {stateValues.Length}");
+                //logger.LogMessage("This", $"Index: {index}, Count: {stateValues.Length}");
 
                 if ((index < 0) || (index >= stateValues.Length))
                     throw new InvalidValueException("StateValueCollection.Index", index.ToString(CultureInfo.CurrentCulture), $"1 to {stateValues.Length.ToString(CultureInfo.CurrentCulture)}");
                 try
                 {
-                    logger.LogMessage("This", $"Returning index: {index}");
+                    //logger.LogMessage("This", $"Returning index: {index}");
 
-                    logger.LogMessage("This", $"StateValues is null: {stateValues is null}");
+                    //logger.LogMessage("This", $"StateValues is null: {stateValues is null}");
 
-                    logger.LogMessage("This", $"Returning: {stateValues[index].Name}");
+                    //logger.LogMessage("This", $"Returning: {stateValues[index].Name}");
                     return stateValues[index];
 
                 }
@@ -175,7 +176,7 @@ namespace ASCOM.DeviceInterface
         {
             if (disposing)
             {
-                logger.LogMessage("Collection.Dispose", $"Dispose called - Disposing: {disposing}");
+                //logger.LogMessage("Collection.Dispose", $"Dispose called - Disposing: {disposing}");
             }
         }
 

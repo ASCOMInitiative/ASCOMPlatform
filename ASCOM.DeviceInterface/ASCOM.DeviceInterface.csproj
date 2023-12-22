@@ -40,18 +40,16 @@
 		 NOTE The links are only required to work when the Help files are built at compile time and are not required to work at runtime. -->
 
 	<!-- Select the correct reference depending on which framework is being built -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+	<PropertyGroup>
+		<IncludeReference>true</IncludeReference>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net35' And '$(IncludeReference)'=='true'">
 		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472' And '$(IncludeReference)'=='true'">
 		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
 	</ItemGroup>
-	<!-- <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">  -->
-	<!-- <ItemGroup> -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="ASCOM.Tools" Version="1.0.113-rc.2" PrivateAssets="All" />
-	</ItemGroup>
-
+	
 	<ItemGroup>
 		<None Include="..\ASCOM Art\Bug 300 Borderless.png">
 			<Pack>True</Pack>

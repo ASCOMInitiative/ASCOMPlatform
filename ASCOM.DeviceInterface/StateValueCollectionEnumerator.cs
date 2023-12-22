@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections;
 #if NETSTANDARD2_0
-using ASCOM.Tools;
+//using ASCOM.Tools;
 #else
 using ASCOM.Utilities;
 #endif
@@ -17,7 +17,7 @@ namespace ASCOM.DeviceInterface
     public class StateValueCollectionEnumerator : IEnumerator, IDisposable
     {
         private IStateValue[] stateValues;
-        private TraceLogger logger;
+        //private TraceLogger logger;
         private int index; // Index into the array of StateValue objects
         private bool disposedValue;
 
@@ -34,10 +34,11 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="stateValues"></param>
         /// <param name="logger"></param>
-        public StateValueCollectionEnumerator(IStateValue[] stateValues, TraceLogger logger)
+        //public StateValueCollectionEnumerator(IStateValue[] stateValues, TraceLogger logger)
+        public StateValueCollectionEnumerator(IStateValue[] stateValues)
         {
             this.stateValues = stateValues;
-            this.logger = logger;
+            //this.logger = logger;
             index = -1;
         }
 
@@ -58,14 +59,14 @@ namespace ASCOM.DeviceInterface
             // Test whether we are at the end of the collection
             if (index >= stateValues.Length) // We are at the end of the collection
             {
-                logger.LogMessage("MoveNext", $"Returning FALSE - Index: {index}, Count: {stateValues.Length}");
+                //logger.LogMessage("MoveNext", $"Returning FALSE - Index: {index}, Count: {stateValues.Length}");
                 // Cannot move further so return false
                 return false;
             }
             else // We are not at the end of the collection
             {
                 // Can move to the next value so increment the index and return true
-                logger.LogMessage("MoveNext", $"Returning TRUE - Index: {index}, Count: {stateValues.Length}");
+                //logger.LogMessage("MoveNext", $"Returning TRUE - Index: {index}, Count: {stateValues.Length}");
                 return true;
             }
         }
@@ -77,7 +78,7 @@ namespace ASCOM.DeviceInterface
         {
             // Reset the index to before the first element
             index = -1;
-            logger.LogMessage("Reset", $"Index: {index}, Count: {stateValues.Length}");
+            //logger.LogMessage("Reset", $"Index: {index}, Count: {stateValues.Length}");
         }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace ASCOM.DeviceInterface
         {
             get
             {
-                logger.LogMessage("Current", $"Index: {index}, Count: {stateValues.Length}");
+                //logger.LogMessage("Current", $"Index: {index}, Count: {stateValues.Length}");
 
                 // Validate the current index value
                 if (index < 0)
@@ -96,7 +97,7 @@ namespace ASCOM.DeviceInterface
                 if (index > stateValues.Length)
                     throw new InvalidOperationException($"StateValueCollection.Current - The requested index ({index}) is greater than the number of values in the collection ({stateValues.Length}).");
 
-                logger.LogMessage("Current", $"Returning: {stateValues[index].Name} = {stateValues[index].Value}");
+                //logger.LogMessage("Current", $"Returning: {stateValues[index].Name} = {stateValues[index].Value}");
 
                 return stateValues[index];
             }
@@ -116,7 +117,7 @@ namespace ASCOM.DeviceInterface
             {
                 if (disposing)
                 {
-                    logger.LogMessage("Enumerator.Dispose", $"Ignoring Dispose() - Disposing: {disposing}");
+                    //logger.LogMessage("Enumerator.Dispose", $"Ignoring Dispose() - Disposing: {disposing}");
                 }
 
                 disposedValue = true;

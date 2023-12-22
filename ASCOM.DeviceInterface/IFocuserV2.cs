@@ -7,7 +7,7 @@ using ASCOM.Utilities;
 #elif NET472
 using ASCOM.Utilities;
 #else
-using Util = ASCOM.Tools.Utilities;
+//using Util = ASCOM.Tools.Utilities;
 #endif
 
 namespace ASCOM.DeviceInterface
