@@ -41,15 +41,15 @@ namespace ASCOM.DynamicClients
             this.label1.TabIndex = 0;
             this.label1.Text = "This is an ASCOM driver, not a program for you to use.";
             // 
-            // frmMain
+            // LocalServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(233, 52);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "frmMain";
-            this.Text = "ASCOM.AlpacaSim.SafetyMonitor Driver Server";
+            this.Name = "LocalServerForm";
+            this.Text = "Dynamic Driver Local Server";
             this.ResumeLayout(false);
 
         }

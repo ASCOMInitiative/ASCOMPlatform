@@ -217,7 +217,7 @@ namespace ASCOM.DynamicRemoteClients
                 if (exitOK) exitCode = proc.ExitCode; // Save the exit code
             }
 
-            if (exitOK) TL.LogMessage("RunLocalServer", $"Local server exited OK with return code: {exitCode}");
+            if (exitOK) TL.LogMessage("RunLocalServer", $"Local server exited OK with return code: {exitCode:X8}");
             else
             {
                 string errorMessage = $"local server did not complete within {LOCALSERVER_WAIT_TIME} milliseconds, return code: {exitCode}";

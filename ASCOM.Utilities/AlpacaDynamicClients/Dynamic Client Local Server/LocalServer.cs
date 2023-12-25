@@ -44,7 +44,7 @@ namespace ASCOM.DynamicClients
 
         #endregion
 
-        #region Local Server entry point (main)
+        #region Local Server entry point (main) and un-handled exception handlers
 
         /// <summary>
         /// Main server entry point
@@ -53,12 +53,15 @@ namespace ASCOM.DynamicClients
         [STAThread]
         static void Main(string[] args)
         {
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             // Create a trace logger for the local server.
             TL = new TraceLogger("AlpacaSim.LocalServer", true)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
-            TL?.LogMessage("Main", $"Server started - Running as a {(Environment.Is64BitProcess?"64bit":"32bit")} process");
+            TL?.LogMessage("Main", $"Server started - Running as a {(Environment.Is64BitProcess ? "64bit" : "32bit")} process");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
             TL?.LogMessage("Main", $"Loading drivers");
@@ -171,6 +174,25 @@ namespace ASCOM.DynamicClients
             TL?.LogMessage("Main", $"Local server closing");
             TL.Dispose();
 
+        }
+
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            using (TraceLogger TL = new TraceLogger("DynamicServerThreadException", true))
+            {
+                TL.LogFatal("An un-handled thread exception occurred in the dynamic driver local server, please report this on the ASCOM Talk groups.io forum.");
+                TL.LogFatal(e.Exception.ToString());
+            }
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            using (TraceLogger TL = new TraceLogger("DynamicServerUnhandledException", true))
+            {
+                TL.LogFatal("An un-handled exception occurred in the dynamic driver local server, please report this on the ASCOM Talk groups.io forum.");
+                TL.LogFatal($"CLR is terminating: {e.IsTerminating}.");
+                TL.LogFatal(((Exception)e.ExceptionObject).ToString());
+            }
         }
 
         #endregion
@@ -353,6 +375,7 @@ namespace ASCOM.DynamicClients
             // Iterate over all ASCOM device types
             foreach (DeviceTypes deviceType in Enum.GetValues(typeof(DeviceTypes)))
             {
+                TL?.LogMessage("GetDynamicTypes", $"Processing device type: {deviceType}");
                 // Iterate over registered devices of the selected device type
                 Profile.GetDrivers(deviceType).ForEach(driver =>
                 {
@@ -377,6 +400,7 @@ namespace ASCOM.DynamicClients
                             TL?.LogMessage("GetDynamicTypes", $"Exception reading COM GUID: {ex.Message}, creating a new registration GUID.\r\n{ex}");
                             throw;
                         }
+                        TL?.LogMessage("GetDynamicTypes", $"  COM Class GUID: {registrationGuid}");
 
                         // Set appropriate class and interface types depending on the device type
                         Type driverType, interfaceType;
@@ -688,28 +712,33 @@ namespace ASCOM.DynamicClients
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo()
+            DialogResult dialogResult = MessageBox.Show("Admin restart required, do you want to restart?","Elevate Self",MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                Arguments = argument,
-                WorkingDirectory = Environment.CurrentDirectory,
-                FileName = Application.ExecutablePath,
-                Verb = "runas"
-            };
-            try
-            {
-                TL?.LogMessage("IsAdministrator", $"Starting elevated process");
-                Process.Start(processStartInfo);
+                ProcessStartInfo processStartInfo = new ProcessStartInfo()
+                {
+                    Arguments = argument,
+                    WorkingDirectory = Environment.CurrentDirectory,
+                    FileName = Application.ExecutablePath,
+                    Verb = "runas"
+                };
+                try
+                {
+                    TL?.LogMessage("IsAdministrator", $"Starting elevated process");
+                    Process.Start(processStartInfo);
+                }
+                catch (System.ComponentModel.Win32Exception)
+                {
+                    TL?.LogMessage("IsAdministrator", $"The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                    MessageBox.Show("The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                }
+                catch (Exception ex)
+                {
+                    TL?.LogMessage("IsAdministrator", $"Exception: {ex}");
+                    MessageBox.Show(ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                }
             }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                TL?.LogMessage("IsAdministrator", $"The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
-                MessageBox.Show("The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Warning));
-            }
-            catch (Exception ex)
-            {
-                TL?.LogMessage("IsAdministrator", $"Exception: {ex}");
-                MessageBox.Show(ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
+
             return;
         }
 
