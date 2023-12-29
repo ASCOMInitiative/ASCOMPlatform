@@ -1413,19 +1413,20 @@ Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.T
 [DEFINE REGION: Alpaca Support for Chooser]
  
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $PLATFORMTARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
+Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\*.* to $COMMONFILES$\ASCOM\AlpacaDynamicClients, include subfolders
  
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.deps.json to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe.config to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Alpaca.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Com.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe.config to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Alpaca.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Com.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
+Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 [END REGION]
  
 [DEFINE REGION: ASCOM Device Hub]

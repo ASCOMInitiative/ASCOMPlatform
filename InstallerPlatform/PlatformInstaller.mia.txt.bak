@@ -1657,7 +1657,7 @@ Set Variable NATIVE_ENGINE to TRUE
  
 [DEFINE REGION: Inno driver installer creator]
  
-Install Files ..\Doc\DriverInstallers.html to $PLATFORMTARGETDIR$\Developer Documentation
+Install Files ..\Doc\DriverInstallers.html to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $DEVELOPERTARGETDIR$\Installer Generator
 Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $DEVELOPERTARGETDIR$\Installer Generator
 Install Files ..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $DEVELOPERTARGETDIR$\Installer Generator
