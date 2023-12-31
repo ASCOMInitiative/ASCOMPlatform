@@ -1344,7 +1344,9 @@ namespace ASCOM.Utilities
                         do
                         {
                             Thread.Sleep(10);
-                            Application.DoEvents();
+                            if(AlpacaMultiThreadedChooser)
+                                Application.DoEvents();
+                            TL.LogMessage("DiscoverAlpacaDevices", $"Waiting for DiscoveryComplete to become true: {discovery.DiscoveryComplete}");
                         }
                         while (!discovery.DiscoveryComplete);
                         TL.LogMessage("DiscoverAlpacaDevices", $"Discovery phase has finished");
