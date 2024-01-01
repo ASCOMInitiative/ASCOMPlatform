@@ -57,12 +57,13 @@ namespace ASCOM.DeviceInterface
         public StateValueCollection(List<StateValue> list)
         {
             //logger.LogMessage("Init", $"List<StateValue>");
-            IStateValue[] stateValues = new StateValue[list.Count];
+            stateValues = new StateValue[list.Count];
 
             int index = -1;
             foreach (StateValue stateValue in list)
             {
-                stateValues[index++] = stateValue;
+                index++;
+                stateValues[index] = stateValue;
             }
 
             //logger.LogMessage("Init", $"Count: {stateValues.Length}");
