@@ -5,6 +5,7 @@ Comment: Set the Platform and developer target directories
 Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform
 Set Variable DEVELOPERTARGETDIR to $PROGRAMFILES$ASCOM\Developer
 Set Variable VSREFERENCEFILES to $DEVELOPERTARGETDIR$\Components
+Set Variable VSREFERENCEPLATFORM6 to $PROGRAMFILES$ASCOM\Platform 6 Developer Components\Components
  
 Comment: The installer must be started in 32bit MSI mode
 Set Variable NATIVE_ENGINE to FALSE
@@ -275,6 +276,7 @@ Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
 Write into Text File $SETUPLOG$ from Value $TIME$ Developer content target folder: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer links to $DEVELOPERMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer content files to $VSREFERENCEFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing Platform 6 developer content files to $VSREFERENCEPLATFORM6$ (at end of file)
  
 Get Folder Location System->Desktop Directory into DESKTOPDIR
 Get Common Folder Location System->Desktop Directory into DESKTOPDIRALL
@@ -1072,6 +1074,10 @@ if Variable REMOVE Equals TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform 7 (at end of file)
   end
    
+  Comment: Clean remaining shortcuts.
+  Delete Files $SHORTCUTFILESALL$\ASCOM Omni-Simulators.lnk (when uninstalling)
+  Delete Files $SHORTCUTFILESALL$\ASCOM Remote Server.lnk (when uninstalling)
+   
   Comment: Bypass the installation code and go to the finish dialogue
   GoTo Label: Finish Setup
 end
@@ -1514,59 +1520,56 @@ Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$\P
 Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$\Platform55
  
 Comment: Platform 5 references
-Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform55
+Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform5
+Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform5
  
 Set Variable MYPROGRESS to 25
  
 [END REGION]
  
 [DEFINE REGION: Visual Studio assembly references for Platform 6 backward compatibility]
-Comment: Set the location of the developer components used in Platform 6
-Set Variable VSREFERENCEFILES to $PROGRAMFILES$ASCOM\Platform 6 Developer Components\Components
- 
 Comment: Platform 6.4 references
-Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$\Platform6
+Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEPLATFORM6$\Platform6
  
 Comment: Platform 6.1 references
-Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $VSREFERENCEFILES$\Platform6
+Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $VSREFERENCEPLATFORM6$\Platform6
  
 Comment: Platform 6 references
-Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform6
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform6
+Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEPLATFORM6$\Platform6
  
 Comment: Platform 5.5 references
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.xml to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.xml to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.xml to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.xml to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.xml to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $VSREFERENCEPLATFORM6$\Platform55
+Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $VSREFERENCEPLATFORM6$\Platform55
  
 Comment: Platform 5 references
-Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform55
+Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEPLATFORM6$\Platform5
+Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEPLATFORM6$\Platform5
  
 Set Variable MYPROGRESS to 30
  
