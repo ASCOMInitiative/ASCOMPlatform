@@ -8,7 +8,7 @@ namespace ASCOM
     /// This exception should be used to indicate that an in-progress operation has been cancelled.
     /// </summary>
     /// <remarks>
-    /// <para>If you need to throw this error as a COM exception use the error number: 0x80040408.</para>
+    /// <para>If you need to throw this error as a COM exception use the error number: 0x8004040E.</para>
     /// </remarks>
     [Serializable]
     [ComVisible(true)]
