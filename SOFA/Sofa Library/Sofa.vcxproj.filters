@@ -779,4 +779,7 @@
       <Filter>ASCOM Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\README - ASCOM SOFA Code Conversion Notes.txt" />
+  </ItemGroup>
 </Project>
