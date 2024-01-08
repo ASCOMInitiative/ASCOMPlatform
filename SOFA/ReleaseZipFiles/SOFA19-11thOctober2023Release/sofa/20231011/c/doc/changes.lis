@@ -1,0 +1,131 @@
+
+This is the list of updates and changes that are actual errors.  
+Additions, such as including the units "radians", and/or typographical 
+alterations are not listed.  They include changing capitalisation, e.g.  
+AU -> au and Of -> of, and consistent spelling i.e. catalogue -> catalog.
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Corrections to Code
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran
+
+STARPV, PVSTAR Code changes to make better use of machine precision
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C
+
+Starpv, Pvstar 
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Updated parameters
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran 
+
+DAT
+       PARAMETER ( IYV = 2023 )
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C
+
+Dat
+    enum { IYV = 2023};
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Changes to comments
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran
+
+A2TF, D2TF  Notes: 3, last line
+
+*     by testing for IHMSF(1)=24 and setting IHMSF(2-4) to zero.
+
+
+ATOIQ  Notes: 1, first line 
+
+*  1) "Observed" Az,ZD means ...
+
+
+C2T06A  Notes: 1, 2nd line, i.e. the end of the first sentence is
+
+*     apportioned in any convenient way between the two arguments. 
+
+
+FK45Z  Notes: 4, last sentence
+
+ *     stars, whether polar or not.  At epoch J2000.0,  ...
+
+FK54Z Notes 3, first line is
+
+ 3) Conversion from J2000.0 FK5 to B1950.0 FK4 only is provided for.
+
+
+HFK5Z  Notes: 6, first line
+
+ 6) See also iau_FK52H, iau_H2FK5, iau_FK5HZ.
+
+
+LTPB  Notes: 1, line 3
+
+*     where P_ICRS is a vector in the International Celestial Reference
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C
+
+
+A2tf  Note 3, last line 
+
+**     by testing for ihmsf[0]=24 and setting ihmsf[1-3] to zero.
+
+
+Atoiq  Notes: 1, first line 
+
+**  1) "Observed" Az,ZD means ...
+
+
+C2t06a  Notes: 1, 2nd line, i.e. the end of the first sentence is
+
+< **     apportioned in any convenient way between the two arguments. 
+
+
+Fk45z  Notes: 4, last sentence
+
+**     motions for all stars, whether polar or not.  At epoch J2000.0,
+
+
+Fk54z Notes 3, first line is
+
+**  3) Conversion from J2000.0 FK5 to B1950.0 FK4 only is provided for.
+
+
+Hfk5z  Notes: 6, first line
+
+ **  6) See also iauFk52h, iauH2fk5, iauFk5hz.
+ 
+ 
+t_sofa_c.c  The test program.  In the routine t_atccq the list of 
+                               called routines is
+ **  Called:  iauApci13, iauAtccq, vvd
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Additions to Cookbooks
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Forty SOFA routines are not mentioned in the existing cookbooks; in
+some cases simply because the routine was developed after the relevant
+cookbook had been written. To address this deficiency, enhancements
+have been drafted to two of the existing cookbooks (those on astrometry
+and Earth attitude) and a new one (on miscellaneous topics) has been
+written. This new cookbook is available for each distribution i.e.
+sofa_misc_f.pdf for Fortran and sofa_misc_c.pdf for ANSI C. Topics
+include ecliptic and galactic coordinates, Hipparcos/FK5 and FK4/FK5
+transformations, geodesy and solar-system ephemerides. 
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+2023 May 31
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +

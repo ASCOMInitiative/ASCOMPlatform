@@ -202,7 +202,8 @@ int iauDat(int iy, int im, int id, double fd, double* deltat)
 	int NDAT; // Number of valid records in the pointer based table (not the dimension of the array itself)
 
 	/* Release year for this version of iauDat */
-	enum { IYV = 2021 };
+	/* This is used to trigger a "warning" error code (1) when this iauDat routine is called more than 5 years after this date */
+	enum { IYV = 2023 };
 
 	/* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
 	static const double drift[][2] =

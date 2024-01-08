@@ -48,10 +48,10 @@ namespace ASCOM.Astrometry.SOFA
         private const string SOFA_DLL_LOCATION = @"\ASCOM\Astrometry\"; // This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
 
         // Release and revision constants
-        private const int SOFA_RELEASE_NUMBER = 18;
-        private const string SOFA_ISSUE_DATE = "2021-05-12";
+        private const int SOFA_RELEASE_NUMBER = 19;
+        private const string SOFA_ISSUE_DATE = "2023-10-11";
         private const int SOFA_REVISION_NUMBER = 0; // Not presented in the interface, maintained here for reference
-        private const string SOFA_REVISION_DATE = "2021-05-12";
+        private const string SOFA_REVISION_DATE = "2023-10-11";
 
         private const int MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES = 100;
 
