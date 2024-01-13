@@ -1,2 +1,0 @@
-IF (LicenseAccept.Checked = True)  THEN  Next.Enabled := True;
-IF (LicenseAccept.Checked = False)  THEN  Next.Enabled := False;

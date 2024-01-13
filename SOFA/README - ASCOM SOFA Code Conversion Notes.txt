@@ -10,9 +10,9 @@ When a new SOFA release is available:
 9. In Visual Studio, add the t_sofa_c.c file to the "Sofa Test Application" Visual Studio Source Files list
 10. In Visual Studio, change t_sofa_c.c file #include <sofa.h> line to #include "sofa.h"
 11. In Visual Studio, adapt the SOFA source code so that it will compile under Visual Studio; you need to make the (non-functional) changes shown below.
-12. In Visual Studio, adapt the ASCOMDat.c "Release year for this version of iauDat" enum value to the one in the latest dat.c file e.g. enum { IYV = 2019 };
+12. In Visual Studio, adapt the ASCOMDat.c "Release year for this version of iauDat" enum value to the one in the latest dat.c file e.g. you are looking for a line that resembles this but contains a later year number: enum { IYV = 2019 };
 13. In Visual Studio, edit the product version number stored in the resource files "Sofa Library.rc" (ASCOM Resouirce Files folder) and "Sofa Test Application.rc" (Resource Files folder) to reflect the new SOFA major and revision versions e.g. 18,0,0,0
-14. In Visual Studio, update the release number, issue date, revision number and revision date constants at the top of the SOFA.vb file in the Astrometry project to match the new SOFA release.
+14. In Visual Studio, update the release number, issue date, revision number and revision date constants at the top of the SOFA.cs file in the Astrometry project to match the new SOFA release.
 15. Build the two projects to confirm that all is well.
 16. At a command prompt, run both the 32 and 64bit versions of the the Sofa Test Application and confirm that no errors are generated.
 17. Commit the changes, make a new build and test it with the Diagnostics application.
