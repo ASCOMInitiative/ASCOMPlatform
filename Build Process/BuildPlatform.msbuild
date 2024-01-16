@@ -15,32 +15,42 @@
 
 	<!--  Set values according to type of build -->
 	<Choose>
-		<When Condition=" '$(BuildType)'=='Release' ">
-			<PropertyGroup>
-				<!-- GIT Branch to Check Out -->
-				<GitCheckoutBranch>master</GitCheckoutBranch>
-				<OmniSimCheckoutBranch>main</OmniSimCheckoutBranch>
-
-				<!--  Specify Release or Debug builds (Platform Debug not working at 25/10/21) -->
-				<PlatformConfiguration>Release</PlatformConfiguration>
-				<OmniSimConfiguration>Debug</OmniSimConfiguration>
-
-				<!-- Annotation to add to the installer name to identify this build type -->
-				<BuildTypeAnnotation></BuildTypeAnnotation>
-			</PropertyGroup>
-		</When>
+		<!--  RELEASE CANDIDATE build -->
 		<When Condition=" '$(BuildType)'=='ReleaseCandidate' ">
 			<PropertyGroup>
-				<!-- GIT Branch to Check Out -->
+				<!-- Platform release candidate configuration -->
 				<GitCheckoutBranch>platform7</GitCheckoutBranch>
-				<OmniSimCheckoutBranch>buildtest</OmniSimCheckoutBranch>
+				<PlatformConfiguration>release</PlatformConfiguration>
 
-				<!--  Specify Release or Debug builds (Platform Debug not working at 25/10/21) -->
-				<PlatformConfiguration>Release</PlatformConfiguration>
-				<OmniSimConfiguration>Debug</OmniSimConfiguration>
+				<!--  OmniSIm release candidate configuration -->
+				<OmniSimCheckoutBranch>devicestatefix</OmniSimCheckoutBranch>
+				<OmniSimConfiguration>release</OmniSimConfiguration>
+
+				<!--  ASCOM Remote release configuration -->
+				<AscomRemoteRepositorytBranch>develop</AscomRemoteRepositorytBranch>
+				<AscomRemoteBuildConfiguration>release</AscomRemoteBuildConfiguration>
 
 				<!-- Annotation to add to the installer name to identify this build type -->
 				<BuildTypeAnnotation>beta</BuildTypeAnnotation>
+			</PropertyGroup>
+		</When>
+		<!--  RELEASE build -->
+		<When Condition=" '$(BuildType)'=='Release' ">
+			<PropertyGroup>
+				<!-- Platform release configuration -->
+				<GitCheckoutBranch>master</GitCheckoutBranch>
+				<PlatformConfiguration>release</PlatformConfiguration>
+
+				<!--  OmniSim release configuration -->
+				<OmniSimCheckoutBranch>main</OmniSimCheckoutBranch>
+				<OmniSimConfiguration>release</OmniSimConfiguration>
+
+				<!--  ASCOM Remote release configuration -->
+				<AscomRemoteRepositorytBranch>release</AscomRemoteRepositorytBranch>
+				<AscomRemoteBuildConfiguration>release</AscomRemoteBuildConfiguration>
+				
+				<!-- Annotation to add to the installer name to identify this build type -->
+				<BuildTypeAnnotation></BuildTypeAnnotation>
 			</PropertyGroup>
 		</When>
 	</Choose>
@@ -91,10 +101,10 @@
 		<DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
 		<PlatformHelpDirectory>Help\Output\Platform</PlatformHelpDirectory>
 		<DeveloperHelpDirectory>Help\Output\Developer</DeveloperHelpDirectory>
-		<PlatformInstallerDirectory>InstallerPlatform</PlatformInstallerDirectory>
+		<PlatformInstallerDirectory>Installer</PlatformInstallerDirectory>
 		<DeveloperInstallerDirectory>InstallerDeveloper</DeveloperInstallerDirectory>
-		<PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
-		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
+		<PlatformInstallerProject>$(PlatformInstallerDirectory)\PlatformInstaller.mpr</PlatformInstallerProject>
+		<DeveloperInstallerProject>$(DeveloperInstallerDirectory)\DeveloperInstaller.mpr</DeveloperInstallerProject>
 		<FindGUIDsDirectory>InstallerSupport\Find GUIDs\bin\$(PlatformConfiguration)</FindGUIDsDirectory>
 		<RemoveASCOMDirectory>InstallerSupport\Remove ASCOM\bin\$(PlatformConfiguration)</RemoveASCOMDirectory>
 		<RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
@@ -108,9 +118,14 @@
 		<VSIXInstallerFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\bin\$(PlatformConfiguration)\$(VSIXInstallerFileName).$(VSIXInstallerFileType)</VSIXInstallerFile2022>
 		<VSIXManifestFile2022>DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\source.extension.vsixmanifest</VSIXManifestFile2022>
 		<PackageVersionFile>Directory.Build.props</PackageVersionFile>
-		<ASCOMExceptionsPackageFolder>Interfaces\ASCOMExceptions\bin\Release</ASCOMExceptionsPackageFolder>
+		<ASCOMExceptionsPackageFolder>ASCOM.Exceptions\bin\Release</ASCOMExceptionsPackageFolder>
 		<BuildEnvironmentPackageFolder>BuildEnvironment\bin\Release</BuildEnvironmentPackageFolder>
+		<DeviceInterfacesPackageFolder>\ASCOM.DeviceInterface\bin\Release</DeviceInterfacesPackageFolder>
 		<GacInstallFile>$(CheckoutDirectory)\InstallerSupport\GACInstall\bin\$(PlatformConfiguration)\GacInstall.exe</GacInstallFile>
+		<SOFAProjectDirectory>SOFA\Sofa Library</SOFAProjectDirectory>
+		<SOFAProjectFile>Sofa.vcxproj</SOFAProjectFile>
+		<NOVASProjectDirectory>NOVAS\NOVAS-31\NOVAS3</NOVASProjectDirectory>
+		<NOVASProjectFile>NOVAS3.vcxproj</NOVASProjectFile>
 		
 		<!-- NuGet location and command to restore Platform NuGet dependencies -->
 		<NuGetCommand>..\nuget restore</NuGetCommand>
@@ -121,27 +136,25 @@
 
 	</PropertyGroup>
 
-	<!-- Set OmniSim properties -->
+	<!-- Set OmniSim and ASCOM Remote properties -->
 	<PropertyGroup>
-		<!-- GitHub URL from which to make the Omni Simulator clone -->
-		<OmniSimRepositoryPath>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimRepositoryPath>
-
-		<!-- Directory in which to export the latest ASCOM OmniSim code base from GitHub-->
-		<OmniSimCheckoutDirectoryRelative>OmniSim</OmniSimCheckoutDirectoryRelative>
-		<OmniSimCheckoutDirectory>$(MSBuildProjectDirectory)\$(CheckoutDirectoryRelative)\$(OmniSimCheckoutDirectoryRelative)</OmniSimCheckoutDirectory>
-		<OmniSimProjectDirectory>$(OmniSimCheckoutDirectory)\ASCOM.Alpaca.Simulators</OmniSimProjectDirectory>
-		
-		<!-- Names and locations of solution and project files used for building the OmniSims -->
-		<OmniSimVSSolution>ASCOM.Alpaca.Simulators.sln</OmniSimVSSolution>
-		<OmniSimVSProject>ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>
+		<!-- Set OmniSim properties -->
+		<OmniSimGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimGitRepositoryURL>
+		<OmniSimDirectory>$(CheckoutDirectory)\OmniSimulators</OmniSimDirectory>
+		<OmniSimVSProject>$(OmniSimDirectory)\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>
+		<OmniSimCheckoutTag></OmniSimCheckoutTag>
+		<!-- Set ASCOM Remote properties -->
+		<AscomRemoteGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOMRemote.git</AscomRemoteGitRepositoryURL>
+		<AscomRemoteDirectory>$(CheckoutDirectory)\AscomRemote</AscomRemoteDirectory>
+		<AscomRemoteVSProject>$(AscomRemoteDirectory)\Remote Server\Remote Server.csproj</AscomRemoteVSProject>
+		<SetNetworkPermissionsVSProject>$(AscomRemoteDirectory)\SetNetworkPermissions\SetNetworkPermissions.csproj</SetNetworkPermissionsVSProject>
 	</PropertyGroup>
-	
+
 	<!-- Main build target for this build -->
 	<Target Name="Build">
-
 		<!-- Item group for the installers that are created by the build process -->
 		<ItemGroup>
-			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM*.*;$(MSBuildProjectDirectory)\*.vsix;$(MSBuildProjectDirectory)\*.nupkg" />
+			<OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM*.*;$(MSBuildProjectDirectory)\*.vsix;$(MSBuildProjectDirectory)\*.nupkg;$(MSBuildProjectDirectory)\*.zip" />
 		</ItemGroup>
 
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
@@ -177,33 +190,76 @@
 		<MakeDir Directories="$(CheckoutDirectory)"/>
 
 		<!-- Clone a fresh copy of the ASCOM Platform Git repository  -->
-		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
+		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="--branch $(GitCheckoutBranch) $(GitRepositoryPath) $(CheckoutDirectoryRelative)"/>
+
+		<!-- Create the OmniSim directory ready for cloning  -->
+		<MakeDir Directories="$(OmniSimDirectory)"/>
 
 		<!-- Clone a fresh copy of the OmniSim Git repository  -->
-		<GitClient Command="clone" LocalPath="$(MSBuildProjectDirectory)" Arguments="-b $(OmniSimCheckoutBranch) $(OmniSimRepositoryPath) $(CheckoutDirectoryRelative)\$(OmniSimCheckoutDirectoryRelative)"/>
+		<GitClient Command="clone" LocalPath="$(OmniSimDirectory)" Arguments='--depth 1 --branch $(OmniSimCheckoutBranch) $(OmniSimGitRepositoryURL) "$(OmniSimDirectory)"'/>
 
-		<!-- Publish the x86 OmniSims -->
-		<MSBuild Projects="$(OmniSimProjectDirectory)\$(OmniSimVSProject)"
+		<!-- Publish a 32bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; 			TrimMode=full; -->
+		<Exec Command="dotnet publish -c Release -r win-x86 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -o ..\publish\x86" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
+
+		<!-- Publish a 64bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; -->
+		<Exec Command="dotnet publish -c Release -r win-x64 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -o ..\publish\x64" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
+
+		<Message Text="Completed building the Omni-Simulators." />
+		
+		<!-- Publish ASCOM Remote -->
+		<!-- Create the export directory ready for cloning  -->
+		<MakeDir Directories="$(AscomRemoteDirectory)"/>
+
+		<!-- Clone a fresh copy of the ASCOM Remote Git repository  -->
+		<GitClient Command="clone" LocalPath="$(AscomRemoteDirectory)" Arguments='--depth 1 --branch $(AscomRemoteRepositorytBranch) $(AscomRemoteGitRepositoryURL) "$(AscomRemoteDirectory)"'/>
+
+		<!-- Publish 32bit ASCOM Remote -->
+		<MSBuild Projects="$(AscomRemoteVSProject)"
 			Targets="restore;rebuild;publish" 
-			Properties="Configuration=$(OmniSimConfiguration);
-			Platform=Any CPU;
-			PublishSingleFile=true;
-			DebugType=embedded;
-			PublishDir=..\publish\x86;
-			DefineConstants=ASCOM_COM;
-			RuntimeIdentifier=win-x86"/>
+			Properties="Configuration=$(AscomRemoteBuildConfiguration);
+			DefineConstants=PLATFORM_BUILD;
+			Platform=AnyCPU;
+			OutputDir=builds\Ascomremote\x86\;
+			RuntimeIdentifier=win-x86;
+			SelfContained=true;
+			PublishDir=..\publish\AscomRemote\x86\;
+			DebugType=embedded" />
+		<Message Text="Completed building ASCOM Remote x86." />
 
-		<!-- Publish the x64 OmniSims -->
-		<MSBuild Projects="$(OmniSimProjectDirectory)\$(OmniSimVSProject)"
+		<!-- Remove obj and bin folders from previous build to get a new clean compile -->
+		<RemoveDir Directories="$(AscomRemoteDirectory)\Remote Server\obj" ContinueOnError="False" />
+		<RemoveDir Directories="$(AscomRemoteDirectory)\Remote Server\bin" ContinueOnError="False" />
+
+		<!-- Publish 64bit ASCOM Remote -->
+		<MSBuild Projects="$(AscomRemoteVSProject)"
+			Targets="clean;restore;rebuild;publish" 
+			Properties="Configuration=$(AscomRemoteBuildConfiguration);
+			DefineConstants=PLATFORM_BUILD;
+			Platform=Any CPU;
+			OutputDir=builds\AscomRemote\x64\;
+			RuntimeIdentifier=win-x64;
+			SelfContained=true;
+			PublishDir=..\publish\AscomRemote\x64\;
+			DebugType=embedded" />
+		<Message Text="Completed building ASCOM Remote x64." />
+
+		<!-- Publish SetNetworkPermissions x86 -->
+		<MSBuild Projects="$(SetNetworkPermissionsVSProject)"
 			Targets="restore;rebuild;publish" 
-			Properties="Configuration=$(OmniSimConfiguration);
-			Platform=Any CPU;
-			PublishSingleFile=true;
-			DebugType=embedded;
-			PublishDir=..\publish\x64;
-			DefineConstants=ASCOM_COM;
-			RuntimeIdentifier=win-x64"/>
+			Properties="Configuration=$(AscomRemoteBuildConfiguration);
+			Platform=AnyCPU;
+			OutputDir=builds\x86\;
+			RuntimeIdentifier=win-x86;
+			SelfContained=true;
+			PublishDir=..\publish\SetNetworkPermissions\x86\;
+			DebugType=embedded" />
 
+		<Message Text="Completed building SetNetworkPermissions 32bit." />
+		
 		<!-- Get the latest commit number into the Revision Property to use in the the Platform version number  Now uses 'all' instead of 'HEAD' to get latest commit accross all branches. -->
 		<Exec Command="git.exe rev-list --all --count" ConsoleToMSBuild="true" WorkingDirectory="$(CheckoutDirectory)">
 			<Output TaskParameter="ConsoleOutput" PropertyName="Revision" />
@@ -304,6 +360,30 @@
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(PlatformConfiguration);Platform=Mixed Platforms" />
 		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(PlatformConfiguration);Platform=Mixed Platforms" />
 
+		<!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(PlatformConfiguration);Platform=x64" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(PlatformConfiguration);Platform=x64" />
+
+		<!-- Build the SOFA and NOVAS ARM64 DLLs -->
+		<MSBuild Projects="$(CheckoutDirectory)\$(SOFAProjectDirectory)\$(SOFAProjectFile);$(CheckoutDirectory)\$(NOVASProjectDirectory)\$(NOVASProjectFile)" Targets="Clean" Properties="Configuration=$(PlatformConfiguration);Platform=ARM64" />
+		<MSBuild Projects="$(CheckoutDirectory)\$(SOFAProjectDirectory)\$(SOFAProjectFile);$(CheckoutDirectory)\$(NOVASProjectDirectory)\$(NOVASProjectFile)" Targets="Build" Properties="Configuration=$(PlatformConfiguration);Platform=ARM64" />
+
+		<!-- Create a list of the compiled SOFA and NOVAS DLLs -->
+		<ItemGroup>
+			<AstrometryFileDLLs Include="$(CheckoutDirectory)\$(SOFAProjectDirectory)\ARM64\$(PlatformConfiguration)\*.DLL;$(CheckoutDirectory)\$(SOFAProjectDirectory)\Win32\$(PlatformConfiguration)\*.DLL;$(CheckoutDirectory)\$(SOFAProjectDirectory)\x64\$(PlatformConfiguration)\*.DLL" />
+			<AstrometryFileDLLs Include="$(CheckoutDirectory)\$(NOVASProjectDirectory)\ARM64\$(PlatformConfiguration)\*.DLL;$(CheckoutDirectory)\$(NOVASProjectDirectory)\Win32\$(PlatformConfiguration)\*.DLL;$(CheckoutDirectory)\$(NOVASProjectDirectory)\x64\$(PlatformConfiguration)\*.DLL" />
+		</ItemGroup>
+		
+		<!-- Sign  the astrometry DLLs -->
+		<Message Text="Signing astrometry DLLs..."/>
+		<Exec Command="$(SignToolBase256) &quot;%(AstrometryFileDLLs.Identity)&quot;" 
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(CheckoutDirectory)" />
+		<Message Text="Signed astrometry DLLs."/>
+	
+		<!-- Zip up the signed NOVAS and SOFA DLLs and store the zip file in the build root directory -->		
+		<Zip Files="@(AstrometryFileDLLs)" ZipFileName="$(MSBuildProjectDirectory)\AstrometryDlls.$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)" />
+		
 		<!-- Sign and copy the RemoveASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(RemoveASCOMExe)&quot;" 
 			ConsoleToMSBuild="true" 
@@ -318,11 +398,7 @@
 		<ItemGroup>
 			<ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
 		</ItemGroup>
-		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM$(BuildTypeAnnotation).$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
-
-		<!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=$(PlatformConfiguration);Platform=x64" />
-		<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=$(PlatformConfiguration);Platform=x64" />
+		<Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.$(Revision).zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
 		<!-- Sign the executables that support the Platform installation process, these are not automatically signed by the InstallAware build process -->
 			<!-- Condition="'$(SignCode)'=='True'" -->
@@ -333,15 +409,15 @@
 			ConsoleToMSBuild="true" 
 			WorkingDirectory="$(CheckoutDirectory)" />
 
-		<!-- Sign the executables that support the Developer installation process, these are not automatically signed by the InstallAware build process -->
+		<!-- Sign the executables that support the Developer installation process, these are not automatically signed by the InstallAware build process
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.exe&quot;" 
 			ConsoleToMSBuild="true" 
 			WorkingDirectory="$(CheckoutDirectory)" />
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.dll&quot;" 
 			ConsoleToMSBuild="true" 
-			WorkingDirectory="$(CheckoutDirectory)" />
+			WorkingDirectory="$(CheckoutDirectory)" /> -->
 
-		<!-- Sign the GACInstall executable that supports the Platform installation process because it  must be singed always to avoid anti-virus alerts. -->
+		<!-- Sign the GACInstall executable that supports the Platform installation process because it  must be signed always to avoid anti-virus alerts. -->
 		<Exec Command="$(SignToolBase256) &quot;$(GacInstallFile)&quot;" 
 			ConsoleToMSBuild="true" 
 			WorkingDirectory="$(CheckoutDirectory)" />
@@ -374,33 +450,30 @@
 
 		<!-- Rename index.html files so that they work on the ASCOM Standards web site -->
 		<Exec Command='Rename "$(CheckoutDirectory)\$(PlatformHelpDirectory)\index.html" "Index.html" ' />
-		<Exec Command='Rename "$(CheckoutDirectory)\$(DeveloperHelpDirectory)\index.html" "Index.html" ' />
+
+		<Message Text="Starting Installaware build with command: $(MIABuild) $(CheckoutDirectory)\$(PlatformInstallerProject) $(MIAOptions)" />
 
 		<!-- Build the InstallAware installers -->
 		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" $(MIAOptions)' />
-		<Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" $(MIAOptions)' />
 
-		<!-- Sign the Platform and developer installer executables if we are not signing everything - required to satisfy anti-virus. -->
+		<Message Text="Completed installer build." />
+		
+		<!-- Sign the Platform installer executables. -->
 		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\single\*.exe&quot;" 
 			ConsoleToMSBuild="true" 
-			Condition="'$(SignCode)'!='True'"
-			WorkingDirectory="$(CheckoutDirectory)" />
-		<Exec Command="$(SignToolBase256) &quot;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\single\*.exe&quot;" 
-			ConsoleToMSBuild="true" 
-			Condition="'$(SignCode)'!='True'"
 			WorkingDirectory="$(CheckoutDirectory)" />
 
+		<Message Text="Completed signing the installer." />
+		
 		<!-- Copy the installers back to the build root directory -->
 		<Sleep Milliseconds="1000" />
 		<ItemGroup>
 			<PlatformInstallers
-			Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe;
-			$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe" />
+			Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack).exe" />
 		</ItemGroup>
 		<ItemGroup>
 			<PlatformInstallersRenamed
-			Include="$(MSBuildProjectDirectory)\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack)$(BuildTypeAnnotation).$(Revision).exe;
-			$(MSBuildProjectDirectory)\AscomDeveloper$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack)$(BuildTypeAnnotation).$(Revision).exe" />
+			Include="$(MSBuildProjectDirectory)\AscomPlatform$(PlatformMajor)$(PlatformMinor)$(PlatformServicePack)$(BuildTypeAnnotation).$(Revision).exe" />
 		</ItemGroup>
 		<Copy SourceFiles="@(PlatformInstallers)" DestinationFiles="@(PlatformInstallersRenamed)" />
 
@@ -421,6 +494,12 @@
 			<VSIXInstallerDestinationFile2022 Include="$(MSBuildProjectDirectory)\$(VSIXInstallerFileName)2022.$(Revision).$(VSIXInstallerFileType)"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(VSIXInstallerSourceFile2022)" DestinationFiles="@(VSIXInstallerDestinationFile2022)" SkipUnchangedFiles="false" />
+
+		<!-- Copy the ASCOM device interfaces package to the root folder -->
+		<ItemGroup>
+			<DeviceInterfacePackage Include="$(CheckoutDirectory)\$(DeviceInterfacesPackageFolder)\*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(DeviceInterfacePackage)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="false" />
 
 		<!-- Copy the ASCOM Exceptions package to the root folder -->
 		<ItemGroup>
@@ -446,6 +525,8 @@
 		</ItemGroup>
 		<WriteLinesToFile File="$(BuildNumberFile)" Lines="@(CmdLine)" Overwrite="true"/>
 
+		<Message Text="Completed copying files to Export folder." />
+		
 	</Target>
 
 </Project>
