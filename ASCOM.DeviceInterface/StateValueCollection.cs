@@ -31,7 +31,7 @@ namespace ASCOM.DeviceInterface
         #region Initialisers
 
         /// <summary>
-        /// 
+        /// Create an empty state value collection
         /// </summary>
         public StateValueCollection()
         {
@@ -42,8 +42,9 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Create a state value collection populated with values a list of objects that implement IStateValue
         /// </summary>
+        /// <param name="list">List of objects that implement IStateValue.</param>
         public StateValueCollection(List<IStateValue> list)
         {
             //logger.LogMessage("Init", $"List<IStateValue>");
@@ -52,8 +53,9 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Create a state value collection populated with values a list of StateValue objects
         /// </summary>
+        /// <param name="list">List of StateValue objects.</param>
         public StateValueCollection(List<StateValue> list)
         {
             //logger.LogMessage("Init", $"List<StateValue>");
@@ -74,9 +76,9 @@ namespace ASCOM.DeviceInterface
         #region Add members to the collection
 
         /// <summary>
-        /// 
+        /// Add an object that implements IStateValue to the state value collection.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">An object that implements the IStateValue interface</param>
         [ComVisible(false)]
         public void Add(IStateValue value)
         {
@@ -86,10 +88,10 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Add a new state value with the given name and value
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="name">The name of the state value</param>
+        /// <param name="value">The state's value</param>
         public void Add(string name, object value)
         {
             StateValue stateValue = new StateValue(name, value);
@@ -103,7 +105,7 @@ namespace ASCOM.DeviceInterface
         #region IStateValueCollection Members
 
         /// <summary>
-        /// 
+        /// The number of state values in the collection
         /// </summary>
         public int Count
         {
@@ -115,9 +117,9 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// An enumerator that enables items in the collection to be retrieved
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An enumerator object.</returns>
         public IEnumerator GetEnumerator()
         {
             //logger.LogMessage("GetEnumerator", $"Count: {stateValues.Length}");
@@ -126,9 +128,9 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Returns the state value as an IStateValue object at the given index into the collection.
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">The zero based item number in the collection to return.</param>
         /// <returns></returns>
         /// <exception cref="InvalidValueException"></exception>
         public IStateValue this[int index]
@@ -161,7 +163,7 @@ namespace ASCOM.DeviceInterface
         #region IDisposable Members
 
         /// <summary>
-        /// 
+        /// Disopse of the state value collection.
         /// </summary>
         public void Dispose()
         {
@@ -185,4 +187,3 @@ namespace ASCOM.DeviceInterface
 
     }
 }
-

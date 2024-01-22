@@ -9,7 +9,7 @@ using ASCOM.Utilities;
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
-    /// 
+    /// An enumerator for IStateValue collections
     /// </summary>
     [Guid("792C4234-C136-4600-988B-A80D03608534")]
     [ClassInterface(ClassInterfaceType.None)]
@@ -23,17 +23,17 @@ namespace ASCOM.DeviceInterface
 
         #region Initialisers
         /// <summary>
-        /// 
+        /// Create an empty state value collection enumerator
         /// </summary>
         public StateValueCollectionEnumerator()
         {
         }
 
         /// <summary>
-        /// 
+        ///  Create a state value collection enumerator containing the supplied IStateValue objects
         /// </summary>
-        /// <param name="stateValues"></param>
-        /// <param name="logger"></param>
+        /// <param name="stateValues">An array of objects that implement IStateValue</param>
+        // /// <param name="logger"></param>
         //public StateValueCollectionEnumerator(IStateValue[] stateValues, TraceLogger logger)
         public StateValueCollectionEnumerator(IStateValue[] stateValues)
         {
@@ -47,9 +47,9 @@ namespace ASCOM.DeviceInterface
         #region IEnumerator implementation
 
         /// <summary>
-        /// 
+        /// Move to the next state value
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if successful, False if at the end of the list.</returns>
         public bool MoveNext()
         {
 
@@ -72,7 +72,7 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Reset the internal index to the start of the collection so that the enumerator can be reused.
         /// </summary>
         public void Reset()
         {
@@ -82,7 +82,7 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Get the current state value.
         /// </summary>
         public object Current
         {
@@ -108,7 +108,6 @@ namespace ASCOM.DeviceInterface
         #region IDisposable implementation
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
@@ -125,7 +124,7 @@ namespace ASCOM.DeviceInterface
         }
 
         /// <summary>
-        /// 
+        /// Dispose of the state value collection enumerator.
         /// </summary>
         public void Dispose()
         {
