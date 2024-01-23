@@ -19,12 +19,47 @@
 		<AscomRemoteVSProject>$(AscomRemoteDirectory)\Remote Server\Remote Server.csproj</AscomRemoteVSProject>
 		<SetNetworkPermissionsVSProject>$(AscomRemoteDirectory)\SetNetworkPermissions\SetNetworkPermissions.csproj</SetNetworkPermissionsVSProject>
 
+		<!-- Set ASCOM Library properties -->
+		<AscomLibraryRepositorytBranch>platform7</AscomLibraryRepositorytBranch>
+		<AscomLibraryBuildConfiguration>debug</AscomLibraryBuildConfiguration>
+		<AscomLibraryGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOMLibrary.git</AscomLibraryGitRepositoryURL>
+		<AscomLibraryDirectory>$(MSBuildStartupDirectory)\AscomLibrary</AscomLibraryDirectory>
+		<AscomLibraryVSProject>$(AscomLibraryDirectory)\ASCOMLibrary.sln</AscomLibraryVSProject>
+		<AscomLibraryHelpDirectory>$(AscomLibraryDirectory)\Help</AscomLibraryHelpDirectory>
+		<AscomLibraryHelpVSSolution>ASCOMLibraryHelp.sln</AscomLibraryHelpVSSolution>
+
 		<!-- Code signing tool command line bases for SHA1 and SHA256 signing -->
 		<SignToolBase256>signtool sign /v /tr http://timestamp.sectigo.com /td sha256 /fd sha256 /n "Peter Simpson"</SignToolBase256>
 	</PropertyGroup>
 	
 	<!-- Main build target for this build -->
 	<Target Name="Build">
+		<!-- ASCOM LIBRARY -->
+	
+		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
+		<RemoveDir Directories="$(AscomLibraryDirectory)" ContinueOnError="true" />
+		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
+
+		<!-- Stop the build with an error if we can't clear the directory by this point -->
+		<RemoveDir Directories="$(AscomLibraryDirectory)" ContinueOnError="false" />
+
+		<!-- Create the export directory ready for cloning  -->
+		<MakeDir Directories="$(AscomLibraryDirectory)"/>
+
+		<!-- Clone a fresh copy of the OmniSim Git repository  -->
+		<GitClient Command="clone" LocalPath="$(AscomLibraryDirectory)" Arguments="-b $(AscomLibraryRepositorytBranch) $(AscomLibraryGitRepositoryURL) $(AscomLibraryDirectory)"/>
+
+		<!-- Buhld the library -->
+		<Exec Command="dotnet build $(AscomLibraryVSProject) --property:Configuration=$(AscomLibraryBuildConfiguration);Platform=&quot;Any CPU&quot;"
+			ConsoleToMSBuild="true" 
+			WorkingDirectory="$(AscomLibraryDirectory)" />
+			
+		<MSBuild Projects="$(AscomLibraryHelpDirectory)\$(AscomLibraryHelpVSSolution)" Targets="Clean;Restore;Build" Properties="Configuration=$(AscomLibraryBuildConfiguration);Platform=Any CPU" />
+
+
+
+		<!-- ASCOM REMOTE -->
+	
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
 		<RemoveDir Directories="$(AscomRemoteDirectory)" ContinueOnError="true" />
 		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
@@ -79,6 +114,9 @@
 			PublishDir=..\publish\SetNetworkPermissions\x86\;
 			DebugType=embedded" />
 
+
+		<!-- OMNISIMS -->
+
 		<!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes becasue the command can complete before the contents are actually gone! -->
 		<RemoveDir Directories="$(OmniSimDirectory)" ContinueOnError="true" />
 		<Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
@@ -93,7 +131,7 @@
 		<GitClient Command="clone" LocalPath="$(OmniSimDirectory)" Arguments="-b $(OmniSimRepositorytBranch) $(OmniSimGitRepositoryURL) $(OmniSimDirectory)"/>
 
 		<!-- Publish a 32bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; 			TrimMode=full; -->
-		<Exec Command="dotnet publish -c Release -r win-x86 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -o ..\publish\x86" 
+		<Exec Command="dotnet publish -c Release -r win-x86 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -p:Platform=x86 -o ..\publish\x86" 
 			ConsoleToMSBuild="true" 
 			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
 

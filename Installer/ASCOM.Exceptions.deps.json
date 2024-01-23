@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "ASCOM.Exceptions/7.0.0-rc.16": {
+      "ASCOM.Exceptions/7.0.0-rc.21": {
         "dependencies": {
           "NETStandard.Library": "2.0.3"
         },
@@ -24,7 +24,7 @@
     }
   },
   "libraries": {
-    "ASCOM.Exceptions/7.0.0-rc.16": {
+    "ASCOM.Exceptions/7.0.0-rc.21": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -14,7 +14,6 @@ Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
-Create shortcuts
 Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
@@ -24,8 +23,16 @@ Clean up any remaining simulator COM entries
 MSI installer support if required
 Platform validation
 Inno driver installer creator
-Developer documentation
 Remove any items left from previous instals
 Platform 5 files
 Install ASCOM Remote Server and the OmniSimulators
 Finalise installation.
+Set up log file and variables
+Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.
+Visual Studio assembly references for current Platform version
+Visual Studio assembly references for Platform 6 backward compatibility
+Set Registry Keys
+Specify additional clean-up required when uninstalling
+Non-MSI activities - 32bit
+Validate installation
+Finish Setup Dialogue

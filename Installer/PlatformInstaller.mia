@@ -364,6 +364,7 @@ Write to Text File
 Write to Text File
 Write to Text File
 Write to Text File
+Comment
 Code Folding Region
 Comment
 Code Folding Region
@@ -1606,6 +1607,9 @@ Install Files
 Comment
 Install Files
 Install Files
+Install Files
+Install Files
+Comment
 Code Folding Region
 Comment
 Code Folding Region
@@ -1940,6 +1944,8 @@ Create Shortcut
 Create Shortcut
 Comment
 Comment
+Create Shortcut
+Create Shortcut
 Create Shortcut
 Create Shortcut
 Create Shortcut
@@ -2948,6 +2954,7 @@ $
 {DAEBCEBF-8C82-4815-A4F4-E0DD3A3F620B}
 {F543725C-6121-4A7E-A6EC-2691330044E3}
 {4B22E7F2-795F-4030-B1F0-091F41C42D3D}
+{EEB458DF-A4E5-43FC-9DA5-A145FFAD64A0}
 {E36C0F03-4E3E-41D5-9A06-48BB79740F11}
 {E51A0658-C543-4AB2-85C3-43120A2FF8F8}
 {5177FF3C-C42D-4163-ACD1-BAF4DBE0F1C2}
@@ -4190,6 +4197,9 @@ $
 {0FAE0816-677C-4F28-A809-4779B8C96698}
 {3748884E-97BB-4BB4-AE81-AF37AC4CBFFA}
 {AD1E324C-1F78-498F-93AE-EE573D4A04C0}
+{9A3BB825-24A7-4C78-99BD-006EEA724A73}
+{30A77E0E-F7E3-495A-8E4C-A4B06D03BE8B}
+{09BCF622-415A-4A8C-AFF5-20344C776414}
 {4D7A192C-CE73-4349-8A33-D03B756AD27F}
 {3F73179C-E1BC-4F1E-B10E-3E3E16CD64E9}
 {509275C4-3E80-4C03-868B-5AF18E3CA1D8}
@@ -4540,6 +4550,8 @@ $
 {1406C74B-6A5C-41D9-BDEF-1838AF9B121B}
 {95DDA856-FACC-4088-95C5-11E6AD735E46}
 {845A1E5F-61ED-481F-9FE9-2C77011D0F95}
+{E2E210EE-3022-4549-89AE-E7F5EBAC9ECD}
+{1C2A0DFF-7730-4204-9A34-BDFDA30593CC}
 {7BA4A4B0-C101-4E3F-B332-5FEDF25B61A3}
 {AFE71886-AAF9-4274-B090-ACEE7CEEB307}
 {AF9DFDA7-3394-430F-B7F9-AC71EF78AFAD}
@@ -6199,6 +6211,10 @@ The installer must be started in 32bit MSI mode
 {8492C174-BFEB-474C-8C5B-CF1009A1BECC}
 Clean remaining shortcuts.
 {CA8B9313-4B93-40C6-A625-3B25075A6D88}
+
+{EEB458DF-A4E5-43FC-9DA5-A145FFAD64A0}
+
+{09BCF622-415A-4A8C-AFF5-20344C776414}
 
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
@@ -12645,6 +12661,32 @@ FALSE
 FALSE
 FALSE
 FALSE
+{9A3BB825-24A7-4C78-99BD-006EEA724A73}
+..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm
+FALSE|
+$DEVELOPERTARGETDIR$\Developer Documentation
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{30A77E0E-F7E3-495A-8E4C-A4B06D03BE8B}
+..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm
+FALSE|
+$DEVELOPERTARGETDIR$\Developer Documentation
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
@@ -13894,6 +13936,26 @@ $SHORTCUTFILESALL$|FALSE
 
 
 $SHORTCUTFOLDER$\Tools|FALSE
+|FALSE
+|
+0|
+{E2E210EE-3022-4549-89AE-E7F5EBAC9ECD}
+$DEVELOPERTARGETDIR$\Developer Documentation\ASCOMLibrary.chm|FALSE
+ASCOM Library Help
+$SHORTCUTFILESALL$\$DEVELOPERMENU$|FALSE
+
+
+|FALSE
+|FALSE
+|
+0|
+{1C2A0DFF-7730-4204-9A34-BDFDA30593CC}
+$DEVELOPERTARGETDIR$\Developer Documentation\ChooserSA.chm|FALSE
+ASCOM Stand Alone Chooser Help
+$SHORTCUTFILESALL$\$DEVELOPERMENU$|FALSE
+
+
+|FALSE
 |FALSE
 |
 0|
@@ -18919,44 +18981,8 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 C
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -19020,127 +19046,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-C
-C
-C
-C
-C
-C
-C
-C
-C
-C
-
-
-
-
-
-
-
-
-
-C
-C
-C
-C
-C
 C
 
 
@@ -19273,6 +19178,167 @@ C
 
 
 
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+
+
+
+
+
+
+
+
+
+C
+C
+C
+C
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19347,6 +19413,8 @@ C
 
 C
 C
+
+
 
 
 
@@ -20269,6 +20337,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 

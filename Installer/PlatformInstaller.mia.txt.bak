@@ -5,7 +5,7 @@ Comment: Set the Platform and developer target directories
 Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform
 Set Variable DEVELOPERTARGETDIR to $PROGRAMFILES$ASCOM\Developer
 Set Variable VSREFERENCEFILES to $DEVELOPERTARGETDIR$\Components
-Set Variable VSREFERENCEPLATFORM6 to $DEVELOPERTARGETDIR$\Components
+Set Variable VSREFERENCEPLATFORM6 to $PROGRAMFILES$ASCOM\Platform 6 Developer Components\Components
  
 Comment: The installer must be started in 32bit MSI mode
 Set Variable NATIVE_ENGINE to FALSE
@@ -276,6 +276,7 @@ Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
 Write into Text File $SETUPLOG$ from Value $TIME$ Developer content target folder: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer links to $DEVELOPERMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing developer content files to $VSREFERENCEFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installing Platform 6 developer content files to $VSREFERENCEPLATFORM6$ (at end of file)
  
 Get Folder Location System->Desktop Directory into DESKTOPDIR
 Get Common Folder Location System->Desktop Directory into DESKTOPDIRALL
@@ -1519,8 +1520,8 @@ Install Files ..\InstallerContent\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$\P
 Install Files ..\InstallerContent\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$\Platform55
  
 Comment: Platform 5 references
-Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform55
-Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform55
+Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform5
+Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform5
  
 Set Variable MYPROGRESS to 25
  
