@@ -364,6 +364,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INST
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+ 
 [END REGION]
  
 [DEFINE REGION: Check Application Requirements]
@@ -1606,6 +1607,9 @@ Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to 
 Comment: Platform 6.1 Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+ 
 [END REGION]
  
 [DEFINE REGION: Install ASCOM Remote Server and the OmniSimulators]
@@ -1956,6 +1960,8 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver Install Script Generat
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $DEVELOPERTARGETDIR$\Developer Documentation\Templates.html
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOMLibrary.chm
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Stand Alone Chooser Help to $DEVELOPERTARGETDIR$\Developer Documentation\ChooserSA.chm
  
 Set Variable NATIVE_ENGINE to FALSE
  

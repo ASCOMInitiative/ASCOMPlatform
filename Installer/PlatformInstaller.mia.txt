@@ -1955,7 +1955,7 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $DEVELO
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform 6 Client-Driver Interaction V2 to $DEVELOPERTARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Video Driver Developer Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver Install Script Generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
