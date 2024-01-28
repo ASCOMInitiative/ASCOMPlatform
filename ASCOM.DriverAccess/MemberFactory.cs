@@ -544,13 +544,11 @@ namespace ASCOM.DriverAccess
                 throw new DriverAccessCOMException(message, number, e.InnerException);
             }
 
-            if (e.InnerException is DriverException)
+            if (e.InnerException is ActionNotImplementedException)
             {
                 message = e.InnerException.Message;
-                int number = (int)e.InnerException.GetType().InvokeMember("Number", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-
-                TL.LogMessageCrLf(memberName, "  Throwing DriverException: '" + message + "' '" + number + "'");
-                throw new DriverException(message, number, e.InnerException);
+                TL.LogMessageCrLf(memberName, "  Throwing ActionNotImplementedException: '" + message + "'");
+                throw new ActionNotImplementedException(message, e.InnerException);
             }
 
             if (e.InnerException is InvalidOperationException)
@@ -628,6 +626,22 @@ namespace ASCOM.DriverAccess
 
                 TL.LogMessageCrLf(memberName, "  Throwing ValueNotSetException: '" + member + "'");
                 throw new ValueNotSetException(member, e.InnerException);
+            }
+
+            // if we get here we did not receive one of the specialised ASCOM exceptions that are derived from DriverException
+            // Now we can safely test for a plain DriverException
+            if (e.InnerException is DriverException)
+            {
+                Type type = e.InnerException.GetType();
+                object exception = Activator.CreateInstance(type, new object[] {e.InnerException.Message });
+
+
+
+                message = e.InnerException.Message;
+                int number = (int)e.InnerException.GetType().InvokeMember("Number", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+
+                TL.LogMessageCrLf(memberName, "  Throwing DriverException: '" + message + "' '" + number + "'");
+                throw new DriverException(message, number, e.InnerException);
             }
 
             // Default behaviour if its not one of the exceptions above
