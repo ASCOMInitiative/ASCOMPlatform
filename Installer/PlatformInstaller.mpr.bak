@@ -1248,6 +1248,7 @@ $
 
 
 
+
 B
 
 
@@ -1978,6 +1979,9 @@ B
 
 
 
+
+
+
 B
 
 
@@ -2082,7 +2086,30 @@ B
 
 
 
+
+
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2746,7 +2773,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{C2E0758D-AFD2-4279-8ED7-BA07B64F1524}
+{13E84E0A-90B2-4155-B53B-D9325C32B8CD}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2755,7 +2782,7 @@ Copyright © 1998-2023, The ASCOM Initiative. All rights reserved.
 FALSE
 AscomPlatform700
 TRUE
-TRUE
+FALSE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer

@@ -2464,6 +2464,27 @@ if Variable SUCCESS not Equals ERROR
    
   [END REGION]
    
+  [DEFINE REGION: Alert if Platform 6 Conform is present.]
+   
+  Comment: The Platform 6 Conform will fail on Platform 7 because internal functions had to be moved when Utilities was ported from VB to C# (no equivalent of module level functions)
+  Set Variable CONFORMPRESENT to 
+  Set Variable CONFORMVERSIONOK to 
+   
+  Does File Exist $PROGRAMFILES$ASCOM\Conform\Conform.exe (get result into variable CONFORMPRESENT)
+  if Variable CONFORMPRESENT Equals TRUE
+     
+    Check File Version $PROGRAMFILES$ASCOM\Conform\Conform.exe into Variable CONFORMVERSIONOK
+    Write into Text File $SETUPLOG$ from Value $TIME$ Conform version OK: $CONFORMVERSIONOK$, Conform file location: $PROGRAMFILES$ASCOM\Conform\Conform.exe (at end of file)
+     
+    if Variable CONFORMVERSIONOK not Equals TRUE
+      MessageBox: Platform 6 Conform Detected, Platform 6 versions of Conform are not compatible with Platform 7 due to internal Platform changes.$NEWLINE$$NEWLINE$Please install the latest version from https://ascom-standards.org/Downloads/DevTools.htm
+    end
+  else
+    Write into Text File $SETUPLOG$ from Value $TIME$ Conform not found on this system. (at end of file)
+  end
+   
+  [END REGION]
+   
 end
  
 Set Variable MYPROGRESS to 100
