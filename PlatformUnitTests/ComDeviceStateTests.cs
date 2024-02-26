@@ -162,7 +162,7 @@ namespace PlatformUnitTests
                 CoverCalibratorState deviceState = device.CoverCalibratorState;
 
                 Assert.True(deviceState.Brightness.HasValue);
-                Assert.True(deviceState.CalibratorReady.HasValue);
+                Assert.True(deviceState.CalibratorChanging.HasValue);
                 Assert.True(deviceState.CalibratorState.HasValue);
                 Assert.True(deviceState.CoverMoving.HasValue);
                 Assert.True(deviceState.CoverState.HasValue);

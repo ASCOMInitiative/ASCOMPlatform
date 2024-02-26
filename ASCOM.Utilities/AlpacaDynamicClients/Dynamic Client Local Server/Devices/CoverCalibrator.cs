@@ -651,19 +651,19 @@ namespace ASCOM.DynamicClients
 
         #region ICoverCalibratorV2 implementation
 
-        public bool CalibratorReady
+        public bool CalibratorChanging
         {
             get
             {
-                // Call the device's CalibratorReady property if this is a Platform 7 or later device, otherwise use CalibratorState
-                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CalibratorReady property
+                // Call the device's CalibratorChanging property if this is a Platform 7 or later device, otherwise use CalibratorState
+                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(deviceType, InterfaceVersion)) // We are presenting a Platform 7 or later device so call the CalibratorChanging property
                 {
-                    TL.LogMessage("CalibratorReady", "Issuing CalibratorReady command");
-                    return client.CalibratorReady;
+                    TL.LogMessage("CalibratorChanging", "Issuing CalibratorChanging command");
+                    return client.CalibratorChanging;
                 }
 
                 // Platform 6 or earlier device so use CalibratorState to determine the movement state.
-                return CalibratorState == DeviceInterface.CalibratorStatus.NotReady;
+                return CalibratorState == CalibratorStatus.NotReady;
             }
         }
 

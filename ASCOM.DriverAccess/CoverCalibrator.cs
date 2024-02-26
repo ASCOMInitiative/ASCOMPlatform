@@ -48,7 +48,7 @@ namespace ASCOM.DriverAccess
             {
                 // Create a state object to return.
                 CoverCalibratorState deviceState = new CoverCalibratorState(DeviceState, TL);
-                TL.LogMessage(nameof(CoverCalibratorState), $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorReady}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
+                TL.LogMessage(nameof(CoverCalibratorState), $"Returning: '{deviceState.Brightness}' '{deviceState.CalibratorChanging}' '{deviceState.CalibratorState}' '{deviceState.CoverMoving}' '{deviceState.CoverState}' '{deviceState.TimeStamp}'");
 
                 // Return the device specific state class
                 return deviceState;
@@ -220,7 +220,7 @@ namespace ASCOM.DriverAccess
         /// Flag showing whether a calibrator brightness state change is in progress. 
         /// </summary>
         /// <returns>
-        /// False while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
+        /// True while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
         /// </returns>
         /// <remarks>
         /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
@@ -228,15 +228,15 @@ namespace ASCOM.DriverAccess
         /// This property must throw an exception ff an issue arises while changing calibrator brightness. The exception must continue to be thrown until a new <see cref="CalibratorOn(int)"/> or
         /// <see cref="CalibratorOff"/> command is received.</para>
         /// </remarks>
-        public bool CalibratorReady
+        public bool CalibratorChanging
         {
             get
             {
-                // Call the device's CalibratorReady method if this is a Platform 7 or later device, otherwise use CalibratorState
+                // Call the device's CalibratorChanging method if this is a Platform 7 or later device, otherwise use CalibratorState
                 if (HasConnectAndDeviceState) // Platform 7 or later device
                 {
-                    TL.LogMessage("CalibratorReady", "Issuing CalibratorReady command");
-                    return Convert.ToBoolean(memberFactory.CallMember(1, "CalibratorReady", new Type[] { }, new object[] { }));
+                    TL.LogMessage("CalibratorChanging", "Issuing CalibratorChanging command");
+                    return Convert.ToBoolean(memberFactory.CallMember(1, "CalibratorChanging", new Type[] { }, new object[] { }));
                 }
 
                 // Platform 6 or earlier device so use CalibratorState to determine the movement state.

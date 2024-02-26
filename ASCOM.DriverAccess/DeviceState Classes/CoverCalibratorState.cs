@@ -84,16 +84,16 @@ namespace ASCOM.DriverAccess
                             LogMessage(className, $"CoverState has value: {CoverState.HasValue}, Value: {CoverState}");
                             break;
 
-                        case nameof(ICoverCalibratorV2.CalibratorReady):
+                        case nameof(ICoverCalibratorV2.CalibratorChanging):
                             try
                             {
-                                CalibratorReady = (bool)stateValue.Value;
+                                CalibratorChanging = (bool)stateValue.Value;
                             }
                             catch (Exception ex)
                             {
-                                LogMessage(className, $"CalibratorReady - Ignoring exception: {ex.Message}");
+                                LogMessage(className, $"CalibratorChanging - Ignoring exception: {ex.Message}");
                             }
-                            LogMessage(className, $"CalibratorReady has value: {CalibratorReady.HasValue}, Value: {CalibratorReady}");
+                            LogMessage(className, $"CalibratorChanging has value: {CalibratorChanging.HasValue}, Value: {CalibratorChanging}");
                             break;
 
                         case nameof(ICoverCalibratorV2.CoverMoving):
@@ -148,9 +148,9 @@ namespace ASCOM.DriverAccess
         public CoverStatus? CoverState { get; set; } = null;
 
         /// <summary>
-        /// The device's CalibratorReady state
+        /// The device's CalibratorChanging state
         /// </summary>
-        public bool? CalibratorReady { get; set; } = null;
+        public bool? CalibratorChanging { get; set; } = null;
 
         /// <summary>
         /// The device's CoverMoving state
