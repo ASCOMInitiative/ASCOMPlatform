@@ -831,9 +831,9 @@ namespace ASCOM.Utilities
             SOFA = new Astrometry.SOFA.SOFA();
 
             // SOFA version tests
-            CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 18);
-            Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate(), "2021-05-12");
-            Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate(), "2021-05-12");
+            CompareInteger("SOFATests", "SOFA release number", SOFA.SofaReleaseNumber(), 19);
+            Compare("SOFATests", "SOFA issue date", SOFA.SofaIssueDate(), "2023-10-11");
+            Compare("SOFATests", "SOFA revision date", SOFA.SofaRevisionDate(), "2023-10-11");
 
             // Af2a tests
             j = SOFA.Af2a("-", 45, 13, 27.2d, ref a);
