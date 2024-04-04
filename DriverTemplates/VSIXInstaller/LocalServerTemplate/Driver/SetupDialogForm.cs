@@ -77,7 +77,7 @@ namespace TEMPLATENAMESPACE
             comboBoxComPort.Items.Clear(); // Clear any existing entries
             using (Serial serial = new Serial()) // User the Se5rial component to get an extended list of COM ports
             {
-                comboBoxComPort.Items.AddRange(serial.AvailableComPorts);
+                comboBoxComPort.Items.AddRange(serial.AvailableCOMPorts);
             }
 
             // If no ports are found include a message to this effect

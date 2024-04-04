@@ -1674,7 +1674,7 @@ namespace ASCOM.Utilities.Interfaces
         /// as a string entry in the ForceCOMPorts key of the ASCOM Profile. In the event that this scanning causes issues, a COM port can be 
         /// omitted from the scan by adding its name as a string entry in the IgnoreCOMPorts key of the ASCOM Profile.</para></remarks>
         [DispId(1)]
-        string[] AvailableComPorts { get; }
+        string[] AvailableCOMPorts { get; }
         /// <summary>
         /// Gets or sets the number of data bits in each byte
         /// </summary>

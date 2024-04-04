@@ -2206,7 +2206,7 @@ namespace ASCOM.Utilities
         /// <para>If this new approach still does not detect a COM port it can be forced to appear in the list by adding its name
         /// as a string entry in the ForceCOMPorts key of the ASCOM Profile. In the event that this scanning causes issues, a COM port can be 
         /// omitted from the scan by adding its name as a string entry in the IgnoreCOMPorts key of the ASCOM Profile.</para></remarks>
-        public string[] AvailableComPorts
+        public string[] AvailableCOMPorts
         {
             // Returns a list of all available COM ports sorted into ascending COM port number order
             get
