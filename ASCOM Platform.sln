@@ -3,15 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Configuration", "Solution Configuration", "{9A54CA39-AB72-45B4-B09F-63679076D040}"
-	ProjectSection(SolutionItems) = preProject
-		AssemblyVersionInfo.cs = AssemblyVersionInfo.cs
-		AssemblyVersionInfo.vb = AssemblyVersionInfo.vb
-		LicenseExceptions.txt = LicenseExceptions.txt
-		SolutionInfo.cs = SolutionInfo.cs
-		SolutionInfo.vb = SolutionInfo.vb
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Utilities Projects", "ASCOM Utilities Projects", "{0B492F73-66F9-460E-BD84-A6CB1FC588C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Developer Components", "Developer Components", "{E61A5194-09EE-46E0-9171-1CBDC35D7A53}"
@@ -97,12 +88,6 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM.Utilities.556", "ASCOM.Utilities\ASCOM.Utilities.556\ASCOM.Utilities.556.vbproj", "{44F1B424-F0FC-4471-8C0B-54E2AAF41032}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsExtras", "Driver Inst\WinFormsExtras\WinFormsExtras.csproj", "{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Analysis", "Code Analysis", "{F1B91A53-8136-4D7A-A0E8-412AEF6B0F2C}"
-	ProjectSection(SolutionItems) = preProject
-		Ascom.ruleset = Ascom.ruleset
-		CustomDictionary.xml = CustomDictionary.xml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientToolkitSampleCSharp", "ASCOM Platform Examples\ASCOM.DriverAccess Example\ClientToolkitSampleCSharp.csproj", "{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}"
 EndProject
@@ -256,8 +241,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{50BF53C3-616D-4A8B-AC3B-11C410601EC8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		AssemblyVersionInfo.cs = AssemblyVersionInfo.cs
+		AssemblyVersionInfo.vb = AssemblyVersionInfo.vb
+		CustomDictionary.xml = CustomDictionary.xml
 		Directory.Build.props = Directory.Build.props
+		LicenseExceptions.txt = LicenseExceptions.txt
 		NuGet.config = NuGet.config
+		SolutionInfo.cs = SolutionInfo.cs
+		SolutionInfo.vb = SolutionInfo.vb
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dome", "Dome", "{5CEEA1B8-7A4E-4AFF-A794-9C3806F8A194}"
@@ -2946,7 +2937,6 @@ Global
 		{62A5D47B-BF6E-4799-9629-14E81DEFE794} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{44F1B424-F0FC-4471-8C0B-54E2AAF41032} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B} = {3EDC5136-4922-4F53-92FB-ADB89CCFBF26}
-		{F1B91A53-8136-4D7A-A0E8-412AEF6B0F2C} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C} = {C1829D56-F07F-42CA-854F-C687694E6339}
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9} = {6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}
 		{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F} = {29B3E411-4259-4315-85A7-3063F31A282A}

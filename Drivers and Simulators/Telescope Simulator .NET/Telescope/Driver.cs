@@ -68,7 +68,7 @@ namespace ASCOM.Simulator
         private string driverID;
         private long objectId;
         private bool connecting = false;
-
+        private bool unParking = false;
         private bool connected = false; // Holds connected state for this instance
 
         // Local copies of the guide rates are kept here because the TelescopeHardware GuideRateRightAscension and GuideRateDeclination values
@@ -1390,7 +1390,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, string.Format(CultureInfo.CurrentCulture, "Slewing: {0}", TelescopeHardware.SlewState != SlewType.SlewNone));
-                return TelescopeHardware.IsSlewing;
+                return TelescopeHardware.IsSlewing | unParking; // Return true if the mount is slewing or Unparking. Unparking is controlled locally within the driver and not in TelescopeHardware
             }
         }
 
@@ -1585,6 +1585,7 @@ namespace ASCOM.Simulator
                 // If parked, run a task to wait before completing the Unpark operation
                 if (AtPark)
                 {
+                    unParking = true; // Set the unparking flag so that Slewing will return true
                     Task.Run(() =>
                     {
                         try
@@ -1594,6 +1595,7 @@ namespace ASCOM.Simulator
 
                             TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
                             TelescopeHardware.ChangePark(false);
+                            unParking = false; // Reset the unparking flag
                             TelescopeHardware.EndOperation("Unpark V4 - Parked");
                             TelescopeHardware.TL.LogMessage("UnparkTask", $"Unpark completed.");
                         }
