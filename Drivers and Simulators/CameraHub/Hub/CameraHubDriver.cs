@@ -39,11 +39,11 @@ namespace ASCOM.CameraHub.Camera
     [ClassInterface(ClassInterfaceType.None)]
     public class Camera : ReferenceCountedObjectBase, ICameraV3, IDisposable
     {
-        internal static string hubProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
-        internal static string hubDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
+        internal static string hubProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ProgId attribute in the class initialiser.
+        internal static string hubDescription; // Chooser descriptive text. The value is retrieved from the ServedClassName attribute in the class initialiser.
 
-        // connectedState holds the connection state from this driver instance's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
-        internal bool connectedState; // The connected state from this driver's perspective)
+        private Guid uniqueId; // A unique ID for this instance of the driver
+
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
         private bool disposedValue;
 
@@ -77,8 +77,8 @@ namespace ASCOM.CameraHub.Camera
                 LogMessage("Camera", "Starting driver initialisation");
                 LogMessage("Camera", $"ProgID: {hubProgId}, Description: {hubDescription}");
 
-                connectedState = false; // Initialise connected to false
-
+                // Create a unique ID to identify this driver instance
+                uniqueId = Guid.NewGuid();
 
                 LogMessage("Camera", "Completed initialisation");
             }
@@ -191,7 +191,7 @@ namespace ASCOM.CameraHub.Camera
         {
             try
             {
-                if (connectedState) // Don't show if already connected
+                if (CameraHub.IsConnected(uniqueId)) // Don't show if already connected
                 {
                     MessageBox.Show("Already connected, just press OK");
                 }
@@ -348,7 +348,8 @@ namespace ASCOM.CameraHub.Camera
             {
                 try
                 {
-                    // Returns the driver's connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
+                    // Return the driver's connection state which could be different to the hardware connected state, because there may be other client connections still active.
+                    bool connectedState = CameraHub.IsConnected(uniqueId);
                     LogMessage("Connected Get", connectedState.ToString());
                     return connectedState;
                 }
@@ -362,23 +363,16 @@ namespace ASCOM.CameraHub.Camera
             {
                 try
                 {
-                    if (value == connectedState)
+                    // Handle connect and disconnect requests
+                    if (value) // Request to connect
                     {
-                        LogMessage("Connected Set", "Device already connected, ignoring Connected Set = true");
-                        return;
-                    }
-
-                    if (value)
-                    {
-                        connectedState = true;
                         LogMessage("Connected Set", "Connecting to device");
-                        CameraHub.Connected = true;
+                        CameraHub.Connect(uniqueId);
                     }
-                    else
+                    else // Request to disconnect
                     {
-                        connectedState = false;
                         LogMessage("Connected Set", "Disconnecting from device");
-                        CameraHub.Connected = false;
+                        CameraHub.Disconnect(uniqueId);
                     }
                 }
                 catch (Exception ex)
@@ -2062,7 +2056,7 @@ namespace ASCOM.CameraHub.Camera
         /// <param name="message"></param>
         private void CheckConnected(string message)
         {
-            if (!connectedState)
+            if (!CameraHub.IsConnected(uniqueId))
             {
                 throw new NotConnectedException($"{hubDescription} ({hubProgId}) is not connected: {message}");
             }

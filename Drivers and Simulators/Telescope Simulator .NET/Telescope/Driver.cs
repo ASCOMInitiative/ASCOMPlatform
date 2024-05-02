@@ -285,6 +285,7 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "AbortSlew: ");
             CheckParked("AbortSlew");
+            CheckCapability(TelescopeHardware.CanSlewAsync | TelescopeHardware.CanSlewAltAzAsync, "AbortSlew",$"AbortSlew is not implemented because CanSlewAsync and CanSlewAltAzAsync are both false.");
             TelescopeHardware.AbortSlew();
 
             SharedResources.TrafficEnd("(done)");
@@ -1724,12 +1725,16 @@ namespace ASCOM.Simulator
             }
         }
 
-        private static void CheckCapability(bool capability, string method)
+        private static void CheckCapability(bool capability, string method, string message = null)
         {
             if (!capability)
             {
                 SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0} not implemented in {1}", capability, method));
-                throw new MethodNotImplementedException(method);
+                if (message != null)
+                    throw new MethodNotImplementedException(method, message);
+                else
+                    throw new MethodNotImplementedException(method);
+
             }
         }
 

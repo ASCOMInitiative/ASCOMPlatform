@@ -2,6 +2,7 @@
 using ASCOM.Utilities;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -27,6 +28,9 @@ namespace ASCOM.CameraHub.Camera
         private static readonly string hubProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
         private static string hubDescription = ""; // The value is set by the driver's class initialiser.
         private static bool connectedState; // Local server's connected state
+
+        private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
+
         private static bool runOnce = false; // Flag to enable "one-off" activities only to run once.
         internal static Util utilities; // ASCOM Utilities object for use as required
         internal static TraceLogger TL; // Local server's trace logger object for diagnostic log with information that you specify
@@ -93,6 +97,107 @@ namespace ASCOM.CameraHub.Camera
             }
         }
 
+        /// <summary>
+        /// Connect to the hardware if not already connected
+        /// </summary>
+        /// <param name="uniqueId">Unique ID identifying the calling driver instance.</param>
+        /// <remarks>
+        /// The unique ID is stored to record that the driver instance is connected and to ensure that multiple calls from the same driver are ignored.
+        /// If this is the first driver instance to connect, the hardware link to the device is established
+        /// </remarks>
+        public static void Connect(Guid uniqueId)
+        {
+            LogMessage("Connect", $"Unique ID: {uniqueId}");
+
+            // Check whether this driver instance has already connected
+            if (uniqueIds.Contains(uniqueId)) // Instance already connected
+            {
+                // Ignore the request, the unique ID is already in the list
+                LogMessage("Connect", $"Ignoring request to connect because the device is already connected.");
+                return;
+            }
+
+            // Driver instance not yet connected
+
+            // Test whether the camera is already connected
+            if (!connectedState) // Camera hardware is not connected so connect
+            {
+                LogMessage("Connect", $"First connection request - Connecting to hardware...");
+                camera.Connected = true;
+                connectedState = true;
+                LogMessage("Connect", $"Camera connected OK.");
+            }
+
+            // Add the driver unique ID to the connected list
+            uniqueIds.Add(uniqueId);
+            LogMessage("Connect", $"Unique id {uniqueId} added to the connection list.");
+
+            // Log the current connected state
+            LogMessage("Connect", $"Currently connected driver ids:");
+            foreach (Guid id in uniqueIds)
+            {
+                LogMessage("Connect", $" ID {id} is connected");
+            }
+        }
+
+        /// <summary>
+        /// Disconnect from the hardware if this is the last driver instance that is connected
+        /// </summary>
+        /// <param name="uniqueId">Unique ID identifying the calling driver instance.</param>
+        /// <remarks>
+        /// The list of connected driver instance IDs is queried to determine whether this driver instance is connected and, if so, it is removed from the connection list. 
+        /// The unique ID ensures that multiple calls from the same driver are ignored.
+        /// If this is the last connected driver instance, the link to the device hardware is disconnected.
+        /// </remarks>
+        public static void Disconnect(Guid uniqueId)
+        {
+            LogMessage("Disconnect", $"Unique ID: {uniqueId}");
+
+            if (!uniqueIds.Contains(uniqueId)) // Instance already disconnected
+            {
+                // Ignore the request, the unique ID is absent from the list
+                LogMessage("Disconnect", $"Ignoring request to disconnect because the device is already disconnected.");
+                return;
+            }
+
+            // Driver instance currently connected
+
+            // Remove the driver unique ID from the connected list
+            uniqueIds.Remove(uniqueId);
+            LogMessage("Disconnect", $"Unique id {uniqueId} removed from the connection list.");
+
+            // Test whether any instances are still connected
+            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the camera device
+            {
+                LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
+                camera.Connected = false;
+                connectedState = false;
+                LogMessage("Disconnect", $"Camera disconnected OK.");
+            }
+
+            // Log the current connected state
+            if (uniqueIds.Count > 0)
+            {
+                LogMessage("Disconnect", $"Remaining connected driver IDs:");
+                foreach (Guid id in uniqueIds)
+                {
+                    LogMessage("Disconnect", $"  ID {id} is connected");
+                }
+            }
+            else
+                LogMessage("Disconnect", $"No connected devices.");
+        }
+
+        /// <summary>
+        /// Test whether a driver instance is connected, identified by its unique ID
+        /// </summary>
+        /// <param name="uniqueId">The driver's unique ID</param>
+        /// <returns>True if the driver instance is connected</returns>
+        public static bool IsConnected(Guid uniqueId)
+        {
+            return uniqueIds.Contains(uniqueId);
+        }
+
         private static void CreateCameraInstance()
         {
             // Remove any current instance and replace with a new one
@@ -149,7 +254,7 @@ namespace ASCOM.CameraHub.Camera
 
         // PUBLIC COM INTERFACE ICameraV3 IMPLEMENTATION
 
-#region Common properties and methods.
+        #region Common properties and methods.
 
         /// <summary>
         /// Displays the Setup Dialogue form.
@@ -160,7 +265,7 @@ namespace ASCOM.CameraHub.Camera
         public static void SetupDialog()
         {
             // Don't permit the setup dialogue if already connected
-            if (IsConnected)
+            if (connectedState)
                 MessageBox.Show("Already connected, just press OK");
 
             using (SetupDialogForm F = new SetupDialogForm(TL))
@@ -304,37 +409,6 @@ namespace ASCOM.CameraHub.Camera
         }
 
         /// <summary>
-        /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-        /// You can also read the property to check whether it is connected. This reports the current hardware state.
-        /// </summary>
-        /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-        public static bool Connected
-        {
-            get
-            {
-                LogMessage("Connected", $"Get {IsConnected}");
-                return IsConnected;
-            }
-            set
-            {
-                LogMessage("Connected", $"Set {value}");
-                if (value == IsConnected)
-                    return;
-
-                if (value)
-                {
-                    camera.Connected = true;
-                    connectedState = true;
-                }
-                else
-                {
-                    camera.Connected = false;
-                    connectedState = false;
-                }
-            }
-        }
-
-        /// <summary>
         /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
@@ -400,9 +474,9 @@ namespace ASCOM.CameraHub.Camera
             }
         }
 
-#endregion
+        #endregion
 
-#region ICamera Implementation
+        #region ICamera Implementation
 
         /// <summary>
         /// Aborts the current exposure, if any, and returns the camera to Idle state.
@@ -1179,9 +1253,9 @@ namespace ASCOM.CameraHub.Camera
             }
         }
 
-#endregion
+        #endregion
 
-#region Private properties and methods
+        #region Private properties and methods
         // Useful methods that can be used as required to help with driver development
 
         /// <summary>
@@ -1195,24 +1269,12 @@ namespace ASCOM.CameraHub.Camera
         }
 
         /// <summary>
-        /// Returns true if there is a valid connection to the driver hardware
-        /// </summary>
-        private static bool IsConnected
-        {
-            get
-            {
-                // TODO check that the driver hardware connection exists and is connected to the hardware
-                return connectedState;
-            }
-        }
-
-        /// <summary>
         /// Use this function to throw an exception if we aren't connected to the hardware
         /// </summary>
         /// <param name="message"></param>
         private static void CheckConnected(string message)
         {
-            if (!IsConnected)
+            if (!connectedState)
             {
                 throw new NotConnectedException(message);
             }
@@ -1265,7 +1327,6 @@ namespace ASCOM.CameraHub.Camera
             var msg = string.Format(message, args);
             LogMessage(identifier, msg);
         }
-#endregion
+        #endregion
     }
 }
-

@@ -94,7 +94,7 @@ Source: "J:\ASCOMPlatform\Drivers and Simulators\CameraHub\ASCOM.ico"; DestDir: 
 Filename: "{app}\{#MyAppExeName}"; Parameters: "/regserver"
 
 [UninstallRun]
-Filename: "{app}\{#MyAppExeName}"; Parameters: "/unregserver"
+Filename: "{app}\{#MyAppExeName}"; Parameters: "/unregserver"; RunOnceId: "HubUnregister"
 
 [UninstallDelete]
 Name: {app}; Type: dirifempty
