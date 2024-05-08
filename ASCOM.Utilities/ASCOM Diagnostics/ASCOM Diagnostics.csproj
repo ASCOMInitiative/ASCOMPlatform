@@ -149,12 +149,17 @@
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Semver, Version=2.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Semver.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -169,6 +174,12 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PlatformUpdateChecker\ExtensionMethods.cs">
+      <Link>ExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PlatformUpdateChecker\UpdateCheck.cs">
+      <Link>UpdateCheck.cs</Link>
+    </Compile>
     <Compile Include="ApplicationEvents.cs" />
     <Compile Include="ConnectForm.Designer.cs">
       <DependentUpon>ConnectForm.cs</DependentUpon>
@@ -291,6 +302,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Octokit">
+      <Version>11.0.1</Version>
+    </PackageReference>
     <PackageReference Include="TaskScheduler">
       <Version>2.10.1</Version>
     </PackageReference>

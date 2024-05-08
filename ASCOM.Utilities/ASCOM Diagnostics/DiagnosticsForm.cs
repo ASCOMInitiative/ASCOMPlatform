@@ -17,6 +17,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ASCOM.Astrometry;
 using ASCOM.Astrometry.Exceptions;
@@ -28,6 +29,9 @@ using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
+using Semver;
+
+//using Semver;
 using static ASCOM.Utilities.Global;
 using static ASCOM.Utilities.RegistryAccess;
 using static ASCOM.Utilities.Serial;
@@ -249,20 +253,12 @@ namespace ASCOM.Utilities
                 RefreshTraceItems(); // Get current values for the trace menu settings
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
 
-                // Create a debug console if required
-#if CREATE_DEBUG_COLSOLE
-                
-                AllocConsole();
-                Console.OpenStandardError();
-                Console.OpenStandardOutput();
-                Console.WriteLine("Console created");
-                
-#endif
+                // Spawn a thread to run the update checker task
+                Task.Run(() => DiagnosticsUpdateCheck());
+
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
             }
-
-
             catch (Exception ex)
             {
                 Utilities.Global.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString());
@@ -1162,7 +1158,7 @@ namespace ASCOM.Utilities
             }
             try
             {
-                Directories = Directory.GetDirectories(PathShell.ToString(), AppDirectory, SearchOption.TopDirectoryOnly).ToList();
+                Directories = [.. Directory.GetDirectories(PathShell.ToString(), AppDirectory, SearchOption.TopDirectoryOnly)];
                 foreach (string Dir in Directories)
                     GetApplicationViaDirectory(Application, Path.GetFileName(Dir));
             }
@@ -1193,8 +1189,8 @@ namespace ASCOM.Utilities
             AppPath = PathShell.ToString() + @"\" + AppDirectory;
             try
             {
-                Executables = Directory.GetFiles(AppPath, "*.exe", SearchOption.AllDirectories).ToList();
-                Executables.AddRange(Directory.GetFiles(AppPath, "*.dll", SearchOption.AllDirectories).ToList());
+                Executables = [.. Directory.GetFiles(AppPath, "*.exe", SearchOption.AllDirectories)];
+                Executables.AddRange([.. Directory.GetFiles(AppPath, "*.dll", SearchOption.AllDirectories)]);
                 if (Executables.Count == 0) // No executables found
                 {
                     TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not found in " + AppPath);
@@ -1234,7 +1230,7 @@ namespace ASCOM.Utilities
                 {
                     AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, @"CLSID\" + CLSIDString + @"\LocalServer32", false, RegWow64Options.KEY_WOW64_32KEY);
                     FileName = Conversions.ToString(AppKey.GetValue("", ""));
-                    FileName = FileName.Trim(new char[] { '"' }); // TrimChars)
+                    FileName = FileName.Trim(['"']); // TrimChars)
                     if (!string.IsNullOrEmpty(FileName)) // We have a file name so see if it exists
                     {
 
@@ -3023,7 +3019,7 @@ namespace ASCOM.Utilities
             // */
 
             double deltat = 60.0d;
-            double[] tjd = new double[] { 2450203.5d, 2450203.5d, 2450417.5d, 2450300.5d };
+            double[] tjd = [2450203.5d, 2450203.5d, 2450417.5d, 2450300.5d];
             double ra = default, dec = default;
 
             // /*
@@ -3488,13 +3484,7 @@ namespace ASCOM.Utilities
                     case NOVAS3Functions.MakeInSpace:
                         {
                             var Insp = new InSpace();
-                            double[] PosOrg = new double[3], VelOrg = new double[3];
-                            PosOrg[0] = 1d;
-                            PosOrg[1] = 2d;
-                            PosOrg[2] = 3d;
-                            VelOrg[0] = 4d;
-                            VelOrg[1] = 5d;
-                            VelOrg[2] = 6d;
+                            double[] PosOrg = [1d, 2d, 3d], VelOrg = [4d, 5d, 6d];
                             Insp.ScPos = Pos;
                             Insp.ScVel = Vel;
                             rc = 0;
@@ -3928,7 +3918,7 @@ namespace ASCOM.Utilities
             // */
 
             double deltat = 60.0d;
-            double[] tjd = new double[] { 2450203.5d, 2450203.5d, 2450417.5d, 2450300.5d };
+            double[] tjd = [2450203.5d, 2450203.5d, 2450417.5d, 2450300.5d];
             double ra = default, dec = default;
 
             // /*
@@ -4472,13 +4462,7 @@ namespace ASCOM.Utilities
                     case NOVAS3Functions.MakeInSpace:
                         {
                             var Insp = new InSpace();
-                            double[] PosOrg = new double[3], VelOrg = new double[3];
-                            PosOrg[0] = 1d;
-                            PosOrg[1] = 2d;
-                            PosOrg[2] = 3d;
-                            VelOrg[0] = 4d;
-                            VelOrg[1] = 5d;
-                            VelOrg[2] = 6d;
+                            double[] PosOrg = [1d, 2d, 3d], VelOrg = [4d, 5d, 6d];
                             Insp.ScPos = Pos;
                             Insp.ScVel = Vel;
                             rc = 0;
@@ -5632,11 +5616,11 @@ namespace ASCOM.Utilities
                             break;
                         }
                 }
-                LogError("TransformInitalGetTest", $"Inital read of Transform.{test} did not raise a TransformUninitialisedException as expected.");
+                LogError("TransformInitalGetTest", $"Initial read of Transform.{test} did not raise a TransformUninitialisedException as expected.");
             }
-            catch (Astrometry.Exceptions.TransformUninitialisedException)
+            catch (TransformUninitialisedException)
             {
-                TL.LogMessage("TransformInitalGetTest", $"A TransformUninitialisedException was generated as expected when readsing Transform{test} for the first time.");
+                TL.LogMessage("TransformInitalGetTest", $"A TransformUninitialisedException was generated as expected when reading Transform{test} for the first time.");
                 NMatches += 1;
             }
             catch (Exception ex)
@@ -5819,23 +5803,23 @@ namespace ASCOM.Utilities
 
             // Astrometry test data for planets obtained from the original 32bit  components
             // The data is for the arbitrary test date Thursday, 30 December 2010 09:00:00" 
-            double[] Mercury = new double[] { -0.146477263357071d, -0.739730529540394d, -0.275237058490435d, -0.146552680905756d, -0.73971718813053d, -0.275232768188589d, -0.144373027430296d, -0.740086172152297d, -0.275392756115203d, -0.146535954004373d, -0.739695817952422d, -0.27526565650813d, -0.144631609584528d, -0.740282847942203d, -0.274694144671298d };
+            double[] Mercury = [-0.146477263357071d, -0.739730529540394d, -0.275237058490435d, -0.146552680905756d, -0.73971718813053d, -0.275232768188589d, -0.144373027430296d, -0.740086172152297d, -0.275392756115203d, -0.146535954004373d, -0.739695817952422d, -0.27526565650813d, -0.144631609584528d, -0.740282847942203d, -0.274694144671298d];
 
-            double[] Venus = new double[] { -0.372100971951828d, -0.449343256389233d, -0.154902566021356d, -0.372134026409355d, -0.449318563980132d, -0.154894786229779d, -0.370822518399929d, -0.450260651717891d, -0.155303914026952d, -0.372117531588399d, -0.449297391719315d, -0.154927789061455d, -0.370858459989012d, -0.450324120624622d, -0.154965842632926d };
+            double[] Venus = [-0.372100971951828d, -0.449343256389233d, -0.154902566021356d, -0.372134026409355d, -0.449318563980132d, -0.154894786229779d, -0.370822518399929d, -0.450260651717891d, -0.155303914026952d, -0.372117531588399d, -0.449297391719315d, -0.154927789061455d, -0.370858459989012d, -0.450324120624622d, -0.154965842632926d];
 
-            double[] Earth = new double[] { -0.147896190667482d, 0.892857938625284d, 0.387075601638547d, -0.0173032744107731d, -0.00236387487195205d, -0.00102513648587834d, -0.143537477185852d, 0.892578667572019d, 0.386954522818712d, -0.0173040812547209d, -0.00235851019511069d, -0.00102281061381548d, 2455560.875d, 1.06091018181116d, 23.437861319031d, 17.3476127157785d, -0.0796612008211573d, 23.4378391909196d };
+            double[] Earth = [-0.147896190667482d, 0.892857938625284d, 0.387075601638547d, -0.0173032744107731d, -0.00236387487195205d, -0.00102513648587834d, -0.143537477185852d, 0.892578667572019d, 0.386954522818712d, -0.0173040812547209d, -0.00235851019511069d, -0.00102281061381548d, 2455560.875d, 1.06091018181116d, 23.437861319031d, 17.3476127157785d, -0.0796612008211573d, 23.4378391909196d];
 
-            double[] Mars = new double[] { 0.693859781031977d, -2.07097170353203d, -0.942316778727103d, 0.693632762626122d, -2.07103494950845d, -0.942344911675691d, 0.699920307729267d, -2.06926836488007d, -0.941576391467848d, 0.693650157043109d, -2.07101326327704d, -0.942377215846966d, 0.694585522035482d, -2.07602310877394d, -0.930591370257697d };
+            double[] Mars = [0.693859781031977d, -2.07097170353203d, -0.942316778727103d, 0.693632762626122d, -2.07103494950845d, -0.942344911675691d, 0.699920307729267d, -2.06926836488007d, -0.941576391467848d, 0.693650157043109d, -2.07101326327704d, -0.942377215846966d, 0.694585522035482d, -2.07602310877394d, -0.930591370257697d];
 
-            double[] Jupiter = new double[] { 5.05143975731352d, -0.264744225667142d, -0.237337980646129d, 5.05143226054377d, -0.264839400889264d, -0.237391349301542d, 5.05234611594448d, -0.252028458651431d, -0.231824986961043d, 5.05144816590343d, -0.264820597160675d, -0.237424161148292d, 5.05236200971188d, -0.252009614615973d, -0.231857781296635d };
+            double[] Jupiter = [5.05143975731352d, -0.264744225667142d, -0.237337980646129d, 5.05143226054377d, -0.264839400889264d, -0.237391349301542d, 5.05234611594448d, -0.252028458651431d, -0.231824986961043d, 5.05144816590343d, -0.264820597160675d, -0.237424161148292d, 5.05236200971188d, -0.252009614615973d, -0.231857781296635d];
 
-            double[] Saturn = new double[] { -9.26931711919579d, -2.66882658902422d, -0.715270438185988d, -9.2693570741403d, -2.66869165249896d, -0.715256117911115d, -9.26176606870019d, -2.69218837105073d, -0.725464045762982d, -9.2693389177143d, -2.66867733760923d, -0.71528954188717d, -9.26144908836291d, -2.69455677562765d, -0.720448748375586d };
+            double[] Saturn = [-9.26931711919579d, -2.66882658902422d, -0.715270438185988d, -9.2693570741403d, -2.66869165249896d, -0.715256117911115d, -9.26176606870019d, -2.69218837105073d, -0.725464045762982d, -9.2693389177143d, -2.66867733760923d, -0.71528954188717d, -9.26144908836291d, -2.69455677562765d, -0.720448748375586d];
 
-            double[] Uranus = new double[] { 20.2306046509148d, -0.944778087940209d, -0.693874737147122d, 20.2305809175823d, -0.945147799559502d, -0.694063183048263d, 20.233665104794d, -0.893841634639764d, -0.671770710247389d, 20.2305964586587d, -0.945137337897977d, -0.694095638580723d, 20.2336806550414d, -0.893831133568696d, -0.671803148655406d };
+            double[] Uranus = [20.2306046509148d, -0.944778087940209d, -0.693874737147122d, 20.2305809175823d, -0.945147799559502d, -0.694063183048263d, 20.233665104794d, -0.893841634639764d, -0.671770710247389d, 20.2305964586587d, -0.945137337897977d, -0.694095638580723d, 20.2336806550414d, -0.893831133568696d, -0.671803148655406d];
 
-            double[] Neptune = new double[] { 25.5771370144156d, -15.409403535665d, -6.96191248591339d, 25.5759958639324d, -15.4109792947898d, -6.96261684888268d, 25.6226500915255d, -15.3460649228334d, -6.93440511594961d, 25.5760116932439d, -15.4109610670775d, -6.96264327213014d, 25.6226659036666d, -15.3460466550117d, -6.93443152177256d };
+            double[] Neptune = [25.5771370144156d, -15.409403535665d, -6.96191248591339d, 25.5759958639324d, -15.4109792947898d, -6.96261684888268d, 25.6226500915255d, -15.3460649228334d, -6.93440511594961d, 25.5760116932439d, -15.4109610670775d, -6.96264327213014d, 25.6226659036666d, -15.3460466550117d, -6.93443152177256d];
 
-            double[] Pluto = new double[] { 2.92990303317673d, -31.0320730022551d, -10.6309560278551d, 2.92658680141819d, -31.0323439400104d, -10.6310785882777d, 3.01698355034971d, -31.0248119250537d, -10.627792242015d, 2.92662685257385d, -31.0323223789174d, -10.6311050132883d, 2.99849040874885d, -31.0401256627947d, -10.5882115993866d };
+            double[] Pluto = [2.92990303317673d, -31.0320730022551d, -10.6309560278551d, 2.92658680141819d, -31.0323439400104d, -10.6310785882777d, 3.01698355034971d, -31.0248119250537d, -10.627792242015d, 2.92662685257385d, -31.0323223789174d, -10.6311050132883d, 2.99849040874885d, -31.0401256627947d, -10.5882115993866d];
 
             try
             {
@@ -5865,15 +5849,15 @@ namespace ASCOM.Utilities
 
                 JD = TestJulianDate();
                 pv = st.GetAstrometricPosition(JD);
-                double[] AstroResults = new double[] { 9.0d, 25.0d, 2062648062470.13d, 0.0d, 11912861640.6606d, -1321861174769.38d, 1321861174768.63d, 871712738743.913d, 9.0d, 25.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d };
+                double[] AstroResults = [9.0d, 25.0d, 2062648062470.13d, 0.0d, 11912861640.6606d, -1321861174769.38d, 1321861174768.63d, 871712738743.913d, 9.0d, 25.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d];
                 ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, false, TOLERANCE_E9);
 
-                double[] TopoNoReractResults = new double[] { 9.01140781883559d, 24.9535152700125d, 2062648062470.13d, 14.2403113213804d, 11912861640.6606d, -1326304233902.68d, 1318405625773.8d, 870195790998.564d, 9.0d, 25.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d };
+                double[] TopoNoReractResults = [9.01140781883559d, 24.9535152700125d, 2062648062470.13d, 14.2403113213804d, 11912861640.6606d, -1326304233902.68d, 1318405625773.8d, 870195790998.564d, 9.0d, 25.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d];
                 pv = st.GetTopocentricPosition(JD, s, false);
                 ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, true, TOLERANCE_E7);
                 pv = st.GetTopocentricPosition(JD, s, true);
 
-                double[] TopoReractResults = new double[] { 9.01438008140491d, 25.0016930437008d, 2062648062470.13d, 14.3031953401364d, 11912861640.6606d, -1326809918883.5d, 1316857267239.29d, 871767977436.204d, 9.0d, 25.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d };
+                double[] TopoReractResults = [9.01438008140491d, 25.0016930437008d, 2062648062470.13d, 14.3031953401364d, 11912861640.6606d, -1326809918883.5d, 1316857267239.29d, 871767977436.204d, 9.0d, 25.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d];
 
                 ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, true, TOLERANCE_E7);
 
@@ -8017,7 +8001,7 @@ namespace ASCOM.Utilities
         {
             int MinimumResolution = default, MaximimResolution = default, CurrentResolution = default;
 
-            _= NtQueryTimerResolution(ref MinimumResolution, ref MaximimResolution, ref CurrentResolution);
+            _ = NtQueryTimerResolution(ref MinimumResolution, ref MaximimResolution, ref CurrentResolution);
             TL.LogMessage("TimerResolution", string.Format("{0} - Current resolution: {1}, Minimum resolution: {2}, Maximum resolution: {3}", message, CurrentResolution / 10000.0d, MinimumResolution / 10000.0d, MaximimResolution / 10000.0d));
         }
 
@@ -8801,7 +8785,7 @@ namespace ASCOM.Utilities
                     ELog = new EventLog(Utilities.Global.EVENTLOG_NAME, ".", Utilities.Global.EVENT_SOURCE);
                     Entries = ELog.Entries;
                     foreach (EventLogEntry Entry in Entries)
-                        TL.LogMessageCrLf("ScanEventLog", Conversions.ToString(Entry.TimeGenerated) + " " + Entry.Source + " " + Entry.EntryType.ToString() + " " + Entry.UserName + " " + Entry.InstanceId + " " + Entry.Message.Trim(new char[] { '\n', '\r' }));
+                        TL.LogMessageCrLf("ScanEventLog", Conversions.ToString(Entry.TimeGenerated) + " " + Entry.Source + " " + Entry.EntryType.ToString() + " " + Entry.UserName + " " + Entry.InstanceId + " " + Entry.Message.Trim(['\n', '\r']));
                     TL.LogMessage("ScanEventLog", "ASCOM Log entries complete");
                     TL.BlankLine();
                 }
@@ -9604,7 +9588,7 @@ namespace ASCOM.Utilities
                 }
 
                 // Sort into inverse date order i.e. latest file first
-                setupFiles = setupFiles.OrderBy(o => DateTime.MaxValue - o.Key).ToList();
+                setupFiles = [.. setupFiles.OrderBy(o => DateTime.MaxValue - o.Key)];
 
                 TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:");
                 foreach (var foundFile in setupFiles)
@@ -9708,7 +9692,7 @@ namespace ASCOM.Utilities
                 UninstallFiles = Directory.GetFiles(Path.GetFullPath(Environment.GetEnvironmentVariable("Temp")), "Uninstall Log*.txt", SearchOption.TopDirectoryOnly);
                 TempFilesList.AddRange(SetupFiles);
                 TempFilesList.AddRange(UninstallFiles);
-                TempFiles = TempFilesList.ToArray();
+                TempFiles = [.. TempFilesList];
 
                 foreach (string TempFile in TempFiles) // Iterate over results
                 {
@@ -11198,7 +11182,7 @@ namespace ASCOM.Utilities
                     }
                 }
             }
-            catch (DirectoryNotFoundException )
+            catch (DirectoryNotFoundException)
             {
                 TL.LogMessageCrLf("RecurseASCOMDrivers", "Directory not present: " + Folder);
                 return;
@@ -11216,7 +11200,7 @@ namespace ASCOM.Utilities
                     RecurseASCOMDrivers(Directory);
                 Action("");
             }
-            catch (DirectoryNotFoundException )
+            catch (DirectoryNotFoundException)
             {
                 TL.LogMessage("RecurseASCOMDrivers", "Directory not present: " + Folder);
             }
@@ -11669,7 +11653,8 @@ namespace ASCOM.Utilities
                     }
             }
 
-
+            OptionsCheckForPlatformReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_UPDATES, Utilities.Global.CHECK_FOR_RELEASE_UPDATES_DEFAULT);
+            OptionsCheckForPlatformPreReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES_DEFAULT);
         }
 
         private void ChooserToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -11869,7 +11854,7 @@ namespace ASCOM.Utilities
         private void SetLogFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Create a folder browser dialogue
-            System.Windows.Forms.FolderBrowserDialog folderDlg = new();
+            FolderBrowserDialog folderDlg = new();
 
             // Set the starting path to the current value using the Documents folder as a fall-back if no location has yet been set
             folderDlg.SelectedPath = Global.GetString(TRACELOGGER_DEFAULT_FOLDER, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
@@ -11891,6 +11876,29 @@ namespace ASCOM.Utilities
             {
                 RunDiagnostics(new object(), new EventArgs());
             }
+        }
+
+        // Check for updates handlers
+        private void OptionsCheckForPlatformReleases_Click(object sender, EventArgs e)
+        {
+            OptionsCheckForPlatformReleases.Checked = !OptionsCheckForPlatformReleases.Checked;
+            Utilities.Global.SetName(Utilities.Global.CHECK_FOR_RELEASE_UPDATES, OptionsCheckForPlatformReleases.Checked.ToString());
+        }
+
+        private void OptionsCheckForPlatformPreReleases_Click(object sender, EventArgs e)
+        {
+            OptionsCheckForPlatformPreReleases.Checked = !OptionsCheckForPlatformPreReleases.Checked;
+            Utilities.Global.SetName(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, OptionsCheckForPlatformPreReleases.Checked.ToString());
+        }
+
+        private void BtnUpdateAvailable_Click(object sender, EventArgs e)
+        {
+            Process.Start(PlatformUpdateChecker.UpdateCheck.GetPlatformDownloadUrl());
+        }
+
+        private void BtnPreReleaseUpdateAvailable_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/ASCOMInitiative/ASCOMPlatform/releases");
         }
 
         #endregion
@@ -11942,6 +11950,65 @@ namespace ASCOM.Utilities
                 }
             }
             return false;
+        }
+
+        TraceLogger traceLogger;
+
+        /// <summary>
+        /// Display an update available button on the Diagnostics form.
+        /// </summary>
+        /// <param name="message">Dummy parameter required to match the CheckForUpdates method signature.</param>
+        /// <remarks>
+        /// The CheckForUpdates reelaseAction parameter is a one parameter action but the parameter is only used by the PlatformUpdateChecker executable and not by the Diagnostics form.
+        /// The message parameter is only included so that this call matches the CheckForUpdates signature.
+        /// </remarks>
+        private void ShowUpdateAvailable(SemVersion message)
+        {
+            LogDebug("CheckForUpdates", $"Making update button visible");
+            BtnUpdateAvailable.Invoke(new Action(() => BtnUpdateAvailable.Visible = true));
+            LogDebug("CheckForUpdates", $"Update button now visible");
+        }
+
+        private async Task DiagnosticsUpdateCheck()
+        {
+            try
+            {
+                // Create a trace logger just for the update task
+                traceLogger = new TraceLogger("DiagnosticsUpdateCheck");
+                traceLogger.Enabled = true;
+                traceLogger.LogMessage("DiagnosticsUpdateCheck", "Diagnostics is checking for updates");
+
+                // Check whether updates are to be checked at all
+                if (OptionsCheckForPlatformPreReleases.Checked | OptionsCheckForPlatformPreReleases.Checked) // Either release or pre-release updates are to be checked
+                {
+                    // Delay for a few seconds to allow the GUI to initialise
+                    LogDebug("DiagnosticsUpdateCheck", $"Entered Delaying...");
+                    await Task.Delay(2000);
+                    LogDebug("DiagnosticsUpdateCheck", $"Running update check");
+
+                    // Check for updates, running the ShowUpdateAvailable method if an update is available. 
+                    // The CheckForUpdates reelaseAction parameter is a one parameter action but the parameter is only used by the PlatformUpdateChecker executable and not by the Diagnostics form
+                    PlatformUpdateChecker.UpdateCheck.CheckForUpdates((x) => ShowUpdateAvailable(new SemVersion(0)), traceLogger);
+
+                    LogDebug("DiagnosticsUpdateCheck", $"Update check complete");
+
+                }
+                else // Updates are not to be checked at all
+                {
+                    LogDebug("DiagnosticsUpdateCheck", $"Not checking GitHub because checking for release updates is disabled and checking for pre-release updates is disabled.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogDebug("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
+            }
+        }
+
+        private void LogDebug(string member, string message)
+        {
+            //Debug.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {member,-20}{message}");
+            traceLogger?.LogMessageCrLf(member, message);
         }
 
         #endregion

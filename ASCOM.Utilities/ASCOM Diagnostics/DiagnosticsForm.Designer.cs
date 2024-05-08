@@ -50,6 +50,7 @@ namespace ASCOM.Utilities
             this.ChooserNETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ListAvailableCOMPortsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EarthRotationDataUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SetLogFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTrace = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLeaveUnset = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -75,11 +76,13 @@ namespace ASCOM.Utilities
             this.MenuWaitTypeWaitForSingleObject = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAutoViewLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.OptionsCheckForPlatformReleases = new System.Windows.Forms.ToolStripMenuItem();
+            this.OptionsCheckForPlatformPreReleases = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAction = new System.Windows.Forms.Label();
             this.btnViewLastLog = new System.Windows.Forms.Button();
             this.SerialTraceFileName = new System.Windows.Forms.SaveFileDialog();
-            this.SetLogFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnUpdateAvailable = new System.Windows.Forms.Button();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -216,6 +219,13 @@ namespace ASCOM.Utilities
             this.EarthRotationDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
             this.EarthRotationDataUpdateToolStripMenuItem.Text = "Earth Rotation Data";
             this.EarthRotationDataUpdateToolStripMenuItem.Click += new System.EventHandler(this.EarthRotationDataUpdateToolStripMenuItem_Click);
+            // 
+            // SetLogFileLocationToolStripMenuItem
+            // 
+            this.SetLogFileLocationToolStripMenuItem.Name = "SetLogFileLocationToolStripMenuItem";
+            this.SetLogFileLocationToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.SetLogFileLocationToolStripMenuItem.Text = "Set Log File Location";
+            this.SetLogFileLocationToolStripMenuItem.Click += new System.EventHandler(this.SetLogFileLocationToolStripMenuItem_Click);
             // 
             // mnuTrace
             // 
@@ -401,7 +411,9 @@ namespace ASCOM.Utilities
             // OptionsToolStripMenuItem
             // 
             this.OptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuAutoViewLog});
+            this.MenuAutoViewLog,
+            this.OptionsCheckForPlatformReleases,
+            this.OptionsCheckForPlatformPreReleases});
             this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
             this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.OptionsToolStripMenuItem.Text = "Options";
@@ -409,9 +421,23 @@ namespace ASCOM.Utilities
             // MenuAutoViewLog
             // 
             this.MenuAutoViewLog.Name = "MenuAutoViewLog";
-            this.MenuAutoViewLog.Size = new System.Drawing.Size(243, 22);
+            this.MenuAutoViewLog.Size = new System.Drawing.Size(280, 22);
             this.MenuAutoViewLog.Text = "Automatically view log after run";
             this.MenuAutoViewLog.Click += new System.EventHandler(this.MenuAutoViewLog_Click);
+            // 
+            // OptionsCheckForPlatformReleases
+            // 
+            this.OptionsCheckForPlatformReleases.Name = "OptionsCheckForPlatformReleases";
+            this.OptionsCheckForPlatformReleases.Size = new System.Drawing.Size(280, 22);
+            this.OptionsCheckForPlatformReleases.Text = "Check for Platform updates";
+            this.OptionsCheckForPlatformReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformReleases_Click);
+            // 
+            // OptionsCheckForPlatformPreReleases
+            // 
+            this.OptionsCheckForPlatformPreReleases.Name = "OptionsCheckForPlatformPreReleases";
+            this.OptionsCheckForPlatformPreReleases.Size = new System.Drawing.Size(280, 22);
+            this.OptionsCheckForPlatformPreReleases.Text = "Check for Platform pre-release updates";
+            this.OptionsCheckForPlatformPreReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformPreReleases_Click);
             // 
             // AboutToolStripMenuItem
             // 
@@ -438,18 +464,25 @@ namespace ASCOM.Utilities
             this.btnViewLastLog.Enabled = false;
             this.btnViewLastLog.Location = new System.Drawing.Point(408, 173);
             this.btnViewLastLog.Name = "btnViewLastLog";
-            this.btnViewLastLog.Size = new System.Drawing.Size(108, 23);
+            this.btnViewLastLog.Size = new System.Drawing.Size(110, 23);
             this.btnViewLastLog.TabIndex = 7;
             this.btnViewLastLog.Text = "View Last Log";
             this.btnViewLastLog.UseVisualStyleBackColor = true;
             this.btnViewLastLog.Click += new System.EventHandler(this.BtnLastLog_Click);
             // 
-            // SetLogFileLocationToolStripMenuItem
+            // BtnUpdateAvailable
             // 
-            this.SetLogFileLocationToolStripMenuItem.Name = "SetLogFileLocationToolStripMenuItem";
-            this.SetLogFileLocationToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
-            this.SetLogFileLocationToolStripMenuItem.Text = "Set Log File Location";
-            this.SetLogFileLocationToolStripMenuItem.Click += new System.EventHandler(this.SetLogFileLocationToolStripMenuItem_Click);
+            this.BtnUpdateAvailable.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.BtnUpdateAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnUpdateAvailable.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnUpdateAvailable.Location = new System.Drawing.Point(408, 76);
+            this.BtnUpdateAvailable.Name = "BtnUpdateAvailable";
+            this.BtnUpdateAvailable.Size = new System.Drawing.Size(110, 42);
+            this.BtnUpdateAvailable.TabIndex = 8;
+            this.BtnUpdateAvailable.Text = "Platform Update Available";
+            this.BtnUpdateAvailable.UseVisualStyleBackColor = false;
+            this.BtnUpdateAvailable.Visible = false;
+            this.BtnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
             // 
             // DiagnosticsForm
             // 
@@ -458,6 +491,7 @@ namespace ASCOM.Utilities
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(530, 266);
+            this.Controls.Add(this.BtnUpdateAvailable);
             this.Controls.Add(this.btnViewLastLog);
             this.Controls.Add(this.lblAction);
             this.Controls.Add(this.lblResult);
@@ -522,5 +556,8 @@ namespace ASCOM.Utilities
         internal ToolStripMenuItem MenuEarthRotationDataFormTraceEnabled;
         internal ToolStripMenuItem MenuRegistryTraceEnabled;
         private ToolStripMenuItem SetLogFileLocationToolStripMenuItem;
+        private ToolStripMenuItem OptionsCheckForPlatformReleases;
+        private ToolStripMenuItem OptionsCheckForPlatformPreReleases;
+        internal Button BtnUpdateAvailable;
     }
 }

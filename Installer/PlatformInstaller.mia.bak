@@ -818,6 +818,16 @@ Comment
 Code Folding Region
 Comment
 Comment
+Write to Text File
+Run Program
+Write to Text File
+Write to Text File
+Comment
+Code Folding Region
+Comment
+Code Folding Region
+Comment
+Comment
 If
 Set 64 Bit Mode
 Comment
@@ -1605,6 +1615,22 @@ Install Files
 Install Files
 Install Files
 Comment
+Install Files
+Install Files
+Install Files
+Install Files
+Comment
+Code Folding Region
+Comment
+Code Folding Region
+Comment
+Comment
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Install Files
 Install Files
 Install Files
@@ -2467,15 +2493,34 @@ Comment
 Code Folding Region
 Comment
 Comment
+Set Variable
+Set Variable
+Comment
+Does File/Folder Exist
+If
+Comment
 Check File Version
 Write to Text File
 Comment
 If
 MessageBox
-Comment
+End
+Else
+Write to Text File
 End
 Comment
 Code Folding Region
+Comment
+Code Folding Region
+Comment
+Comment
+Write to Text File
+Run Program
+Write to Text File
+Write to Text File
+Comment
+Code Folding Region
+End
 Comment
 Set Variable
 Set Variable
@@ -3415,6 +3460,16 @@ $
 {BE9BD426-AD4F-4D1D-BDAA-BF899E01B907}
 {33520393-43AC-48B9-AC30-411F3AE21591}
 {EB1A936A-CF47-480E-83FA-C2A266E249FB}
+{118591D9-8EDF-4367-AB47-C8F29C5EBEB0}
+{E9C9EAB9-689D-4DFD-B5A0-649268616D64}
+{3AE383A2-2FD2-4481-AC5E-B298E313756B}
+{B7A1CFF1-5063-4A05-84BD-EC44EE0FA280}
+{9AB88148-20EE-4529-AE2D-A008E7BE7F39}
+{0AEA1550-FA20-458B-B04C-C13616D585CC}
+{B2B30F12-7D58-4F2A-9AE2-3DE654B5A3D7}
+{D7719EB8-3AEF-48AF-B6D9-BABF2F8B42D5}
+{4AFB05A9-C04E-49BA-98FE-EAB6548D598F}
+{40480CD7-1DD0-43AA-A0C5-1C77FD06C77E}
 {192C4885-E789-477E-BB48-13F705831E95}
 {2FAFBB36-3DE9-48AB-BB21-DC6FF67A2A52}
 {6977AFAE-1B85-48C7-9F17-BC793524DD14}
@@ -4212,6 +4267,22 @@ $
 {30A77E0E-F7E3-495A-8E4C-A4B06D03BE8B}
 {09BCF622-415A-4A8C-AFF5-20344C776414}
 {4D7A192C-CE73-4349-8A33-D03B756AD27F}
+{B151F0FC-26D7-4886-ABDC-55CCF02C03E4}
+{8ACEBAE9-D839-4A4F-9A9D-1E35B7DC79F8}
+{4E69F338-CD27-4D57-95C7-0F9BDEC82168}
+{5C67F775-821C-4D4F-A917-6B3BCEF5F246}
+{08431FE6-97EB-4ED0-BFC1-1D030CF9A4B9}
+{1281DAEE-2B2F-4535-B093-BCF2AA906AA4}
+{84C04E86-06C8-4632-804C-578280601EC5}
+{E9B4E03B-3869-4922-8587-7FFF1AA4579C}
+{A0FE68F0-E3EB-420E-B183-9AFB04AE0F3A}
+{77E5A061-8AEF-49CB-AB28-CA6B57292CC4}
+{70FAD4EE-BE06-4607-AFEE-8E49EDF0D3E3}
+{F8893773-84CD-4A3C-AAFF-552A4BD62A35}
+{37621627-F886-4854-A850-B4E09DBC404D}
+{1787A77D-E3F0-4286-84D7-0DECBC21A048}
+{DBD47ED3-BED9-4CFB-8ABD-864C0BEBF9DD}
+{0DF50B2E-A261-4151-9CD7-260273CCCDEE}
 {3F73179C-E1BC-4F1E-B10E-3E3E16CD64E9}
 {509275C4-3E80-4C03-868B-5AF18E3CA1D8}
 {0858D1D1-FD67-45E2-A27C-3A30575C855C}
@@ -5068,16 +5139,35 @@ $
 {9CC6F58D-7550-4C31-BD7B-4ACC3E334980}
 {96175347-A47A-417E-BBC6-F563A20E4F5C}
 {6F167F82-6B49-4F20-8F80-8B15A32676E6}
+{F568440B-0098-4B0D-82A7-E82CE1F31A18}
+{FCBF79A6-A6ED-4319-819E-C47B047BEDBA}
+{DAFA19BB-FFEC-482A-87B4-C50B13AA4836}
+{25049FD6-B49B-4CBC-B242-19AB9C945C2B}
+{1BC1EB2D-7EB3-48BD-B13A-D318002AFD94}
+{2C64A5D3-810A-4B7A-9270-0FFE56CA6C67}
 {D570074A-CAB1-40EF-B985-984F71CAB79B}
 {643A0492-F9F0-4F64-ACAE-917B088A6B8C}
 {99962B1B-AA14-4C8F-8B29-9C4989279C27}
 {21DE0352-23B4-44E2-9ED2-F458A9588206}
 {273F902A-2D61-416B-B8B9-9E197E7D95BA}
-{BC87E58B-0EFE-4AC2-A08F-CF84EEC571ED}
 {E25D026C-FE1B-4501-96B8-D1DD9F983273}
+{CBF20AE4-8535-4C91-8617-502C967BAA63}
+{112237B2-F6FA-45D6-A525-D6D4DE2D4123}
+{F5B113FB-6B43-43F8-AC7E-070747D88457}
 {10048ADB-0944-429E-929E-D7247345DB8A}
 {D05CBB71-56C1-40C4-B1ED-965A15356ECB}
+{0A50329A-5EBE-4E93-8BD5-FC20C6B8A57E}
+{CFE9856E-A755-4F60-BC73-F578CBF66676}
+{3AEEE279-F333-4043-9582-F347F2792E8D}
+{C7EADC66-6130-49E6-968B-B627EA2BFFE3}
+{1823A8B1-D1DF-4E8C-AF22-AA18A9CEF0E1}
+{CF68CD48-FC9F-47C6-BE98-893A0FEBC786}
+{8CC4FF9D-438F-43ED-92C1-64F3FAF66A1B}
+{9B64885A-E7EB-4554-A149-E31D87788DED}
 {B0E2DE99-0571-4301-98DC-C60634830737}
+{1D5C1833-153A-4061-A200-C7C2C485ED41}
+{BCA1FE7F-C700-4D9F-8EFF-FF4965C79F43}
+{108AA2BD-A8D3-4463-83D9-32718CF61583}
 {0ED2AD35-9CB9-4766-961D-B615B536A865}
 {1BE49D7D-5038-4ED1-B06D-D3BEA4EDBD2F}
 {3FF14CDB-9582-4EF8-BB61-B9036B7EE63A}
@@ -5508,8 +5598,6 @@ Register core components
 
 {AD2B261C-0D79-49E2-A1E2-33A516A82E05}
 Extra registration of 64bit components if on 64bit system
-{BC87E58B-0EFE-4AC2-A08F-CF84EEC571ED}
-
 {FD78AF67-B196-4184-85A1-724C7AB67896}
 
 {33520393-43AC-48B9-AC30-411F3AE21591}
@@ -6247,6 +6335,34 @@ Clean remaining shortcuts.
 {6F167F82-6B49-4F20-8F80-8B15A32676E6}
 The Platform 6 Conform will fail on Platform 7 because internal functions had to be moved when Utilities was ported from VB to C# (no equivalent of module level functions)
 {99962B1B-AA14-4C8F-8B29-9C4989279C27}
+
+{108AA2BD-A8D3-4463-83D9-32718CF61583}
+
+{2C64A5D3-810A-4B7A-9270-0FFE56CA6C67}
+
+{DAFA19BB-FFEC-482A-87B4-C50B13AA4836}
+
+{B151F0FC-26D7-4886-ABDC-55CCF02C03E4}
+
+{4E69F338-CD27-4D57-95C7-0F9BDEC82168}
+
+{DBD47ED3-BED9-4CFB-8ABD-864C0BEBF9DD}
+
+{5C67F775-821C-4D4F-A917-6B3BCEF5F246}
+Install the updater checker application
+{C7EADC66-6130-49E6-968B-B627EA2BFFE3}
+Create a scheduled task to run the update checker once a week
+{3AEEE279-F333-4043-9582-F347F2792E8D}
+
+{0A50329A-5EBE-4E93-8BD5-FC20C6B8A57E}
+
+{4AFB05A9-C04E-49BA-98FE-EAB6548D598F}
+
+{B7A1CFF1-5063-4A05-84BD-EC44EE0FA280}
+Create a scheduled task to run the update checker once a week
+{3AE383A2-2FD2-4481-AC5E-B298E313756B}
+
+{118591D9-8EDF-4367-AB47-C8F29C5EBEB0}
 
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
@@ -7484,6 +7600,12 @@ $PROGRAMFILES$ASCOM\Platform
 {356B3331-0E2B-49D8-8C15-3402149AA9CE}
 VSREFERENCEPLATFORM6$MYAH$MYAH$FALSE
 $PROGRAMFILES$ASCOM\Platform 6 Developer Components\Components
+{F568440B-0098-4B0D-82A7-E82CE1F31A18}
+CONFORMPRESENT$MYAH$MYAH$FALSE
+
+{FCBF79A6-A6ED-4319-819E-C47B047BEDBA}
+CONFORMVERSIONOK$MYAH$MYAH$FALSE
+
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -8210,9 +8332,14 @@ FILEEXISTS
 
 FALSE
 {21DE0352-23B4-44E2-9ED2-F458A9588206}
-SUCCESS
+CONFORMVERSIONOK
 0
-FALSE
+TRUE
+TRUE
+{1BC1EB2D-7EB3-48BD-B13A-D318002AFD94}
+CONFORMPRESENT
+0
+TRUE
 FALSE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
@@ -8348,7 +8475,7 @@ Unable to uninstall old version of Develoiper Tools. Please uninstall it yoursel
 
 {273F902A-2D61-416B-B8B9-9E197E7D95BA}
 Platform 6 Conform Detected
-Platform 6 versions of Conform are not compatible with Platform 7 due to necessary internal Platform changes.$NEWLINE$$NEWLINE$Please install the latest Platform 7 compatbile version from https://ascom-standards.org/Downloads/DevTools.htm
+Platform 6 versions of Conform are not compatible with Platform 7 due to internal Platform changes.$NEWLINE$$NEWLINE$Please install the latest version from https://ascom-standards.org/Downloads/DevTools.htm
 2
 1
 
@@ -8597,7 +8724,7 @@ ARM64MODE
 WIN10ORLATER
 98
 {D570074A-CAB1-40EF-B985-984F71CAB79B}
-SUCCESS
+CONFORMVERSIONOK
 $PROGRAMFILES$ASCOM\Conform\Conform.exe
 FALSE
 
@@ -12736,6 +12863,140 @@ FALSE
 FALSE
 FALSE
 FALSE
+{08431FE6-97EB-4ED0-BFC1-1D030CF9A4B9}
+..\PlatformUpdateChecker\bin\Release\ascom.jpg
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{1281DAEE-2B2F-4535-B093-BCF2AA906AA4}
+..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.dll
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{84C04E86-06C8-4632-804C-578280601EC5}
+..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.pdb
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{E9B4E03B-3869-4922-8587-7FFF1AA4579C}
+..\PlatformUpdateChecker\bin\Release\Microsoft.Win32.TaskScheduler.dll
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{77E5A061-8AEF-49CB-AB28-CA6B57292CC4}
+..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{70FAD4EE-BE06-4607-AFEE-8E49EDF0D3E3}
+..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe.config
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{F8893773-84CD-4A3C-AAFF-552A4BD62A35}
+..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.pdb
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{1787A77D-E3F0-4286-84D7-0DECBC21A048}
+..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{A0FE68F0-E3EB-420E-B183-9AFB04AE0F3A}
+..\PlatformUpdateChecker\bin\Release\Octokit.dll
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{37621627-F886-4854-A850-B4E09DBC404D}
+..\PlatformUpdateChecker\bin\Release\Semver.dll
+FALSE|
+$TARGETDIR$\Tools\PlatformUpdateChecker
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{25049FD6-B49B-4CBC-B242-19AB9C945C2B}
+CONFORMPRESENT
+$PROGRAMFILES$ASCOM\Conform\Conform.exe
+TRUE
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
@@ -13316,6 +13577,18 @@ RC
 $UNINSTALLER$
 FALSE
 /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+TRUE
+RC
+{CF68CD48-FC9F-47C6-BE98-893A0FEBC786}
+$TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe
+TRUE
+/InstallTask
+TRUE
+RC
+{0AEA1550-FA20-458B-B04C-C13616D585CC}
+$TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe
+TRUE
+/RemoveTask
 TRUE
 RC
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
@@ -17070,7 +17343,42 @@ FALSE
 TRUE
 {643A0492-F9F0-4F64-ACAE-917B088A6B8C}
 $SETUPLOG$
-$TIME$ Success: $SUCCESS$, Conform file version: $PROGRAMFILES$ASCOM\Conform\Conform.exe
+$TIME$ Conform version OK: $CONFORMVERSIONOK$, Conform file location: $PROGRAMFILES$ASCOM\Conform\Conform.exe
+FALSE
+TRUE
+{112237B2-F6FA-45D6-A525-D6D4DE2D4123}
+$SETUPLOG$
+$TIME$ Conform not found on this system.
+FALSE
+TRUE
+{9B64885A-E7EB-4554-A149-E31D87788DED}
+$SETUPLOG$
+
+FALSE
+TRUE
+{8CC4FF9D-438F-43ED-92C1-64F3FAF66A1B}
+$SETUPLOG$
+$TIME$ Update Checker Task scheduled OK
+FALSE
+TRUE
+{1823A8B1-D1DF-4E8C-AF22-AA18A9CEF0E1}
+$SETUPLOG$
+$TIME$ About to install Platform Update Checker Task...
+FALSE
+TRUE
+{D7719EB8-3AEF-48AF-B6D9-BABF2F8B42D5}
+$SETUPLOG$
+
+FALSE
+TRUE
+{B2B30F12-7D58-4F2A-9AE2-3DE654B5A3D7}
+$SETUPLOG$
+$TIME$ Update Checker Task removed OK
+FALSE
+TRUE
+{9AB88148-20EE-4529-AE2D-A008E7BE7F39}
+$SETUPLOG$
+$TIME$ About to remove the Platform Update Checker Task...
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
@@ -17408,6 +17716,24 @@ Alert if Platform 6 Conform is present.
 {D05CBB71-56C1-40C4-B1ED-965A15356ECB}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{8ACEBAE9-D839-4A4F-9A9D-1E35B7DC79F8}
+TRUE
+Platform Update Checker
+{0DF50B2E-A261-4151-9CD7-260273CCCDEE}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{CFE9856E-A755-4F60-BC73-F578CBF66676}
+TRUE
+Install Platform update scheduled task
+{1D5C1833-153A-4061-A200-C7C2C485ED41}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{40480CD7-1DD0-43AA-A0C5-1C77FD06C77E}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{E9C9EAB9-689D-4DFD-B5A0-649268616D64}
+TRUE
+Remove Platform update checker scheduled task
 {1092A0D5-2A44-44ED-A0BF-E78001F6D95A}
 $UNINSTALLER$
 FALSE
@@ -19042,23 +19368,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -19096,16 +19405,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
 C
 
 
@@ -19143,127 +19442,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-C
-C
-C
-C
-C
-C
-C
-C
-C
-C
-
-
-
-
-
-
-
-
-
-C
-C
-C
-C
-C
 C
 
 
@@ -19396,47 +19574,18 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 C
-
-
-
-
-
-
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
+C
 
 
 
@@ -19448,29 +19597,8 @@ C
 
 C
 C
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 C
 C
-
 C
 C
 
@@ -19654,6 +19782,230 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20228,6 +20580,25 @@ C
 
 C
 C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20408,6 +20779,51 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -103,14 +103,27 @@ namespace EarthRotationUpdate
                 {
                     if (args[0].Trim(' ', '-', '\\', '/').Equals("INITIALISE", StringComparison.OrdinalIgnoreCase)) // Test for the presence of and act on the initialise argument ignoring everything else
                     {
-                        LogMessage("EarthRotationUpdate", string.Format("Earth rotation parameter initialisation run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem));
+                        LogMessage("EarthRotationUpdate", $"Earth rotation parameter initialisation run on {runDate} by {runBy}, IsSystem: {isSystem}");
                         LogEvent(string.Format("Earth rotation parameter initialisation run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
 
-                        LogMessage("EarthRotationUpdate", string.Format("Calling ManageScheduledTask"));
+                        LogMessage("EarthRotationUpdate", "Calling ManageScheduledTask");
                         parameters.ManageScheduledTask();
-                        LogMessage("EarthRotationUpdate", string.Format("Completed ManageScheduledTask"));
+                        LogMessage("EarthRotationUpdate", "Completed ManageScheduledTask");
 
                         LogMessage("EarthRotationUpdate", "Initialise complete.");
+
+                        Environment.Exit(0);
+                    }
+                    else if (args[0].Trim(' ', '-', '\\', '/').Equals("REMOVETASK", StringComparison.OrdinalIgnoreCase)) // Test for the presence of and act on the remove task argument ignoring everything else
+                    {
+                        LogMessage("EarthRotationUpdate", $"Earth rotation task removal run on {runDate} by {runBy}, IsSystem: {isSystem}");
+                        LogEvent(string.Format("Earth rotation task removal run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
+
+                        LogMessage("EarthRotationUpdate", "Calling RemoveScheduledTask");
+                        parameters.RemoveScheduledTask();
+                        LogMessage("EarthRotationUpdate", "Completed RemoveScheduledTask");
+
+                        LogMessage("EarthRotationUpdate", "Removal complete.");
 
                         Environment.Exit(0);
                     }

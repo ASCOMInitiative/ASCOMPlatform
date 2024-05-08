@@ -115,7 +115,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverConnect", "ASCO
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Master Platform Version Number", "Master Platform Version Number", "{94891499-3A68-4E4D-B9E7-2F2B7A59A2AB}"
 	ProjectSection(SolutionItems) = preProject
-		Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt = Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt
+		Installer\MasterPlatformVersion.txt = Installer\MasterPlatformVersion.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hubs", "Hubs", "{81D7DF5D-E6AF-420E-9CC5-B6CA823ED048}"
@@ -278,6 +278,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Interfaces", "ASCOM Interfaces", "{757D9194-3458-459F-ADA5-1CBE53B5A1F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASCOM.Exceptions", "ASCOM.Exceptions\ASCOM.Exceptions.csproj", "{6FD62EA4-8B79-4805-85EC-35178759C405}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Update Checker", "Platform Update Checker", "{10167B87-BE51-4822-A28E-EC04FA20E968}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformUpdateChecker", "PlatformUpdateChecker\PlatformUpdateChecker.csproj", "{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2897,6 +2901,46 @@ Global
 		{6FD62EA4-8B79-4805-85EC-35178759C405}.Release|x64.Build.0 = Release|Any CPU
 		{6FD62EA4-8B79-4805-85EC-35178759C405}.Release|x86.ActiveCfg = Release|Any CPU
 		{6FD62EA4-8B79-4805-85EC-35178759C405}.Release|x86.Build.0 = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|Win32.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|Win32.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|x64.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug Quick|x86.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|Win32.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|x64.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|x86.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Any CPU.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Win32.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Win32.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|x64.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|x64.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|x86.ActiveCfg = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|x86.Build.0 = Debug|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|Win32.ActiveCfg = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|Win32.Build.0 = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|x64.ActiveCfg = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|x64.Build.0 = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|x86.ActiveCfg = Release|Any CPU
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -3008,6 +3052,7 @@ Global
 		{96ABE929-97F9-4A0F-9D8C-6FC9C12B8A76} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{E83F33EA-139D-4D9A-8A83-E49F485796D8} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{6FD62EA4-8B79-4805-85EC-35178759C405} = {8780D6D3-B6FB-4DC9-8BC0-C160CF5028B3}
+		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B} = {10167B87-BE51-4822-A28E-EC04FA20E968}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}

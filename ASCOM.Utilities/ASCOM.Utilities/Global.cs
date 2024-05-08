@@ -128,6 +128,12 @@ namespace ASCOM.Utilities
         // TraceLogger - Per user configuration value names
         internal const string TRACELOGGER_DEFAULT_FOLDER = "TraceLogger Default Folder";
 
+        // Check for updates constants
+        internal const string CHECK_FOR_RELEASE_UPDATES = "Check for Release Updates"; // Name of flag indicating whether or not to check for new releases
+        internal const bool CHECK_FOR_RELEASE_UPDATES_DEFAULT = true;
+        internal const string CHECK_FOR_RELEASE_CANDIDATES = "Check for Release Candidate Updates"; // Name of flag indicating whether or not to check for new "release candidate" releases
+        internal const bool CHECK_FOR_RELEASE_CANDIDATES_DEFAULT = false;
+
         // Other constants
         internal const double ABSOLUTE_ZERO_CELSIUS = -273.15d;
         internal const string TRACE_LOGGER_PATH = @"\ASCOM"; // Path to TraceLogger directory from My Documents

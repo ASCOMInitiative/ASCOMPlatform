@@ -1193,6 +1193,52 @@ namespace ASCOM.Astrometry
         }
 
         /// <summary>
+        /// Remove the scheduled Windows task from the task list
+        /// </summary>
+        public void RemoveScheduledTask()
+        {
+            try
+            {
+                using (var serviceController = new ServiceController(SCHEDULER_SERVICE_NAME)) // Create a new service controller for the scheduler service
+                {
+
+                    if (serviceController.Status == ServiceControllerStatus.Running) // The scheduler is running normally so proceed with creating or updating the ASCOM EarthRotation parameters update task
+                    {
+                        LogScheduledTaskMessage("ManageScheduledTask", $"Scheduler service is running OK - status: {serviceController.Status}. Obtaining Scheduler information...");
+                        using (var service = new TaskService())
+                        {
+                            LogScheduledTaskMessage("ManageScheduledTask", $"Highest supported scheduler version: {service.HighestSupportedVersion}, Library version: {TaskService.LibraryVersion}, Connected: {service.Connected}");
+
+                            // List current task state if any
+                            var ASCOMTask = service.GetTask(GlobalItems.DOWNLOAD_TASK_PATH);
+                            if (ASCOMTask is not null)
+                            {
+                                LogScheduledTaskMessage("ManageScheduledTask", $"Found ASCOM task {ASCOMTask.Path} last run: {ASCOMTask.LastRunTime}, State: {ASCOMTask.State}, Enabled: {ASCOMTask.Enabled}");
+                                service.RootFolder.DeleteTask(GlobalItems.DOWNLOAD_TASK_NAME);
+                            }
+                            else
+                            {
+                                LogScheduledTaskMessage("ManageScheduledTask", "ASCOM task does not exist");
+                            }
+                            LogScheduledTaskMessage("", "");
+                        }
+                    }
+                    else // The task scheduler is not running so provide a message
+                    {
+                        string message = $"The ASCOM EarthRotation scheduled task cannot be removed because your PC's task scheduler is in the: {serviceController.Status} state. Please ensure that this service is running correctly, then repair the ASCOM installation.";
+                        LogScheduledTaskMessage("ManageScheduledTask", message);
+                        MessageBox.Show(message);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogScheduledTaskMessage("RemoveScheduledTask", $"Exception: {ex.Message}\r\n{ex}");
+            }
+        }
+
+        /// <summary>
         /// Update the scheduled Windows task with new parameters specified by the user through the Diagnostics Earth Rotation Parameters dialogue.
         /// </summary>
         public void ManageScheduledTask()

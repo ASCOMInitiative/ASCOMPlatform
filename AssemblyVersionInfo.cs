@@ -18,3 +18,4 @@
 // For local builds, the version is always 6.x.9999.9999, indicating an uncontrolled release.
 
 [assembly: AssemblyFileVersion("7.0.9999.9999")]
+[assembly: AssemblyInformationalVersion("7.0.0-rc.0+0")]
