@@ -2923,7 +2923,6 @@ Global
 		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.Debug|x86.Build.0 = Debug|Any CPU
 		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Mixed Platforms.Build.0 = Debug|Any CPU
 		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Win32.ActiveCfg = Debug|Any CPU
 		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|Win32.Build.0 = Debug|Any CPU
 		{6A0E1582-BB51-4B62-A4A8-4F54784F3D4B}.MakeDynamicLists|x64.ActiveCfg = Debug|Any CPU
