@@ -151,7 +151,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Semver, Version=2.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Semver.dll</HintPath>
+      <HintPath>DotnetSignedSemverDll\Semver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
