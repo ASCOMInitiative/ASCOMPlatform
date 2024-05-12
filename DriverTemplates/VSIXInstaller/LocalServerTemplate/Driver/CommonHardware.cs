@@ -14,6 +14,11 @@ using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Utilities;
 using System.Collections;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using ASCOM.Astrometry;
+using ASCOM.Astrometry.NOVAS;
+using ASCOM.DeviceInterface;
 
 namespace TEMPLATENAMESPACE
 {
@@ -37,10 +42,13 @@ namespace TEMPLATENAMESPACE
         private static string DriverDescription = ""; // The value is set by the driver's class initialiser.
         internal static string comPort; // COM port name (if required)
         private static bool connectedState; // Local server's connected state
+        private static bool connecting; // Completion variable for use with the Connect and Disconnect methods
         private static bool runOnce = false; // Flag to enable "one-off" activities only to run once.
         internal static Util utilities; // ASCOM Utilities object for use as required
         internal static AstroUtils astroUtilities; // ASCOM AstroUtilities object for use as required
         internal static TraceLogger tl; // Local server's trace logger object for diagnostic log with information that you specify
+
+        private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
 
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
@@ -258,39 +266,186 @@ namespace TEMPLATENAMESPACE
         }
 
         /// <summary>
-        /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
-        /// You can also read the property to check whether it is connected. This reports the current hardware state.
+        /// Connect to the hardware if not already connected
         /// </summary>
-        /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
-        public static bool Connected
+        /// <param name="uniqueId">Unique ID identifying the calling driver instance.</param>
+        /// <remarks>
+        /// The unique ID is stored to record that the driver instance is connected and to ensure that multiple calls from the same driver are ignored.
+        /// If this is the first driver instance to connect, the physical hardware link to the device is established
+        /// </remarks>
+        public static void Connect(Guid uniqueId)
+        {
+            LogMessage("Connect", $"Device instance unique ID: {uniqueId}");
+
+            // Check whether this driver instance has already connected
+            if (uniqueIds.Contains(uniqueId)) // Instance already connected
+            {
+                // Ignore the request, the unique ID is already in the list
+                LogMessage("Connect", $"Ignoring request to connect because the device is already connected.");
+                return;
+            }
+
+            // Set the connection in progress flag
+            connecting = true;
+
+            // Driver instance not yet connected, so start a task to connect to the device hardware and return while the task runs in the background
+            // Discard the returned task value because this a "fire and forget" task
+            LogMessage("Connect", $"Starting Connect task...");
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    // Set the Connected state to true, waiting until it completes
+                    LogMessage("ConnectTask", $"Setting connection state to true");
+                    SetConnected(uniqueId, true);
+                    LogMessage("ConnectTask", $"Connected set true");
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("ConnectTask", $"Exception - {ex.Message}\r\n{ex}");
+                    throw;
+                }
+                finally
+                {
+                    connecting = false;
+                    LogMessage("ConnectTask", $"Connecting set false");
+                }
+            });
+            LogMessage("Connect", $"Connect task started OK");
+        }
+
+        /// <summary>
+        /// Disconnect from the device asynchronously using Connecting as the completion variable
+        /// </summary>
+        /// <param name="uniqueId">Unique ID identifying the calling driver instance.</param>
+        /// <remarks>
+        /// The list of connected driver instance IDs is queried to determine whether this driver instance is connected and, if so, it is removed from the connection list. 
+        /// The unique ID ensures that multiple calls from the same driver are ignored.
+        /// If this is the last connected driver instance, the physical link to the device hardware is disconnected.
+        /// </remarks>
+        public static void Disconnect(Guid uniqueId)
+        {
+            LogMessage("Disconnect", $"Device instance unique ID: {uniqueId}");
+
+            // Check whether this driver instance has already connected
+            if (uniqueIds.Contains(uniqueId)) // Instance already connected
+            {
+                // Ignore the request, the unique ID is already in the list
+                LogMessage("Disconnect", $"Ignoring request to connect because the device is already connected.");
+                return;
+            }
+
+            // Set the Disconnect in progress flag
+            connecting = true;
+
+            // Start a task to disconnect from the device hardware and return while the task runs in the background
+            // Discard the returned task value because this a "fire and forget" task
+            LogMessage("Disconnect", $"Starting Disconnect task...");
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    // Set the Connected state to false, waiting until it completes
+                    LogMessage("DisconnectTask", $"Setting connection state to false");
+                    SetConnected(uniqueId, false);
+                    LogMessage("DisconnectTask", $"Connected set false");
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("DisconnectTask", $"Exception - {ex.Message}\r\n{ex}");
+                    throw;
+                }
+                finally
+                {
+                    connecting = false;
+                    LogMessage("DisconnectTask", $"Connecting set false");
+                }
+            });
+            LogMessage("Disconnect", $"Disconnect task started OK");
+        }
+
+        /// <summary>
+        /// Completion variable for the asynchronous Connect() and Disconnect()  methods
+        /// </summary>
+        public static bool Connecting
         {
             get
             {
-                LogMessage("Connected", $"Get {IsConnected}");
-                return IsConnected;
+                return connecting;
             }
-            set
+        }
+
+        /// <summary>
+        /// Synchronously connect to or disconnect from the hardware
+        /// </summary>
+        /// <param name="uniqueId">Driver's unique ID</param>
+        /// <param name="newState">New state: Connected or Disconnected</param>
+        public static void SetConnected(Guid uniqueId, bool newState)
+        {
+            // Check whether we are connecting or disconnecting
+            if (newState) // We are connecting
             {
-                LogMessage("Connected", $"Set {value}");
-                if (value == IsConnected)
-                    return;
-
-                if (value)
+                // Check whether this driver instance has already connected
+                if (uniqueIds.Contains(uniqueId)) // Instance already connected
                 {
-                    LogMessage("Connected Set", $"Connecting to port {comPort}");
-
-                    // TODO insert connect to the device code here
-
-                    connectedState = true;
+                    // Ignore the request, the unique ID is already in the list
+                    LogMessage("SetConnected", $"Ignoring request to connect because the device is already connected.");
                 }
-                else
+                else // Instance not already connected, so connect it
                 {
-                    LogMessage("Connected Set", $"Disconnecting from port {comPort}");
+                    // Check whether this is the first connection to the hardware
+                    if (uniqueIds.Count == 0) // This is the first connection to the hardware so initiate the hardware connection
+                    {
+                        //
+                        // Add hardware connect logic here
+                        //
+                        LogMessage("SetConnected", $"Connecting to hardware.");
+                    }
+                    else // Other device instances are connected so the hardware is already connected
+                    {
+                        // Since the hardware is already connected no action is required
+                        LogMessage("SetConnected", $"Hardware already connected.");
+                    }
 
-                    // TODO insert disconnect from the device code here
-
-                    connectedState = false;
+                    // The hardware either "already was" or "is now" connected, so add the driver unique ID to the connected list
+                    uniqueIds.Add(uniqueId);
+                    LogMessage("SetConnected", $"Unique id {uniqueId} added to the connection list.");
                 }
+            }
+            else // We are disconnecting
+            {
+                // Check whether this driver instance has already disconnected
+                if (!uniqueIds.Contains(uniqueId)) // Instance not connected so ignore request
+                {
+                    // Ignore the request, the unique ID is not in the list
+                    LogMessage("SetConnected", $"Ignoring request to disconnect because the device is already disconnected.");
+                }
+                else // Instance currently connected so disconnect it
+                {
+                    // Remove the driver unique ID to the connected list
+                    uniqueIds.Remove(uniqueId);
+                    LogMessage("SetConnected", $"Unique id {uniqueId} removed from the connection list.");
+
+                    // Check whether there are now any connected driver instances 
+                    if (uniqueIds.Count == 0) // There are no connected driver instances so disconnect from the hardware
+                    {
+                        //
+                        // Add hardware disconnect logic here
+                        //
+                    }
+                    else // Other device instances are connected so do not disconnect the hardware
+                    {
+                        // No action is required
+                        LogMessage("SetConnected", $"Hardware already connected.");
+                    }
+                }
+            }
+
+            // Log the current connected state
+            LogMessage("SetConnected", $"Currently connected driver ids:");
+            foreach (Guid id in uniqueIds)
+            {
+                LogMessage("SetConnected", $" ID {id} is connected");
             }
         }
 

@@ -15,6 +15,7 @@ using ASCOM;
 using ASCOM.Utilities;
 using System.Collections;
 using System.Windows.Forms;
+using ASCOM.DeviceInterface;
 
 namespace TEMPLATENAMESPACE
 {
@@ -45,6 +46,8 @@ namespace TEMPLATENAMESPACE
         internal bool connectedState; // The connected state from this driver's perspective)
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
         private bool disposedValue;
+
+        private Guid uniqueId; // A unique ID for this instance of the driver
 
         #region Initialisation and Dispose
 
@@ -78,6 +81,8 @@ namespace TEMPLATENAMESPACE
 
                 connectedState = false; // Initialise connected to false
 
+                // Create a unique ID to identify this driver instance
+                uniqueId = Guid.NewGuid();
 
                 LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
             }
@@ -339,6 +344,30 @@ namespace TEMPLATENAMESPACE
 
         //ENDOFCOMMANDXXXMETHODS - This line will be deleted by the template wizard.
         /// <summary>
+        /// Connect to the device asynchronously using Connecting as the completion variable
+        /// </summary>
+        public void Connect()
+        {
+            try
+            {
+                if (connectedState)
+                {
+                    LogMessage("Connect", "Device already connected, ignoring method");
+                    return;
+                }
+
+                LogMessage("Connect", "Calling Connect");
+                TEMPLATEHARDWARECLASS.Connect(uniqueId);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Connect", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+            LogMessage("Connect", $"Connect completed OK");
+        }
+
+        /// <summary>
         /// Set True to connect to the device hardware. Set False to disconnect from the device hardware.
         /// You can also read the property to check whether it is connected. This reports the current hardware state.
         /// </summary>
@@ -371,23 +400,60 @@ namespace TEMPLATENAMESPACE
 
                     if (value)
                     {
+                        LogMessage("Connected Set", "Connecting to device...");
+                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId,true);
+                        LogMessage("Connected Set", "Connected OK");
                         connectedState = true;
-                        LogMessage("Connected Set", "Connecting to device");
-                        TEMPLATEHARDWARECLASS.Connected = true;
                     }
                     else
                     {
                         connectedState = false;
-                        LogMessage("Connected Set", "Disconnecting from device");
-                        TEMPLATEHARDWARECLASS.Connected = false;
+                        LogMessage("Connected Set", "Disconnecting from device...");
+                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId,false);
+                        LogMessage("Connected Set", "Disconnected OK");
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogMessage("Connected Set", $"Threw an exception: \r\n{ex}");
+                    LogMessage("Connected Set", $"Threw an exception: {ex.Message}\r\n{ex}");
                     throw;
                 }
             }
+        }
+
+        /// <summary>
+        /// Completion variable for the asynchronous Connect() and Disconnect()  methods
+        /// </summary>
+        public bool Connecting
+        {
+            get
+            {
+                return TEMPLATEHARDWARECLASS.Connecting;
+            }
+        }
+
+        /// <summary>
+        /// Disconnect from the device asynchronously using Connecting as the completion variable
+        /// </summary>
+        public void Disconnect()
+        {
+            try
+            {
+                if (connectedState)
+                {
+                    LogMessage("Disconnect", "Device already connected, ignoring method");
+                    return;
+                }
+
+                LogMessage("Disconnect", "Calling Disconnect");
+                TEMPLATEHARDWARECLASS.Disconnect(uniqueId);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Disconnect", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+            LogMessage("Disconnect", $"Completed OK");
         }
 
         /// <summary>
