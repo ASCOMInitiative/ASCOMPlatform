@@ -817,10 +817,18 @@ if Variable REMOVE Equals TRUE
    
   [DEFINE REGION: Remove Platform update checker scheduled task]
    
-  Comment: Create a scheduled task to run the update checker once a week
+  Comment: Remove the scheduled task to check for Platform updates.
   Write into Text File $SETUPLOG$ from Value $TIME$ About to remove the Platform Update Checker Task... (at end of file)
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /RemoveTask (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ Update Checker Task removed OK (at end of file)
+   
+  [END REGION]
+   
+  [DEFINE REGION: Remove the earth rotation update scheduled job.]
+   
+  Set Variable PROGRESSTEXT to Removing earth rotation data scheduled task.
+  Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /RemoveTask (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Remove earth rotation data scheduled task (at end of file)
   Write into Text File $SETUPLOG$ from Value  (at end of file)
    
   [END REGION]

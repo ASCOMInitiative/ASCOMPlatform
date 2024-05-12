@@ -1,13 +1,3 @@
-// TODO fill in this information for your driver, then remove this line!
-//
-// ASCOM Camera driver for CameraHub
-//
-// Description:	 <To be completed by driver developer>
-//
-// Implements:	ASCOM Camera interface version: <To be completed by driver developer>
-// Author:		(XXX) Your N. Here <your@email.here>
-//
-
 using ASCOM.DeviceInterface;
 using ASCOM.LocalServer;
 using ASCOM.Utilities;
@@ -18,17 +8,6 @@ using System.Windows.Forms;
 
 namespace ASCOM.CameraHub.Camera
 {
-    //
-    // This code is mostly a presentation layer for the functionality in the CameraHub class.
-    // One instance of this driver class is created for every connection to the camera hub.
-    // There is exactly one common instance of the CamerHub class that is shared by all driver instances
-    //
-    // The hub's DeviceID is ASCOM.CameraHub.Camera
-    //
-    // The COM Guid attribute sets the CLSID for ASCOM.CameraHub.Camera
-    // The COM ClassInterface/None attribute prevents an empty interface called _CameraHub from being created and used as the [default] interface
-    //
-
     /// <summary>
     /// ASCOM Driver for the Camera Hub.
     /// </summary>
@@ -37,7 +16,7 @@ namespace ASCOM.CameraHub.Camera
     [ProgId("ASCOM.CameraHub.Camera")]
     [ServedClassName("ASCOM Camera Hub")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
-    public class Camera : ReferenceCountedObjectBase, ICameraV3, IDisposable
+    public class Camera : ReferenceCountedObjectBase, ASCOM.DeviceInterface.ICameraV4, IDisposable
     {
         internal static string hubProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ProgId attribute in the class initialiser.
         internal static string hubDescription; // Chooser descriptive text. The value is retrieved from the ServedClassName attribute in the class initialiser.
@@ -367,12 +346,12 @@ namespace ASCOM.CameraHub.Camera
                     if (value) // Request to connect
                     {
                         LogMessage("Connected Set", "Connecting to device");
-                        CameraHub.Connect(uniqueId);
+                        CameraHub.Connect(uniqueId, CameraHub.ConnectType.Connected);
                     }
                     else // Request to disconnect
                     {
                         LogMessage("Connected Set", "Disconnecting from device");
-                        CameraHub.Disconnect(uniqueId);
+                        CameraHub.Disconnect(uniqueId, CameraHub.ConnectType.Connected);
                     }
                 }
                 catch (Exception ex)
@@ -2048,7 +2027,6 @@ namespace ASCOM.CameraHub.Camera
         #endregion
 
         #region Private properties and methods
-        // Useful properties and methods that can be used as required to help with driver development
 
         /// <summary>
         /// Use this function to throw an exception if we aren't connected to the hardware
@@ -2094,5 +2072,90 @@ namespace ASCOM.CameraHub.Camera
         }
 
         #endregion
+
+        #region Connect / Disconnect and DeviceState members
+
+        /// <summary>
+        /// Connect to the device asynchronously
+        /// </summary>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        public void Connect()
+        {
+            // Check whether the connected device is Platform 7 or later
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so Connect
+            {
+                LogMessage("Connect", "Issuing Connect command");
+                CameraHub.Connect(uniqueId, CameraHub.ConnectType.Connect_Disconnect);
+                return;
+            }
+
+            // Platform 6 or earlier so reject the method call
+            LogMessage("Connect", "Throwing a MethodNotImplementedException because the connected camera is a Platform 6 or earlier device.");
+            throw new MethodNotImplementedException($"Connect is not implemented in this ICameraV{CameraHub.GetInterfaceVersion()} device.");
+        }
+
+        /// <summary>
+        /// Disconnect from the device asynchronously
+        /// </summary>
+        public void Disconnect()
+        {
+            // Check whether the connected device is Platform 7 or later
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so Disconnect
+            {
+                LogMessage("Disconnect", "Issuing Disconnect command");
+                CameraHub.Disconnect(uniqueId, CameraHub.ConnectType.Connect_Disconnect);
+                return;
+            }
+
+            // Platform 6 or earlier so reject the method call
+            LogMessage("Disconnect", "Throwing a MethodNotImplementedException because the connected camera is a Platform 6 or earlier device.");
+            throw new MethodNotImplementedException($"Disconnect is not implemented in this ICameraV{CameraHub.GetInterfaceVersion()} device.");
+        }
+
+        /// <summary>
+        /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
+        /// </summary>
+        public bool Connecting
+        {
+            get
+            {
+                // Check whether the connected device is Platform 7 or later
+                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so call Connecting
+                {
+                    LogMessage("Connecting", "Calling Connecting property");
+                    return CameraHub.Connecting;
+                }
+
+                // Platform 6 or earlier so reject the method call
+                LogMessage("Connecting", "Throwing a PropertyNotImplementedException because the connected camera is a Platform 6 or earlier device.");
+                throw new PropertyNotImplementedException($"Connecting is not implemented in this ICameraV{CameraHub.GetInterfaceVersion()} device.");
+            }
+        }
+
+        /// <summary>
+        /// Returns the device's operational state in a single call.
+        /// </summary>
+        public IStateValueCollection DeviceState
+        {
+            get
+            {
+                CheckConnected("DeviceState");
+
+                // Check whether the connected device is Platform 7 or later
+                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so call Connecting
+                {
+                    LogMessage("DeviceState", "Calling DeviceState property");
+                    return CameraHub.DeviceState;
+                }
+
+                // Platform 6 or earlier so return an empty ArrayList because this feature isn't supported
+                LogMessage("DeviceState", "Returning an empty ArrayList because this feature isn't supported.");
+                return new StateValueCollection();
+            }
+        }
+
+        #endregion
+
     }
 }

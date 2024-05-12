@@ -15,6 +15,15 @@ namespace ASCOM.CameraHub.Camera
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class CameraHub
     {
+        /// <summary>
+        /// Type of connection Connect/Disconnect or Connecting=
+        /// </summary>
+        internal enum ConnectType
+        {
+            Connect_Disconnect,
+            Connected
+        }
+
         // Constants used for Profile persistence
         internal const string TRACE_STATE_PROFILE_NAME = "Trace Level"; internal const string TRACE_STATE_DEFAULT = "true";
         internal const string CAMERA_PROGID = "Camera ProgID"; internal const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
@@ -27,13 +36,14 @@ namespace ASCOM.CameraHub.Camera
 #endif
         private static readonly string hubProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
         private static string hubDescription = ""; // The value is set by the driver's class initialiser.
-        private static bool connectedState; // Local server's connected state
 
         private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
 
         private static bool runOnce = false; // Flag to enable "one-off" activities only to run once.
         internal static Util utilities; // ASCOM Utilities object for use as required
         internal static TraceLogger TL; // Local server's trace logger object for diagnostic log with information that you specify
+
+        private static int? interfaceVersion;
 
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
@@ -80,7 +90,6 @@ namespace ASCOM.CameraHub.Camera
 
                 LogMessage("InitialiseHub", $"ProgID: {hubProgId}, Description: {hubDescription}");
 
-                connectedState = false; // Initialise connected to false
                 utilities = new Util(); //Initialise ASCOM Utilities object
 
                 LogMessage("InitialiseHub", "Completed basic initialisation");
@@ -105,9 +114,9 @@ namespace ASCOM.CameraHub.Camera
         /// The unique ID is stored to record that the driver instance is connected and to ensure that multiple calls from the same driver are ignored.
         /// If this is the first driver instance to connect, the hardware link to the device is established
         /// </remarks>
-        public static void Connect(Guid uniqueId)
+        public static void Connect(Guid uniqueId, ConnectType connectType)
         {
-            LogMessage("Connect", $"Unique ID: {uniqueId}");
+            LogMessage("Connect", $"Unique ID: {uniqueId}, Connect type: {connectType}");
 
             // Check whether this driver instance has already connected
             if (uniqueIds.Contains(uniqueId)) // Instance already connected
@@ -120,12 +129,25 @@ namespace ASCOM.CameraHub.Camera
             // Driver instance not yet connected
 
             // Test whether the camera is already connected
-            if (!connectedState) // Camera hardware is not connected so connect
+            if (!camera.Connected) // Camera hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
-                camera.Connected = true;
-                connectedState = true;
-                LogMessage("Connect", $"Camera connected OK.");
+
+                switch (connectType)
+                {
+                    case ConnectType.Connected:
+                        camera.Connected = true;
+                        LogMessage("Connect", $"Camera connected OK.");
+                        break;
+
+                    case ConnectType.Connect_Disconnect:
+                        camera.Connect();
+                        LogMessage("Connect", $"Connect completed OK - Connecting: {camera.Connecting}.");
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"CameraHub.Connect - Unknown connection type: {connectType}");
+                }
             }
 
             // Add the driver unique ID to the connected list
@@ -149,9 +171,9 @@ namespace ASCOM.CameraHub.Camera
         /// The unique ID ensures that multiple calls from the same driver are ignored.
         /// If this is the last connected driver instance, the link to the device hardware is disconnected.
         /// </remarks>
-        public static void Disconnect(Guid uniqueId)
+        public static void Disconnect(Guid uniqueId, ConnectType connectType)
         {
-            LogMessage("Disconnect", $"Unique ID: {uniqueId}");
+            LogMessage("Disconnect", $"Unique ID: {uniqueId}, Disconnect type: {connectType}");
 
             if (!uniqueIds.Contains(uniqueId)) // Instance already disconnected
             {
@@ -170,9 +192,22 @@ namespace ASCOM.CameraHub.Camera
             if (uniqueIds.Count == 0) // No instances remain connected so disconnect the camera device
             {
                 LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
-                camera.Connected = false;
-                connectedState = false;
-                LogMessage("Disconnect", $"Camera disconnected OK.");
+
+                switch (connectType)
+                {
+                    case ConnectType.Connected:
+                        camera.Connected = false;
+                        LogMessage("Disconnect", $"Camera disconnected OK.");
+                        break;
+
+                    case ConnectType.Connect_Disconnect:
+                        camera.Disconnect();
+                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {camera.Connecting}.");
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"CameraHub.Connect - Unknown connection type: {connectType}");
+                }
             }
 
             // Log the current connected state
@@ -186,6 +221,28 @@ namespace ASCOM.CameraHub.Camera
             }
             else
                 LogMessage("Disconnect", $"No connected devices.");
+        }
+
+        /// <summary>
+        /// ICameraV4 and later Connecting property
+        /// </summary>
+        public static bool Connecting
+        {
+            get
+            {
+                return camera.Connecting;
+            }
+        }
+
+        /// <summary>
+        /// ICameraV4 and later DeviceState property
+        /// </summary>
+        public static IStateValueCollection DeviceState
+        {
+            get
+            {
+                return camera.DeviceState;
+            }
         }
 
         /// <summary>
@@ -265,7 +322,7 @@ namespace ASCOM.CameraHub.Camera
         public static void SetupDialog()
         {
             // Don't permit the setup dialogue if already connected
-            if (connectedState)
+            if (camera.Connected)
                 MessageBox.Show("Already connected, just press OK");
 
             using (SetupDialogForm F = new SetupDialogForm(TL))
@@ -1256,7 +1313,6 @@ namespace ASCOM.CameraHub.Camera
         #endregion
 
         #region Private properties and methods
-        // Useful methods that can be used as required to help with driver development
 
         /// <summary>
         /// Release memory allocated to the large arrays on the large object heap.
@@ -1274,7 +1330,7 @@ namespace ASCOM.CameraHub.Camera
         /// <param name="message"></param>
         private static void CheckConnected(string message)
         {
-            if (!connectedState)
+            if (!camera.Connected)
             {
                 throw new NotConnectedException(message);
             }
@@ -1327,6 +1383,36 @@ namespace ASCOM.CameraHub.Camera
             var msg = string.Format(message, args);
             LogMessage(identifier, msg);
         }
+
+        /// <summary>
+        /// Get the device interface version
+        /// </summary>
+        /// <returns></returns>
+        internal static int GetInterfaceVersion()
+        {
+            // Check whether we already know the device's interface version
+            if (interfaceVersion.HasValue) // We do have the interface version so return it
+            {
+                return interfaceVersion.Value;
+            }
+
+            // We don't have the interface version so get it from the device but only store it if we are connected because it may change when connected
+
+            // Get the interface version
+            int iVersion = camera.InterfaceVersion;
+
+            // Check whether the device is connected
+            if (camera.Connected) // Camera is connected so save the value for future use
+            {
+                interfaceVersion = InterfaceVersion;
+                return interfaceVersion.Value;
+            }
+            else // Camera is not connected so return the reported value but don't save it
+            {
+                return iVersion;
+            }
+        }
+
         #endregion
     }
 }
