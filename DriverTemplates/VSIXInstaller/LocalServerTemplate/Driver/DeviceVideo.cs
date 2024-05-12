@@ -5,6 +5,7 @@
 using ASCOM.DeviceInterface;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 class DeviceVideo
 {
@@ -93,6 +94,35 @@ class DeviceVideo
         {
             LogMessage("ConfigureDeviceProperties", $"Threw an exception: \r\n{ex}");
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Return the device's state in one call.
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(IVideoV2.CameraState), CameraState)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
+                throw;
+            }
         }
     }
 

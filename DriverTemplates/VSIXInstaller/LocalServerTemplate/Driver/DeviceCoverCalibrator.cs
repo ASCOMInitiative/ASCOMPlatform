@@ -4,6 +4,7 @@
 
 using ASCOM.DeviceInterface;
 using System;
+using System.Collections.Generic;
 
 class DeviceCoverCalibrator
 {
@@ -26,6 +27,28 @@ class DeviceCoverCalibrator
             catch (Exception ex)
             {
                 LogMessage("CoverState", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Completion variable for OpenCover, CloseCover and HaltCover
+    /// </summary>
+    public bool CoverMoving
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("CoverMoving");
+                bool coverMoving = CoverCalibratorHardware.CoverMoving;
+                LogMessage("CoverMoving", $"{coverMoving}");
+                return coverMoving;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CoverMoving", $"Threw an exception: {ex.Message}\r\n{ex}");
                 throw;
             }
         }
@@ -111,6 +134,28 @@ class DeviceCoverCalibrator
     }
 
     /// <summary>
+    /// Completion variable for CalibratorOn and CalibratorOff
+    /// </summary>
+    public bool CalibratorChanging
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("CalibratorChanging");
+                bool calibratorChanging = CoverCalibratorHardware.CalibratorChanging;
+                LogMessage("CalibratorChanging", $"{calibratorChanging}");
+                return calibratorChanging;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("CalibratorChanging", $"Threw an exception: {ex.Message} \r\n\n{ex}");
+                throw;
+            }
+        }
+    }
+
+    /// <summary>
     /// Returns the current calibrator brightness in the range 0 (completely off) to <see cref="MaxBrightness"/> (fully on)
     /// </summary>
     public int Brightness
@@ -190,6 +235,39 @@ class DeviceCoverCalibrator
         {
             LogMessage("CalibratorOff", $"Threw an exception: \r\n{ex}");
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Return the cover calibrator's device state
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.Brightness), Brightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorState), CalibratorState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CalibratorChanging), CalibratorChanging)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverState), CoverState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICoverCalibratorV2.CoverMoving), CoverMoving)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
+                throw;
+            }
         }
     }
 

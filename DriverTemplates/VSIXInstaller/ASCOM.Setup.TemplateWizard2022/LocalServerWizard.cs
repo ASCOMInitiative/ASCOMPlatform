@@ -209,71 +209,73 @@ namespace ASCOM.Setup
                         //
                         TL.LogMessage("Driver", "Removing the CommandXXX methods if the device interface does not support them");
 
-                        if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
-                        {
-                            TL.LogMessage("DriverCommandXXXVideo", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
-                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                            TL.LogMessage("DriverCommandXXXVideo", "Created a selection object for the start of CommandXXX methods marker.");
+                        // IVideoV2: Removed special handling for IVideoV1 where the CommandXXX methods were removed.
 
-                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                            TL.LogMessage("DriverCommandXXXVideo", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        //if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
+                        //{
+                        //    TL.LogMessage("DriverCommandXXXVideo", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
+                        //    documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        //    TL.LogMessage("DriverCommandXXXVideo", "Created a selection object for the start of CommandXXX methods marker.");
 
-                            documentSelection.SelectLine(); // Select the current line
-                            TL.LogMessage("DriverCommandXXXVideo", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+                        //    bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        //    TL.LogMessage("DriverCommandXXXVideo", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
-                            // Delete lines until we get to the end of CommandXXX methods marker
-                            deleteCount = 0;
-                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < MAXIMUM_DELETED_LINES))
-                            {
-                                TL.LogMessage("DriverCommandXXXVideo", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
-                                documentSelection.Delete(); // Delete the current line
-                                documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
-                                TL.LogMessage("DriverCommandXXXVideo", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
-                                deleteCount += 1;
-                            }
+                        //    documentSelection.SelectLine(); // Select the current line
+                        //    TL.LogMessage("DriverCommandXXXVideo", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
 
-                            // Show an error message if we reached the delete line safety limit
-                            if (deleteCount == MAXIMUM_DELETED_LINES)
-                            {
-                                MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
+                        //    // Delete lines until we get to the end of CommandXXX methods marker
+                        //    deleteCount = 0;
+                        //    while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < MAXIMUM_DELETED_LINES))
+                        //    {
+                        //        TL.LogMessage("DriverCommandXXXVideo", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                        //        documentSelection.Delete(); // Delete the current line
+                        //        documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                        //        TL.LogMessage("DriverCommandXXXVideo", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                        //        deleteCount += 1;
+                        //    }
 
-                            TL.LogMessage("DriverCommandXXXVideo", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
-                            documentSelection.Delete(); // Delete the current line
+                        //    // Show an error message if we reached the delete line safety limit
+                        //    if (deleteCount == MAXIMUM_DELETED_LINES)
+                        //    {
+                        //        MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //    }
 
-                            TL.LogMessage("DriverCommandXXXVideo", $"CommandXXX members removed.");
-                        }
-                        else // Normal behaviour for all other interfaces that do have CommandXXX methods
-                        {
-                            TL.LogMessage("DriverCommandXXXNormal", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
+                        //    TL.LogMessage("DriverCommandXXXVideo", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                        //    documentSelection.Delete(); // Delete the current line
 
-                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                            TL.LogMessage("DriverCommandXXXNormal", "Created a selection object for start of CommandXXX methods.");
+                        //    TL.LogMessage("DriverCommandXXXVideo", $"CommandXXX members removed.");
+                        //}
+                        //else // Normal behaviour for all other interfaces that do have CommandXXX methods
+                        //{
+                        TL.LogMessage("DriverCommandXXXNormal", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
 
-                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                            TL.LogMessage("DriverCommandXXXNormal", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        TL.LogMessage("DriverCommandXXXNormal", "Created a selection object for start of CommandXXX methods.");
 
-                            documentSelection.SelectLine(); // Select the current line
-                            TL.LogMessage("DriverCommandXXXNormal", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+                        bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("DriverCommandXXXNormal", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
-                            TL.LogMessage("DriverCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
-                            documentSelection.Delete(); // Delete the current line
+                        documentSelection.SelectLine(); // Select the current line
+                        TL.LogMessage("DriverCommandXXXNormal", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                        TL.LogMessage("DriverCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        documentSelection.Delete(); // Delete the current line
 
 
-                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                            TL.LogMessage("DriverCommandXXXNormal", "Created a selection object for end of CommandXXX methods.");
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        TL.LogMessage("DriverCommandXXXNormal", "Created a selection object for end of CommandXXX methods.");
 
-                            bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                            TL.LogMessage("DriverCommandXXXNormal", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("DriverCommandXXXNormal", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
-                            documentSelection.SelectLine(); // Select the current line
-                            TL.LogMessage("DriverCommandXXXNormal", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+                        documentSelection.SelectLine(); // Select the current line
+                        TL.LogMessage("DriverCommandXXXNormal", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
 
-                            TL.LogMessage("DriverCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
-                            documentSelection.Delete(); // Delete the current line
+                        TL.LogMessage("DriverCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        documentSelection.Delete(); // Delete the current line
 
-                            TL.LogMessage("DriverCommandXXXNormal", $"CommandXXX markers removed.");
-                        }
+                        TL.LogMessage("DriverCommandXXXNormal", $"CommandXXX markers removed.");
+                        //}
 
                         //
                         // Insert the device specific methods into the generic driver file
@@ -365,70 +367,73 @@ namespace ASCOM.Setup
                         //
                         TL.LogMessage("Hardware", "Removing the CommandXXX methods if the device interface does not support them");
 
-                        if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
-                        {
-                            TL.LogMessage("HardwareCommandXXXVideo", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
-                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                            TL.LogMessage("HardwareCommandXXXVideo", "Created a selection object for the start of CommandXXX methods marker.");
+                        // IVideoV2: Removed special handling for IVideoV1 where the CommandXXX methods were removed.
 
-                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                            TL.LogMessage("HardwareCommandXXXVideo", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        //if (DeviceClass.ToUpperInvariant() == "VIDEO") // Special handling for the Video interface that does not have CommmandXXX methods
+                        //{
+                        //    TL.LogMessage("HardwareCommandXXXVideo", $"{DeviceClass} device - Removing the CommandXXX method markers and all CommandXXX members .");
+                        //    documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        //    TL.LogMessage("HardwareCommandXXXVideo", "Created a selection object for the start of CommandXXX methods marker.");
 
-                            documentSelection.SelectLine(); // Select the current line
-                            TL.LogMessage("HardwareCommandXXXVideo", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+                        //    bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        //    TL.LogMessage("HardwareCommandXXXVideo", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
-                            // Delete lines until we get to the end of CommandXXX methods marker
-                            deleteCount = 0;
-                            while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < MAXIMUM_DELETED_LINES))
-                            {
-                                TL.LogMessage("HardwareCommandXXXVideo", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
-                                documentSelection.Delete(); // Delete the current line
-                                documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
-                                TL.LogMessage("HardwareCommandXXXVideo", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
-                                deleteCount += 1;
-                            }
+                        //    documentSelection.SelectLine(); // Select the current line
+                        //    TL.LogMessage("HardwareCommandXXXVideo", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
 
-                            // Show an error message if we reached the delete line safety limit
-                            if (deleteCount == MAXIMUM_DELETED_LINES)
-                            {
-                                MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
+                        //    // Delete lines until we get to the end of CommandXXX methods marker
+                        //    deleteCount = 0;
+                        //    while ((!documentSelection.Text.ToUpperInvariant().Contains(END_OF_COMMANDXXX_METHODS)) & (deleteCount < MAXIMUM_DELETED_LINES))
+                        //    {
+                        //        TL.LogMessage("HardwareCommandXXXVideo", $"Deleting line: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                        //        documentSelection.Delete(); // Delete the current line
+                        //        documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                        //        TL.LogMessage("HardwareCommandXXXVideo", $"Found end line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}. Delete count: {deleteCount}");
+                        //        deleteCount += 1;
+                        //    }
 
-                            TL.LogMessage("HardwareCommandXXXVideo", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
-                            documentSelection.Delete(); // Delete the current line
+                        //    // Show an error message if we reached the delete line safety limit
+                        //    if (deleteCount == MAXIMUM_DELETED_LINES)
+                        //    {
+                        //        MessageBox.Show("DriverCommandXXXVideo - Reached maximum delete count!", "LocalServerWizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //    }
 
-                            TL.LogMessage("HardwareCommandXXXVideo", $"CommandXXX members removed.");
-                        }
-                        else // Normal behaviour for all other interfaces that do have CommandXXX methods
-                        {
-                            TL.LogMessage("HardwareCommandXXXNormal", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
+                        //    TL.LogMessage("HardwareCommandXXXVideo", $"Deleting end of CommandXXX marker: {documentSelection.Text} at line {documentSelection.CurrentLine}, Line length: {documentSelection.Text.Length}");
+                        //    documentSelection.Delete(); // Delete the current line
 
-                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                            TL.LogMessage("HardwareCommandXXXNormal", "Created a selection object for start of CommandXXX methods.");
+                        //    TL.LogMessage("HardwareCommandXXXVideo", $"CommandXXX members removed.");
+                        //}
+                        //else // Normal behaviour for all other interfaces that do have CommandXXX methods
+                        //{
 
-                            bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                            TL.LogMessage("HardwareCommandXXXNormal", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        TL.LogMessage("HardwareCommandXXXNormal", $"{DeviceClass} device - Just removing the CommandXXX method markers. Retaining all CommandXXX members.");
 
-                            documentSelection.SelectLine(); // Select the current line
-                            TL.LogMessage("HardwareCommandXXXNormal", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        TL.LogMessage("HardwareCommandXXXNormal", "Created a selection object for start of CommandXXX methods.");
 
-                            TL.LogMessage("HardwareCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
-                            documentSelection.Delete(); // Delete the current line
+                        bool foundStartOfCommandXxx = documentSelection.FindText(START_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("HardwareCommandXXXNormal", $"Found {START_OF_COMMANDXXX_METHODS}: {foundStartOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
-                            documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
-                            TL.LogMessage("HardwareCommandXXXNormal", "Created a selection object for end of CommandXXX methods.");
+                        documentSelection.SelectLine(); // Select the current line
+                        TL.LogMessage("HardwareCommandXXXNormal", $"Selected {START_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
 
-                            bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                            TL.LogMessage("HardwareCommandXXXNormal", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        TL.LogMessage("HardwareCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        documentSelection.Delete(); // Delete the current line
 
-                            documentSelection.SelectLine(); // Select the current line
-                            TL.LogMessage("HardwareCommandXXXNormal", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+                        documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        TL.LogMessage("HardwareCommandXXXNormal", "Created a selection object for end of CommandXXX methods.");
 
-                            TL.LogMessage("HardwareCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
-                            documentSelection.Delete(); // Delete the current line
+                        bool foundEndOfCommandXxx = documentSelection.FindText(END_OF_COMMANDXXX_METHODS, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("HardwareCommandXXXNormal", $"Found {END_OF_COMMANDXXX_METHODS}: {foundEndOfCommandXxx}, Text: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
 
-                            TL.LogMessage("HardwareCommandXXXNormal", $"CommandXXX markers removed.");
-                        }
+                        documentSelection.SelectLine(); // Select the current line
+                        TL.LogMessage("HardwareCommandXXXNormal", $"Selected {END_OF_COMMANDXXX_METHODS} line: " + documentSelection.Text);
+
+                        TL.LogMessage("HardwareCommandXXXNormal", $"Deleting line: '{documentSelection.Text}'. Line number: {documentSelection.CurrentLine}");
+                        documentSelection.Delete(); // Delete the current line
+
+                        TL.LogMessage("HardwareCommandXXXNormal", $"CommandXXX markers removed.");
+                        //}
 
                         //
                         // Insert the device specific methods into the generic driver file

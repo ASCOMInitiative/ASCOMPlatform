@@ -5,6 +5,7 @@
 using ASCOM.DeviceInterface;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 class DeviceCamera
 {
@@ -475,6 +476,40 @@ class DeviceCamera
     }
 
     /// <summary>
+    /// Return the device's operational state in one call
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CameraState), CameraState)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CCDTemperature), CCDTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.CoolerPower), CoolerPower)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.HeatSinkTemperature), HeatSinkTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.ImageReady), ImageReady)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.IsPulseGuiding), IsPulseGuiding)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(ICameraV4.PercentCompleted), PercentCompleted)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState); ;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
+                throw;
+            }
+        }
+    }
+    /// <summary>
     /// Returns the gain of the camera in photoelectrons per A/D unit.
     /// </summary>
     /// <value>The electrons per ADU.</value>
@@ -589,8 +624,8 @@ class DeviceCamera
         }
         set
         {
-try
-{
+            try
+            {
                 CheckConnected("FastReadout Set");
                 LogMessage("FastReadout Set", value.ToString());
                 CameraHardware.FastReadout = value;
@@ -712,11 +747,11 @@ try
         }
     }
 
-	/// <summary>
-	/// List of Gain names supported by the camera
-	/// </summary>
-	/// <returns>The list of supported gain names as an ArrayList of strings</returns>
-	public ArrayList Gains
+    /// <summary>
+    /// List of Gain names supported by the camera
+    /// </summary>
+    /// <returns>The list of supported gain names as an ArrayList of strings</returns>
+    public ArrayList Gains
     {
         get
         {
@@ -1303,11 +1338,11 @@ try
         }
     }
 
-	/// <summary>
-	/// List of available readout modes, Interface Version 2 and later
-	/// </summary>
-	/// <returns>An ArrayList of readout mode names</returns>
-	public ArrayList ReadoutModes
+    /// <summary>
+    /// List of available readout modes, Interface Version 2 and later
+    /// </summary>
+    /// <returns>An ArrayList of readout mode names</returns>
+    public ArrayList ReadoutModes
     {
         get
         {

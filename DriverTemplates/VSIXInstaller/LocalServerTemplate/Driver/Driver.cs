@@ -16,6 +16,7 @@ using ASCOM.Utilities;
 using System.Collections;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
+using System.Collections.Generic;
 
 namespace TEMPLATENAMESPACE
 {

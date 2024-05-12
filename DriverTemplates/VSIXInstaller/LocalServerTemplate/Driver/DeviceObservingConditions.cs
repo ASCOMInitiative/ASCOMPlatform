@@ -2,7 +2,9 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
+using ASCOM.DeviceInterface;
 using System;
+using System.Collections.Generic;
 
 class DeviceObservingConditions
 {
@@ -61,6 +63,47 @@ class DeviceObservingConditions
             catch (Exception ex)
             {
                 LogMessage("CloudCover", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Return the device's state in one call
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.CloudCover), CloudCover)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.DewPoint), DewPoint)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Humidity), Humidity)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Pressure), Pressure)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.RainRate), RainRate)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyBrightness), SkyBrightness)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyQuality), SkyQuality)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.SkyTemperature), SkyTemperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.StarFWHM), StarFWHM)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.Temperature), Temperature)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindDirection), WindDirection)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindSpeed), WindSpeed)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IObservingConditionsV2.WindGust), WindGust)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
                 throw;
             }
         }
@@ -132,10 +175,10 @@ class DeviceObservingConditions
         }
     }
 
-	/// <summary>
-	/// Rain rate at the observatory, in millimeters per hour
-	/// </summary>
-	public double RainRate
+    /// <summary>
+    /// Rain rate at the observatory, in millimeters per hour
+    /// </summary>
+    public double RainRate
     {
         get
         {
@@ -196,10 +239,10 @@ class DeviceObservingConditions
         }
     }
 
-	/// <summary>
-	/// Sky brightness at the observatory, in Lux (lumens per square meter)
-	/// </summary>
-	public double SkyBrightness
+    /// <summary>
+    /// Sky brightness at the observatory, in Lux (lumens per square meter)
+    /// </summary>
+    public double SkyBrightness
     {
         get
         {
@@ -218,10 +261,10 @@ class DeviceObservingConditions
         }
     }
 
-	/// <summary>
-	/// Sky quality at the observatory, in magnitudes per square arc-second
-	/// </summary>
-	public double SkyQuality
+    /// <summary>
+    /// Sky quality at the observatory, in magnitudes per square arc-second
+    /// </summary>
+    public double SkyQuality
     {
         get
         {
@@ -240,10 +283,10 @@ class DeviceObservingConditions
         }
     }
 
-	/// <summary>
-	/// Seeing at the observatory, measured as the average star full width half maximum (FWHM in arc secs) 
-	/// </summary>
-	public double StarFWHM
+    /// <summary>
+    /// Seeing at the observatory, measured as the average star full width half maximum (FWHM in arc secs) 
+    /// </summary>
+    public double StarFWHM
     {
         get
         {

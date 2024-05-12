@@ -3,7 +3,9 @@
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
 using System;
+using System.Collections.Generic;
 using ASCOM.Astrometry.AstroUtils;
+using ASCOM.DeviceInterface;
 
 class DeviceRotator
 {
@@ -31,6 +33,37 @@ class DeviceRotator
             catch (Exception ex)
             {
                 LogMessage("CanReverse", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns the device's state in one call
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.IsMoving), IsMoving)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.MechanicalPosition), MechanicalPosition)); } catch { }
+                try { deviceState.Add(new StateValue(nameof(IRotatorV4.Position), Position)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
                 throw;
             }
         }
@@ -97,7 +130,6 @@ class DeviceRotator
             throw;
         }
     }
-
 
     /// <summary>
     /// Causes the rotator to move the absolute position of <see cref="Position" /> degrees.

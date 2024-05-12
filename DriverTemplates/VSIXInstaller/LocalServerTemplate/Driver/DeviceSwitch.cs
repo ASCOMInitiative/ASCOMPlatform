@@ -2,11 +2,57 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
+using ASCOM.DeviceInterface;
 using System;
+using System.Collections.Generic;
+using static System.Windows.Forms.AxHost;
 
 class DeviceSwitch
 {
-    #region ISwitchV2 Implementation
+    #region ISwitch Implementation
+
+    /// <summary>
+    /// Return the device's state in one call
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                for (short i = 0; i < MaxSwitch; i++)
+                {
+                    try { deviceState.Add(new StateValue($"GetSwitch{i}", GetSwitch(i))); } catch { }
+                }
+
+                for (short i = 0; i < MaxSwitch; i++)
+                {
+                    try { deviceState.Add(new StateValue($"GetSwitchValue{i}", GetSwitchValue(i))); } catch { }
+                }
+
+                for (short i = 0; i < MaxSwitch; i++)
+                {
+                    try { deviceState.Add(new StateValue($"StateChangeComplete{i}", StateChangeComplete(i))); } catch { }
+                }
+
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
+                throw;
+            }
+        }
+    }
 
     /// <summary>
     /// The number of switches managed by this driver
@@ -124,7 +170,7 @@ class DeviceSwitch
         }
     }
 
-    #region Boolean switch members
+    #region Boolean members
 
     /// <summary>
     /// Return the state of switch device id as a boolean
@@ -279,6 +325,138 @@ class DeviceSwitch
         catch (Exception ex)
         {
             LogMessage("SetSwitchValue", $"Threw an exception: \r\n{ex}");
+            throw;
+        }
+    }
+
+    #endregion
+
+    #region Async members
+
+    /// <summary>
+    /// Set a boolean switch's state asynchronously
+    /// </summary>
+    /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+    /// <param name="id">Switch number.</param>
+    /// <param name="state">New boolean state.</param>
+    /// <remarks>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+    /// </remarks>
+    public void SetAsync(short id, bool state)
+    {
+        try
+        {
+            CheckConnected("SetAsync");
+            LogMessage("SetAsync", $"Calling method.");
+            SwitchHardware.SetAsync(id, state);
+            LogMessage("SetAsync", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SetAsync", $"Threw an exception: {ex.Message}\r\n{ex}");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Set a switch's value asynchronously
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <param name="value">New double value.</param>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+    /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+    /// <remarks>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+    /// </remarks>
+    public void SetAsyncValue(short id, double value)
+    {
+        try
+        {
+            CheckConnected("SetAsyncValue");
+            LogMessage("SetAsyncValue", $"Calling method.");
+            SwitchHardware.SetAsyncValue(id, value);
+            LogMessage("SetAsyncValue", $"Completed.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("SetAsyncValue", $"Threw an exception: {ex.Message}\r\n{ex}");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Flag indicating whether this switch can operate asynchronously.
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <returns>True if the switch can operate asynchronously.</returns>
+    /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+    /// <remarks>
+    /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+    /// </remarks>
+    public bool CanAsync(short id)
+    {
+        try
+        {
+            CheckConnected("CanAsync");
+            LogMessage("CanAsync", $"Calling method.");
+            bool canAsync = SwitchHardware.CanAsync(id);
+            LogMessage("CanAsync", canAsync.ToString());
+            return canAsync;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CanAsync", $"Threw an exception: {ex.Message}\r\n{ex}");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Completion variable for asynchronous switch state change operations.
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
+    /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
+    /// <remarks>
+    /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+    /// </remarks>
+    public bool StateChangeComplete(short id)
+    {
+        try
+        {
+            CheckConnected("StateChangeComplete");
+            LogMessage("StateChangeComplete", $"Calling method.");
+            bool stateChangeComplete = SwitchHardware.StateChangeComplete(id);
+            LogMessage("StateChangeComplete", stateChangeComplete.ToString());
+            return stateChangeComplete;
+        }
+        catch (Exception ex)
+        {
+            LogMessage("StateChangeComplete", $"Threw an exception: {ex.Message}\r\n{ex}");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Cancels an in-progress asynchronous state change operation.
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <exception cref="MethodNotImplementedException">When it is not possible to cancel an asynchronous change.</exception>
+    /// <remarks>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/>.</b></p>
+    /// This method must be implemented if it is possible for the device to cancel an asynchronous state change operation, otherwise it must throw a <see cref="MethodNotImplementedException"/>.
+    /// </remarks>
+    public void CancelAsync(short id)
+    {
+        try
+        {
+            CheckConnected("CancelAsync");
+            LogMessage("CancelAsync", $"Calling method...");
+            SwitchHardware.CancelAsync(id);
+            LogMessage("CancelAsync", "Returned from method OK.");
+        }
+        catch (Exception ex)
+        {
+            LogMessage("CancelAsync", $"Threw an exception: {ex.Message}\r\n{ex}");
             throw;
         }
     }

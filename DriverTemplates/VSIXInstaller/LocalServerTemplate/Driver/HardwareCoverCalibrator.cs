@@ -22,6 +22,24 @@ static class CoverCalibratorHardware
     }
 
     /// <summary>
+    /// Completion variable for OpenCover, CloseCover and HaltCover
+    /// </summary>
+    internal static bool CoverMoving
+    {
+        get
+        {
+            try
+            {
+                return CoverState == CoverStatus.Moving;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+    }
+
+    /// <summary>
     /// Initiates cover opening if a cover is present
     /// </summary>
     internal static void OpenCover()
@@ -57,6 +75,24 @@ static class CoverCalibratorHardware
         {
             LogMessage("CalibratorState Get", "Not implemented");
             throw new PropertyNotImplementedException("CalibratorState", false);
+        }
+    }
+
+    /// <summary>
+    /// Completion variable for CalibratorOn and CalibratorOff
+    /// </summary>
+    internal static bool CalibratorChanging
+    {
+        get
+        {
+            try
+            {
+                return CalibratorState == CalibratorStatus.NotReady;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
         }
     }
 

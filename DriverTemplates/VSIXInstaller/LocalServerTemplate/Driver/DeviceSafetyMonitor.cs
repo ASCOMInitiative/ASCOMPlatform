@@ -2,7 +2,9 @@
 // Required code must lie within the device implementation region
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
+using ASCOM.DeviceInterface;
 using System;
+using System.Collections.Generic;
 
 class DeviceSafetyMonitor
 {
@@ -26,6 +28,32 @@ class DeviceSafetyMonitor
             catch (Exception ex)
             {
                 LogMessage("IsSafe", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
+    }
+
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<IStateValue> deviceState = new List<IStateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { deviceState.Add(new StateValue(nameof(ISafetyMonitorV3.IsSafe), IsSafe)); } catch { }
+                try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(deviceState);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
                 throw;
             }
         }

@@ -6,7 +6,7 @@ using ASCOM;
 
 static class SwitchHardware
 {
-    #region ISwitchV2 Implementation
+    #region ISwitch Implementation
 
     private static short numSwitch = 0;
 
@@ -179,6 +179,112 @@ static class SwitchHardware
         }
         LogMessage("SetSwitchValue", $"SetSwitchValue({id}) = {value} - not implemented");
         throw new MethodNotImplementedException("SetSwitchValue");
+    }
+
+    #endregion
+
+    #region Async members
+
+    /// <summary>
+    /// Set a boolean switch's state asynchronously
+    /// </summary>
+    /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+    /// <param name="id">Switch number.</param>
+    /// <param name="state">New boolean state.</param>
+    /// <remarks>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+    /// </remarks>
+    public static void SetAsync(short id, bool state)
+    {
+        Validate("SetAsync", id);
+        if (!CanAsync(id))
+        {
+            var message = $"SetAsync({id}) - Switch cannot operate asynchronously";
+            LogMessage("SetAsync", message);
+            throw new MethodNotImplementedException(message);
+        }
+
+        // Implement async support here if required
+        LogMessage("SetAsync", $"SetAsync({id}) = {state} - not implemented");
+        throw new MethodNotImplementedException("SetAsync");
+    }
+
+    /// <summary>
+    /// Set a switch's value asynchronously
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <param name="value">New double value.</param>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+    /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+    /// <remarks>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+    /// </remarks>
+    public static void SetAsyncValue(short id, double value)
+    {
+        Validate("SetSwitchValue", id, value);
+        if (!CanWrite(id))
+        {
+            LogMessage("SetSwitchValue", $"SetSwitchValue({id}) - Cannot write");
+            throw new ASCOM.MethodNotImplementedException($"SetSwitchValue({id}) - Cannot write");
+        }
+
+        // Implement async support here if required
+        LogMessage("SetSwitchValue", $"SetSwitchValue({id}) = {value} - not implemented");
+        throw new MethodNotImplementedException("SetSwitchValue");
+    }
+
+    /// <summary>
+    /// Flag indicating whether this switch can operate asynchronously.
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <returns>True if the switch can operate asynchronously.</returns>
+    /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+    /// <remarks>
+    /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+    /// </remarks>
+    public static bool CanAsync(short id)
+    {
+        const bool ASYNC_SUPPORT_DEFAULT = false;
+
+        Validate("CanAsync", id);
+
+        // Default behaviour is not to support async operation
+        LogMessage("CanAsync", $"CanAsync({id}): {ASYNC_SUPPORT_DEFAULT}");
+        return ASYNC_SUPPORT_DEFAULT;
+    }
+
+    /// <summary>
+    /// Completion variable for asynchronous switch state change operations.
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
+    /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
+    /// <remarks>
+    /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+    /// </remarks>
+    public static bool StateChangeComplete(short id)
+    {
+        const bool STATE_CHANGE_COMPLETE_DEFAULT = true;
+
+        Validate("StateChangeComplete", id);
+        LogMessage("StateChangeComplete", $"StateChangeComplete({id}) - Returning {STATE_CHANGE_COMPLETE_DEFAULT}");
+        return STATE_CHANGE_COMPLETE_DEFAULT;
+    }
+
+    /// <summary>
+    /// Cancels an in-progress asynchronous state change operation.
+    /// </summary>
+    /// <param name="id">Switch number.</param>
+    /// <exception cref="MethodNotImplementedException">When it is not possible to cancel an asynchronous change.</exception>
+    /// <remarks>
+    /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/>.</b></p>
+    /// This method must be implemented if it is possible for the device to cancel an asynchronous state change operation, otherwise it must throw a <see cref="MethodNotImplementedException"/>.
+    /// </remarks>
+    public static void CancelAsync(short id)
+    {
+        Validate("CancelAsync", id);
+        LogMessage("CancelAsync", $"CancelAsync({id}) - not implemented");
+        throw new MethodNotImplementedException("CancelAsync");
     }
 
     #endregion

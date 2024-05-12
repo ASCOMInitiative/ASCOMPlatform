@@ -54,6 +54,9 @@ dotnet_diagnostic.VSSpell001.severity = none
 # IDE0063: Use simple 'using' statement
 dotnet_diagnostic.IDE0063.severity = none
 
+# VSTHRD200: Use "Async" suffix for async methods
+dotnet_diagnostic.VSTHRD200.severity = none
+
 [*.vb]
 [*.{cs,vb}]
 

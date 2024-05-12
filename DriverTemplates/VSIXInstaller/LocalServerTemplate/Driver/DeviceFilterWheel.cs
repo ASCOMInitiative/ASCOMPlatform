@@ -3,6 +3,8 @@
 // The //ENDOFINSERTEDFILE tag must be the last but one line in this file
 
 using System;
+using System.Collections.Generic;
+using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
 class DeviceFilerWheel
@@ -29,6 +31,35 @@ class DeviceFilerWheel
             catch (Exception ex)
             {
                 LogMessage("FocusOffsets", $"Threw an exception: \r\n{ex}");
+                throw;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns the device's state in one call
+    /// </summary>
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<StateValue> returnValue = new List<StateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { returnValue.Add(new StateValue(nameof(IFilterWheelV3.Position), Position)); } catch { };
+                try { returnValue.Add(new StateValue(DateTime.Now)); } catch { };
+
+                // Return the overall device state
+                return new StateValueCollection(returnValue);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
                 throw;
             }
         }

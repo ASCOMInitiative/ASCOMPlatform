@@ -4,6 +4,7 @@
 
 using ASCOM.DeviceInterface;
 using System;
+using System.Collections.Generic;
 
 class DeviceDome
 {
@@ -192,11 +193,11 @@ class DeviceDome
         }
     }
 
-	/// <summary>
-	/// <see langword="true" /> if driver is capable of rotating the dome. Must be <see "langword="false" /> for a 
-	/// roll-off roof or clamshell.
-	/// </summary>
-	public bool CanSetAzimuth
+    /// <summary>
+    /// <see langword="true" /> if driver is capable of rotating the dome. Must be <see "langword="false" /> for a 
+    /// roll-off roof or clamshell.
+    /// </summary>
+    public bool CanSetAzimuth
     {
         get
         {
@@ -321,6 +322,37 @@ class DeviceDome
         {
             LogMessage("CloseShutter", $"Threw an exception: \r\n{ex}");
             throw;
+        }
+    }
+
+    public IStateValueCollection DeviceState
+    {
+        get
+        {
+            try
+            {
+                CheckConnected("DeviceState");
+
+                // Create an array list to hold the IStateValue entries
+                List<StateValue> returnValue = new List<StateValue>();
+
+                // Add one entry for each operational state, if possible
+                try { returnValue.Add(new StateValue(nameof(IDomeV3.Altitude), Altitude)); } catch { }
+                try { returnValue.Add(new StateValue(nameof(IDomeV3.AtHome), AtHome)); ; } catch { }
+                try { returnValue.Add(new StateValue(nameof(IDomeV3.AtPark), AtPark)); } catch { }
+                try { returnValue.Add(new StateValue(nameof(IDomeV3.Azimuth), Azimuth)); } catch { }
+                try { returnValue.Add(new StateValue(nameof(IDomeV3.ShutterStatus), ShutterStatus)); } catch { }
+                try { returnValue.Add(new StateValue(nameof(IDomeV3.Slewing), Slewing)); } catch { }
+                try { returnValue.Add(new StateValue(DateTime.Now)); } catch { }
+
+                // Return the overall device state
+                return new StateValueCollection(returnValue);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("DeviceState", $"Threw an exception: {ex.Message}\r\n{ex}");
+                throw;
+            }
         }
     }
 
