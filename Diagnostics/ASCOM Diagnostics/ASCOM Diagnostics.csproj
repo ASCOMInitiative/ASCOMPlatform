@@ -240,9 +240,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ASCOM.snk">
-      <Link>ASCOM.snk</Link>
-    </None>
     <None Include="app.manifest" />
     <None Include="Ceres.chby">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
