@@ -57,7 +57,7 @@ namespace EnableSims
         /// </summary>
         private static void RestorePlatform6Simulators()
         {
-            using (TraceLogger TL = new TraceLogger("SetPlatform6Simulators"))
+            using (TraceLogger TL = new TraceLogger("EnableSims-Platform6"))
             {
                 LogMessage($"Setting Platform 6 Simulator ProgIDs...", TL);
                 LogMessage(" ", TL);
@@ -84,7 +84,7 @@ namespace EnableSims
         /// </summary>
         private static void SetOmniSimulators()
         {
-            using (TraceLogger TL = new TraceLogger("SetOmniSimulators"))
+            using (TraceLogger TL = new TraceLogger("EnableSims-OmniSimulators"))
             {
                 LogMessage($"Setting Omni Simulator ProgIDs...", TL);
                 LogMessage(" ", TL);
