@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("UseSimulators")]
+[assembly: AssemblyTitle("EnableSims")]
 [assembly: AssemblyDescription("Switches well known simulator COM ProgIDs between the Platform 6 simulators and the OmniSims")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("UseSimulators")]
+[assembly: AssemblyProduct("EnableSims")]
 [assembly: AssemblyCopyright("Copyright © ASCOM 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
