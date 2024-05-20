@@ -1333,9 +1333,9 @@ Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverCon
 Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
 Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
 Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
-Install Files ..\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
-Install Files ..\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
-Install Files ..\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
+Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
 Comment: Platform 6 Simulators
 Comment: Camera simulator
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera

@@ -1655,9 +1655,9 @@ Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll t
  
 [END REGION]
  
-[DEFINE REGION: Copy of Camera Hub]
+[DEFINE REGION: Use Simulators]
  
-Comment: Install the updater checker application
+Comment: Install the use simulators application to choose which simulators to use.
 Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe to $TARGETDIR$\Tools\UseSimulators
 Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.pdb to $TARGETDIR$\Tools\UseSimulators
 Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe.config to $TARGETDIR$\Tools\UseSimulators
@@ -2498,7 +2498,6 @@ if Variable SUCCESS not Equals ERROR
   Set Variable PROGRESSTEXT to Finalising install
   Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
-  Set Variable MYPROGRESS to 100
   if Variable RC not Equals 0
     MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
     if Variable ASCOMERROR not Equals 
@@ -2508,7 +2507,9 @@ if Variable SUCCESS not Equals ERROR
   end
    
   Comment: Set the OmniSimulators as the default Platform simulators
+  Set Variable PROGRESSTEXT to Enabling Omni Simulators
   Run Program $TARGETDIR$\Tools\UseSimulators\UseSimulators.exe OmniSimulators (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Enable Omni Simulators (at end of file)
   if Variable RC not Equals 0
     MessageBox: Use Simulators, An error has occured while setting the Omni Simulators as the default simulators, please save all logs in Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
     if Variable ASCOMERROR not Equals 
@@ -2516,6 +2517,17 @@ if Variable SUCCESS not Equals ERROR
     end
     Set Variable ASCOMERROR to $ASCOMERRORUseSimulators issue. RC: $RC$
   end
+  Set Variable MYPROGRESS to 100
+   
+  [END REGION]
+   
+  [DEFINE REGION: Install Platform update scheduled task]
+   
+  Comment: Create a scheduled task to run the update checker once a week
+  Write into Text File $SETUPLOG$ from Value $TIME$ About to install Platform Update Checker Task... (at end of file)
+  Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Update Checker Task scheduled (at end of file)
+  Write into Text File $SETUPLOG$ from Value  (at end of file)
    
   [END REGION]
    
@@ -2556,15 +2568,6 @@ if Variable SUCCESS not Equals ERROR
    
   [END REGION]
    
-  [DEFINE REGION: Install Platform update scheduled task]
-   
-  Comment: Create a scheduled task to run the update checker once a week
-  Write into Text File $SETUPLOG$ from Value $TIME$ About to install Platform Update Checker Task... (at end of file)
-  Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Update Checker Task scheduled OK (at end of file)
-  Write into Text File $SETUPLOG$ from Value  (at end of file)
-   
-  [END REGION]
 end
  
 Set Variable MYPROGRESS to 100
