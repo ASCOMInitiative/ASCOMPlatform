@@ -1324,18 +1324,18 @@ Install Assembly ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensi
 Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb to $WINDIR$\Symbols\dll
 Comment: Platform 6 Tools
 Install Files ..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
-Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
-Install Files ..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
-Install Files ..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
-Install Files ..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
-Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
-Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
+Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
+Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
+Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
+Install Files ..\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+Install Files ..\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
+Install Files ..\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
 Comment: Platform 6 Simulators
 Comment: Camera simulator
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
@@ -1369,8 +1369,8 @@ Install Files ..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Rele
 Comment: Dome simulator
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
-Comment: Platform Update Checker
-Install Files ..\CheckForUpdates.js to $TARGETDIR$\Tools
+Comment: Platform Update Checker - Superceded by the scheduled task update checker in Platform 7
+Comment: Install Files ..\CheckForUpdates.js to $TARGETDIR$\Tools
 [END REGION]
  
 [DEFINE REGION: Platform 6.1 files]
@@ -1438,7 +1438,7 @@ Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COM
  
 Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
 Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $TARGETDIR$\Tools
-Install Files ..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
  
 [END REGION]
  
@@ -1652,6 +1652,15 @@ Comment: Install the updater checker application
 Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe to $COMMONFILES$\ASCOM\Camera\CameraHub
 Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb to $COMMONFILES$\ASCOM\Camera\CameraHub
 Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\Camera\CameraHub
+ 
+[END REGION]
+ 
+[DEFINE REGION: Copy of Camera Hub]
+ 
+Comment: Install the updater checker application
+Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe to $TARGETDIR$\Tools\UseSimulators
+Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.pdb to $TARGETDIR$\Tools\UseSimulators
+Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe.config to $TARGETDIR$\Tools\UseSimulators
  
 [END REGION]
  
@@ -2498,6 +2507,15 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
   end
    
+  Comment: Set the OmniSimulators as the default Platform simulators
+  Run Program $TARGETDIR$\Tools\UseSimulators\UseSimulators.exe OmniSimulators (WAIT, get result into variable RC)
+  if Variable RC not Equals 0
+    MessageBox: Use Simulators, An error has occured while setting the Omni Simulators as the default simulators, please save all logs in Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
+    if Variable ASCOMERROR not Equals 
+      Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
+    end
+    Set Variable ASCOMERROR to $ASCOMERRORUseSimulators issue. RC: $RC$
+  end
    
   [END REGION]
    

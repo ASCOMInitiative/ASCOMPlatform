@@ -9224,7 +9224,7 @@ FALSE
 FALSE
 FALSE
 {54B06058-9E54-4D5A-820E-9E5992F3529B}
-..\Profile Explorer\bin\Release\ProfileExplorer.pdb
+..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9237,7 +9237,7 @@ FALSE
 FALSE
 FALSE
 {D8ABE00A-C6F9-432C-A0C2-C6B6FD28AD9D}
-..\Profile Explorer\bin\Release\ProfileExplorer.exe
+..\Profile Explorer\bin\x86\Release\ProfileExplorer.exe
 FALSE|
 $TARGETDIR$\Tools
 FALSE
@@ -9250,7 +9250,7 @@ FALSE
 FALSE
 FALSE
 {D4B8807E-5C3B-4827-96E2-33710EA117A0}
-..\Profile Explorer\bin\Release\ProfileExplorer.pdb
+..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
