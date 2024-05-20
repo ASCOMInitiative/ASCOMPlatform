@@ -267,15 +267,15 @@
       <Name>ASCOM.Utilities.Video</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\ASCOM.Cache\ASCOM.Cache.csproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Cache\ASCOM.Cache.csproj">
       <Project>{e1fcce89-bd43-4625-83ab-44c9a5adb826}</Project>
       <Name>ASCOM.Cache</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.csproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
       <Project>{7b9b8be0-9517-0548-11d2-27b6261ab180}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FusionLib\FusionLib.csproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\FusionLib\FusionLib.csproj">
       <Project>{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}</Project>
       <Name>FusionLib</Name>
       <Private>True</Private>
