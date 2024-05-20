@@ -2406,11 +2406,12 @@ Global
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.MakeDynamicLists|x64.ActiveCfg = Debug|x64
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Mixed Platforms.Build.0 = Release|x64
+		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Win32.ActiveCfg = Release|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|Win32.Build.0 = Release|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|x64.ActiveCfg = Release|x64
+		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
