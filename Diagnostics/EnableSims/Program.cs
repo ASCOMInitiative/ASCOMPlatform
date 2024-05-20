@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UseSimulators
+namespace EnableSims
 {
     internal class Program
     {
@@ -24,7 +24,7 @@ namespace UseSimulators
             // Check whether the required parameter was provided
             if (args.Length == 0) // No parameters so present some help text and end
             {
-                Console.WriteLine($"\r\nUseSimulators - Switches the Platform 6 simulator COM ProgIDs to run either the Platform 6 simulators or the Omni Simulators");
+                Console.WriteLine($"\r\nEnableSims - Switches the Platform 6 simulator COM ProgIDs to run either the Platform 6 simulators or the Omni Simulators");
                 Console.WriteLine($"");
                 Console.WriteLine($"Requires a single, case insensitive, parameter.");
                 Console.WriteLine($"");
@@ -47,7 +47,7 @@ namespace UseSimulators
                     return rc;
 
                 default:
-                    Console.WriteLine($"\r\nASCOM UseSimulators - Unrecognised parameter value: '{args[0]}'. Valid values are: Platform6 and OmniSimulators");
+                    Console.WriteLine($"\r\nASCOM EnableSims - Unrecognised parameter value: '{args[0]}'. Valid values are: Platform6 and OmniSimulators");
                     return 99;
             }
         }
@@ -146,8 +146,8 @@ namespace UseSimulators
         /// <param name="TL"></param>
         private static void LogMessage(string message, TraceLogger TL)
         {
-            Console.WriteLine($"UseSimulators - {message}");
-            TL.LogMessageCrLf("UseSimulators", message);
+            Console.WriteLine($"EnableSims - {message}");
+            TL.LogMessageCrLf("EnableSims", message);
         }
     }
 }
