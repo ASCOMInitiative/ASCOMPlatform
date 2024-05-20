@@ -1646,6 +1646,15 @@ Install Files ..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll to $TAR
  
 [END REGION]
  
+[DEFINE REGION: Camera Hub]
+ 
+Comment: Install the updater checker application
+Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe to $COMMONFILES$\ASCOM\Camera\CameraHub
+Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb to $COMMONFILES$\ASCOM\Camera\CameraHub
+Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\Camera\CameraHub
+ 
+[END REGION]
+ 
 [DEFINE REGION: Install ASCOM Remote Server and the OmniSimulators]
  
 Apply Install (get result into variable RC)
@@ -2088,23 +2097,28 @@ if Variable SUCCESS not Equals ERROR
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
     Set Variable MYPROGRESS to 31
   end
+   
   Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
   Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
+   
   Set Variable MYPROGRESS to 32
   if Variable INSTALL_DOMECONTROLHUB Equals TRUE
     Set Variable PROGRESSTEXT to Registering Platform 5 Dome Hub
     Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
   end
+   
   Set Variable MYPROGRESS to 33
   Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
   Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheelSim (at end of file)
+   
   Set Variable MYPROGRESS to 34
   Set Variable PROGRESSTEXT to Registering Platform 5 Focuser simulator
   Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
+   
   Set Variable MYPROGRESS to 35
   Set Variable PROGRESSTEXT to Registering Platform 5 Switch simulator
   Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
@@ -2114,6 +2128,7 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 36
   Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 5.5.6.0
   Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
   Set Variable MYPROGRESS to 37
   Set Variable MYPROGRESS to 38
   Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 5.5.6.0
@@ -2300,6 +2315,10 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ASCOMERROR to $ASCOMERROR$Earth rotation data scheduled job issue. RC: $RC$
   end
    
+  Set Variable PROGRESSTEXT to Registering Camera Hub
+  Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - CameraHub (at end of file)
+   
   [END REGION]
    
   [DEFINE REGION: Non-MSI activities - 64bit]
@@ -2310,7 +2329,7 @@ if Variable SUCCESS not Equals ERROR
      
     Comment: Register 64bit Omni-Simulators
     Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Omni-Simulators (at end of file)
     if Variable RC not Equals 0
       MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
     end

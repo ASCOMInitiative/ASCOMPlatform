@@ -11,12 +11,16 @@ namespace UseSimulators
 {
     internal class Program
     {
+
+        internal static int rc = 0; // Return code
+
         /// <summary>
         /// Enable the Platform 6 simulator COM ProgIDs to start either the Platform 6 devices or the OmniSimulators
         /// </summary>
         /// <param name="args">Parameter (Platform6 or OmniSimulators) specifying whether to enable the Platform 6 or Omni Simulator simulators.</param>
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+
             // Check whether the required parameter was provided
             if (args.Length == 0) // No parameters so present some help text and end
             {
@@ -27,7 +31,7 @@ namespace UseSimulators
                 Console.WriteLine($"Valid parameter values:");
                 Console.WriteLine("    Platform6");
                 Console.WriteLine("    OmniSimulators");
-                return;
+                return 0;
             }
 
             // If we get here there must be at least one argument so act on it
@@ -36,15 +40,15 @@ namespace UseSimulators
             {
                 case "PLATFORM6":
                     RestorePlatform6Simulators();
-                    return;
+                    return rc;
 
                 case "OMNISIMULATORS":
                     SetOmniSimulators();
-                    return;
+                    return rc;
 
                 default:
                     Console.WriteLine($"\r\nASCOM UseSimulators - Unrecognised parameter value: '{args[0]}'. Valid values are: Platform6 and OmniSimulators");
-                    return;
+                    return 99;
             }
         }
 
@@ -102,12 +106,12 @@ namespace UseSimulators
             }
         }
 
-       /// <summary>
-       /// Set the CLSID GUID value of a given COM ProgID to a new value
-       /// </summary>
-       /// <param name="progId"></param>
-       /// <param name="classGuid"></param>
-       /// <param name="TL"></param>
+        /// <summary>
+        /// Set the CLSID GUID value of a given COM ProgID to a new value
+        /// </summary>
+        /// <param name="progId"></param>
+        /// <param name="classGuid"></param>
+        /// <param name="TL"></param>
         private static void SetProgId(string progId, string classGuid, TraceLogger TL)
         {
             LogMessage($"Setting ProgID: {progId} to {classGuid}", TL);
@@ -130,7 +134,8 @@ namespace UseSimulators
             }
             catch (Exception ex)
             {
-                LogMessage($"Exception - {ex.Message}\r\n{ex}",TL);
+                LogMessage($"Exception - {ex.Message}\r\n{ex}", TL);
+                rc = ex.HResult;
             }
         }
 
