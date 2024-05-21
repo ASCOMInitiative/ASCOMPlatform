@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1A0E2F7A-D2E0-4379-8446-72B47B897CCE}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EnableSims</RootNamespace>
-    <AssemblyName>EnableSims</AssemblyName>
+    <RootNamespace>SetSimulators</RootNamespace>
+    <AssemblyName>SetSimulators</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
