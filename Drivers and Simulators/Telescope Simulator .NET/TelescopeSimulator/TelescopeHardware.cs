@@ -41,7 +41,7 @@ namespace ASCOM.Simulator
         #region How the simulator works and Operations
 
         // OPERATIONS
-        
+
         // Operations were part of a PoC to introduce independent completion variables for all async methods that was implemented in June / July 2023 as part of Platform 7 feature testing.
         // These completion variables would return true /false or, when something went wrong, would throw exceptions continually until the next operation was started.
 
@@ -199,7 +199,7 @@ namespace ASCOM.Simulator
         private static double elevation;
         private static int maximumSlewRate;
         private static bool noSyncPastMeridian;
-
+        private static DriveRates driveRate;
         private static bool atPark;
 
         //
@@ -1530,9 +1530,17 @@ namespace ASCOM.Simulator
             get { return rateRaDecOffsetExternal.Y; }
             set
             {
-                rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
-                rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES; // Save the rate in the internal units that the simulator uses
-                TL.LogMessage("DeclinationRate Set", $"Value to be set (as received): {rateRaDecOffsetExternal.Y} arc seconds per SI second. Converted to internal rate of: {rateRaDecOffsetInternal.Y} degrees per SI second.");
+                // Check whether we are tracking at sidereal rate
+                if (driveRate == DriveRates.driveSidereal) // We are tracking at sidereal rate so rate offsets can be applied
+                {
+                    rateRaDecOffsetExternal.Y = value; // Save the provided rate to be returned through the Get property
+                    rateRaDecOffsetInternal.Y = value * ARCSECONDS_TO_DEGREES; // Save the rate in the internal units that the simulator uses
+                    TL.LogMessage("DeclinationRate Set", $"Value to be set (as received): {rateRaDecOffsetExternal.Y} arc seconds per SI second. Converted to internal rate of: {rateRaDecOffsetInternal.Y} degrees per SI second.");
+                }
+                else // We are tracking at a rate other than sidereal so rate offsets are invalid. 
+                {
+                    throw new InvalidOperationException($"Setting DeclinationRate is invalid when tracking at: {driveRate}");
+                }
             }
         }
 
@@ -1639,16 +1647,24 @@ namespace ASCOM.Simulator
             get { return rateRaDecOffsetExternal.X; }
             set
             {
-                // Save the provided rate (seconds of RA per sidereal second) to be returned through the Get property
-                rateRaDecOffsetExternal.X = value;
+                // Check whether we are tracking at sidereal rate
+                if (driveRate == DriveRates.driveSidereal) // We are tracking at sidereal rate so rate offsets can be applied
+                {
+                    // Save the provided rate (seconds of RA per sidereal second) to be returned through the Get property
+                    rateRaDecOffsetExternal.X = value;
 
-                // Save the provided rate for internal use in the units (degrees per SI second) that the simulator uses.
-                // SIDEREAL_SECONDS_TO_SI_SECONDS converts from sidereal seconds to SI seconds
-                // Have to multiply by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be less in one SI second than in one sidereal second
-                // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arc-seconds (1 circle = 360 degrees)
-                // ARCSECONDS_TO_DEGREES converts from arc-seconds to degrees
-                rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
-                TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
+                    // Save the provided rate for internal use in the units (degrees per SI second) that the simulator uses.
+                    // SIDEREAL_SECONDS_TO_SI_SECONDS converts from sidereal seconds to SI seconds
+                    // Have to multiply by the SIDEREAL_SECONDS_TO_SI_SECONDS conversion factor (0.99726956631945) because SI seconds are longer than sidereal seconds and hence the simulator movement will be less in one SI second than in one sidereal second
+                    // ARCSECONDS_PER_RA_SECOND converts from seconds of RA (1 circle = 24 hours) to arc-seconds (1 circle = 360 degrees)
+                    // ARCSECONDS_TO_DEGREES converts from arc-seconds to degrees
+                    rateRaDecOffsetInternal.X = value * SIDEREAL_SECONDS_TO_SI_SECONDS * ARCSECONDS_PER_RA_SECOND * ARCSECONDS_TO_DEGREES;
+                    TL.LogMessage("RightAscensionRate Set", $"Value to be set (as received): {value} seconds per sidereal second. Converted to internal rate of: {value * SIDEREAL_SECONDS_TO_SI_SECONDS} seconds per SI second = {rateRaDecOffsetInternal.X} degrees per SI second.");
+                }
+                else // We are tracking at a rate other than sidereal so rate offsets are invalid. 
+                {
+                    throw new InvalidOperationException($"Setting RightAscensionRate is invalid when tracking at: {driveRate}");
+                }
             }
         }
 
@@ -1664,7 +1680,25 @@ namespace ASCOM.Simulator
             set { guideRate.X = value; }
         }
 
-        public static DriveRates TrackingRate { get; set; }
+        public static DriveRates TrackingRate
+        {
+            get
+            {
+                return driveRate;
+            }
+            set
+            {
+                // Zero the rate offsets if we are transitioning to a non-sidereal tracking rate, ignoring any errors
+                if (value != DriveRates.driveSidereal) // We are transitioning to a non sidereal rate
+                {
+                    // Zero the rate offsets ignoring any errors
+                    try { RightAscensionRate = 0.0; } catch { }
+                    try { DeclinationRate = 0.0; } catch { }
+                }
+
+                driveRate = value;
+            }
+        }
 
         public static double SlewSettleTime { get; set; }
 
