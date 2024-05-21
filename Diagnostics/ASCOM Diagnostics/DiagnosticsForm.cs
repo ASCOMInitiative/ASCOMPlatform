@@ -11948,8 +11948,63 @@ namespace ASCOM.Utilities
 
         private bool IsUsingOmniSimulators()
         {
+
+
+            // List of simulator COM ProgIDs and corresponding Omni-Simulator GUIDs
+            Dictionary<string, string> omniSimulators = new Dictionary<string, string>()
+            {
+                {"ASCOM.Simulator.Camera", "{de992041-27fc-45ca-bc58-7507994973ea}"},
+                {"ASCOM.Simulator.CoverCalibrator", "{97a847f6-2522-4007-842a-ae2339b1d70d}"},
+                {"ASCOM.Simulator.Dome", "{1e074ddb-d020-4045-8db0-cfbba81a6172}"},
+                {"ASCOM.Simulator.FilterWheel", "{568961e4-0d98-4b9f-947e-b467c4aac5fc}"},
+                {"ASCOM.Simulator.Focuser", "{a8904146-656b-4852-96cb-53c1229ff0e8}"},
+                {"ASCOM.Simulator.ObservingConditions", "{38620ae3-e175-4153-8871-85ee1023c5ad}"},
+                {"ASCOM.Simulator.Rotator", "{23b464ed-b86a-4276-ab2c-69ff65df9477}"},
+                {"ASCOM.Simulator.SafetyMonitor", "{269f2a82-98b6-46ee-88f7-5a6c794e5d9a}"},
+                {"ASCOM.Simulator.Switch", "{d0efcd2b-00d6-42b6-9f16-795cf09fbee8}"},
+                {"ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}"}
+            };
+
+
+
+
+
             try
             {
+                // Assume TRUE and iterate over the well known simulator ProgIDs comparing GUIDs to the OmniSim values. Any mismatch will result in a FALSE return
+                bool omnisimsAreConfigured = true;
+                foreach (KeyValuePair<string, string> simulator in omniSimulators)
+                {
+                    string guid = (string)RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Default).OpenSubKey($"{simulator.Key}\\CLSID").GetValue(null);
+                    if (string.IsNullOrEmpty(guid))
+                    {
+                        TL.LogMessage("IsUsingOmniSimulators", $"CLSID is null or empty for key: {simulator.Key}\\CLSID");
+                        omnisimsAreConfigured = false;
+                    }
+                    else
+                    {
+                        if (guid !=simulator.Value )
+                        {
+                            TL.LogMessage("IsUsingOmniSimulators", $"CLSID mismatch - Actual: {guid}, Expected: {simulator.Value}");
+                            omnisimsAreConfigured = false;
+                        }
+                        else
+                        {
+                            TL.LogMessage("IsUsingOmniSimulators", $"CLSIDs match OK");
+                        }
+                    }
+                }
+
+                TL.LogMessage("IsUsingOmniSimulators", $"Returning {omnisimsAreConfigured}");
+                return omnisimsAreConfigured;
+
+
+
+
+
+
+
+
                 // Open the ASCOM Platform key where the install status is stored
                 RegistryKey platformKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(STATUS_KEY);
 
@@ -12025,7 +12080,7 @@ namespace ASCOM.Utilities
                 Task timeoutTask = new Task(() =>
                 {
                     TL.LogMessage("SetSimulatorTimeout", $"Started...");
-                    
+
                     // Wait for the timeout period
                     Thread.Sleep(SET_SIMULATORS_TASK_TIMEOUT);
                     TL.LogMessage("SetSimulatorTimeout", $"Completed");
@@ -12035,7 +12090,7 @@ namespace ASCOM.Utilities
                 // Wait for either the swap simulator task or the timeout task to complete
                 if (Task.WhenAny(swapSimTask, timeoutTask).Result == swapSimTask) // The swapSimTask completed
                 {
-                    TL.LogMessage("SetSimulator", $"Swap completed OK");
+                    TL.LogMessage("SetSimulator", $"Simulators set to {simulatorName} OK.");
                 }
                 else // The timeout task completed first
                 {
