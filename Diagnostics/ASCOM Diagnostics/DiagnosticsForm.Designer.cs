@@ -83,6 +83,7 @@ namespace ASCOM.Utilities
             this.btnViewLastLog = new System.Windows.Forms.Button();
             this.SerialTraceFileName = new System.Windows.Forms.SaveFileDialog();
             this.BtnUpdateAvailable = new System.Windows.Forms.Button();
+            this.OptionsUseOmniSimulators = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -413,7 +414,8 @@ namespace ASCOM.Utilities
             this.OptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuAutoViewLog,
             this.OptionsCheckForPlatformReleases,
-            this.OptionsCheckForPlatformPreReleases});
+            this.OptionsCheckForPlatformPreReleases,
+            this.OptionsUseOmniSimulators});
             this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
             this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.OptionsToolStripMenuItem.Text = "Options";
@@ -421,21 +423,21 @@ namespace ASCOM.Utilities
             // MenuAutoViewLog
             // 
             this.MenuAutoViewLog.Name = "MenuAutoViewLog";
-            this.MenuAutoViewLog.Size = new System.Drawing.Size(280, 22);
+            this.MenuAutoViewLog.Size = new System.Drawing.Size(308, 22);
             this.MenuAutoViewLog.Text = "Automatically view log after run";
             this.MenuAutoViewLog.Click += new System.EventHandler(this.MenuAutoViewLog_Click);
             // 
             // OptionsCheckForPlatformReleases
             // 
             this.OptionsCheckForPlatformReleases.Name = "OptionsCheckForPlatformReleases";
-            this.OptionsCheckForPlatformReleases.Size = new System.Drawing.Size(280, 22);
+            this.OptionsCheckForPlatformReleases.Size = new System.Drawing.Size(308, 22);
             this.OptionsCheckForPlatformReleases.Text = "Check for Platform updates";
             this.OptionsCheckForPlatformReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformReleases_Click);
             // 
             // OptionsCheckForPlatformPreReleases
             // 
             this.OptionsCheckForPlatformPreReleases.Name = "OptionsCheckForPlatformPreReleases";
-            this.OptionsCheckForPlatformPreReleases.Size = new System.Drawing.Size(280, 22);
+            this.OptionsCheckForPlatformPreReleases.Size = new System.Drawing.Size(308, 22);
             this.OptionsCheckForPlatformPreReleases.Text = "Check for Platform pre-release updates";
             this.OptionsCheckForPlatformPreReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformPreReleases_Click);
             // 
@@ -483,6 +485,13 @@ namespace ASCOM.Utilities
             this.BtnUpdateAvailable.UseVisualStyleBackColor = false;
             this.BtnUpdateAvailable.Visible = false;
             this.BtnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
+            // 
+            // OptionsUseOmniSimulators
+            // 
+            this.OptionsUseOmniSimulators.Name = "OptionsUseOmniSimulators";
+            this.OptionsUseOmniSimulators.Size = new System.Drawing.Size(308, 22);
+            this.OptionsUseOmniSimulators.Text = "Use Omni-Simulators as Platform simulators";
+            this.OptionsUseOmniSimulators.Click += new System.EventHandler(this.OptionsUseOmniSimulators_Click);
             // 
             // DiagnosticsForm
             // 
@@ -559,5 +568,6 @@ namespace ASCOM.Utilities
         private ToolStripMenuItem OptionsCheckForPlatformReleases;
         private ToolStripMenuItem OptionsCheckForPlatformPreReleases;
         internal Button BtnUpdateAvailable;
+        private ToolStripMenuItem OptionsUseOmniSimulators;
     }
 }

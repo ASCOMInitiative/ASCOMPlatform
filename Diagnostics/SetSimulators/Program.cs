@@ -231,19 +231,23 @@ namespace SetSimulators
                     {
                         // Handle Omni-Simulators have been selected
                         case OMNI_SIMULATORS_NAME_UPPERCASE:
+                            LogMessage($"The Omni-Simulators are already selected", TL);
                             return true;
 
                         // Handle Platform 6 Simulators have been selected
                         case PLATFORM6_SIMULATORS_NAME_UPPERCASE:
+                            LogMessage($"The Platform 6 Simulators are already selected", TL);
                             return true;
 
                         // All other values are reported as no simulators have been selected
                         default:
+                            LogMessage($"Unrecognised install status: '{installStatus}', returning false indicating that no simulators have yet been selected.", TL);
                             return false;
                     }
                 }
                 else // No value has been set so no simulators have been selected so return false
                 {
+                    LogMessage($"No install status value, returning false indicating that no simulators have yet been selected.", TL);
                     return false;
                 }
             }

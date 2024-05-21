@@ -45,6 +45,7 @@ namespace ASCOM.Utilities
     {
 
         #region Constants and Enums
+
         // Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
         private const bool TEST_ASTROMETRY = true;
         private const bool TEST_CACHE = true;
@@ -108,6 +109,16 @@ namespace ASCOM.Utilities
         private const string OPTIONS_AUTOVIEW_REGISTRYKEY = "Diagnostics Auto View Log";
         private const bool OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT = false;
 
+        // Constants to determine whether the Platform is using Omni-Simulators or Platform 6 simulators
+        const string STATUS_KEY = @"SOFTWARE\ASCOM\Platform"; // Key name where the install status value is stored
+        const string COM_SIMULATORS_VALUE_NAME = "COMSimulators"; // Name of the status value
+        const string OMNI_SIMULATORS_NAME = "OmniSimulators";
+        const string OMNI_SIMULATORS_NAME_UPPERCASE = "OMNISIMULATORS"; // Status value indicating that the Omni-Simulators are configured
+        const string PLATFORM6_SIMULATORS_NAME = "Platform6";
+        const string PLATFORM6_SIMULATORS_NAME_UPPERCASE = "PLATFORM6SIMULATORS";
+        const string SET_SIMULATORS_EXE_RELATIVE_PATH = @"SetSimulators\SetSimulators.exe";
+        const int SET_SIMULATORS_TASK_TIMEOUT = 3000; // Length of time to wait for the SetSimulators task to complete (milliseconds)
+
         /// <summary>
         /// Diagnostics form initiator
         /// </summary>
@@ -159,6 +170,7 @@ namespace ASCOM.Utilities
         #endregion
 
         #region Variables
+
         private int NMatches, NNonMatches, NExceptions;
         private List<string> ErrorList = new();
 
@@ -228,6 +240,8 @@ namespace ASCOM.Utilities
 
             try
             {
+                TL = new TraceLogger("DiagnosticsLoad");
+
                 DiagnosticsVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 InstallInformation = this.GetInstallInformation(Utilities.Global.PLATFORM_INSTALLER_PROPDUCT_CODE, false, true, false); // Retrieve the current install information
                 lblTitle.Text = InstallInformation[INST_DISPLAY_NAME] + " - " + InstallInformation[INST_DISPLAY_VERSION];
@@ -11653,8 +11667,12 @@ namespace ASCOM.Utilities
                     }
             }
 
+            // Set the check for updates check marks
             OptionsCheckForPlatformReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_UPDATES, Utilities.Global.CHECK_FOR_RELEASE_UPDATES_DEFAULT);
             OptionsCheckForPlatformPreReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES_DEFAULT);
+
+            // Set the Is using Omni-Simulators check mark
+            OptionsUseOmniSimulators.Checked = IsUsingOmniSimulators();
         }
 
         private void ChooserToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -11878,6 +11896,29 @@ namespace ASCOM.Utilities
             }
         }
 
+        /// <summary>
+        /// Click handler for Options - Swap COM simulators from Platform 6 to Omni-Simulators and vice versa
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OptionsUseOmniSimulators_Click(object sender, EventArgs e)
+        {
+            // Check which simulators are currently in use
+            if (IsUsingOmniSimulators()) // Omni-Simulators are in use
+            {
+                // Swap to Platform simulators
+                SetSimulator(PLATFORM6_SIMULATORS_NAME);
+            }
+            else // Platform simulators are in use
+            {
+                // Swap to Omni-Simulators
+                SetSimulator(OMNI_SIMULATORS_NAME);
+            }
+
+            // Update the state of the simulator option checked flag as appropriate
+            OptionsUseOmniSimulators.Checked = IsUsingOmniSimulators();
+        }
+
         // Check for updates handlers
         private void OptionsCheckForPlatformReleases_Click(object sender, EventArgs e)
         {
@@ -11904,6 +11945,108 @@ namespace ASCOM.Utilities
         #endregion
 
         #region Utility Code
+
+        private bool IsUsingOmniSimulators()
+        {
+            try
+            {
+                // Open the ASCOM Platform key where the install status is stored
+                RegistryKey platformKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(STATUS_KEY);
+
+                // Get the install status string value
+                string installStatus = (string)platformKey.GetValue(COM_SIMULATORS_VALUE_NAME);
+
+                // Check whether the value has been set
+                if (installStatus != null) // A value has already been set so act on it
+                {
+                    switch (installStatus.ToUpperInvariant())
+                    {
+                        // Handle Omni-Simulators have been selected
+                        case OMNI_SIMULATORS_NAME_UPPERCASE:
+                            TL.LogMessage("IsUsingOmniSimulators", $"The Omni-Simulators are selected");
+                            return true;
+
+                        case PLATFORM6_SIMULATORS_NAME_UPPERCASE:
+                            TL.LogMessage("IsUsingOmniSimulators", $"The Platform 6 Simulators are selected");
+                            return false;
+
+                        // All other values are reported as no simulators have been selected
+                        default:
+                            TL.LogMessage("IsUsingOmniSimulators", $"Unrecognised install status: '{installStatus}', returning false indicating that no simulators have yet been selected.");
+                            return false;
+                    }
+                }
+                else // No value has been set so no simulators have been selected so return false
+                {
+                    TL.LogMessage("IsUsingOmniSimulators", $"No install status value, returning false indicating that no simulators have yet been selected.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessage("IsUsingOmniSimulators", $"Exception - {ex.Message}\r\n{ex}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Swap the currently selected Platform 6 or Omni-Simulators to the other
+        /// </summary>
+        /// <param name="simulatorName"></param>
+        private void SetSimulator(string simulatorName)
+        {
+            // Create a path to the SetSimulators executable
+            string setSimulatorsPath = Path.Combine(Environment.CurrentDirectory, SET_SIMULATORS_EXE_RELATIVE_PATH);
+            TL.LogMessage("SetSimulator", $"Path to SetSimulators executable: '{setSimulatorsPath}', Current directory: '{Environment.CurrentDirectory}'");
+
+            // Check whether the executable exists
+            if (File.Exists(setSimulatorsPath)) // SetSimulators executable exists
+            {
+                TL.LogMessage("SetSimulator", $"SetSimulators exists");
+
+                // Create a task to run the SetSimulator executable
+                Task swapSimTask = new Task(() =>
+                {
+                    Process swapSimulatorProcess = new Process();
+                    swapSimulatorProcess.StartInfo.FileName = setSimulatorsPath; // Set the path to the executable
+                    swapSimulatorProcess.StartInfo.Arguments = simulatorName; // Set the parameter to be passed to the executable
+                    swapSimulatorProcess.Start(); // Start the process
+                    TL.LogMessage("SetSimulatorTask", $"Started...");
+
+                    // Wait for the process to complete
+                    swapSimulatorProcess.WaitForExit();
+                    TL.LogMessage("SetSimulatorTask", $"Completed");
+                });
+                swapSimTask.Start();
+
+                // Create a task that waits for a time-out period before completing
+                Task timeoutTask = new Task(() =>
+                {
+                    TL.LogMessage("SetSimulatorTimeout", $"Started...");
+                    
+                    // Wait for the timeout period
+                    Thread.Sleep(SET_SIMULATORS_TASK_TIMEOUT);
+                    TL.LogMessage("SetSimulatorTimeout", $"Completed");
+                });
+                timeoutTask.Start();
+
+                // Wait for either the swap simulator task or the timeout task to complete
+                if (Task.WhenAny(swapSimTask, timeoutTask).Result == swapSimTask) // The swapSimTask completed
+                {
+                    TL.LogMessage("SetSimulator", $"Swap completed OK");
+                }
+                else // The timeout task completed first
+                {
+                    TL.LogMessage("SetSimulator", $"SetSimulators Task timed out!");
+                    MessageBox.Show($"The SetSimulators task timed out and the new simulators were not enabled.", "SetSimulator Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else // SetSimulators executable can not be found
+            {
+                TL.LogMessage("SetSimulator", $"SetSimulators DOES NOT exist");
+                MessageBox.Show($"Unable to find the SetSimulators executable at expected location: {setSimulatorsPath}", "SetSimulator Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         // DLL to provide the path to Program Files(x86)\Common Files folder location that is not available through the .NET framework
         [DllImport("shell32.dll")]
