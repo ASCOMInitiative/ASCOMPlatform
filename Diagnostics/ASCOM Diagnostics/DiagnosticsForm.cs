@@ -11996,7 +11996,7 @@ namespace ASCOM.Utilities
         private void SetSimulator(string simulatorName)
         {
             // Create a path to the SetSimulators executable
-            string setSimulatorsPath = Path.Combine(Environment.CurrentDirectory, SET_SIMULATORS_EXE_RELATIVE_PATH);
+            string setSimulatorsPath = Path.Combine(Application.StartupPath, SET_SIMULATORS_EXE_RELATIVE_PATH);
             TL.LogMessage("SetSimulator", $"Path to SetSimulators executable: '{setSimulatorsPath}', Current directory: '{Environment.CurrentDirectory}'");
 
             // Check whether the executable exists

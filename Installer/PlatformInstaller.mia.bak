@@ -13200,9 +13200,9 @@ FALSE
 FALSE
 FALSE
 {3BB4F517-B7BB-47AC-B8A0-407B8A437A2A}
-..\Diagnostics\EnableSims\bin\Release\EnableSims.exe
+..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe
 FALSE|
-$TARGETDIR$\Tools\EnableSimulators
+$TARGETDIR$\Tools\SetSimulators
 FALSE
 FALSE
 FALSE
@@ -13213,9 +13213,9 @@ FALSE
 FALSE
 FALSE
 {26534CEE-A10B-48BB-93DD-D87DA9C97DA8}
-..\Diagnostics\EnableSims\bin\Release\EnableSims.pdb
+..\Diagnostics\SetSimulators\bin\Release\SetSimulators.pdb
 FALSE|
-$TARGETDIR$\Tools\EnableSimulators
+$TARGETDIR$\Tools\SetSimulators
 FALSE
 FALSE
 FALSE
@@ -13226,9 +13226,9 @@ FALSE
 FALSE
 FALSE
 {A2BBA5CC-8242-4236-93C4-69A705FEE553}
-..\Diagnostics\EnableSims\bin\Release\EnableSims.exe.config
+..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe.config
 FALSE|
-$TARGETDIR$\Tools\EnableSimulators
+$TARGETDIR$\Tools\SetSimulators
 FALSE
 FALSE
 FALSE
@@ -13843,9 +13843,9 @@ TRUE
 TRUE
 RC
 {074E20BD-436A-4456-9125-D1136FB5F43A}
-$TARGETDIR$\Tools\EnableSimulators\EnableSims.exe
+$TARGETDIR$\Tools\SetSimulators\SetSimulators.exe
 TRUE
-OmniSimulators
+OmniSimulators-RespectExisting
 TRUE
 RC
 {4689112C-EDAA-4DF5-89F0-8225714A37AB}
@@ -14520,7 +14520,7 @@ ASCOM Diagnostics
 $SHORTCUTFILESALL$|FALSE
 
 
-$SHORTCUTFOLDER$\Tools|FALSE
+$SHORTCUTDIR$\Tools|FALSE
 |FALSE
 |
 0|

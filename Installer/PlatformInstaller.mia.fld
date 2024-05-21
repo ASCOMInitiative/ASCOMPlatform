@@ -9,7 +9,6 @@ Platform 6 files
 Platform 5.5 files
 Set Registry Keys
 Platform 6.1 files
-Set up log file and variables
 Platform 6.2 files
 Remove Previous Platform install if present
 Non-MSI activities - 64bit
@@ -19,7 +18,6 @@ ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
 Non-MSI activities - 32bit
-Create shortcuts
 Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
@@ -38,3 +36,4 @@ Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any
 Visual Studio assembly references for Platform 6 backward compatibility
 Platform Update Checker
 Camera Hub
+Set up log file and variables
