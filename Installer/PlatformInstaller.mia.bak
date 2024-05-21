@@ -6491,7 +6491,7 @@ Install the use simulators application to choose which simulators to use.
 {9F03879E-585C-44C1-877E-AEB44A64592C}
 
 {EFA056C9-6C45-4B2D-B99C-515AFDB2FA6E}
-Set the OmniSimulators as the default Platform simulators
+Set the default Platform COM simulators
 {A5BEABB2-99EC-4F69-B2F3-887D0BAB6DB5}
 
 {025BA787-FC7A-4256-BB6D-BF9F9CE0CFA3}
@@ -7753,7 +7753,7 @@ ASCOMERROR$MYAH$MYAH$FALSE
 $ASCOMERROR$$NEWLINE$
 {FA6DEE47-1921-4B5A-A637-FB7ADD0EF9DD}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Enabling Omni Simulators
+Setting default Platform simulators
 {C7726B74-5D45-487A-AFDE-DB4F56B4389D}
 MYPROGRESS
 100
@@ -13200,9 +13200,9 @@ FALSE
 FALSE
 FALSE
 {3BB4F517-B7BB-47AC-B8A0-407B8A437A2A}
-..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe
+..\Diagnostics\EnableSims\bin\Release\EnableSims.exe
 FALSE|
-$TARGETDIR$\Tools\UseSimulators
+$TARGETDIR$\Tools\EnableSimulators
 FALSE
 FALSE
 FALSE
@@ -13213,9 +13213,9 @@ FALSE
 FALSE
 FALSE
 {26534CEE-A10B-48BB-93DD-D87DA9C97DA8}
-..\Diagnostics\UseSimulators\bin\Release\UseSimulators.pdb
+..\Diagnostics\EnableSims\bin\Release\EnableSims.pdb
 FALSE|
-$TARGETDIR$\Tools\UseSimulators
+$TARGETDIR$\Tools\EnableSimulators
 FALSE
 FALSE
 FALSE
@@ -13226,9 +13226,9 @@ FALSE
 FALSE
 FALSE
 {A2BBA5CC-8242-4236-93C4-69A705FEE553}
-..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe.config
+..\Diagnostics\EnableSims\bin\Release\EnableSims.exe.config
 FALSE|
-$TARGETDIR$\Tools\UseSimulators
+$TARGETDIR$\Tools\EnableSimulators
 FALSE
 FALSE
 FALSE
@@ -13843,7 +13843,7 @@ TRUE
 TRUE
 RC
 {074E20BD-436A-4456-9125-D1136FB5F43A}
-$TARGETDIR$\Tools\UseSimulators\UseSimulators.exe
+$TARGETDIR$\Tools\EnableSimulators\EnableSims.exe
 TRUE
 OmniSimulators
 TRUE

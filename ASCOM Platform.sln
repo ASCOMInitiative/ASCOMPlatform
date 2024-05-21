@@ -283,7 +283,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profile Explorer", "Profile
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverConnect", "Diagnostics\ASCOM.DriverConnect\ASCOM.DriverConnect.csproj", "{E39CFF76-C086-425A-93FD-E60BA491D45C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnableSims", "Diagnostics\EnableSims\EnableSims.csproj", "{1A0E2F7A-D2E0-4379-8446-72B47B897CCE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetSimulators", "Diagnostics\SetSimulators\SetSimulators.csproj", "{1A0E2F7A-D2E0-4379-8446-72B47B897CCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1658,9 +1658,9 @@ Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll t
 [DEFINE REGION: Use Simulators]
  
 Comment: Install the use simulators application to choose which simulators to use.
-Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe to $TARGETDIR$\Tools\UseSimulators
-Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.pdb to $TARGETDIR$\Tools\UseSimulators
-Install Files ..\Diagnostics\UseSimulators\bin\Release\UseSimulators.exe.config to $TARGETDIR$\Tools\UseSimulators
+Install Files ..\Diagnostics\EnableSims\bin\Release\EnableSims.exe to $TARGETDIR$\Tools\EnableSimulators
+Install Files ..\Diagnostics\EnableSims\bin\Release\EnableSims.pdb to $TARGETDIR$\Tools\EnableSimulators
+Install Files ..\Diagnostics\EnableSims\bin\Release\EnableSims.exe.config to $TARGETDIR$\Tools\EnableSimulators
  
 [END REGION]
  
@@ -2506,9 +2506,9 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
   end
    
-  Comment: Set the OmniSimulators as the default Platform simulators
-  Set Variable PROGRESSTEXT to Enabling Omni Simulators
-  Run Program $TARGETDIR$\Tools\UseSimulators\UseSimulators.exe OmniSimulators (WAIT, get result into variable RC)
+  Comment: Set the default Platform COM simulators
+  Set Variable PROGRESSTEXT to Setting default Platform simulators
+  Run Program $TARGETDIR$\Tools\EnableSimulators\EnableSims.exe OmniSimulators (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Enable Omni Simulators (at end of file)
   if Variable RC not Equals 0
     MessageBox: Use Simulators, An error has occured while setting the Omni Simulators as the default simulators, please save all logs in Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
