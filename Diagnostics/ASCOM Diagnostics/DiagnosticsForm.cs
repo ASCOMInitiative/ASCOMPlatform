@@ -12010,6 +12010,8 @@ namespace ASCOM.Utilities
                     Process swapSimulatorProcess = new Process();
                     swapSimulatorProcess.StartInfo.FileName = setSimulatorsPath; // Set the path to the executable
                     swapSimulatorProcess.StartInfo.Arguments = simulatorName; // Set the parameter to be passed to the executable
+                    swapSimulatorProcess.StartInfo.UseShellExecute = false;
+                    swapSimulatorProcess.StartInfo.CreateNoWindow = true;
                     swapSimulatorProcess.Start(); // Start the process
                     TL.LogMessage("SetSimulatorTask", $"Started...");
 
