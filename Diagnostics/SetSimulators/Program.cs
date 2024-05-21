@@ -11,6 +11,14 @@ namespace SetSimulators
 {
     internal class Program
     {
+        const string COM_SIMULATORS_VALUE_NAME = "COMSimulators";
+        const string OMNI_SIMULATORS_NAME = "OmniSimulators";
+        const string OMNI_SIMULATORS_NAME_UPPERCASE = "OMNISIMULATORS";
+        const string PLATFORM6_SIMULATORS_NAME = "Platform6Simulators";
+        const string PLATFORM6_SIMULATORS_NAME_UPPERCASE = "PLATFORM6SIMULATORS";
+        const string STATUS_KEY = @"SOFTWARE\ASCOM\Platform";
+        const int CANNOT_DETERMINE_INSTALL_STATUS = 1;
+        const int CANNOT_SET_STATUS = 2;
 
         internal static int rc = 0; // Return code
 
@@ -29,21 +37,32 @@ namespace SetSimulators
                 Console.WriteLine($"Requires a single, case insensitive, parameter.");
                 Console.WriteLine($"");
                 Console.WriteLine($"Valid parameter values:");
-                Console.WriteLine("    Platform6");
-                Console.WriteLine("    OmniSimulators");
+                Console.WriteLine("    Platform6                      - Enables the Platform 6 simulators.");
+                Console.WriteLine("    OmniSimulators                 - Enables the Omni-Simulators.");
+                Console.WriteLine("    Platform6-RespectExisting      - Enables the Platform 6 simulators on first use but otherwise leaves the current setting.");
+                Console.WriteLine("    OmniSimulators-RespectExisting - Enables the Omni-Simulators on first use but otherwise leaves the current setting.");
                 return 0;
             }
 
             // If we get here there must be at least one argument so act on it
 
+            // Act depending on the supplied parameter
             switch (args[0].ToUpperInvariant())
             {
                 case "PLATFORM6":
-                    RestorePlatform6Simulators();
+                    SetPlatform6Simulators(false);
                     return rc;
 
                 case "OMNISIMULATORS":
-                    SetOmniSimulators();
+                    SetOmniSimulators(false);
+                    return rc;
+
+                case "PLATFORM6-RESPECTEXISTING":
+                    SetPlatform6Simulators(true);
+                    return rc;
+
+                case "OMNISIMULATORS-RESPECTEXISTING":
+                    SetOmniSimulators(true);
                     return rc;
 
                 default:
@@ -55,10 +74,28 @@ namespace SetSimulators
         /// <summary>
         /// Restore the Platform 6 COM ProgIDs to point at their Platform 6 values
         /// </summary>
-        private static void RestorePlatform6Simulators()
+        private static void SetPlatform6Simulators(bool respectExisting)
         {
             using (TraceLogger TL = new TraceLogger("EnableSims-Platform6"))
             {
+                // Check whether we need to respect any existing setting
+                if (respectExisting) // We must respect any existing setting
+                {
+                    // Check whether a simulator has already been selected
+                    LogMessage("Checking whether a simulator type has already been set", TL);
+                    if (SimulatorsHaveBeenSet(TL))  // A simulator has already been selected so respect it and don't change the current value
+                    {
+                        LogMessage("A simulator has already been selected, leaving that in place", TL);
+                        return;
+                    }
+                    else
+                    {
+                        LogMessage("No simulator has been selected, configuring Platform 6 Simulators", TL);
+                        LogMessage(" ", TL);
+                    }
+                }
+
+                // Set the Platform 6 simulators as default
                 LogMessage($"Setting Platform 6 Simulator ProgIDs...", TL);
                 LogMessage(" ", TL);
 
@@ -74,6 +111,8 @@ namespace SetSimulators
                 SetProgId("ASCOM.Simulator.Switch", "{602b2780-d8fe-438b-a11a-e45a8df6e7c8}", TL);
                 SetProgId("ASCOM.Simulator.Telescope", "{86931eac-1f52-4918-b6aa-7e9b0ff361bd}", TL);
 
+                SetSimulator(PLATFORM6_SIMULATORS_NAME, TL);
+
                 LogMessage(" ", TL);
                 LogMessage($"Platform 6 Simulator ProgIDs set.", TL);
             }
@@ -82,10 +121,28 @@ namespace SetSimulators
         /// <summary>
         /// Hijack the Platform 6 ProgIDs and point them to the Omni Simulator devices
         /// </summary>
-        private static void SetOmniSimulators()
+        private static void SetOmniSimulators(bool respectExisting)
         {
             using (TraceLogger TL = new TraceLogger("EnableSims-OmniSimulators"))
             {
+                // Check whether we need to respect any existing setting
+                if (respectExisting) // We must respect any existing setting
+                {
+                    // Check whether a simulator has already been selected
+                    LogMessage("Checking whether a simulator type has already been set", TL);
+                    if (SimulatorsHaveBeenSet(TL))  // A simulator has already been selected so respect it and don't change the current value
+                    {
+                        LogMessage("A simulator has already been selected, leaving that in place", TL);
+                        return;
+                    }
+                    else
+                    {
+                        LogMessage("No simulator has been selected, configuring Omni-Simulators", TL);
+                        LogMessage(" ", TL);
+                    }
+                }
+
+                // Set the Omni-Simulator simulators as default
                 LogMessage($"Setting Omni Simulator ProgIDs...", TL);
                 LogMessage(" ", TL);
 
@@ -100,6 +157,8 @@ namespace SetSimulators
                 SetProgId("ASCOM.Simulator.SafetyMonitor", "{269f2a82-98b6-46ee-88f7-5a6c794e5d9a}", TL);
                 SetProgId("ASCOM.Simulator.Switch", "{d0efcd2b-00d6-42b6-9f16-795cf09fbee8}", TL);
                 SetProgId("ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}", TL);
+
+                SetSimulator(OMNI_SIMULATORS_NAME, TL);
 
                 LogMessage(" ", TL);
                 LogMessage($"Omni Simulator ProgIDs set.", TL);
@@ -148,6 +207,67 @@ namespace SetSimulators
         {
             Console.WriteLine($"EnableSims - {message}");
             TL.LogMessageCrLf("EnableSims", message);
+        }
+
+        /// <summary>
+        /// Determine whether the COM simulators have already been set to either Platform 6 or the Omni-simulators
+        /// </summary>
+        /// <param name="TL"></param>
+        /// <returns>True if either simulator has already been set, otherwise false</returns>
+        private static bool SimulatorsHaveBeenSet(TraceLogger TL)
+        {
+            try
+            {
+                // Open the ASCOM Platform key where the install status is stored
+                RegistryKey platformKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(STATUS_KEY);
+
+                // Get the install status string value
+                string installStatus = (string)platformKey.GetValue(COM_SIMULATORS_VALUE_NAME);
+
+                // Check whether the value has been set
+                if (installStatus != null) // A value has already been set so act on it
+                {
+                    switch (installStatus.ToUpperInvariant())
+                    {
+                        // Handle Omni-Simulators have been selected
+                        case OMNI_SIMULATORS_NAME_UPPERCASE:
+                            return true;
+
+                        // Handle Platform 6 Simulators have been selected
+                        case PLATFORM6_SIMULATORS_NAME_UPPERCASE:
+                            return true;
+
+                        // All other values are reported as no simulators have been selected
+                        default:
+                            return false;
+                    }
+                }
+                else // No value has been set so no simulators have been selected so return false
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                rc = CANNOT_DETERMINE_INSTALL_STATUS;
+                LogMessage($"Exception - {ex.Message}\r\n{ex}", TL);
+                throw;
+            }
+        }
+
+        private static void SetSimulator(string simulatorName, TraceLogger TL)
+        {
+            try
+            {
+                // Write the simulator name to the status value
+                RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(STATUS_KEY, true).SetValue(COM_SIMULATORS_VALUE_NAME, simulatorName);
+            }
+            catch (Exception ex)
+            {
+                rc = CANNOT_SET_STATUS;
+                LogMessage($"Exception - {ex.Message}\r\n{ex}", TL);
+                throw;
+            }
         }
     }
 }
