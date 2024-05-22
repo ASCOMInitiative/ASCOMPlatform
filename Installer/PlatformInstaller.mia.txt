@@ -2509,7 +2509,7 @@ if Variable SUCCESS not Equals ERROR
   Comment: Set the default Platform COM simulators
   Set Variable PROGRESSTEXT to Setting default Platform simulators
   Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Enable Omni Simulators (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set Simulators (at end of file)
   if Variable RC not Equals 0
     MessageBox: Use Simulators, An error has occured while setting the Omni Simulators as the default simulators, please save all logs in Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
     if Variable ASCOMERROR not Equals 
@@ -2524,9 +2524,8 @@ if Variable SUCCESS not Equals ERROR
   [DEFINE REGION: Install Platform update scheduled task]
    
   Comment: Create a scheduled task to run the update checker once a week
-  Write into Text File $SETUPLOG$ from Value $TIME$ About to install Platform Update Checker Task... (at end of file)
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Update Checker Task scheduled (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Update Checker Task scheduled (at end of file)
   Write into Text File $SETUPLOG$ from Value  (at end of file)
    
   [END REGION]
