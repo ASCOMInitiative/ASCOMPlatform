@@ -264,14 +264,16 @@ namespace ASCOM.Utilities
                 // Spawn a thread to run the update checker task
                 LogInternal("Load", "About to define update task");
                 Task updateCheckTask = new Task(() => DiagnosticsUpdateCheck());
-
                 updateCheckTask.Start();
                 LogInternal("Load", "Update task has started");
-
-                //Task.WaitAny(updateCheckTask);
+                Thread.Sleep(800);
                 LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
 
+                Thread.Sleep(300);
+                LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
 
+                Thread.Sleep(500);
+                LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
 
 
 
@@ -12053,7 +12055,7 @@ namespace ASCOM.Utilities
                 {
                     // Delay for a few seconds to allow the GUI to initialise
                     LogInternal("DiagnosticsUpdateCheck", $"Entered Delaying...");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
                     LogInternal("DiagnosticsUpdateCheck", $"Running update check");
 
                     // Check for updates, running the ShowUpdateAvailable method if an update is available. 
