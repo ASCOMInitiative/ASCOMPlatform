@@ -211,6 +211,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SimulatorDescriptor.cs" />
+    <Compile Include="SimulatorManager.cs" />
     <Compile Include="VersionForm.Designer.cs">
       <DependentUpon>VersionForm.cs</DependentUpon>
     </Compile>

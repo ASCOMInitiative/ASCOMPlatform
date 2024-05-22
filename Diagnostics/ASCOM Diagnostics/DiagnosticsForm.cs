@@ -106,26 +106,8 @@ namespace ASCOM.Utilities
         private const int CSIDL_SYSTEMX86 = 41; // 0x0029,
 
         private const string OPTIONS_REGISTRYKEY_BASE = @"Software\ASCOM\Diagnostics";
-        private const string OPTIONS_AUTOVIEW_REGISTRYKEY = "Diagnostics Auto View Log";
-        private const bool OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT = false;
-
-        // Constants to determine whether the Platform is using Omni-Simulators or Platform 6 simulators
-        const string STATUS_KEY = @"SOFTWARE\ASCOM\Platform"; // Key name where the install status value is stored
-        const string COM_SIMULATORS_VALUE_NAME = "COMSimulators"; // Name of the status value
-        const string OMNI_SIMULATORS_NAME = "OmniSimulators";
-        const string OMNI_SIMULATORS_NAME_UPPERCASE = "OMNISIMULATORS"; // Status value indicating that the Omni-Simulators are configured
-        const string PLATFORM6_SIMULATORS_NAME = "Platform6";
-        const string PLATFORM6_SIMULATORS_NAME_UPPERCASE = "PLATFORM6SIMULATORS";
-        const string SET_SIMULATORS_EXE_RELATIVE_PATH = @"SetSimulators\SetSimulators.exe";
-        const int SET_SIMULATORS_TASK_TIMEOUT = 3000; // Length of time to wait for the SetSimulators task to complete (milliseconds)
-
-        /// <summary>
-        /// Diagnostics form initiator
-        /// </summary>
-        public DiagnosticsForm()
-        {
-            InitializeComponent();
-        }
+        private const string OPTIONS_AUTOVIEW_REGISTRYKEY = "Diagnostics Auto View Log"; private const bool OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT = false;
+        private const string OPTIONS_DIAGNOSTICS_TRACE = "Diagnostics Trace"; private const bool OPTIONS_DIAGNOSTICS_TRACE_DEFAULT = true;
 
         #region DLL Call Definitions
         [DllImport("kernel32.dll")]
@@ -174,7 +156,8 @@ namespace ASCOM.Utilities
         private int NMatches, NNonMatches, NExceptions;
         private List<string> ErrorList = new();
 
-        private TraceLogger TL;
+        private TraceLogger TL; // Logger for Diagnostics reports
+        private static TraceLogger tlInternal; // Logger for internal Diagnostic operation
         private RegistryAccess ASCOMRegistryAccess;
         private Timer _ASCOMTimer;
 
@@ -233,6 +216,16 @@ namespace ASCOM.Utilities
 
         #endregion
 
+        #region Initialisation, Form load and overall process
+
+        /// <summary>
+        /// Diagnostics form initiator
+        /// </summary>
+        public DiagnosticsForm()
+        {
+            InitializeComponent();
+        }
+
         private void DiagnosticsForm_Load(object sender, EventArgs e)
         {
             // Initialise form
@@ -240,10 +233,11 @@ namespace ASCOM.Utilities
 
             try
             {
-                TL = new TraceLogger("DiagnosticsLoad");
+                tlInternal = new TraceLogger("DiagnosticsOperation");
+                tlInternal.Enabled = Utilities.Global.GetBool(OPTIONS_DIAGNOSTICS_TRACE, OPTIONS_DIAGNOSTICS_TRACE_DEFAULT);
 
                 DiagnosticsVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                InstallInformation = this.GetInstallInformation(Utilities.Global.PLATFORM_INSTALLER_PROPDUCT_CODE, false, true, false); // Retrieve the current install information
+                InstallInformation = GetInstallInformation(Utilities.Global.PLATFORM_INSTALLER_PROPDUCT_CODE, false, true, false); // Retrieve the current install information
                 lblTitle.Text = InstallInformation[INST_DISPLAY_NAME] + " - " + InstallInformation[INST_DISPLAY_VERSION];
                 lblResult.Text = "";
                 lblAction.Text = "";
@@ -827,6 +821,10 @@ namespace ASCOM.Utilities
             btnExit.Enabled = true; // Enable buttons during run
             btnRunDiagnostics.Enabled = true;
         }
+
+        #endregion
+
+        #region Tests
 
         private void SOFATests()
         {
@@ -11448,6 +11446,8 @@ namespace ASCOM.Utilities
             return Retval;
         }
 
+        #endregion
+
         #region XML  test String
         private const string XMLTestString = "<?xml version=\"1.0\"?>" + "\r\n" + "<ASCOMProfile>" + "\r\n" + "  <SubKey>" + "\r\n" + "    <SubKeyName />" + "\r\n" + "    <DefaultValue>" + TestTelescopeDescription + "</DefaultValue>" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>Results 1</Name>" + "\r\n" + "        <Data />" + "\r\n" + "      </Value>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>Root Test Name</Name>" + "\r\n" + "        <Data>Test Value in Root key</Data>" + "\r\n" + "      </Value>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>Test Name</Name>" + "\r\n" + "        <Data>Test Value</Data>" + "\r\n" + "      </Value>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>Test Name Default</Name>" + "\r\n" + "        <Data>123456</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + "    <SubKeyName>SubKey1</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values />" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + @"    <SubKeyName>SubKey1\SubKey2</SubKeyName>" + "\r\n" + "    <DefaultValue>Null Key in SubKey2</DefaultValue>" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey2 Test Name</Name>" + "\r\n" + "        <Data>Test Value in SubKey 2</Data>" + "\r\n" + "      </Value>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey2 Test Name1</Name>" + "\r\n" + "        <Data>Test Value in SubKey 2</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + @"    <SubKeyName>SubKey1\SubKey2\SubKey2a</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey2a Test Name2a</Name>" + "\r\n" + "        <Data>Test Value in SubKey 2a</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + @"    <SubKeyName>SubKey1\SubKey2\SubKey2a\SubKey2b</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey2b Test Name2b</Name>" + "\r\n" + "        <Data>Test Value in SubKey 2b</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + @"    <SubKeyName>SubKey1\SubKey2\SubKey2c</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey2c Test Name2c</Name>" + "\r\n" + "        <Data>Test Value in SubKey 2c</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + "    <SubKeyName>SubKey3</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey3 Test Name</Name>" + "\r\n" + "        <Data>Test Value SubKey 3</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + "    <SubKeyName>SubKey4</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>SubKey4 Test Name</Name>" + "\r\n" + "        <Data>Test Value SubKey 4</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "  <SubKey>" + "\r\n" + "    <SubKeyName>SubKeyDefault</SubKeyName>" + "\r\n" + "    <DefaultValue />" + "\r\n" + "    <Values>" + "\r\n" + "      <Value>" + "\r\n" + "        <Name>Test Name Default</Name>" + "\r\n" + "        <Data>123456</Data>" + "\r\n" + "      </Value>" + "\r\n" + "    </Values>" + "\r\n" + "  </SubKey>" + "\r\n" + "</ASCOMProfile>";
         #endregion
@@ -11642,6 +11642,7 @@ namespace ASCOM.Utilities
             MenuNovasTraceEnabled.Checked = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT);
             MenuCacheTraceEnabled.Checked = Utilities.Global.GetBool(Utilities.Global.TRACE_CACHE, Utilities.Global.TRACE_CACHE_DEFAULT);
             MenuEarthRotationDataFormTraceEnabled.Checked = Utilities.Global.GetBool(Utilities.Global.TRACE_EARTHROTATION_DATA_FORM, Utilities.Global.TRACE_EARTHROTATION_DATA_FORM_DEFAULT);
+            MenuDiagnosticsTraceEnabled.Checked = Utilities.Global.GetBool(OPTIONS_DIAGNOSTICS_TRACE, OPTIONS_DIAGNOSTICS_TRACE_DEFAULT);
 
             TypeOfWait = Utilities.Global.GetWaitType(Utilities.Global.SERIAL_WAIT_TYPE, Utilities.Global.SERIAL_WAIT_TYPE_DEFAULT);
 
@@ -11672,7 +11673,8 @@ namespace ASCOM.Utilities
             OptionsCheckForPlatformPreReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES_DEFAULT);
 
             // Set the Is using Omni-Simulators check mark
-            OptionsUseOmniSimulators.Checked = IsUsingOmniSimulators();
+            OptionsUseOmniSimulators.Checked = SimulatorManager.IsUsingOmniSimulators(tlInternal);
+            LogInternal(" ", " ");
         }
 
         private void ChooserToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -11903,20 +11905,33 @@ namespace ASCOM.Utilities
         /// <param name="e"></param>
         private void OptionsUseOmniSimulators_Click(object sender, EventArgs e)
         {
-            // Check which simulators are currently in use
-            if (IsUsingOmniSimulators()) // Omni-Simulators are in use
+            LogInternal("UseOmniSimulators", $"Menu entry clicked");
+            LogInternal(" ", " ");
+
+            // Check whether OmniSims are in use
+            if (SimulatorManager.IsUsingOmniSimulators(tlInternal)) // Omni-Simulators are in use
             {
                 // Swap to Platform simulators
-                SetSimulator(PLATFORM6_SIMULATORS_NAME);
+                SimulatorManager.SetPlatform6Simulators(false, tlInternal);
             }
             else // Platform simulators are in use
             {
                 // Swap to Omni-Simulators
-                SetSimulator(OMNI_SIMULATORS_NAME);
+                SimulatorManager.SetOmniSimulators(false, tlInternal);
             }
 
             // Update the state of the simulator option checked flag as appropriate
-            OptionsUseOmniSimulators.Checked = IsUsingOmniSimulators();
+            OptionsUseOmniSimulators.Checked = SimulatorManager.IsUsingOmniSimulators(tlInternal);
+
+            LogInternal(" ", " ");
+            LogInternal("UseOmniSimulators", $"Complete");
+            LogInternal(" ", " ");
+        }
+
+        private void MenuDiagnosticsTraceEnabled_Click(object sender, EventArgs e)
+        {
+            MenuDiagnosticsTraceEnabled.Checked = !MenuDiagnosticsTraceEnabled.Checked;
+            Utilities.Global.SetName(OPTIONS_DIAGNOSTICS_TRACE, MenuAutoViewLog.Checked.ToString()); // Set the new value in the registry
         }
 
         // Check for updates handlers
@@ -11945,165 +11960,6 @@ namespace ASCOM.Utilities
         #endregion
 
         #region Utility Code
-
-        private bool IsUsingOmniSimulators()
-        {
-
-
-            // List of simulator COM ProgIDs and corresponding Omni-Simulator GUIDs
-            Dictionary<string, string> omniSimulators = new Dictionary<string, string>()
-            {
-                {"ASCOM.Simulator.Camera", "{de992041-27fc-45ca-bc58-7507994973ea}"},
-                {"ASCOM.Simulator.CoverCalibrator", "{97a847f6-2522-4007-842a-ae2339b1d70d}"},
-                {"ASCOM.Simulator.Dome", "{1e074ddb-d020-4045-8db0-cfbba81a6172}"},
-                {"ASCOM.Simulator.FilterWheel", "{568961e4-0d98-4b9f-947e-b467c4aac5fc}"},
-                {"ASCOM.Simulator.Focuser", "{a8904146-656b-4852-96cb-53c1229ff0e8}"},
-                {"ASCOM.Simulator.ObservingConditions", "{38620ae3-e175-4153-8871-85ee1023c5ad}"},
-                {"ASCOM.Simulator.Rotator", "{23b464ed-b86a-4276-ab2c-69ff65df9477}"},
-                {"ASCOM.Simulator.SafetyMonitor", "{269f2a82-98b6-46ee-88f7-5a6c794e5d9a}"},
-                {"ASCOM.Simulator.Switch", "{d0efcd2b-00d6-42b6-9f16-795cf09fbee8}"},
-                {"ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}"}
-            };
-
-
-
-
-
-            try
-            {
-                // Assume TRUE and iterate over the well known simulator ProgIDs comparing GUIDs to the OmniSim values. Any mismatch will result in a FALSE return
-                bool omnisimsAreConfigured = true;
-                foreach (KeyValuePair<string, string> simulator in omniSimulators)
-                {
-                    string guid = (string)RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Default).OpenSubKey($"{simulator.Key}\\CLSID").GetValue(null);
-                    if (string.IsNullOrEmpty(guid))
-                    {
-                        TL.LogMessage("IsUsingOmniSimulators", $"CLSID is null or empty for key: {simulator.Key}\\CLSID");
-                        omnisimsAreConfigured = false;
-                    }
-                    else
-                    {
-                        if (guid !=simulator.Value )
-                        {
-                            TL.LogMessage("IsUsingOmniSimulators", $"CLSID mismatch - Actual: {guid}, Expected: {simulator.Value}");
-                            omnisimsAreConfigured = false;
-                        }
-                        else
-                        {
-                            TL.LogMessage("IsUsingOmniSimulators", $"CLSIDs match OK");
-                        }
-                    }
-                }
-
-                TL.LogMessage("IsUsingOmniSimulators", $"Returning {omnisimsAreConfigured}");
-                return omnisimsAreConfigured;
-
-
-
-
-
-
-
-
-                // Open the ASCOM Platform key where the install status is stored
-                RegistryKey platformKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(STATUS_KEY);
-
-                // Get the install status string value
-                string installStatus = (string)platformKey.GetValue(COM_SIMULATORS_VALUE_NAME);
-
-                // Check whether the value has been set
-                if (installStatus != null) // A value has already been set so act on it
-                {
-                    switch (installStatus.ToUpperInvariant())
-                    {
-                        // Handle Omni-Simulators have been selected
-                        case OMNI_SIMULATORS_NAME_UPPERCASE:
-                            TL.LogMessage("IsUsingOmniSimulators", $"The Omni-Simulators are selected");
-                            return true;
-
-                        case PLATFORM6_SIMULATORS_NAME_UPPERCASE:
-                            TL.LogMessage("IsUsingOmniSimulators", $"The Platform 6 Simulators are selected");
-                            return false;
-
-                        // All other values are reported as no simulators have been selected
-                        default:
-                            TL.LogMessage("IsUsingOmniSimulators", $"Unrecognised install status: '{installStatus}', returning false indicating that no simulators have yet been selected.");
-                            return false;
-                    }
-                }
-                else // No value has been set so no simulators have been selected so return false
-                {
-                    TL.LogMessage("IsUsingOmniSimulators", $"No install status value, returning false indicating that no simulators have yet been selected.");
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessage("IsUsingOmniSimulators", $"Exception - {ex.Message}\r\n{ex}");
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Swap the currently selected Platform 6 or Omni-Simulators to the other
-        /// </summary>
-        /// <param name="simulatorName"></param>
-        private void SetSimulator(string simulatorName)
-        {
-            // Create a path to the SetSimulators executable
-            string setSimulatorsPath = Path.Combine(Application.StartupPath, SET_SIMULATORS_EXE_RELATIVE_PATH);
-            TL.LogMessage("SetSimulator", $"Path to SetSimulators executable: '{setSimulatorsPath}', Current directory: '{Environment.CurrentDirectory}'");
-
-            // Check whether the executable exists
-            if (File.Exists(setSimulatorsPath)) // SetSimulators executable exists
-            {
-                TL.LogMessage("SetSimulator", $"SetSimulators exists");
-
-                // Create a task to run the SetSimulator executable
-                Task swapSimTask = new Task(() =>
-                {
-                    Process swapSimulatorProcess = new Process();
-                    swapSimulatorProcess.StartInfo.FileName = setSimulatorsPath; // Set the path to the executable
-                    swapSimulatorProcess.StartInfo.Arguments = simulatorName; // Set the parameter to be passed to the executable
-                    swapSimulatorProcess.StartInfo.UseShellExecute = false;
-                    swapSimulatorProcess.StartInfo.CreateNoWindow = true;
-                    swapSimulatorProcess.Start(); // Start the process
-                    TL.LogMessage("SetSimulatorTask", $"Started...");
-
-                    // Wait for the process to complete
-                    swapSimulatorProcess.WaitForExit();
-                    TL.LogMessage("SetSimulatorTask", $"Completed");
-                });
-                swapSimTask.Start();
-
-                // Create a task that waits for a time-out period before completing
-                Task timeoutTask = new Task(() =>
-                {
-                    TL.LogMessage("SetSimulatorTimeout", $"Started...");
-
-                    // Wait for the timeout period
-                    Thread.Sleep(SET_SIMULATORS_TASK_TIMEOUT);
-                    TL.LogMessage("SetSimulatorTimeout", $"Completed");
-                });
-                timeoutTask.Start();
-
-                // Wait for either the swap simulator task or the timeout task to complete
-                if (Task.WhenAny(swapSimTask, timeoutTask).Result == swapSimTask) // The swapSimTask completed
-                {
-                    TL.LogMessage("SetSimulator", $"Simulators set to {simulatorName} OK.");
-                }
-                else // The timeout task completed first
-                {
-                    TL.LogMessage("SetSimulator", $"SetSimulators Task timed out!");
-                    MessageBox.Show($"The SetSimulators task timed out and the new simulators were not enabled.", "SetSimulator Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else // SetSimulators executable can not be found
-            {
-                TL.LogMessage("SetSimulator", $"SetSimulators DOES NOT exist");
-                MessageBox.Show($"Unable to find the SetSimulators executable at expected location: {setSimulatorsPath}", "SetSimulator Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         // DLL to provide the path to Program Files(x86)\Common Files folder location that is not available through the .NET framework
         [DllImport("shell32.dll")]
@@ -12152,8 +12008,6 @@ namespace ASCOM.Utilities
             return false;
         }
 
-        TraceLogger traceLogger;
-
         /// <summary>
         /// Display an update available button on the Diagnostics form.
         /// </summary>
@@ -12164,9 +12018,9 @@ namespace ASCOM.Utilities
         /// </remarks>
         private void ShowUpdateAvailable(SemVersion message)
         {
-            LogDebug("CheckForUpdates", $"Making update button visible");
+            LogInternal("CheckForUpdates", $"Making update button visible");
             BtnUpdateAvailable.Invoke(new Action(() => BtnUpdateAvailable.Visible = true));
-            LogDebug("CheckForUpdates", $"Update button now visible");
+            LogInternal("CheckForUpdates", $"Update button now visible");
         }
 
         private async Task DiagnosticsUpdateCheck()
@@ -12174,41 +12028,38 @@ namespace ASCOM.Utilities
             try
             {
                 // Create a trace logger just for the update task
-                traceLogger = new TraceLogger("DiagnosticsUpdateCheck");
-                traceLogger.Enabled = true;
-                traceLogger.LogMessage("DiagnosticsUpdateCheck", "Diagnostics is checking for updates");
+                LogInternal("DiagnosticsUpdateCheck", "Diagnostics is checking for updates");
 
                 // Check whether updates are to be checked at all
                 if (OptionsCheckForPlatformPreReleases.Checked | OptionsCheckForPlatformPreReleases.Checked) // Either release or pre-release updates are to be checked
                 {
                     // Delay for a few seconds to allow the GUI to initialise
-                    LogDebug("DiagnosticsUpdateCheck", $"Entered Delaying...");
+                    LogInternal("DiagnosticsUpdateCheck", $"Entered Delaying...");
                     await Task.Delay(2000);
-                    LogDebug("DiagnosticsUpdateCheck", $"Running update check");
+                    LogInternal("DiagnosticsUpdateCheck", $"Running update check");
 
                     // Check for updates, running the ShowUpdateAvailable method if an update is available. 
-                    // The CheckForUpdates reelaseAction parameter is a one parameter action but the parameter is only used by the PlatformUpdateChecker executable and not by the Diagnostics form
-                    PlatformUpdateChecker.UpdateCheck.CheckForUpdates((x) => ShowUpdateAvailable(new SemVersion(0)), traceLogger);
+                    // The CheckForUpdates relaseAction parameter is a one parameter action but the parameter is only used by the PlatformUpdateChecker executable and not by the Diagnostics form
+                    PlatformUpdateChecker.UpdateCheck.CheckForUpdates((x) => ShowUpdateAvailable(new SemVersion(0)), tlInternal);
 
-                    LogDebug("DiagnosticsUpdateCheck", $"Update check complete");
-
+                    LogInternal("DiagnosticsUpdateCheck", $"Update check complete");
+                    LogInternal(" ", $" ");
                 }
                 else // Updates are not to be checked at all
                 {
-                    LogDebug("DiagnosticsUpdateCheck", $"Not checking GitHub because checking for release updates is disabled and checking for pre-release updates is disabled.");
+                    LogInternal("DiagnosticsUpdateCheck", $"Not checking GitHub because checking for release updates is disabled and checking for pre-release updates is disabled.");
                 }
-
             }
             catch (Exception ex)
             {
-                LogDebug("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
+                LogInternal("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
             }
         }
 
-        private void LogDebug(string member, string message)
+        private static void LogInternal(string member, string message)
         {
             //Debug.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {member,-20}{message}");
-            traceLogger?.LogMessageCrLf(member, message);
+            tlInternal?.LogMessageCrLf(member, message);
         }
 
         #endregion

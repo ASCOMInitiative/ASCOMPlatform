@@ -74,16 +74,17 @@ namespace ASCOM.Utilities
             this.MenuWaitTypeManualResetEvent = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuWaitTypeSleep = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuWaitTypeWaitForSingleObject = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuDiagnosticsTraceEnabled = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAutoViewLog = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsCheckForPlatformReleases = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsCheckForPlatformPreReleases = new System.Windows.Forms.ToolStripMenuItem();
+            this.OptionsUseOmniSimulators = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAction = new System.Windows.Forms.Label();
             this.btnViewLastLog = new System.Windows.Forms.Button();
             this.SerialTraceFileName = new System.Windows.Forms.SaveFileDialog();
             this.BtnUpdateAvailable = new System.Windows.Forms.Button();
-            this.OptionsUseOmniSimulators = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -249,7 +250,8 @@ namespace ASCOM.Utilities
             this.MenuCacheTraceEnabled,
             this.MenuEarthRotationDataFormTraceEnabled,
             this.MenuThrowAbandonedMutexExceptions,
-            this.SerialWaitTypeToolStripMenuItem});
+            this.SerialWaitTypeToolStripMenuItem,
+            this.MenuDiagnosticsTraceEnabled});
             this.mnuTrace.Name = "mnuTrace";
             this.mnuTrace.Size = new System.Drawing.Size(46, 20);
             this.mnuTrace.Text = "Trace";
@@ -376,6 +378,7 @@ namespace ASCOM.Utilities
             this.MenuThrowAbandonedMutexExceptions.Name = "MenuThrowAbandonedMutexExceptions";
             this.MenuThrowAbandonedMutexExceptions.Size = new System.Drawing.Size(282, 22);
             this.MenuThrowAbandonedMutexExceptions.Text = "Throw Abandoned Mutex Exceptions";
+            this.MenuThrowAbandonedMutexExceptions.Visible = false;
             this.MenuThrowAbandonedMutexExceptions.Click += new System.EventHandler(this.MenuThrowAbandonedMutexExceptions_Click);
             // 
             // SerialWaitTypeToolStripMenuItem
@@ -387,6 +390,7 @@ namespace ASCOM.Utilities
             this.SerialWaitTypeToolStripMenuItem.Name = "SerialWaitTypeToolStripMenuItem";
             this.SerialWaitTypeToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
             this.SerialWaitTypeToolStripMenuItem.Text = "Serial Wait Type";
+            this.SerialWaitTypeToolStripMenuItem.Visible = false;
             // 
             // MenuWaitTypeManualResetEvent
             // 
@@ -408,6 +412,13 @@ namespace ASCOM.Utilities
             this.MenuWaitTypeWaitForSingleObject.Size = new System.Drawing.Size(182, 22);
             this.MenuWaitTypeWaitForSingleObject.Text = "WaitForSingleObject";
             this.MenuWaitTypeWaitForSingleObject.Click += new System.EventHandler(this.MenuWaitTypeWaitForSingleObject_Click);
+            // 
+            // MenuDiagnosticsTraceEnabled
+            // 
+            this.MenuDiagnosticsTraceEnabled.Name = "MenuDiagnosticsTraceEnabled";
+            this.MenuDiagnosticsTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuDiagnosticsTraceEnabled.Text = "Diagnostics Trace Enabled";
+            this.MenuDiagnosticsTraceEnabled.Click += new System.EventHandler(this.MenuDiagnosticsTraceEnabled_Click);
             // 
             // OptionsToolStripMenuItem
             // 
@@ -440,6 +451,13 @@ namespace ASCOM.Utilities
             this.OptionsCheckForPlatformPreReleases.Size = new System.Drawing.Size(308, 22);
             this.OptionsCheckForPlatformPreReleases.Text = "Check for Platform pre-release updates";
             this.OptionsCheckForPlatformPreReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformPreReleases_Click);
+            // 
+            // OptionsUseOmniSimulators
+            // 
+            this.OptionsUseOmniSimulators.Name = "OptionsUseOmniSimulators";
+            this.OptionsUseOmniSimulators.Size = new System.Drawing.Size(308, 22);
+            this.OptionsUseOmniSimulators.Text = "Use Omni-Simulators as Platform simulators";
+            this.OptionsUseOmniSimulators.Click += new System.EventHandler(this.OptionsUseOmniSimulators_Click);
             // 
             // AboutToolStripMenuItem
             // 
@@ -485,13 +503,6 @@ namespace ASCOM.Utilities
             this.BtnUpdateAvailable.UseVisualStyleBackColor = false;
             this.BtnUpdateAvailable.Visible = false;
             this.BtnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
-            // 
-            // OptionsUseOmniSimulators
-            // 
-            this.OptionsUseOmniSimulators.Name = "OptionsUseOmniSimulators";
-            this.OptionsUseOmniSimulators.Size = new System.Drawing.Size(308, 22);
-            this.OptionsUseOmniSimulators.Text = "Use Omni-Simulators as Platform simulators";
-            this.OptionsUseOmniSimulators.Click += new System.EventHandler(this.OptionsUseOmniSimulators_Click);
             // 
             // DiagnosticsForm
             // 
@@ -569,5 +580,6 @@ namespace ASCOM.Utilities
         private ToolStripMenuItem OptionsCheckForPlatformPreReleases;
         internal Button BtnUpdateAvailable;
         private ToolStripMenuItem OptionsUseOmniSimulators;
+        private ToolStripMenuItem MenuDiagnosticsTraceEnabled;
     }
 }
