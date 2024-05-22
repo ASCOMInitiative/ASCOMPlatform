@@ -262,7 +262,11 @@ namespace ASCOM.Utilities
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
 
                 // Spawn a thread to run the update checker task
+                tlInternal.LogMessage("Load","About to run update task");
+                LogInternal("Load", "About to run update task");
                 Task.Run(() => DiagnosticsUpdateCheck());
+                tlInternal.LogMessage("Load", "Update task has started");
+                LogInternal("Load", "Update task has started");
 
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
@@ -12034,7 +12038,6 @@ namespace ASCOM.Utilities
         {
             try
             {
-                // Create a trace logger just for the update task
                 LogInternal("DiagnosticsUpdateCheck", "Diagnostics is checking for updates");
 
                 // Check whether updates are to be checked at all
