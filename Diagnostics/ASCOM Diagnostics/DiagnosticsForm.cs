@@ -275,7 +275,11 @@ namespace ASCOM.Utilities
                 Thread.Sleep(500);
                 LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
 
+                if (!(updateCheckTask.Exception is null))
+                {
+                    LogInternal("Load", $"Task exception: {updateCheckTask.Exception.Message}\r\n{updateCheckTask.Exception}");
 
+                }
 
 
                 BringToFront();
@@ -12072,7 +12076,15 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                LogInternal("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
+                //LogInternal("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
+
+                using (TraceLogger logger=new TraceLogger("UpdateCheckException"))
+                {
+                    logger.Enabled = true;
+
+                    logger.LogMessageCrLf("Exception",$"Message: {ex.Message}\r\n{ex}");
+                    logger.Enabled=false;
+                }
             }
         }
 
