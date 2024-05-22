@@ -2542,6 +2542,7 @@ if Variable SUCCESS not Equals ERROR
     Set Variable PROGRESSTEXT to Validate 64bit Platform operation
     Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform64 (at end of file)
+    Write into Text File $SETUPLOG$ from Value  (at end of file)
   end
    
   [END REGION]
