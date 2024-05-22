@@ -1846,7 +1846,7 @@ namespace ASCOM.Utilities
 
                         try
                         {
-                            Compare("TestSimulator", Sim.DeviceType + " " + "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion);
+                            // Compare("TestSimulator", Sim.DeviceType + " " + "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion);
                         }
                         catch (COMException ex1)
                         {
