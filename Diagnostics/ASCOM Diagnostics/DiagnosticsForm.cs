@@ -272,6 +272,9 @@ namespace ASCOM.Utilities
 
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
+
+                LogInternal("Load", "Complete");
+                LogInternal(" ", " ");
             }
             catch (Exception ex)
             {
