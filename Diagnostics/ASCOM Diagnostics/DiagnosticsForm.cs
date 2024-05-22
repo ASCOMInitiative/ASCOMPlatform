@@ -262,11 +262,19 @@ namespace ASCOM.Utilities
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
 
                 // Spawn a thread to run the update checker task
-                tlInternal.LogMessage("Load","About to run update task");
-                LogInternal("Load", "About to run update task");
-                Task.Run(() => DiagnosticsUpdateCheck());
-                tlInternal.LogMessage("Load", "Update task has started");
+                LogInternal("Load", "About to define update task");
+                Task updateCheckTask = new Task(() => DiagnosticsUpdateCheck());
+
+                updateCheckTask.Start();
                 LogInternal("Load", "Update task has started");
+
+                //Task.WaitAny(updateCheckTask);
+                LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
+
+
+
+
+
 
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
@@ -12034,7 +12042,7 @@ namespace ASCOM.Utilities
             LogInternal("CheckForUpdates", $"Update button now visible");
         }
 
-        private async Task DiagnosticsUpdateCheck()
+        private void DiagnosticsUpdateCheck()
         {
             try
             {
@@ -12045,7 +12053,7 @@ namespace ASCOM.Utilities
                 {
                     // Delay for a few seconds to allow the GUI to initialise
                     LogInternal("DiagnosticsUpdateCheck", $"Entered Delaying...");
-                    await Task.Delay(2000);
+                    Thread.Sleep(2000);
                     LogInternal("DiagnosticsUpdateCheck", $"Running update check");
 
                     // Check for updates, running the ShowUpdateAvailable method if an update is available. 
