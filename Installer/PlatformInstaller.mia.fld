@@ -37,5 +37,6 @@ Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any
 Visual Studio assembly references for Platform 6 backward compatibility
 Platform Update Checker
 Camera Hub
-Validate installation
-Alert if Platform 6 Conform is present.
+Use Simulators
+Create shortcuts
+Finalise installation.

@@ -1898,10 +1898,17 @@ namespace ASCOM.Utilities
                                     {
                                         // The maximum slew rate is a user configurable value so we need to read it here in order to conduct slew rate value tests
                                         // Get the maximum slew rate stored in the simulator Profile for use in relative rates tests
-                                        prof = new Profile();
+                                        using (Profile profileSlew = new())
+                                        {
+                                            // Handle the possibility that the Platform 6 simulator has never been started and so a max slew rate doesn't exist.
+                                            string maxSlewRateString = profileSlew.GetValue(Sim.ProgID, MAX_SLEW_RATE_PROFILE_NAME); // Get the max slew rate string
 
-                                        MaxSlewRate = Conversions.ToDouble(prof.GetValue(Sim.ProgID, MAX_SLEW_RATE_PROFILE_NAME));
-                                        prof.Dispose();
+                                            // Check whether the max slew rate has a value
+                                            if (!string.IsNullOrEmpty(maxSlewRateString)) // There is a value
+                                                MaxSlewRate = Conversions.ToDouble(maxSlewRateString);
+                                            else // There is no value so set a low value that should be OK
+                                                MaxSlewRate = 1.0;
+                                        }
 
                                         ct = Conversions.ToInteger(DeviceObject.InterfaceVersion());
                                         ct = 0;
