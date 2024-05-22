@@ -29,6 +29,7 @@ using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
+using PlatformUpdateChecker;
 using Semver;
 
 //using Semver;
@@ -261,26 +262,13 @@ namespace ASCOM.Utilities
                 RefreshTraceItems(); // Get current values for the trace menu settings
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
 
-                // Spawn a thread to run the update checker task
+                // Define the update checker task
                 LogInternal("Load", "About to define update task");
                 Task updateCheckTask = new Task(() => DiagnosticsUpdateCheck());
+
+                // Run the update checker task without waiting for it to complete
                 updateCheckTask.Start();
                 LogInternal("Load", "Update task has started");
-                Thread.Sleep(800);
-                LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
-
-                Thread.Sleep(300);
-                LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
-
-                Thread.Sleep(500);
-                LogInternal("Load", $"WaitAny has finished - Status: {updateCheckTask.Status}, IsCancelled: {updateCheckTask.IsCanceled}, IsCompleted: {updateCheckTask.IsCompleted}, IsFaulted: {updateCheckTask.IsFaulted}");
-
-                if (!(updateCheckTask.Exception is null))
-                {
-                    LogInternal("Load", $"Task exception: {updateCheckTask.Exception.Message}\r\n{updateCheckTask.Exception}");
-
-                }
-
 
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
@@ -759,6 +747,32 @@ namespace ASCOM.Utilities
                     CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_UTILITIES, true);
                     CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_SCAN_DRIVES, true);
                     CompareBoolean("Test Configuration", "Create Debug Console Disabled", CREATE_DEBUG_COLSOLE, false);
+
+                    // Check the Product Version string to make sure that it can be parsed by SemVer
+                    try
+                    {
+                        string productVersionString = UpdateCheck.GetCurrentPlatformVersion();
+                        bool parsedOk = SemVersion.TryParse(productVersionString, SemVersionStyles.Strict, out _);
+                        if (parsedOk)
+                        {
+                            TL.LogMessage("SemVer", $"The product version was parsed OK by SemVer: {productVersionString}");
+                            NMatches += 1;
+                        }
+                        else
+                        {
+                            string errMsg = $"##### The product version was NOT parsed OK by SemVer: {productVersionString}";
+                            TL.LogMessageCrLf("SemVer", errMsg);
+                            NNonMatches += 1;
+                            ErrorList.Add($"SemVer - {errMsg}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errMsg = $"##### Exception parsing the product version: {ex.Message}";
+                        TL.LogMessageCrLf("SemVer", $"{errMsg}\r\n{ex}");
+                        NNonMatches += 1;
+                        ErrorList.Add($"SemVer - {errMsg}");
+                    }
 
                     if (NNonMatches == 0 & NExceptions == 0)
                     {
@@ -12076,15 +12090,7 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                //LogInternal("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
-
-                using (TraceLogger logger=new TraceLogger("UpdateCheckException"))
-                {
-                    logger.Enabled = true;
-
-                    logger.LogMessageCrLf("Exception",$"Message: {ex.Message}\r\n{ex}");
-                    logger.Enabled=false;
-                }
+                LogInternal("DiagnosticsUpdateCheck", $"Exception - {ex.Message}\r\n{ex}");
             }
         }
 
