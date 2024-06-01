@@ -3,6 +3,8 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Globalization;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ASCOM.Simulator
 {
@@ -14,13 +16,16 @@ namespace ASCOM.Simulator
     [ProgId(Hub.DRIVER_PROGID)]
     [ServedClassName(Hub.DRIVER_DISPLAY_NAME)]
     [ClassInterface(ClassInterfaceType.None)]
-    public class ObservingConditions : ReferenceCountedObjectBase, IObservingConditions
+    public class ObservingConditions : ReferenceCountedObjectBase, IObservingConditionsV2
     {
         #region Variables and Constants
 
         internal static TraceLoggerPlus TL; // Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         private int clientNumber;
         private bool testMode, testConnected;
+
+        private bool connecting; // Flag used when emulating the Connect / Disconnect methods
+        private Exception connectException = null; // Placeholder for any exception generated when emulating asynchronous connection / disconnection on a Platform 6 or earlier device
 
         #endregion
 
@@ -115,8 +120,8 @@ namespace ASCOM.Simulator
                 }
                 else
                 {
-                    if (value) Hub.Connect(clientNumber);
-                    else Hub.Disconnect(clientNumber);
+                    if (value) Hub.ConnectDevices(clientNumber);
+                    else Hub.DisconnectDevices(clientNumber);
                 }
             }
         }
@@ -158,7 +163,7 @@ namespace ASCOM.Simulator
                 if (testMode)
                 {
                     Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                    string driverVersion =  String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                    string driverVersion = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
 
                     TL.LogMessage(clientNumber, "DriverVersion", driverVersion);
                     return driverVersion;
@@ -173,8 +178,8 @@ namespace ASCOM.Simulator
             {
                 if (testMode)
                 {
-                    TL.LogMessage(clientNumber, "InterfaceVersion", "1");
-                    return 1;
+                    TL.LogMessage(clientNumber, "InterfaceVersion", "2");
+                    return 2;
                 }
                 return Hub.InterfaceVersion(clientNumber);
             }
@@ -191,6 +196,99 @@ namespace ASCOM.Simulator
                 }
                 return Hub.Name(clientNumber);
             }
+        }
+
+        public void Connect()
+        {
+            TL.LogMessage("Connect", "Starting Connect process...");
+
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to True
+            Task connectingTask = Task.Factory.StartNew(() =>
+            {
+                // Ensure that no exceptions can escape
+                try
+                {
+                    // Set Connected True
+                    TL.LogMessage("ConnectTask", "About to set Connected True");
+                    Connected = true;
+                    TL.LogMessage("ConnectTask", "Connected Set True OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so log the issue and save the exception
+                    TL.LogMessage("ConnectTask", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    TL.LogMessage("ConnectTask", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
+
+            TL.LogMessage("Connect", "Connect completed");
+        }
+
+        public void Disconnect()
+        {
+            TL.LogMessage("Disconnect", "Starting Disconnect process...");
+
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to False
+            Task disConnectingTask = Task.Factory.StartNew(() =>
+            {
+                // Ensure that no exceptions can escape
+                try
+                {
+                    // Set Connected False
+                    TL.LogMessage("DisconnectTask", "About to set Connected False");
+                    Connected = false;
+                    TL.LogMessage("DisconnectTask", "Connected Set False OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so save the exception
+                    TL.LogMessage("DisconnectTask", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    TL.LogMessage("DisconnectTask", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
+
+            TL.LogMessage("Disconnect", "Disconnect completed");
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                // If Connected or disconnected threw an exception, throw this to the client
+                if (!(connectException is null))
+                {
+                    TL.LogMessage("Connecting Get", $"Throwing exception from Connected to the client: {connectException.Message}\r\n{connectException}");
+                    throw connectException;
+                }
+
+                // No exception so return emulated state
+                return connecting;
+            }
+        }
+
+        public IStateValueCollection DeviceState
+        {
+            get { return Hub.DeviceState(clientNumber); }
         }
 
         #endregion
@@ -301,6 +399,8 @@ namespace ASCOM.Simulator
         {
             get { return Hub.WindSpeed(clientNumber); }
         }
+
         #endregion
+
     }
 }

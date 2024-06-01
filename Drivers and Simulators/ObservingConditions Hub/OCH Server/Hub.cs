@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using ASCOM.Utilities;
 using ASCOM.DriverAccess;
 using System.Text.RegularExpressions;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.Simulator
 {
@@ -278,18 +279,18 @@ namespace ASCOM.Simulator
             throw new MethodNotImplementedException("CommandString");
         }
 
-        public static void Connect(int clientNumber)
+        public static void ConnectDevices(int clientNumber)
         {
-            if (DebugTraceState) TL.LogMessage(clientNumber, "Connect", "Acquiring connection lock");
+            if (DebugTraceState) TL.LogMessage(clientNumber, "ConnectDevices", "Acquiring connection lock");
 
             lock (connectLockObject) // Ensure that only one connection attempt can happen at a time
             {
-                TL.LogMessage(clientNumber, "Connect", "Has connection lock");
+                TL.LogMessage(clientNumber, "ConnectDevices", "Has connection lock");
                 try
                 {
                     if (!IsHardwareConnected(clientNumber)) // We are not physically connected so connect all devices now
                     {
-                        TL.LogMessage(clientNumber, "Connect", "Attempting to connect to devices");
+                        TL.LogMessage(clientNumber, "ConnectDevices", "Attempting to connect to devices");
 
                         // Work out which devices we actually need to connect to
                         foreach (KeyValuePair<string, Sensor> sensor in Sensors)
@@ -305,39 +306,39 @@ namespace ASCOM.Simulator
                                         case DeviceType.ObservingConditions:
                                             if (!ObservingConditionsDevices.ContainsKey(sensor.Value.ProgID))
                                             {
-                                                TL.LogMessage(clientNumber, "Connect", "Adding new ObservingConditions ProgID: " + sensor.Value.ProgID);
+                                                TL.LogMessage(clientNumber, "ConnectDevices", "Adding new ObservingConditions ProgID: " + sensor.Value.ProgID);
                                                 try
                                                 {
                                                     ObservingConditionsDevices.Add(sensor.Value.ProgID, new ObservingConditions(sensor.Value.ProgID));
                                                 }
                                                 catch (Exception ex)
                                                 {
-                                                    TL.LogMessageCrLf(clientNumber, "Connect", "Exception adding ObservingConditions Device " + sensor.Value.ProgID + ": " + ex.ToString());
+                                                    TL.LogMessageCrLf(clientNumber, "ConnectDevices", "Exception adding ObservingConditions Device " + sensor.Value.ProgID + ": " + ex.ToString());
                                                     MessageBox.Show("Unable to connect to ObservingConditions device " + sensor.Value.ProgID + ": " + ex.Message);
                                                 }
                                             }
                                             else
                                             {
-                                                TL.LogMessage(clientNumber, "Connect", "Skipping this ObservingConditions ProgID, it already exists: " + sensor.Value.ProgID);
+                                                TL.LogMessage(clientNumber, "ConnectDevices", "Skipping this ObservingConditions ProgID, it already exists: " + sensor.Value.ProgID);
                                             }
                                             break;
                                         case DeviceType.Switch:
                                             if (!SwitchDevices.ContainsKey(sensor.Value.ProgID))
                                             {
-                                                TL.LogMessage(clientNumber, "Connect", "Adding new Switch ProgID: " + sensor.Value.ProgID);
+                                                TL.LogMessage(clientNumber, "ConnectDevices", "Adding new Switch ProgID: " + sensor.Value.ProgID);
                                                 try
                                                 {
                                                     SwitchDevices.Add(sensor.Value.ProgID, new Switch(sensor.Value.ProgID));
                                                 }
                                                 catch (Exception ex)
                                                 {
-                                                    TL.LogMessageCrLf(clientNumber, "Connect", "Exception adding Switch Device " + sensor.Value.ProgID + ": " + ex.ToString());
+                                                    TL.LogMessageCrLf(clientNumber, "ConnectDevices", "Exception adding Switch Device " + sensor.Value.ProgID + ": " + ex.ToString());
                                                     MessageBox.Show("Unable to connect to Switch device " + sensor.Value.ProgID + ": " + ex.Message);
                                                 }
                                             }
                                             else
                                             {
-                                                TL.LogMessage(clientNumber, "Connect", "Skipping this Switch ProgID, it already exists: " + sensor.Value.ProgID);
+                                                TL.LogMessage(clientNumber, "ConnectDevices", "Skipping this Switch ProgID, it already exists: " + sensor.Value.ProgID);
                                             }
                                             break;
                                         default:
@@ -351,32 +352,32 @@ namespace ASCOM.Simulator
                         // Now try to connect to ObservingConditions devices
                         foreach (KeyValuePair<string, ObservingConditions> observingConditionsDevice in ObservingConditionsDevices)
                         {
-                            TL.LogMessage(clientNumber, "Connect", "Connecting to: " + observingConditionsDevice.Key);
+                            TL.LogMessage(clientNumber, "ConnectDevices", "Connecting to: " + observingConditionsDevice.Key);
                             try
                             {
                                 observingConditionsDevice.Value.Connected = true;
                                 bool notAlreadyPresent = connectStates.TryAdd(clientNumber, true); // Add this client to the list of connected clients
-                                TL.LogMessage(clientNumber, "Connect", "Successfully connected to: " + observingConditionsDevice.Key.ToString() + ", AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                                TL.LogMessage(clientNumber, "ConnectDevices", "Successfully connected to: " + observingConditionsDevice.Key.ToString() + ", AlreadyConnected: " + (!notAlreadyPresent).ToString());
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(clientNumber, "Connect", "Failed to connect: " + ex.ToString());
+                                TL.LogMessage(clientNumber, "ConnectDevices", "Failed to connect: " + ex.ToString());
                             }
                         }
 
                         // Now try to connect to Switch devices
                         foreach (KeyValuePair<string, Switch> switchDevice in SwitchDevices)
                         {
-                            TL.LogMessage(clientNumber, "Connect", "Connecting to: " + switchDevice.Key);
+                            TL.LogMessage(clientNumber, "ConnectDevices", "Connecting to: " + switchDevice.Key);
                             try
                             {
                                 switchDevice.Value.Connected = true;
                                 bool notAlreadyPresent = connectStates.TryAdd(clientNumber, true); // Add this client to the list of connected clients
-                                TL.LogMessage(clientNumber, "Connect", "Successfully connected to: " + switchDevice.Key.ToString() + ", AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                                TL.LogMessage(clientNumber, "ConnectDevices", "Successfully connected to: " + switchDevice.Key.ToString() + ", AlreadyConnected: " + (!notAlreadyPresent).ToString());
                             }
                             catch (Exception ex)
                             {
-                                TL.LogMessage(clientNumber, "Connect", "Failed to connect: " + ex.ToString());
+                                TL.LogMessage(clientNumber, "ConnectDevices", "Failed to connect: " + ex.ToString());
                             }
 
                         }
@@ -387,27 +388,27 @@ namespace ASCOM.Simulator
                     {
                         if (IsClientConnected(clientNumber)) // If this client is already connected then just log this 
                         {
-                            TL.LogMessage(clientNumber, "Connect", "This client is already connected - no action required.");
+                            TL.LogMessage(clientNumber, "ConnectDevices", "This client is already connected - no action required.");
                         }
                         else // This client is not connected so connect now
                         {
                             bool notAlreadyPresent = connectStates.TryAdd(clientNumber, true); // Add this client to the list of connected clients
-                            TL.LogMessage(clientNumber, "Connect", "Successfully added client to the connected clients list, AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                            TL.LogMessage(clientNumber, "ConnectDevices", "Successfully added client to the connected clients list, AlreadyConnected: " + (!notAlreadyPresent).ToString());
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessageCrLf(clientNumber, "Connect", "Unhandled Exception: " + ex.ToString());
+                    TL.LogMessageCrLf(clientNumber, "ConnectDevices", "Unhandled Exception: " + ex.ToString());
                     throw;
                 }
             }
         }
 
-        public static void Disconnect(int clientNumber)
+        public static void DisconnectDevices(int clientNumber)
         {
             bool successfullyRemoved = connectStates.TryRemove(clientNumber, out bool lastValue);
-            TL.LogMessage(clientNumber, "Disconnect", "Successfully removed entry from list of connected states: " + successfullyRemoved.ToString());
+            TL.LogMessage(clientNumber, "DisconnectDevices", "Successfully removed entry from list of connected states: " + successfullyRemoved.ToString());
 
             if (ConnectionCount == 0) // The last connection has dropped so stop the timer and disconnect connected devices
             {
@@ -417,24 +418,24 @@ namespace ASCOM.Simulator
                 // Now try to disconnect ObservingConditions devices
                 foreach (KeyValuePair<string, ObservingConditions> observingConditionsDevice in ObservingConditionsDevices)
                 {
-                    TL.LogMessage(clientNumber, "Disconnect", "Disconnecting: " + observingConditionsDevice.Key);
-                    try { observingConditionsDevice.Value.Connected = false; } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Connected = false: " + ex.ToString()); }
-                    try { observingConditionsDevice.Value.Dispose(); } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Dispose(): " + ex.ToString()); }
-                    TL.LogMessage(clientNumber, "Disconnect", "Disconnected: " + observingConditionsDevice.Key);
+                    TL.LogMessage(clientNumber, "DisconnectDevices", "Disconnecting: " + observingConditionsDevice.Key);
+                    try { observingConditionsDevice.Value.Connected = false; } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "DisconnectDevices", "Connected = false: " + ex.ToString()); }
+                    try { observingConditionsDevice.Value.Dispose(); } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "DisconnectDevices", "Dispose(): " + ex.ToString()); }
+                    TL.LogMessage(clientNumber, "DisconnectDevices", "Disconnected: " + observingConditionsDevice.Key);
                 }
                 ObservingConditionsDevices.Clear();
 
                 // Now try to disconnect Switch devices
                 foreach (KeyValuePair<string, Switch> switchDevice in SwitchDevices)
                 {
-                    TL.LogMessage(clientNumber, "Disconnect", "Disconnecting: " + switchDevice.Key);
-                    try { switchDevice.Value.Connected = false; } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Connected = false: " + ex.ToString()); }
-                    try { switchDevice.Value.Dispose(); } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Dispose(): " + ex.ToString()); }
-                    TL.LogMessage(clientNumber, "Disconnect", "Disconnected: " + switchDevice.Key);
+                    TL.LogMessage(clientNumber, "DisconnectDevices", "Disconnecting: " + switchDevice.Key);
+                    try { switchDevice.Value.Connected = false; } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "DisconnectDevices", "Connected = false: " + ex.ToString()); }
+                    try { switchDevice.Value.Dispose(); } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "DisconnectDevices", "Dispose(): " + ex.ToString()); }
+                    TL.LogMessage(clientNumber, "DisconnectDevices", "Disconnected: " + switchDevice.Key);
                 }
                 SwitchDevices.Clear();
 
-                TL.LogMessage(clientNumber, "Disconnect", "Clearing time of last update and sensors");
+                TL.LogMessage(clientNumber, "DisconnectDevices", "Clearing time of last update and sensors");
                 timeOfLastUpdate = BAD_DATETIME; // Set the last update time to a bad value
 
                 // Clear the sensor values ready to start again if reconnected
@@ -480,9 +481,7 @@ namespace ASCOM.Simulator
 
         public static short InterfaceVersion(int clientNumber)
         {
-            CheckConnected("InterfaceVersion");
-
-            short interfaceVersion = 1;
+            short interfaceVersion = 2;
             TL.LogMessage(clientNumber, "InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
         }
@@ -577,6 +576,35 @@ namespace ASCOM.Simulator
 
             TL.LogMessage(clientNumber, "SupportedActions", "Returning arraylist containing actions: " + actionList.Trim());
             return overallSupportedActions;
+        }
+
+        public static IStateValueCollection DeviceState(int clientNumber)
+        {
+            CheckConnected("StateValue");
+
+            // Create an empty state value collection to which values can be added
+            StateValueCollection stateValueCollection = new StateValueCollection();
+
+            // Add each property value if available
+            try { StateValue stateValue = new StateValue(PROPERTY_CLOUDCOVER, CloudCover(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_DEWPOINT, DewPoint(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_HUMIDITY, Humidity(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_PRESSURE, Pressure(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_RAINRATE, RainRate(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_SKYBRIGHTNESS, SkyBrightness(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_SKYQUALITY, SkyQuality(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_SKYTEMPERATURE, SkyTemperature(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_STARFWHM, StarFWHM(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_TEMPERATURE, Temperature(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_WINDDIRECTION, WindDirection(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_WINDGUST, WindGust(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(PROPERTY_WINDSPEED, WindSpeed(clientNumber)); stateValueCollection.Add(stateValue); } catch { }
+            try { StateValue stateValue = new StateValue(DateTime.Now); stateValueCollection.Add(stateValue); } catch { }
+
+            TL.LogMessage(clientNumber, "DeviceState", $"Returning a StateValueCollection containing {stateValueCollection.Count} actions.");
+
+            // Return the state value collection
+            return stateValueCollection;
         }
 
         #endregion
