@@ -90,10 +90,5 @@ namespace ASCOM.CameraHub.Camera
             }
             CameraHub.LogMessage("BtnChooseCamera_Click", $"Exited");
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
