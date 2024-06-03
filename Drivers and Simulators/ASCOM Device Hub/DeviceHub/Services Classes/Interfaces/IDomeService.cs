@@ -2,7 +2,7 @@
 
 namespace ASCOM.DeviceHub
 {
-    public interface IDomeService : IDeviceService, IDomeV2
+    public interface IDomeService : IDeviceService, IDomeV3
     {
 		void CreateDevice( string id );
 	}

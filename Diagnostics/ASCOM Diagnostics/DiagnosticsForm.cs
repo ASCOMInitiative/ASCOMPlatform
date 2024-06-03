@@ -1670,7 +1670,6 @@ namespace ASCOM.Utilities
             object DeviceAxisRates;
             int ct;
             Type DeviceType;
-            Profile prof;
             double MaxSlewRate;
             string returnString;
             CoverStatus coverState;

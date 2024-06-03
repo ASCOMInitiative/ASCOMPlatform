@@ -138,7 +138,7 @@ namespace ASCOM.DeviceHub
 		{
 			if ( _logger != null && _logger.Enabled )
 			{
-				_logger.LogMessage( identifier, message );
+				_logger.LogMessageCrLf( identifier, message );
 			}
 		}
 

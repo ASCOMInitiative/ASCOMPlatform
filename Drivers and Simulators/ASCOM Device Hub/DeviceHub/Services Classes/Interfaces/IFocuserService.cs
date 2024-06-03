@@ -2,7 +2,7 @@
 
 namespace ASCOM.DeviceHub
 {
-	public interface IFocuserService : IDeviceService, IFocuserV3
+	public interface IFocuserService : IDeviceService, IFocuserV4
 	{
 		void CreateDevice( string id );
 	}

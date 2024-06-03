@@ -686,7 +686,16 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		public void SlewToAltitude( double altitude )
+        /// <summary>
+        /// This <see langword="method"/> is only included so that all members of the ITelescope interface are implemented. It has no other function.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void SetupDialog()
+        {
+            throw new InvalidOperationException("TelescopeManagerAccess.SetupDialog - This method is only included to keep the compiler happy! - Use TelescopeDriver.SetupDialog instead.");
+        }
+
+        public void SlewToAltitude( double altitude )
 		{
 			ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
 			Exception except = null;
@@ -782,11 +791,84 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		#endregion IDomeV2 Methods
+        #endregion IDomeV2 Methods
 
-		#region Helper Methods
+        #region IDomeV3 Properties and Methods
 
-		protected override void CheckDevice()
+        public IStateValueCollection DeviceState => GetServiceProperty<IStateValueCollection>(() => Service.DeviceState, new StateValueCollection());
+
+        public void Connect()
+        {
+            ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+            string msgEnd = "";
+            Exception except = null;
+
+            try
+            {
+                CheckDevice();
+                Service.Connect();
+                msgEnd = Done;
+            }
+            catch (Exception xcp)
+            {
+                except = xcp;
+                msgEnd = $"{Failed}. Details follow:";
+
+                throw;
+            }
+            finally
+            {
+                LogActivityLine(msgType, "Connect - {0}", msgEnd);
+
+                if (except != null)
+                {
+                    LogActivityLine(msgType, $"{except}");
+                }
+
+                Status = new DevHubDomeStatus(this);
+            }
+
+        }
+
+        public void Disconnect()
+        {
+            ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+            string msgEnd = "";
+            Exception except = null;
+
+            try
+            {
+                CheckDevice();
+                Service.Disconnect();
+                msgEnd = Done;
+            }
+            catch (Exception xcp)
+            {
+                except = xcp;
+                msgEnd = $"{Failed}. Details follow:";
+
+                throw;
+            }
+            finally
+            {
+                LogActivityLine(msgType, "Disconnect - {0}", msgEnd);
+
+                if (except != null)
+                {
+                    LogActivityLine(msgType, $"{except}");
+                }
+
+                Status = new DevHubDomeStatus(this);
+            }
+        }
+
+        public bool Connecting => GetServiceProperty<bool>(() => Service.Connecting, false);
+
+        #endregion
+
+        #region Helper Methods
+
+        protected override void CheckDevice()
 		{
 			CheckDevice( true, true );
 		}
@@ -828,5 +910,6 @@ namespace ASCOM.DeviceHub
 		}
 
 		#endregion Helper Methods
+
 	}
 }

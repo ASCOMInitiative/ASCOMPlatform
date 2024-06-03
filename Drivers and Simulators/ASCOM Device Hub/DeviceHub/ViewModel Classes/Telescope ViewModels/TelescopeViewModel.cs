@@ -215,7 +215,7 @@ namespace ASCOM.DeviceHub
 
 				// Now do the connect.
 
-				success = TelescopeManager.Connect( TelescopeID );
+				success = TelescopeManager.ConnectTelescope( TelescopeID );
 
 				if ( success )
 				{
@@ -287,7 +287,7 @@ namespace ASCOM.DeviceHub
 			try
 			{
 				SignalWait( true );
-				TelescopeManager.Disconnect( true );
+				TelescopeManager.DisconnectTelescope( true );
 			}
 			finally
 			{

@@ -152,7 +152,7 @@ namespace ASCOM.DeviceHub
 
 				// Now do the connect.
 		
-				success = DomeManager.Connect( DomeID );
+				success = DomeManager.ConnectDome( DomeID );
 
 				if ( success )
 				{
@@ -220,7 +220,7 @@ namespace ASCOM.DeviceHub
 			try
 			{
 				SignalWait( true );
-				DomeManager.Disconnect( true );
+				DomeManager.DisconnectDome( true );
 			}
 			finally
 			{

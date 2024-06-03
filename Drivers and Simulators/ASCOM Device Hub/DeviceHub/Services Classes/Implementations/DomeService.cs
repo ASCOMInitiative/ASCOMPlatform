@@ -192,6 +192,26 @@ namespace ASCOM.DeviceHub
 			Dome.SyncToAzimuth( azimuth );
 		}
 
-		#endregion IDomeV2 Methods
-	}
+        #endregion IDomeV2 Methods
+
+        #region IDomeV3 Properties and Methods
+
+        public IStateValueCollection DeviceState => Dome.DeviceState;
+
+        public void Connect()
+        {
+            Dome.Connect();
+        }
+
+        public void Disconnect()
+        {
+            Dome.Disconnect();
+        }
+
+        public bool Connecting => Dome.Connecting;
+
+        #endregion
+
+
+    }
 }

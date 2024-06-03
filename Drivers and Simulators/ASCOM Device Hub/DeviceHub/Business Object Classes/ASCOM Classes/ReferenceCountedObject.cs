@@ -31,15 +31,15 @@ namespace ASCOM.DeviceHub
 
 			// We increment the global count of objects.
 
-			if ( this is ITelescopeV3 )
+			if ( this is ITelescopeV4 )
 			{
 				devType = DeviceTypeEnum.Telescope;
 			}
-			else if ( this is IDomeV2 )
+			else if ( this is IDomeV3 )
 			{
 				devType = DeviceTypeEnum.Dome;
 			}
-			else if ( this is IFocuserV3 )
+			else if ( this is IFocuserV4 )
 			{
 				devType = DeviceTypeEnum.Focuser;
 			}

@@ -150,7 +150,7 @@ namespace ASCOM.DeviceHub
 
 				// Now do the connect.
 
-				success = FocuserManager.Connect( FocuserID );
+				success = FocuserManager.ConnectFocuser( FocuserID );
 
 				if ( success )
 				{
@@ -218,7 +218,7 @@ namespace ASCOM.DeviceHub
 			try
 			{
 				SignalWait( true );
-				FocuserManager.Disconnect( true );
+				FocuserManager.DisconnectFocuser( true );
 			}
 			finally
 			{

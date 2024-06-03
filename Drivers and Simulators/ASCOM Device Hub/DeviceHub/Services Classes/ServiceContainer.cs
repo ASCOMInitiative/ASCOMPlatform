@@ -27,7 +27,7 @@ namespace ASCOM.DeviceHub
 			Instance = new ServiceContainer();
 		}
 
-		//  The _serviceMap Key is the Type of the Interface that definces the service
+		//  The _serviceMap Key is the Type of the Interface that defines the service
 		//  The _serviceMap Value is a Dictionary of variant objects.
 		//  The Key of the variant item is a string with the variant's name.
 		//  The Value of the Variant item is either an instance of the concrete class that needs to be returned or

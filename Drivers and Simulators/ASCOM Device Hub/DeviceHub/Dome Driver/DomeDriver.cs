@@ -48,7 +48,7 @@ namespace ASCOM.DeviceHub
 	[ProgId( "ASCOM.DeviceHub.Dome" )]
 	[ServedClassName( "Device Hub Dome" )]
 	[ClassInterface( ClassInterfaceType.None )]
-	public class Dome : DeviceDriverBase, IDomeV2
+	public class Dome : DeviceDriverBase, IDomeV3
 	{
 		#region Private Fields and Properties
 
@@ -61,15 +61,19 @@ namespace ASCOM.DeviceHub
 
 		private Util Utilities { get; set; }
 
-		#endregion Private Fields and Properties
+        // Fields to support the Platform 7 Connect / Disconnect protocol
+        private bool connecting = false;
+        private Exception connectException = null;
 
-		#region Instance Constructor 
+        #endregion Private Fields and Properties
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DeviceHub"/> class.
-		/// Must be public for COM registration.
-		/// </summary>
-		public Dome()
+        #region Instance Constructor 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceHub"/> class.
+        /// Must be public for COM registration.
+        /// </summary>
+        public Dome()
 		{
 			_driverID = Marshal.GenerateProgIdForType( this.GetType() );
 			_driverDescription = GetDriverDescriptionFromAttribute();
@@ -323,7 +327,7 @@ namespace ASCOM.DeviceHub
 
 						Task task = new Task(() =>
 						{
-							ConnectedState = DomeManager.Connect();
+							ConnectedState = DomeManager.ConnectDome();
 						});
 
 						task.Start(Globals.UISyncContext);
@@ -391,7 +395,7 @@ namespace ASCOM.DeviceHub
 
 			get
 			{
-				short version = 2;
+				short version = 3;
 
 				LogMessage( "Get InterfaceVersion:", version.ToString() );
 
@@ -1222,11 +1226,127 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region Private properties and methods
-		
-		private void CheckConnected( string identifier )
+        #region IDomeV3 Properties and Methods
+
+        public IStateValueCollection DeviceState
+        {
+            get
+            {
+                IStateValueCollection retval;
+                string msg = "";
+
+                try
+                {
+                    Exception xcp = DomeManager.Parameters.GetException();
+
+                    if (xcp != null)
+                    {
+                        throw xcp;
+                    }
+
+                    retval = DomeManager.DeviceState;
+                    msg += $"{retval}{_done}";
+                }
+                catch (Exception)
+                {
+                    msg += _failed;
+
+                    throw;
+                }
+                finally
+                {
+                    LogMessage("DeviceState:", msg);
+                }
+
+                return retval;
+            }
+        }
+
+        public void Connect()
+        {
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to True
+            LogMessage("Connect", "Starting connection task...");
+            Task connectingTask = Task.Factory.StartNew(() =>
+            {
+                // Ensure that no exceptions can escape
+                try
+                {
+                    // Set Connected True
+                    LogMessage("ConnectTask", "About to set Connected True");
+                    Connected = true;
+                    LogMessage("ConnectTask", "Connected Set True OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so log the issue and save the exception
+                    LogMessage("ConnectTask", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    LogMessage("ConnectTask", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
+
+            LogMessage("Connect", "Connection task started OK");
+        }
+
+        public void Disconnect()
+        {
+            // Set Connecting to true and clear any previous exception
+            connecting = true;
+            connectException = null;
+
+            // Run a task to set the Connected property to False
+            LogMessage("Disconnect", "Starting connection task...");
+            Task connectingTask = Task.Factory.StartNew(() =>
+            {
+                // Ensure that no exceptions can escape
+                try
+                {
+                    // Set Connected True
+                    LogMessage("DisconnectTask", "About to set Connected False");
+                    Connected = false;
+                    LogMessage("DisconnectTask", "Connected Set False OK");
+                }
+                catch (Exception ex)
+                {
+                    // Something went wrong so log the issue and save the exception
+                    LogMessage("DisconnectTask", $"Connected threw an exception: {ex.Message}");
+                    connectException = ex;
+                }
+                // Ensure that Connecting is always set False at the end of the task
+                finally
+                {
+                    LogMessage("DisconnectTask", "Setting Connecting to False");
+                    connecting = false;
+                }
+            });
+
+            LogMessage("Disconnect", "Connection task started OK");
+        }
+
+        public bool Connecting
+        {
+            get
+            {
+                return connecting;
+            }
+        }
+
+        #endregion
+
+        #region Private properties and methods
+
+        private void CheckConnected( string identifier )
 		{
 			CheckConnected( identifier, ConnectedState );
 		}

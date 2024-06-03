@@ -12,9 +12,9 @@ namespace ASCOM.DeviceHub
 		Exception ConnectException { get; }
 		ObservableCollection<JogDirection> JogDirections { get; }
 
-		bool Connect();
-		bool Connect( string scopeID, bool interactiveConnect = true );
-		void Disconnect( bool interactiveDisconnect = false );
+		bool ConnectTelescope();
+		bool ConnectTelescope( string scopeID, bool interactiveConnect = true );
+		void DisconnectTelescope( bool interactiveDisconnect = false );
 		void StartJogScope( int ndx, double rate );
 		void StopJogScope( int ndx );
 		void StopJogScope( TelescopeAxes axis );

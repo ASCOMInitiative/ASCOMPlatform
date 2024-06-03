@@ -2,7 +2,7 @@
 
 namespace ASCOM.DeviceHub
 {
-	public interface ITelescopeService : IDeviceService, ITelescopeV3
+	public interface ITelescopeService : IDeviceService, ITelescopeV4
     {
 		void CreateDevice( string id );
     }

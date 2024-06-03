@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace ASCOM.DeviceHub
 {
-	public partial class DomeManager : DeviceManagerBase, IDomeManager, IDisposable
+	public partial class DomeManager : DeviceManagerBase, IDomeManager, IDomeV3,IDisposable
 	{
 		#region Static Constructor, Properties, Fields, and Methods
 
@@ -160,14 +160,14 @@ namespace ASCOM.DeviceHub
 
 		#region Public Methods
 
-		public bool Connect()
+		public bool ConnectDome()
 		{
 			// This is only called by the dome driver.
 
-			return Connect( DomeID, false );
+			return ConnectDome( DomeID, false );
 		}
 
-		public bool Connect( string domeID, bool interactiveConnect = true )
+		public bool ConnectDome( string domeID, bool interactiveConnect = true )
 		{
 			ConnectError = "";
 			ConnectException = null;
@@ -265,7 +265,7 @@ namespace ASCOM.DeviceHub
 			return retval;
 		}
 
-		public void Disconnect( bool interactiveDisconnect = false )
+		public void DisconnectDome( bool interactiveDisconnect = false )
 		{
 			if ( !DeviceCreated )
 			{

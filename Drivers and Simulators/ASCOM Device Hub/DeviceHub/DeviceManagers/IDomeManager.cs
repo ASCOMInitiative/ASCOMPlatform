@@ -10,9 +10,9 @@ namespace ASCOM.DeviceHub
 		bool IsScopeReadyToSlave { get; }
 		bool IsDomeReadyToSlave { get; }
 
-		bool Connect();
-		bool Connect( string domeID, bool interactiveConnect = true );
-		void Disconnect( bool interactiveDisconnect = false );
+		bool ConnectDome();
+		bool ConnectDome( string domeID, bool interactiveConnect = true );
+		void DisconnectDome( bool interactiveDisconnect = false );
 		void OpenDomeShutter();
 		void CloseDomeShutter();
 		void SlewDomeShutter( double targetAltitude );

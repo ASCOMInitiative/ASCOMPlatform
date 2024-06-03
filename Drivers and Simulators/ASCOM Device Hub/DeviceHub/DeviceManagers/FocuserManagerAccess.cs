@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
 namespace ASCOM.DeviceHub
@@ -590,11 +591,93 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		#endregion IFocuserV3 Methods
+        /// <summary>
+        /// This <see langword="method"/> is only included so that all members of the ITelescope interface are implemented. It has no other function.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void SetupDialog()
+        {
+            throw new InvalidOperationException("TelescopeManagerAccess.SetupDialog - This method is only included to keep the compiler happy! - Use TelescopeDriver.SetupDialog instead.");
+        }
 
-		#region CheckDevice Methods
+        #endregion IFocuserV3 Methods
 
-		protected override void CheckDevice()
+        #region IFocuserV4 Properties and Methods
+
+        public IStateValueCollection DeviceState => GetServiceProperty<IStateValueCollection>(() => Service.DeviceState, new StateValueCollection());
+
+        public void Connect()
+        {
+            ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+            string msgEnd = "";
+            Exception except = null;
+
+            try
+            {
+                CheckDevice();
+                Service.Connect();
+                msgEnd = Done;
+            }
+            catch (Exception xcp)
+            {
+                except = xcp;
+                msgEnd = $"{Failed}. Details follow:";
+
+                throw;
+            }
+            finally
+            {
+                LogActivityLine(msgType, "Connect - {0}", msgEnd);
+
+                if (except != null)
+                {
+                    LogActivityLine(msgType, $"{except}");
+                }
+
+                Status = new DevHubFocuserStatus(this);
+            }
+        }
+
+        public void Disconnect()
+        {
+            ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
+            string msgEnd = "";
+            Exception except = null;
+
+            try
+            {
+                CheckDevice();
+                Service.Disconnect();
+                msgEnd = Done;
+            }
+            catch (Exception xcp)
+            {
+                except = xcp;
+                msgEnd = $"{Failed}. Details follow:";
+
+                throw;
+            }
+            finally
+            {
+                LogActivityLine(msgType, "Disconnect - {0}", msgEnd);
+
+                if (except != null)
+                {
+                    LogActivityLine(msgType, $"{except}");
+                }
+
+                Status = new DevHubFocuserStatus(this);
+            }
+        }
+
+        public bool Connecting => GetServiceProperty<bool>(() => Service.Connecting, false);
+
+        #endregion
+
+
+        #region CheckDevice Methods
+
+        protected override void CheckDevice()
 		{
 			CheckDevice( true, true );
 		}
