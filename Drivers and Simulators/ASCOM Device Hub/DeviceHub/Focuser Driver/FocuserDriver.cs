@@ -1031,7 +1031,7 @@ namespace ASCOM.DeviceHub
 
                      // Force a garbage collection to remove COM object references and enable the local server to shut down.
                      // If this is not done here the local server will wait until the next scheduled garbage collection (1 minute) before closing down.
-                     LogMessage($"DisconnectTask", $"Forcing garbage collection - attempt {loopCount}/{Globals.GARBAGE_COLLECT_ATTEMPTS}");
+                     LogMessage($"DisconnectTask", $"Forcing garbage collection - attempt {loopCount}/{Globals.GARBAGE_COLLECT_ATTEMPTS}, Object count: {Server.ObjectsCount}");
                      Server.ForceGarbageCollection();
                  }
 

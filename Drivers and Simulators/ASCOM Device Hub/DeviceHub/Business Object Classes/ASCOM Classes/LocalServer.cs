@@ -639,7 +639,7 @@ namespace ASCOM.DeviceHub
 
                 foreach (Type type in types)
                 {
-                    Logger.LogMessage(msgId, $"Found type: {type.Name}");
+                    //Logger.LogMessage(msgId, $"Found type: {type.Name}");
 
                     // Check to see if this type has the ServedClassName attribute, which indicates that this is a driver class.
 
@@ -647,7 +647,7 @@ namespace ASCOM.DeviceHub
 
                     if (attrbutes.Length > 0) // There is a ServedClassName attribute on this class so it is a driver
                     {
-                        Logger.LogMessage(msgId, $"{type.Name} is an ASCOM driver");
+                        //Logger.LogMessage(msgId, $"Found ASCOM driver: {type.Name}");
                         _driverTypes.Add(type); // Add the driver type to the list
                     }
                 }

@@ -43,7 +43,7 @@ namespace ASCOM.DeviceHub.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ServerLoggingEnabled {
             get {
                 return ((bool)(this["ServerLoggingEnabled"]));
@@ -52,7 +52,7 @@ namespace ASCOM.DeviceHub.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool DeviceHubAppLoggingEnabled {
             get {
                 return ((bool)(this["DeviceHubAppLoggingEnabled"]));

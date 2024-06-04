@@ -35,7 +35,7 @@ namespace ASCOM.DeviceHub
 		public const double FOCUSER_FAST_UPDATE_MAX = 5.0;
 
         public const int GARBAGE_COLLECT_TIME_BETWEEN_ATTEMPTS = 100; // Time (milliseconds) between quick garbage collections when processing the Disconnect() method
-        public const int GARBAGE_COLLECT_ATTEMPTS = 50; // Number of attempts to collect garbage when processing the Disconnect() method. 50 attempts allows 5 seconds of trying with a 100ms wait between attempts
+        public const int GARBAGE_COLLECT_ATTEMPTS = 20; // Number of attempts to collect garbage when processing the Disconnect() method. 20 attempts allows 2 seconds of trying with a 100ms wait between attempts
 
         public static double RegistryVersion { get; set; }
 
