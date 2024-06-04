@@ -3048,43 +3048,75 @@ namespace ASCOM.DeviceHub
 
         public void Disconnect()
         {
+            if (connecting)
+            {
+                LogMessage($"Disconnect", $"Connect or Disconnect already in progress, ignoring Disconnect() call.");
+                return;
+            }
+
+            if (!ConnectedState)
+            {
+                LogMessage($"Disconnect", $"Already disconnected, ignoring Disconnect() call.");
+                return;
+            }
+
             // Set Connecting to true and clear any previous exception
             connecting = true;
             connectException = null;
 
             // Run a task to set the Connected property to False
-            LogMessage("Disconnect", "Starting connection task...");
-            Task connectingTask = Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 // Ensure that no exceptions can escape
                 try
                 {
-                    // Set Connected True
-                    LogMessage("DisconnectTask", "About to set Connected False");
+                    // Set Connected False
+                    LogMessage($"DisconnectTask", "Setting Connected FALSE...");
                     Connected = false;
-                    LogMessage("DisconnectTask", "Connected Set False OK");
+
+                    LogMessage($"DisconnectTask", "Connected set FALSE OK");
                 }
                 catch (Exception ex)
                 {
                     // Something went wrong so log the issue and save the exception
-                    LogMessage("DisconnectTask", $"Connected threw an exception: {ex.Message}");
+                    LogMessage($"DisconnectTask", $"Connected threw an exception: {ex.Message}\r\n{ex}");
                     connectException = ex;
                 }
-                // Ensure that Connecting is always set False at the end of the task
                 finally
                 {
-                    LogMessage("DisconnectTask", "Setting Connecting to False");
+                    // Ensure that Connecting is always set False at the end of the task
+                    LogMessage($"DisconnectTask", "Setting Connecting to FALSE");
                     connecting = false;
                 }
+
+                // Immediately clean up any disposed objects so that the local server can shut down promptly rather than waiting for its next scheduled 60 second garbage collection
+                for (int loopCount = 1; loopCount <= Globals.GARBAGE_COLLECT_ATTEMPTS; loopCount++)
+                {
+                    // Sleep the thread to give some time for COM objects to be invalidated and ready for garbage collection
+                    LogMessage($"DisconnectTask", $"Sleeping thread for {Globals.GARBAGE_COLLECT_TIME_BETWEEN_ATTEMPTS} milliseconds");
+                    Thread.Sleep(Globals.GARBAGE_COLLECT_TIME_BETWEEN_ATTEMPTS);
+
+                    // Force a garbage collection to remove COM object references and enable the local server to shut down.
+                    // If this is not done here the local server will wait until the next scheduled garbage collection (1 minute) before closing down.
+                    LogMessage($"DisconnectTask", $"Forcing garbage collection - attempt {loopCount}/{Globals.GARBAGE_COLLECT_ATTEMPTS}");
+                    Server.ForceGarbageCollection();
+                }
+
+                LogMessage($"DisconnectTask", "Task finished");
             });
 
-            LogMessage("Disconnect", "Connection task started OK");
+            LogMessage($"Disconnect", "Complete.");
         }
 
         public bool Connecting
         {
             get
             {
+                // If Connect or Disconnect threw an exception, throw it here
+                if (!(connectException is null))
+                    throw connectException;
+
+                // Connect or Disconnect did not throw an exception so return the current connecting value
                 return connecting;
             }
         }

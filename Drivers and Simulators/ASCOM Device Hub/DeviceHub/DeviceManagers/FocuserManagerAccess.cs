@@ -47,7 +47,6 @@ namespace ASCOM.DeviceHub
 			}
 
 			// This creates the service and defines the driver ID.
-
 			Service.CreateDevice( id );
 		}
 

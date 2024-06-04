@@ -439,7 +439,7 @@ namespace ASCOM.DeviceHub
             {
                 // The device manager decides whether to disconnect.
 
-                Logger.LogMessage("DisconnectDomeIfTask", "Disconnecting telescope...");
+                Logger.LogMessage("DisconnectDomeIfTask", "Disconnecting dome...");
                 DomeManager.Instance.DisconnectDome();
                 Logger.LogMessage("DisconnectDomeIfTask", "Dome disconnected");
             });
@@ -461,7 +461,7 @@ namespace ASCOM.DeviceHub
             {
                 // The device manager decides whether to disconnect.
 
-                Logger.LogMessage("DisconnectFocuserIfTask", "Disconnecting telescope...");
+                Logger.LogMessage("DisconnectFocuserIfTask", "Disconnecting focuser...");
                 FocuserManager.Instance.DisconnectFocuser();
                 Logger.LogMessage("DisconnectFocuserIfTask", "Focuser disconnected");
             });

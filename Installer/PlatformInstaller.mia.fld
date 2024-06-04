@@ -23,7 +23,6 @@ Remove 32bit components
 Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
-ASCOM Device Hub
 Clean up any remaining simulator COM entries
 MSI installer support if required
 Platform validation
@@ -39,3 +38,4 @@ Visual Studio assembly references for Platform 6 backward compatibility
 Platform Update Checker
 Camera Hub
 Use Simulators
+Platform 6 files

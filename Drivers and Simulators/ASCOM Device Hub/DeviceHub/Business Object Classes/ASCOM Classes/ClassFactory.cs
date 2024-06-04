@@ -234,6 +234,7 @@ namespace ASCOM.DeviceHub
 			{
 				Server.UncountLock();
 			}
+
 			// Always attempt to see if we need to shutdown this server application.
 			Server.ExitIf();
 		}

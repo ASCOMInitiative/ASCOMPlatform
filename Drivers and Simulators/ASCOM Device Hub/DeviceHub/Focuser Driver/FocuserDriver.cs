@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -318,7 +319,8 @@ namespace ASCOM.DeviceHub
                             return;
                         }
 
-                        if (value)
+                        // Determine whether we are connecting or disconnecting
+                        if (value) // Connecting
                         {
                             msg += $" (connecting to {FocuserManager.FocuserID})";
 
@@ -332,7 +334,7 @@ namespace ASCOM.DeviceHub
                             task.Start(Globals.UISyncContext);
                             task.Wait();
                         }
-                        else
+                        else // Disconnecting
                         {
                             ConnectedState = false;
                             LogMessage("Set Connected:", $"Calling DisconnectFocuserIF()");
@@ -901,7 +903,7 @@ namespace ASCOM.DeviceHub
             get
             {
                 IStateValueCollection retval;
-                string msg = "";
+                string msg = "DeviceState";
 
                 try
                 {
@@ -913,17 +915,16 @@ namespace ASCOM.DeviceHub
                     }
 
                     retval = FocuserManager.DeviceState;
-                    msg += $"{retval}{_done}";
+                    msg += _done;
                 }
                 catch (Exception)
                 {
                     msg += _failed;
-
                     throw;
                 }
                 finally
                 {
-                    LogMessage("Connecting:", msg);
+                    LogMessage("DeviceState:", msg);
                 }
 
                 return retval;
@@ -933,7 +934,10 @@ namespace ASCOM.DeviceHub
         public void Connect()
         {
             if (connecting)
-                throw new InvalidOperationException($"The scope is already running a Connect or Disconnect operation.");
+            {
+                LogMessage("Connect", "Connect or Disconnect already in progress, ignoring Connect() call.");
+                return;
+            }
 
             if (ConnectedState)
             {
@@ -942,9 +946,7 @@ namespace ASCOM.DeviceHub
             }
 
             // Set Connecting to true and clear any previous exception
-
             LogMessage("Connect", "Setting connecting TRUE.");
-
             connecting = true;
             connectException = null;
 
@@ -980,11 +982,14 @@ namespace ASCOM.DeviceHub
         public void Disconnect()
         {
             if (connecting)
-                throw new InvalidOperationException($"The scope is already running a Connect or Disconnect operation.");
+            {
+                LogMessage($"Disconnect", $"Connect or Disconnect already in progress, ignoring Disconnect() call.");
+                return;
+            }
 
             if (!ConnectedState)
             {
-                LogMessage("Disconnect", "Already disconnected, ignoring Disconnect() call.");
+                LogMessage($"Disconnect", $"Already disconnected, ignoring Disconnect() call.");
                 return;
             }
 
@@ -993,50 +998,58 @@ namespace ASCOM.DeviceHub
             connectException = null;
 
             // Run a task to set the Connected property to False
-
             Task.Run(() =>
              {
                  // Ensure that no exceptions can escape
                  try
                  {
                      // Set Connected False
-                     LogMessage("DisconnectTask", "Starting disconnection task...");
+                     LogMessage($"DisconnectTask", "Setting Connected FALSE...");
                      Connected = false;
 
-                     LogMessage("DisconnectTask", "Disconnection task started OK");
+                     LogMessage($"DisconnectTask", "Connected set FALSE OK");
                  }
                  catch (Exception ex)
                  {
                      // Something went wrong so log the issue and save the exception
-                     LogMessage("DisconnectTask", $"Connected threw an exception: {ex.Message}");
+                     LogMessage($"DisconnectTask", $"Connected threw an exception: {ex.Message}\r\n{ex}");
                      connectException = ex;
                  }
-                 // Ensure that Connecting is always set False at the end of the task
                  finally
                  {
-                     LogMessage("DisconnectTask", "NOT Setting Connecting to False");
+                     // Ensure that Connecting is always set False at the end of the task
+                     LogMessage($"DisconnectTask", "Setting Connecting to FALSE");
                      connecting = false;
                  }
 
-                 // Sleep the thread to give some time for COM objects to be invalidated and ready for garbage collection
-                 LogMessage("DisconnectTask", "Sleeping thread for 1 second");
-                 Thread.Sleep(1000);
+                 // Immediately clean up any disposed objects so that the local server can shut down promptly rather than waiting for its next scheduled 60 second garbage collection
+                 for (int loopCount = 1; loopCount <= Globals.GARBAGE_COLLECT_ATTEMPTS; loopCount++)
+                 {
+                     // Sleep the thread to give some time for COM objects to be invalidated and ready for garbage collection
+                     LogMessage($"DisconnectTask", $"Sleeping thread for {Globals.GARBAGE_COLLECT_TIME_BETWEEN_ATTEMPTS} milliseconds");
+                     Thread.Sleep(Globals.GARBAGE_COLLECT_TIME_BETWEEN_ATTEMPTS);
 
-                 // Force a garbage collection to remove COM object references and enable the local server to shut down.
-                 //If this is not done here the local server will wait until the next scheduled garbage collection (1 minute) before closing down.
-                 LogMessage("DisconnectTask", "Forcing garbage collection");
-                 Server.ForceGarbageCollection();
+                     // Force a garbage collection to remove COM object references and enable the local server to shut down.
+                     // If this is not done here the local server will wait until the next scheduled garbage collection (1 minute) before closing down.
+                     LogMessage($"DisconnectTask", $"Forcing garbage collection - attempt {loopCount}/{Globals.GARBAGE_COLLECT_ATTEMPTS}");
+                     Server.ForceGarbageCollection();
+                 }
 
-                 LogMessage("DisconnectTask", "Task finished");
+                 LogMessage($"DisconnectTask", "Task finished");
              });
 
-            LogMessage("Disconnect", "Complete.");
+            LogMessage($"Disconnect", "Complete.");
         }
 
         public bool Connecting
         {
             get
             {
+                // If Connect or Disconnect threw an exception, throw it here
+                if (!(connectException is null))
+                    throw connectException;
+
+                // Connect or Disconnect did not throw an exception so return the current connecting value
                 return connecting;
             }
         }

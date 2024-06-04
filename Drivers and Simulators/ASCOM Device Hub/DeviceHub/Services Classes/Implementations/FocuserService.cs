@@ -130,21 +130,6 @@ namespace ASCOM.DeviceHub
             Focuser.Dispose();
             Focuser = null;
             GC.Collect();
-
-            // Fully remove the COM object
-            int loopCount, remainingObjectCount;
-            try
-            {
-                loopCount = 0;
-                do
-                {
-                    loopCount += 1;
-                    remainingObjectCount = Marshal.ReleaseComObject(DeviceID);
-                }
-                while ((remainingObjectCount > 0) & (loopCount <= 20));
-            }
-            catch { }
-
             DeviceID = null;
             Initialized = false;
         }
