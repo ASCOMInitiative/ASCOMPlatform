@@ -11,6 +11,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.Utilities;
+using System.Runtime.InteropServices;
 
 namespace PlatformUpdateChecker
 {
@@ -29,6 +30,8 @@ namespace PlatformUpdateChecker
         private const string COMMAND_DOWNLOAD = "Download";
         private const string COMMAND_REMIND_LATER = "RemindLater";
         private const string COMMAND_SKIP_RELEASE = "SkipRelease";
+        private const string COMMAND_HELP_MINUS_MINUS = "--help";
+        private const string COMMAND_HELP_SLASH_H = "/h";
 
         #endregion
 
@@ -94,6 +97,15 @@ namespace PlatformUpdateChecker
                 // Handle the supplied argument
                 switch (arg.Trim().ToUpperInvariant())
                 {
+                    // Provide explanatory help to a command line user
+                    case "--HELP":
+                    case "/H":
+                        MessageBox.Show($"Platform Update Checker - Queries the list of ASCOM Platform GitHub releases to determine whether a later Platform version is available.\r\n\r\n" +
+                                        $"Supported commands: InstallTask, RemoveTask, Version, ResetSkipped, CheckForUpdates\r\n\r\n" +
+                                        @"Output is written to a log file in the Documents\ASCOM\Logs YYYY.MM.DD folder where YYYY, MM and DD are the current year, month and day numbers.",
+                                        "Platform Update Checker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+
                     // Install the scheduled update check task
                     case "/INSTALLTASK":
                         CreateScheduledTask();

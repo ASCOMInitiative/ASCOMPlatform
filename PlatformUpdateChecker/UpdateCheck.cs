@@ -27,6 +27,11 @@ namespace PlatformUpdateChecker
         // URL of the source of Platform updates
         private const string DOWNLOAD_URL = @"https://github.com/ASCOMInitiative/ASCOMPlatform/releases";
 
+        // Define the ASCOM Platform GitHub repository to check for updates
+        const string OWNER = "ASCOMInitiative"; // Test owner: "Peter-Simpson"
+        const string REPOSITORY = "ASCOMPlatform"; // Test repository: "SafetyMonitorTester"
+
+        // TraceLogger instance
         private static TraceLogger TL;
 
         /// <summary>
@@ -35,9 +40,6 @@ namespace PlatformUpdateChecker
         public static void CheckForUpdates(Action<SemVersion> releaseAction, TraceLogger traceLogger)
         {
             TL = traceLogger;
-            // Define the GitHub repository to check
-            const string OWNER = "Peter-Simpson"; //"ASCOMInitiative";
-            const string REPOSITORY = "SafetyMonitorTester"; // "ASCOMPlatform";
 
             // initialise Booleans controlling whether or not checks are enabled as set through the Diagnostics app
             bool checksEnabledReleaseUpdate = true;
