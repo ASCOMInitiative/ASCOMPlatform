@@ -1471,7 +1471,6 @@ Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\A
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.dll to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.pdb to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll to $COMMONFILES$\ASCOM\DeviceHub
-Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\app.config to $COMMONFILES$\ASCOM\DeviceHub
 Comment: Install Files ..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.dll to $COMMONFILES$\ASCOM\DeviceHub
 Comment: Install Files ..\Drivers and Simulators\ASCOM Device Hub\TelescopeDriver\bin\Release\ASCOM.DeviceHub.Telescope.pdb to $COMMONFILES$\ASCOM\DeviceHub
 Comment: Install Files ..\Drivers and Simulators\ASCOM Device Hub\DomeDriver\bin\Release\ASCOM.DeviceHub.Dome.dll to $COMMONFILES$\ASCOM\DeviceHub
