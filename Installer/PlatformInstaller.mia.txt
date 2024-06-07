@@ -31,6 +31,7 @@ Set Variable CFABYPASS to
 Set Variable PROGRESSMODE to MARQUEE
 Set Variable FILEEXISTS to 
 Set Variable UNINSTALLER to 
+Set Variable ACTION to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
@@ -361,6 +362,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end o
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Target Directory: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Documents Directory: $MYDOCUMENTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Acrobat key: $ACROBATKEY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
@@ -492,6 +494,7 @@ end
 [END REGION]
  
 [DEFINE REGION: Main Setup Dialogue]
+ 
 if Variable MAINTENANCE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Mode: Maintenance (at end of file)
   GoTo Label: Maintenance
@@ -523,9 +526,11 @@ if Variable WIZARD Equals CANCEL
 end
 Comment: Return to the welcome screen to continue
 GoTo Label: Welcome Dialog
+ 
 [END REGION]
  
 [DEFINE REGION: Maintenance Dialogue]
+ 
 label: Maintenance
 Comment: Display maintenance dialogue
 Display Dialog: maintenance, wait for dialog to return (modal)
@@ -540,6 +545,7 @@ if Variable REPAIR Equals (Ignore Case) TRUE
   Set Variable PROGRESSTEXT to Repairing Platform 7...
 end
  
+label: Modify Maintenance
 if Variable MODIFY Equals (Ignore Case) TRUE
   Hide Component: ASCOM Platform Options\Display user guide when installation is complete
   Display Dialog: welcome, wait for dialog to return (modal)
@@ -561,6 +567,23 @@ if Variable REMOVE Equals (Ignore Case) TRUE
   Set Variable PROGRESSTEXT to Removing Platform 7...
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+ 
+if Variable WIZARD Equals README
+  Write into Text File $SETUPLOG$ from Value $TIME$ ReadMe shown (at end of file)
+  GoTo Label: ReadMe Information Maintenance
+end
+GoTo Label: Main Install
+ 
+label: ReadMe Information Maintenance
+Display Dialog: readme, wait for dialog to return (modal)
+Comment: Exit Setup if install is cancelled
+if Variable WIZARD Equals CANCEL
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (ReadMe) (at end of file)
+  Terminate Installation
+end
+Comment: Return to the welcome screen to continue
+GoTo Label: Modify Maintenance
+ 
 [END REGION]
  
 [DEFINE REGION: Prepare for Installation or Uninstallation]
@@ -1104,20 +1127,14 @@ end
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites if required]
+ 
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
 Run Program $SUPPORTDIR$\SetACL.exe /SETPROFILEACL (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
+Set Variable ACTION to Set ACL on ASCOM Profile store
+Include Script: UpdateAscomError
  
-Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
-if Variable RC not Equals 0
-  MessageBox: Set ASCOM Profile Permissions, An error has occured when setting the ASCOM Profile ACL, please zip up all logs in your Documents\ASCOM folder and its sub-folders and report this on the ASCOM-Talk Groups.Io forum.$NEWLINE$$NEWLINE$Error code: $RC$
-  if Variable ASCOMERROR not Equals 
-    Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
-  end
-  Set Variable ASCOMERROR to $ASCOMERROR$Error setting ASCOM Profile ACL. RC: $RC$
-end
 [END REGION]
  
 [DEFINE REGION: Clean up any remaining simulator COM entries]
@@ -1664,7 +1681,8 @@ Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe.config 
 [DEFINE REGION: Install ASCOM Remote Server and the OmniSimulators]
  
 Apply Install (get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$  Apply install RC: $RC$ (at end of file)
+Set Variable ACTION to Apply install
+Include Script: UpdateAscomError
  
 Comment: Install SetNetworkPermissions
 Set Variable NATIVE_ENGINE to TRUE
@@ -1695,7 +1713,8 @@ if Variable WIN64MODE Equals TRUE
   Comment: Switch back to 32bit mode if running on a 64bit OS.
   Write into Text File $SETUPLOG$ from Value $TIME$ WIN64MODE is true, restoring 32bit mode (at end of file)
   Apply Install (get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$  Apply install, mode = 64bit, RC: $RC$ (at end of file)
+  Set Variable ACTION to Apply Install - 64bit mode
+  Include Script: UpdateAscomError
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 else
   Comment: 32bit OS
@@ -1715,7 +1734,7 @@ else
   Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
 end
  
-Set Variable NATIVE_ENGINE to TRUE
+Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
  
@@ -2044,10 +2063,8 @@ if Variable SUCCESS not Equals ERROR
   Comment: Register the Omni-Simulators
   if Variable WIN64MODE not Equals TRUE
     Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register Omni-Simulators (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: Omni-Simulators, Omni-Simulator registration error RC: $RC$
-    end
+    Set Variable ACTION to Register Omni-Simulators
+    Include Script: UpdateAscomError
   end
    
   Comment: Register Platform 5 components
@@ -2065,70 +2082,83 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 24
   Set Variable PROGRESSTEXT to Registering AscomMaterInterfaces typelib
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
+  Set Variable ACTION to ASCOM Master Interfaces
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 25
   Set Variable PROGRESSTEXT to Registering ASCOM.Helper typelib
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper (at end of file)
+  Set Variable ACTION to Helper type library
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 26
   Set Variable PROGRESSTEXT to Registering ASCOM.Helper2 typelib
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper2 (at end of file)
+  Set Variable ACTION to Helper2 type library
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 26
   Set Variable PROGRESSTEXT to Registering IObjectSafety typelib
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
+  Set Variable ACTION to IObjectSafety type library
+  Include Script: UpdateAscomError
    
   Comment: Register Platform 5 Simulators
   Set Variable MYPROGRESS to 27
   Set Variable PROGRESSTEXT to Registering Platform 5 Telescope simulator
   Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
+  Set Variable ACTION to Register ScopeSim
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 28
   if Variable INSTALL_HUB Equals TRUE
     Set Variable PROGRESSTEXT to Registering Hub server
     Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Hub (at end of file)
+    Set Variable ACTION to Register - Hub
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 29
   end
   if Variable INSTALL_PIPE Equals TRUE
     Set Variable PROGRESSTEXT to Registering Pipe server
     Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
+    Set Variable ACTION to Register - Pipe
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 30
   end
   if Variable INSTALL_POTH Equals TRUE
     Set Variable PROGRESSTEXT to Registering POTH server
     Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
+    Set Variable ACTION to Register - POTH
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 31
   end
    
   Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
   Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
+  Set Variable ACTION to Register - DomeSim
+  Include Script: UpdateAscomError
    
   Set Variable MYPROGRESS to 32
   if Variable INSTALL_DOMECONTROLHUB Equals TRUE
     Set Variable PROGRESSTEXT to Registering Platform 5 Dome Hub
     Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
+    Set Variable ACTION to Register - ASCOMDome
+    Include Script: UpdateAscomError
   end
    
   Set Variable MYPROGRESS to 33
   Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
   Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheelSim (at end of file)
+  Set Variable ACTION to Register - FilterWheelSim
+  Include Script: UpdateAscomError
    
   Set Variable MYPROGRESS to 34
   Set Variable PROGRESSTEXT to Registering Platform 5 Focuser simulator
   Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
+  Set Variable ACTION to Register - FocuserSim
+  Include Script: UpdateAscomError
    
   Set Variable MYPROGRESS to 35
   Set Variable PROGRESSTEXT to Registering Platform 5 Switch simulator
   Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - SwitchSim (at end of file)
+  Set Variable ACTION to Register - SwitchSim
+  Include Script: UpdateAscomError
    
   Comment: Register Platform 5.5 components
   Set Variable MYPROGRESS to 36
@@ -2143,53 +2173,46 @@ if Variable SUCCESS not Equals ERROR
   Comment: Install policy files
   Set Variable MYPROGRESS to 39
   Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Utilities
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Utilities (at end of file)
-  if Variable GACINSTALLRC not Equals 0
-    MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
-  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Utilities
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 40
   Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Astrometry
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
-  if Variable GACINSTALLRC not Equals 0
-    MessageBalloon: GACInstall, Astrometry install error RC: $GACINSTALLRC$
-  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Astrometry
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 41
   Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.DriverAccess
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - DriverAccess Policy (at end of file)
-  if Variable GACINSTALLRC not Equals 0
-    MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
-  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - DriverAccess Policy
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 42
   Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.Exceptions
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.0 (at end of file)
-  if Variable GACINSTALLRC not Equals 0
-    MessageBalloon: GACInstall, Exceptions 1.0 install error RC: $GACINSTALLRC$
-  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Exceptions policy 1.0
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 43
   Set Variable PROGRESSTEXT to Installing policy.1.1.ASCOM.Exceptions
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.1 (at end of file)
-  if Variable GACINSTALLRC not Equals 0
-    MessageBalloon: GACInstall, Exceptions 1.1 install error RC: $GACINSTALLRC$
-  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Exceptions Policy 1.1
+  Include Script: UpdateAscomError
    
   Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
   Set Variable MYPROGRESS to 44
   Set Variable PROGRESSTEXT to Installing ASCOM.Utilities debug information
   Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Utilities 5.5.6 (at end of file)
+  Set Variable ABORT to GACInstall - Copy - Utilities 5.5.6
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 45
   Set Variable PROGRESSTEXT to Installing ASCOM.Astrometry debug information
   Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
+  Set Variable ACTION to GACInstall - Copy - Astrometry 5.5.6
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 46
   Set Variable PROGRESSTEXT to Installing ASCOM.Atributes debug information
   Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
+  Set Variable ACTION to GACInstall - Copy - Attributes 5.5.0
+  Include Script: UpdateAscomError
    
   Comment: Register Platform components
   Set Variable MYPROGRESS to 47
@@ -2236,94 +2259,105 @@ if Variable SUCCESS not Equals ERROR
   Set Variable MYPROGRESS to 58
   Set Variable PROGRESSTEXT to Registering Platform 7 FilterWheel simulator
   Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
+  Set Variable ACTION to Register - FilerWheel Simulator
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 59
   Set Variable PROGRESSTEXT to Registering Platform 7 Rotator simulator
   Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Rotator Simulator 6 (at end of file)
+  Set Variable ACTION to Register - Rotator Simulator
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 60
   Set Variable PROGRESSTEXT to Registering Platform 7 Switch simulator
   Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
+  Set Variable ACTION to Register - Switch Simulator
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 61
   Set Variable PROGRESSTEXT to Registering Platform 7 Telescope simulator
   Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
+  Set Variable ACTION to Register - Telescope Simulator
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 62
   Set Variable PROGRESSTEXT to Registering Platform 7 ObservingConditions simulator
   Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Simulator (at end of file)
+  Set Variable ACTION to Register - ObservingConditions Simulator
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 63
   Set Variable PROGRESSTEXT to Registering Platform 7 Observing Conditions Hub
   Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
+  Set Variable ACTION to Register - OnservingConditions Hub
+  Include Script: UpdateAscomError
   Set Variable PROGRESSTEXT to Registering Platform 7 Device Hub
   Run Program $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe -register (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Device Hub (at end of file)
+  Set Variable ACTION to Register - Device Hub
+  Include Script: UpdateAscomError
    
   Comment: Install 32bit native images
   Set Variable MYPROGRESS to 64
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
   Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
+  Set Variable ACTION to NGen32 Install - DeviceInterfaces
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 65
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
   Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Helper (at end of file)
+  Set Variable ACTION to NGen32 Install - ASCOM Helper
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 66
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
   Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
+  Set Variable ACTION to NGen32 Install - Utilities
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 67
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
   Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
+  Set Variable ACTION to NGen32 Install - VideoUtils
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 68
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
   Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
+  Set Variable ACTION to NGen32 Install - Astrometry 5.5.6
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 69
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
   Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
+  Set Variable ACTION to NGen32 Install - Astrometry 6.0
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 70
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
   Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
+  Set Variable ACTION to NGen32 Install - DriverAccess 6
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 71
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
   Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
+  Set Variable ACTION to NGen32 Install - Helper2 1.0
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 72
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
   Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Exceptions 6 (at end of file)
+  Set Variable ACTION to NGen32 Install - Exceptions 6
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 73
   Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
   Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
+  Set Variable ACTION to NGen32 Install - DirectShowLib 2.1
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 74
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
   Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Cache (at end of file)
+  Set Variable ACTION to NGen32 Install - ASCOM Cache
+  Include Script: UpdateAscomError
   Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
-  Comment: Run Program $NGEN32$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Support Utilities (at end of file)
    
   Set Variable PROGRESSTEXT to Initialising earth rotation data
   Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Initialise earth rotation data (at end of file)
-  if Variable RC not Equals 0
-    MessageBox: Initialise Earth Rotation Data, An error has occured while initialising the earth rotation data scheduled task, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
-    if Variable ASCOMERROR not Equals 
-      Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
-    end
-    Set Variable ASCOMERROR to $ASCOMERROR$Earth rotation data scheduled job issue. RC: $RC$
-  end
+  Set Variable ACTION to Initialise earth rotation data
+  Include Script: UpdateAscomError
    
   Set Variable PROGRESSTEXT to Registering Camera Hub
   Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - CameraHub (at end of file)
+  Set Variable ACTION to Register CameraHub
+  Include Script: UpdateAscomError
    
   [END REGION]
    
@@ -2335,149 +2369,123 @@ if Variable SUCCESS not Equals ERROR
      
     Comment: Register 64bit Omni-Simulators
     Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Omni-Simulators (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: GACInstall, Omni-Simulator registration error RC: $RC$
-    end
+    Set Variable ACTION to Register Omni-Simulators - 64bit
+    Include Script: UpdateAscomError
      
     Comment: Register core components
     Set Variable MYPROGRESS to 75
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Astrometry (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register ASCOM.Astrometry - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 76
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Exceptions.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Exceptions (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Exceptions assembly for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register ASCOM.Exceptions - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 77
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Utilities (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilities assembly for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register ASCOM.Utilities - 64bit
+    Include Script: UpdateAscomError
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Deviceinterfaces.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Deviceinterfaces (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Deviceinterfaces assembly for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register ASCOM.Deviceinterfaces - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 78
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Utilities (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilites.Video assembly for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register Video Utilities - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 79
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Cache.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - ASCOM Cache (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM.Cache assembly for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register ASCOM.Cache - 64bit
+    Include Script: UpdateAscomError
      
     Comment: Register simulators
     Set Variable MYPROGRESS to 80
     Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Camera Simulator 6 (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM Camera simulator for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register ASCOM Camera Simulator - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 81
     Set Variable PROGRESSTEXT to Registering Platform 7  Focuser simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Focus Simulator 6 (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM Focuser simulator for 64bit operation. RC: $RC$
-      if Variable ASCOMERROR not Equals 
-        Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
-      end
-      Set Variable ASCOMERROR to $ASCOMERROR$Focuser simulator 64bit registration failed. RC: $RC$
-    end
+    Set Variable ACTION to Register Focuser Simulator - 64bit
+    Include Script: UpdateAscomError
     Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - CoverCalibrator Simulator (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM CoverCalibrator simulator for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register CoverCalibrator Simulator - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 82
     Set Variable PROGRESSTEXT to Registering Platform 7 Safety Monitor simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM Safety Monitor simulator for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register SafetyMonitor Simulator - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 83
     Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Dome Simulator 6 (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM Dome simulator for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register Dome Simulator - 64bit
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 84
     Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Simulator (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM Video simulator for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register Video Simulator- 64bit
     Set Variable MYPROGRESS to 85
     Set Variable PROGRESSTEXT to Registering Platform 7 Open Weathermap Driver
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Open Weather Map Driver (at end of file)
-    if Variable RC not Equals 0
-      MessageBalloon: RegAsm 64, Unable to register the ASCOM Open Weathermap driver for 64bit operation. RC: $RC$
-    end
+    Set Variable ACTION to Register Open Weathermap Driver - 64bit
+    Include Script: UpdateAscomError
      
     Comment: Create 64bit native images
     Set Variable MYPROGRESS to 86
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
+    Set Variable ACTION to NGen64 Install - DeviceInterfaces 6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 87
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
+    Set Variable ACTION to NGen64 Install - DriverAccess 6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 88
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
+    Set Variable ACTION to NGen64 Install - Exceptions 6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 89
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
+    Set Variable ACTION to NGen64 Install - Utilities 6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 90
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
     Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
+    Set Variable ACTION to NGen64 Install - Video Utilities 6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 91
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
     Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
+    Set Variable ACTION to NGen64 Install - Astrometry 5.5.6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 92
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
+    Set Variable ACTION to NGen64 Install - Astrometry 6
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 93
     Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
     Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
+    Set Variable ACTION to NGen64 Install - DirectShowLib
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 94
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Cache (at end of file)
+    Set Variable ACTION to NGen64 Install - ASCOM Cache
+    Include Script: UpdateAscomError
     Set Variable MYPROGRESS to 95
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
-    Comment: Run Program $NGEN64$ "ASCOM.Utilities.Support, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Comment: Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Support Utilities (at end of file)
      
     Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
     Set Variable PROGRESSTEXT to Installing additional Platform 5.5 files required for 64bit systems
@@ -2494,26 +2502,14 @@ if Variable SUCCESS not Equals ERROR
   Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
   Set Variable PROGRESSTEXT to Finalising install
   Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
-  if Variable RC not Equals 0
-    MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
-    if Variable ASCOMERROR not Equals 
-      Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
-    end
-    Set Variable ASCOMERROR to $ASCOMERROR$Finalise setup issue. RC: $RC$
-  end
+  Set Variable ACTION to FinaliseInstall
+  Include Script: UpdateAscomError
    
   Comment: Set the default Platform COM simulators
   Set Variable PROGRESSTEXT to Setting default Platform simulators
   Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set Simulators (at end of file)
-  if Variable RC not Equals 0
-    MessageBox: Use Simulators, An error has occured while setting the Omni Simulators as the default simulators, please save all logs in Documents\ASCOM... and report this on the ASCOM-Talk Groups.Io forum.
-    if Variable ASCOMERROR not Equals 
-      Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$
-    end
-    Set Variable ASCOMERROR to $ASCOMERRORUseSimulators issue. RC: $RC$
-  end
+  Set Variable ACTION to Set COM simulators to use OmniSimulators
+  Include Script: UpdateAscomError
   Set Variable MYPROGRESS to 100
    
   [END REGION]
@@ -2522,7 +2518,8 @@ if Variable SUCCESS not Equals ERROR
    
   Comment: Create a scheduled task to run the update checker once a week
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Update Checker Task scheduled (at end of file)
+  Set Variable ACTION to Update checker scheduled task
+  Include Script: UpdateAscomError
   Write into Text File $SETUPLOG$ from Value  (at end of file)
    
   [END REGION]
@@ -2532,13 +2529,15 @@ if Variable SUCCESS not Equals ERROR
   Comment: Run basic 32bit Platform validation
   Set Variable PROGRESSTEXT to Validate 32bit Platform operation
   Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform (at end of file)
+  Set Variable ACTION to ValidatePlatform - 32bit
+  Include Script: UpdateAscomError
    
   Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
   if Variable WIN64MODE Equals TRUE
     Set Variable PROGRESSTEXT to Validate 64bit Platform operation
     Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ ValidatePlatform64 (at end of file)
+    Set Variable ACTION to ValidatePlatform - 64bit
+    Include Script: UpdateAscomError
     Write into Text File $SETUPLOG$ from Value  (at end of file)
   end
    
@@ -2571,16 +2570,9 @@ Set Variable MYPROGRESS to 100
 Set Variable PROGRESSTEXT to Platform install complete.
  
 [DEFINE REGION: Finish Setup Dialogue]
+ 
 label: Finish Setup
 Hide Dialog
- 
-Comment: Set SUCCESS to REBOOT if either of the Visual C++ installers required it.
-if Variable VC32_REBOOT_REQUIRED Equals (Ignore Case) TRUE
-  Set Variable SUCCESS to REBOOT
-end
-if Variable VC64_REBOOT_REQUIRED Equals (Ignore Case) TRUE
-  Set Variable SUCCESS to REBOOT
-end
  
 Comment: Initialise finish dialogue message display variables
 Set Variable FINISH_TITLE to 
@@ -2601,57 +2593,67 @@ end
  
 Comment: Test whether we have an error, if so then we just display the error messages
 if Variable SUCCESS not Equals (Ignore Case) ERROR
-  Comment: No errors - great!
+  Comment: No errors - great! Test for CANCEL
   if Variable SUCCESS Equals (Ignore Case) CANCEL
-    Comment: User requested installation cancel
+    Comment: CANCEL requested
     Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
   else
+    Comment: SUCCESS is not CANCEL, test for reboot required
     if Variable SUCCESS Equals (Ignore Case) REBOOT
-      Comment: At least one of the Visual C++ installers requires a reboot
-      Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$Your PC needs to be restarted to complete installation.
+      Comment: REBOOT Required
+      Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$(Reboot required)
+      Set Variable FINISH_DESCRIPTION to $NEWLINE$ Your PC needs to be restarted to complete installation.$NEWLINE$$NEWLINE$ Leave the checkbox below checked to restart now. $NEWLINE$$NEWLINE$  Uncheck the checkbox to restart later.
     else
+      Comment: SUCCESS is not CANCEL or REBOOT so test for a successful outcome (COMPLETE)
       if Variable SUCCESS Equals (Ignore Case) COMPLETE
-        Comment: Success and no reboot required!
-        Set Variable FINISH_TITLE to $TITLE$ has been installed successfully.
-        Set Variable FINISH_DESCRIPTION to  Congratulations, ASCOM Platform 7 installed successfully!$NEWLINE$$NEWLINE$ Please review the "Introduction" section of the Help file in$NEWLINE$ Start Menu / ASCOM Platform 7 for changes in this release.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 7 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+        Comment: SUCCESS in both new install and maintenmance modes, so create good outcome messages
+        Set Variable FINISH_TITLE to $TITLE$ installed successfully.
+        Set Variable FINISH_DESCRIPTION to $NEWLINE$ If you are new to Platform 7, you will find information about new features in the "Introduction" section of the Help file in Start / ASCOM Platform 7.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 7 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+        Comment: Enable a note saying when the user guide will be displayed.
         if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
           Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
         end
         Comment: Revise messages if in maintenance mode
         if Variable MAINTENANCE Equals (Ignore Case) TRUE
-          Set Variable FINISH_DESCRIPTION to 
+          Comment: MAINTENANCE mode is active
+          Set Variable FINISH_TITLE to $TITLE$ - Maintenance complete
           Set Variable FINISH_CONTEXT to 
+          Comment: MAINTENANCE - Check whether we are uninstalling the Platform
           if Variable REMOVE Equals (Ignore Case) TRUE
-            Comment: User requested uninstall
-            Set Variable FINISH_TITLE to $TITLE$ has been uninstalled.
+            Comment: UNINSTALL - User requested uninstall
+            Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been uninstalled.
           end
+          Comment: MAINTENANCE - Check whether we are repairing the Platform
           if Variable REPAIR Equals (Ignore Case) TRUE
-            Comment: User requested repair
-            Set Variable FINISH_TITLE to $TITLE$ has been repaired.
+            Comment: REPAIR - User requested repair
+            Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been repaired.
           end
+          Comment: MAINTENANCE - Check whether we are modifying the Platform
           if Variable MODIFY Equals (Ignore Case) TRUE
-            Comment: User requested change features
-            Set Variable FINISH_TITLE to $TITLE$ has been modified as requested.
+            Comment: MODIFY - User requested change features
+            Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been modified as requested.
           end
         end
       else
         Comment: Unexpected value in SUCCESS variable
-        Set Variable FINISH_TITLE to Unexpected SUCCESS Status Returned: $SUCCESS$!
-        Set Variable FINISH_CONTEXT to The installation may or may not have completed successfully.$NEWLINE$Please report this on the Groups.Io ASCOM-Talk forum.
+        Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful.
+        Set Variable FINISH_DESCRIPTION to $NEWLINE$ An unexpected SUCCESS status was returned: $SUCCESS$$NEWLINE$$NEWLINE$ The installation may or may not have completed successfully.$NEWLINE$$NEWLINE$ Please report this issue on the Groups.Io ASCOM-Talk forum.
       end
     end
   end
 else
-  Comment: We have an error so set the error messages
-  Set Variable FINISH_TITLE to $TITLE$ installation failed
-  Set Variable FINISH_DESCRIPTION to An error occurred during installation of Platform 7.$NEWLINE$$NEWLINE$Please review the PlatformInstall, UninstallASCOM and FinaliseInstall $NEWLINE$logs in the Documents\ASCOM and the most recent$NEWLINE$Documents\ASCOM\Logs YYYY MM DD folders.$NEWLINE$$NEWLINE$Please also run the Diagnostics Tool in ASCOM Platform 7 / Tools and $NEWLINE$post all logs on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$Many thanks, The ASCOM Platform Team.
-  Set Variable FINISH_CONTEXT to Last error: "$LASTERROR$"$NEWLINE$$ASCOMERROR$
+  Comment: ERROR - We have an error so set the error messages
+  Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful.
+  Set Variable FINISH_DESCRIPTION to  An error occurred while installing Platform 7.$NEWLINE$$NEWLINE$ Please zip up all files and sub-folders in your Documents\ASCOM folder and post the zip on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Many thanks, The ASCOM Platform Team.$NEWLINE$$NEWLINE$ Last error: $LASTERROR$$ASCOMERROR$
+  Set Variable FINISH_CONTEXT to 
 end
  
 Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
 Convert Variable SUCCESS to UPPER case
 Display Dialog: finish, wait for dialog to return (modal)
+ 
 if Variable SILENT Equals FALSE
+  Comment: Check whether a reboot is required and do this if required
   if Variable REBOOTCOMPUTER Equals TRUE
     if Variable SUCCESS Equals REBOOT
       Reboot Computer
@@ -2667,6 +2669,8 @@ if Variable SILENT Equals FALSE
         Comment: Acrobat is installed
         Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
         Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        Set Variable ACTION to Display User Guide
+        Include Script: UpdateAscomError
       else
         Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
         if Variable OSCURRENTBUILD Greater Than 9600
@@ -2685,6 +2689,8 @@ if Variable SILENT Equals FALSE
     Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: User guide display not requested (at end of file)
   end
 end
+ 
 [END REGION]
+ 
 label: End of Script
  

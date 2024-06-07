@@ -1,7 +1,6 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
 Prepare for Installation or Uninstallation
-Finish Setup Dialogue
 Check Application Pre-Requisites
 Specify additional clean-up required when uninstalling
 Platform 6 Content
@@ -9,33 +8,26 @@ Platform 6 files
 Platform 5.5 files
 Set Registry Keys
 Platform 6.1 files
-Set up log file and variables
 Platform 6.2 files
-Remove Previous Platform install if present
-Non-MSI activities - 64bit
-Uninstall items installed by this installer
-Remove 64bit components
 ASCOM Cache
 Earth Rotation Date Update
 Remove Previous Platforms 4 and 5 if present
-Non-MSI activities - 32bit
-Create shortcuts
 Remove 32bit components
-Install Application Pre-Requisites if required
 Maintenance Dialogue
 Alpaca Support for Chooser
+ASCOM Device Hub
 Clean up any remaining simulator COM entries
 MSI installer support if required
 Platform validation
 Inno driver installer creator
 Developer documentation
 Visual Studio assembly references for current Platform version
-Remove any items left from previous instals
+Validate installation
 Platform 5 files
-Install ASCOM Remote Server and the OmniSimulators
 Finalise installation.
-Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.
 Visual Studio assembly references for Platform 6 backward compatibility
-Platform Update Checker
+Alert if Platform 6 Conform is present.
 Camera Hub
 Use Simulators
+Install Platform update scheduled task
+Platform Update Checker
