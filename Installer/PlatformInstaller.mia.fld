@@ -1,32 +1,25 @@
-﻿Set up log file and variables
-Main Setup Dialogue
-Maintenance Dialogue
+﻿Main Setup Dialogue
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
-Remove 64bit components
-Remove 32bit components
-Create shortcuts
-Non-MSI activities - 32bit
-Finalise installation.
-Install Platform update scheduled task
-Validate installation
-Alert if Platform 6 Conform is present.
 Finish Setup Dialogue
 Check Application Pre-Requisites
 Check Application Requirements
-Set Profile ACL
 Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
-Install MSI support if required
 Start installation
-Remove Previous Platform install if present
-Remove any items left from previous instals
 Remove Previous Platforms 4 and 5 if present
-Uninstall items installed by this installer
 Clean up any remaining simulator COM entries
+Post install activities - 32bit only
+Remove 64bit components
+Remove any items left from previous instals
+Remove 32bit components
+Uninstall items installed by this installer
+Remove Previous Platform install if present
+Set up log file and variables
+Maintenance Dialogue
+Install MSI support if required
 Uninstall previous Platform
-Platform 5 and 5.5 files
-Platform 6 and 7 files
-Set Registry Keys
-Developer files
+Set Profile ACL
 Install Platform files
-Non-MSI activities - 64bit
+Set Registry Keys
+Create shortcuts
+Post install activities - 64bit only
