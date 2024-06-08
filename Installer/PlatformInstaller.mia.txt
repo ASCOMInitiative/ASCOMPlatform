@@ -13,6 +13,7 @@ Set Variable NATIVE_OVERWRITE to ALWAYS
 Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
  
 [DEFINE REGION: Set up log file and variables]
+ 
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
 Get Folder Location My->My Documents into MYDOCUMENTS
@@ -423,6 +424,7 @@ end
 [END REGION]
  
 [DEFINE REGION: Check Application Pre-Requisites]
+ 
 Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
@@ -491,6 +493,7 @@ if Variable PREREQ not Equals FALSE
     end
   end
 end
+ 
 [END REGION]
  
 [DEFINE REGION: Main Setup Dialogue]
@@ -587,6 +590,7 @@ GoTo Label: Modify Maintenance
 [END REGION]
  
 [DEFINE REGION: Prepare for Installation or Uninstallation]
+ 
 label: Main Install
  
 Comment: Get the state of the installable components
@@ -610,12 +614,15 @@ Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
+ 
 [END REGION]
  
-[DEFINE REGION: MSI installer support if required]
+[DEFINE REGION: Install MSI support if required]
+ 
 Comment: Install pre-requisites included in this installer
 Include Script: setupmsi31
 Set Variable MYPROGRESS to 3
+ 
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platform install if present]
@@ -785,6 +792,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Finished cleaning templates - 
 [END REGION]
  
 [DEFINE REGION: Remove Previous Platforms 4 and 5 if present]
+ 
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
 if Variable MAINTENANCE not Equals TRUE
   Comment: Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform 6 install
@@ -799,15 +807,18 @@ if Variable MAINTENANCE not Equals TRUE
       Set Variable PLATFORM4FOUND to TRUE
     end
     Write into Text File $SETUPLOG$ from Value $TIME$ Platform 4.1 - $UNINSTALLER41$ (at end of file)
+     
     Comment: Check whether Platform 5 is actually installed, only try and uninstall if present! Test is presence of Platform 5 Uninstall string in registry
     Set Variable UNINSTALLER5A to 
     Set Variable PLATFORM5FOUND to FALSE
+     
     Comment: Check for Platform 5a
     Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{075F543B-97C5-4118-9D54-93910DE03FE9}\UninstallString into UNINSTALLER5A
     if Variable UNINSTALLER5A not Equals 
       Set Variable PLATFORM5FOUND to TRUE
     end
     Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5A - $UNINSTALLER5A$ (at end of file)
+     
     Comment: Check for Platform 5b
     Set Variable UNINSTALLER5B to 
     Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{14C10725-0018-4534-AE5E-547C08B737B7}\UninstallString into UNINSTALLER5B
@@ -815,6 +826,7 @@ if Variable MAINTENANCE not Equals TRUE
       Set Variable PLATFORM5FOUND to TRUE
     end
     Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5B - $UNINSTALLER5B$ (at end of file)
+     
     Comment: Run the uninstaller if either platform is found
     Set Variable RC to 0
     if Variable PLATFORM5FOUND Equals TRUE
@@ -832,6 +844,7 @@ if Variable MAINTENANCE not Equals TRUE
     end
   end
 end
+ 
 [END REGION]
  
 [DEFINE REGION: Uninstall items installed by this installer]
@@ -918,6 +931,7 @@ if Variable REMOVE Equals TRUE
   [END REGION]
    
   [DEFINE REGION: Remove 32bit components]
+   
   Comment: Remove 32bit components
   Set Variable MYPROGRESS to 55
   Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
@@ -1032,6 +1046,7 @@ if Variable REMOVE Equals TRUE
   Include Script: CleanRegistry
    
   Set Variable MYPROGRESS to 90
+   
   [END REGION]
    
   Set Variable PROGRESSTEXT to Uninstalling Platform...
@@ -1258,50 +1273,54 @@ if Variable INSTALL_POTH Equals TRUE
   Install Files ..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
   Install Files ..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
 end
+ 
 [END REGION]
  
 [DEFINE REGION: Platform 5.5 files]
+ 
 Comment: Updated helpers that use Platform 5.5 support
 Install Files ..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
 Install Files ..\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
+ 
 Comment: New files in Platform 5.5
 Install Assembly ..\InstallerContent\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
 Install Files ..\InstallerContent\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
-Comment: Install Assembly ..\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
-Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
-Comment: The ASCOM.Utilities.dll file MUST be the original from Platform 5.5 because at least 1 installer checks the file version of the installed file!
 Install Files ..\InstallerContent\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
 Install Files ..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
 Install Files ..\InstallerContent\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
+ 
 [END REGION]
  
 [DEFINE REGION: Platform 6 files]
+ 
 Comment: Install exceptions redirection policy
 Install Files ..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
 Install Files ..\InstallerSupport\RedirectionPolicies\Policy.1.0.Exceptions.xml to $COMMONFILES$\ASCOM\Platform\v6.0
 Install Files ..\InstallerSupport\RedirectionPolicies\policy.1.1.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
 Install Files ..\InstallerSupport\RedirectionPolicies\Policy.1.1.Exceptions.xml to $COMMONFILES$\ASCOM\Platform\v6.0
+ 
 Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
 Install Assembly ..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+ 
 Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 drivers
 Install Assembly ..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+ 
 Comment: Platform 6 core components
 Install Assembly ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
 Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
-Comment: Install Files ..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
 Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
 Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+ 
 Comment: Tim Long Platform 6 components
 Install Assembly ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
@@ -1309,6 +1328,7 @@ Install Assembly ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\AS
 Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
 Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+ 
 Comment: Platform 6 Astrometry
 Install Assembly ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
@@ -1327,18 +1347,20 @@ Install Files ..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\
 Install Files ..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+ 
 Comment: Platform 6 SP1 Astrometry
 Install Files ..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.pdb to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.pdb to $COMMONFILES$\ASCOM\Astrometry
-Comment: Install Files ..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
+ 
 Comment: Platform 6 Internal
 Install Files ..\InstallerSupport\GACInstall\bin\Release\GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
 Install Assembly ..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to Global Assembly Cache
 Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb to $WINDIR$\Symbols\dll
+ 
 Comment: Platform 6 Tools
 Install Files ..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
@@ -1356,60 +1378,73 @@ Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverCon
 Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
 Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
 Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+ 
 Comment: Platform 6 Simulators
+ 
 Comment: Camera simulator
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+ 
 Comment: FilterWheel simulator
 Install Files ..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 Install Files ..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 Install Files ..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 Install Files ..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+ 
 Comment: Focuser simulator
 Install Files ..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
 Install Files ..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+ 
 Comment: CoverCalibrator simulator
 Install Files ..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.dll to $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator
 Install Files ..\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.pdb to $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator
+ 
 Comment: SafetyMonitor simulator
 Install Files ..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 Install Files ..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+ 
 Comment: Telescope simulator
 Install Files ..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 Install Files ..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 Install Files ..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 Install Files ..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+ 
 Comment: Rotator simulator
 Install Files ..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 Install Files ..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 Install Files ..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 Install Files ..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+ 
 Comment: Dome simulator
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
-Comment: Platform Update Checker - Superceded by the scheduled task update checker in Platform 7
-Comment: Install Files ..\CheckForUpdates.js to $TARGETDIR$\Tools
+ 
 [END REGION]
  
 [DEFINE REGION: Platform 6.1 files]
+ 
 Comment: Video utilities
 Install Assembly ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb to $WINDIR$\Symbols\dll
 Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $COMMONFILES$\ASCOM\Platform\v6.1
+ 
 Comment: Video Simulator
 Install Files ..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 Install Files ..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 Install Files ..\InstallerContent\DirectShowLib\DirectShowLib-2005.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 Install Files ..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\Resources\simulator.pix to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\Resources
+ 
 Comment: Video Utilities - Native Helpers
 Install Files ..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll to $COMMONFILES$\ASCOM\VideoUtilities
 Install Files ..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.pdb to $COMMONFILES$\ASCOM\VideoUtilities
 Install Files ..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.dll to $COMMONFILES$\ASCOM\VideoUtilities
 Install Files ..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.pdb to $COMMONFILES$\ASCOM\VideoUtilities
+ 
 Comment: Direct Video 2005
 Install Assembly ..\InstallerContent\DirectShowLib\DirectShowLib-2005.dll to Global Assembly Cache
+ 
 Comment: Switch V2 simulator
 Install Files ..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe to $COMMONFILES$\ASCOM\Switch\Switch V2
 Install Files ..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
@@ -1417,6 +1452,7 @@ Install Files ..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Rele
 Install Files ..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\Switch V2
 Install Files ..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
 Install Files ..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config to $COMMONFILES$\ASCOM\Switch\Switch V2
+ 
 Comment: Platform 6.1 SP1 SOFA Files
 Install Files ..\SOFA\SOFA Library\Win32\Release\SOFA.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\SOFA\SOFA Library\Win32\Release\SOFA.pdb to $WINDIR$\Symbols\dll
@@ -1424,9 +1460,11 @@ Install Files ..\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32
 Install Files ..\SOFA\SOFA Library\x64\Release\SOFA-64.dll to $COMMONFILES$\ASCOM\Astrometry
 Install Files ..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb to $WINDIR$\Symbols\dll
 Install Files ..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe to $COMMONFILES$\ASCOM\Astrometry
+ 
 [END REGION]
  
 [DEFINE REGION: Platform 6.2 files]
+ 
 Comment: Platform 6.2 ObservingConditions Hub
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OCH
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
@@ -1446,12 +1484,15 @@ Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulat
 Install Files ..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
 Install Files ..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
 Install Files ..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
+ 
 [END REGION]
  
 [DEFINE REGION: ASCOM Cache]
+ 
 Install Assembly ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb to $WINDIR$\Symbols\dll
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COMMONFILES$\ASCOM\Platform\v6.4
+ 
 [END REGION]
  
 [DEFINE REGION: Earth Rotation Date Update]
@@ -1467,21 +1508,10 @@ Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskS
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $TARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\*.* to $COMMONFILES$\ASCOM\AlpacaDynamicClients, include subfolders
  
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.deps.json to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe.config to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Alpaca.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Com.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Common.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Tools.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\AlpacaDynamicClients
-Comment: Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.pdb to $COMMONFILES$\ASCOM\AlpacaDynamicClients
 [END REGION]
  
 [DEFINE REGION: ASCOM Device Hub]
+ 
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe.config to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.pdb to $COMMONFILES$\ASCOM\DeviceHub
@@ -1489,16 +1519,20 @@ Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\M
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.pdb to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf to $COMMONFILES$\ASCOM\DeviceHub
+ 
 [END REGION]
  
 [DEFINE REGION: Platform validation]
+ 
 Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.exe to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.pdb to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.pdb to $TARGETDIR$\Tools\Validation
+ 
 [END REGION]
  
 [DEFINE REGION: Platform 6 Content]
+ 
 Comment: Platform Documents
 Install Files ..\InstallerContent\Help.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\InstallerContent\Internet.ico to $COMMONFILES$\ASCOM\Platform
@@ -1510,9 +1544,11 @@ Install Files ..\InstallerContent\Support (web).url to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\ASCOM User Guide.pdf to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Supported Devices (web).url to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
+ 
 [END REGION]
  
 [DEFINE REGION: Visual Studio assembly references for current Platform version]
+ 
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$\Platform
@@ -1561,6 +1597,7 @@ Set Variable MYPROGRESS to 25
 [END REGION]
  
 [DEFINE REGION: Visual Studio assembly references for Platform 6 backward compatibility]
+ 
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEPLATFORM6$\Platform6
@@ -1609,6 +1646,7 @@ Set Variable MYPROGRESS to 30
 [END REGION]
  
 [DEFINE REGION: Developer documentation]
+ 
 Set Variable PROGRESSTEXT to Installing developer content.
  
 Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -1688,7 +1726,6 @@ Comment: Install SetNetworkPermissions
 Set Variable NATIVE_ENGINE to TRUE
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing network permissions unitility to: $PROGRAMFILES64$ASCOM\SetNetworkPermissions (at end of file)
 Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.*  to $PROGRAMFILES$ASCOM\SetNetworkPermissions, include subfolders
-Comment: Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\runtimes\win-x86\*.* to $PROGRAMFILES$ASCOM\SetNetworkPermissions\runtimes\win-x86, include subfolders
 Apply Install (get result into variable RC)
  
 Comment: Install on 32 or 64bit OS as appropriate
@@ -1754,6 +1791,7 @@ Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $DEVELOPER
 [END REGION]
  
 [DEFINE REGION: Set Registry Keys]
+ 
 Comment: Install into 32bit registry, even on a 64bit system
 Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entries (at end of file)
  
@@ -2036,6 +2074,7 @@ Set Variable NATIVE_ENGINE to FALSE
 [END REGION]
  
 [DEFINE REGION: Specify additional clean-up required when uninstalling]
+ 
 Comment: Remove TLB files created by RegAsm when application is uninstalled
 Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
 Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
@@ -2362,6 +2401,7 @@ if Variable SUCCESS not Equals ERROR
   [END REGION]
    
   [DEFINE REGION: Non-MSI activities - 64bit]
+   
   Comment: Extra registration of 64bit components if on 64bit system
   if Variable WIN64MODE Equals TRUE
      
@@ -2495,6 +2535,7 @@ if Variable SUCCESS not Equals ERROR
     Apply Install (get result into variable SUCCESS64)
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
+   
   [END REGION]
    
   [DEFINE REGION: Finalise installation.]

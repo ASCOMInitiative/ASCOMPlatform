@@ -1127,17 +1127,14 @@ end
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites if required]
+ 
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
 Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
 Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
 Run Program $SUPPORTDIR$\SetACL.exe /SETPROFILEACL (WAIT, get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Set ACL on ASCOM Profile Store (at end of file)
+Set Variable ACTION to Set ACL on ASCOM Profile store
+Include Script: UpdateAscomError
  
-Comment: Test whether an error occured when setting the Profile ACL and report this if necessary
-if Variable RC not Equals 0
-  MessageBox: Set ASCOM Profile Permissions, An error has occured when setting the ASCOM Profile ACL, please zip up all logs in your Documents\ASCOM folder and its sub-folders and report this on the ASCOM-Talk Groups.Io forum.$NEWLINE$$NEWLINE$Error code: $RC$
-  Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$Error setting ASCOM Profile ACL. RC: $RC$
-end
 [END REGION]
  
 [DEFINE REGION: Clean up any remaining simulator COM entries]
@@ -1684,7 +1681,8 @@ Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe.config 
 [DEFINE REGION: Install ASCOM Remote Server and the OmniSimulators]
  
 Apply Install (get result into variable RC)
-Write into Text File $SETUPLOG$ from Value $TIME$  Apply install RC: $RC$ (at end of file)
+Set Variable ACTION to Apply install
+Include Script: UpdateAscomError
  
 Comment: Install SetNetworkPermissions
 Set Variable NATIVE_ENGINE to TRUE
@@ -1715,7 +1713,8 @@ if Variable WIN64MODE Equals TRUE
   Comment: Switch back to 32bit mode if running on a 64bit OS.
   Write into Text File $SETUPLOG$ from Value $TIME$ WIN64MODE is true, restoring 32bit mode (at end of file)
   Apply Install (get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$  Apply install, mode = 64bit, RC: $RC$ (at end of file)
+  Set Variable ACTION to Apply Install - 64bit mode
+  Include Script: UpdateAscomError
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 else
   Comment: 32bit OS
@@ -1735,7 +1734,7 @@ else
   Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
 end
  
-Set Variable NATIVE_ENGINE to TRUE
+Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
  
@@ -2602,10 +2601,10 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
     Comment: SUCCESS is not CANCEL, test for reboot required
     if Variable SUCCESS Equals (Ignore Case) REBOOT
       Comment: REBOOT Required
-      Set Variable FINISH_TITLE to $TITLE$ has been successfully installed. Reboot required)
-      Set Variable FINISH_DESCRIPTION to  Your PC needs to be restarted to complete installation.
+      Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$(Reboot required)
+      Set Variable FINISH_DESCRIPTION to $NEWLINE$ Your PC needs to be restarted to complete installation.$NEWLINE$$NEWLINE$ Leave the checkbox below checked to restart now. $NEWLINE$$NEWLINE$  Uncheck the checkbox to restart later.
     else
-      Comment: SUCCESS is not CANCEL or REBOOT so test for success
+      Comment: SUCCESS is not CANCEL or REBOOT so test for a successful outcome (COMPLETE)
       if Variable SUCCESS Equals (Ignore Case) COMPLETE
         Comment: SUCCESS in both new install and maintenmance modes, so create good outcome messages
         Set Variable FINISH_TITLE to $TITLE$ installed successfully.
@@ -2669,8 +2668,7 @@ if Variable SILENT Equals FALSE
       if Variable ACROBATKEY not Equals 
         Comment: Acrobat is installed
         Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
-        Comment: Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
-        Run Program elevated under UAC $TARGETDIR$\Docs\ASCOM User Guide.pdf , startup in folder $MYDOCUMENTS$ (WAIT, get result into variable RC)
+        Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
         Set Variable ACTION to Display User Guide
         Include Script: UpdateAscomError
       else
