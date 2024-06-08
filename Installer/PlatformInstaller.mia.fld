@@ -1,46 +1,32 @@
 ﻿Set up log file and variables
-Check Application Requirements
-Check Application Pre-Requisites
 Main Setup Dialogue
 Maintenance Dialogue
-Prepare for Installation or Uninstallation
-Install MSI support if required
-Remove Previous Platform install if present
-Remove any items left from previous instals
-Remove Previous Platforms 4 and 5 if present
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Remove 64bit components
 Remove 32bit components
-Uninstall items installed by this installer
-Install Application Pre-Requisites if required
-Clean up any remaining simulator COM entries
-Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.
-Platform 5 files
-Platform 5.5 files
-Platform 6 files
-Platform 6.1 files
-ASCOM Cache
-Earth Rotation Date Update
-Platform 6.2 files
-Alpaca Support for Chooser
-ASCOM Device Hub
-Platform validation
-Visual Studio assembly references for current Platform version
-Visual Studio assembly references for Platform 6 backward compatibility
-Developer documentation
-Platform Update Checker
-Camera Hub
-Use Simulators
-Install ASCOM Remote Server and the OmniSimulators
-Inno driver installer creator
-Set Registry Keys
 Create shortcuts
-Specify additional clean-up required when uninstalling
 Non-MSI activities - 32bit
-Non-MSI activities - 64bit
 Finalise installation.
 Install Platform update scheduled task
 Validate installation
 Alert if Platform 6 Conform is present.
 Finish Setup Dialogue
+Check Application Pre-Requisites
+Check Application Requirements
+Set Profile ACL
+Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
+Install MSI support if required
+Start installation
+Remove Previous Platform install if present
+Remove any items left from previous instals
+Remove Previous Platforms 4 and 5 if present
+Uninstall items installed by this installer
+Clean up any remaining simulator COM entries
+Uninstall previous Platform
+Platform 5 and 5.5 files
+Platform 6 and 7 files
+Set Registry Keys
+Developer files
+Install Platform files
+Non-MSI activities - 64bit

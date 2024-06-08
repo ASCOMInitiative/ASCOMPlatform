@@ -589,7 +589,7 @@ GoTo Label: Modify Maintenance
  
 [END REGION]
  
-[DEFINE REGION: Prepare for Installation or Uninstallation]
+[DEFINE REGION: Start installation]
  
 label: Main Install
  
@@ -624,6 +624,8 @@ Include Script: setupmsi31
 Set Variable MYPROGRESS to 3
  
 [END REGION]
+ 
+[DEFINE REGION: Uninstall previous Platform]
  
 [DEFINE REGION: Remove Previous Platform install if present]
  
@@ -1141,17 +1143,6 @@ end
  
 [END REGION]
  
-[DEFINE REGION: Install Application Pre-Requisites if required]
- 
-Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
-Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
-Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
-Run Program $SUPPORTDIR$\SetACL.exe /SETPROFILEACL (WAIT, get result into variable RC)
-Set Variable ACTION to Set ACL on ASCOM Profile store
-Include Script: UpdateAscomError
- 
-[END REGION]
- 
 [DEFINE REGION: Clean up any remaining simulator COM entries]
  
 Comment: Clean up any remaining 32bit COM registry entries
@@ -1169,7 +1160,7 @@ end
  
 [END REGION]
  
-[DEFINE REGION: Uninstall any ASCOM Remote or OmniSumulatort Inno installations and clean up any left-overs from other installers.]
+[DEFINE REGION: Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.]
  
 Set Variable NATIVE_ENGINE to TRUE
  
@@ -1214,9 +1205,22 @@ Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
  
-Comment: ***** Start of Platform Installation *****
+[END REGION]
  
-[DEFINE REGION: Platform 5 files]
+Comment: ***** Start of Platform Installation Activities *****
+ 
+[DEFINE REGION: Set Profile ACL]
+ 
+Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
+Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
+Write into Text File $SETUPLOG$ from Value $TIME$ Setting Profile registry ACL (at end of file)
+Run Program $SUPPORTDIR$\SetACL.exe /SETPROFILEACL (WAIT, get result into variable RC)
+Set Variable ACTION to Set ACL on ASCOM Profile store
+Include Script: UpdateAscomError
+ 
+[END REGION]
+ 
+[DEFINE REGION: Install Platform files]
  
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Write into Text File $SETUPLOG$ from Value   (at end of file)
@@ -1224,6 +1228,8 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Start of Platform installation
  
 Comment: Create the main ASCOM folder in Common Files
 Create Folder $COMMONFILES$\ASCOM
+ 
+[DEFINE REGION: Platform 5 and 5.5 files]
  
 Comment: Type libraries
 Install Files ..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
@@ -1259,24 +1265,25 @@ Install Files ..\Drivers and Simulators\Switch Simulator\SwitchSim.exe to $COMMO
 Install Files ..\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
 Install Files ..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
 Install Files ..\InstallerContent\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
+ 
+Comment: Only install legacy hubs if specified by the user.
 if Variable INSTALL_DOMECONTROLHUB Equals TRUE
   Install Files ..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
 end
+ 
 if Variable INSTALL_PIPE Equals TRUE
   Install Files ..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
   Install Files ..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
 end
+ 
 if Variable INSTALL_HUB Equals TRUE
   Install Files ..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
 end
+ 
 if Variable INSTALL_POTH Equals TRUE
   Install Files ..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
   Install Files ..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
 end
- 
-[END REGION]
- 
-[DEFINE REGION: Platform 5.5 files]
  
 Comment: Updated helpers that use Platform 5.5 support
 Install Files ..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
@@ -1291,7 +1298,7 @@ Install Files ..\InstallerContent\Docs\These files are not in use - ReadMe.txt t
  
 [END REGION]
  
-[DEFINE REGION: Platform 6 files]
+[DEFINE REGION: Platform 6 and 7 files]
  
 Comment: Install exceptions redirection policy
 Install Files ..\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
@@ -1379,7 +1386,7 @@ Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $WINDIR
 Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
 Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
  
-Comment: Platform 6 Simulators
+Comment: Platform Simulators
  
 Comment: Camera simulator
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
@@ -1421,10 +1428,6 @@ Comment: Dome simulator
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
 Install Files ..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
  
-[END REGION]
- 
-[DEFINE REGION: Platform 6.1 files]
- 
 Comment: Video utilities
 Install Assembly ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb to $WINDIR$\Symbols\dll
@@ -1461,10 +1464,6 @@ Install Files ..\SOFA\SOFA Library\x64\Release\SOFA-64.dll to $COMMONFILES$\ASCO
 Install Files ..\SOFA\SOFA Library\x64\Release\SOFA-64.pdb to $WINDIR$\Symbols\dll
 Install Files ..\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe to $COMMONFILES$\ASCOM\Astrometry
  
-[END REGION]
- 
-[DEFINE REGION: Platform 6.2 files]
- 
 Comment: Platform 6.2 ObservingConditions Hub
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OCH
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
@@ -1485,33 +1484,21 @@ Install Files ..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Releas
 Install Files ..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
 Install Files ..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
  
-[END REGION]
- 
-[DEFINE REGION: ASCOM Cache]
- 
+Comment: ASCOM Cache
 Install Assembly ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb to $WINDIR$\Symbols\dll
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COMMONFILES$\ASCOM\Platform\v6.4
  
-[END REGION]
- 
-[DEFINE REGION: Earth Rotation Date Update]
- 
+Comment: Earth rotation update
 Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe to $TARGETDIR$\Tools
 Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.pdb to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
  
-[END REGION]
- 
-[DEFINE REGION: Alpaca Support for Chooser]
- 
+Comment: Alpaca support for the Chooser
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $TARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\*.* to $COMMONFILES$\ASCOM\AlpacaDynamicClients, include subfolders
  
-[END REGION]
- 
-[DEFINE REGION: ASCOM Device Hub]
- 
+Comment: Device Hub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe.config to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.pdb to $COMMONFILES$\ASCOM\DeviceHub
@@ -1520,18 +1507,11 @@ Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\M
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll to $COMMONFILES$\ASCOM\DeviceHub
 Install Files ..\Drivers and Simulators\ASCOM Device Hub\Documents\ASCOM Device Hub User and Technical Information.pdf to $COMMONFILES$\ASCOM\DeviceHub
  
-[END REGION]
- 
-[DEFINE REGION: Platform validation]
- 
+Comment: Platform validation
 Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.exe to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\Release\ValidatePlatform.pdb to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe to $TARGETDIR$\Tools\Validation
 Install Files ..\ValidatePlatform\bin\x64\Release\ValidatePlatform64.pdb to $TARGETDIR$\Tools\Validation
- 
-[END REGION]
- 
-[DEFINE REGION: Platform 6 Content]
  
 Comment: Platform Documents
 Install Files ..\InstallerContent\Help.ico to $COMMONFILES$\ASCOM\Platform
@@ -1545,9 +1525,82 @@ Install Files ..\InstallerContent\ASCOM User Guide.pdf to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Supported Devices (web).url to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
  
+Comment: Install the updater checker application
+Install Files ..\PlatformUpdateChecker\bin\Release\ascom.jpg to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\Octokit.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe.config to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\Semver.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+ 
+Comment: Install the updater checker application
+Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe to $COMMONFILES$\ASCOM\Camera\CameraHub
+Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb to $COMMONFILES$\ASCOM\Camera\CameraHub
+Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\Camera\CameraHub
+ 
+Comment: Install the use simulators application to choose which simulators to use.
+Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe to $TARGETDIR$\Tools\SetSimulators
+Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.pdb to $TARGETDIR$\Tools\SetSimulators
+Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe.config to $TARGETDIR$\Tools\SetSimulators
+ 
+Comment: Install ASCOM Remote and Omni-simulators
+Set Variable NATIVE_ENGINE to TRUE
+ 
+Comment: Install on 32 or 64bit OS as appropriate
+if Variable WIN64MODE Equals TRUE
+  Comment: 64bit OS
+  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
+   
+  Comment: Install Omni-Simulators
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulator (at end of file)
+  Install Files ..\OmniSimulators\publish\x64\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator
+  Install Files ..\OmniSimulators\publish\x64\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
+   
+  Comment: Install ASCOM Remote
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
+  Install Files ..\AscomRemote\publish\AscomRemote\x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer, include subfolders
+   
+  Comment: Only install ASCOM Remote 32bit version on a 64bit OS.
+  Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit, include subfolders
+   
+  Comment: Switch back to 32bit mode if running on a 64bit OS.
+  Write into Text File $SETUPLOG$ from Value $TIME$ WIN64MODE is true, restoring 32bit mode (at end of file)
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+else
+  Comment: 32bit OS
+   
+  Comment: Install Omni-Simulators
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulator (at end of file)
+  Install Files ..\OmniSimulators\publish\x86\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator
+  Install Files ..\OmniSimulators\publish\x86\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
+   
+  Comment: Install ASCOM Remote
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
+  Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer, include subfolders
+end
+ 
+Set Variable NATIVE_ENGINE to FALSE
+ 
+Comment: Specify additional cleanup when uninstalling
+ 
+Comment: Remove TLB files created by RegAsm when application is uninstalled
+Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\*.tlb (when uninstalling)
+Delete Files $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\*.tlb (when uninstalling)
+Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
+ 
 [END REGION]
  
-[DEFINE REGION: Visual Studio assembly references for current Platform version]
+[DEFINE REGION: Developer files]
+ 
+Comment: Visual Studio assembly references for current Platform version
  
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$\Platform
@@ -1594,9 +1647,7 @@ Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Pla
  
 Set Variable MYPROGRESS to 25
  
-[END REGION]
- 
-[DEFINE REGION: Visual Studio assembly references for Platform 6 backward compatibility]
+Comment: Visual Studio assembly references for Platform 6 backward compatibility because Platform 7 references are in a different place
  
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEPLATFORM6$\Platform6
@@ -1643,10 +1694,7 @@ Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEPLATFORM6$
  
 Set Variable MYPROGRESS to 30
  
-[END REGION]
- 
-[DEFINE REGION: Developer documentation]
- 
+Comment: Developer documentation
 Set Variable PROGRESSTEXT to Installing developer content.
  
 Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -1680,103 +1728,7 @@ Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf 
 Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
  
-[END REGION]
- 
-[DEFINE REGION: Platform Update Checker]
- 
-Comment: Install the updater checker application
-Install Files ..\PlatformUpdateChecker\bin\Release\ascom.jpg to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Octokit.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe.config to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Semver.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
- 
-[END REGION]
- 
-[DEFINE REGION: Camera Hub]
- 
-Comment: Install the updater checker application
-Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe to $COMMONFILES$\ASCOM\Camera\CameraHub
-Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb to $COMMONFILES$\ASCOM\Camera\CameraHub
-Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\Camera\CameraHub
- 
-[END REGION]
- 
-[DEFINE REGION: Use Simulators]
- 
-Comment: Install the use simulators application to choose which simulators to use.
-Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe to $TARGETDIR$\Tools\SetSimulators
-Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.pdb to $TARGETDIR$\Tools\SetSimulators
-Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe.config to $TARGETDIR$\Tools\SetSimulators
- 
-[END REGION]
- 
-[DEFINE REGION: Install ASCOM Remote Server and the OmniSimulators]
- 
-Apply Install (get result into variable RC)
-Set Variable ACTION to Apply install
-Include Script: UpdateAscomError
- 
-Comment: Install SetNetworkPermissions
-Set Variable NATIVE_ENGINE to TRUE
-Write into Text File $SETUPLOG$ from Value $TIME$ Installing network permissions unitility to: $PROGRAMFILES64$ASCOM\SetNetworkPermissions (at end of file)
-Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.*  to $PROGRAMFILES$ASCOM\SetNetworkPermissions, include subfolders
-Apply Install (get result into variable RC)
- 
-Comment: Install on 32 or 64bit OS as appropriate
-if Variable WIN64MODE Equals TRUE
-  Comment: 64bit OS
-  Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
-   
-  Comment: Install Omni-Simulators
-  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulator (at end of file)
-  Install Files ..\OmniSimulators\publish\x64\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator
-  Install Files ..\OmniSimulators\publish\x64\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
-   
-  Comment: Install ASCOM Remote
-  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
-  Install Files ..\AscomRemote\publish\AscomRemote\x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer, include subfolders
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x64\runtimes\win-x86\*.*  to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x86, include subfolders
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x64\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x64, include subfolders
-  Comment: Only install ASCOM Remote 32bit version on a 64bit OS.
-  Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit, include subfolders
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
-   
-  Comment: Switch back to 32bit mode if running on a 64bit OS.
-  Write into Text File $SETUPLOG$ from Value $TIME$ WIN64MODE is true, restoring 32bit mode (at end of file)
-  Apply Install (get result into variable RC)
-  Set Variable ACTION to Apply Install - 64bit mode
-  Include Script: UpdateAscomError
-  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-else
-  Comment: 32bit OS
-   
-  Comment: Install Omni-Simulators
-  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Omni-Simulators to: $PROGRAMFILES64$ASCOM\OmniSimulator (at end of file)
-  Install Files ..\OmniSimulators\publish\x86\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator
-  Install Files ..\OmniSimulators\publish\x86\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
-   
-  Comment: Install ASCOM Remote
-  Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
-  Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer, include subfolders
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.*  to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x86, include subfolders
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x64\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\runtimes\win-x64, include subfolders
-  Comment: Only install ASCOM Remote 32bit version on a 64bit OS.
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit
-  Comment: Install Files ..\AscomRemote\publish\AscomRemote\x86\runtimes\win-x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit\runtimes\win-x86, include subfolders
-end
- 
-Set Variable NATIVE_ENGINE to FALSE
- 
-[END REGION]
- 
-[DEFINE REGION: Inno driver installer creator]
- 
+Comment: Inno - Driver installer creator
 Install Files ..\Doc\DriverInstallers.html to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $DEVELOPERTARGETDIR$\Installer Generator
 Install Files ..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $DEVELOPERTARGETDIR$\Installer Generator
@@ -1787,6 +1739,8 @@ Install Files ..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameter
 Install Files ..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 Install Files ..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $DEVELOPERTARGETDIR$\Installer Generator\Resources
+ 
+[END REGION]
  
 [END REGION]
  
@@ -2070,19 +2024,6 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELO
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Stand Alone Chooser Help to $DEVELOPERTARGETDIR$\Developer Documentation\ChooserSA.chm
  
 Set Variable NATIVE_ENGINE to FALSE
- 
-[END REGION]
- 
-[DEFINE REGION: Specify additional clean-up required when uninstalling]
- 
-Comment: Remove TLB files created by RegAsm when application is uninstalled
-Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
-Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
-Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
-Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
-Delete Files $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\*.tlb (when uninstalling)
-Delete Files $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\*.tlb (when uninstalling)
-Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
  
 [END REGION]
  
