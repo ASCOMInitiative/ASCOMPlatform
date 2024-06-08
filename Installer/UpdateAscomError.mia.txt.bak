@@ -1,0 +1,5 @@
+Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ $ACTION$ (at end of file)
+if Variable RC not Equals 0
+  MessageBalloon: Platform Install Error, $ACTION$ error - Return code: $RC$
+  Set Variable ASCOMERROR to $NEWLINE$$ACTION$ returned error code $RC$
+end
