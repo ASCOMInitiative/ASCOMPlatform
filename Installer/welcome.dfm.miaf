@@ -1,1 +1,4 @@
-﻿
+﻿IF (ClearCache.Checked = True)  THEN  Components.Visible := False;
+IF (ClearCache.Checked = True)  THEN  ClearCacheText.Visible := True;
+IF (ClearCache.Checked = False)  THEN  Components.Visible := True;
+IF (ClearCache.Checked = False)  THEN  ClearCacheText.Visible := False;

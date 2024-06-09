@@ -507,17 +507,28 @@ else
 end
  
 label: Welcome Dialog
+Set Variable CLEARCACHE to 
 Show Component: ASCOM Platform Options\Display user guide when installation is complete
 Display Dialog: welcome, wait for dialog to return (modal)
+ 
 Comment: Exit Setup when install is cancelled
 if Variable WIZARD Equals CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Main welcome) (at end of file)
   Terminate Installation
 end
+ 
 if Variable WIZARD Equals README
   Write into Text File $SETUPLOG$ from Value $TIME$ ReadMe shown (at end of file)
   GoTo Label: ReadMe Information
 end
+ 
+Write into Text File $SETUPLOG$ from Value $TIME$ Welcome dialogue CLEARCACHE outcome: $CLEARCACHE$ (at end of file)
+if Variable CLEARCACHE Equals TRUE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Delete cache requested - $ENGINECACHE$*.* (at end of file)
+  Recursively Delete Files $ENGINECACHE$*.*
+  Terminate Installation
+end
+ 
 GoTo Label: Main Install
  
 label: ReadMe Information
@@ -527,6 +538,7 @@ if Variable WIZARD Equals CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (ReadMe) (at end of file)
   Terminate Installation
 end
+ 
 Comment: Return to the welcome screen to continue
 GoTo Label: Welcome Dialog
  
@@ -575,6 +587,14 @@ if Variable WIZARD Equals README
   Write into Text File $SETUPLOG$ from Value $TIME$ ReadMe shown (at end of file)
   GoTo Label: ReadMe Information Maintenance
 end
+ 
+Write into Text File $SETUPLOG$ from Value $TIME$ Welcome dialogue CLEARCACHE outcome: $CLEARCACHE$ (at end of file)
+if Variable CLEARCACHE Equals TRUE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Delete cache requested - $ENGINECACHE$*.* (at end of file)
+  Recursively Delete Files $ENGINECACHE$*.*
+  Terminate Installation
+end
+ 
 GoTo Label: Main Install
  
 label: ReadMe Information Maintenance
@@ -2045,6 +2065,282 @@ Write into Text File $SETUPLOG$ from Value  (at end of file)
 Comment: Proceed with post install activities if the MSI install was successful
 if Variable SUCCESS not Equals ERROR
    
+  [DEFINE REGION: Post install activities - 32bit and 64bit]
+   
+  Comment: Register Platform 5 components
+  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0
+  Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper2 1.0.0.0
+  Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Interfaces 1.0.0.0
+  Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Comment: Register the Platform 5 type libraries
+  Set Variable PROGRESSTEXT to Registering AscomMaterInterfaces typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
+  Set Variable ACTION to ASCOM Master Interfaces
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering ASCOM.Helper typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
+  Set Variable ACTION to Helper type library
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering ASCOM.Helper2 typelib
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT, get result into variable RC)
+  Set Variable ACTION to Helper2 type library
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering IObjectSafety typelib
+  Set Variable MYPROGRESS to 52
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
+  Set Variable ACTION to IObjectSafety type library
+  Include Script: UpdateAscomError
+   
+  Comment: Register Platform 5 Simulators
+  Set Variable PROGRESSTEXT to Registering Platform 5 Telescope simulator
+  Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register ScopeSim
+  Include Script: UpdateAscomError
+  if Variable INSTALL_HUB Equals TRUE
+    Set Variable PROGRESSTEXT to Registering Hub server
+    Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register - Hub
+    Include Script: UpdateAscomError
+  end
+  if Variable INSTALL_PIPE Equals TRUE
+    Set Variable PROGRESSTEXT to Registering Pipe server
+    Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register - Pipe
+    Include Script: UpdateAscomError
+  end
+  if Variable INSTALL_POTH Equals TRUE
+    Set Variable PROGRESSTEXT to Registering POTH server
+    Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register - POTH
+    Include Script: UpdateAscomError
+  end
+   
+  Set Variable MYPROGRESS to 55
+  Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
+  Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - DomeSim
+  Include Script: UpdateAscomError
+   
+  if Variable INSTALL_DOMECONTROLHUB Equals TRUE
+    Set Variable PROGRESSTEXT to Registering Platform 5 Dome Hub
+    Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register - ASCOMDome
+    Include Script: UpdateAscomError
+  end
+   
+  Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
+  Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - FilterWheelSim
+  Include Script: UpdateAscomError
+   
+  Set Variable MYPROGRESS to 57
+  Set Variable PROGRESSTEXT to Registering Platform 5 Focuser simulator
+  Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - FocuserSim
+  Include Script: UpdateAscomError
+   
+  Set Variable PROGRESSTEXT to Registering Platform 5 Switch simulator
+  Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - SwitchSim
+  Include Script: UpdateAscomError
+   
+  Comment: Register Platform 5.5 components
+  Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 5.5.6.0
+  Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 5.5.6.0
+  Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Comment: Install policy files
+  Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Utilities
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Utilities
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Astrometry
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Astrometry
+  Include Script: UpdateAscomError
+  Set Variable MYPROGRESS to 58
+  Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.DriverAccess
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - DriverAccess Policy
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.Exceptions
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Exceptions policy 1.0
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Installing policy.1.1.ASCOM.Exceptions
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Exceptions Policy 1.1
+  Include Script: UpdateAscomError
+   
+  Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
+  Set Variable MYPROGRESS to 60
+  Set Variable PROGRESSTEXT to Installing ASCOM.Utilities debug information
+  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ABORT to GACInstall - Copy - Utilities 5.5.6
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Installing ASCOM.Astrometry debug information
+  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Copy - Astrometry 5.5.6
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Installing ASCOM.Atributes debug information
+  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
+  Set Variable ACTION to GACInstall - Copy - Attributes 5.5.0
+  Include Script: UpdateAscomError
+   
+  Comment: Register Platform components
+  Set Variable MYPROGRESS to 61
+  Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 6.0.0.0
+  Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.Exceptions 6.0.0.0
+  Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
+  Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.DeviceInterface 6.0.0.0
+  Register assembly ASCOM.DeviceInterface, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
+  Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Registering ASCOM.Cache 6.0.0.0
+  Register assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Set Variable MYPROGRESS to 62
+  Comment: Register in-process simulator DLL files with Codebase option
+  Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
+  Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 7 Focuser simulator
+  Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
+  Register assembly $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 7 SafetyMonitor simulator
+  Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
+  Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
+  Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
+  Set Variable PROGRESSTEXT to Registering Platform 7 OpenWeatherMap simulator
+  Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
+   
+  Comment: Register these LocalServer drivers using the -register option
+  Set Variable MYPROGRESS to 63
+  Set Variable PROGRESSTEXT to Registering Platform 7 FilterWheel simulator
+  Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - FilerWheel Simulator
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering Platform 7 Rotator simulator
+  Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - Rotator Simulator
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering Platform 7 Switch simulator
+  Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - Switch Simulator
+  Include Script: UpdateAscomError
+  Set Variable MYPROGRESS to 64
+  Set Variable PROGRESSTEXT to Registering Platform 7 Telescope simulator
+  Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - Telescope Simulator
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering Platform 7 ObservingConditions simulator
+  Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - ObservingConditions Simulator
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering Platform 7 Observing Conditions Hub
+  Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - OnservingConditions Hub
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Registering Platform 7 Device Hub
+  Run Program $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe -register (WAIT, get result into variable RC)
+  Set Variable ACTION to Register - Device Hub
+  Include Script: UpdateAscomError
+   
+  Comment: Install 32bit native images
+  Set Variable MYPROGRESS to 65
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - DeviceInterfaces
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
+  Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - ASCOM Helper
+  Include Script: UpdateAscomError
+  Set Variable MYPROGRESS to 66
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - Utilities
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
+  Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - VideoUtils
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
+  Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - Astrometry 5.5.6
+  Include Script: UpdateAscomError
+  Set Variable MYPROGRESS to 67
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - Astrometry 6.0
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - DriverAccess 6
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
+  Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - Helper2 1.0
+  Include Script: UpdateAscomError
+  Set Variable MYPROGRESS to 68
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - Exceptions 6
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
+  Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - DirectShowLib 2.1
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
+  Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Set Variable ACTION to NGen32 Install - ASCOM Cache
+  Include Script: UpdateAscomError
+  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
+   
+  Set Variable MYPROGRESS to 70
+  Set Variable PROGRESSTEXT to Initialising earth rotation data
+  Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
+  Set Variable ACTION to Initialise earth rotation data
+  Include Script: UpdateAscomError
+   
+  Set Variable PROGRESSTEXT to Registering Camera Hub
+  Set Variable MYPROGRESS to 72
+  Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register CameraHub
+  Include Script: UpdateAscomError
+   
+  Comment: Tidy up COM registration (add AppID for DCOM etc.) 
+  Set Variable PROGRESSTEXT to Finalising install
+  Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
+  Set Variable ACTION to FinaliseInstall
+  Include Script: UpdateAscomError
+   
+  Comment: Set the default Platform COM simulators
+  Set Variable MYPROGRESS to 73
+  Set Variable PROGRESSTEXT to Setting default Platform simulators
+  Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
+  Set Variable ACTION to Set COM simulators to use OmniSimulators
+  Include Script: UpdateAscomError
+   
+  Comment: Create a scheduled task to run the update checker once a week
+  Set Variable MYPROGRESS to 74
+  Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
+  Set Variable ACTION to Update checker scheduled task
+  Include Script: UpdateAscomError
+  Write into Text File $SETUPLOG$ from Value  (at end of file)
+   
+  [END REGION]
+   
   [DEFINE REGION: Post install activities - 32bit only]
    
   if Variable WIN64MODE not Equals TRUE
@@ -2060,7 +2356,7 @@ if Variable SUCCESS not Equals ERROR
    
   Comment: Extra registration of 64bit components if on 64bit system
   if Variable WIN64MODE Equals TRUE
-    Set Variable MYPROGRESS to 60
+    Set Variable MYPROGRESS to 80
      
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
      
@@ -2078,6 +2374,7 @@ if Variable SUCCESS not Equals ERROR
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
     Set Variable ACTION to Register ASCOM.Exceptions - 64bit
     Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 83
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
     Set Variable ACTION to Register ASCOM.Utilities - 64bit
@@ -2096,6 +2393,7 @@ if Variable SUCCESS not Equals ERROR
     Include Script: UpdateAscomError
      
     Comment: Register simulators
+    Set Variable MYPROGRESS to 86
     Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
     Set Variable ACTION to Register ASCOM Camera Simulator - 64bit
@@ -2125,7 +2423,7 @@ if Variable SUCCESS not Equals ERROR
     Include Script: UpdateAscomError
      
     Comment: Create 64bit native images
-    Set Variable MYPROGRESS to 65
+    Set Variable MYPROGRESS to 89
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
     Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Set Variable ACTION to NGen64 Install - DeviceInterfaces 6
@@ -2146,6 +2444,7 @@ if Variable SUCCESS not Equals ERROR
     Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Set Variable ACTION to NGen64 Install - Video Utilities 6
     Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 92
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
     Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Set Variable ACTION to NGen64 Install - Astrometry 5.5.6
@@ -2169,280 +2468,7 @@ if Variable SUCCESS not Equals ERROR
    
   [END REGION]
    
-  [DEFINE REGION: Post install activities - 32bit and 64bit]
-   
-  Comment: Register Platform 5 components
-  Set Variable MYPROGRESS to 70
-  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0
-  Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper2 1.0.0.0
-  Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering assembly ASCOM.Interfaces 1.0.0.0
-  Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-   
-  Comment: Register the Platform 5 type libraries
-  Set Variable PROGRESSTEXT to Registering AscomMaterInterfaces typelib
-  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-  Set Variable ACTION to ASCOM Master Interfaces
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering ASCOM.Helper typelib
-  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
-  Set Variable ACTION to Helper type library
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering ASCOM.Helper2 typelib
-  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT, get result into variable RC)
-  Set Variable ACTION to Helper2 type library
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering IObjectSafety typelib
-  Set Variable MYPROGRESS to 72
-  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
-  Set Variable ACTION to IObjectSafety type library
-  Include Script: UpdateAscomError
-   
-  Comment: Register Platform 5 Simulators
-  Set Variable PROGRESSTEXT to Registering Platform 5 Telescope simulator
-  Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register ScopeSim
-  Include Script: UpdateAscomError
-  if Variable INSTALL_HUB Equals TRUE
-    Set Variable PROGRESSTEXT to Registering Hub server
-    Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
-    Set Variable ACTION to Register - Hub
-    Include Script: UpdateAscomError
-  end
-  if Variable INSTALL_PIPE Equals TRUE
-    Set Variable PROGRESSTEXT to Registering Pipe server
-    Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
-    Set Variable ACTION to Register - Pipe
-    Include Script: UpdateAscomError
-  end
-  if Variable INSTALL_POTH Equals TRUE
-    Set Variable PROGRESSTEXT to Registering POTH server
-    Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
-    Set Variable ACTION to Register - POTH
-    Include Script: UpdateAscomError
-  end
-   
-  Set Variable MYPROGRESS to 75
-  Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
-  Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - DomeSim
-  Include Script: UpdateAscomError
-   
-  if Variable INSTALL_DOMECONTROLHUB Equals TRUE
-    Set Variable PROGRESSTEXT to Registering Platform 5 Dome Hub
-    Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
-    Set Variable ACTION to Register - ASCOMDome
-    Include Script: UpdateAscomError
-  end
-   
-  Set Variable PROGRESSTEXT to Registering Platform 5 FilterWheel simulator
-  Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - FilterWheelSim
-  Include Script: UpdateAscomError
-   
-  Set Variable MYPROGRESS to 77
-  Set Variable PROGRESSTEXT to Registering Platform 5 Focuser simulator
-  Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - FocuserSim
-  Include Script: UpdateAscomError
-   
-  Set Variable PROGRESSTEXT to Registering Platform 5 Switch simulator
-  Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - SwitchSim
-  Include Script: UpdateAscomError
-   
-  Comment: Register Platform 5.5 components
-  Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 5.5.6.0
-  Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-   
-  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 5.5.6.0
-  Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-   
-  Comment: Install policy files
-  Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Utilities
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - Utilities
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Installing policy.5.5.ASCOM.Astrometry
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - Astrometry
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 78
-  Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.DriverAccess
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - DriverAccess Policy
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Installing policy.1.0.ASCOM.Exceptions
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - Exceptions policy 1.0
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Installing policy.1.1.ASCOM.Exceptions
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - Exceptions Policy 1.1
-  Include Script: UpdateAscomError
-   
-  Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
-  Set Variable MYPROGRESS to 80
-  Set Variable PROGRESSTEXT to Installing ASCOM.Utilities debug information
-  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Set Variable ABORT to GACInstall - Copy - Utilities 5.5.6
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Installing ASCOM.Astrometry debug information
-  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - Copy - Astrometry 5.5.6
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Installing ASCOM.Atributes debug information
-  Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-  Set Variable ACTION to GACInstall - Copy - Attributes 5.5.0
-  Include Script: UpdateAscomError
-   
-  Comment: Register Platform components
-  Set Variable MYPROGRESS to 81
-  Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 6.0.0.0
-  Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering ASCOM.Exceptions 6.0.0.0
-  Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
-  Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering ASCOM.DeviceInterface 6.0.0.0
-  Register assembly ASCOM.DeviceInterface, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
-  Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESSTEXT to Registering ASCOM.Cache 6.0.0.0
-  Register assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-   
-  Set Variable MYPROGRESS to 82
-  Comment: Register in-process simulator DLL files with Codebase option
-  Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
-  Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 7 Focuser simulator
-  Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
-  Register assembly $COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 7 SafetyMonitor simulator
-  Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
-  Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
-  Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
-  Set Variable PROGRESSTEXT to Registering Platform 7 OpenWeatherMap simulator
-  Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
-   
-  Comment: Register these LocalServer drivers using the -register option
-  Set Variable MYPROGRESS to 83
-  Set Variable PROGRESSTEXT to Registering Platform 7 FilterWheel simulator
-  Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - FilerWheel Simulator
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering Platform 7 Rotator simulator
-  Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - Rotator Simulator
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering Platform 7 Switch simulator
-  Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - Switch Simulator
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 84
-  Set Variable PROGRESSTEXT to Registering Platform 7 Telescope simulator
-  Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - Telescope Simulator
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering Platform 7 ObservingConditions simulator
-  Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - ObservingConditions Simulator
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering Platform 7 Observing Conditions Hub
-  Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - OnservingConditions Hub
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Registering Platform 7 Device Hub
-  Run Program $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe -register (WAIT, get result into variable RC)
-  Set Variable ACTION to Register - Device Hub
-  Include Script: UpdateAscomError
-   
-  Comment: Install 32bit native images
-  Set Variable MYPROGRESS to 85
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - DeviceInterfaces
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
-  Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - ASCOM Helper
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 86
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Utilities
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
-  Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - VideoUtils
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
-  Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Astrometry 5.5.6
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 87
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Astrometry 6.0
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - DriverAccess 6
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
-  Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Helper2 1.0
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 88
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Exceptions 6
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
-  Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - DirectShowLib 2.1
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - ASCOM Cache
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
-   
-  Set Variable MYPROGRESS to 90
-  Set Variable PROGRESSTEXT to Initialising earth rotation data
-  Run Program $TARGETDIR$\Tools\EarthRotationUpdate.exe /Initialise (WAIT, get result into variable RC)
-  Set Variable ACTION to Initialise earth rotation data
-  Include Script: UpdateAscomError
-   
-  Set Variable PROGRESSTEXT to Registering Camera Hub
-  Set Variable MYPROGRESS to 92
-  Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register CameraHub
-  Include Script: UpdateAscomError
-   
-  Comment: Tidy up COM registration (add AppID for DCOM etc.) 
-  Set Variable PROGRESSTEXT to Finalising install
-  Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
-  Set Variable ACTION to FinaliseInstall
-  Include Script: UpdateAscomError
-   
-  Comment: Set the default Platform COM simulators
-  Set Variable MYPROGRESS to 93
-  Set Variable PROGRESSTEXT to Setting default Platform simulators
-  Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-  Set Variable ACTION to Set COM simulators to use OmniSimulators
-  Include Script: UpdateAscomError
-   
-  Comment: Create a scheduled task to run the update checker once a week
-  Set Variable MYPROGRESS to 94
-  Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
-  Set Variable ACTION to Update checker scheduled task
-  Include Script: UpdateAscomError
-  Write into Text File $SETUPLOG$ from Value  (at end of file)
+  [DEFINE REGION: Validate installation]
    
   Comment: Run basic 32bit Platform validation
   Set Variable PROGRESSTEXT to Validate 32bit Platform operation
@@ -2487,7 +2513,7 @@ end
 Set Variable MYPROGRESS to 100
 Set Variable PROGRESSTEXT to Platform install complete.
  
-[DEFINE REGION: Finish Setup Dialogue]
+[DEFINE REGION: DIsplay end of installation dialogue]
  
 label: Finish Setup
 Hide Dialog
