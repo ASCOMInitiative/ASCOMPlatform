@@ -43,6 +43,38 @@ namespace ASCOM.Utilities
             {"ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}"}
         };
 
+        // List of standard simulator names
+        private static Dictionary<string, string> standardSimulatorNames = new Dictionary<string, string>()
+        {
+            { @"Camera Drivers\ASCOM.Simulator.Camera","ASCOM Camera Simulator"},
+            { @"CoverCalibrator Drivers\ASCOM.Simulator.CoverCalibrator","ASCOM Cover Calibrator Simulator"},
+            { @"Dome Drivers\ASCOM.Simulator.Dome","ASCOM Dome Simulator"},
+            { @"FilterWheel Drivers\ASCOM.Simulator.FilterWheel","ASCOM Filter Wheel Simulator"},
+            { @"Focuser Drivers\ASCOM.Simulator.Focuser","ASCOM Focuser Simulator"},
+            { @"ObservingConditions Drivers\ASCOM.Simulator.ObservingConditions","ASCOM Observing Conditions Simulator"},
+            { @"Rotator Drivers\ASCOM.Simulator.Rotator","ASCOM Rotator Simulator"},
+            { @"SafetyMonitor Drivers\ASCOM.Simulator.SafetyMonitor","ASCOM Safety Monitor Simulator"},
+            { @"Switch Drivers\ASCOM.Simulator.Switch","ASCOM Switch Simulator"},
+            { @"Telescope Drivers\ASCOM.Simulator.Telescope","ASCOM Telescope Simulator"},
+            { @"Video Drivers\ASCOM.Simulator.Video","ASCOM Video Simulator"}
+        };
+
+        // List of standard simulator names
+        private static Dictionary<string, string> originalSimulatorNames = new Dictionary<string, string>()
+        {
+            { @"Camera Drivers\ASCOM.Simulator.Camera","Camera V3 simulator"},
+            { @"CoverCalibrator Drivers\ASCOM.Simulator.CoverCalibrator","ASCOM CoverCalibrator Simulator"},
+            { @"Dome Drivers\ASCOM.Simulator.Dome","Dome Simulator .NET"},
+            { @"FilterWheel Drivers\ASCOM.Simulator.FilterWheel","Filter Wheel Simulator [.Net]"},
+            { @"Focuser Drivers\ASCOM.Simulator.Focuser","ASCOM Simulator Focuser Driver"},
+            { @"ObservingConditions Drivers\ASCOM.Simulator.ObservingConditions","ASCOM Observing Conditions Simulator"},
+            { @"Rotator Drivers\ASCOM.Simulator.Rotator","Rotator Simulator .NET"},
+            { @"SafetyMonitor Drivers\ASCOM.Simulator.SafetyMonitor","ASCOM Simulator SafetyMonitor Driver"},
+            { @"Switch Drivers\ASCOM.Simulator.Switch","ASCOM SwitchV2 Simulator Driver"},
+            { @"Telescope Drivers\ASCOM.Simulator.Telescope","Telescope Simulator for .NET"},
+            { @"Video Drivers\ASCOM.Simulator.Video","Video Simulator"}
+        };
+
         /// <summary>
         /// Restore the Platform 6 COM ProgIDs to point at their Platform 6 values
         /// </summary>
@@ -166,7 +198,51 @@ namespace ASCOM.Utilities
             }
         }
 
+        internal static void SetOriginalSimulatorNames(TraceLogger TL)
+        {
+            foreach (KeyValuePair<string, string> simulator in originalSimulatorNames)
+            {
+                SetSimulatorName(simulator.Key, simulator.Value, TL);
+            }
+
+        }
+
+        internal static void SetStandardSimulatorNames(TraceLogger TL)
+        {
+            foreach (KeyValuePair<string, string> simulator in standardSimulatorNames)
+            {
+                SetSimulatorName(simulator.Key, simulator.Value, TL);
+            }
+        }
+
         #region Support Code
+
+        /// <summary>
+        /// Set the CLSID GUID value of a given COM ProgID to a new value
+        /// </summary>
+        /// <param name="profileKey"></param>
+        /// <param name="name"></param>
+        /// <param name="TL"></param>
+        private static void SetSimulatorName(string profileKey, string name, TraceLogger TL)
+        {
+            LogMessage("SetProgId", $"Setting simulator name for Profile key {profileKey} to {name}", TL);
+
+            try
+            {
+                using (RegistryKey progIdRegistryKey = Registry.LocalMachine.CreateSubKey($@"SOFTWARE\ASCOM\{profileKey}"))
+                {
+                    LogMessage("SetSimulatorName", $"Created Profile registry key", TL);
+                    progIdRegistryKey.SetValue(null, name);
+                    LogMessage("SetSimulatorName", $"Set simulator name OK", TL);
+                    LogMessage("SetSimulatorName", $"", TL);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage("SetSimulatorName", $"Exception - {ex.Message}\r\n{ex}", TL);
+                throw;
+            }
+        }
 
         /// <summary>
         /// Set the CLSID GUID value of a given COM ProgID to a new value

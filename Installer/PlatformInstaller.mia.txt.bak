@@ -2314,7 +2314,7 @@ if Variable SUCCESS not Equals ERROR
   Include Script: UpdateAscomError
    
   Set Variable PROGRESSTEXT to Registering Camera Hub
-  Set Variable MYPROGRESS to 72
+  Set Variable MYPROGRESS to 71
   Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
   Set Variable ACTION to Register CameraHub
   Include Script: UpdateAscomError
@@ -2326,10 +2326,17 @@ if Variable SUCCESS not Equals ERROR
   Include Script: UpdateAscomError
    
   Comment: Set the default Platform COM simulators
-  Set Variable MYPROGRESS to 73
+  Set Variable MYPROGRESS to 72
   Set Variable PROGRESSTEXT to Setting default Platform simulators
   Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
   Set Variable ACTION to Set COM simulators to use OmniSimulators
+  Include Script: UpdateAscomError
+   
+  Comment: Set consistent COM simulator names
+  Set Variable MYPROGRESS to 73
+  Set Variable PROGRESSTEXT to Setting default Platform simulators
+  Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe Set-Standard-Simulator-Names (WAIT, get result into variable RC)
+  Set Variable ACTION to Set standard COM simulator names
   Include Script: UpdateAscomError
    
   Comment: Create a scheduled task to run the update checker once a week
@@ -2470,10 +2477,27 @@ if Variable SUCCESS not Equals ERROR
    
   [DEFINE REGION: Validate installation]
    
+  Comment: Run basic 32bit Platform validation
+  Set Variable PROGRESSTEXT to Validate 32bit Platform operation
+  Set Variable MYPROGRESS to 95
+  Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
+  Set Variable ACTION to ValidatePlatform - 32bit
+  Include Script: UpdateAscomError
+   
+  Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
+  Set Variable MYPROGRESS to 97
+  if Variable WIN64MODE Equals TRUE
+    Set Variable PROGRESSTEXT to Validate 64bit Platform operation
+    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
+    Set Variable ACTION to ValidatePlatform - 64bit
+    Include Script: UpdateAscomError
+    Write into Text File $SETUPLOG$ from Value  (at end of file)
+  end
+   
   Comment: The Platform 6 Conform will fail on Platform 7 because internal functions had to be moved when Utilities was ported from VB to C# (no equivalent of module level functions)
   Set Variable CONFORMPRESENT to 
   Set Variable CONFORMVERSIONOK to 
-  Set Variable MYPROGRESS to 95
+  Set Variable MYPROGRESS to 99
   Set Variable PROGRESSTEXT to Check Conform version
    
   Does File Exist $PROGRAMFILES$ASCOM\Conform\Conform.exe (get result into variable CONFORMPRESENT)
@@ -2487,23 +2511,6 @@ if Variable SUCCESS not Equals ERROR
     end
   else
     Write into Text File $SETUPLOG$ from Value $TIME$ Conform not found on this system. (at end of file)
-  end
-   
-  Comment: Run basic 32bit Platform validation
-  Set Variable PROGRESSTEXT to Validate 32bit Platform operation
-  Set Variable MYPROGRESS to 97
-  Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
-  Set Variable ACTION to ValidatePlatform - 32bit
-  Include Script: UpdateAscomError
-   
-  Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
-  Set Variable MYPROGRESS to 99
-  if Variable WIN64MODE Equals TRUE
-    Set Variable PROGRESSTEXT to Validate 64bit Platform operation
-    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
-    Set Variable ACTION to ValidatePlatform - 64bit
-    Include Script: UpdateAscomError
-    Write into Text File $SETUPLOG$ from Value  (at end of file)
   end
    
   [END REGION]

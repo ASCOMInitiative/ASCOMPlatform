@@ -2314,7 +2314,7 @@ if Variable SUCCESS not Equals ERROR
   Include Script: UpdateAscomError
    
   Set Variable PROGRESSTEXT to Registering Camera Hub
-  Set Variable MYPROGRESS to 72
+  Set Variable MYPROGRESS to 71
   Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
   Set Variable ACTION to Register CameraHub
   Include Script: UpdateAscomError
@@ -2326,10 +2326,17 @@ if Variable SUCCESS not Equals ERROR
   Include Script: UpdateAscomError
    
   Comment: Set the default Platform COM simulators
-  Set Variable MYPROGRESS to 73
+  Set Variable MYPROGRESS to 72
   Set Variable PROGRESSTEXT to Setting default Platform simulators
   Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
   Set Variable ACTION to Set COM simulators to use OmniSimulators
+  Include Script: UpdateAscomError
+   
+  Comment: Set consistent COM simulator names
+  Set Variable MYPROGRESS to 73
+  Set Variable PROGRESSTEXT to Setting standard simulator names
+  Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe Set-Standard-Simulator-Names (WAIT, get result into variable RC)
+  Set Variable ACTION to Set standard COM simulator names
   Include Script: UpdateAscomError
    
   Comment: Create a scheduled task to run the update checker once a week

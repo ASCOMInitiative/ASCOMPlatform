@@ -33,6 +33,9 @@ namespace SetSimulators
                 Console.WriteLine("    OmniSimulators                 - Enables the Omni-Simulators.");
                 Console.WriteLine("    Platform6-RespectExisting      - Enables the Platform 6 simulators on first use but otherwise leaves the current setting.");
                 Console.WriteLine("    OmniSimulators-RespectExisting - Enables the Omni-Simulators on first use but otherwise leaves the current setting.");
+                Console.WriteLine("    Set-Original-Simulator-Names   - Sets the simulator Chooser descriptive names to their historic values.");
+                Console.WriteLine("    Set-Standard-Simulator-Names   - Sets the simulator Chooser descriptive names to consistent standard values.");
+
                 return 0;
             }
 
@@ -59,6 +62,14 @@ namespace SetSimulators
 
                         case "OMNISIMULATORS-RESPECTEXISTING":
                             SimulatorManager.SetOmniSimulators(true, TL);
+                            return 0;
+
+                        case "SET-ORIGINAL-SIMULATOR-NAMES":
+                            SimulatorManager.SetOriginalSimulatorNames(TL);
+                            return 0;
+
+                        case "SET-STANDARD-SIMULATOR-NAMES":
+                            SimulatorManager.SetStandardSimulatorNames(TL);
                             return 0;
 
                         default:
