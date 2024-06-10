@@ -1328,6 +1328,32 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -2070,7 +2096,42 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2798,7 +2859,7 @@ COMMONFILES64
 COMMONFILES32
 $
 1
-4
+6
 TRUE
 
 ASCOM Initiative
@@ -2811,7 +2872,7 @@ ASCOM Platform 7.0 - Early Access
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{CFAD53B0-0F38-48D9-9810-24C7C9A77E6D}
+{0C91E1E5-8637-45FD-8765-07F754A034B8}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2825,7 +2886,7 @@ FALSE
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer
 https://ascom-standards.org
-UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,VM_TARGETFOLDER=%TEMP%,VM_INSTALL_COMMANDLINE=/s,"VM_UNINSTALL_COMMANDLINE=/s MODIFY=FALSE REMOVE=TRUE","VM_UNITTEST=C:\Program Files (x86)\InstallAware X6 Creators Update\unit.exe",LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE,CACHESOURCES=TRUE,IGNOREMISSINGFILES=FALSE,LOCMODE=NEWONLY,NOHARDLINKS=TRUE,SINGLEINSTANCE=TRUE,PCH=FALSE,CODEPAGE=65001,LONGCOMPONENTS=TRUE,NO_MSI=FALSE
+UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE,CACHESOURCES=TRUE,SINGLEINSTANCE=TRUE,LONGCOMPONENTS=TRUE,MIN_EXTRACT=AUTO
 $
 $
 
@@ -2849,7 +2910,7 @@ UpdateAscomError.mia
 $
 FALSE
 
-FALSE
-FALSE
-true
-FALSE
+TRUE
+TRUE
+false
+TRUE

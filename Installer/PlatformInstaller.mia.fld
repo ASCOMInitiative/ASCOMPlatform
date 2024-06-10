@@ -1,26 +1,22 @@
-﻿Remove Platform update checker scheduled task
-Remove the earth rotation update scheduled job.
+﻿Check Application Requirements
+End of installation dialogue
 Check Application Pre-Requisites
-Check Application Requirements
-Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
-Remove Previous Platforms 4 and 5 if present
-Clean up any remaining simulator COM entries
-Remove 64bit components
-Remove any items left from previous instals
-Remove 32bit components
-Uninstall items installed by this installer
-Remove Previous Platform install if present
-Install MSI support if required
-Uninstall previous Platform
-Set Profile ACL
-Install Platform files
-Create shortcuts
-Start installation
-Set up log file and variables
-Main Setup Dialogue
-Maintenance Dialogue
-DIsplay end of installation dialogue
-Post install activities - 32bit only
-Validate installation
-Post install activities - 64bit only
 Set Registry Keys
+Remove Previous Platform install if present
+Uninstall items installed by this installer
+Remove 64bit components
+Remove Previous Platforms 4 and 5 if present
+Remove 32bit components
+Clean up any remaining simulator COM entries
+Install MSI support if required
+Remove any items left from previous instals
+Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
+Remove Platform update checker scheduled task
+Remove the earth rotation update scheduled job.
+Set Profile ACL
+Uninstall previous Platform
+Install Platform files
+Post install activities - 64bit only
+Post install activities - 32bit only
+Set up log file and variables
+Validate installation

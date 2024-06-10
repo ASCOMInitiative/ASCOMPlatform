@@ -33,6 +33,7 @@ Set Variable PROGRESSMODE to MARQUEE
 Set Variable FILEEXISTS to 
 Set Variable UNINSTALLER to 
 Set Variable ACTION to 
+Set Variable CLEARCACHE to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
@@ -145,10 +146,12 @@ Set Variable INSTALL_PLATFORM to
 Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
 Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
 Set Variable DISPLAY_USER_GUIDE to 
+Set Variable INSTALL_HUBS to 
 Set Variable INSTALL_POTH to 
 Set Variable INSTALL_DOMECONTROLHUB to 
 Set Variable INSTALL_PIPE to 
 Set Variable INSTALL_HUB to 
+Set Variable INSTALL_SIMULATOR_SHORTCUTS to 
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -221,14 +224,15 @@ Set Variable FRAMEWORK to $FRAMEWORK4$
  
 Comment: Define components
 Define Component: ASCOM Platform Options
+Define Component: Out of date hubs replaced by Device Hub\Pipe
+Define Component: Out of date hubs replaced by Device Hub\Dome Control Hub
+Define Component: Out of date hubs replaced by Device Hub\POTH
+Define Component: Out of date hubs replaced by Device Hub\Hub
+Define Component: Out of date hubs replaced by Device Hub
 Define Component: ASCOM Platform Options\Install Diagnostics shortcut on desktop
 Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on desktop
 Define Component: ASCOM Platform Options\Display user guide when installation is complete
-Define Component: Out of date hubs replaced by Device Hub
-Define Component: Out of date hubs replaced by Device Hub\POTH
-Define Component: Out of date hubs replaced by Device Hub\Dome Control Hub
-Define Component: Out of date hubs replaced by Device Hub\Pipe
-Define Component: Out of date hubs replaced by Device Hub\Hub
+Define Component: ASCOM Platform Options\Include simulator Start menu shortcuts
  
 Comment: Read the framework root value from the OS and set FRAMEWORKPATH to the full path to the executables
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
@@ -507,7 +511,6 @@ else
 end
  
 label: Welcome Dialog
-Set Variable CLEARCACHE to 
 Show Component: ASCOM Platform Options\Display user guide when installation is complete
 Display Dialog: welcome, wait for dialog to return (modal)
  
@@ -517,15 +520,18 @@ if Variable WIZARD Equals CANCEL
   Terminate Installation
 end
  
+Comment: Display Read-Me if required
 if Variable WIZARD Equals README
   Write into Text File $SETUPLOG$ from Value $TIME$ ReadMe shown (at end of file)
   GoTo Label: ReadMe Information
 end
  
+Comment: Clear the install cache if required
 Write into Text File $SETUPLOG$ from Value $TIME$ Welcome dialogue CLEARCACHE outcome: $CLEARCACHE$ (at end of file)
 if Variable CLEARCACHE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Delete cache requested - $ENGINECACHE$*.* (at end of file)
   Recursively Delete Files $ENGINECACHE$*.*
+  MessageBox: Clear Cache, The installer cache has been cleared and the installer will now close.
   Terminate Installation
 end
  
@@ -533,6 +539,7 @@ GoTo Label: Main Install
  
 label: ReadMe Information
 Display Dialog: readme, wait for dialog to return (modal)
+ 
 Comment: Exit Setup if install is cancelled
 if Variable WIZARD Equals CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (ReadMe) (at end of file)
@@ -549,6 +556,7 @@ GoTo Label: Welcome Dialog
 label: Maintenance
 Comment: Display maintenance dialogue
 Display Dialog: maintenance, wait for dialog to return (modal)
+ 
 Comment: Exit Setup if cancelled
 if Variable WIZARD Equals (Ignore Case) CANCEL
   Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance cancelled at user request (Maintenance) (at end of file)
@@ -564,7 +572,7 @@ label: Modify Maintenance
 if Variable MODIFY Equals (Ignore Case) TRUE
   Hide Component: ASCOM Platform Options\Display user guide when installation is complete
   Display Dialog: welcome, wait for dialog to return (modal)
-  Comment: Exit Setup when install is cancelled
+  Comment: Exit Setup if install is cancelled
   if Variable WIZARD Equals CANCEL
     Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Modify) (at end of file)
     Terminate Installation
@@ -617,15 +625,33 @@ Comment: Get the state of the installable components
 Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATFORM
 Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
+Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable INSTALL_SIMULATOR_SHORTCUTS
 Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
-Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
 Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
-Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
 Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
+Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
+Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
+Get Component Out of date hubs replaced by Device Hub Selection State into Variable INSTALL_HUBS
+ 
+Comment: Handle the top level installed / uninstalled twistie value
+if Variable INSTALL_HUBS not Equals TRUE
+  Comment: All hubs are not to be installed
+  Write into Text File $SETUPLOG$ from Value $TIME$ No hubs are being installed - $INSTALL_HUBS$ (at end of file)
+  Set Variable INSTALL_POTH to FALSE
+  Set Variable INSTALL_DOMECONTROLHUB to FALSE
+  Set Variable INSTALL_PIPE to FALSE
+  Set Variable INSTALL_HUB to FALSE
+else
+  Comment: Individual hubs may or may not be installed
+  Write into Text File $SETUPLOG$ from Value $TIME$ Some hubs are being installed - $INSTALL_HUBS$ (at end of file)
+end
+ 
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Start menu shortcuts - $INSTALL_SIMULATOR_SHORTCUTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
@@ -1987,44 +2013,55 @@ Set Variable NATIVE_ENGINE to TRUE
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-Create Shortcut $SHORTCUTFOLDER$\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
-Create Shortcut $SHORTCUTFOLDER$\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
+Create Shortcut $SHORTCUTFOLDER$\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
 Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $TARGETDIR$\Docs\PlatformHelp.chm
 Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
-Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-Create Shortcut $SHORTCUTFOLDER$\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-Create Shortcut $SHORTCUTFOLDER$\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-Create Shortcut $SHORTCUTFOLDER$\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+ 
+Comment: Install simulator shortcuts if required
+if Variable INSTALL_SIMULATOR_SHORTCUTS Equals TRUE
+  Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+  Create Shortcut $SHORTCUTFOLDER$\Rotator Simulator to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+  Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+  Create Shortcut $SHORTCUTFOLDER$\Dome Simulator(Platform 5) to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+  Create Shortcut $SHORTCUTFOLDER$\FilterWheel Simulator Simulator(Platform 5) to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+  Create Shortcut $SHORTCUTFOLDER$\Focus Simulator (Platform 5) to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+  Create Shortcut $SHORTCUTFOLDER$\Switch Simulator (Platform 5) to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+  Create Shortcut $SHORTCUTFOLDER$\Telescope Simulator(Platform 5) to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+else
+  Comment: Remove simulator shortcuts if required
+  Delete Files $SHORTCUTFOLDER$\FilterWheel Simulator.lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Rotator Simulator.lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Telescope Simulator.lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Dome Simulator(Platform 5).lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\FilterWheel Simulator Simulator(Platform 5).lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Focus Simulator (Platform 5).lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Switch Simulator (Platform 5).lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Telescope Simulator(Platform 5).lnk (when installing)
+end
  
 if Variable INSTALL_PIPE Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
   Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
 else
-  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor.lnk" (when installing)
-  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Help.lnk" (when installing)
+  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor.lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Tools\Pipe Help.lnk (when installing)
 end
  
 if Variable INSTALL_POTH Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
 else
-  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub.lnk" (when installing)
-  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help.lnk" (when installing)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub.lnk (when installing)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help.lnk (when installing)
 end
  
 if Variable INSTALL_DOMECONTROLHUB Equals TRUE
   Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
 else
-  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control.lnk" (when installing)
+  Delete Files $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control.lnk (when installing)
 end
  
 Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
@@ -2334,7 +2371,7 @@ if Variable SUCCESS not Equals ERROR
    
   Comment: Set consistent COM simulator names
   Set Variable MYPROGRESS to 73
-  Set Variable PROGRESSTEXT to Setting default Platform simulators
+  Set Variable PROGRESSTEXT to Setting standard simulator names
   Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe Set-Standard-Simulator-Names (WAIT, get result into variable RC)
   Set Variable ACTION to Set standard COM simulator names
   Include Script: UpdateAscomError
@@ -2520,7 +2557,7 @@ end
 Set Variable MYPROGRESS to 100
 Set Variable PROGRESSTEXT to Platform install complete.
  
-[DEFINE REGION: DIsplay end of installation dialogue]
+[DEFINE REGION: End of installation dialogue]
  
 label: Finish Setup
 Hide Dialog
@@ -2645,3 +2682,27 @@ end
  
 label: End of Script
  
+[DEFINE WEB MEDIA Out of date hubs replaced by Device Hub]
+Get Component Out of date hubs replaced by Device Hub Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA POTH]
+Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Dome Control Hub]
+Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Pipe]
+Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Hub]
+Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
+[DEFINE WEB MEDIA Include simulator Start menu shortcuts]
+Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable SELECTED
+if Variable SELECTED Equals TRUE
+end
