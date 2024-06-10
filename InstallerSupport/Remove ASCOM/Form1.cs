@@ -422,6 +422,11 @@ namespace RemoveASCOM
                                             Found = true;
                                             TL.LogMessageCrLf("RemoveInstallers", "  Found install directory - " + DirInfo.Name);
                                         }
+                                        if ((MyFile.Name.ToUpperInvariant() ?? "") == ("{8961E141-B307-4882-ABAD-77A3E76A40C1}.native.bitness.log".ToUpperInvariant() ?? ""))
+                                        {
+                                            Found = true;
+                                            TL.LogMessageCrLf("RemoveInstallers", "  Found installer bitness log directory - " + DirInfo.Name);
+                                        }
                                     }
                                     if (Found)
                                     {
@@ -440,7 +445,7 @@ namespace RemoveASCOM
                             }
                         }
                     }
-                    catch (UnauthorizedAccessException )
+                    catch (UnauthorizedAccessException)
                     {
                         TL.LogMessage("RemoveInstallers", "UnauthorizedAccessException for directory; " + DirInfo.FullName);
                     }
