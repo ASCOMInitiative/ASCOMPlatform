@@ -2014,19 +2014,21 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native m
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+ 
 if Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP Equals TRUE
   Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 end
+ 
 if Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP Equals TRUE
   Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
 end
  
 Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
 Set Variable NATIVE_ENGINE to TRUE
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-Create Shortcut $SHORTCUTFOLDER$\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
 Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf

@@ -2384,13 +2384,6 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to Set COM simulators to use OmniSimulators
   Include Script: UpdateAscomError
    
-  Comment: Set consistent COM simulator names
-  Set Variable MYPROGRESS to 73
-  Set Variable PROGRESSTEXT to Setting standard simulator names
-  Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe Set-Standard-Simulator-Names (WAIT, get result into variable RC)
-  Set Variable ACTION to Set standard COM simulator names
-  Include Script: UpdateAscomError
-   
   Comment: Create a scheduled task to run the update checker once a week
   Set Variable MYPROGRESS to 74
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
