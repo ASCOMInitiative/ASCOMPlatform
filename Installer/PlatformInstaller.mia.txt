@@ -1776,9 +1776,11 @@ Install Files ..\Doc\Bug72T-sm.jpg to $DEVELOPERTARGETDIR$\Developer Documentati
 Install Files ..\Help\Script Help Files\Script56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Script Help Files\wsh-56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Output\Developer\PlatformDeveloperHelp.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+ 
 Comment: Platform 6 SP1 Documentation
 Install Files ..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+ 
 Comment: Platform 6 SP2 Files
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $DEVELOPERTARGETDIR$\Sample Scripts
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $DEVELOPERTARGETDIR$\Sample Scripts
@@ -1786,6 +1788,7 @@ Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs to $DEV
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $DEVELOPERTARGETDIR$\Sample Scripts
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $DEVELOPERTARGETDIR$\Sample Scripts
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $DEVELOPERTARGETDIR$\Sample Scripts
+ 
 Comment: Platform 6.1 Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -1802,6 +1805,9 @@ Install Files ..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameter
 Install Files ..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 Install Files ..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $DEVELOPERTARGETDIR$\Installer Generator\Resources
 Install Files ..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $DEVELOPERTARGETDIR$\Installer Generator\Resources
+ 
+Comment: Visual Studio Templates
+Install Files ..\DriverTemplates\Templates.html to $DEVELOPERTARGETDIR$\Developer Documentation
  
 [END REGION]
  
@@ -2033,7 +2039,7 @@ Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.o
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $TARGETDIR$\Docs\PlatformHelp.chm
-Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
+Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/Index.htm
  
 Comment: Install simulator shortcuts if required
 if Variable INSTALL_SIMULATOR_SHORTCUTS Equals TRUE
@@ -2084,24 +2090,23 @@ Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMO
  
 Comment: Developer shortcuts
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to $DEVELOPERTARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $DEVELOPERTARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Fundamental Astrometry Theory Paper to $DEVELOPERTARGETDIR$\Developer Documentation\Algorithms.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create multiple versions of a driver to $DEVELOPERTARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $DEVELOPERTARGETDIR$\Developer Documentation\Platform Evolution.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform 6 Client-Driver Interaction V2 to $DEVELOPERTARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Video Driver Developer Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver Install Script Generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $DEVELOPERTARGETDIR$\Developer Documentation\Templates.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOMLibrary.chm
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Stand Alone Chooser Help to $DEVELOPERTARGETDIR$\Developer Documentation\ChooserSA.chm
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver installer Inno script generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $DEVELOPERTARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $DEVELOPERTARGETDIR$\Developer Documentation\Templates.html
  
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $DEVELOPERTARGETDIR$\Developer Documentation\Platform Evolution.pdf
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create multiple versions of a driver to $DEVELOPERTARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform 6 Client-Driver Interaction V2 to $DEVELOPERTARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Video Driver Developer Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Stand Alone Chooser Help to $DEVELOPERTARGETDIR$\Developer Documentation\ChooserSA.chm
 Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
@@ -2565,7 +2570,7 @@ end
 Set Variable MYPROGRESS to 100
 Set Variable PROGRESSTEXT to Platform install complete.
  
-[DEFINE REGION: End of installation dialogue]
+[DEFINE REGION: Install complete dialogue]
  
 label: Finish Setup
 Hide Dialog
@@ -2604,7 +2609,7 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
       if Variable SUCCESS Equals (Ignore Case) COMPLETE
         Comment: SUCCESS in both new install and maintenmance modes, so create good outcome messages
         Set Variable FINISH_TITLE to $TITLE$ installed successfully.
-        Set Variable FINISH_DESCRIPTION to $NEWLINE$ If you are new to Platform 7, you will find information about new features in the "Introduction" section of the Help file in Start / ASCOM Platform 7.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ Diagnostics Tool in ASCOM Platform 7 / Tools and report them on$NEWLINE$ the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+        Set Variable FINISH_DESCRIPTION to $NEWLINE$$NEWLINE$ If you are new to Platform 7, you will find information about new$NEWLINE$ features in the "Introduction" section of the Help file in the$NEWLINE$ Start / ASCOM Platform 7 folder.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ ASCOM Diagnostics Tool that you will find in the Start menu and$NEWLINE$ report the issues on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
         Comment: Enable a note saying when the user guide will be displayed.
         if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
           Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
@@ -2691,28 +2696,3 @@ end
 [END REGION]
  
 label: End of Script
- 
-[DEFINE WEB MEDIA Out of date hubs replaced by Device Hub]
-Get Component Out of date hubs replaced by Device Hub Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA POTH]
-Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Dome Control Hub]
-Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Pipe]
-Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Hub]
-Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
-[DEFINE WEB MEDIA Include simulator Start menu shortcuts]
-Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable SELECTED
-if Variable SELECTED Equals TRUE
-end
