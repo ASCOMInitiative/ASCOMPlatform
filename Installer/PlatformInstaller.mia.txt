@@ -35,8 +35,11 @@ Set Variable UNINSTALLER to
 Set Variable ACTION to 
 Set Variable CLEARCACHE to 
  
-Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
-Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
+Comment: Set a variable indicating whether the installer was started from a stand alone exe or from the control panel
+Set Variable STARTEDFROMCONTROLPANEL to FALSE
+if Variable SETUPPATH Equals $ENGINECACHE$
+  Set Variable STARTEDFROMCONTROLPANEL to TRUE
+end
  
 Comment: Create the correct log name depending on whether we are installing or uninstalling
 Set Variable LOGPATHREGISTRY to 
@@ -94,9 +97,13 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at 
 Write into Text File $SETUPLOG$ from Value   (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Setup path: $SETUPPATH$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Support directory: $SUPPORTDIR$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Installer: $EXEFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer file: $EXEFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer directory: $EXEDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer file: $EXEFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ SFX path: $SFXPATH$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ SFX file: $SFXFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Run the RemoveASCOM program if requested on the command line
@@ -2007,19 +2014,21 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native m
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+ 
 if Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP Equals TRUE
   Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 end
+ 
 if Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP Equals TRUE
   Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
 end
  
 Comment: Shortcuts have to be created in native mode in order to get the ASCOM shortcut icon to appear
 Set Variable NATIVE_ENGINE to TRUE
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
-Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-Create Shortcut $SHORTCUTFOLDER$\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+Create Shortcut $SHORTCUTFILESALL$\ASCOM Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
 Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
@@ -2606,6 +2615,8 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
         Comment: Enable a note saying when the user guide will be displayed.
         if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
           Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+        else
+          Set Variable FINISH_CONTEXT to Installation completed succesfully.
         end
         Comment: Revise messages if in maintenance mode
         if Variable MAINTENANCE Equals (Ignore Case) TRUE

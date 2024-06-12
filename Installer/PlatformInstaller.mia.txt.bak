@@ -35,8 +35,11 @@ Set Variable UNINSTALLER to
 Set Variable ACTION to 
 Set Variable CLEARCACHE to 
  
-Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
-Comment: Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$ASCOM" (WAIT)
+Comment: Set a variable indicating whether the installer was started from a stand alone exe or from the control panel
+Set Variable STARTEDFROMCONTROLPANEL to FALSE
+if Variable SETUPPATH Equals $ENGINECACHE$
+  Set Variable STARTEDFROMCONTROLPANEL to TRUE
+end
  
 Comment: Create the correct log name depending on whether we are installing or uninstalling
 Set Variable LOGPATHREGISTRY to 
@@ -94,9 +97,13 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at 
 Write into Text File $SETUPLOG$ from Value   (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Setup path: $SETUPPATH$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Support directory: $SUPPORTDIR$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Installer: $EXEFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer file: $EXEFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer directory: $EXEDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer file: $EXEFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ SFX path: $SFXPATH$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ SFX file: $SFXFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Run the RemoveASCOM program if requested on the command line
@@ -569,9 +576,11 @@ if Variable REPAIR Equals (Ignore Case) TRUE
 end
  
 label: Modify Maintenance
+Comment: Check whether the Modify option was selected and action if necessary
 if Variable MODIFY Equals (Ignore Case) TRUE
   Hide Component: ASCOM Platform Options\Display user guide when installation is complete
   Display Dialog: welcome, wait for dialog to return (modal)
+   
   Comment: Exit Setup if install is cancelled
   if Variable WIZARD Equals CANCEL
     Write into Text File $SETUPLOG$ from Value $TIME$ Installation cancelled at user request (Modify) (at end of file)
@@ -580,6 +589,7 @@ if Variable MODIFY Equals (Ignore Case) TRUE
   Set Variable PROGRESSTEXT to Maintaining Platform 7...
 end
  
+Comment: Check whether the Remove option was selected and action if necessary
 if Variable REMOVE Equals (Ignore Case) TRUE
   Set Variable ABORT to FALSE
   Display Dialog: ConfirmRemove, wait for dialog to return (modal)
@@ -591,15 +601,18 @@ if Variable REMOVE Equals (Ignore Case) TRUE
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance after processing - Modify: $MODIFY$ ,Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
  
+Comment: Display Read-Me if required
 if Variable WIZARD Equals README
   Write into Text File $SETUPLOG$ from Value $TIME$ ReadMe shown (at end of file)
   GoTo Label: ReadMe Information Maintenance
 end
  
+Comment: Clear the install cache if required
 Write into Text File $SETUPLOG$ from Value $TIME$ Welcome dialogue CLEARCACHE outcome: $CLEARCACHE$ (at end of file)
 if Variable CLEARCACHE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Delete cache requested - $ENGINECACHE$*.* (at end of file)
   Recursively Delete Files $ENGINECACHE$*.*
+  MessageBox: Clear Cache, The installer cache has been cleared and the installer will now close.
   Terminate Installation
 end
  
@@ -2600,6 +2613,8 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
         Comment: Enable a note saying when the user guide will be displayed.
         if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
           Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+        else
+          Set Variable FINISH_CONTEXT to Installation completed succesfully.
         end
         Comment: Revise messages if in maintenance mode
         if Variable MAINTENANCE Equals (Ignore Case) TRUE

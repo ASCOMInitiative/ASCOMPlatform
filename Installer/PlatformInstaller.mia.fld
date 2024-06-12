@@ -1,5 +1,4 @@
 ﻿Check Application Requirements
-End of installation dialogue
 Check Application Pre-Requisites
 Set Registry Keys
 Remove Previous Platform install if present
@@ -18,5 +17,9 @@ Uninstall previous Platform
 Install Platform files
 Post install activities - 64bit only
 Post install activities - 32bit only
-Set up log file and variables
+Main Setup Dialogue
+Maintenance Dialogue
+Start installation
+Post install activities - 32bit and 64bit
 Validate installation
+End of installation dialogue
