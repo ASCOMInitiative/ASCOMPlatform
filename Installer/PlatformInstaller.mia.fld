@@ -2,9 +2,9 @@
 Main Setup Dialogue
 Start installation
 Check Application Pre-Requisites
+Platform 6 and 7 files
 Set Registry Keys
 Remove Previous Platform install if present
-Uninstall items installed by this installer
 Remove 64bit components
 Remove Previous Platforms 4 and 5 if present
 Remove 32bit components
@@ -16,11 +16,12 @@ Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any 
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
-Uninstall previous Platform
 Post install activities - 64bit only
 Post install activities - 32bit only
 Set up log file and variables
-Platform 5 and 5.5 files
-Platform 6 and 7 files
-Post install activities - 32bit and 64bit
 Validate installation
+Post install activities - 32bit and 64bit
+Install complete dialogue
+Platform 5 and 5.5 files
+Developer files
+Install Platform files

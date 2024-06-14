@@ -1765,8 +1765,9 @@ Set Variable MYPROGRESS to 38
  
 Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Install Files ..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Install Files ..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Platform Supporting Documents\How to make an ASCOM driver.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\Platform Evolution.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -2094,9 +2095,10 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELO
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver installer Inno script generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create an ASCOM driver to $DEVELOPERTARGETDIR$\Developer Documentation\How to make an ASCOM driver.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
+Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $DEVELOPERTARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
@@ -2664,6 +2666,7 @@ if Variable SILENT Equals FALSE
   end
    
   Comment: Show the user guide if we are not removing and not repairing the install
+  Set Variable NATIVE_ENGINE to TRUE
   Write into Text File $SETUPLOG$ from Value   (at end of file)
   if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
     if Variable MAINTENANCE not Equals (Ignore Case) TRUE
