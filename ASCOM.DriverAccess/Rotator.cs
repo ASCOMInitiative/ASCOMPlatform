@@ -114,43 +114,48 @@ namespace ASCOM.DriverAccess
             get { return (bool)memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }); }
         }
 
-		/// <summary>
-		/// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
-		/// </summary>
-		/// <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
-		/// <exception cref="InvalidValueException">If Position is invalid.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-		/// <remarks>
-		/// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
-		/// <para>Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position
-		/// and the value of the <see cref="Position" /> parameter (modulo 360 degrees), then starts rotation to <see cref="TargetPosition" />.</para>
-		/// <para><b>NOTE</b></para>
-		/// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
-		/// </remarks>
-		public void Move(float Position)
+        /// <summary>
+        /// Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
+        /// </summary>
+        /// <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
+        /// <exception cref="InvalidValueException">If Position is invalid.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+        /// <remarks>
+        /// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
+        /// <para>This is an asynchronous method that returns as soon as the rotation operation has been successfully started, with the
+        /// <see cref="IsMoving"/> property True (unless already at the requested position). After the requested angle is successfully reached and motion stops, 
+        /// the <see cref="IsMoving"/> property must become False.</para>
+        /// <para>Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position
+        /// and the value of the <see cref="Position" /> parameter (modulo 360 degrees), then starts rotation to <see cref="TargetPosition" />.</para>
+        /// <para><b>NOTE</b></para>
+        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// </remarks>
+        public void Move(float Position)
         {
             memberFactory.CallMember(3, "Move", new Type[] { typeof(float) }, new object[] { Position });
         }
 
-		/// <summary>
-		/// Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
-		/// </summary>
-		/// <param name="Position">Absolute position in degrees.</param>
-		/// <exception cref="InvalidValueException">If Position is invalid.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-		/// <remarks>
-		/// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
-		/// <p style="color:red"><b>SPECIFICATION REVISION - IRotatorV3 - Platform 6.5</b></p>
-		/// <para>
-		/// Calling <see cref="MoveAbsolute"/> causes the <see cref="TargetPosition" /> property to change to the value of the
-		/// <see cref="Position" /> parameter, then starts rotation to <see cref="TargetPosition" />. 
-		/// </para>
-		/// <para><b>NOTE</b></para>
-		/// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
-		/// </remarks>
-		public void MoveAbsolute(float Position)
+        /// <summary>
+        /// Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
+        /// </summary>
+        /// <param name="Position">Absolute position in degrees.</param>
+        /// <exception cref="InvalidValueException">If Position is invalid.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+        /// <remarks>
+        /// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
+        /// <para>This is an asynchronous method that returns as soon as the rotation operation has been successfully started, with the
+        /// <see cref="IsMoving"/> property True (unless already at the requested position). After the requested angle is successfully reached and motion stops, 
+        /// the <see cref="IsMoving"/> property must become False.</para>
+        /// <para>
+        /// Calling <see cref="MoveAbsolute"/> causes the <see cref="TargetPosition" /> property to change to the value of the
+        /// <see cref="Position" /> parameter, then starts rotation to <see cref="TargetPosition" />. 
+        /// </para>
+        /// <para><b>NOTE</b></para>
+        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// </remarks>
+        public void MoveAbsolute(float Position)
         {
             memberFactory.CallMember(3, "MoveAbsolute", new Type[] { typeof(float) }, new object[] { Position });
         }
@@ -296,21 +301,23 @@ namespace ASCOM.DriverAccess
             }
         }
 
-		/// <summary>
-		/// Moves the rotator to the specified mechanical angle. 
-		/// </summary>
-		/// <param name="Position">Mechanical rotator position angle.</param>
-		/// <exception cref="InvalidValueException">If Position is invalid.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented.</b></p>
-		/// <p style="color:red"><b>Introduced in IRotatorV3.</b></p>
-		/// <para>Moves the rotator to the requested mechanical angle, independent of any sync offset that may have been set. This method is to address requirements that need a physical rotation
-		/// angle such as taking sky flats.</para>
-		/// <para>Client applications should use the <see cref="MoveAbsolute(float)"/> method in preference to this method when imaging.</para>
-		/// </remarks>
-		public void MoveMechanical(float Position)
+        /// <summary>
+        /// Moves the rotator to the specified mechanical angle. 
+        /// </summary>
+        /// <param name="Position">Mechanical rotator position angle.</param>
+        /// <exception cref="InvalidValueException">If Position is invalid.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented.</b></p>
+        /// <para>This is an asynchronous method that returns as soon as the rotation operation has been successfully started, with the
+        /// <see cref="IsMoving"/> property True (unless already at the requested position). After the requested angle is successfully reached and motion stops, 
+        /// the <see cref="IsMoving"/> property must become False.</para>
+        /// <para>Moves the rotator to the requested mechanical angle, independent of any sync offset that may have been set. This method is to address requirements that need a physical rotation
+        /// angle such as taking sky flats.</para>
+        /// <para>Client applications should use the <see cref="MoveAbsolute(float)"/> method in preference to this method when imaging.</para>
+        /// </remarks>
+        public void MoveMechanical(float Position)
         {
             if (base.DriverInterfaceVersion >= 3)
             {

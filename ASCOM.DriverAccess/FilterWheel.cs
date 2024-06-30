@@ -106,26 +106,28 @@ namespace ASCOM.DriverAccess
             get { return (string[])memberFactory.CallMember(1, "Names", new Type[] { }, new object[] { }); }
         }
 
-		/// <summary>
-		/// Sets or returns the current filter wheel position
-		/// </summary>
-		/// <exception cref="InvalidValueException">Must throw an InvalidValueException if an invalid position is set</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// Write a position number between 0 and N-1, where N is the number of filter slots (see
-		/// <see cref="Names"/>). Starts filter wheel rotation immediately when written. Reading
-		/// the property gives current slot number (if wheel stationary) or -1 if wheel is
-		/// moving. 
-		/// <para>Returning a position of -1 is <b>mandatory</b> while the filter wheel is in motion; valid slot numbers must not be reported back while
-		/// the filter wheel is rotating past filter positions.</para>
-		/// <para><b>Note</b></para>
-		/// <para>Some filter wheels are built into the camera (one driver, two
-		/// interfaces).  Some cameras may not actually rotate the wheel until the
-		/// exposure is triggered.  In this case, the written value is available
-		/// immediately as the read value, and -1 is never produced.</para>
-		/// </remarks>
-		public short Position
+        /// <summary>
+        /// Sets or returns the current filter wheel position
+        /// </summary>
+        /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an invalid position is set</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        ///<para>This is an asynchronous operation: Writing to Position must return as soon as the filter change operation has been successfully started. Reading the Position property must return -1 while the change
+        /// is in progress. After the requested position has been successfully reached and motion stops, reading Position must return the requested new filter number.</para>
+        /// <para>Write a position number between 0 and N-1, where N is the number of filter slots (see
+        /// <see cref="Names"/>). Starts filter wheel rotation immediately when written. Reading
+        /// the property gives current slot number (if wheel stationary) or -1 if wheel is
+        /// moving.</para>
+        /// <para>Returning a position of -1 is <b>mandatory</b> while the filter wheel is in motion; valid slot numbers must not be reported back while
+        /// the filter wheel is rotating past filter positions.</para>
+        /// <para><b>Note</b></para>
+        /// <para>Some filter wheels are built into the camera (one driver, two
+        /// interfaces).  Some cameras may not actually rotate the wheel until the
+        /// exposure is triggered.  In this case, the written value is available
+        /// immediately as the read value, and -1 is never produced.</para>
+        /// </remarks>
+        public short Position
         {
             get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
             set { memberFactory.CallMember(2, "Position", new Type[] { typeof(Int16) }, new object[] { value }); }

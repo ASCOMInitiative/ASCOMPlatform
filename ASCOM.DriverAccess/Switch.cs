@@ -326,11 +326,21 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Set a boolean switch's state asynchronously
         /// </summary>
-		/// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
+        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
         /// <param name="id">Switch number.</param>
         /// <param name="state">New boolean state.</param>
-		/// <remarks>
+        /// <remarks>
         /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// <para>
+        /// This is an asynchronous method that must return as soon as the state change operation has been successfully started, with
+        /// <see cref="StateChangeComplete(short)"/> for the given switch Id = False. After the state change has completed <see cref="StateChangeComplete(short)"/> becomes True.
+        /// </para>
+        /// <para>
+        /// <see cref="GetSwitchValue"/> must return <see cref="MaxSwitchValue" /> if the set state is true and <see cref="MinSwitchValue" /> if the set state is false.
+        /// </para>
+        /// <para>
+        /// Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1
+        /// </para>
         /// </remarks>
         public void SetAsync(short id, bool state)
         {
@@ -355,6 +365,12 @@ namespace ASCOM.DriverAccess
         /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
         /// <remarks>
         /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
+        /// <para>This is an asynchronous method that must return as soon as the state change operation has been successfully started, with
+        /// <see cref="StateChangeComplete(short)"/> for the given switch Id = False. After the state change has completed <see cref="StateChangeComplete(short)"/> becomes True.</para>
+        /// <para>If the value is more than <see cref="MaxSwitchValue"/> or less than <see cref="MinSwitchValue"/> the method must throw an <see cref="ASCOM.InvalidValueException"/>.</para>
+        /// <para>A set value that is intermediate between the values specified by <see cref="SwitchStep"/> must result in the device being set to an achievable value close to the requested set value.</para>
+        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+        /// <para>This is a Version 2 method.</para>
         /// </remarks>
         public void SetAsyncValue(short id, double value)
         {

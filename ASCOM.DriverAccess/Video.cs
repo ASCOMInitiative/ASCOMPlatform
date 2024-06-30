@@ -12,7 +12,7 @@ using System.Collections;
 namespace ASCOM.DriverAccess
 {
     /// <summary>
-    /// Provides universal access to Video drivers
+    /// Defines the IVideo Interface. - NOW DEPRECATED, ONLY RETAINED FOR BACKWARD COMPATIBILITY
     /// </summary>
     public class Video : AscomDriver, IVideo
     {

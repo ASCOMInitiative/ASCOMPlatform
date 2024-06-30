@@ -365,14 +365,16 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns a safearray of int of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure. 
+        /// Returns an array of int of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
         /// </summary>
         /// <value>The image array.</value>
         /// <exception cref="InvalidOperationException">If no image data is available.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// The application must inspect the Safearray parameters to determine the dimensions. 
+        /// <para>This is a synchronous call and clients should be prepared for it to take a long time to complete when large images are being transferred.</para>
+        /// <para>Drivers written in C++ must return the image as a SafeArray.</para>
+        /// <para>Developers of Alpaca camera devices are strongly advised to implement the ImageBytes mechanic, which is specified in the Alpaca API Reference, to ensure fast image transfer to the client.</para>>
         /// <para>Note: if <see cref="NumX" /> or <see cref="NumY" /> is changed after a call to <see cref="StartExposure">StartExposure</see> it will 
         /// have no effect on the size of this array. This is the preferred method for programs (not scripts) to download 
         /// images since it requires much less memory.</para>
@@ -393,7 +395,7 @@ namespace ASCOM.DriverAccess
         /// values are held in memory in column major order despite being stored in row major order from an <b>infrastructure</b> perspective.
         /// </para>
         /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
-        /// <para>Furthermore, for the avoidence of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
+        /// <para>Furthermore, for the avoidance of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
         public object ImageArray
         {
@@ -401,19 +403,21 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns a safearray of Variant of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure. 
+        /// Returns an array of COM-Variant of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
         /// </summary>
         /// <value>The image array variant.</value>
         /// <exception cref="InvalidOperationException">If no image data is available.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// The application must inspect the Safearray parameters to
-        /// determine the dimensions. Note: if <see cref="NumX" /> or <see cref="NumY" /> is changed after a call to
+        /// <para>This property is used only in Windows ASCOM/COM drivers. Alpaca drivers and stand-alone Alpaca cameras must raise a <see cref="PropertyNotImplementedException"/>.</para>
+        /// <para>This is a synchronous call and clients should be prepared for it to take a long time to complete when large images are being transferred.</para>
+        /// <para>Drivers written in C++ must return the image as a SafeArray.</para>
+        /// <para>Note: if <see cref="NumX" /> or <see cref="NumY" /> is changed after a call to
         /// <see cref="StartExposure">StartExposure</see> it will have no effect on the size of this array. This property
         /// should only be used from scripts due to the extremely high memory utilization on
         /// large image arrays (26 bytes per pixel). Pixels values should be in Short, int,
-        /// or Double format.
+        /// or Double format.</para>
         /// <para>For colour or multispectral cameras, will produce an array of <see cref="NumX" /> * <see cref="NumY" /> *
         /// NumPlanes.  If the application cannot handle multispectral images, it should use
         /// just the first plane.</para>
@@ -606,7 +610,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
-        /// This method returns only after the move has completed.
+        /// <para>This method must be implemented asynchronously using <see cref="IsPulseGuiding"/>  as the completion property.</para>
         /// <para>
         /// The (symbolic) values for GuideDirections are:
         /// <list type="bullet">
@@ -626,7 +630,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Sets the camera cooler setpoint in degrees Celsius, and returns the current setpoint.
+        /// Sets the camera cooler set-point in degrees Celsius, and returns the current set-point.
         /// </summary>
         /// <value>The set CCD temperature.</value>
         /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an attempt is made to set a value is outside the camera's valid temperature setpoint range.</exception>
@@ -634,6 +638,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
+        /// <para>This method should be short-lived because it is only expected to ‘set’ the new set point and must not block until the set point has been reached.</para>
         /// <para>The driver should throw an <see cref="InvalidValueException" /> if an attempt is made to set <see cref="SetCCDTemperature" /> 
         /// outside the valid range for the camera. As an assistance to driver authors, to protect equipment and prevent harm to individuals, 
         /// Conform will report an issue if it is possible to set <see cref="SetCCDTemperature" /> below -280C or above +100C.</para>
@@ -656,6 +661,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
+        /// <para>Must be implemented asynchronously using <see cref="ImageReady"/> to determine if the exposure has been successfully completed and the image data is ready for access via <see cref="ImageArray"/>.</para>
         /// <para>A dark frame or bias exposure may be shorter than the V2 <see cref="ExposureMin" /> value and for a bias frame can be zero.
         /// Check the value of <see cref="StartExposure">Light</see> and allow exposures down to 0 seconds 
         /// if <see cref="StartExposure">Light</see> is False.  If the hardware will not
@@ -704,6 +710,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
+        /// <para>Must be implemented asynchronously using <see cref="ImageReady"/> to determine if the exposure has been successfully completed and the image data is ready for access via <see cref="ImageArray"/>.</para>
         /// If an exposure is in progress, the readout process is initiated.  Ignored if readout is already in process.
         /// </remarks>
         public void StopExposure()

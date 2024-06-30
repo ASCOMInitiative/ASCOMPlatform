@@ -410,6 +410,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Optional method, can throw a MethodNotImplementedException</b></p>
+        /// <para>This must be a short-lived synchronous call that triggers a refresh. It must not wait for long running processes to complete. 
+        /// It is the client's responsibility to poll , <see cref="TimeSinceLastUpdate(string)"/> to determine whether / when the data has been refreshed.</para>
         /// </remarks>
         public void Refresh()
         {

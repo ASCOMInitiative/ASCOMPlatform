@@ -75,18 +75,19 @@ namespace ASCOM.DriverAccess
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		/// Immediately stop any focuser motion due to a previous <see cref="Move" /> method call.
-		/// </summary>
-		/// <exception cref="MethodNotImplementedException">Focuser does not support this method.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// Some focusers may not support this function, in which case an exception will be raised. 
-		/// <para><b>Recommendation:</b> Host software should call this method upon initialization and,
-		/// if it fails, disable the Halt button in the user interface.</para>
-		/// </remarks>
-		public void Halt()
+        /// <summary>
+        /// Immediately stop any focuser motion due to a previous <see cref="Move" /> method call.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException">Focuser does not support this method.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <para>This method must be short-lived; it is defined as synchronous in this specification.</para>
+        /// <para>Some focusers may not support this function, in which case an exception will be raised.</para>
+        /// <para><b>Recommendation:</b> Host software should call this method upon initialization and,
+        /// if it fails, disable the Halt button in the user interface.</para>
+        /// </remarks>
+        public void Halt()
         {
             memberFactory.CallMember(3, "Halt", new Type[] { }, new object[] { });
         }
@@ -150,28 +151,31 @@ namespace ASCOM.DriverAccess
             get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxStep", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		///  Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
-		/// </summary>
-		/// <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// If the <see cref="Absolute" /> property is True, then this is an absolute positioning focuser. 
-		/// The <see cref="Move">Move</see> command tells the focuser to move to an exact step position, and the Position parameter 
-		/// of the <see cref="Move">Move</see> method is an integer between 0 and <see cref="MaxStep" />.
-		/// <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells 
-		/// the focuser to move in a relative direction, and the Position parameter of the <see cref="Move">Move</see> method (in this case, step distance) 
-		/// is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
-		/// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
-		/// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser 
-		/// was able to execute the move safely without disrupting temperature compensation.</para>
-		/// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requirement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers 
-		/// are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling 
-		/// temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
-		/// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
-		///</remarks>
-		public void Move(int Position)
+        /// <summary>
+        ///  Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
+        /// </summary>
+        /// <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <remarks>
+        /// <para>This is <see langword="and"/>asynchronous method and must return as soon as the focus change operation has been successfully started, with the <see cref="IsMoving"/> property = True.
+        /// After the requested position is successfully reached and motion stops, the <see cref="IsMoving"/> property becomes False.</para>
+        /// <para>
+        /// If the <see cref="Absolute" /> property is True, then this is an absolute positioning focuser. 
+        /// The <see cref="Move">Move</see> command tells the focuser to move to an exact step position, and the Position parameter 
+        /// of the <see cref="Move">Move</see> method is an integer between 0 and <see cref="MaxStep" />.</para>
+        /// <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells 
+        /// the focuser to move in a relative direction, and the Position parameter of the <see cref="Move">Move</see> method (in this case, step distance) 
+        /// is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
+        /// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
+        /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser 
+        /// was able to execute the move safely without disrupting temperature compensation.</para>
+        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requirement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers 
+        /// are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling 
+        /// temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
+        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
+        ///</remarks>
+        public void Move(int Position)
         {
             memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { Position });
         }
