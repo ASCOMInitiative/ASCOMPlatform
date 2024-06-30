@@ -5,10 +5,10 @@
 			<title>Introduction</title>
 			<content>
 				<para>
-					All current components have in Platform 7 have an assembly version number 6.0.0.0 to ensure compatibility with applications developed under Platform 6. Please do not use references
+					All current components in Platform 7 have an assembly version number 6.0.0.0 to ensure compatibility with applications developed under Platform 6. Please do not use references
 					with assembly version numbers lower than this, which are only included to maintain backward compatibility.
 				</para>
-				<para>References to all ASCOM components are available on the "Assemblies/Extensions" tab of the Visual Studio "Add Reference" dialogue. The following components are available: </para>
+				<para>References to all ASCOM components are available on the "Assemblies/Extensions" tab of the Visual Studio "Add Reference" dialogue. The following main components are available: </para>
 				<table>
 					<tableHeader>
 						<row>

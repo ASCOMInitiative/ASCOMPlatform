@@ -1,33 +1,137 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-   
-    <section address="Introduction-Developers-Platform-6">
-    	<title>Introduction - ASCOM-Platform 7 - ASCOM Driver and Application Developers</title>
-      	<content>
-      	
-      	<para>
-      		Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" /> for a detailed list of changes and fixes for both developers and Platform users.
-        </para>
+		<section address="Introduction-Developers-Platform-7">
+			<title>Introduction - ASCOM-Platform 7 - ASCOM Driver and Application Developers</title>
+			<content>
+				<para>
+					Platform 7 builds on the architectural changes introduced in Platform 6 with a strong new focus on asynchronous operation.
+					Many Platform 6 interface operations were already explicitly documented as asynchronous and had associated pollable completion properties. Platform 7 ensures that all
+					potentially long running operations are now defined as asynchronous and have associated completion properties.
+				</para>
+				<para>
+					Some new asynchronous methods and completion properties have been introduced where these were missing from the Platform 6 interface definitions. See the Key Interface Changes section below for details.
+				</para>
+				<para>
 
-		<para>***** TBC *****</para>
-      	
-      	<para>Platform 7 builds on the architectural changes introduced in Platform 6 and introduces a set of common methods that 
-      	will be available in all drivers. These have been based on the methods already implemented in the Telescope interface together
-      	with methods agreed in the IDeviceControl interface discussion. The full list of members is given 
-      	in the ASCOM.DeviceInterface namespace section of this help file.
-      	</para>
-		</content>
-    </section>
-
-   	<relatedTopics>
-		<link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" />
-		<externalLink>
-			<linkText>ASCOM Initiative Web Site</linkText>
-			<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
-			<linkUri>https://ascom-standards.org/</linkUri>
-		</externalLink>
-		<codeEntityReference>N:ASCOM.Utilities</codeEntityReference>
-	</relatedTopics>
+					Please note that, if a telescope mount can slew programmatically, it is mandatory for driver authors to implement the asynchronous slew methods.
+					The synchronous methods must also be implemented to ensure backward compatibility with older clients.
+				</para>
+				<para>
+					Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" /> for a detailed list of changes and fixes for both developers and Platform users.
+				</para>
+			</content>
+		</section>
+		<section address="Interface-Changes">
+			<title>Platform 7 Interface change summary</title>
+			<content>
+				<table>
+					<tr>
+						<th>Interface</th>
+						<th>Change</th>
+					</tr>
+					<tr>
+						<td>All</td>
+						<td>
+							New asynchronous <legacyBold>Connect()</legacyBold> and <legacyBold>Disconnect()</legacyBold> methods to replace the PUT Connected property. 
+							A new <legacyBold>Connecting</legacyBold> property acts as the completion property for connect / disconnect operations. Driver authors must 
+							continue to implement PUT Connected to ensure backward compatibility.
+						</td>
+					</tr>
+					<tr>
+						<td>All</td>
+						<td>
+							A new <legacyBold>DeviceState</legacyBold> property returns all operational properties of the device in a single call.
+						</td>
+					</tr>
+					<tr>
+						<td>CoverCalibrator</td>
+						<td>
+							A new <legacyBold>CalibratorChanging</legacyBold> completion property to monitor the state of the CalibratorOn and CalibratorOff operations. The CalibratorState property must continue
+							to reflect the device's state to ensure backward compatibility.
+						</td>
+					</tr>
+					<tr>
+						<td>CoverCalibrator</td>
+						<td>
+							A new <legacyBold>CoverMoving</legacyBold> completion property to monitor the state of the CoverCalibrator OpenCover and CloseCover operations. The CoverState property must continue
+							to reflect the device's state to ensure backward compatibility.
+						</td>
+					</tr>
+					<tr>
+						<td>Dome</td>
+						<td>
+							<legacyBold>AbortSlew()</legacyBold> is now explicitly defined as asynchronous with Slewing as the completion property.
+						</td>
+					</tr>
+					<tr>
+						<td>Switch</td>
+						<td>
+							New asynchronous <legacyBold>SetAsync()</legacyBold> and <legacyBold>SetAsyncValue()</legacyBold> methods to support long-running Switch operations.
+							The new <legacyBold>StateChangeComplete</legacyBold> property acts as the completion
+							property for asynchronous switch operations.
+						</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>
+							<legacyBold>FindHome()</legacyBold>, <legacyBold>Park()</legacyBold> and <legacyBold>MoveAxis()</legacyBold> are explicitly defined as
+							asynchronous using Slewing as the completion property.
+						</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>
+							<legacyBold>PulseGuide</legacyBold> is explicitly defined as asynchronous with IsPulseGuiding as the completion property.
+						</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>The synchronous slewing methods in the Telescope interface have been deprecated for client authors in favour of their asynchronous counterparts.</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>
+							Driver authors must implement both the synchronous and asynchronous slew methods when programmatic slewing is supported.
+							The synchronous methods must be implemented to ensure backward compatibility with older clients. A consequence of this is that the CanSlew and CanSlewAsync properties
+							will always have the same value. This also applies to the CanSlewAltAz and CanSlewAltAzAsync properties.
+						</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>
+							<legacyBold>AbortSlew()</legacyBold> is now explicitly defined as asynchronous with Slewing as the completion property.
+						</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>
+							Drivers must now reject attempts to set RightAscensionRate or DeclinationRate when TrackingRate is not driveSidereal by throwing an InvalidOperationException.
+							This is because the offsets are only valid when tracking at sidereal rate.
+						</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>ParkedException is now specified to be thrown in methods where operations are invalid while parked.</td>
+					</tr>
+					<tr>
+						<td>Telescope</td>
+						<td>
+							The equatorial slewing methods must now throw an InvalidOperationException if called while Tracking is False or when the requested slew would fail
+							due to exceeding a hardware limit of the mount.
+						</td>
+					</tr>
+				</table>
+			</content>
+		</section>
+		<relatedTopics>
+			<link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" />
+			<externalLink>
+				<linkText>ASCOM Initiative Web Site</linkText>
+				<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
+				<linkUri>https://ascom-standards.org/</linkUri>
+			</externalLink>
+			<codeEntityReference>N:ASCOM.Utilities</codeEntityReference>
+		</relatedTopics>
 	</developerConceptualDocument>
 </topic>

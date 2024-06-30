@@ -15,7 +15,71 @@
 			<title>Changes in 7.0 - For Everyone</title>
 			<content>
 				<list class="bullet">
-					<listItem>TBC.</listItem>
+					<listItem>
+						Simplified Start menu with ASCOM applications in the top-level menu.
+					</listItem>
+					<listItem>
+						The ASCOM global default log file location can now be customised to a value other than Documents\ASCOM.
+						<list class="bullet">
+							<listItem>
+								The new location can be set through the Diagnostics Tool – Tools / Set Log File Location menu dialogue.
+							</listItem>
+							<listItem>
+								This only applies to logs from applications and drivers that use the Platform’s TraceLogger component.
+								If the developer created their own logging mechanic their logs will remain in the location defined by the developer.
+							</listItem>
+						</list>
+					</listItem>
+					<listItem>
+						Improvements in performance
+						<list class="bullet">
+							<listItem>
+								The entire device operational state can be determined in a single call, replacing use of many single purpose calls.
+							</listItem>
+							<listItem>
+								Focus on async operations to keep UIs responsive
+							</listItem>
+						</list>
+					</listItem>
+					<listItem>Updated explanatory user guide that now includes Alpaca.</listItem>
+					<listItem>ASCOM Remote and the ASCOM Omni-Simulators are now included in the install</listItem>
+					<listItem>
+						The ASCOM Omni-Simulators are now the default Platform simulators.
+						<list class="bullet">
+							<listItem>
+								The original simulators can be used if required through a configuration option in the Diagnostics Tool Options menu.
+							</listItem>
+						</list>
+					</listItem>
+					<listItem>A Camera Hub application has been added to host 32bit camera driver DLLs and enable them to be used by 64bit applications.</listItem>
+					<listItem>
+						There is now a weekly scheduled Platform update availability check.
+						<list class="bullet">
+							<listItem>
+								When an update is available an alert will appear as a Windows message.
+							</listItem>
+							<listItem>
+								An update check can be made manually by running the Diagnostics Tool. An “Update available button will appear when an update has been posted to Github.
+							</listItem>
+							<listItem>
+								Update checks can be enabled and disabled through the Diagnostics Options menu.
+							</listItem>
+						</list>
+					</listItem>
+					<listItem>
+						Platform Installer
+						<list class="bullet">
+							<listItem>
+								Has an updated appearance
+							</listItem>
+							<listItem>
+								Now has more reliable and consistent error reporting
+							</listItem>
+							<listItem>
+								Now has a clear cache option to address “File Missing” issues during installation
+							</listItem>
+						</list>
+					</listItem>
 				</list>
 			</content>
 		</section>
@@ -24,13 +88,7 @@
 			<title>Issues Fixed in 7.0 - Platform</title>
 			<content>
 				<list class="bullet">
-					<listItem>
-						Installer
-						<list class="bullet">
-							<listItem>TBC.</listItem>
-						</list>
-					</listItem>
-					<listItem>TBC.</listItem>
+					<listItem>The installer no longer displays a successful install message when an error occurs</listItem>
 				</list>
 			</content>
 		</section>
@@ -39,13 +97,28 @@
 			<title>Key Changes in 7.0 - For Developers</title>
 			<content>
 				<list class="bullet">
+					<listItem>The developer components are now included with the main installer and no longer need to be installed separately.</listItem>
+					<listItem>How to make an ASCOM driver document completely re-written to document the current process.</listItem>
+					<listItem>A new DeviceState property for all interfaces that returns the entire device operational state in a single call.</listItem>
+					<listItem>New asynchronous Connect and Disconnect methods for all interfaces.</listItem>
 					<listItem>
-						Documentation
-						<list class="bullet">
-							<listItem>TBC.</listItem>
-						</list>
+						New <link xlink:href="6cdc126a-3b1a-4a55-836f-aaf704740a33">asynchronous methods and API clarifications</link>.
 					</listItem>
-					<listItem>TBC.</listItem>
+					<listItem>
+						Platform neutral online documentation – External link
+						<externalLink>
+							<linkText>ascom-standards.org/newdocs</linkText>
+							<linkAlternateText>https://ascom-standards.org/newdocs</linkAlternateText>
+							<linkUri>https://ascom-standards.org/newdocs</linkUri>
+							<linkTarget>_blank</linkTarget>
+						</externalLink>
+					</listItem>
+					<listItem>Documentation clarity on where async operation is expected</listItem>
+					<listItem>DriverAccess now has convenience methods to retrieve device state in a single call.</listItem>
+					<listItem>The driver templates have been updated to support Platform 7 interface changes.</listItem>
+					<listItem>SOFA has been updated to release 19 as issued on 11th October 2023.</listItem>
+					<listItem>Platform 6 versions of Conform are incompatible with Platform 7 and a warning is issued by the Platform installer to this effect. An updated version is available on GitHub.</listItem>
+					<listItem>Interface version numbers have all increased by 1.</listItem>
 				</list>
 			</content>
 		</section>
@@ -54,7 +127,11 @@
 			<title>Issues Fixed in 7.0 - For Developers</title>
 			<content>
 				<list class="bullet">
-					<listItem>TBC.</listItem>
+					<listItem>NOVASCOM – Fixed error in Sun Ephemeris calculation introduced when the Code was transcribed from C++ in 2009.</listItem>
+					<listItem>Driver template – Fixed issue in Focuser Link code that resulted in an out of the box Conform fail.</listItem>
+					<listItem>Fixed issue in NOVAS 3.1 component where the ephemeris file may not have been closed on DLL unload.</listItem>
+					<listItem>The installer now pre-populates historic leap second data so that AstroUtils.DeltaUT1 works out of the box when there has been no earth rotation data update.</listItem>
+					<listItem>Fixed a bug introduced in Platform 6.6 SP2 where a DriverException was returned instead of more specialised exceptions like InvalidValueException.</listItem>
 				</list>
 			</content>
 		</section>
@@ -63,9 +140,7 @@
 			<title>Breaking Changes (For Developers) in Platform 6.6 SP2</title>
 			<content>
 				<list class="bullet">
-					<listItem>
-						None.
-					</listItem>
+					<listItem>None.</listItem>
 				</list>
 			</content>
 		</section>
@@ -91,27 +166,34 @@
 			</content>
 		</section>
 
+		<section address="InfrastructureChanges70">
+			<title>Platform Infrastructure Changes</title>
+			<content>
+				<list class="bullet">
+					<listItem>A	more secure code signing mechanic has been introduced.</listItem>
+					<listItem>All current components that were written in VB have been migrated to C#.</listItem>
+					<listItem>The Platform source code folder structure has been rationalised.</listItem>
+					<listItem>The installer internal structure has been simplified to improve maintainability.</listItem>
+				</list>
+			</content>
+		</section>
+
 		<section address="PreReqs70">
 			<title>Platform Prerequisites</title>
 			<content>
-				<para>Platform 7.0 requires the following .NET framework version and library:</para>
+				<para>Platform 7.0 requires the following .NET framework versions:</para>
 				<list class="bullet">
-					<listItem>.NET 8 Runtime</listItem>
+					<listItem>.NET Framework 3.5</listItem>
 					<listItem>.NET Framework 4.8</listItem>
-					<listItem>For WIndows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
+					<listItem>For Windows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
 				</list>
 				<para>
-					The installer will advise you if your PC does not have the required support and will request that you install or enable it before continuing with the installation.
+					The installer will advise you if your PC does not have the required framework support and will request that you install or enable it
+					before continuing with the installation. In some circumstances the installer can install framework support for you.
 					<externalLink>
 						<linkText>Microsoft Download Centre</linkText>
 						<linkAlternateText>https://www.microsoft.com/downloads</linkAlternateText>
 						<linkUri>https://www.microsoft.com/downloads</linkUri>
-						<linkTarget>_blank</linkTarget>
-					</externalLink>
-					<externalLink>
-						<linkText>.NET 8 Runtime</linkText>
-						<linkAlternateText>https://dotnet.microsoft.com/en-us/download/dotnet/8.0</linkAlternateText>
-						<linkUri>https://dotnet.microsoft.com/en-us/download/dotnet/8.0</linkUri>
 						<linkTarget>_blank</linkTarget>
 					</externalLink>
 				</para>

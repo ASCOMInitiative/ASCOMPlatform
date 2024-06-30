@@ -7,22 +7,32 @@
 		</para>
 
 		<para>
-			Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
+			Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications,
+			providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
 		</para>
 
 		<para>
-			If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> will provide a wide ranging report through a comprehensive test suite that exercises
-			every aspect of Platform functionality.
+			If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" />
+			will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
 		</para>
 
 		<section address="Introduction-Users-Platform-7">
 			<title>Key changes in Platform 7</title>
 			<content>
 				<list class="bullet">
-					<listItem>
-						***** TBC *****. A detailed list of fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.
-					</listItem>
+					<listItem>Simplified Start menu</listItem>
+					<listItem>The default log file location can be customised.</listItem>
+					<listItem>Focus on technical changes to improve performance and application usability.</listItem>
+					<listItem>Updated user guide that includes Alpaca,</listItem>
+					<listItem>ASCOM Remote and the ASCOM Omni-simulators are now installed as part of the Platform.</listItem>
+					<listItem>The Omni-Simulators are now the default Platform simulators.</listItem>
+					<listItem>A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.</listItem>
+					<listItem>An alert will be generated when a new Platform version is released.</listItem>
+					<listItem>The Platform installer is more resilient and reliable,</listItem>
 				</list>
+				<para>
+					A comprehensive list of changes and fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.
+				</para>
 			</content>
 		</section>
 
@@ -30,7 +40,8 @@
 			<title>Operating System Compatibility</title>
 			<content>
 				<para>
-					Platform 7 requires Windows 7 or later together with .NET Framework 4.8 and .NET 8. PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
+					Platform 7 requires Windows 7 SP1 or later together with .NET Frameworks 3.5 and 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1
+					together with .NET Framework 4 Client Profile instead.
 				</para>
 			</content>
 		</section>
@@ -47,8 +58,8 @@
 						<linkTarget>_blank</linkTarget>
 					</externalLink>
 					at <quoteInline>https://ascomtalk.groups.io/g/Help</quoteInline> to report and discuss issues that you come across when using the ASCOM Platform. You will find the
-					<link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting an issue as it provides concrete evidence to
-					help diagnose and resolve the problem.
+					<link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> located in Start Menu / ASCOM Platform 6 / Tools; it will help greatly if you run it before reporting
+					an issue as it provides concrete evidence to help diagnose and resolve the problem.
 				</para>
 			</content>
 		</section>
@@ -58,7 +69,7 @@
 			<content>
 				<list class="bullet">
 					<listItem>
-						See the section titled <link xlink:href="bfd53b69-9f13-489b-9a98-50c60d2a633b" /> for a summary of Platform 6 updates and new functionality.
+						See the section titled <link xlink:href="6c2d0f0d-6460-494e-9c1f-08545fcff623" /> for a summary of Platform 6 updates and new functionality.
 					</listItem>
 					<listItem>
 						See the section titled <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /> for a summary of Platform 5.5 updates and new functionality.
@@ -66,7 +77,9 @@
 					<listItem>
 						This platform appears as <quoteInline>ASCOM Platform 7</quoteInline> in the Apps and add/remove programs dialogues
 					</listItem>
-					<listItem>The Platform has been tested in 32 and 64bit bit versions of Windows 7 and Windows 10.</listItem>
+					<listItem>
+						The Platform has been tested in 32bit Windows 7, 64bit Windows 7, 32bit Windows 10, 64bit Windows 10 and Windows 11.
+					</listItem>
 				</list>
 			</content>
 		</section>
