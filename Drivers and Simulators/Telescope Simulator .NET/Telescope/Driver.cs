@@ -1465,7 +1465,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination: ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination", false);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetDeclination", false);
                 CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "TargetDeclination");
                 SharedResources.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
                 return TelescopeHardware.TargetDeclination;
@@ -1473,7 +1473,7 @@ namespace ASCOM.Simulator
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination:-> ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination", true);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetDeclination", true);
                 CheckRange(value, -90, 90, "TargetDeclination");
                 SharedResources.TrafficEnd(m_Util.DegreesToDMS(value));
                 TelescopeHardware.TargetDeclination = value;
@@ -1485,7 +1485,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetRightAscension: ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetRightAscension", false);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetRightAscension", false);
                 CheckRange(TelescopeHardware.TargetRightAscension, 0, 24, "TargetRightAscension");
                 SharedResources.TrafficEnd(m_Util.HoursToHMS(TelescopeHardware.TargetRightAscension));
                 return TelescopeHardware.TargetRightAscension;
@@ -1493,7 +1493,7 @@ namespace ASCOM.Simulator
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetRightAscension:-> ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetRightAscension", true);
+                CheckCapability(TelescopeHardware.CanSlew | TelescopeHardware.CanSlewAsync, "TargetRightAscension", true);
                 CheckRange(value, 0, 24, "TargetRightAscension");
 
                 SharedResources.TrafficEnd(m_Util.HoursToHMS(value));
