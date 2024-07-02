@@ -304,3 +304,11 @@ Help/Output
 /Installer/RemoveOldTemplates.exe
 /Installer/SetACL.exe
 /Installer/SuppressWinErrors.exe
+/OmniSimulators
+/Installer/FinaliseInstall.application
+/Installer/RemoveOldTemplates.application
+/Installer/RemoveOldTemplates.exe.manifest
+/Installer/SetACL.application
+/Installer/SetACL.exe.manifest
+/Installer/SuppressWinErrors.application
+/Installer/SuppressWinErrors.exe.manifest

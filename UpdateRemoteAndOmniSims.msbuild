@@ -5,11 +5,11 @@
 
 	<PropertyGroup>
 		<!-- Set OmniSim properties -->
-		<OmniSimRepositorytBranch>devicestatefix</OmniSimRepositorytBranch>
-		<OmniSimBuildConfiguration>Debug</OmniSimBuildConfiguration>
+		<OmniSimRepositorytBranch>main</OmniSimRepositorytBranch>
+		<OmniSimBuildConfiguration>release</OmniSimBuildConfiguration>
 		<OmniSimGitRepositoryURL>https://github.com/ASCOMInitiative/ASCOM.Alpaca.Simulators.git</OmniSimGitRepositoryURL>
 		<OmniSimDirectory>$(MSBuildStartupDirectory)\OmniSimulators</OmniSimDirectory>
-		<OmniSimVSProject>$(OmniSimDirectory)\ASCOM.Alpaca.Simulators\ASCOM.Alpaca.Simulators.csproj</OmniSimVSProject>
+		<OmniSimVSSolution>$(OmniSimDirectory)\ASCOM.Alpaca.Simulators.sln</OmniSimVSSolution>
 
 		<!-- Set ASCOM Remote properties -->
 		<AscomRemoteRepositorytBranch>develop</AscomRemoteRepositorytBranch>
@@ -130,8 +130,17 @@
 		<!-- Clone a fresh copy of the OmniSim Git repository  -->
 		<GitClient Command="clone" LocalPath="$(OmniSimDirectory)" Arguments="-b $(OmniSimRepositorytBranch) $(OmniSimGitRepositoryURL) $(OmniSimDirectory)"/>
 
+		<MSBuild Projects="$(OmniSimVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Any CPU;DefineConstants=ASCOM_COM" />
+		<Message Text="***** Cleaned the Omni-Simulators." />
+		
+		<MSBuild Projects="$(OmniSimVSSolution)" Targets="Restore" Properties="Configuration=Release;Platform=Any CPU;DefineConstants=ASCOM_COM" />
+		<Message Text="***** Restored the Omni-Simulators." />
+
+		<MSBuild Projects="$(OmniSimVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=Any CPU;DefineConstants=ASCOM_COM" />
+		<Message Text="***** Completed building the Omni-Simulators." />
+
 		<!-- Publish a 32bit OmniSim executable DefineConstants=ASCOM_COM;ASCOM_7_PREVIEW; 			TrimMode=full; -->
-		<Exec Command="dotnet publish -c Release -r win-x86 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -p:Platform=x86 -o ..\publish\x86" 
+		<Exec Command="dotnet publish -c Release -r win-x86 --self-contained true /p:PublishTrimmed=true -p DefineConstants=ASCOM_COM -o ..\publish\x86" 
 			ConsoleToMSBuild="true" 
 			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
 
@@ -140,8 +149,7 @@
 			ConsoleToMSBuild="true" 
 			WorkingDirectory="$(OmniSimDirectory)\ASCOM.Alpaca.Simulators" />
 
-		<Message Text="Completed building the Omni-Simulators." />
+		<Message Text="Completed publishing the Omni-Simulators." />
 		
-
 	</Target>
 </Project>
