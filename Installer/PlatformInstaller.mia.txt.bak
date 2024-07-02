@@ -241,6 +241,9 @@ Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on de
 Define Component: ASCOM Platform Options\Display user guide when installation is complete
 Define Component: ASCOM Platform Options\Include simulator Start menu shortcuts
  
+Comment: Force the user guide not to be displayed because Adobe reader locks up when started from the installer.
+Deselect Component: ASCOM Platform Options\Display user guide when installation is complete
+ 
 Comment: Read the framework root value from the OS and set FRAMEWORKPATH to the full path to the executables
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
 Set Variable FRAMEWORKPATH to $FRAMEWORKROOT$$FRAMEWORK$
@@ -518,7 +521,7 @@ else
 end
  
 label: Welcome Dialog
-Show Component: ASCOM Platform Options\Display user guide when installation is complete
+Hide Component: ASCOM Platform Options\Display user guide when installation is complete
 Display Dialog: welcome, wait for dialog to return (modal)
  
 Comment: Exit Setup when install is cancelled
@@ -2613,11 +2616,11 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
         Set Variable FINISH_TITLE to $TITLE$ installed successfully.
         Set Variable FINISH_DESCRIPTION to $NEWLINE$$NEWLINE$ If you are new to Platform 7, you will find information about new$NEWLINE$ features in the "Introduction" section of the Help file in the$NEWLINE$ Start / ASCOM Platform 7 folder.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ ASCOM Diagnostics Tool that you will find in the Start menu and$NEWLINE$ report the issues on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
         Comment: Enable a note saying when the user guide will be displayed.
-        if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
-          Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
-        else
-          Set Variable FINISH_CONTEXT to Installation completed succesfully.
-        end
+        Comment: if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+        Comment: Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+        Comment: else
+        Set Variable FINISH_CONTEXT to The user guide is in your Start / ASCOM Platform 6 folder.
+        Comment: end
         Comment: Revise messages if in maintenance mode
         if Variable MAINTENANCE Equals (Ignore Case) TRUE
           Comment: MAINTENANCE mode is active
@@ -2674,7 +2677,8 @@ if Variable SILENT Equals FALSE
       if Variable ACROBATKEY not Equals 
         Comment: Acrobat is installed
         Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
-        Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        Comment: Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        Run Program  $WINDIR$\explorer.exe "$TARGETDIR$\Docs\ASCOM User Guide.pdf" (WAIT)
         Set Variable ACTION to Display User Guide
         Include Script: UpdateAscomError
       else
@@ -2683,6 +2687,8 @@ if Variable SILENT Equals FALSE
           Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
           Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
           Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+          Set Variable ACTION to Display User Guide (Win 10)
+          Include Script: UpdateAscomError
         else
           Comment: We are not running on Windows 10 so display an error message.
           Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)

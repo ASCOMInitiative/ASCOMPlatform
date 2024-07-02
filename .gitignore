@@ -312,3 +312,4 @@ Help/Output
 /Installer/SetACL.exe.manifest
 /Installer/SuppressWinErrors.application
 /Installer/SuppressWinErrors.exe.manifest
+/Installer/FinaliseInstall.exe.manifest
