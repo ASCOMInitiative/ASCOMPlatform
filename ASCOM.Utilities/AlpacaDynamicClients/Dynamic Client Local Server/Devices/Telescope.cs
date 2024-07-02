@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.Tools;
+using System.Threading;
 
 namespace ASCOM.DynamicClients
 {
@@ -34,6 +35,14 @@ namespace ASCOM.DynamicClients
 
         private bool asyncConnectDisconnect; // Flag indicating whether an asynchronous Connect or Disconnect operation is in progress
         private bool newConnectedState; // The state to which connectedState will be set when an asynchronous Connect / Disconnect operation completes
+
+        // Flags to hold the sate of the device's can slew properties - Used if we need to emulate synchronous slewing
+        private bool? canSlew;
+        private bool? canSlewAltAz;
+        private bool? canAsynchronousSlew;
+        private bool? canAsynchronousSlewAltAz;
+
+        private const int ASYNC_SLEW_WAIT_TIME_MS = 500; // Time between polls of Slewing during an emulated synchronous slew (milliseconds)
 
         #region Initialisation and Dispose
 
@@ -585,6 +594,7 @@ namespace ASCOM.DynamicClients
         #endregion
 
         #region ITelescope Implementation
+
         public void AbortSlew()
         {
             client.AbortSlew();
@@ -752,7 +762,24 @@ namespace ASCOM.DynamicClients
         {
             get
             {
-                return client.CanSlew;
+                // Check whether this device can synchronous slew
+                if (CanSynchronousSlew()) // Device can synchronous slew
+                {
+                    // Return true because the device supports synchronous slewing
+                    return true;
+                }
+
+                // Device doesn't support synchronous slewing so check whether it supports asynchronous slewing
+                if (CanAsynchronousSlew()) // Device can asynchronous slew
+                {
+                    // Return true because we will emulate the synchronous slew
+                    return true;
+                }
+                else // The device doesn't support asynchronous slewing
+                {
+                    // Return false because the device doesn't support slewing at all, nether synchronous or asynchronous
+                    return false;
+                }
             }
         }
 
@@ -760,7 +787,24 @@ namespace ASCOM.DynamicClients
         {
             get
             {
-                return client.CanSlewAltAz;
+                // Check whether this device can synchronous slew alt/az
+                if (CanSynchronousSlewAltAz()) // Device can synchronous slew alt/az
+                {
+                    // Return true because the device supports synchronous slewing alt/az
+                    return true;
+                }
+
+                // Device doesn't support synchronous slewing alt/az so check whether it supports asynchronous slewing alt/az
+                if (CanAsynchronousSlewAltAz()) // Device can asynchronous slew alt/az
+                {
+                    // Return true because we will emulate the synchronous alt/az slew
+                    return true;
+                }
+                else // The device doesn't support asynchronous alt/az slewing
+                {
+                    // Return false because the device doesn't support slewing at all, nether synchronous or asynchronous
+                    return false;
+                }
             }
         }
 
@@ -1007,22 +1051,80 @@ namespace ASCOM.DynamicClients
 
         public void SlewToAltAz(double azimuth, double altitude)
         {
-            client.SlewToAltAz(azimuth, altitude);
+            // Check whether the device can slew synchronously
+            if (CanAsynchronousSlewAltAz()) // Device can slew synchronously
+            {
+                // Call the device's synchronous slew endpoint
+                client.SlewToAltAz(azimuth, altitude);
+            }
+            else // Device cannot slew synchronously
+            {
+                // Check whether the device can slew asynchronously
+                if (CanAsynchronousSlewAltAz()) // The device can slew asynchronously
+                {
+                    // The device cannot slew synchronously but can slew asynchronously so emulate the synchronous slew using asynchronous methods
+                    client.SlewToAltAzAsync(azimuth, altitude);
+
+                    // Wait for the slew to complete
+                    do
+                    {
+                        Thread.Sleep(ASYNC_SLEW_WAIT_TIME_MS);
+                        Application.DoEvents();
+                    } while (client.Slewing);
+                }
+                else // The device cannot slew asynchronously
+                {
+                    // The device cannot slew synchronously or asynchronously so call the device's synchronous slew endpoint so that it can return an error
+                    client.SlewToAltAz(azimuth, altitude);
+                }
+            }
+
+            TL.LogMessage("SlewToAltAz", "Slew completed OK");
         }
 
         public void SlewToAltAzAsync(double azimuth, double altitude)
         {
             client.SlewToAltAzAsync(azimuth, altitude);
+            TL.LogMessage("SlewToAltAzAsync", "Call completed OK");
         }
 
         public void SlewToCoordinates(double rightAscension, double declination)
         {
-            client.SlewToCoordinates(rightAscension, declination);
+            // Check whether the device can slew synchronously
+            if (CanSynchronousSlew()) // Device can slew synchronously
+            {
+                // Call the device's synchronous slew endpoint
+                client.SlewToCoordinates(rightAscension, declination);
+            }
+            else // Device cannot slew synchronously
+            {
+                // Check whether the device can slew asynchronously
+                if (CanAsynchronousSlew()) // The device can slew asynchronously
+                {
+                    // The device cannot slew synchronously but can slew asynchronously so emulate the synchronous slew using asynchronous methods
+                    client.SlewToCoordinatesAsync(rightAscension, declination);
+
+                    // Wait for the slew to complete
+                    do
+                    {
+                        Thread.Sleep(ASYNC_SLEW_WAIT_TIME_MS);
+                        Application.DoEvents();
+                    } while (client.Slewing);
+                }
+                else // The device cannot slew asynchronously
+                {
+                    // The device cannot slew synchronously or asynchronously so call the device's synchronous slew endpoint so that it can return an error
+                    client.SlewToCoordinates(rightAscension, declination);
+                }
+            }
+
+            TL.LogMessage("SlewToCoordinates", "Slew completed OK");
         }
 
         public void SlewToCoordinatesAsync(double rightAscension, double declination)
         {
             client.SlewToCoordinatesAsync(rightAscension, declination);
+            TL.LogMessage("SlewToCoordinatesAsync", "Call completed OK");
         }
 
         public void SlewToTarget()
@@ -1034,7 +1136,7 @@ namespace ASCOM.DynamicClients
         public void SlewToTargetAsync()
         {
             client.SlewToTargetAsync();
-            TL.LogMessage("SlewToTargetAsync", "Slew completed OK");
+            TL.LogMessage("SlewToTargetAsync", "Call completed OK");
         }
 
         public bool Slewing
@@ -1191,6 +1293,54 @@ namespace ASCOM.DynamicClients
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
             TL?.LogMessage(LogLevel.Debug, identifier, message);
+        }
+
+        /// <summary>
+        /// Efficiently return the device's CanSlew value
+        /// </summary>
+        /// <returns>True if the device can slew, otherwise false.</returns>
+        private bool CanSynchronousSlew()
+        {
+            if (!canSlew.HasValue)
+                canSlew = client.CanSlew;
+
+            return canSlew.Value;
+        }
+
+        /// <summary>
+        /// Efficiently return the device's CanSlewAltAz value
+        /// </summary>
+        /// <returns>True if the device can slew in Alt/Az, otherwise false.</returns>
+        private bool CanSynchronousSlewAltAz()
+        {
+            if (!canSlewAltAz.HasValue)
+                canSlewAltAz = client.CanSlewAltAz;
+
+            return canSlewAltAz.Value;
+        }
+
+        /// <summary>
+        /// Efficiently return the device's CanSlew value
+        /// </summary>
+        /// <returns>True if the device can slew, otherwise false.</returns>
+        private bool CanAsynchronousSlew()
+        {
+            if (!canAsynchronousSlew.HasValue)
+                canAsynchronousSlew = client.CanSlewAsync;
+
+            return canAsynchronousSlew.Value;
+        }
+
+        /// <summary>
+        /// Efficiently return the device's CanSlewAltAz value
+        /// </summary>
+        /// <returns>True if the device can slew in Alt/Az, otherwise false.</returns>
+        private bool CanAsynchronousSlewAltAz()
+        {
+            if (!canAsynchronousSlewAltAz.HasValue)
+                canAsynchronousSlewAltAz = client.CanSlewAltAzAsync;
+
+            return canAsynchronousSlewAltAz.Value;
         }
 
         #endregion
