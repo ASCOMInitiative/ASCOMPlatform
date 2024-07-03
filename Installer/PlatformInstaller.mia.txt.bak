@@ -1626,10 +1626,10 @@ if Variable WIN64MODE Equals TRUE
   Install Files ..\OmniSimulators\publish\x64\wwwroot\*.* to $PROGRAMFILES64$ASCOM\OmniSimulator\wwwroot, include subfolders
   Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe to $PROGRAMFILES64$ASCOM\OmniSimulator\COM
   Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe.config to $PROGRAMFILES64$ASCOM\OmniSimulator\COM
-  Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.pdb to $PROGRAMFILES64$ASCOM\OmniSimulator\COM
+  Comment: Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.pdb to $PROGRAMFILES64$ASCOM\OmniSimulator\COM
   Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe to $PROGRAMFILES32$ASCOM\OmniSimulator\COM
   Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe.config to $PROGRAMFILES32$ASCOM\OmniSimulator\COM
-  Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.pdb to $PROGRAMFILES32$ASCOM\OmniSimulator\COM
+  Comment: Install Files ..\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.pdb to $PROGRAMFILES32$ASCOM\OmniSimulator\COM
    
   Comment: Install ASCOM Remote
   Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
