@@ -12,7 +12,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to SafetyMonitor drivers
     /// </summary>
-    public class SafetyMonitor : AscomDriver, ISafetyMonitor
+    public class SafetyMonitor : AscomDriver, ISafetyMonitorV3
     {
         private readonly MemberFactory _memberFactory;
 

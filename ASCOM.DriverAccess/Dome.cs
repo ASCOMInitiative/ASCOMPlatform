@@ -61,7 +61,7 @@ namespace ASCOM.DriverAccess
     /// </item>
     /// </list>
     /// </remarks>
-    public class Dome : AscomDriver, IDomeV2
+    public class Dome : AscomDriver, IDomeV3
     {
         private MemberFactory memberFactory;
 
