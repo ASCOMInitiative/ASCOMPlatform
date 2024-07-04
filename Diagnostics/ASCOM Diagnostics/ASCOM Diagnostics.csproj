@@ -301,7 +301,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Octokit">
-      <Version>11.0.1</Version>
+      <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="TaskScheduler">
       <Version>2.10.1</Version>

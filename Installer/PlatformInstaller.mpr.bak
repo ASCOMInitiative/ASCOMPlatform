@@ -2132,6 +2132,15 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -2862,25 +2871,25 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 7.0 - Early Access
+ASCOM Platform 7.0 - RC1
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 7.0.9999.9999
 English
-ASCOM Platform 7.0 - Early Access
+ASCOM Platform 7.0 - RC1
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{CCD24451-1838-4EB3-A57A-BAA25CF71482}
+{B9F04C13-56CB-4F00-823C-8965355F0495}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
-Copyright © 1998-2023, The ASCOM Initiative. All rights reserved. 
+Copyright © 1998-2024, The ASCOM Initiative. All rights reserved. 
 FALSE
 AscomPlatform700
 TRUE
-TRUE
+FALSE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer
