@@ -34,7 +34,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Exceptions\ASCOM.Exceptions.csproj" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-23, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2009-24, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry" isExposed="True">
         <Filter entryType="Class" fullName="ASCOM.Astrometry.EarthRotationParameters" filterName="EarthRotationParameters" isExposed="False" />
@@ -97,7 +97,7 @@
       <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <CleanIntermediates>True</CleanIntermediates>
     <IncludeFavorites>True</IncludeFavorites>
@@ -125,7 +125,8 @@
     </FeedbackEMailAddress>
     <FeedbackEMailLinkText>
     </FeedbackEMailLinkText>
-    <HeaderText>Platform 7 Draft</HeaderText>
+    <HeaderText>
+    </HeaderText>
     <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" />

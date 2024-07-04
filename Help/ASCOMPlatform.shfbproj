@@ -20,7 +20,7 @@
     <DocumentationSources>
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-23, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2009-24, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
@@ -38,15 +38,9 @@
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
   <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
 </Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.Interfaces" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAlpacaDevice" filterName="IAlpacaDevice" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAlpacaDeviceExtra" filterName="IAlpacaDeviceExtra" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAlpacaDiscovery" filterName="IAlpacaDiscovery" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.Interfaces.IAscomDevice" filterName="IAscomDevice" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" /></ApiFilter>
+    </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <CleanIntermediates>True</CleanIntermediates>
     <IncludeFavorites>True</IncludeFavorites>
@@ -68,8 +62,9 @@
     </FeedbackEMailAddress>
     <FeedbackEMailLinkText>
     </FeedbackEMailLinkText>
-    <HeaderText>Platform 7 draft</HeaderText>
-    <VisibleItems>InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
+    <HeaderText>
+    </HeaderText>
+    <VisibleItems>ExplicitInterfaceImplementations, InheritedMembers, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
@@ -78,16 +73,16 @@
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
-    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <CollectionTocStyle>Flat</CollectionTocStyle>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <Language>en-US</Language>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <SaveComponentCacheCapacity>0</SaveComponentCacheCapacity>
-    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <BuildAssemblerVerbosity>AllMessages</BuildAssemblerVerbosity>
     <IndentHtml>False</IndentHtml>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CatalogProductId>VS</CatalogProductId>
@@ -193,6 +188,7 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Introduction\Introduction - Developer.aml" />
     <None Include="Version History\Version 7.0.aml" />
     <None Include="Version History\Version 6.6 SP2.aml" />
     <None Include="Version History\Version 6.6 SP1.aml" />

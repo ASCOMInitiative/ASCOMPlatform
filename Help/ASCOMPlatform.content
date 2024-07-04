@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" title="Introduction - ASCOM Platform 7" tocTitle="Introduction" />
-  <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" isSelected="true" />
+  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" isSelected="true" title="Introduction - ASCOM Platform 7" tocTitle="Introduction" />
+  <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" title="Version History">
     <Topic id="4eb05978-d9b4-4465-896b-e9ed09bff8c1" visible="True" />
     <Topic id="aa55983a-7030-4db2-a5b0-b24480703726" visible="True" />
