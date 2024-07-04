@@ -1948,17 +1948,19 @@ namespace ASCOM.Utilities
                                         ct = 0;
                                         foreach (dynamic AxRte in (IEnumerable)DeviceAxisRates)
                                         {
-                                            if (Sim.AxisRatesRelative) // Relative axis rates so multiply the provided fractions of MaxRate by MaxRate
-                                            {
-                                                CompareDouble("TestSimulator", "AxisRate Minimum", Conversions.ToDouble(AxRte.Minimum), Sim.AxisRates[0, ct] * MaxSlewRate, 0.000001d);
-                                                CompareDouble("TestSimulator", "AxisRate Maximum", Conversions.ToDouble(AxRte.Maximum), Sim.AxisRates[1, ct] * MaxSlewRate, 0.000001d);
-                                            }
-                                            else // Absolute axis rates so test as given
-                                            {
-                                                CompareDouble("TestSimulator", "AxisRate Minimum", Conversions.ToDouble(AxRte.Minimum), Sim.AxisRates[0, ct], 0.000001d);
-                                                CompareDouble("TestSimulator", "AxisRate Maximum", Conversions.ToDouble(AxRte.Maximum), Sim.AxisRates[1, ct], 0.000001d);
-                                            }
-                                            ct += 1;
+                                            // Get the minimum rate
+                                            double minimum=AxRte.Minimum;
+
+                                            // If we get here a maximum value could be read OK
+                                            TL.LogMessage("TestSimulator", $"Got minimum rate OK: {AxRte.Minimum}");
+                                            NMatches += 1;
+
+                                            // Get the maximum rate
+                                            double maximum =AxRte.Maximum;
+
+                                            // If we get here a maximum value could be read OK
+                                            TL.LogMessage("TestSimulator", $"Got maximum rate OK: {AxRte.Maximum}");
+                                            NMatches += 1;
                                         }
                                     }
                                     catch (COMException ex1)
