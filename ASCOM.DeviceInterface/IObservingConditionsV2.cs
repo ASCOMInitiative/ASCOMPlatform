@@ -4,6 +4,8 @@
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+
 
 #if NET35
 using ASCOM.Utilities;
@@ -624,14 +626,16 @@ namespace ASCOM.DeviceInterface
 		/// </remarks>
 		string SensorDescription(string PropertyName);
 
-		/// <summary>
-		/// Forces the driver to immediately query its attached hardware to refresh sensor values
-		/// </summary>
-		/// <exception cref="MethodNotImplementedException">If this method is not available.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Optional method, can throw a MethodNotImplementedException</b></p>
+        /// <summary>
+        /// Forces the driver to immediately query its attached hardware to refresh sensor values
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException">If this method is not available.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Optional method, can throw a MethodNotImplementedException</b></p>
+        /// <para>This must be a short-lived synchronous call that triggers a refresh. It must not wait for long running processes to complete. 
+		/// It is the client's responsibility to poll , <see cref="TimeSinceLastUpdate(string)"/> to determine whether / when the data has been refreshed.</para>
 		/// </remarks>
 		void Refresh();
 

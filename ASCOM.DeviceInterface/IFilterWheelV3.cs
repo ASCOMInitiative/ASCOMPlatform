@@ -235,15 +235,17 @@ namespace ASCOM.DeviceInterface
 		/// </remarks>
 		string[] Names { get; }
 
-		/// <summary>
-		/// Sets or returns the current filter wheel position
-		/// </summary>
-		/// <exception cref="InvalidValueException">Must throw an InvalidValueException if an invalid position is set</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-		/// Write a position number between 0 and N-1, where N is the number of filter slots (see <see cref="Names"/>). Starts filter wheel rotation immediately when written. Reading
+        /// <summary>
+        /// Sets or returns the current filter wheel position
+        /// </summary>
+        /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an invalid position is set</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+        ///<para>This is an asynchronous operation: Writing to Position must return as soon as the filter change operation has been successfully started. Reading the Position property must return -1 while the change
+        /// is in progress. After the requested position has been successfully reached and motion stops, reading Position must return the requested new filter number.</para>
+		/// Write a position number between 0 and N-1, where N is the number of filter slots (see <see cref="Names"/>). Starts filter wheel rotation immediately. Reading
 		/// the property gives current slot number (if wheel stationary) or -1 if wheel is moving.
 		/// <para>Returning a position of -1 is <b>mandatory</b> while the filter wheel is in motion; valid slot numbers must not be reported back while the filter wheel is rotating past filter positions.</para>
 		/// <para><b>Note</b></para>

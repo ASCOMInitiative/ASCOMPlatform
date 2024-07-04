@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
-    /// Defines the IVideo Interface.
+    /// Defines the IVideo Interface. - NOW DEPRECATED, ONLY RETAINED FOR BACKWARD COMPATIBILITY
     /// </summary>
     [Guid("85570809-BBD8-41F3-94C4-55201D64235B")]
     [ComVisible(true)]

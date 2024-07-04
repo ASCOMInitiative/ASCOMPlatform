@@ -224,10 +224,13 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
         /// <remarks>
         /// <para>This is a mandatory property that must return a value, it must not throw a <see cref="PropertyNotImplementedException"/>.</para>
+        /// <para>Whenever the cover is moving both <see cref="CoverMoving"/> must be True and CoverState must be <see cref="CoverStatus.Moving"/>.</para>
         /// <para>The <see cref="CoverStatus.Unknown"/> state must only be returned if the device is unaware of the cover's state e.g. if the hardware does not report the open / closed state and the cover has just been powered on.
         /// Clients do not need to take special action if this state is returned, they must carry on as usual, issuing  <see cref="OpenCover"/> or <see cref="CloseCover"/> commands as required.</para>
         /// <para>If the cover hardware cannot report its state, the device could mimic this by recording the last configured state and returning this. Driver authors or device manufacturers may also wish to offer users
         /// the capability of powering up in a known state e.g. Open or Closed and driving the hardware to this state when Connected is set <see langword="true"/>.</para>
+        /// <para>This property is intended to be available under all but the most disastrous driver conditions.If something has gone wrong, the CoverState must be <see cref="CoverStatus.Error"/>
+        /// rather than throwing an exception.</para>
         /// </remarks>
         CoverStatus CoverState { get; }
 
@@ -277,11 +280,14 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
         /// <remarks>
         /// <para>This is a mandatory property that must return a value, it must not throw a <see cref="PropertyNotImplementedException"/>.</para>
+        /// <para>Whenever the calibrator is changing both <see cref="CalibratorChanging"/> must be True and CalibratorState must be <see cref="CalibratorStatus.NotReady"/>.</para>
         /// <para>The <see cref="CalibratorStatus.Unknown"/> state must only be returned if the device is unaware of the calibrator's state e.g. if the hardware does not report the device's state and 
         /// the calibrator has just been powered on. Clients do not need to take special action if this state is returned, they must carry on as usual, issuing <see cref="CalibratorOn(int)"/> and 
         /// <see cref="CalibratorOff"/> commands as required.</para>
         /// <para>If the calibrator hardware cannot report its state, the device could mimic this by recording the last configured state and returning this. Driver authors or device manufacturers may also wish to offer users
         /// the capability of powering up in a known state and driving the hardware to this state when Connected is set <see langword="true"/>.</para>
+        /// <para>This property is intended to be available under all but the most disastrous driver conditions.If something has gone wrong, the CoverState must be <see cref="CalibratorStatus.Error"/>
+        /// rather than throwing an exception.</para>
         /// </remarks>
         CalibratorStatus CalibratorState { get; }
 
@@ -389,6 +395,8 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Flag showing whether a calibrator brightness state change is in progress. 
         /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <returns>
         /// True while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
         /// </returns>
@@ -403,6 +411,8 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Flag showing whether the cover is moving. 
         /// </summary>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <returns>
         /// True while the cover is in motion following an <see cref="OpenCover"/> or <see cref="CloseCover"/> command.
         /// </returns>
