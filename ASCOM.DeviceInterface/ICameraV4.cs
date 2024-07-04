@@ -73,7 +73,7 @@ namespace ASCOM.DeviceInterface
         string DriverVersion { get; }
 
         /// <summary>
-        /// The interface version number that this device supports. Should return 3 for this interface version.
+        /// The interface version number that this device supports. Should return 4 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> Clients can detect legacy V1 drivers by trying to read this property.
