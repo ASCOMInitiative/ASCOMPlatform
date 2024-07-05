@@ -252,7 +252,7 @@ Class DeviceTelescope
 	End Property
 
 	''' <summary>
-	''' True if this telescope is capable of programmed synching to equatorial coordinates.
+	''' True if this telescope is capable of programmed syncing to equatorial coordinates.
 	''' </summary>
 	Public ReadOnly Property CanSync() As Boolean Implements ITelescopeV3.CanSync
 		Get
@@ -262,7 +262,7 @@ Class DeviceTelescope
 	End Property
 
 	''' <summary>
-	''' True if this telescope is capable of programmed synching to local horizontal coordinates
+	''' True if this telescope is capable of programmed syncing to local horizontal coordinates
 	''' </summary>
 	Public ReadOnly Property CanSyncAltAz() As Boolean Implements ITelescopeV3.CanSyncAltAz
 		Get

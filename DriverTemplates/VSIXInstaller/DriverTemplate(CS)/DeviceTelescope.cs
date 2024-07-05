@@ -296,7 +296,7 @@ class DeviceTelescope
     }
 
 	/// <summary>
-	/// True if this telescope is capable of programmed synching to equatorial coordinates.
+	/// True if this telescope is capable of programmed syncing to equatorial coordinates.
 	/// </summary>
 	public bool CanSync
     {
@@ -308,7 +308,7 @@ class DeviceTelescope
     }
 
 	/// <summary>
-	/// True if this telescope is capable of programmed synching to local horizontal coordinates
+	/// True if this telescope is capable of programmed syncing to local horizontal coordinates
 	/// </summary>
 	public bool CanSyncAltAz
     {
