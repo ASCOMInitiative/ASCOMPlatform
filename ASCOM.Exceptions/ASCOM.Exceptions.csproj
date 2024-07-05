@@ -9,7 +9,7 @@
 		<PackageProjectUrl>https://ascom-standards.org/</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>The ASCOM Initiative</Authors>
-		<Copyright>(c) ASCOM Initiative 2023</Copyright>
+		<Copyright>(c) ASCOM Initiative 2024</Copyright>
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
 		<PackageId>ASCOM.Exception.Library</PackageId>
 		<Description>Exception definitions common to both COM and Alpaca devices.</Description>
@@ -19,6 +19,12 @@
 	<PropertyGroup>
 		<DocumentationFile>ASCOM.Exceptions.xml</DocumentationFile>
 		<NoWarn>1701;1702;NU5105</NoWarn>
+		<Title>ASCOM Exception Library</Title>
+		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/ASCOMInitiative/ASCOMPlatform</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>ASCOM;Exceptions</PackageTags>
+		<Version>7.0.0-rc.24</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -44,6 +50,14 @@
 
 	<ItemGroup>
 	  <Folder Include="build\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="ReadMe.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

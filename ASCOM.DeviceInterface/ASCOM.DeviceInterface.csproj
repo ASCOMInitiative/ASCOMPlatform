@@ -14,7 +14,7 @@
 		<Company>ASCOM</Company>
 		<Product>ASCOM.DeviceInterfaces</Product>
 		<Description>ASCOM device interfaces for Platform 7</Description>
-		<Copyright>Copyright © ASCOM Initiative 2023</Copyright>
+		<Copyright>Copyright © ASCOM Initiative 2024</Copyright>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<RegisterForComInterop>false</RegisterForComInterop>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -22,14 +22,13 @@
 		<Title>ASCOM device interfaces for Platform 7.</Title>
 		<Authors>Peter Simpson</Authors>
 		<PackageIcon>Bug 300 Borderless.png</PackageIcon>
-		<PackageReadmeFile></PackageReadmeFile>
+		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
 		<PackageReleaseNotes>Initial beta release.</PackageReleaseNotes>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="ASCOM.DeviceInterfaces.xml" />
 		<None Remove="oldvbproject" />
-		<None Remove="ReadMe.md" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
@@ -59,5 +58,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ASCOM.Exceptions\ASCOM.Exceptions.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="ReadMe.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 </Project>
