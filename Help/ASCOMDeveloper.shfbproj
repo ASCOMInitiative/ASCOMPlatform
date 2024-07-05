@@ -278,6 +278,7 @@
     <Content Include="styles\branding-Help1.css" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Developer Information\Developer Links.aml" />
+    <None Include="Developer Information\SynchronousAndAsynchronousSlewing.aml" />
     <None Include="Version History\Version 6.6 SP2.aml" />
     <None Include="Version History\Version 6.6 SP1.aml" />
     <None Include="Version History\Version 6.6.aml" />

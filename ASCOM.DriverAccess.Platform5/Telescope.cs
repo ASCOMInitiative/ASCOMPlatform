@@ -312,7 +312,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if this telescope is capable of programmed synching to equatorial coordinates.
+        /// True if this telescope is capable of programmed syncing to equatorial coordinates.
         /// May raise an error if the telescope is not connected. 
         /// </summary>
         public bool CanSync
@@ -321,7 +321,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if this telescope is capable of programmed synching to local horizontal coordinates
+        /// True if this telescope is capable of programmed syncing to local horizontal coordinates
         /// May raise an error if the telescope is not connected. 
         /// </summary>
         public bool CanSyncAltAz

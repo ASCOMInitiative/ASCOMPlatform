@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c37349a5-a535-47d6-8c30-11c620932213" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<introduction>
+			<para>
+				Over the life of ASCOM, devices have provided both synchronous and asynchronous
+				slewing. With the introduction of Alpaca, synchronous operations are badly
+				mismatched to the communication medium, TCP/IP. Therefore in ITelescopeV4 and later
+				use of synchronous slewing by clients has been strongly discouraged, and thus deprecated as noted in the specifications.
+
+				It is a client author design decision as to whether, in the absence of driver asynchronous
+				support, they will use synchronous methods or report that the driver is not compatible
+				with their application.
+			</para>
+		</introduction>
+
+		<section address="Section1">
+			<title>Slewing requirements</title>
+			<content>
+				<para>
+					In order to maximize compatibility with older ASCOM COM clients, the ITelescopeV4 and later
+					interface specifications require COM Telescope drivers to support synchronous slewing via
+					Telescope.SlewToCoordinates, Telescope.SlewToTarget, Telescope.SlewToAltAz, and the capability flags
+					Telescope.CanSlew and Telescope.CanSlewAltAz.
+				</para>
+
+				<para>
+					<legacyBold>Please note</legacyBold>
+				</para>
+
+				<list class="bullet">
+					<listItem>
+						<para>
+							All ITelescopeV4 and later devices (COM and Alpaca) that can be programmatically slewed
+							must support asynchronous slewing and must therefore report True for
+							Telescope.CanSlewAsync and Telescope.CanSlewAltAzAsync.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							ASCOM COM drivers for mounts that can be programmatically slewed must support
+							synchronous slewing to ensure backward compatibility with older clients.
+							This is in addition to supporting asynchronous slewing as described above.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							Alpaca devices cannot provide reliable synchronous slewing operations over the
+							network, where a method call could take several minutes to complete before returning to
+							the client. Therefore, for mounts that can slew programmatically, Alpaca devices must always return
+							False for Telescope.CanSlew and Telescope.CanSlewAltAz, and raise MethodNotImplementedException
+							for the synchronous slewing methods.
+						</para>
+					</listItem>
+				</list>
+
+			</content>
+		</section>
+
+	</developerConceptualDocument>
+</topic>

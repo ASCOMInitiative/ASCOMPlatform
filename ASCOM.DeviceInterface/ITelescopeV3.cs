@@ -485,7 +485,7 @@ namespace ASCOM.DeviceInterface
 		bool CanSlewAsync { get; }
 
 		/// <summary>
-		/// True if this telescope is capable of programmed synching to equatorial coordinates.
+		/// True if this telescope is capable of programmed syncing to equatorial coordinates.
 		/// </summary>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -496,7 +496,7 @@ namespace ASCOM.DeviceInterface
 		bool CanSync { get; }
 
 		/// <summary>
-		/// True if this telescope is capable of programmed synching to local horizontal coordinates
+		/// True if this telescope is capable of programmed syncing to local horizontal coordinates
 		/// </summary>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 

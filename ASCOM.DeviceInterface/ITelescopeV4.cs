@@ -443,7 +443,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// If this is true, the <see cref="CanSlewAsync" /> property must also return true because all drivers must implement asynchronous slewing in this interface version.
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// May raise an error if the telescope is not connected.
         /// </remarks>
         bool CanSlew { get; }
@@ -455,8 +455,8 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// If this is true, the <see cref="CanSlewAltAzAsync" /> property must also return true because all drivers must implement asynchronous slewing in this interface version.
-        /// May raise an error if the telescope is not connected.
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// May raise an error if the telescope is not connected. 
         /// </remarks>
         bool CanSlewAltAz { get; }
 
@@ -467,7 +467,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// If this is true, the <see cref="CanSlewAltAz" /> property must also return true because all drivers must implement synchronous slewing in this interface version to ensure backward compatibility with older clients..
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// May raise an error if the telescope is not connected.
         /// </remarks>
         bool CanSlewAltAzAsync { get; }
@@ -479,13 +479,13 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// If this is true, the <see cref="CanSlew" /> property must also return true because all drivers must implement synchronous slewing in this interface version to ensure backward compatibility with older clients..
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// May raise an error if the telescope is not connected.
         /// </remarks>
         bool CanSlewAsync { get; }
 
         /// <summary>
-        /// True if this telescope is capable of programmed synching to equatorial coordinates.
+        /// True if this telescope is capable of programmed syncing to equatorial coordinates.
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -496,7 +496,7 @@ namespace ASCOM.DeviceInterface
         bool CanSync { get; }
 
         /// <summary>
-        /// True if this telescope is capable of programmed synching to local horizontal coordinates
+        /// True if this telescope is capable of programmed syncing to local horizontal coordinates
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -1024,6 +1024,7 @@ namespace ASCOM.DeviceInterface
         /// </para>
         /// <para>The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method.
         /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True. This is only available for telescope InterfaceVersions 2 and later.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
@@ -1047,7 +1048,7 @@ namespace ASCOM.DeviceInterface
         /// The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method.
         /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
         /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
-        /// <para>For drivers, <see cref="SlewToAltAz(double, double)"/> must also be implemented and <see cref="CanSlewAltAz"/> must return True when this method is implemented.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         void SlewToAltAzAsync(double Azimuth, double Altitude);
 
@@ -1074,8 +1075,8 @@ namespace ASCOM.DeviceInterface
         /// building or dome enclosure restrictions, etc. The target coordinates are copied to
         /// <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> whether or not the slew succeeds.
         /// </para>
-        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.
-        /// </para>
+        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         void SlewToCoordinates(double RightAscension, double Declination);
 
@@ -1090,16 +1091,17 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
-        /// This method must be implemented if <see cref="CanSlewAsync" /> returns True. Raises an error if starting the slew failed.
-        /// Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
+        /// <para>This method must be implemented if <see cref="CanSlewAsync" /> returns True.Raises an error if starting the slew failed.</para>
+        /// <para>Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
         /// the <see cref="RightAscension" />, <see cref="Declination" />, and <see cref="Slewing" /> properties during the slew. When the slew completes,
         /// <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits
         /// imposed within the driver component. Such limits include mechanical constraints imposed
         /// by the mount or attached instruments, building or dome enclosure restrictions, etc.
+        /// </para>
         /// <para>The target coordinates are copied to <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />
         /// whether or not the slew succeeds.
         /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
-        /// <para>For drivers, <see cref="SlewToCoordinates(double, double)"/> must also be implemented and <see cref="CanSlew"/> must return True when this method is implemented.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         void SlewToCoordinatesAsync(double RightAscension, double Declination);
 
@@ -1112,13 +1114,17 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Deprecated for client applications.</b></p>
-        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToTargetAsync"/> method instead.
-        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.</para>
-        /// <para>This Method must be implemented if <see cref="CanSlew" /> returns True. Raises an error if the slew fails.
-        /// The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-        /// Such limits include mechanical constraints imposed by the mount or attached
-        /// instruments, building or dome enclosure restrictions, etc.</para>
+        /// <para>
+        /// This method must not be used by applications, use the asynchronous <see cref="SlewToTargetAsync"/> method instead.
+        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.
+        /// </para>
+        /// <para>This Method must be implemented if <see cref="CanSlew" /> returns True.</para>
+        /// <para>
+        /// Raises an error if the slew fails. The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+        /// Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
+        /// </para>
         /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         void SlewToTarget();
 
@@ -1131,12 +1137,14 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
-        /// This Method must be implemented if  <see cref="CanSlewAsync" /> returns True.
+        /// <para>
+        /// <para>This Method must be implemented if <see cref="CanSlewAsync" /> returns True.</para>
         /// Raises an error if starting the slew failed. Returns immediately after starting the slew. The client may monitor the progress of the slew by reading the RightAscension, Declination,
         /// and Slewing properties during the slew. When the slew completes,  <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits imposed within
         /// the driver component. Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
         /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.
-        /// <para>For drivers, <see cref="SlewToTarget()"/> must also be implemented and <see cref="CanSlew"/> must return True when this method is implemented.</para>
+        /// </para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         void SlewToTargetAsync();
 
@@ -1150,7 +1158,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
-        /// This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails.
+        /// <para>This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails.</para>
         /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
         /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
         /// </remarks>

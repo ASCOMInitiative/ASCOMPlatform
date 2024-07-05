@@ -2,7 +2,7 @@
 <Topics>
   <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" title="Introduction - ASCOM Platform 7" tocTitle="Introduction" />
   <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" title="Introduction - ASCOM Platform 7  For Developers" tocTitle="Introduction - Developers" />
-  <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" isSelected="true" />
+  <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
   <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" title="Version History">
     <Topic id="4eb05978-d9b4-4465-896b-e9ed09bff8c1" visible="True" />
@@ -50,11 +50,12 @@
     <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
   </Topic>
   <Topic id="98b612bf-f22c-428f-af22-7a77e9907b7f" visible="True" noFile="true" isExpanded="true" title="Developer Information">
-    <Topic id="A8BA6881-8D00-44C2-BEAE-9B81039FE0F5" visible="True" title="Links to extended developer documentation" />
     <Topic id="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7" visible="True" />
-    <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
-    <Topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" visible="True" title="Coordinate Conversion" />
-    <Topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" visible="True" />
     <Topic id="84ec64a2-c029-45fb-91ff-78ff3d683a0c" visible="True" />
+    <Topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" visible="True" title="Coordinate Conversion" />
+    <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
+    <Topic id="A8BA6881-8D00-44C2-BEAE-9B81039FE0F5" visible="True" title="Links to extended developer documentation" />
+    <Topic id="c37349a5-a535-47d6-8c30-11c620932213" visible="True" isSelected="true" title="Synchronous and Asynchronous Slewing" />
+    <Topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" visible="True" />
   </Topic>
 </Topics>

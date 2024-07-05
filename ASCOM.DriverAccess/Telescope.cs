@@ -481,6 +481,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// If this is true, the <see cref="CanSlewAsync" /> property must also return true because all drivers must implement asynchronous slewing in this interface version.
         /// May raise an error if the telescope is not connected.
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public bool CanSlew
         {
@@ -495,6 +496,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// If this is true, the <see cref="CanSlewAltAzAsync" /> property must also return true because all drivers must implement asynchronous slewing in this interface version.
         /// May raise an error if the telescope is not connected. 
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public bool CanSlewAltAz
         {
@@ -509,6 +511,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// If this is true, the <see cref="CanSlewAltAz" /> property must also return true because all drivers must implement synchronous slewing in this interface version to ensure backward compatibility with older clients..
         /// May raise an error if the telescope is not connected. 
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public bool CanSlewAltAzAsync
         {
@@ -523,6 +526,7 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// If this is true, the <see cref="CanSlew" /> property must also return true because all drivers must implement synchronous slewing in this interface version to ensure backward compatibility with older clients..
         /// May raise an error if the telescope is not connected. 
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public bool CanSlewAsync
         {
@@ -1151,6 +1155,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
         /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
+        /// <remarks>
         /// <p style="color:red"><b>Deprecated for client applications.</b></p>
         /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToAltAzAsync(double, double)"/> method instead.
         /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.</para>
@@ -1160,6 +1165,8 @@ namespace ASCOM.DriverAccess
         /// </para>
         /// <para>The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method.
         /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True. This is only available for telescope InterfaceVersions 2 and later.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// </remarks>
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
             memberFactory.CallMember(3, "SlewToAltAz", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
@@ -1189,6 +1196,7 @@ namespace ASCOM.DriverAccess
         /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
         /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
         /// <para>For drivers, <see cref="SlewToAltAz(double, double)"/> must also be implemented and <see cref="CanSlewAltAz"/> must return True when this method is implemented.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
@@ -1205,6 +1213,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
         /// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
+        /// <remarks>
         /// <p style="color:red"><b>Deprecated for client applications.</b></p>
         /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToCoordinates(double, double)"/> method instead.
         /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.
@@ -1216,8 +1225,9 @@ namespace ASCOM.DriverAccess
         /// building or dome enclosure restrictions, etc. The target coordinates are copied to
         /// <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> whether or not the slew succeeds.
         /// </para>
-        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.
-        /// </para>
+        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// </remarks>
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
             memberFactory.CallMember(3, "SlewToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
@@ -1234,16 +1244,17 @@ namespace ASCOM.DriverAccess
         /// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
         /// <remarks>
-        /// This method must be implemented if <see cref="CanSlewAsync" /> returns True. Raises an error if starting the slew failed. 
-        /// Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
+        /// <para>This method must be implemented if <see cref="CanSlewAsync" /> returns True.Raises an error if starting the slew failed.</para>
+        /// <para>Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
         /// the <see cref="RightAscension" />, <see cref="Declination" />, and <see cref="Slewing" /> properties during the slew. When the slew completes,
         /// <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits
         /// imposed within the driver component. Such limits include mechanical constraints imposed
         /// by the mount or attached instruments, building or dome enclosure restrictions, etc. 
+        /// </para>
         /// <para>The target coordinates are copied to <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />
         /// whether or not the slew succeeds. 
         /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
-        /// <para>For drivers, <see cref="SlewToCoordinates(double, double)"/> must also be implemented and <see cref="CanSlew"/> must return True when this method is implemented.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
@@ -1259,13 +1270,17 @@ namespace ASCOM.DriverAccess
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Deprecated for client applications.</b></p>
-        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToTargetAsync"/> method instead.
-        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.</para>
-        /// <para>This Method must be implemented if <see cref="CanSlew" /> returns True. Raises an error if the slew fails.
-        /// The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-        /// Such limits include mechanical constraints imposed by the mount or attached
-        /// instruments, building or dome enclosure restrictions, etc.</para>
+        /// <para>
+        /// This method must not be used by applications, use the asynchronous <see cref="SlewToTargetAsync"/> method instead.
+        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.
+        /// </para>
+        /// <para>This Method must be implemented if <see cref="CanSlew" /> returns True.</para>
+        /// <para>
+        /// Raises an error if the slew fails. The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+        /// Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
+        /// </para>
         /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public void SlewToTarget()
         {
@@ -1281,15 +1296,14 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
         /// <remarks>
-        /// This Method must be implemented if  <see cref="CanSlewAsync" /> returns True.
-        /// Raises an error if starting the slew failed. 
-        /// Returns immediately after starting the slew. The client may
-        /// monitor the progress of the slew by reading the RightAscension, Declination,
-        /// and Slewing properties during the slew. When the slew completes,  <see cref="Slewing" /> becomes False. 
-        /// The slew may fail to start if the target coordinates are beyond limits imposed within 
-        /// the driver component. Such limits include mechanical constraints imposed by the mount
-        /// or attached instruments, building or dome enclosure restrictions, etc. 
-        /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False. 
+        /// <para>
+        /// <para>This Method must be implemented if <see cref="CanSlewAsync" /> returns True.</para>
+        /// Raises an error if starting the slew failed. Returns immediately after starting the slew. The client may monitor the progress of the slew by reading the RightAscension, Declination,
+        /// and Slewing properties during the slew. When the slew completes,  <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits imposed within
+        /// the driver component. Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
+        /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.
+        /// </para>
+        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
         /// </remarks>
         public void SlewToTargetAsync()
         {
