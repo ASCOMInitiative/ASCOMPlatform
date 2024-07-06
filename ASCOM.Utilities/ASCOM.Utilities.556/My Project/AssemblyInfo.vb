@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("ASCOM Utilities")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")>
 <Assembly: AssemblyProduct("ASCOM Utilities")>
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 

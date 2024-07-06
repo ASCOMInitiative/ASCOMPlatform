@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM Astrometry")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM.Astrometry")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2023")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")]
 [assembly: AssemblyTrademark("")]
 
 [assembly: ComVisible(false)]

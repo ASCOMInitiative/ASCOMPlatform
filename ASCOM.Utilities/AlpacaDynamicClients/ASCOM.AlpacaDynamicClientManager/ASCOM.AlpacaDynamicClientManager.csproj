@@ -10,7 +10,7 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<AssemblyTitle>Alpaca Dynamic Client Manager</AssemblyTitle>
 		<Product>ASCOM.AlpacaDynamicClientManager</Product>
-		<Copyright>Copyright © ASCOM Initiative 2022</Copyright>
+		<Copyright>Copyright © ASCOM Initiative 2024</Copyright>
 		<AssemblyVersion>6.0.0.0</AssemblyVersion>
 		<PlatformTarget>x86</PlatformTarget>
 		<OutputPath>bin\$(Configuration)\</OutputPath>

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("6.0.0.0")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2023")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")]
 [assembly: AssemblyDescription("ASCOM device interfaces for Platform 7")]
 [assembly: AssemblyProduct("ASCOM.DeviceInterfaces")]
 [assembly: AssemblyTitle("ASCOM Device Interfaces")]

@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Removes all ASCOM Platforms and Profile")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("RemoveASCOM")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2022")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")]
 [assembly: AssemblyTrademark("")]
 
 [assembly: ComVisible(false)]

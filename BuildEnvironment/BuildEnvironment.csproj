@@ -9,7 +9,7 @@
 		<PackageProjectUrl>https://ascom-standards.org/</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Tim Long, Peter Simpson</Authors>
-		<Copyright>(c) ASCOM Initiative 2022</Copyright>
+		<Copyright>(c) ASCOM Initiative 2024</Copyright>
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
 		<PackageId>ASCOM.BuildEnvironment.SupportFiles</PackageId>
 		<Description>
