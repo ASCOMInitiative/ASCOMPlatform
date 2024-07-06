@@ -28,20 +28,35 @@ namespace ASCOM.Utilities
             {"ASCOM.Simulator.Telescope", "{86931eac-1f52-4918-b6aa-7e9b0ff361bd}"}
         };
 
-        // List of simulator COM ProgIDs and corresponding Omni-Simulator GUIDs
-        private static Dictionary<string, string> omniSimulators = new Dictionary<string, string>()
+        // List of OmniSim ProgIDs
+        private static Dictionary<string, string> omniSimulatorProgIds = new Dictionary<string, string>()
         {
-            {"ASCOM.Simulator.Camera", "{de992041-27fc-45ca-bc58-7507994973ea}"},
-            {"ASCOM.Simulator.CoverCalibrator", "{97a847f6-2522-4007-842a-ae2339b1d70d}"},
-            {"ASCOM.Simulator.Dome", "{1e074ddb-d020-4045-8db0-cfbba81a6172}"},
-            {"ASCOM.Simulator.FilterWheel", "{568961e4-0d98-4b9f-947e-b467c4aac5fc}"},
-            {"ASCOM.Simulator.Focuser", "{a8904146-656b-4852-96cb-53c1229ff0e8}"},
-            {"ASCOM.Simulator.ObservingConditions", "{38620ae3-e175-4153-8871-85ee1023c5ad}"},
-            {"ASCOM.Simulator.Rotator", "{23b464ed-b86a-4276-ab2c-69ff65df9477}"},
-            {"ASCOM.Simulator.SafetyMonitor", "{269f2a82-98b6-46ee-88f7-5a6c794e5d9a}"},
-            {"ASCOM.Simulator.Switch", "{d0efcd2b-00d6-42b6-9f16-795cf09fbee8}"},
-            {"ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}"}
+            {"ASCOM.Simulator.Camera", "ASCOM.OmniSim.Camera"},
+            {"ASCOM.Simulator.CoverCalibrator", "ASCOM.OmniSim.CoverCalibrator"},
+            {"ASCOM.Simulator.Dome", "ASCOM.OmniSim.Dome"},
+            {"ASCOM.Simulator.FilterWheel", "ASCOM.OmniSim.FilterWheel"},
+            {"ASCOM.Simulator.Focuser", "ASCOM.OmniSim.Focuser"},
+            {"ASCOM.Simulator.ObservingConditions", "ASCOM.OmniSim.ObservingConditions"},
+            {"ASCOM.Simulator.Rotator", "ASCOM.OmniSim.Rotator"},
+            {"ASCOM.Simulator.SafetyMonitor", "ASCOM.OmniSim.SafetyMonitor"},
+            {"ASCOM.Simulator.Switch", "ASCOM.OmniSim.Switch"},
+            {"ASCOM.Simulator.Telescope", "ASCOM.OmniSim.Telescope"}
         };
+
+        // List of simulator COM ProgIDs and corresponding Omni-Simulator GUIDs
+        private static Dictionary<string, string> omniSimulators = new Dictionary<string, string>();
+        //{
+        //    {"ASCOM.Simulator.Camera", "{de992041-27fc-45ca-bc58-7507994973ea}"},
+        //    {"ASCOM.Simulator.CoverCalibrator", "{97a847f6-2522-4007-842a-ae2339b1d70d}"},
+        //    {"ASCOM.Simulator.Dome", "{1e074ddb-d020-4045-8db0-cfbba81a6172}"},
+        //    {"ASCOM.Simulator.FilterWheel", "{568961e4-0d98-4b9f-947e-b467c4aac5fc}"},
+        //    {"ASCOM.Simulator.Focuser", "{a8904146-656b-4852-96cb-53c1229ff0e8}"},
+        //    {"ASCOM.Simulator.ObservingConditions", "{38620ae3-e175-4153-8871-85ee1023c5ad}"},
+        //    {"ASCOM.Simulator.Rotator", "{23b464ed-b86a-4276-ab2c-69ff65df9477}"},
+        //    {"ASCOM.Simulator.SafetyMonitor", "{269f2a82-98b6-46ee-88f7-5a6c794e5d9a}"},
+        //    {"ASCOM.Simulator.Switch", "{d0efcd2b-00d6-42b6-9f16-795cf09fbee8}"},
+        //    {"ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}"}
+        //};
 
         // List of standard simulator names
         private static Dictionary<string, string> standardSimulatorNames = new Dictionary<string, string>()
@@ -74,6 +89,15 @@ namespace ASCOM.Utilities
             { @"Telescope Drivers\ASCOM.Simulator.Telescope","Telescope Simulator for .NET"},
             { @"Video Drivers\ASCOM.Simulator.Video","Video Simulator"}
         };
+
+        // Initialiser
+        static SimulatorManager()
+        {
+            foreach (KeyValuePair<string, string> progId in omniSimulatorProgIds)
+            {
+                omniSimulators.Add(progId.Key, GetComGuid(progId.Value, null));
+            }
+        }
 
         /// <summary>
         /// Restore the Platform 6 COM ProgIDs to point at their Platform 6 values
@@ -161,6 +185,7 @@ namespace ASCOM.Utilities
             {
                 // Assume TRUE and iterate over the well known simulator ProgIDs comparing GUIDs to the OmniSim values. Any mismatch will result in a FALSE return
                 bool omnisimsAreConfigured = true;
+
                 foreach (KeyValuePair<string, string> simulator in omniSimulators)
                 {
                     string guid = (string)RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Default).OpenSubKey($"{simulator.Key}\\CLSID").GetValue(null);
@@ -178,7 +203,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            LogMessage("IsUsingOmniSimulators", $"CLSIDs match OK", TL);
+                            LogMessage("IsUsingOmniSimulators", $"CLSIDs match OK - Actual: {guid}, Expected: {simulator.Value}", TL);
                         }
                     }
                 }
@@ -273,6 +298,30 @@ namespace ASCOM.Utilities
             catch (Exception ex)
             {
                 LogMessage("SetProgId", $"Exception - {ex.Message}\r\n{ex}", TL);
+                throw;
+            }
+        }
+
+
+        private static string GetComGuid(string progId, TraceLogger TL)
+        {
+            LogMessage("GetComGuid", $"Getting GUID for ProgID: {progId}", TL);
+
+            try
+            {
+                string clsId = "";
+                using (RegistryKey clsIdRegistryKey = Registry.ClassesRoot.OpenSubKey($"{progId}\\CLSID"))
+                {
+                    LogMessage("GetComGuid", $"Opened CLSID registry key", TL);
+                    clsId = (string)clsIdRegistryKey.GetValue(null, "");
+                    LogMessage("GetComGuid", $"Got CLSID OK: {clsId}", TL);
+                }
+
+                return clsId;
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GetComGuid", $"Exception - {ex.Message}\r\n{ex}", TL);
                 throw;
             }
         }
