@@ -2397,13 +2397,6 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to FinaliseInstall
   Include Script: UpdateAscomError
    
-  Comment: Set the default Platform COM simulators
-  Set Variable MYPROGRESS to 72
-  Set Variable PROGRESSTEXT to Setting default Platform simulators
-  Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-  Set Variable ACTION to Set COM simulators to use OmniSimulators
-  Include Script: UpdateAscomError
-   
   Comment: Create a scheduled task to run the update checker once a week
   Set Variable MYPROGRESS to 74
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
@@ -2419,6 +2412,13 @@ if Variable SUCCESS not Equals ERROR
     Comment: Register the Omni-Simulators
     Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
     Set Variable ACTION to Register Omni-Simulators
+    Include Script: UpdateAscomError
+     
+    Comment: Set the default Platform COM simulators
+    Set Variable MYPROGRESS to 72
+    Set Variable PROGRESSTEXT to Setting default Platform simulators
+    Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
+    Set Variable ACTION to Set COM simulators to use OmniSimulators
     Include Script: UpdateAscomError
   end
    
@@ -2534,6 +2534,13 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ACTION to NGen64 Install - ASCOM Cache
     Include Script: UpdateAscomError
     Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
+     
+    Comment: Set the default Platform COM simulators
+    Set Variable MYPROGRESS to 72
+    Set Variable PROGRESSTEXT to Setting default Platform simulators
+    Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
+    Set Variable ACTION to Set COM simulators to use OmniSimulators
+    Include Script: UpdateAscomError
      
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end

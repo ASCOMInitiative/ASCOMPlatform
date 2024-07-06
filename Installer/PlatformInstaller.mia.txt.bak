@@ -2109,12 +2109,13 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver installer Inno script 
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
 Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create an ASCOM driver to $DEVELOPERTARGETDIR$\Developer Documentation\How to make an ASCOM driver.pdf
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to https://www.jrsoftware.org/isinfo.php
 Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $DEVELOPERTARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $DEVELOPERTARGETDIR$\Developer Documentation\Templates.html
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Master Interface Definitions (Web) to https://ascom-standards.org/newdocs
  
 Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $DEVELOPERTARGETDIR$\Developer Documentation\Platform Evolution.pdf
 Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create multiple versions of a driver to $DEVELOPERTARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
