@@ -1937,9 +1937,11 @@ namespace ASCOM.DeviceInterface
         /// Devices must not throw exceptions / return errors when values are not known.</para>
         /// <para>An empty list must be returned if no values are known.</para>
         /// <para><b>Client Applications</b></para>
-		/// <para>
-		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
-		/// </para>
+        /// <para>
+        /// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
+        /// </para>
+        /// <para><b>Further Information</b></para>
+        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on implementation support within the ASCOM Platform.</para>
         /// </remarks>
         IStateValueCollection DeviceState { get; }
 

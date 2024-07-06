@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-		<introduction></introduction>
+		<introduction>
+			<autoOutline excludeRelatedTopics="true" />
+		</introduction>
 		<section address="Introduction-Developers-Platform-7">
 			<title>Introduction</title>
 			<content>
@@ -15,8 +17,8 @@
 					See the Key Interface Changes section below for details.
 				</para>
 				<para>
-					With the introduction of fully asynchronous operation, ASCOM is introducing a 1 second target time for completion of asynchronous operation initiation. 
-					Of course, the overall operation can take as long as required, it is just the initiation that has a target time. Our interface conformance checker Conform Universal 
+					With the introduction of fully asynchronous operation, ASCOM is introducing a 1 second target time for completion of asynchronous operation initiation.
+					Of course, the overall operation can take as long as required, it is just the initiation that has a target time. Our interface conformance checker Conform Universal
 					can provide a full timing analysis so you can check how long interface methods take to complete.
 				</para>
 				<para>
@@ -34,7 +36,7 @@
 					a completion property: Connecting that clients can poll regularly to determine when the process completes or errors.
 				</para>
 				<para>
-					Drivers and Alpaca devices that implement Platform 7 interfaces must implement the asynchronous connection mechanic as well as supporting the Connected 
+					Drivers and Alpaca devices that implement Platform 7 interfaces must implement the asynchronous connection mechanic as well as supporting the Connected
 					mechanic for backward compatibility with earlier clients.
 				</para>
 				<para>
@@ -53,6 +55,150 @@
 					Further detail on new implementation requirements for COM clients and drivers and Alpaca clients and devices is
 					set out here: <link xlink:href="c37349a5-a535-47d6-8c30-11c620932213">Synchronous and Asynchronous Telescope Slewing</link>.
 				</para>
+			</content>
+		</section>
+		<section address="Device-State">
+			<title>DeviceState Property</title>
+			<content>
+				<para>
+					Every interface now includes a DeviceState property that returns all the device's <legacyBold>operational</legacyBold> state in a single call. This has been introduced
+					to reduce the number of polling calls required to monitor the device's operational state. A property is considered Operational if it can change during normal
+					operation e.g a mount's right ascension and declination while slewing. Properties like telescope site latitude are excluded because their values 
+					do not change during operation.
+				</para>
+				<para>
+					Keeping the number of properties to a manageable size was considered important to improve response time and reduce loading on low power devices and to avoid creating
+					large network responses that could cause issues on slower links. The table below shows the properties that are returned for each device type. The TimeStamp value is
+					the time at which the device state was determined, if known, in ISO 8601 format.
+				</para>
+				<table>
+					<tableHeader>
+						<row>
+							<entry>
+								<para>Device type</para>
+							</entry>
+							<entry>
+								<para>Operational Properties</para>
+							</entry>
+						</row>
+					</tableHeader>
+					<row>
+						<entry>
+							<para>Camera</para>
+						</entry>
+						<entry>
+							<para>
+								CameraState, CCDTemperature, CoolerPower, HeatSinkTemperature, ImageReady, IsPulseGuiding, PercentCompleted, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>CoverCalibrator</para>
+						</entry>
+						<entry>
+							<para>
+								Brightness, CalibratorState,
+								CoverState, CalibratorReady, CoverMoving, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Dome</para>
+						</entry>
+						<entry>
+							<para>
+								Altitude, AtHome, AtPark, Azimuth, ShutterStatus, Slewing, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>FilterWheel</para>
+						</entry>
+						<entry>
+							<para>
+								Position, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Focuser</para>
+						</entry>
+						<entry>
+							<para>
+								IsMoving, Position, Temperature, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>ObservingConditions</para>
+						</entry>
+						<entry>
+							<para>
+								CloudCover, DewPoint Humidity, Pressure, RainRate, SkyBrightness, SkyQuality, SkyTemperature, StarFWHM, Temperature, WindDirection, WindGust, WindSpeed, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Rotator</para>
+						</entry>
+						<entry>
+							<para>
+								IsMoving, MechanicalPosition, Position, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>SafetyMonitor</para>
+						</entry>
+						<entry>
+							<para>
+								IsSafe, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Switch</para>
+						</entry>
+						<entry>
+							<para>
+								See <link xlink:href="320982e4-105d-46d8-b5f9-efce3f4dafd4" /> for further information on use and required behaviour.
+							</para>
+							<para>
+								GetSwitch0, GetSwitch1, GetSwitch2, GetSwitchN-1, 
+								GetSwitchValue0, GetSwitchValue1, GetSwitchValue2, GetSwitchValueN-1, 
+								StateChangeComplete0, StateChangeComplete1, StateChangeComplete2, StateChangeComplete N-1, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Telescope</para>
+						</entry>
+						<entry>
+							<para>
+								Altitude, AtHome, AtPark, Azimuth, Declination, IsPulseGuiding, RightAscension. SideOfPier, SiderealTime, Slewing, Tracking, UTCDate, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Video</para>
+						</entry>
+						<entry>
+							<para>
+								CameraState, TimeStamp
+							</para>
+						</entry>
+					</row>
+				</table>
 			</content>
 		</section>
 		<section address="Interface-Changes">

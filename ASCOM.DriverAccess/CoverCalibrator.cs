@@ -41,6 +41,9 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// CoverCalibrator device state
+        /// <remarks>
+        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on using the class returned by this property.</para>
+        /// </remarks>
         /// </summary>
         public CoverCalibratorState CoverCalibratorState
         {

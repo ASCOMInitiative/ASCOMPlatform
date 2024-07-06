@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="320982e4-105d-46d8-b5f9-efce3f4dafd4" revisionNumber="1">
+	<developerConceptualDocument
+	  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+	  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section titles.  Specify a numeric value as the inner text to limit it to a specific number of sub-topics when creating the outline.  
+	  Specify zero (0) to limit it to top-level sections only.  -->
+			<!-- <autoOutline /> -->
+			<para>
+				Many ASCOM properties provide information about current device state and fall into two categories:
+			</para>
+			<list class="bullet">
+				<listItem>
+					<para>Configuration information – These are set prior to an operation commencing and stay fixed for the lifetime of an operation such as Camera.BinX and Telescope.SiteLatitude.</para>
+				</listItem>
+				<listItem>
+					<para>Operational information – These change while an operation is in progress such as Telescope.RightAscension, Focuser.Position and ObservingConditions.WindGust.</para>
+				</listItem>
+			</list>
+			<para>
+				The DeviceState property will return all the device’s operational property values in a single call to reduce latency and network bandwidth. Configuration information is not included because this is
+				either set and known by the application or can be read once at the beginning of an operation.
+			</para>
+		</introduction>
+
+		<!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="UseCases">
+			<title>Use Cases</title>
+			<content>
+				<para>
+					The DeviceState property is intended to improve ASCOM Interface support for two primary use cases:
+				</para>
+				<list class="bullet">
+					<listItem>
+						<para>Status reporting in client user interfaces.</para>
+					</listItem>
+					<listItem>
+						<para>Progress monitoring for processes initiated by the client.</para>
+					</listItem>
+				</list>
+			</content>
+		</section>
+		<section address="Behaviour">
+			<title>DeviceState Behaviour</title>
+			<content>
+				<para>
+					From both the client’s and the device’s perspective, DeviceState is a “best endeavours” call.
+					This is to ensure that the maximum amount of available data is returned by the device to the client.
+				</para>
+			</content>
+			<sections>
+				<section address="Devices">
+					<title>Devices</title>
+					<content>
+						<para>
+							A device must return all operational values that it definitively knows but can omit entries where value are unknown.
+						</para>
+						<para>
+							Devices must not throw exceptions / return errors when values are not known. An empty list must be returned if no values are known.
+						</para>
+					</content>
+				</section>
+				<section address="Clients">
+					<title>Clients</title>
+					<content>
+						<para>
+							Applications must expect that, from time to time, some operational state values may not be present in the device response and must implement
+							a strategy to deal with such “missing” values.
+						</para>
+					</content>
+				</section>
+			</sections>
+		</section>
+		<section address="TimeStamps">
+			<title>Time Stamps</title>
+			<content>
+				<para>
+					An optional string TimeStamp property will be defined so that the device can record the time at which the state was measured, if known. The ISO-8601 time format must be used to report:
+				</para>
+				<list class="bullet">
+					<listItem>
+						<para>An unqualified local time.</para>
+					</listItem>
+					<listItem>
+						<para> A local time including a time offset.</para>
+					</listItem>
+					<listItem>
+						<para> A UTC time using the Z time-zone designator.</para>
+					</listItem>
+				</list>
+			</content>
+		</section>
+		<section address="Interface">
+			<title>Device Interface Definition</title>
+			<content>
+				<para>
+					The COM and Alpaca interfaces are functionally equivalent and return an enumerable collection of IStateValue objects.
+				</para>
+			</content>
+			<sections>
+				<section address="COMInterface">
+					<title>COM Interface Definition</title>
+					<content>
+						<para>
+							The ASCOM COM driver interface definition is:
+						</para>
+						<code language="c#">
+							public IstateValueCollection DeviceState { get; }
+						</code>
+						<para>
+							The <codeEntityReference>T:ASCOM.DeviceInterface.StateValueCollection</codeEntityReference> type is provided to make creating device state responses straightforward.
+							It provides an enumerable list of <codeEntityReference>T:ASCOM.DeviceInterface.IStateValue</codeEntityReference> objects that can be consumed by
+							COM, .NET Framework and .NET 5 onward clients.
+						</para>
+						<para>
+							Each element of the enumeration must be a COM registered class that implements the <codeEntityReference>T:ASCOM.DeviceInterface.IStateValue</codeEntityReference>
+							interface and exposes the two properties below. The <codeEntityReference>T:ASCOM.DeviceInterface.StateValue</codeEntityReference> class is provided
+							specifically for this purpose.
+							class
+						</para>
+						<code language="c#">
+							public interface IStateValue
+							{
+							&#160;&#160;&#160;string Name { get; }
+							&#160;&#160;&#160;object Value { get; }
+							}
+						</code>
+						<para>
+							IStateValue.Name is the name of an operational property. The name is <legacyBold>case sensitive</legacyBold> and must match the property name’s
+							spelling and casing in the ASCOM interface specification.
+						</para>
+						<para>
+							The IStateValue.Value property has the object type so that it can accept any type including the types commonly used in ASCOM interfaces such as int16, int32, double, string
+							and enum. This approach avoids localisation complexities when transferring numeric and bool types.
+						</para>
+						<para>
+							Here is an example of creating a focuser DeviceState response:
+						</para>
+						<code language="c#">
+							public IStateValueCollection DeviceState
+							{
+							&#160;&#160;&#160;get
+							&#160;&#160;&#160;{
+							&#160;&#160;&#160;&#160;&#160;&#160;List&lt;IStateValue&gt;
+							&#160;&#160;&#160;&#160;&#160;&#160;deviceState = new List&lt;IStateValue&gt;();
+							&#160;
+							&#160;&#160;&#160;&#160;&#160;&#160;try { deviceState.Add(new StateValue(nameof(IFocuserV4.IsMoving), IsMoving)); } catch { }
+							&#160;&#160;&#160;&#160;&#160;&#160;try { deviceState.Add(new StateValue(nameof(IFocuserV4.Position), Position)); } catch { }
+							&#160;&#160;&#160;&#160;&#160;&#160;try { deviceState.Add(new StateValue(nameof(IFocuserV4.Temperature), Temperature)); } catch { }
+							&#160;&#160;&#160;&#160;&#160;&#160;try { deviceState.Add(new StateValue(DateTime.Now)); } catch { }
+							&#160;
+							&#160;&#160;&#160;&#160;&#160;&#160;return new StateValueCollection(deviceState);
+							&#160;&#160;&#160;}
+							}
+						</code>
+					</content>
+				</section>
+				<section address="AlpacaInterface">
+					<title>Alpaca Interface Definition</title>
+					<content>
+						<para>
+							The Alpaca device response uses the standard Alpaca message structure consisting of Value, ClientTransactionID, ServerTransactionID, ErrorNumber and ErrorMessage keys. The content of the Value key is a JSON array of IStateValue objects with Name and Value keys defined identically to those in the COM interface.
+						</para>
+						<para>
+							Here is a formatted example of a Camera DeviceState Alpaca JSON response:
+						</para>
+						<code language="none">
+							{
+							&#160;&#160;&#160;"Value":[
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"CameraState","Value":0},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"CCDTemperature","Value":10},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"CoolerPower","Value":0},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"HeatSinkTemperature","Value":10},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"ImageReady","Value":false},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"IsPulseGuiding","Value":false},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"PercentCompleted","Value":0},
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Name":"TimeStamp","Value":"2023-06-14T11:17:50.0Z"}
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;],
+							&#160;&#160;&#160;"ClientTransactionID":123,
+							&#160;&#160;&#160;"ServerTransactionID":456,
+							&#160;&#160;&#160;"ErrorNumber":0,
+							&#160;&#160;&#160;"ErrorMessage":""
+							}
+						</code>
+					</content>
+				</section>
+			</sections>
+		</section>
+		<section address="Device-State">
+			<title>DeviceState Properties by Device Type</title>
+			<content>
+				<table>
+					<tableHeader>
+						<row>
+							<entry>
+								<para>Device type</para>
+							</entry>
+							<entry>
+								<para>Operational Properties</para>
+							</entry>
+						</row>
+					</tableHeader>
+					<row>
+						<entry>
+							<para>Camera</para>
+						</entry>
+						<entry>
+							<para>
+								CameraState, CCDTemperature, CoolerPower, HeatSinkTemperature, ImageReady, IsPulseGuiding, PercentCompleted, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>CoverCalibrator</para>
+						</entry>
+						<entry>
+							<para>
+								Brightness, CalibratorState,
+								CoverState, CalibratorReady, CoverMoving, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Dome</para>
+						</entry>
+						<entry>
+							<para>
+								Altitude, AtHome, AtPark, Azimuth, ShutterStatus, Slewing, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>FilterWheel</para>
+						</entry>
+						<entry>
+							<para>
+								Position, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Focuser</para>
+						</entry>
+						<entry>
+							<para>
+								IsMoving, Position, Temperature, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>ObservingConditions</para>
+						</entry>
+						<entry>
+							<para>
+								CloudCover, DewPoint Humidity, Pressure, RainRate, SkyBrightness, SkyQuality, SkyTemperature, StarFWHM, Temperature, WindDirection, WindGust, WindSpeed, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Rotator</para>
+						</entry>
+						<entry>
+							<para>
+								IsMoving, MechanicalPosition, Position, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>SafetyMonitor</para>
+						</entry>
+						<entry>
+							<para>
+								IsSafe, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Switch</para>
+						</entry>
+						<entry>
+							<para>
+								See <link xlink:href="320982e4-105d-46d8-b5f9-efce3f4dafd4" /> for further information on use and required behaviour.
+							</para>
+							<para>
+								GetSwitch0, GetSwitch1, GetSwitch2, GetSwitchN-1,
+								GetSwitchValue0, GetSwitchValue1, GetSwitchValue2, GetSwitchValueN-1,
+								StateChangeComplete0, StateChangeComplete1, StateChangeComplete2, StateChangeComplete N-1, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Telescope</para>
+						</entry>
+						<entry>
+							<para>
+								Altitude, AtHome, AtPark, Azimuth, Declination, IsPulseGuiding, RightAscension. SideOfPier, SiderealTime, Slewing, Tracking, UTCDate, TimeStamp
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Video</para>
+						</entry>
+						<entry>
+							<para>
+								CameraState, TimeStamp
+							</para>
+						</entry>
+					</row>
+				</table>
+			</content>
+		</section>
+
+		<section address="ClientToolkit">
+			<title>Client Toolkit Support</title>
+			<content>
+				<para>
+					As a convenience for application developers, all ASCOM client toolkit devices will provide an additional property that presents the device’s DeviceState response as a class.
+					The name of the additional property for most devices will follow the format: {DeviceType}State where {DeviceType} is Dome, Telescope etc. The Camera property will be named
+					CameraDeviceState to avoid a conflict with the ICamera.CameraState property.
+					Due to the variable nature of the Switch’s device state response there is no helper class for the Switch device.
+					The signature of these additional properties will be:
+				</para>
+				<code>
+					public CameraDeviceState CameraDeviceState { get; } // Camera device
+					public {DeviceType}State {DeviceType}State { get; } // All other devices
+				</code>
+				<para>
+					Within the ASCOM device interfaces all operational information values are defined as value types that do not allow an “unknown” state to be represented.
+					To address this, toolkit response classes will expose nullable value types so that clients can detect the “unknown” state in addition to the property’s actual value.
+				</para>
+			</content>
+			<sections>
+				<section address="NullableBehaviour">
+					<title>Nullable Property Behaviour</title>
+					<content>
+						<para>
+							Using the telescope device AtPark property as an example, if the device returns a value for the AtPark property:
+						</para>
+						<list class="bullet">
+							<listItem>
+								<para>TelescopeState.AtPark.HasValue will return true.</para>
+							</listItem>
+							<listItem>
+								<para>TelescopeState.AtPark will return the value.</para>
+							</listItem>
+							<listItem>
+								<para>TelescopeState.AtPark.Value will return the value.</para>
+							</listItem>
+						</list>
+						<para>
+							If the device does not return a value for the AtPark property:
+						</para>
+						<list class="bullet">
+							<listItem>
+								<para>TelescopeState.AtPark.HasValue will return false.</para>
+							</listItem>
+							<listItem>
+								<para>TelescopeState.AtPark will return null.</para>
+							</listItem>
+							<listItem>
+								<para>TelescopeState.AtPark.Value will throw a System.InvalidOperationException.</para>
+							</listItem>
+						</list>
+					</content>
+				</section>
+				<section address="PropertyPopulation">
+					<title>Property Population</title>
+					<content>
+						<para>
+							When a client GETs a device state property the toolkit will:
+						</para>
+						<list class="bullet">
+							<listItem>
+								<para>Create a response class with all property values set to null.</para>
+							</listItem>
+							<listItem>
+								<para> Call the device’s DeviceState property.</para>
+							</listItem>
+							<listItem>
+								<para>Populate the response class’s properties with the information returned by the device.</para>
+							</listItem>
+						</list>
+					</content>
+				</section>
+				<section address="Immutability">
+					<title>Immutability</title>
+					<content>
+						<para>
+							Please note that response class data is immutable. To obtain updated device state information GET a new response class instance from the toolkit’s device state property.
+						</para>
+					</content>
+				</section>
+				<section address="Example">
+					<title>Telescope Device State Example</title>
+					<content>
+						<para>
+							This is the definition of the class returned by DriverAccess’s TelescopeDeviceState property:
+						</para>
+						<code language="c#">
+							public class TelescopeDeviceState : ITelescopeDeviceState
+							{
+							&#160;&#160;&#160;public TelescopeDeviceState() { } // Other initiators omitted for clarity
+							&#160;&#160;&#160;public double? Altitude { get; private set; } = null;
+							&#160;&#160;&#160;public bool? AtHome { get; private set; } = null; 
+							&#160;&#160;&#160;public bool? AtPark { get; private set; } = null; 
+							&#160;&#160;&#160;public double? Azimuth { get; private set; } = null; 
+							&#160;&#160;&#160;public double? Declination { get; private set; } = null; 
+							&#160;&#160;&#160;public bool? IsPulseGuiding { get; private set; } = null; 
+							&#160;&#160;&#160;public double? RightAscension { get; private set; } = null; 
+							&#160;&#160;&#160;public PierSide? SideOfPier { get; private set; } = null; 
+							&#160;&#160;&#160;public double? SiderealTime { get; private set; } = null; 
+							&#160;&#160;&#160;public bool? Slewing { get; private set; } = null; 
+							&#160;&#160;&#160;public bool? Tracking { get; private set; } = null; 
+							&#160;&#160;&#160;public DateTime? UTCDate { get; private set; } = null; 
+							&#160;&#160;&#160;public DateTime? TimeStamp { get; private set; } = null;
+							}
+						</code>
+					</content>
+				</section>
+			</sections>
+		</section>
+
+
+
+		<relatedTopics>
+			<!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

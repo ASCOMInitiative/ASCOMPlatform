@@ -1,34 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-		<title>Introduction - ASCOM Platform 7.0</title>
-		<para>
-			Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" /> for a detailed list of changes and fixes for both developers and Platform users.
-		</para>
+		<introduction>
+			<para>
+				Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" /> for a detailed list of changes and fixes for both developers and Platform users.
+			</para>
 
-		<para>
-			Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications,
-			providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
-		</para>
+			<para>
+				Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications,
+				providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
+			</para>
 
-		<para>
-			If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" />
-			will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
-		</para>
-
+			<para>
+				If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" />
+				will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
+			</para>
+		</introduction>
 		<section address="Introduction-Users-Platform-7">
 			<title>Key changes in Platform 7</title>
 			<content>
 				<list class="bullet">
-					<listItem>Simplified Start menu</listItem>
-					<listItem>The default log file location can be customised.</listItem>
-					<listItem>Focus on technical changes to improve performance and application usability.</listItem>
-					<listItem>Updated user guide that includes Alpaca,</listItem>
-					<listItem>ASCOM Remote and the ASCOM Omni-simulators are now installed as part of the Platform.</listItem>
-					<listItem>The Omni-Simulators are now the default Platform simulators.</listItem>
-					<listItem>A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.</listItem>
-					<listItem>An alert will be generated when a new Platform version is released.</listItem>
-					<listItem>The Platform installer is more resilient and reliable,</listItem>
+					<listItem>
+						<para>Simplified Start menu</para>
+					</listItem>
+					<listItem>
+						<para>The default log file location can be customised.</para>
+					</listItem>
+					<listItem>
+						<para>Focus on technical changes to improve performance and application usability.</para>
+					</listItem>
+					<listItem>
+						<para>Updated user guide that includes Alpaca.</para>
+					</listItem>
+					<listItem>
+						<para>ASCOM Remote and the ASCOM Omni-simulators are now installed as part of the Platform.</para>
+					</listItem>
+					<listItem>
+						<para>The Omni-Simulators are now the default Platform simulators.</para>
+					</listItem>
+					<listItem>
+						<para>A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.</para>
+					</listItem>
+					<listItem>
+						<para>An alert will be generated when a new Platform version is released.</para>
+					</listItem>
+					<listItem>
+						<para>The Platform installer is more resilient and reliable.</para>
+					</listItem>
 				</list>
 				<para>
 					A comprehensive list of changes and fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.

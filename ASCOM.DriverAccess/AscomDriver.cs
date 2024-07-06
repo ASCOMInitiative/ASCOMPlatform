@@ -351,6 +351,8 @@ namespace ASCOM.DriverAccess
 		/// <para>
 		/// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
 		/// </para>
+        /// <para><b>Further Information</b></para>
+        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on implementation support within the ASCOM Platform.</para>
         /// </remarks>
         public IStateValueCollection DeviceState
         {

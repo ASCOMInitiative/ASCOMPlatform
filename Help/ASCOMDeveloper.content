@@ -53,9 +53,10 @@
     <Topic id="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7" visible="True" />
     <Topic id="84ec64a2-c029-45fb-91ff-78ff3d683a0c" visible="True" />
     <Topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" visible="True" title="Coordinate Conversion" />
+    <Topic id="320982e4-105d-46d8-b5f9-efce3f4dafd4" visible="True" isSelected="true" title="Device State Implementation and Requirements" />
     <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
     <Topic id="A8BA6881-8D00-44C2-BEAE-9B81039FE0F5" visible="True" title="Links to extended developer documentation" />
-    <Topic id="c37349a5-a535-47d6-8c30-11c620932213" visible="True" isSelected="true" title="Synchronous and Asynchronous Slewing" />
+    <Topic id="c37349a5-a535-47d6-8c30-11c620932213" visible="True" title="Synchronous and Asynchronous Slewing" />
     <Topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" visible="True" />
   </Topic>
 </Topics>
