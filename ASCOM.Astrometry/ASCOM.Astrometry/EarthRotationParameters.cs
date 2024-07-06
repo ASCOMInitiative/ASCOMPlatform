@@ -87,8 +87,8 @@ namespace ASCOM.Astrometry
             DebugTraceEnabled = Utilities.Global.GetBool(Utilities.Global.ASTROUTILS_TRACE, Utilities.Global.ASTROUTILS_TRACE_DEFAULT); // Get our debug trace value
 
             LogMessage("EarthRotationParameters", "Getting built-in leap second values");
-            BuiltInLeapSecondsValues = SOFA.SOFA.BuiltInLeapSeconds();
-            LogMessage("EarthRotationParameters", string.Format("Received {0 }leap second values", BuiltInLeapSecondsValues.Count));
+            BuiltInLeapSecondsValues = SOFA.SOFA.BuiltInLeapSeconds(TL);
+            LogMessage("EarthRotationParameters", string.Format("Received {0} leap second values", BuiltInLeapSecondsValues.Count));
 
             foreach (KeyValuePair<double, double> record in BuiltInLeapSecondsValues)
             {

@@ -1692,10 +1692,10 @@ namespace ASCOM.Astrometry.SOFA
         private static extern short UpdateLeapSecondData32(LeapSecondDataStruct[] arr);
 
         [DllImport(SOFA32DLL, EntryPoint = "GetLeapSecondData")]
-        private static extern short GetLeapSecondData32(LeapSecondDataStruct[] arr, ref int HasUpdatedData);
+        private static extern short GetLeapSecondData32([Out()]LeapSecondDataStruct[] arr, ref int HasUpdatedData);
 
         [DllImport(SOFA32DLL, EntryPoint = "GetBuiltInLeapSecondData")]
-        private static extern short GetLeapSecondData32(LeapSecondDataStruct[] arr);
+        private static extern short GetLeapSecondData32([Out()]LeapSecondDataStruct[] arr);
 
         [DllImport(SOFA32DLL, EntryPoint = "UsingUpdatedData")]
         private static extern short UsingUpdatedData32();
@@ -1775,10 +1775,10 @@ namespace ASCOM.Astrometry.SOFA
         private static extern short UpdateLeapSecondData64(LeapSecondDataStruct[] arr);
 
         [DllImport(SOFA64DLL, EntryPoint = "GetLeapSecondData")]
-        private static extern short GetLeapSecondData64(LeapSecondDataStruct[] arr, ref int HasUpdatedData);
+        private static extern short GetLeapSecondData64([Out()] LeapSecondDataStruct[] arr, ref int HasUpdatedData);
 
         [DllImport(SOFA64DLL, EntryPoint = "GetBuiltInLeapSecondData")]
-        private static extern short GetLeapSecondData64(LeapSecondDataStruct[] arr);
+        private static extern short GetLeapSecondData64([Out()] LeapSecondDataStruct[] arr);
 
         [DllImport(SOFA64DLL, EntryPoint = "UsingUpdatedData")]
         private static extern short UsingUpdatedData64();
@@ -1828,7 +1828,7 @@ namespace ASCOM.Astrometry.SOFA
         /// <returns>TRUE if successful; otherwise, FALSE.</returns>
         /// <remarks></remarks>
         [DllImport("shell32.dll")]
-        private static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, StringBuilder lpszPath, int nFolder, bool fCreate);
+        private static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, [Out()]StringBuilder lpszPath, int nFolder, bool fCreate);
 
         /// <summary>
         /// Loads a library DLL
@@ -1872,7 +1872,7 @@ namespace ASCOM.Astrometry.SOFA
         // Get the built-in list of leap seconds from the SOFA DLL, which is the master data for the whole Platform
         // This method is static so that it can be called without having to fully initialise the SOFA DLL which uses an instance of the EarthRotationParameters 
         // object leading to a circular reference of EarthRotationParameters calling SOFA, which calls EarthRotationParameters and so on ad infinitum.
-        internal static SortedList<double, double> BuiltInLeapSeconds()
+        internal static SortedList<double, double> BuiltInLeapSeconds(TraceLogger TL)
         {
             var LeapSecondArray = new LeapSecondDataStruct[101];
             SortedList<double, double> LeapSecondList;
@@ -1892,20 +1892,23 @@ namespace ASCOM.Astrometry.SOFA
                 {
                     NumberOfRecords = GetLeapSecondData32(LeapSecondArray, ref UpdatedDataInt);
                 }
-                Debug.Print("BuiltInLeapSeconds received records: " + NumberOfRecords);
+                TL?.LogMessage("SOFA.BuiltInLeapSeconds", $"Received {NumberOfRecords} records.");
 
                 // Process the received LeapSecondDataStruct records and save them into a sorted list of juliandate:leapsecond pairs
-                for (int i = 0, loopTo = NumberOfRecords - 1; i <= loopTo; i++)
+                for (int i = 0; i <= NumberOfRecords - 1; i++)
                 {
+                    TL?.LogMessage($"SOFA.BuiltInLeapSeconds {i}", $"Year: {LeapSecondArray[i].Year}, Month: {LeapSecondArray[i].Month}");
                     // Create a Julian date from the supplied year, month, date
                     JulianDate = new DateTime(LeapSecondArray[i].Year, LeapSecondArray[i].Month, 1).ToOADate() + GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET;
                     LeapSecondList.Add(JulianDate, LeapSecondArray[i].DelAt);
+                    TL?.LogMessage($"SOFA.BuiltInLeapSeconds {i}", $"Adding JulianDate: {JulianDate} Leap second value: {LeapSecondArray[i].DelAt}.");
                 }
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                Debug.Print("");
+                TL?.LogMessageCrLf("SOFA.BuiltInLeapSeconds", $"Exception: {ex.Message}\r\n{ex}");
             }
+            TL?.LogMessage("SOFA.BuiltInLeapSeconds", $"Returning {LeapSecondList.Count} records.");
 
             return LeapSecondList;
 
