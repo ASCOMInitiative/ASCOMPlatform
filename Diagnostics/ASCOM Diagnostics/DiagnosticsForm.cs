@@ -11974,7 +11974,7 @@ namespace ASCOM.Utilities
         private void MenuDiagnosticsTraceEnabled_Click(object sender, EventArgs e)
         {
             MenuDiagnosticsTraceEnabled.Checked = !MenuDiagnosticsTraceEnabled.Checked;
-            Utilities.Global.SetName(OPTIONS_DIAGNOSTICS_TRACE, MenuAutoViewLog.Checked.ToString()); // Set the new value in the registry
+            Utilities.Global.SetName(OPTIONS_DIAGNOSTICS_TRACE, MenuDiagnosticsTraceEnabled.Checked.ToString()); // Set the new value in the registry
         }
 
         // Check for updates handlers
