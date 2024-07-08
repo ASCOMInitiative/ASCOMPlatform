@@ -93,9 +93,18 @@ namespace ASCOM.Utilities
         // Initialiser
         static SimulatorManager()
         {
-            foreach (KeyValuePair<string, string> progId in omniSimulatorProgIds)
+            TraceLogger traceLogger = new TraceLogger("SimulatorManagerInit") { Enabled = true };
+
+            try
             {
-                omniSimulators.Add(progId.Key, GetComGuid(progId.Value, null));
+                foreach (KeyValuePair<string, string> progId in omniSimulatorProgIds)
+                {
+                    omniSimulators.Add(progId.Key, GetComGuid(progId.Value, traceLogger));
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Init", $"Exception: {ex.Message}\r\n{ex}", traceLogger);
             }
         }
 
