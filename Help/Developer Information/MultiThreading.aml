@@ -20,7 +20,7 @@
 		 
 		 <para>The ASCOM Serial component has a measure of protection built in which prevents multiple 
 		 simultaneous use of the serial port by multi-threaded applications when using its transmit and receive
-		 mehtods. This however is unlikely to be sufficient for your needs as in many cases you will need to 
+		 methods. This however is unlikely to be sufficient for your needs as in many cases you will need to 
 		 transmit something to your device and then wait for its reply while blocking any attempts by other 
 		 threads to interrupt your "transmit - receive" transaction.
 		 </para>
@@ -35,9 +35,9 @@
 		 of the code is to create the multiple threads in order to demonstrate that the mutex works! If you do try 
 		 this out you should find that each command receives the response that it is expecting. If you comment out
 		 the two SerMutex lines, you will find that from time to time a thread will pick up the response from 
-		 another thread because that second thread just happend to get in between the SerPort.Transmit 
+		 another thread because that second thread just happened to get in between the SerPort.Transmit 
 		 and SerPort.ReceiveTerminated commands of the first thread.</para> 
-		 <para>This is impossible when the mutexes are in place because although the seond thread starts, it
+		 <para>This is impossible when the mutexes are in place because although the second thread starts, it
 		 gets hung up on its SerMutex.WaitOne until the first thread releases the mutex.</para>
 		 
 		 <para>CommandString and CommandBool are specific (but are unlikely to be the only cases) where you should 

@@ -71,7 +71,7 @@
         <title>NOVAS3.1</title>
 	    <content>
 	  		<para>This component is a shell for the NOVAS 3.1 library released in March 2011 for demanding applications that require access to the fundamental routines
-	  		in the NOVAS3.1 library, the latest JPL DE421 planetary and lunar ephemerises or to calculations 
+	  		in the NOVAS3.1 library, the latest JPL DE421 planetary and lunar ephemerides or to calculations 
 	  		based on the IAU 2000 reference systems resolution. It contains a range of supervisory routines that provide access to high
 	  		level functions and an extensive range of intermediate and basic level routines dedicated to lower level astrometric functions.</para>
 	  		
@@ -124,7 +124,7 @@
    		<content>
    			<para><legacyBold><literal>DEPRECATED - SCHEDULED FOR REMOVAL FROM THE PLATFORM - USE TRANSFORM, SOFA OR NOVAS31</literal></legacyBold></para>
       		<para>This component is a shell for the NOVAS 3 library released in December 2009 for demanding applications that require access to the fundamental routines
-      		in the NOVAS3 library, the latest JPL DE421 planetary and lunar ephemerises or to calculations 
+      		in the NOVAS3 library, the latest JPL DE421 planetary and lunar ephemerides or to calculations 
       		based on the IAU 2000 reference systems resolution. It contains a range of supervisory routines that provide access to high
       		level functions and an extensive range of intermediate and basic level routines dedicated to lower level
       		astrometric functions.</para>

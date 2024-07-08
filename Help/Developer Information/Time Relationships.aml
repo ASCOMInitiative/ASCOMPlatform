@@ -26,7 +26,7 @@
 			independent of time as defined by rotation of the earth. The two time scales are related by a fixed constant offset of 32.184s. The 
 			terrestrial time scale is used as the yardstick for applying corrections for precession, nutation and star proper motion.</para>
 			
-			<para>Coorindated universal time (UTC) is also based on the SI second and is always an integral number of seconds different 
+			<para>Coordinated universal time (UTC) is also based on the SI second and is always an integral number of seconds different 
 			to TAI. This is the timescale on which we govern our lives and is the base to which time zone and daylight saving time corrections 
 			are applied in order to get local civil time in the various time zones around the world.</para>
 			
@@ -36,7 +36,7 @@
 			astrometry namespace contains routines that should give good values of DeltaT for the next couple of years.</para>
 			
 			<para>The fact that there is a difference in rate between UTC, which is based on atomic time, and UT, which is based on the rotation 
-			of earth and which governs when day and night actually occur, requres management. This is effected by introducing occasional leap 
+			of earth and which governs when day and night actually occur, requires management. This is effected by introducing occasional leap 
 			seconds into UTC in order to keep it within plus or minus 0.9 seconds of UT. This approach ensures that our civil time, despite being 
 			based on the SI second always stays close to universal time as defined by the rotation of the earth.</para>
 			

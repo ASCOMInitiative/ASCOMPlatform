@@ -1,39 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="320982e4-105d-46d8-b5f9-efce3f4dafd4" revisionNumber="1">
-	<developerConceptualDocument
-	  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
-	  xmlns:xlink="http://www.w3.org/1999/xlink">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 		<!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
-
+			<summary>
+			<para>Optional summary abstract</para>
+			</summary>
+		-->
 		<introduction>
-			<!-- Uncomment this to generate an outline of the section and sub-section titles.  Specify a numeric value as the inner text to limit it to a specific number of sub-topics when creating the outline.  
-	  Specify zero (0) to limit it to top-level sections only.  -->
-			<!-- <autoOutline /> -->
-			<para>
-				Many ASCOM properties provide information about current device state and fall into two categories:
-			</para>
-			<list class="bullet">
-				<listItem>
-					<para>Configuration information – These are set prior to an operation commencing and stay fixed for the lifetime of an operation such as Camera.BinX and Telescope.SiteLatitude.</para>
-				</listItem>
-				<listItem>
-					<para>Operational information – These change while an operation is in progress such as Telescope.RightAscension, Focuser.Position and ObservingConditions.WindGust.</para>
-				</listItem>
-			</list>
-			<para>
-				The DeviceState property will return all the device’s operational property values in a single call to reduce latency and network bandwidth. Configuration information is not included because this is
-				either set and known by the application or can be read once at the beginning of an operation.
-			</para>
+			<!-- Uncomment this to generate an outline of the section and sub-section titles.  Specify a numeric value as the inner text to limit it to a specific number of sub-topics when creating the outline. Specify zero (0) to limit it to top-level sections only.  -->
+			<autoOutline />
 		</introduction>
 
-		<!-- Add one or more top-level section elements.  These are collapsible.
-         If using <autoOutline />, add an address attribute to identify it
-         and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="Introduction">
+			<title>Introduction</title>
+			<content>
+				<para>
+					Many ASCOM properties provide information about current device state and fall into two categories:
+				</para>
+				<list class="bullet">
+					<listItem>
+						<para>Configuration information – These are set prior to an operation commencing and stay fixed for the lifetime of an operation such as Camera.BinX and Telescope.SiteLatitude.</para>
+					</listItem>
+					<listItem>
+						<para>Operational information – These change while an operation is in progress such as Telescope.RightAscension, Focuser.Position and ObservingConditions.WindGust.</para>
+					</listItem>
+				</list>
+				<para>
+					The DeviceState property will return all the device’s operational property values in a single call to reduce latency and network bandwidth. Configuration information is not included because this is
+					either set and known by the application or can be read once at the beginning of an operation.
+				</para>
+			</content>
+		</section>
 		<section address="UseCases">
 			<title>Use Cases</title>
 			<content>
@@ -66,7 +64,16 @@
 							A device must return all operational values that it definitively knows but can omit entries where value are unknown.
 						</para>
 						<para>
-							Devices must not throw exceptions / return errors when values are not known. An empty list must be returned if no values are known.
+							Devices must not throw exceptions / return errors when values are not known. An empty list, with no TimeStamp, must be returned if no values are known.
+						</para>
+						<para>
+							If you wish to report additional values to clients, beyond those defined as	operational, implement an Action e.g. via 
+							<codeEntityReference linkText="Telescope.Action(string, string)">M:ASCOM.DeviceInterface.ITelescopeV4.Action(System.String,System.String)</codeEntityReference> and
+							<codeEntityReference linkText="Telescope.SupportedActions">P:ASCOM.DeviceInterface.ITelescopeV4.SupportedActions</codeEntityReference>,
+							and return your items in this way rather than adding them to the DeviceState response.
+
+							This is to ensure that the ``DeviceState`` call is as performant as possible for both client and device and is not burdened with information that unduly
+							increases its size and transmission time. Conform will report non-standard StateValue items found in the DeviceState response as Issues.
 						</para>
 					</content>
 				</section>
@@ -421,17 +428,17 @@
 							{
 							&#160;&#160;&#160;public TelescopeDeviceState() { } // Other initiators omitted for clarity
 							&#160;&#160;&#160;public double? Altitude { get; private set; } = null;
-							&#160;&#160;&#160;public bool? AtHome { get; private set; } = null; 
-							&#160;&#160;&#160;public bool? AtPark { get; private set; } = null; 
-							&#160;&#160;&#160;public double? Azimuth { get; private set; } = null; 
-							&#160;&#160;&#160;public double? Declination { get; private set; } = null; 
-							&#160;&#160;&#160;public bool? IsPulseGuiding { get; private set; } = null; 
-							&#160;&#160;&#160;public double? RightAscension { get; private set; } = null; 
-							&#160;&#160;&#160;public PierSide? SideOfPier { get; private set; } = null; 
-							&#160;&#160;&#160;public double? SiderealTime { get; private set; } = null; 
-							&#160;&#160;&#160;public bool? Slewing { get; private set; } = null; 
-							&#160;&#160;&#160;public bool? Tracking { get; private set; } = null; 
-							&#160;&#160;&#160;public DateTime? UTCDate { get; private set; } = null; 
+							&#160;&#160;&#160;public bool? AtHome { get; private set; } = null;
+							&#160;&#160;&#160;public bool? AtPark { get; private set; } = null;
+							&#160;&#160;&#160;public double? Azimuth { get; private set; } = null;
+							&#160;&#160;&#160;public double? Declination { get; private set; } = null;
+							&#160;&#160;&#160;public bool? IsPulseGuiding { get; private set; } = null;
+							&#160;&#160;&#160;public double? RightAscension { get; private set; } = null;
+							&#160;&#160;&#160;public PierSide? SideOfPier { get; private set; } = null;
+							&#160;&#160;&#160;public double? SiderealTime { get; private set; } = null;
+							&#160;&#160;&#160;public bool? Slewing { get; private set; } = null;
+							&#160;&#160;&#160;public bool? Tracking { get; private set; } = null;
+							&#160;&#160;&#160;public DateTime? UTCDate { get; private set; } = null;
 							&#160;&#160;&#160;public DateTime? TimeStamp { get; private set; } = null;
 							}
 						</code>
@@ -439,45 +446,6 @@
 				</section>
 			</sections>
 		</section>
-
-
-
-		<relatedTopics>
-			<!-- One or more of the following:
-           - A local link
-           - An external link
-           - A code entity reference
-
-      <link xlink:href="Other Topic's ID"/>
-      <link xlink:href="Other Topic's ID">Link inner text</link>
-
-      <externalLink>
-          <linkText>Link text</linkText>
-          <linkAlternateText>Optional alternate link text</linkAlternateText>
-          <linkUri>URI</linkUri>
-      </externalLink>
-
-      <codeEntityReference>API member ID</codeEntityReference>
-
-      Examples:
-
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-      <externalLink>
-          <linkText>SHFB on GitHub</linkText>
-          <linkAlternateText>Go to GitHub</linkAlternateText>
-          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
-      </externalLink>
-
-      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-      -->
-		</relatedTopics>
+		<relatedTopics></relatedTopics>
 	</developerConceptualDocument>
 </topic>
