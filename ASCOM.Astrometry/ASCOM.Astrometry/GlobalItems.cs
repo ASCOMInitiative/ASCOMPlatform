@@ -139,7 +139,7 @@ namespace ASCOM.Astrometry
         internal const string DOWNLOAD_TASK_TRACE_LOG_FILETYPE = "EarthRotationUpdate";
         internal const string DOWNLOAD_TASK_NAME = "ASCOM - Update Earth Rotation Data"; // Name of the schedule job that runs the automatic download task
         internal const string DOWNLOAD_TASK_PATH = @"\" + DOWNLOAD_TASK_NAME; // Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibility with XP!
-        internal const string DOWNLOAD_TASK_EXECUTABLE_NAME = @"\ASCOM\Platform 7\Tools\EarthRotationUpdate.exe"; // File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
+        internal const string DOWNLOAD_TASK_EXECUTABLE_NAME = @"\ASCOM\Platform\Tools\EarthRotationUpdate.exe"; // File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
         internal const string DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE = "Not published"; // Value to use for next leap seconds and its effective date before these are published
         internal const string DOWNLOAD_TASK_TIME_FORMAT = "dddd dd MMM yyyy - HH:mm:ss";
         internal const string DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT = @"{0}\ASCOM\" + DOWNLOAD_TASK_TRACE_LOG_FILETYPE;
