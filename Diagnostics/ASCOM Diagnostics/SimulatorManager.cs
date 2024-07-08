@@ -370,19 +370,11 @@ namespace ASCOM.Utilities
                         // Handle Omni-Simulators have been selected
                         case OMNI_SIMULATORS_NAME_UPPERCASE:
                             LogMessage("SimulatorsHaveBeenSet", $"The Omni-Simulators are already selected", TL);
-
-                            // Set them again to ensure the COM values are correct
-                            SetOmniSimulators(false, TL);
-
                             return true;
 
                         // Handle Platform 6 Simulators have been selected
                         case PLATFORM6_SIMULATORS_NAME_UPPERCASE:
                             LogMessage("SimulatorsHaveBeenSet", $"The Platform 6 Simulators are already selected", TL);
-
-                            // Set them again to ensure the COM values are correct
-                            SetPlatform6Simulators(false, TL);
-
                             return true;
 
                         // All other values are reported as no simulators have been selected
