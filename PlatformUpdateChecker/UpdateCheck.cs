@@ -22,7 +22,9 @@ namespace PlatformUpdateChecker
         // Registry key and values for "check for releases" configuration information that is set by the user through the Diagnostics application
         private const string REGISTRY_CONFIGURATION_PATH = @"Software\ASCOM\Utilities"; //Computer\HKEY_CURRENT_USER\Software\ASCOM\Utilities
         private const string REGISTRY_CHECK_FOR_RELEASE_UPDATES = "Check for Release Updates"; //Check for Release Updates
-        private const string REGISTRY_CHECK_FOR_PRERELEASE_UPDATES = "Check for Release Candidate Updates";
+        private const string REGISTRY_CHECK_FOR_PRERELEASE_UPDATES = "Check for Release Candidate Updates"; // Check for pre-release updates
+        private const bool CHECK_FOR_RELEASE_UPDATES_DEFAULT = true;
+        private const bool CHECK_FOR_PRERELEASE_UPDATES_DEFAULT = true;
 
         // URL of the source of Platform updates
         private const string DOWNLOAD_URL = @"https://github.com/ASCOMInitiative/ASCOMPlatform/releases";
@@ -84,8 +86,8 @@ namespace PlatformUpdateChecker
                 {
                     if (key != null)
                     {
-                        checksEnabledReleaseUpdate = Convert.ToBoolean(key.GetValue(REGISTRY_CHECK_FOR_RELEASE_UPDATES, true));
-                        checksEnabledPreReleaseUpdate = Convert.ToBoolean(key.GetValue(REGISTRY_CHECK_FOR_PRERELEASE_UPDATES, false));
+                        checksEnabledReleaseUpdate = Convert.ToBoolean(key.GetValue(REGISTRY_CHECK_FOR_RELEASE_UPDATES, CHECK_FOR_RELEASE_UPDATES_DEFAULT));
+                        checksEnabledPreReleaseUpdate = Convert.ToBoolean(key.GetValue(REGISTRY_CHECK_FOR_PRERELEASE_UPDATES, CHECK_FOR_PRERELEASE_UPDATES_DEFAULT));
                         LogMessage("CheckForUpdates", $"Release updates enabled: {checksEnabledReleaseUpdate}, pre-release updates enabled: {checksEnabledPreReleaseUpdate}");
                     }
                     else
