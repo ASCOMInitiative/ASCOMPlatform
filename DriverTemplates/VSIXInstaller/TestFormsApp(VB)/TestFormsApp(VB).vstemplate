@@ -1,11 +1,11 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>TestFormsApp(VB)</Name>
-		<Description>TestFormsApp(VB)</Description>
+		<Name>ASCOM Platform 7 Windows Forms test application (VB).</Name>
+		<Description>Creates a Windows Forms test application that connects to a driver.</Description>
 		<Icon>PackageIconVB.ico</Icon>
 		<ProjectType>VisualBasic</ProjectType>
 		<LanguageTag>visualbasic</LanguageTag>
-		<TemplateID>5c97c346-3521-43d3-b801-8beba72a7a9a</TemplateID>
+		<TemplateID>C0045300-4AA5-4186-8905-AFB1BC77CA2C</TemplateID>
 		<SortOrder>1200</SortOrder>
 		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
 		<CreateNewFolder>true</CreateNewFolder>

@@ -1,11 +1,11 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>TestConsoleApp(VB)</Name>
-		<Description>TestConsoleApp(VB)</Description>
+		<Name>ASCOM Platform 7 console test application (VB)</Name>
+		<Description>Creates a console application that connects to an ASCOM driver.</Description>
 		<Icon>PackageIconVB.ico</Icon>
 		<ProjectType>VisualBasic</ProjectType>
 		<LanguageTag>visualbasic</LanguageTag>
-		<TemplateID>74930a47-efdf-49bb-b8ba-16662296c0c6</TemplateID>
+		<TemplateID>6C33330E-6077-4BC8-B2D3-2A1F8C0418A6</TemplateID>
 		<SortOrder>1100</SortOrder>
 		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
 		<CreateNewFolder>true</CreateNewFolder>

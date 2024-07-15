@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>ASCOM Windows Forms test application (Platform 7)</Name>
-		<Description>A Windows Forms application to create and connect to an ASCOM driver.</Description>
+		<Name>ASCOM Platform 7 Windows Forms test application (C#)</Name>
+		<Description>Creates a Windows Forms test application that connects to a driver.</Description>
 		<Icon>PackageIconCSharp.ico</Icon>
 		<ProjectType>CSharp</ProjectType>
 		<LanguageTag>csharp</LanguageTag>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<SortOrder>1300</SortOrder>
-		<TemplateID>4b0ca1db-89b7-492a-b6d7-d18ce9e71899</TemplateID>
+		<TemplateID>2F7CD0B7-E68C-4015-9DB7-E516FE7D8DD0</TemplateID>
 		<CreateNewFolder>true</CreateNewFolder>
 		<DefaultName>ReplaceWithYourOwnName</DefaultName>
 		<ProvideDefaultName>true</ProvideDefaultName>

@@ -2,9 +2,9 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
-		<TemplateID>0416ef46-0da3-4774-8edf-9783ad3312c3</TemplateID>
-		<Name>ASCOM Device Driver (VB)</Name>
-		<Description>Creates a skeleton ASCOM device driver in Visual Basic. Choose the device type in the wizard</Description>
+		<TemplateID>3F0F303D-17A0-463A-9A75-8C08CD342866</TemplateID>
+		<Name>ASCOM Platform 7 In-process Driver (VB)</Name>
+		<Description>Creates a skeleton ASCOM driver in Visual Basic. Choose the device type in the wizard</Description>
 		<ProjectType>VisualBasic</ProjectType>
 		<ProjectSubType></ProjectSubType>
 		<SortOrder>1000</SortOrder>
