@@ -3,7 +3,7 @@
 	<TemplateData>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<TemplateID>8D72CCA1-4EB1-4353-93B2-F318347A4C06</TemplateID>
-		<Name>ASCOM Platform 7 In-process Driver (C#)</Name>
+		<Name>ASCOM Platform 7 In-process Driver</Name>
 		<Description>Creates a skeleton ASCOM driver in C#. Use the wizard to specify the device type.</Description>
 		<ProjectType>CSharp</ProjectType>
 		<ProjectSubType></ProjectSubType>

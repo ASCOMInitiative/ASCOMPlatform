@@ -3,7 +3,7 @@
 	<TemplateData>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<TemplateID>AC5FA723-AB65-4525-B60F-1E5FBD71516D</TemplateID>
-		<Name>ASCOM Platform 7 Driver (C#)</Name>
+		<Name>ASCOM Platform 7 Driver</Name>
 		<Description>Creates an EXE based (local server/singleton) host for multiple devices and drivers. The Project name is the server name and namespace, choose carefully!</Description>
 		<ProjectType>CSharp</ProjectType>
 		<ProjectSubType></ProjectSubType>

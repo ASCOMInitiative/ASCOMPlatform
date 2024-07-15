@@ -1,6 +1,6 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>ASCOM Platform 7 Windows Forms test application (VB).</Name>
+		<Name>ASCOM Platform 7 Windows Forms test application</Name>
 		<Description>Creates a Windows Forms test application that connects to a driver.</Description>
 		<Icon>PackageIconVB.ico</Icon>
 		<ProjectType>VisualBasic</ProjectType>

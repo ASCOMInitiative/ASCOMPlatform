@@ -3,7 +3,7 @@
 	<TemplateData>
 		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
 		<TemplateID>3F0F303D-17A0-463A-9A75-8C08CD342866</TemplateID>
-		<Name>ASCOM Platform 7 In-process Driver (VB)</Name>
+		<Name>ASCOM Platform 7 In-process Driver</Name>
 		<Description>Creates a skeleton ASCOM driver in Visual Basic. Choose the device type in the wizard</Description>
 		<ProjectType>VisualBasic</ProjectType>
 		<ProjectSubType></ProjectSubType>
