@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-    <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller2019" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
-        <DisplayName>ASCOM Driver Project Templates (VS2019)</DisplayName>
-        <Description xml:space="preserve">Requires Platform 7. Templates to create and test an ASCOM driver project. Compatible with Visual Studio 2019.</Description>
-        <MoreInfo>https://ascom-standards.org</MoreInfo>
-        <License>License.txt</License>
-        <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
-        <Icon>ASCOM.ico</Icon>
-        <PreviewImage>ASCOM.ico</PreviewImage>
-        <Tags>ASCOM;project;template</Tags>
-        <Preview>true</Preview>
-    </Metadata>
-    <Installation>
-        <InstallationTarget Version="[16.0,17.0)" Id="Microsoft.VisualStudio.Community" />
-    </Installation>
-    <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    </Dependencies>
-    <Assets>
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard (VS2019)|" AssemblyName="|ASCOM.Setup.VsixWizard (VS2019);AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard (VS2019)" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="LocalServerTemplate" d:TargetPath="|LocalServerTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestConsoleApp(CS)" d:TargetPath="|TestConsoleApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(CS)" d:TargetPath="|TestFormsApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-    </Assets>
-    <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
-    </Prerequisites>
+	<Metadata>
+		<Identity Id="ASCOMPlatform7Templates2019" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
+		<DisplayName>ASCOM Platform 7 Project Templates (VS2019)</DisplayName>
+		<Description xml:space="preserve">Requires Platform 7. Templates to create and test an ASCOM driver project. Compatible with Visual Studio 2019.</Description>
+		<MoreInfo>https://ascom-standards.org</MoreInfo>
+		<License>License.txt</License>
+		<ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+		<Icon>ASCOM.ico</Icon>
+		<PreviewImage>ASCOM.ico</PreviewImage>
+		<Tags>ASCOM;project;template</Tags>
+	</Metadata>
+	<Installation>
+		<InstallationTarget Version="[16.0,17.0)" Id="Microsoft.VisualStudio.Community" />
+	</Installation>
+	<Dependencies>
+		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+	</Dependencies>
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="|ASCOM.Setup.VsixWizard (VS2019)|" AssemblyName="|ASCOM.Setup.VsixWizard (VS2019);AssemblyName|" d:ProjectName="ASCOM.Setup.VsixWizard (VS2019)" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="LocalServerTemplate" d:TargetPath="|LocalServerTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestConsoleApp(CS)" d:TargetPath="|TestConsoleApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+		<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(CS)" d:TargetPath="|TestFormsApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+	</Assets>
+	<Prerequisites>
+		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+	</Prerequisites>
 </PackageManifest>

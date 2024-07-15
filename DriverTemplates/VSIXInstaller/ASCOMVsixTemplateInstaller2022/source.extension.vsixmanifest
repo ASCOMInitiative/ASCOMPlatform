@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ASCOMVsixTemplateInstaller" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
-        <DisplayName>ASCOM Driver Project Templates (VS2022)</DisplayName>
+        <Identity Id="ASCOMPlatform7Templates2022" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
+        <DisplayName>ASCOM Platform 7 Project Templates (VS2022)</DisplayName>
         <Description xml:space="preserve">Requires Platform 7. Templates to create and test an ASCOM driver project. Compatible with Visual Studio 2022.</Description>
         <MoreInfo>https://ascom-standards.org</MoreInfo>
         <License>License.txt</License>
@@ -10,7 +10,6 @@
         <Icon>ASCOM.ico</Icon>
         <PreviewImage>ASCOM.ico</PreviewImage>
         <Tags>ASCOM;project;template</Tags>
-        <Preview>true</Preview>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)">
