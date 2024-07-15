@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>ASCOM Windows console test application</Name>
+		<Name>ASCOM Windows console test application (Platform 7)</Name>
 		<Description>A Windows console application to create and connect to an ASCOM driver.</Description>
 		<Icon>PackageIconCSharp.ico</Icon>
 		<ProjectType>CSharp</ProjectType>
