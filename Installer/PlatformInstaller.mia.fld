@@ -1,16 +1,11 @@
 ﻿Check Application Requirements
 Check Application Pre-Requisites
-Set Registry Keys
 Remove Previous Platform install if present
-Remove 64bit components
 Remove Previous Platforms 4 and 5 if present
-Remove 32bit components
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
-Platform 5 and 5.5 files
-Developer files
 Validate installation
