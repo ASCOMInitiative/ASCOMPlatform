@@ -9,3 +9,14 @@ Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
 Validate installation
+Developer files
+Set Registry Keys
+Create shortcuts
+Post install activities - 32bit and 64bit
+Post install activities - 32bit only
+Post install activities - 64bit only
+Install complete dialogue
+Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
+Remove 32bit components
+Start installation
+Uninstall items installed by this installer
