@@ -327,11 +327,11 @@ namespace TEMPLATENAMESPACE
         {
             LogMessage("Disconnect", $"Device instance unique ID: {uniqueId}");
 
-            // Check whether this driver instance has already connected
-            if (uniqueIds.Contains(uniqueId)) // Instance already connected
+            // Check whether this driver instance has already disconnected
+            if (!uniqueIds.Contains(uniqueId)) // Instance already disconnected
             {
-                // Ignore the request, the unique ID is already in the list
-                LogMessage("Disconnect", $"Ignoring request to connect because the device is already connected.");
+                // Ignore the request, the unique ID is already removed from the list
+                LogMessage("Disconnect", $"Ignoring request to disconnect because the device is already disconnected.");
                 return;
             }
 
