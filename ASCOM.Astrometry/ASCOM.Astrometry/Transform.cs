@@ -413,7 +413,7 @@ namespace ASCOM.Astrometry.Transform
         /// information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
         /// a SetApparent and one of the Site properties has not been set.</exception>
         /// <remarks></remarks>
-        public double DECJ2000
+        public double DecJ2000
         {
             get
             {

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using ASCOM.Astrometry.Kepler;
 
 #region Transform Interface
+
 namespace ASCOM.Astrometry.Transform
 {
     /// <summary>
@@ -32,6 +33,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks>Positive numbers north of the equator, negative numbers south.</remarks>
         [DispId(1)]
         double SiteLatitude { get; set; }
+
         /// <summary>
         /// Gets or sets the site longitude
         /// </summary>
@@ -40,6 +42,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks>Positive numbers east of the Greenwich meridian, negative numbers west of the Greenwich meridian.</remarks>
         [DispId(2)]
         double SiteLongitude { get; set; }
+
         /// <summary>
         /// Gets or sets the site elevation above sea level
         /// </summary>
@@ -48,6 +51,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(3)]
         double SiteElevation { get; set; }
+
         /// <summary>
         /// Gets or sets the site ambient temperature
         /// </summary>
@@ -56,6 +60,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(4)]
         double SiteTemperature { get; set; }
+
         /// <summary>
         /// Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
         /// </summary>
@@ -64,6 +69,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(5)]
         bool Refraction { get; set; }
+
         /// <summary>
         /// Causes the transform component to recalculate values derived from the last Set command
         /// </summary>
@@ -71,6 +77,7 @@ namespace ASCOM.Astrometry.Transform
         /// co-ordinates allowing for local effects that change with time such as refraction.</remarks>
         [DispId(6)]
         void Refresh();
+
         /// <summary>
         /// Sets the known J2000 Right Ascension and Declination coordinates that are to be transformed
         /// </summary>
@@ -79,6 +86,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(7)]
         void SetJ2000(double RA, double DEC);
+
         /// <summary>
         /// Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
         /// </summary>
@@ -87,6 +95,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(8)]
         void SetApparent(double RA, double DEC);
+
         /// <summary>
         /// Sets the known topocentric Right Ascension and Declination coordinates that are to be transformed
         /// </summary>
@@ -95,6 +104,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(9)]
         void SetTopocentric(double RA, double DEC);
+
         /// <summary>
         /// Returns the Right Ascension in J2000 co-ordinates
         /// </summary>
@@ -107,6 +117,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(10)]
         double RAJ2000 { get; }
+
         /// <summary>
         /// Returns the Declination in J2000 co-ordinates
         /// </summary>
@@ -118,7 +129,8 @@ namespace ASCOM.Astrometry.Transform
         /// a SetApparent and one of the Site properties has not been set.</exception>
         /// <remarks></remarks>
         [DispId(11)]
-        double DECJ2000 { get; }
+        double DecJ2000 { get; }
+
         /// <summary>
         /// Returns the Right Ascension in topocentric co-ordinates
         /// </summary>
@@ -131,6 +143,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(12)]
         double RATopocentric { get; }
+
         /// <summary>
         /// Returns the Declination in topocentric co-ordinates
         /// </summary>
@@ -143,6 +156,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(13)]
         double DECTopocentric { get; }
+
         /// <summary>
         /// Returns the Right Ascension in apparent co-ordinates
         /// </summary>
@@ -155,6 +169,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(14)]
         double RAApparent { get; }
+
         /// <summary>
         /// Returns the Declination in apparent co-ordinates
         /// </summary>
@@ -167,6 +182,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(15)]
         double DECApparent { get; }
+
         /// <summary>
         /// Returns the topocentric azimuth angle of the target
         /// </summary>
@@ -179,6 +195,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(16)]
         double AzimuthTopocentric { get; }
+
         /// <summary>
         /// Returns the topocentric elevation of the target
         /// </summary>
@@ -191,6 +208,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(17)]
         double ElevationTopocentric { get; }
+
         /// <summary>
         /// Sets known Altitude and Azimuth values which are to be transformed
         /// </summary>
@@ -199,6 +217,7 @@ namespace ASCOM.Astrometry.Transform
         /// <remarks></remarks>
         [DispId(18)]
         void SetAzimuthElevation(double Azimuth, double Elevation);
+
         /// <summary>
         /// Sets or return the Julian date (terrestrial time) for which the transform will be made
         /// </summary>
@@ -212,19 +231,21 @@ namespace ASCOM.Astrometry.Transform
         /// to the value derived from the PC's clock.</remarks>
         [DispId(19)]
         double JulianDateTT { get; set; }
+
         /// <summary>
         /// Sets or return the Julian date (UTC) for which the transform will be made
         /// </summary>
         /// <value>Julian date (UTC) of the transform</value>
         /// <returns>UTC Julian date that will be used by Transform or zero if the PC's current clock value will be used to calculate
         /// the Julian date.</returns>
-        /// <remarks>The inital value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
+        /// <remarks>The initial value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
         /// Julian date from the PC's current date and time. If this property is non zero, that UTC Julian date is used in preference 
-        /// to the value derrived from the PC's clock.</remarks>
+        /// to the value derived from the PC's clock.</remarks>
         [DispId(20)]
         double JulianDateUTC { get; set; }
     }
 }
+
 #endregion
 
 #region Kepler Ephemeris Interface
@@ -247,7 +268,7 @@ namespace ASCOM.Astrometry.Kepler
     /// <para>
     /// <b>Ephemeris Calculations</b><br />
     /// The ephemeris calculations in Kepler draw heavily from the work of 
-    /// Stephen Moshier moshier@world.std.com. kepler is released as a free software package, further 
+    /// Stephen Moshier moshier@world.std.com. Kepler is released as a free software package, further 
     /// extending the work of Mr. Moshier.</para>
     /// <para>Kepler does not integrate orbits to the current epoch. If you want the accuracy resulting from 
     /// an integrated orbit, you must integrate separately and supply Kepler with elements of the current 
@@ -453,7 +474,7 @@ namespace ASCOM.Astrometry.NOVASCOM
     /// increased accuracy. 
     /// <para><b>Ephemeris Generator</b><br />
     /// The ephemeris generator object used with NOVAS-COM must support a single 
-    /// method GetPositionAndVelocity(tjd). This method must take a terrestrial Julian date (like the 
+    /// method GetPositionAndVelocity(TJD). This method must take a terrestrial Julian date (like the 
     /// NOVAS-COM methods) as its single parameter, and return an array of Double 
     /// containing the rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and velocity 
     /// (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
@@ -586,7 +607,7 @@ namespace ASCOM.Astrometry.NOVASCOM
     /// not necessary to create and attach these in order to get Kepler accuracy from this
     /// component</para>
     /// <para>The ephemeris generator object used with NOVAS-COM must support a single 
-    /// method GetPositionAndVelocity(tjd). This method must take a terrestrial Julian date (like the 
+    /// method GetPositionAndVelocity(TJD). This method must take a terrestrial Julian date (like the 
     /// NOVAS-COM methods) as its single parameter, and return an array of Double 
     /// containing the rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and velocity 
     /// (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
@@ -708,7 +729,7 @@ namespace ASCOM.Astrometry.NOVASCOM
     /// from a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). 
     /// PositionVector has methods that can adjust the coordinates for precession, aberration and 
     /// proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
-    /// <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
+    /// <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any Cartesian coordinate will cause the equatorial coordinates to be recalculated. 
     /// </para></remarks>
     [Guid("A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA")]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
@@ -825,7 +846,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         [DispId(12)]
         double RightAscension { get; }
         /// <summary>
-        /// Position cartesian x component
+        /// Position Cartesian x component
         /// </summary>
         /// <value>Cartesian x component</value>
         /// <returns>Cartesian x component</returns>
@@ -833,7 +854,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         [DispId(13)]
         double x { get; set; }
         /// <summary>
-        /// Position cartesian y component
+        /// Position Cartesian y component
         /// </summary>
         /// <value>Cartesian y component</value>
         /// <returns>Cartesian y component</returns>
@@ -841,7 +862,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         [DispId(14)]
         double y { get; set; }
         /// <summary>
-        /// Position cartesian z component
+        /// Position Cartesian z component
         /// </summary>
         /// <value>Cartesian z component</value>
         /// <returns>Cartesian z component</returns>
@@ -866,7 +887,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// <remarks>The Julian date must be UTC Julian date, not terrestrial. Calculations will use the internal delta-T tables and estimator to get 
         /// delta-T. 
         /// This overload is not available through COM, please use 
-        /// "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
+        /// "SetFromSiteJD(ByVal site As Site, ByVal UJD As Double, ByVal delta_t As Double)"
         /// with delta_t set to 0.0 to achieve this effect.
         /// </remarks>
         bool SetFromSiteJD([MarshalAs(UnmanagedType.IDispatch)] Site site, double ujd);
@@ -877,7 +898,7 @@ namespace ASCOM.Astrometry.NOVASCOM
     /// </summary>
     /// <remarks>Objects of class Site contain the specifications for an observer's location on the Earth 
     /// ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
-    /// and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
+    /// and the sea-level barometric pressure. The latter two are used only for optional refraction corrections. 
     /// Latitude and longitude are (common) geodetic, not geocentric. </remarks>
     [Guid("2414C071-8A5B-4d53-89BC-CAF30BA7123B")]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
@@ -959,11 +980,11 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// <param name="RA">Catalog mean right ascension (hours)</param>
         /// <param name="Dec">Catalog mean declination (degrees)</param>
         /// <param name="ProMoRA">Catalog mean J2000 proper motion in right ascension (sec/century)</param>
-        /// <param name="ProMoDec">Catalog mean J2000 proper motion in declination (arcsec/century)</param>
-        /// <param name="Parallax">Catalog mean J2000 parallax (arcsec)</param>
+        /// <param name="ProMoDec">Catalog mean J2000 proper motion in declination (arc-sec/century)</param>
+        /// <param name="Parallax">Catalog mean J2000 parallax (arc-sec)</param>
         /// <param name="RadVel">Catalog mean J2000 radial velocity (km/sec)</param>
         /// <remarks>Assumes positions are FK5. If Parallax is set to zero, NOVAS-COM assumes the object 
-        /// is on the "celestial sphere", which has a distance of 10 megaparsecs. </remarks>
+        /// is on the "celestial sphere", which has a distance of 10 mega-parsecs. </remarks>
         [DispId(1)]
         void Set(double RA, double Dec, double ProMoRA, double ProMoDec, double Parallax, double RadVel);
         /// <summary>
@@ -972,12 +993,12 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// <param name="RA">Catalog mean right ascension (hours)</param>
         /// <param name="Dec">Catalog mean declination (degrees)</param>
         /// <param name="ProMoRA">Catalog mean J2000 proper motion in right ascension (sec/century)</param>
-        /// <param name="ProMoDec">Catalog mean J2000 proper motion in declination (arcsec/century)</param>
-        /// <param name="Parallax">Catalog mean J2000 parallax (arcsec)</param>
+        /// <param name="ProMoDec">Catalog mean J2000 proper motion in declination (arc-sec/century)</param>
+        /// <param name="Parallax">Catalog mean J2000 parallax (arc-sec)</param>
         /// <param name="RadVel">Catalog mean J2000 radial velocity (km/sec)</param>
         /// <remarks>Assumes positions are Hipparcos standard and transforms to FK5 standard used by NOVAS. 
         /// <para>If Parallax is set to zero, NOVAS-COM assumes the object is on the "celestial sphere", 
-        /// which has a distance of 10 megaparsecs.</para>
+        /// which has a distance of 10 mega-parsecs.</para>
         /// </remarks>
         [DispId(2)]
         void SetHipparcos(double RA, double Dec, double ProMoRA, double ProMoDec, double Parallax, double RadVel);
@@ -1074,7 +1095,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         [DispId(13)]
         int Number { get; set; }
         /// <summary>
-        /// Catalog mean J2000 parallax (arcsec)
+        /// Catalog mean J2000 parallax (arc-sec)
         /// </summary>
         /// <value>Catalog mean J2000 parallax</value>
         /// <returns>Arc seconds</returns>
@@ -1082,7 +1103,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         [DispId(14)]
         double Parallax { get; set; }
         /// <summary>
-        /// Catalog mean J2000 proper motion in declination (arcsec/century)
+        /// Catalog mean J2000 proper motion in declination (arc-sec/century)
         /// </summary>
         /// <value>Catalog mean J2000 proper motion in declination</value>
         /// <returns>Arc seconds per century</returns>
@@ -1131,7 +1152,7 @@ namespace ASCOM.Astrometry.NOVASCOM
     public interface IVelocityVector
     {
         /// <summary>
-        /// Initialize the VelocityVector from a Site object and Greenwich Apparent Sdereal Time.
+        /// Initialize the VelocityVector from a Site object and Greenwich Apparent Sidereal Time.
         /// </summary>
         /// <param name="site">The Site object from which to initialize</param>
         /// <param name="gast">Greenwich Apparent Sidereal Time</param>
@@ -1230,7 +1251,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// of mass. The Julian date must be UTC Julian date, not terrestrial. This call will use 
         /// the internal tables and estimator to get delta-T.
         /// This overload is not available through COM, please use 
-        /// "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
+        /// "SetFromSiteJD(ByVal site As Site, ByVal UJD As Double, ByVal delta_t As Double)"
         /// with delta_t set to 0.0 to achieve this effect.
         /// </remarks>
         bool SetFromSiteJD([MarshalAs(UnmanagedType.IDispatch)] Site site, double ujd);
@@ -1477,9 +1498,9 @@ namespace ASCOM.Astrometry.NOVAS
         ///    Epoch: J1991.25
         ///    Right ascension (RA): degrees
         ///    Declination (Dec): degrees
-        ///    Proper motion in RA * cos (Dec): milliarcseconds per year
-        ///    Proper motion in Dec: milliarcseconds per year
-        ///    Parallax: milliarcseconds
+        ///    Proper motion in RA * cos (Dec): milli-arcseconds per year
+        ///    Proper motion in Dec: milli-arcseconds per year
+        ///    Parallax: milli-arcseconds
         ///    Radial velocity: kilometers per second (not in catalog)
         /// 
         /// 2. FK5 epoch and units:
@@ -1626,15 +1647,15 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="dec">OUT: Declination in degrees.</param>
         /// <returns><pre>
         /// 0...Everything OK.
-        /// 1...All vector components are zero; 'ra' and 'dec' are indeterminate.
-        /// 2...Both vec[0] and vec[1] are zero, but vec[2] is nonzero; 'ra' is indeterminate.</pre>
+        /// 1...All vector components are zero; 'RA' and 'DEC' are indeterminate.
+        /// 2...Both vec[0] and vec[1] are zero, but vec[2] is nonzero; 'RA' is indeterminate.</pre>
         /// </returns>
         /// <remarks></remarks>
         [DispId(20)]
         short Vector2RADec(double[] pos, ref double ra, ref double dec);
 
         /// <summary>
-        /// Converts angular quanities for stars to vectors.
+        /// Converts angular quantities for stars to vectors.
         /// </summary>
         /// <param name="star">Catalog entry structure containing J2000.0 catalog data with FK5-style units </param>
         /// <param name="pos">Position vector, equatorial rectangular coordinates, components in AU.</param>
@@ -1792,7 +1813,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <summary>
         /// Nutates equatorial rectangular coordinates from mean equator and equinox of epoch to true equator and equinox of epoch.
         /// </summary>
-        /// <param name="tjd">TDB julian date of epoch.</param>
+        /// <param name="tjd">TDB Julian date of epoch.</param>
         /// <param name="fn">Flag determining 'direction' of transformation;<pre>
         ///    fn  = 0 transformation applied, mean to true.
         ///    fn != 0 inverse transformation applied, true to mean.</pre></param>
@@ -1844,7 +1865,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="type">Type of body</param>
         /// <param name="number">Body number</param>
         /// <param name="name">Name of the body.</param>
-        /// <param name="cel_obj">OUT: Structure containg the body definition </param>
+        /// <param name="cel_obj">OUT: Structure containing the body definition </param>
         /// <returns><pre>
         /// = 0 ... everything OK
         /// = 1 ... invalid value of 'type'
@@ -1882,7 +1903,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         /// <param name="location">structure containing observer's location</param>
         /// <param name="ref_option">refraction option</param>
-        /// <param name="zd_obs">bserved zenith distance, in degrees.</param>
+        /// <param name="zd_obs">observed zenith distance, in degrees.</param>
         /// <returns>Atmospheric refraction, in degrees.</returns>
         /// <remarks>This version computes approximate refraction for optical wavelengths.</remarks>
         [DispId(39)]
@@ -1979,7 +2000,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Name">The name of the asteroid.</param>
         /// <param name="Jd"> The Julian date on which to find the position and velocity.</param>
         /// <param name="Err">Error code; always set equal to 9 (see note below).</param>
-        /// <returns> 6-element array of double cotaining position and velocity vector values, with all elements set to zero.</returns>
+        /// <returns> 6-element array of double containing position and velocity vector values, with all elements set to zero.</returns>
         /// <remarks> This is a dummy version of function 'ReadEph'.  It serves as a stub for the "real" 'ReadEph' 
         /// (part of the USNO/AE98 minor planet ephemerides) when NOVAS-C is used without the minor planet ephemerides.
         /// <para>
@@ -2073,7 +2094,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// Computes the apparent place of a star at date 'JdTt', given its catalog mean place, proper motion, parallax, and radial velocity.
         /// </summary>
         /// <param name="JdTt">TT Julian date for apparent place.</param>
-        /// <param name="Star">Catalog entry structure containing catalog data forthe object in the ICRS </param>
+        /// <param name="Star">Catalog entry structure containing catalog data for the object in the ICRS </param>
         /// <param name="Accuracy">Code specifying the relative accuracy of the output position.</param>
         /// <param name="Ra">Apparent right ascension in hours, referred to true equator and equinox of date 'JdTt'.</param>
         /// <param name="Dec">Apparent declination in degrees, referred to true equator and equinox of date 'JdTt'.</param>
@@ -2124,7 +2145,7 @@ namespace ASCOM.Astrometry.NOVAS
         short AstroStar(double JdTt, CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
 
         /// <summary>
-        /// Move the origin of coordinates from the barycenter of the solar system to the observer (or the geocenter); i.e., this function accounts for parallax (annual+geocentric or justannual).
+        /// Move the origin of coordinates from the barycenter of the solar system to the observer (or the geocenter); i.e., this function accounts for parallax (annual+geocentric or just annual).
         /// </summary>
         /// <param name="Pos">Position vector, referred to origin at solar system barycenter, components in AU.</param>
         /// <param name="PosObs">Position vector of observer (or the geocenter), with respect to origin at solar system barycenter, components in AU.</param>
@@ -2151,8 +2172,8 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         /// <param name="Tjd">TDB or TT Julian date for pole offsets.</param>
         /// <param name="Type"> Type of pole offset. 1 for corrections to angular coordinates of modeled pole referred to mean ecliptic of date, that is, delta-delta-psi and delta-delta-epsilon.  2 for corrections to components of modeled pole unit vector referred to GCRS axes, that is, dx and dy.</param>
-        /// <param name="Dpole1">Value of celestial pole offset in first coordinate, (delta-delta-psi or dx) in milliarcseconds.</param>
-        /// <param name="Dpole2">Value of celestial pole offset in second coordinate, (delta-delta-epsilon or dy) in milliarcseconds.</param>
+        /// <param name="Dpole1">Value of celestial pole offset in first coordinate, (delta-delta-psi or dx) in milli-arcseconds.</param>
+        /// <param name="Dpole2">Value of celestial pole offset in second coordinate, (delta-delta-epsilon or dy) in milli-arcseconds.</param>
         /// <returns><pre>
         /// 0 ... Everything OK
         /// 1 ... Invalid value of 'Type'.
@@ -2162,7 +2183,7 @@ namespace ASCOM.Astrometry.NOVAS
         short CelPole(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2);
 
         /// <summary>
-        /// Calaculate an array of CIO RA values around a given date
+        /// Calculate an array of CIO RA values around a given date
         /// </summary>
         /// <param name="JdTdb">TDB Julian date.</param>
         /// <param name="NPts"> Number of Julian dates and right ascension values requested (not less than 2 or more than 20).</param>
@@ -2314,7 +2335,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Jd"> TDB Julian date split into two parts, where the sum jd[0] + jd[1] is the TDB Julian date.</param>
         /// <param name="CelObj">Structure containing the designation of the body of interest </param>
         /// <param name="Origin"> Origin code; solar system barycenter = 0, center of mass of the Sun = 1.</param>
-        /// <param name="Accuracy">Slection for accuracy</param>
+        /// <param name="Accuracy">Selection for accuracy</param>
         /// <param name="Pos">Position vector of the body at 'Jd'; equatorial rectangular coordinates in AU referred to the ICRS.</param>
         /// <param name="Vel">Velocity vector of the body at 'Jd'; equatorial rectangular system referred to the mean equator and equinox of the ICRS, in AU/Day.</param>
         /// <returns><pre>
@@ -2344,7 +2365,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// 1 ... invalid value of 'CoordSys'
         /// </pre></returns>
         /// <remarks>
-        /// To convert ICRS RA and dec to ecliptic coordinates (mean ecliptic and equinox of J2000.0), 
+        /// To convert ICRS RA and Dec to ecliptic coordinates (mean ecliptic and equinox of J2000.0), 
         /// set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         /// Except for the input to this case, all input coordinates are dynamical.
         /// </remarks>
@@ -2386,13 +2407,13 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Jd_Ut1">UT1 Julian date.</param>
         /// <param name="DeltT">Difference TT-UT1 at 'jd_ut1', in seconds.</param>
         /// <param name="Accuracy">Selection for accuracy</param>
-        /// <param name="x">onventionally-defined x coordinate of celestial intermediate pole with respect to ITRS reference pole, in arcseconds.</param>
+        /// <param name="x">Conventionally-defined x coordinate of celestial intermediate pole with respect to ITRS reference pole, in arcseconds.</param>
         /// <param name="y">Conventionally-defined y coordinate of celestial intermediate pole with respect to ITRS reference pole, in arcseconds.</param>
         /// <param name="Location">Structure containing observer's location </param>
         /// <param name="Ra">Topocentric right ascension of object of interest, in hours, referred to true equator and equinox of date.</param>
         /// <param name="Dec">Topocentric declination of object of interest, in degrees, referred to true equator and equinox of date.</param>
         /// <param name="RefOption">Refraction option. 0 ... no refraction; 1 ... include refraction, using 'standard' atmospheric conditions;
-        /// 2 ... include refraction, using atmospheric parametersinput in the 'Location' structure.</param>
+        /// 2 ... include refraction, using atmospheric parameters input in the 'Location' structure.</param>
         /// <param name="Zd">Topocentric zenith distance in degrees, affected by refraction if 'ref_option' is non-zero.</param>
         /// <param name="Az">Topocentric azimuth (measured east from north) in degrees.</param>
         /// <param name="RaR"> Topocentric right ascension of object of interest, in hours, referred to true equator and 
@@ -2459,7 +2480,7 @@ namespace ASCOM.Astrometry.NOVAS
         ///   a[3] = D (mean elongation of the Moon from the Sun)
         ///   a[4] = a[4] (mean longitude of the Moon's ascending node);
         ///                from Simon section 3.4(b.3),
-        ///                precession = 5028.8200 arcsec/cy)
+        ///                precession = 5028.8200 arc-sec/cycle)
         /// </pre>
         /// </remarks>
         [DispId(28)]
@@ -2582,7 +2603,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// Computes the geocentric position of a solar system body, as antedated for light-time.
         /// </summary>
         /// <param name="JdTdb">TDB Julian date of observation.</param>
-        /// <param name="SsObject">Structure containing the designation for thesolar system body</param>
+        /// <param name="SsObject">Structure containing the designation for the solar system body</param>
         /// <param name="PosObs">Position vector of observer (or the geocenter), with respect to origin 
         /// at solar system barycenter, referred to ICRS axes, components in AU.</param>
         /// <param name="TLight0">First approximation to light-time, in days (can be set to 0.0 if unknown)</param>
@@ -2664,9 +2685,9 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="StarNum">Object number in the catalog.</param>
         /// <param name="Ra">Right ascension of the object (hours).</param>
         /// <param name="Dec">Declination of the object (degrees).</param>
-        /// <param name="PmRa">Proper motion in right ascension (milliarcseconds/year).</param>
-        /// <param name="PmDec">Proper motion in declination (milliarcseconds/year).</param>
-        /// <param name="Parallax">Parallax (milliarcseconds).</param>
+        /// <param name="PmRa">Proper motion in right ascension (milli-arcseconds/year).</param>
+        /// <param name="PmDec">Proper motion in declination (milli-arcseconds/year).</param>
+        /// <param name="Parallax">Parallax (milli-arcseconds).</param>
         /// <param name="RadVel">Radial velocity (kilometers/second).</param>
         /// <param name="Star">CatEntry3 structure containing the input data</param>
         /// <remarks></remarks>
@@ -3033,7 +3054,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="VecC"> Position vector, geocentric equatorial rectangular coordinates, referred to GCRS 
         /// axes (celestial system) or with respect to the equator and equinox of date, depending on 'Option'.</param>
         /// <returns><pre>
-        ///    0 ... everything is ok
+        ///    0 ... everything is OK
         ///    1 ... invalid value of 'Accuracy'
         ///    2 ... invalid value of 'Method'
         /// > 10 ... 10 + error from function 'CioLocation'
@@ -3157,9 +3178,9 @@ namespace ASCOM.Astrometry.NOVAS
         /// <item>Epoch: J1991.25</item>
         /// <item>Right ascension (RA): degrees</item>
         /// <item>Declination (Dec): degrees</item>
-        /// <item>Proper motion in RA: milliarcseconds per year</item>
-        /// <item>Proper motion in Dec: milliarcseconds per year</item>
-        /// <item>Parallax: milliarcseconds</item>
+        /// <item>Proper motion in RA: milli-arcseconds per year</item>
+        /// <item>Proper motion in Dec: milli-arcseconds per year</item>
+        /// <item>Parallax: milli-arcseconds</item>
         /// <item>Radial velocity: kilometers per second (not in catalog)</item>
         /// </list>
         /// </para>
@@ -3169,9 +3190,9 @@ namespace ASCOM.Astrometry.NOVAS
         /// <item>Epoch: J2000.0</item>
         /// <item>Right ascension: hours</item>
         /// <item>Declination: degrees</item>
-        /// <item>Proper motion in RA: milliarcseconds per year</item>
-        /// <item>Proper motion in Dec: milliarcseconds per year</item>
-        /// <item>Parallax: milliarcseconds</item>
+        /// <item>Proper motion in RA: milli-arcseconds per year</item>
+        /// <item>Proper motion in Dec: milli-arcseconds per year</item>
+        /// <item>Parallax: milli-arcseconds</item>
         /// <item>Radial velocity: kilometers per second</item>
         /// </list>>
         /// </para>
@@ -3302,7 +3323,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Name">The name of the asteroid.</param>
         /// <param name="Jd"> The Julian date on which to find the position and velocity.</param>
         /// <param name="Err">Error code; always set equal to 9 (see note below).</param>
-        /// <returns> 6-element array of double cotaining position and velocity vector values, with all elements set to zero.</returns>
+        /// <returns> 6-element array of double containing position and velocity vector values, with all elements set to zero.</returns>
         /// <remarks> This is a dummy version of function 'ReadEph'.  It serves as a stub for the "real" 'ReadEph' 
         /// (part of the USNO/AE98 minor planet ephemerides) when NOVAS-C is used without the minor planet ephemerides.
         /// <para>
@@ -3396,7 +3417,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// Computes the apparent place of a star at date 'JdTt', given its catalog mean place, proper motion, parallax, and radial velocity.
         /// </summary>
         /// <param name="JdTt">TT Julian date for apparent place.</param>
-        /// <param name="Star">Catalog entry structure containing catalog data forthe object in the ICRS </param>
+        /// <param name="Star">Catalog entry structure containing catalog data for the object in the ICRS </param>
         /// <param name="Accuracy">Code specifying the relative accuracy of the output position.</param>
         /// <param name="Ra">Apparent right ascension in hours, referred to true equator and equinox of date 'JdTt'.</param>
         /// <param name="Dec">Apparent declination in degrees, referred to true equator and equinox of date 'JdTt'.</param>
@@ -3447,7 +3468,7 @@ namespace ASCOM.Astrometry.NOVAS
         short AstroStar(double JdTt, CatEntry3 Star, Accuracy Accuracy, ref double Ra, ref double Dec);
 
         /// <summary>
-        /// Move the origin of coordinates from the barycenter of the solar system to the observer (or the geocenter); i.e., this function accounts for parallax (annual+geocentric or justannual).
+        /// Move the origin of coordinates from the barycenter of the solar system to the observer (or the geocenter); i.e., this function accounts for parallax (annual+geocentric or just annual).
         /// </summary>
         /// <param name="Pos">Position vector, referred to origin at solar system barycenter, components in AU.</param>
         /// <param name="PosObs">Position vector of observer (or the geocenter), with respect to origin at solar system barycenter, components in AU.</param>
@@ -3491,7 +3512,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="VecC">Position vector, geocentric equatorial rectangular coordinates,
         /// referred to ITRS axes (terrestrial system).</param>
         /// <returns><pre>
-        ///    0 ... everything is ok
+        ///    0 ... everything is OK
         ///    1 ... invalid value of 'Accuracy'
         ///    2 ... invalid value of 'Method'
         /// > 10 ... 10 + error from function 'CioLocation'
@@ -3510,8 +3531,8 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         /// <param name="Tjd">TDB or TT Julian date for pole offsets.</param>
         /// <param name="Type"> Type of pole offset. 1 for corrections to angular coordinates of modeled pole referred to mean ecliptic of date, that is, delta-delta-psi and delta-delta-epsilon.  2 for corrections to components of modeled pole unit vector referred to GCRS axes, that is, dx and dy.</param>
-        /// <param name="Dpole1">Value of celestial pole offset in first coordinate, (delta-delta-psi or dx) in milliarcseconds.</param>
-        /// <param name="Dpole2">Value of celestial pole offset in second coordinate, (delta-delta-epsilon or dy) in milliarcseconds.</param>
+        /// <param name="Dpole1">Value of celestial pole offset in first coordinate, (delta-delta-psi or dx) in milli-arcseconds.</param>
+        /// <param name="Dpole2">Value of celestial pole offset in second coordinate, (delta-delta-epsilon or dy) in milli-arcseconds.</param>
         /// <returns><pre>
         /// 0 ... Everything OK
         /// 1 ... Invalid value of 'Type'.
@@ -3521,7 +3542,7 @@ namespace ASCOM.Astrometry.NOVAS
         short CelPole(double Tjd, PoleOffsetCorrection Type, double Dpole1, double Dpole2);
 
         /// <summary>
-        /// Calaculate an array of CIO RA values around a given date
+        /// Calculate an array of CIO RA values around a given date
         /// </summary>
         /// <param name="JdTdb">TDB Julian date.</param>
         /// <param name="NPts"> Number of Julian dates and right ascension values requested (not less than 2 or more than 20).</param>
@@ -3665,7 +3686,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// This same series was also adopted for use in the IAU's Standards of Fundamental Astronomy (SOFA) software (i.e., subroutine 
         /// eect00.for and function eect00.c).
         /// <para>2. The low-accuracy series used in this function is a simple implementation derived from the first reference, in which terms
-        /// smaller than 2 microarcseconds have been omitted.</para>
+        /// smaller than 2 micro-arcseconds have been omitted.</para>
         /// <para>3. This function is based on NOVAS Fortran routine 'eect2000', with the low-accuracy formula taken from NOVAS Fortran routine 'etilt'.</para>
         /// </remarks>
         [DispId(20)]
@@ -3677,7 +3698,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Jd"> TDB Julian date split into two parts, where the sum jd[0] + jd[1] is the TDB Julian date.</param>
         /// <param name="CelObj">Structure containing the designation of the body of interest </param>
         /// <param name="Origin"> Origin code; solar system barycenter = 0, center of mass of the Sun = 1.</param>
-        /// <param name="Accuracy">Slection for accuracy</param>
+        /// <param name="Accuracy">Selection for accuracy</param>
         /// <param name="Pos">Position vector of the body at 'Jd'; equatorial rectangular coordinates in AU referred to the ICRS.</param>
         /// <param name="Vel">Velocity vector of the body at 'Jd'; equatorial rectangular system referred to the mean equator and equinox of the ICRS, in AU/Day.</param>
         /// <returns><pre>
@@ -3707,7 +3728,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// 1 ... invalid value of 'CoordSys'
         /// </pre></returns>
         /// <remarks>
-        /// To convert ICRS RA and dec to ecliptic coordinates (mean ecliptic and equinox of J2000.0), 
+        /// To convert ICRS RA and Dec to ecliptic coordinates (mean ecliptic and equinox of J2000.0), 
         /// set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         /// Except for the input to this case, all input coordinates are dynamical.
         /// </remarks>
@@ -3749,13 +3770,13 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="Jd_Ut1">UT1 Julian date.</param>
         /// <param name="DeltT">Difference TT-UT1 at 'jd_ut1', in seconds.</param>
         /// <param name="Accuracy">Selection for accuracy</param>
-        /// <param name="x">onventionally-defined x coordinate of celestial intermediate pole with respect to ITRS reference pole, in arcseconds.</param>
+        /// <param name="x">Conventionally-defined x coordinate of celestial intermediate pole with respect to ITRS reference pole, in arcseconds.</param>
         /// <param name="y">Conventionally-defined y coordinate of celestial intermediate pole with respect to ITRS reference pole, in arcseconds.</param>
         /// <param name="Location">Structure containing observer's location </param>
         /// <param name="Ra">Topocentric right ascension of object of interest, in hours, referred to true equator and equinox of date.</param>
         /// <param name="Dec">Topocentric declination of object of interest, in degrees, referred to true equator and equinox of date.</param>
         /// <param name="RefOption">Refraction option. 0 ... no refraction; 1 ... include refraction, using 'standard' atmospheric conditions;
-        /// 2 ... include refraction, using atmospheric parametersinput in the 'Location' structure.</param>
+        /// 2 ... include refraction, using atmospheric parameters input in the 'Location' structure.</param>
         /// <param name="Zd">Topocentric zenith distance in degrees, affected by refraction if 'ref_option' is non-zero.</param>
         /// <param name="Az">Topocentric azimuth (measured east from north) in degrees.</param>
         /// <param name="RaR"> Topocentric right ascension of object of interest, in hours, referred to true equator and 
@@ -3822,7 +3843,7 @@ namespace ASCOM.Astrometry.NOVAS
         ///   a[3] = D (mean elongation of the Moon from the Sun)
         ///   a[4] = a[4] (mean longitude of the Moon's ascending node);
         ///                from Simon section 3.4(b.3),
-        ///                precession = 5028.8200 arcsec/cy)
+        ///                precession = 5028.8200 arc-sec/cycle)
         /// </pre>
         /// </remarks>
         [DispId(29)]
@@ -3945,7 +3966,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// Computes the geocentric position of a solar system body, as antedated for light-time.
         /// </summary>
         /// <param name="JdTdb">TDB Julian date of observation.</param>
-        /// <param name="SsObject">Structure containing the designation for thesolar system body</param>
+        /// <param name="SsObject">Structure containing the designation for the solar system body</param>
         /// <param name="PosObs">Position vector of observer (or the geocenter), with respect to origin 
         /// at solar system barycenter, referred to ICRS axes, components in AU.</param>
         /// <param name="TLight0">First approximation to light-time, in days (can be set to 0.0 if unknown)</param>
@@ -4027,9 +4048,9 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="StarNum">Object number in the catalog.</param>
         /// <param name="Ra">Right ascension of the object (hours).</param>
         /// <param name="Dec">Declination of the object (degrees).</param>
-        /// <param name="PmRa">Proper motion in right ascension (milliarcseconds/year).</param>
-        /// <param name="PmDec">Proper motion in declination (milliarcseconds/year).</param>
-        /// <param name="Parallax">Parallax (milliarcseconds).</param>
+        /// <param name="PmRa">Proper motion in right ascension (milli-arcseconds/year).</param>
+        /// <param name="PmDec">Proper motion in declination (milli-arcseconds/year).</param>
+        /// <param name="Parallax">Parallax (milli-arcseconds).</param>
         /// <param name="RadVel">Radial velocity (kilometers/second).</param>
         /// <param name="Star">CatEntry3 structure containing the input data</param>
         /// <remarks></remarks>
@@ -4396,7 +4417,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// <param name="VecC"> Position vector, geocentric equatorial rectangular coordinates, referred to GCRS 
         /// axes (celestial system) or with respect to the equator and equinox of date, depending on 'Option'.</param>
         /// <returns><pre>
-        ///    0 ... everything is ok
+        ///    0 ... everything is OK
         ///    1 ... invalid value of 'Accuracy'
         ///    2 ... invalid value of 'Method'
         /// > 10 ... 10 + error from function 'CioLocation'
@@ -4520,9 +4541,9 @@ namespace ASCOM.Astrometry.NOVAS
         /// <item>Epoch: J1991.25</item>
         /// <item>Right ascension (RA): degrees</item>
         /// <item>Declination (Dec): degrees</item>
-        /// <item>Proper motion in RA: milliarcseconds per year</item>
-        /// <item>Proper motion in Dec: milliarcseconds per year</item>
-        /// <item>Parallax: milliarcseconds</item>
+        /// <item>Proper motion in RA: milli-arcseconds per year</item>
+        /// <item>Proper motion in Dec: milli-arcseconds per year</item>
+        /// <item>Parallax: milli-arcseconds</item>
         /// <item>Radial velocity: kilometers per second (not in catalog)</item>
         /// </list>
         /// </para>
@@ -4532,9 +4553,9 @@ namespace ASCOM.Astrometry.NOVAS
         /// <item>Epoch: J2000.0</item>
         /// <item>Right ascension: hours</item>
         /// <item>Declination: degrees</item>
-        /// <item>Proper motion in RA: milliarcseconds per year</item>
-        /// <item>Proper motion in Dec: milliarcseconds per year</item>
-        /// <item>Parallax: milliarcseconds</item>
+        /// <item>Proper motion in RA: milli-arcseconds per year</item>
+        /// <item>Proper motion in Dec: milli-arcseconds per year</item>
+        /// <item>Parallax: milli-arcseconds</item>
         /// <item>Radial velocity: kilometers per second</item>
         /// </list>>
         /// </para>
@@ -4659,6 +4680,7 @@ namespace ASCOM.Astrometry.AstroUtils
         /// <returns></returns>
         [DispId(3)]
         double DeltaT();
+
         /// <summary>
         /// Un-refract a zenith distance
         /// </summary>
@@ -4668,25 +4690,29 @@ namespace ASCOM.Astrometry.AstroUtils
         /// <returns>Un-refracted zenith distance</returns>
         [DispId(4)]
         double UnRefract(OnSurface Location, RefractionOption RefOption, double ZdObs);
-    /// <summary>
-    /// 
-    /// </summary>
-        [DispId(5)]
-        double JulianDateUtc { get; }
+
         /// <summary>
         /// Julian date in UTC
         /// </summary>
-        /// <param name="DeltaUT1"></param>
-        /// <returns></returns>
+        [DispId(5)]
+        double JulianDateUtc { get; }
+
+        /// <summary>
+        /// Julian date on the Terrestrial Time timescale
+        /// </summary>
+        /// <param name="DeltaUT1">Current delta UT1 offset</param>
+        /// <returns>Julian date on the Terrestrial timescale</returns>
         [DispId(6)]
         double JulianDateTT(double DeltaUT1);
+
         /// <summary>
-        /// Julian date on the terrestrial time scale.
+        /// Julian date on the UT1 time scale.
         /// </summary>
         /// <param name="DeltaUT1">Current delta UT1 value</param>
-        /// <returns>double terrestrial Julian date</returns>
+        /// <returns>Julian date on the UT1 timescale</returns>
         [DispId(7)]
         double JulianDateUT1(double DeltaUT1);
+
         /// <summary>
         /// Flexible routine to range a number between a lower and an higher bound. Switches control whether the ranged value can be equal to either the
         /// lower or upper bounds.
@@ -4696,7 +4722,7 @@ namespace ASCOM.Astrometry.AstroUtils
         /// <param name="LowerEqual">Boolean flag indicating whether the ranged value can have the lower bound value</param>
         /// <param name="UpperBound">Highest value of the range</param>
         /// <param name="UpperEqual">Boolean flag indicating whether the ranged value can have the upper bound value</param>
-        /// <returns>The ranged nunmber as a double</returns>
+        /// <returns>The ranged number as a double</returns>
         /// <exception cref="ASCOM.InvalidValueException">Thrown if the lower bound is greater than the upper bound.</exception>
         /// <exception cref="ASCOM.InvalidValueException">Thrown if LowerEqual and UpperEqual are both false and the ranged value equals
         /// one of these values. This is impossible to handle as the algorithm will always violate one of the rules!</exception>
@@ -4706,18 +4732,18 @@ namespace ASCOM.Astrometry.AstroUtils
         /// <summary>
         /// Converts a calendar day, month, year to a modified Julian date
         /// </summary>
-        /// <param name="Day">Integer day of ther month</param>
+        /// <param name="Day">Integer day of the month</param>
         /// <param name="Month">Integer month of the year</param>
         /// <param name="Year">Integer year</param>
-        /// <returns>Double modified julian date</returns>
+        /// <returns>Double modified Julian date</returns>
         /// <remarks></remarks>
         [DispId(9)]
         double CalendarToMJD(int Day, int Month, int Year);
         /// <summary>
-        /// Translates a modified Julian date to a VB ole automation date, presented as a double
+        /// Translates a modified Julian date to a VB OLE automation date, presented as a double
         /// </summary>
         /// <param name="MJD">Modified Julian date</param>
-        /// <returns>Date as a VB ole automation date</returns>
+        /// <returns>Date as a VB OLE automation date</returns>
         /// <remarks></remarks>
         [DispId(10)]
         double MJDToOADate(double MJD);
@@ -4732,7 +4758,7 @@ namespace ASCOM.Astrometry.AstroUtils
         /// <summary>
         /// Returns a modified Julian date as a string formatted according to the supplied presentation format
         /// </summary>
-        /// <param name="MJD">Mofified julian date</param>
+        /// <param name="MJD">Modified Julian date</param>
         /// <param name="PresentationFormat">Format representation</param>
         /// <returns>Date string</returns>
         /// <exception cref="FormatException">Thrown if the provided PresentationFormat is not valid.</exception>
@@ -4742,7 +4768,7 @@ namespace ASCOM.Astrometry.AstroUtils
         [DispId(12)]
         string FormatMJD(double MJD, string PresentationFormat);
         /// <summary>
-        /// Proivides an estimates of DeltaUT1, the difference between UTC and UT1. DeltaUT1 = UT1 - UTC
+        /// Provides an estimate of DeltaUT1, the difference between UTC and UT1. DeltaUT1 = UT1 - UTC
         /// </summary>
         /// <param name="JulianDate">Julian date when DeltaUT is required</param>
         /// <returns>Double DeltaUT in seconds</returns>
@@ -4766,7 +4792,7 @@ namespace ASCOM.Astrometry.AstroUtils
         /// <value>Integer number of seconds</value>
         /// <returns>Current number of leap seconds</returns>
         /// <remarks>The property value is stored in the ASCOM Profile under the name \Astrometry\Leap Seconds. Any change made to this property 
-        /// will be persisted to the ASCOM Profile store and will be immediately availble to this and all future instances of AstroUtils.
+        /// will be persisted to the ASCOM Profile store and will be immediately available to this and all future instances of AstroUtils.
         /// <para>The current value and any announced but not yet actioned change are listed 
         /// here: ftp://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat</para> </remarks>
         [DispId(15)]
@@ -4804,7 +4830,7 @@ namespace ASCOM.Astrometry.AstroUtils
         /// Springer Fourth Edition 2000, Fourth Printing 2009. The day is divided into twelve two hour intervals and a quadratic equation is fitted
         /// to the altitudes at the beginning, middle and end of each interval. The resulting equation coefficients are then processed to determine 
         /// the number of roots within the interval (each of which corresponds to a rise or set event) and their sense (rise or set). 
-        /// These results are are then aggregated over the day and the resultant list of values returned as the function result.
+        /// These results are then aggregated over the day and the resultant list of values returned as the function result.
         /// </para>
         /// <para>High precision ephemeredes for the Sun, Moon and Earth and other planets from the JPL DE421 series are employed as delivered by the 
         /// ASCOM NOVAS 3.1 component rather than using the lower precision ephemeredes employed by Montenbruck and Pfleger.
@@ -4813,12 +4839,12 @@ namespace ASCOM.Astrometry.AstroUtils
         /// North pole to the South Pole at a variety of longitudes, timezones and dates have been compared to data from
         /// the <a href="http://aa.usno.navy.mil/data/docs/RS_OneYear.php">US Naval Observatory Astronomical Data</a> web site. The RMS error has been found to be 
         /// better than 0.5 minute over the latitude range 80 degrees North to 80 degrees South and better than 5 minutes from 80 degrees to the relevant pole.
-        /// Most returned values are within 1 minute of the USNO values although some very infrequent grazing event times at lattiudes from 67 to 90 degrees North and South can be up to 
+        /// Most returned values are within 1 minute of the USNO values although some very infrequent grazing event times at latitudes from 67 to 90 degrees North and South can be up to 
         /// 10 minutes different.
         /// </para>
-        /// <para>An Almanac program that creates a year's worth of information for a given event, lattitude, longitude and timezone is included in the 
+        /// <para>An Almanac program that creates a year's worth of information for a given event, latitude, longitude and timezone is included in the 
         /// developer code examples elsewhere in this help file. This creates an output file with an almost identical format to that used by the USNO web site 
-        /// and allows comprehensive checking of acccuracy for a given set of parameters.</para>
+        /// and allows comprehensive checking of accuracy for a given set of parameters.</para>
         /// </remarks>
         [DispId(16)]
         ArrayList EventTimes(EventType TypeofEvent, int Day, int Month, int Year, double SiteLatitude, double SiteLongitude, double SiteTimeZone);
@@ -4836,7 +4862,7 @@ namespace ASCOM.Astrometry.AstroUtils
         /// Returns the Moon phase as an angle
         /// </summary>
         /// <param name="JD">Julian day (UTC) for which the Moon phase is required</param>
-        /// <returns>Moon phase as an angle between -180.0 amd +180.0 (see Remarks for further description)</returns>
+        /// <returns>Moon phase as an angle between -180.0 and +180.0 (see Remarks for further description)</returns>
         /// <remarks>To allow maximum freedom in displaying the Moon phase, this function returns the excess of the apparent geocentric longitude
         /// of the Moon over the apparent geocentric longitude of the Sun, expressed as an angle in the range -180.0 to +180.0 degrees.
         /// This definition is taken from Astronomical Algorithms (Second Edition, Corrected to August 2009) Chapter 49 p349
@@ -4889,11 +4915,11 @@ namespace ASCOM.Astrometry.SOFA
     {
 
         /// <summary>
-        /// Convert degrees, arcminutes, arcseconds to radians.
+        /// Convert degrees, arc-minutes, arcseconds to radians.
         /// </summary>
         /// <param name="s">Sign:  '-' = negative, otherwise positive</param>
         /// <param name="ideg">Degrees</param>
-        /// <param name="iamin">Arcminutes</param>
+        /// <param name="iamin">Arc-minutes</param>
         /// <param name="asec">Arcseconds</param>
         /// <param name="rad">Angle in radian</param>
         /// <returns>Status:  0 = OK, 1 = ideg outside range 0-359, 2 = iamin outside range 0-59, 3 = asec outside range 0-59.999...</returns>
@@ -4924,8 +4950,8 @@ namespace ASCOM.Astrometry.SOFA
         /// <param name="dc">ICRS declination at J2000.0 (radians, Note 1)</param>
         /// <param name="pr">RA proper motion (radians/year; Note 2)</param>
         /// <param name="pd">Dec proper motion (radians/year)</param>
-        /// <param name="px">parallax (arcsec)</param>
-        /// <param name="rv">radial velocity (km/s, +ve if receding)</param>
+        /// <param name="px">parallax (arc-sec)</param>
+        /// <param name="rv">radial velocity (km/s, positive if receding)</param>
         /// <param name="date1">TDB as a 2-part Julian Date (Note 3)</param>
         /// <param name="date2">TDB as a 2-part Julian Date (Note 3)</param>
         /// <param name="ri">CIRS geocentric RA (radians)</param>
@@ -5042,9 +5068,9 @@ namespace ASCOM.Astrometry.SOFA
         /// and will deliver the optimum resolution.  The MJD method and the date and time methods are both good compromises between resolution and convenience.  For most applications of this function the choice will not be at all critical.</para>
         /// <para>TT can be used instead of TDB without any significant impact on accuracy.</para>
         /// </description></item>
-        /// <item><description>The available accuracy is better than 1 milliarcsecond, limited mainly by the precession-nutation model that is used, namely IAU 2000A/2006.  Very close to solar system bodies, additional 
-        /// errors of up to several milliarcseconds can occur because of unmodeled light deflection;  however, the Sun's contribution is taken into account, to first order.  The accuracy limitations of 
-        /// the SOFA function iauEpv00 (used to compute Earth position and velocity) can contribute aberration errors of up to 5 microarcseconds.  Light deflection at the Sun's limb is uncertain at the 0.4 mas level.</description></item>
+        /// <item><description>The available accuracy is better than 1 milli-arcsecond, limited mainly by the precession-nutation model that is used, namely IAU 2000A/2006.  Very close to solar system bodies, additional 
+        /// errors of up to several milli-arcseconds can occur because of un-modeled light deflection;  however, the Sun's contribution is taken into account, to first order.  The accuracy limitations of 
+        /// the SOFA function iauEpv00 (used to compute Earth position and velocity) can contribute aberration errors of up to 5 micro-arcseconds.  Light deflection at the Sun's limb is uncertain at the 0.4 mas level.</description></item>
         /// <item><description>Should the transformation to (equinox based) apparent place be required rather than (CIO based) intermediate place, subtract the equation of the origins from the returned right ascension:
         /// RA = RI - EO. (The Anp function can then be applied, as required, to keep the result in the conventional 0-2pi range.)</description></item>
         /// </list>
@@ -5172,10 +5198,10 @@ namespace ASCOM.Astrometry.SOFA
         /// <para>TT can be used instead of TDB without any significant impact on accuracy.</para>
         /// </description></item>
         /// <item><description>Iterative techniques are used for the aberration and light deflection corrections so that the functions Atic13 and Atci13 are accurate inverses; 
-        /// even at the edge of the Sun's disk the discrepancy is only about 1 nanoarcsecond.</description></item>
-        /// <item><description>The available accuracy is better than 1 milliarcsecond, limited mainly by the precession-nutation model that is used, namely IAU 2000A/2006.  Very close to solar system bodies, additional 
-        /// errors of up to several milliarcseconds can occur because of unmodeled light deflection;  however, the Sun's contribution is taken into account, to first order.  The accuracy limitations of 
-        /// the SOFA function iauEpv00 (used to compute Earth position and velocity) can contribute aberration errors of up to 5 microarcseconds.  Light deflection at the Sun's limb is uncertain at the 0.4 mas level.</description></item>
+        /// even at the edge of the Sun's disk the discrepancy is only about 1 nano-arcsecond.</description></item>
+        /// <item><description>The available accuracy is better than 1 milli-arcsecond, limited mainly by the precession-nutation model that is used, namely IAU 2000A/2006.  Very close to solar system bodies, additional 
+        /// errors of up to several milli-arcseconds can occur because of un-modeled light deflection;  however, the Sun's contribution is taken into account, to first order.  The accuracy limitations of 
+        /// the SOFA function iauEpv00 (used to compute Earth position and velocity) can contribute aberration errors of up to 5 micro-arcseconds.  Light deflection at the Sun's limb is uncertain at the 0.4 mas level.</description></item>
         /// <item><description>Should the transformation to (equinox based) J2000.0 mean place be required rather than (CIO based) ICRS coordinates, subtract the equation of the origins from the returned right ascension:
         /// RA = RI - EO.  (The Anp function can then be applied, as required, to keep the result in the conventional 0-2pi range.)</description></item>
         /// </list>
@@ -5190,20 +5216,20 @@ namespace ASCOM.Astrometry.SOFA
         /// <param name="dc">ICRS Dec (radians, note 2)</param>
         /// <param name="pr">RA Proper motion (radians/year)</param>
         /// <param name="pd">Dec Proper motion (radians/year</param>
-        /// <param name="px">Parallax (arcsec)</param>
-        /// <param name="rv">Radial veolcity (Km/s, +ve if receding</param>
+        /// <param name="px">Parallax (arc-sec)</param>
+        /// <param name="rv">Radial velocity (Km/s, positive if receding</param>
         /// <param name="utc1">UTC Julian date (part 1, notes 3,4)</param>
         /// <param name="utc2">UTC Julian date (part 2, notes 3,4)</param>
-        /// <param name="dut1">UT1 - UTC (seonds, note 5)</param>
+        /// <param name="dut1">UT1 - UTC (seconds, note 5)</param>
         /// <param name="elong">Site longitude (radians, note 6)</param>
         /// <param name="phi">Site Latitude (radians, note 6)</param>
         /// <param name="hm">Site Height (meters, notes 6,8)</param>
         /// <param name="xp">Polar motion co-ordinate (radians, note 7)</param>
         /// <param name="yp">Polar motion co-ordinate (radians,note 7)</param>
-        /// <param name="phpa">Site Presure (hPa = mB, note 8)</param>
+        /// <param name="phpa">Site Pressure (hPa = mB, note 8)</param>
         /// <param name="tc">Site Temperature (C)</param>
         /// <param name="rh">Site relative humidity (fraction in the range: 0.0 to 1.0)</param>
-        /// <param name="wl">Observation wavem=length (micrometres, note 9)</param>
+        /// <param name="wl">Observation wavelength (micrometres, note 9)</param>
         /// <param name="aob">Observed Azimuth (radians)</param>
         /// <param name="zob">Observed Zenith distance (radians)</param>
         /// <param name="hob">Observed Hour Angle (radians)</param>
@@ -5229,8 +5255,8 @@ namespace ASCOM.Astrometry.SOFA
         /// <p style="margin-left:25px;font-family:Lucida Conosle,Monospace"><b>phpa = 1013.25 * exp ( -hm / ( 29.3 * tsl ) );</b></p>
         /// <para>Note, however, that the refraction is nearly proportional to the pressure and that an accurate phpa value is important for precise work.</para></description></item>
         /// <item><description>The argument wl specifies the observing wavelength in micrometers.  The transition from optical to radio is assumed to occur at 100 micrometers (about 3000 GHz).</description></item>
-        /// <item><description>The accuracy of the result is limited by the corrections for refraction, which use a simple A*tan(z) + B*tan^3(z) model. Providing the meteorological parameters are known accurately and there are no gross local effects, the predicted observed coordinates should be within 0.05 arcsec (optical) or 1 arcsec (radio) for a zenith distance of less than 70 degrees, better than 30 arcsec (optical or radio) at 85 degrees and better than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
-        /// <para>Without refraction, the complementary functions iauAtco13 and iauAtoc13 are self-consistent to better than 1 microarcsecond all over the celestial sphere.  With refraction included, consistency falls off at high zenith distances, but is still better than 0.05 arcsec at 85 degrees.</para></description></item>
+        /// <item><description>The accuracy of the result is limited by the corrections for refraction, which use a simple A*tan(z) + B*tan^3(z) model. Providing the meteorological parameters are known accurately and there are no gross local effects, the predicted observed coordinates should be within 0.05 arc-sec (optical) or 1 arc-sec (radio) for a zenith distance of less than 70 degrees, better than 30 arc-sec (optical or radio) at 85 degrees and better than 20 arc-min (optical) or 30 arc-min (radio) at the horizon.
+        /// <para>Without refraction, the complementary functions iauAtco13 and iauAtoc13 are self-consistent to better than 1 micro-arcsecond all over the celestial sphere.  With refraction included, consistency falls off at high zenith distances, but is still better than 0.05 arc-sec at 85 degrees.</para></description></item>
         /// <item><description>"Observed" Az,ZD means the position that would be seen by a perfect geodetically aligned theodolite.  (Zenith distance is used rather than altitude in order to reflect the fact that no allowance is made for depression of the horizon.)  This is related to the observed HA,Dec via the standard rotation, using the geodetic latitude (corrected for polar motion), while the observed HA and RA are related simply through the Earth rotation angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus means the position that would be seen by a perfect equatorial with its polar axis aligned to the Earth's axis of rotation.</description></item>
         /// <item><description>It is advisable to take great care with units, as even unlikely values of the input parameters are accepted and processed in accordance with the models used.</description></item>
         /// </list>
@@ -5239,14 +5265,14 @@ namespace ASCOM.Astrometry.SOFA
         int Atco13(double rc, double dc, double pr, double pd, double px, double rv, double utc1, double utc2, double dut1, double elong, double phi, double hm, double xp, double yp, double phpa, double tc, double rh, double wl, ref double aob, ref double zob, ref double hob, ref double dob, ref double rob, ref double eo);
 
         /// <summary>
-        /// CIRS RA,Dec to observed place using the SOFA Atio13 funciton.
+        /// CIRS RA,Dec to observed place using the SOFA Atio13 function.
         /// </summary>
         /// <param name="ri">CIRS right ascension (CIO-based, radians)</param>
         /// <param name="di">CIRS declination (radians)</param>
         /// <param name="utc1">UTC as a 2-part quasi Julian Date (Notes 1,2)</param>
         /// <param name="utc2">UTC as a 2-part quasi Julian Date (Notes 1,2)</param>
         /// <param name="dut1">UT1-UTC (seconds, Note 3)</param>
-        /// <param name="elong">longitude (radians, east +ve, Note 4)</param>
+        /// <param name="elong">longitude (radians, east positive, Note 4)</param>
         /// <param name="phi">geodetic latitude (radians, Note 4)</param>
         /// <param name="hm">height above ellipsoid (m, geodetic Notes 4,6)</param>
         /// <param name="xp">polar motion coordinates (radians, Note 5)</param>
@@ -5282,8 +5308,8 @@ namespace ASCOM.Astrometry.SOFA
         /// allowance is made for depression of the horizon.)  This is related to the observed HA,Dec via the standard rotation, using the geodetic latitude (corrected for polar motion), while the observed HA and RA are related simply through the Earth rotation
         /// angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus means the position that would be seen by a perfect equatorial with its polar axis aligned to the Earth's axis of rotation.</description></item>
         /// <item><description>The accuracy of the result is limited by the corrections for refraction, which use a simple A*tan(z) + B*tan^3(z) model. Providing the meteorological parameters are known accurately and there are no gross local effects, the predicted astrometric
-        /// coordinates should be within 0.05 arcsec (optical) or 1 arcsec (radio) for a zenith distance of less than 70 degrees, better than 30 arcsec (optical or radio) at 85 degrees and better than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.</description></item>
-        /// <item><description>The complementary functions iauAtio13 and iauAtoi13 are self-consistent to better than 1 microarcsecond all over the celestial sphere.</description></item>
+        /// coordinates should be within 0.05 arc-sec (optical) or 1 arc-sec (radio) for a zenith distance of less than 70 degrees, better than 30 arc-sec (optical or radio) at 85 degrees and better than 20 arc-min (optical) or 30 arc-min (radio) at the horizon.</description></item>
+        /// <item><description>The complementary functions iauAtio13 and iauAtoi13 are self-consistent to better than 1 micro-arcsecond all over the celestial sphere.</description></item>
         /// <item><description>It is advisable to take great care with units, as even unlikely values of the input parameters are accepted and processed in accordance with the models used.</description></item>
         /// </list>
         /// </remarks>
@@ -5291,7 +5317,7 @@ namespace ASCOM.Astrometry.SOFA
         int Atio13(double ri, double di, double utc1, double utc2, double dut1, double elong, double phi, double hm, double xp, double yp, double phpa, double tc, double rh, double wl, ref double aob, ref double zob, ref double hob, ref double dob, ref double rob);
 
         /// <summary>
-        /// Observed place at a groundbased site to to ICRS astrometric RA,Dec using the SOFA Atoc13 function.
+        /// Observed place at a ground-based site to ICRS astrometric RA,Dec using the SOFA Atoc13 function.
         /// </summary>
         /// <param name="type">type of coordinates - "R", "H" or "A" (Notes 1,2)</param>
         /// <param name="ob1">observed Az, HA or RA (radians; Az is N=0,E=90)</param>
@@ -5299,7 +5325,7 @@ namespace ASCOM.Astrometry.SOFA
         /// <param name="utc1">UTC as a 2-part quasi Julian Date (Notes 3,4)</param>
         /// <param name="utc2">UTC as a 2-part quasi Julian Date (Notes 3,4)</param>
         /// <param name="dut1">UT1-UTC (seconds, Note 5)</param>
-        /// <param name="elong">longitude (radians, east +ve, Note 6)</param>
+        /// <param name="elong">longitude (radians, east positive, Note 6)</param>
         /// <param name="phi">geodetic latitude (radians, Note 6)</param>
         /// <param name="hm">height above ellipsoid (m, geodetic Notes 6,8)</param>
         /// <param name="xp">polar motion coordinates (radians, Note 7)</param>
@@ -5317,7 +5343,7 @@ namespace ASCOM.Astrometry.SOFA
         /// <item><description>"Observed" Az,ZD means the position that would be seen by a perfect geodetically aligned theodolite.  (Zenith distance is used rather than altitude in order to reflect the fact that no
         /// allowance is made for depression of the horizon.)  This is related to the observed HA,Dec via the standard rotation, using the geodetic latitude (corrected for polar motion), while the
         /// observed HA and RA are related simply through the Earth rotation angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus means the position that would be seen by a perfect equatorial with its polar axis aligned to the Earth's axis of rotation.</description></item>
-        /// <item><description>Only the first character of the type argument is significant. "R" or "r" indicates that ob1 and ob2 are the observed right ascension and declination;  "H" or "h" indicates that they are hour angle (west +ve) and declination;  anything else ("A" or
+        /// <item><description>Only the first character of the type argument is significant. "R" or "r" indicates that ob1 and ob2 are the observed right ascension and declination;  "H" or "h" indicates that they are hour angle (west positive) and declination;  anything else ("A" or
         /// "a" is recommended) indicates that ob1 and ob2 are azimuth (north zero, east 90 deg) and zenith distance.</description></item>
         /// <item><description>utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any convenient way between the two arguments, for example where utc1 is the Julian Day Number and utc2 is the fraction of a day.
         /// <para>However, JD cannot unambiguously represent UTC during a leap second unless special measures are taken.  The convention in the present function is that the JD day represents UTC days whether the length is 86399, 86400 or 86401 SI seconds.</para>
@@ -5334,9 +5360,9 @@ namespace ASCOM.Astrometry.SOFA
         /// <para>Note, however, that the refraction is nearly proportional to the pressure and that an accurate phpa value is important for precise work.</para></description></item>
         /// <item><description>The argument wl specifies the observing wavelength in micrometers.  The transition from optical to radio is assumed to occur at 100 micrometers (about 3000 GHz).</description></item>
         /// <item><description>The accuracy of the result is limited by the corrections for refraction, which use a simple A*tan(z) + B*tan^3(z) model. Providing the meteorological parameters are known accurately and
-        /// there are no gross local effects, the predicted astrometric coordinates should be within 0.05 arcsec (optical) or 1 arcsec (radio) for a zenith distance of less than 70 degrees, better than 30 arcsec (optical or radio) at 85 degrees and better
-        /// than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
-        /// <para>Without refraction, the complementary functions iauAtco13 and iauAtoc13 are self-consistent to better than 1 microarcsecond all over the celestial sphere.  With refraction included, consistency falls off at high zenith distances, but is still better than 0.05 arcsec at 85 degrees.</para></description></item>
+        /// there are no gross local effects, the predicted astrometric coordinates should be within 0.05 arc-sec (optical) or 1 arc-sec (radio) for a zenith distance of less than 70 degrees, better than 30 arc-sec (optical or radio) at 85 degrees and better
+        /// than 20 arc-min (optical) or 30 arc-min (radio) at the horizon.
+        /// <para>Without refraction, the complementary functions iauAtco13 and iauAtoc13 are self-consistent to better than 1 micro-arcsecond all over the celestial sphere.  With refraction included, consistency falls off at high zenith distances, but is still better than 0.05 arc-sec at 85 degrees.</para></description></item>
         /// <item><description>It is advisable to take great care with units, as even unlikely values of the input parameters are accepted and processed in accordance with the models used.</description></item>
         /// </list>
         /// </remarks>
@@ -5352,7 +5378,7 @@ namespace ASCOM.Astrometry.SOFA
         /// <param name="utc1">UTC as a 2-part quasi Julian Date (Notes 3,4)</param>
         /// <param name="utc2">UTC as a 2-part quasi Julian Date (Notes 3,4)</param>
         /// <param name="dut1">UT1-UTC (seconds, Note 5)</param>
-        /// <param name="elong">longitude (radians, east +ve, Note 6)</param>
+        /// <param name="elong">longitude (radians, east positive, Note 6)</param>
         /// <param name="phi">geodetic latitude (radians, Note 6)</param>
         /// <param name="hm">height above the ellipsoid (meters, Notes 6,8)</param>
         /// <param name="xp">polar motion coordinates (radians, Note 7)</param>
@@ -5372,7 +5398,7 @@ namespace ASCOM.Astrometry.SOFA
         /// observed HA and RA are related simply through the Earth rotation angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus means the position that would be seen by a perfect equatorial
         /// with its polar axis aligned to the Earth's axis of rotation.</description></item>
         /// <item><description>Only the first character of the type argument is significant. "R" or "r" indicates that ob1 and ob2 are the observed right ascension and declination;  "H" or "h" indicates that they are
-        /// hour angle (west +ve) and declination;  anything else ("A" or "a" is recommended) indicates that ob1 and ob2 are azimuth (north zero, east 90 deg) and zenith distance.</description></item>
+        /// hour angle (west positive) and declination;  anything else ("A" or "a" is recommended) indicates that ob1 and ob2 are azimuth (north zero, east 90 deg) and zenith distance.</description></item>
         /// <item><description>utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any convenient way between the two arguments, for example where utc1 is the Julian Day Number and utc2 is the fraction of a day.
         /// <para>However, JD cannot unambiguously represent UTC during a leap second unless special measures are taken.  The convention in the present function is that the JD day represents UTC days whether the length is 86399, 86400 or 86401 SI seconds.</para>
         /// <para>Applications should use the function iauDtf2d to convert from calendar date and time of day into 2-part quasi Julian Date, as it implements the leap-second-ambiguity convention just described.</para></description></item>
@@ -5390,10 +5416,10 @@ namespace ASCOM.Astrometry.SOFA
         /// <para>Note, however, that the refraction is nearly proportional to the pressure and that an accurate phpa value is important for precise work.</para></description></item>
         /// <item><description>The argument wl specifies the observing wavelength in micrometers.  The transition from optical to radio is assumed to occur at 100 micrometers (about 3000 GHz).</description></item>
         /// <item><description>The accuracy of the result is limited by the corrections for refraction, which use a simple A*tan(z) + B*tan^3(z) model. Providing the meteorological parameters are known accurately and
-        /// there are no gross local effects, the predicted astrometric coordinates should be within 0.05 arcsec (optical) or 1 arcsec (radio) for a zenith distance of less than 70 degrees, better
-        /// than 30 arcsec (optical or radio) at 85 degrees and better than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
-        /// <para>Without refraction, the complementary functions iauAtio13 and iauAtoi13 are self-consistent to better than 1 microarcsecond all over the celestial sphere.  With refraction included,
-        /// consistency falls off at high zenith distances, but is still better than 0.05 arcsec at 85 degrees.</para></description></item>
+        /// there are no gross local effects, the predicted astrometric coordinates should be within 0.05 arc-sec (optical) or 1 arc-sec (radio) for a zenith distance of less than 70 degrees, better
+        /// than 30 arc-sec (optical or radio) at 85 degrees and better than 20 arc-min (optical) or 30 arc-min (radio) at the horizon.
+        /// <para>Without refraction, the complementary functions iauAtio13 and iauAtoi13 are self-consistent to better than 1 micro-arcsecond all over the celestial sphere.  With refraction included,
+        /// consistency falls off at high zenith distances, but is still better than 0.05 arc-sec at 85 degrees.</para></description></item>
         /// <item><description>It is advisable to take great care with units, as even unlikely values of the input parameters are accepted and processed in accordance with the models used.</description></item>
         /// </list>
         /// </remarks>
@@ -5571,7 +5597,7 @@ namespace ASCOM.Astrometry.SOFA
         /// Release date of the revision to the SOFA Issue that is actually being used by this component.
         /// </summary>
         /// <returns>String date in format yyyy-mm-dd</returns>
-        /// <remarks>When a new issue is employed that doesn't yet have a revision, this mehtod will return the SofaIssueDate</remarks>
+        /// <remarks>When a new issue is employed that doesn't yet have a revision, this method will return the SofaIssueDate</remarks>
         [DispId(13)]
         string SofaRevisionDate();
 
@@ -5695,7 +5721,7 @@ namespace ASCOM.Astrometry.SOFA
         /// <item><description>Should the user wish to work with respect to the astronomical zenith rather than the geodetic zenith, phi will need to be
         /// adjusted for deflection of the vertical (often tens of arcseconds), and the zero point of the hour angle ha will also be affected.</description></item>
         /// <item><description>The transformation is the same as Vh = Rz(pi)*Ry(pi/2−phi)*Ve, where Vh And Ve are left-handed unit vectors in the (az,el) 
-        /// and (ha,dec) systems respectively And Ry And Rz are rotations about first the y−axis And then the z−axis.  (n.b. Rz(pi) simply
+        /// and (ha,Dec) systems respectively And Ry And Rz are rotations about first the y−axis And then the z−axis.  (n.b. Rz(pi) simply
         /// reverses the signs of the x And y components.)  For efficiency, the algorithm Is written out rather than calling other utility functions.  
         /// For applications that require even greater efficiency, additional savings are possible if constant terms such as functions of latitude are computed once And for all.</description></item>
         /// <item><description>Again for efficiency, no range checking of arguments is carried out.</description></item>
