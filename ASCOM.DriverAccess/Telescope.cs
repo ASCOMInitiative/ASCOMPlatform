@@ -31,23 +31,36 @@ namespace ASCOM.DriverAccess
         /// Creates an instance of the telescope class.
         /// </summary>
         /// <param name="telescopeId">The ProgID for the telescope</param>
-        public Telescope(string telescopeId)
-            : base(telescopeId)
+        public Telescope(string telescopeId) : base(telescopeId)
         {
             memberFactory = base.MemberFactory;
 
-            foreach (Type objInterface in memberFactory.GetInterfaces)
+            // Set capabilities depending on returned interface version
+            switch (DriverInterfaceVersion)
             {
-                TL.LogMessage("Telescope", "Found interface name: " + objInterface.Name);
-                if (objInterface.Equals(typeof(ITelescopeV4)))
-                {
-                    isPlatform6Telescope = true; //If the type matches the V2 type flag this
-                    isPlatform7Telescope = true; //If the type matches the V2 type flag this
-                }
+                // Unknown or Platform 5
+                case 0:
+                case 1:
+                    TL.LogMessage("Telescope", $"Reported interface version: {DriverInterfaceVersion}, setting Platform 5 compatibility.");
+                    isPlatform5Telescope = true;
+                    break;
 
-                if (objInterface.Equals(typeof(ITelescopeV3))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
-                if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
+                // Platform 6
+                case 2:
+                case 3:
+                    TL.LogMessage("Telescope", $"Reported interface version: {DriverInterfaceVersion}, setting Platform 6 compatibility.");
+                    isPlatform6Telescope = true;
+                    break;
+
+                // Platform 7 onward
+                case 4:
+                default:
+                    TL.LogMessage("Telescope", $"Reported interface version: {DriverInterfaceVersion}, setting Platform 7 compatibility.");
+                    isPlatform6Telescope = true;
+                    isPlatform7Telescope = true;
+                    break;
             }
+
             TL.LogMessage("Telescope", $"Platform 5 Telescope: {isPlatform5Telescope},  Platform 6 Telescope: {isPlatform6Telescope},  Platform 7 Telescope: {isPlatform7Telescope}");
         }
 
