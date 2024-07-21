@@ -46,10 +46,10 @@ namespace ASCOM.DriverAccess
             if (GetObjType == null)
             {
                 //no type information found throw error
-                throw new ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create object type of progID: " + _strProgId);
+                throw new ASCOM.Utilities.Exceptions.HelperException("MemberFactory.Init: Cannot create object type of progID: " + _strProgId);
             }
 
-            //setup the property
+            // We got a Type so set the IsComObject property
             IsComObject = GetObjType.IsCOMObject;
             TL.LogMessage("IsComObject", GetObjType.IsCOMObject.ToString());
 
@@ -57,38 +57,52 @@ namespace ASCOM.DriverAccess
             GetLateBoundObject = Activator.CreateInstance(GetObjType);
 
             // Get list of interfaces but don't throw an exception if this fails
+            TL.LogMessage("GetInterfaces", $"Starting to get implemented interfaces...");
             try
             {
-                var objInterfaces = GetObjType.GetInterfaces();
+                Type[] objInterfaces = GetObjType.GetInterfaces();
+                TL.LogMessage("GetInterfaces", $"objInterfaces is null: {objInterfaces is null}");
+                TL.LogMessage("GetInterfaces", $"GetInterfaces() returned {objInterfaces.Length} interfaces.");
 
                 foreach (Type objInterface in objInterfaces)
                 {
                     GetInterfaces.Add(objInterface);
-                    TL.LogMessage("GetInterfaces", "Found interface: " + objInterface.AssemblyQualifiedName);
+                    TL.LogMessage("GetInterfaces", $"Found interface: {objInterface.AssemblyQualifiedName}");
                 }
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("GetInterfaces", "Exception: " + ex.ToString());
+                TL.LogMessageCrLf("GetInterfaces", $"Exception: {ex.Message}\r\n{ex}");
             }
+            TL.LogMessage("GetInterfaces", $"Completed getting implemented interfaces.");
 
-            /*MemberInfo[] members = GetObjType.GetMembers();
-            foreach (MemberInfo mi in members)
+            // Get a list of members but don't throw an exception if this fails
+            TL.LogMessage("GetMembers", $"Starting to get members...");
+            try
             {
-                TL.LogMessage("Member", Enum.GetName(typeof(MemberTypes), mi.MemberType) + " " + mi.Name);
-                if (mi.MemberType == MemberTypes.Method)
+                MemberInfo[] members = GetObjType.GetMembers();
+                TL.LogMessage("GetMembers", $"members is null: {members is null}");
+                TL.LogMessage("GetMembers", $"GetMembers() returned {members.Length} members.");
+
+                foreach (MemberInfo mi in members)
                 {
-                    foreach (ParameterInfo pi in ((MethodInfo)mi).GetParameters())
+                    TL.LogMessage("GetMembers", $"Found: {Enum.GetName(typeof(MemberTypes), mi.MemberType)} {mi.Name}");
+                    if (mi.MemberType == MemberTypes.Method)
                     {
-                        TL.LogMessage("Parameter",
-                                       " " + pi.Name +
-                                       " " + pi.ParameterType.Name +
-                                       " " + pi.ParameterType.AssemblyQualifiedName);
+                        foreach (ParameterInfo pi in ((MethodInfo)mi).GetParameters())
+                        {
+                            TL.LogMessage("GetMembers", $"  Parameter: {pi.Name} {pi.ParameterType.Name} {pi.ParameterType.AssemblyQualifiedName}");
+                        }
                     }
                 }
-            }*/
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("GetMembers", $"Exception: {ex.Message}\r\n{ex}");
+            }
+            TL.LogMessage("GetMembers", $"Completed getting implemented members.");
 
-            //no instance found throw error
+            // Throw an exception if no instance found
             if (GetLateBoundObject == null)
             {
                 TL.LogMessage("Exception", "GetLateBoudObject is null, throwing HelperException");
@@ -633,7 +647,7 @@ namespace ASCOM.DriverAccess
             if (e.InnerException is DriverException)
             {
                 Type type = e.InnerException.GetType();
-                object exception = Activator.CreateInstance(type, new object[] {e.InnerException.Message });
+                object exception = Activator.CreateInstance(type, new object[] { e.InnerException.Message });
 
 
 
