@@ -244,6 +244,11 @@ namespace ASCOM.DriverAccess
                     TL.LogMessage("Connect", "About to set Connected True");
                     Connected = true;
                     TL.LogMessage("Connect", "Connected Set True OK");
+
+                    // Update the interface version in case it changed when the device was connected
+                    try { interfaceVersion = this.InterfaceVersion; } // Get the interface version
+                    catch { interfaceVersion = 1; } // The method failed so assume that the driver has a version 1 interface where the InterfaceVersion method is not implemented
+                    TL.LogMessage("Connect", $"Post-connect interface version: {DriverInterfaceVersion}");
                 }
                 catch (Exception ex)
                 {
@@ -418,6 +423,11 @@ namespace ASCOM.DriverAccess
                     TL.LogMessage("Connected Set", "Issuing Connected command: " + value);
                     memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value });
                 }
+
+                // Update the interface version in case it changed when the device was connected
+                try { interfaceVersion = this.InterfaceVersion; } // Get the interface version
+                catch { interfaceVersion = 1; } // The method failed so assume that the driver has a version 1 interface where the InterfaceVersion method is not implemented
+                TL.LogMessage("Connected Set", $"Post-connect interface version: {DriverInterfaceVersion}");
             }
         }
 
