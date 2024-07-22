@@ -13,7 +13,7 @@
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
 		<PackageId>ASCOM.BuildEnvironment.SupportFiles</PackageId>
 		<Description>
-			This package contains ASCOM run-time executables that are normally installed by the ASCOM Platform. Most ASCOM application and driver authros DO NOT need this package.
+			This package contains ASCOM run-time executables that are normally installed by the ASCOM Platform. Most ASCOM application and driver authors DO NOT need this package.
 
 			This package is only of use in application and driver build environments requiring ASCOM functionality but where the ASCOM Platform is NOT installed.
 
@@ -35,7 +35,8 @@
 		</None>
 		<None Include="install.ps1">
 			<Pack>True</Pack>
-			<PackagePath>\tools</PackagePath>
+			<PackagePath>\content</PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Include="package.md">
 			<Pack>True</Pack>
@@ -61,7 +62,6 @@
 		<Product>ASCOM.BuildEnvironment.SupportFiles</Product>
 		<Company>The ASCOM Initiative</Company>
 		<PackageReadmeFile>package.md</PackageReadmeFile>
-		<Version>1.0.0-rc1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net35|AnyCPU'">
@@ -72,6 +72,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
 	  <NoWarn>1701;1702;3274;3258;3268</NoWarn>
 	  <WarningLevel>0</WarningLevel>
+	  <Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
@@ -82,6 +83,10 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
 	  <NoWarn>1701;1702;3274;3258;3268</NoWarn>
 	  <WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net40|AnyCPU'">
+	  <Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
