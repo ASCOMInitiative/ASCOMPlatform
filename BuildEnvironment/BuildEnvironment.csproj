@@ -11,7 +11,7 @@
 		<Authors>Tim Long, Peter Simpson</Authors>
 		<Copyright>(c) ASCOM Initiative 2024</Copyright>
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
-		<PackageId>ASCOM.BuildEnvironment.SupportFiles7</PackageId>
+		<PackageId>ASCOM7.BuildEnvironment.Support</PackageId>
 		<Description>This package contains ASCOM run-time executables that are normally installed by ASCOM Platform 7. Most ASCOM application and driver authors DO NOT need this package.
 
 This package is only of use in application and driver build environments requiring ASCOM functionality but where the ASCOM Platform is NOT installed.
