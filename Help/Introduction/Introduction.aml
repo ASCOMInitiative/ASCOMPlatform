@@ -64,6 +64,22 @@
 			</content>
 		</section>
 
+		<section address="PlatformNeutralInterface">
+			<title>Platform Neutral Interface Definitions</title>
+			<content>
+				<para>
+					The ASCOM interface definitions have been re-drafted in a platform neutral form that no longer relies on the COM implementation within the Platform. The interface 
+					technical definitions have not changed, but additional context is provided regarding expected behaviour.
+					<externalLink>
+						<linkText>Platform neutral definitions</linkText>
+						<linkAlternateText>https://ascom-standards.org/newdocs</linkAlternateText>
+						<linkUri>https://ascom-standards.org/newdocs</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+				</para>
+			</content>
+		</section>
+
 		<section address="Issues">
 			<title>Issues and Enhancement Requests</title>
 			<content>
