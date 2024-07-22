@@ -54,28 +54,28 @@
 			</content>
 		</section>
 
-		<section address="Compatibility">
-			<title>Operating System Compatibility</title>
-			<content>
-				<para>
-					Platform 7 requires Windows 7 SP1 or later together with .NET Frameworks 3.5 and 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1
-					together with .NET Framework 4 Client Profile instead.
-				</para>
-			</content>
-		</section>
-
 		<section address="PlatformNeutralInterface">
 			<title>Platform Neutral Interface Definitions</title>
 			<content>
 				<para>
 					The ASCOM interface definitions have been re-drafted in a platform neutral form that no longer relies on the COM implementation within the Platform. The interface 
-					technical definitions have not changed, but additional context is provided regarding expected behaviour.
+					technical definitions remain the same and additional context is provided regarding expected behaviour.
 					<externalLink>
 						<linkText>Platform neutral definitions</linkText>
 						<linkAlternateText>https://ascom-standards.org/newdocs</linkAlternateText>
 						<linkUri>https://ascom-standards.org/newdocs</linkUri>
 						<linkTarget>_blank</linkTarget>
 					</externalLink>
+				</para>
+			</content>
+		</section>
+
+		<section address="Compatibility">
+			<title>Operating System Compatibility</title>
+			<content>
+				<para>
+					Platform 7 requires Windows 7 SP1 or later together with .NET Frameworks 3.5 and 4.8. PCs running Windows XP should use Platform 6.4 Service Pack 1
+					together with .NET Framework 4 Client Profile instead.
 				</para>
 			</content>
 		</section>
