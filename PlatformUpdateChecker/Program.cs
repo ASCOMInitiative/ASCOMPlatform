@@ -325,8 +325,8 @@ namespace PlatformUpdateChecker
         {
             try
             {
-                // Remove any remaining toast notifications that haven't yet fired
-                ToastNotificationManagerCompat.Uninstall();
+                // Remove any remaining toast notifications that haven't yet fired, ignoring any errors (This fails and throws an exception on Windows 7 SP1)
+                try { ToastNotificationManagerCompat.Uninstall(); } catch { };
 
                 LogMessage("RemoveScheduledTask", "Testing whether scheduler is running");
 
