@@ -11,14 +11,12 @@
 		<Authors>Tim Long, Peter Simpson</Authors>
 		<Copyright>(c) ASCOM Initiative 2024</Copyright>
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
-		<PackageId>ASCOM.BuildEnvironment.SupportFiles</PackageId>
-		<Description>
-			This package contains ASCOM run-time executables that are normally installed by the ASCOM Platform. Most ASCOM application and driver authors DO NOT need this package.
+		<PackageId>ASCOM.BuildEnvironment.SupportFiles7</PackageId>
+		<Description>This package contains ASCOM run-time executables that are normally installed by ASCOM Platform 7. Most ASCOM application and driver authors DO NOT need this package.
 
-			This package is only of use in application and driver build environments requiring ASCOM functionality but where the ASCOM Platform is NOT installed.
+This package is only of use in application and driver build environments requiring ASCOM functionality but where the ASCOM Platform is NOT installed.
 
-			THE EXECUTABLES IN THIS PACKAGE SHOULD NEVER BE DISTRIBUTED AS PART OF A DRIVER OR APPLICATION .
-		</Description>
+THE EXECUTABLES IN THIS PACKAGE SHOULD NEVER BE DISTRIBUTED AS PART OF A DRIVER OR APPLICATION .		</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<IncludeReferencedProjects>true</IncludeReferencedProjects>
 	</PropertyGroup>
@@ -58,8 +56,8 @@
 
 	<PropertyGroup>
 		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-		<Title>Support files for build environments where the ASCOM Platform is not installed.</Title>
-		<Product>ASCOM.BuildEnvironment.SupportFiles</Product>
+		<Title>ASCOM Platform 7 support files for build environments where the Platform is not installed.</Title>
+		<Product>ASCOM Platform 7 Build Environment Support Files</Product>
 		<Company>The ASCOM Initiative</Company>
 		<PackageReadmeFile>package.md</PackageReadmeFile>
 	</PropertyGroup>
