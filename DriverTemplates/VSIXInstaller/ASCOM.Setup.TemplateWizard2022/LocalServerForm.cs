@@ -32,7 +32,10 @@ namespace ASCOM.Setup
         public LocalServerForm(TraceLogger TLSupplied)
         {
             InitializeComponent();
+
             TL = TLSupplied; // Make sure we use the trace logger that has been created by the calling method
+
+            TL.LogMessage("LocalServerForm", $"Initialising ASCOM classes.");
             InitASCOMClasses();
         }
 

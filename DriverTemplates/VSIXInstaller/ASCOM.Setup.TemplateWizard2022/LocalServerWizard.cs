@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using System.Windows.Forms;
 using EnvDTE;
 using System.IO;
+using ASCOM.Utilities;
 
 namespace ASCOM.Setup
 {
@@ -60,10 +61,26 @@ namespace ASCOM.Setup
             DialogResult dialogResult = DialogResult.Cancel;
             try
             {
-                // Display a form to the user. The form collects 
-                // input for the custom message.
-                inputForm = new LocalServerForm(TL); // Pass our trace logger into the form so all Wizard trace goes into one file
-                dialogResult = inputForm.ShowDialog();
+                // Check whether we are on Platform 7, if not, say this template requires Platform 7
+
+                Util util = new Util();
+                TL.LogMessage("RunStarted", $"Utilities created, Major version: {util.MajorVersion}, Platform version: {util.PlatformVersion}.");
+
+                if (util.MajorVersion < 7) // Platform 7 or later is not installed
+                {
+                    TL.LogMessage("RunStarted", $"Showing wrong Platform dialogue.");
+                    MessageBox.Show($"This template requires Platform 7 or later, you are running Platform {util.PlatformVersion}.", "Incompatible ASCOM Platform version", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                    TL.LogMessage("RunStarted", $"Ending application.");
+                }
+                else // Platform 7 or later is installed
+                {
+                    // Display a form to the user. The form collects input for the custom message.
+                    TL.LogMessage("RunStarted", $"Creating form...");
+                    inputForm = new LocalServerForm(TL); // Pass our trace logger into the form so all Wizard trace goes into one file
+                    TL.LogMessage("RunStarted", $"Showing form...");
+                    dialogResult = inputForm.ShowDialog();
+                }
             }
             catch (Exception ex)
             {
