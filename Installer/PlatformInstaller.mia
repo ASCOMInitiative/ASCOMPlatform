@@ -777,8 +777,9 @@ Write to Text File
 Run Program As
 Write to Text File
 If
-MessageBox
-Terminate Install
+Write to Text File
+Delete Registry
+Write to Text File
 End
 If
 MessageBox
@@ -3508,8 +3509,9 @@ $
 {45E436F7-51C4-4774-BBF7-F0D9310E1116}
 {E93688C9-53C5-44C9-A0CF-F5C4289DD5E5}
 {198A549F-96F0-42E0-8DB1-A55549912F6D}
-{F31D19FD-BF5C-4CBC-B785-E112138AF92B}
-{C9C12D91-A609-4F40-864A-D8F1AEB5B005}
+{654418D4-BA9A-469D-9DC7-5C9661FF4498}
+{9309B52E-E81F-4A7B-A284-3B58E0CBD8DC}
+{AFF00979-FAE4-4CC0-AF91-32739B2BE15D}
 {251A9B0C-9655-4434-AA9D-71748808EDEB}
 {2F935225-D977-4171-AAD7-9A70F35E83F3}
 {83B56B6E-1926-4C88-88D2-056C4BEAC603}
@@ -8843,12 +8845,6 @@ Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$
 2
 2
 REBOOTNOW
-{F31D19FD-BF5C-4CBC-B785-E112138AF92B}
-$TITLE$ Setup
-Unable to uninstall old version of Develoiper Tools. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$Error: $UNINSTALLCODE$
-2
-1
-
 {0CDB0B86-A066-44F8-B562-91A2E821D318}
 Platform 6 Conform Detected
 Platform 6 versions of Conform are not compatible with Platform 7 due to internal Platform changes.$NEWLINE$$NEWLINE$Please install the latest version from https://ascom-standards.org/Downloads/DevTools.htm
@@ -17417,11 +17413,26 @@ $SETUPLOG$
 $TIME$ Installer file: $EXEFILE$
 FALSE
 TRUE
+{654418D4-BA9A-469D-9DC7-5C9661FF4498}
+$SETUPLOG$
+$TIME$ Deleting installer registry entry.
+FALSE
+TRUE
+{AFF00979-FAE4-4CC0-AF91-32739B2BE15D}
+$SETUPLOG$
+$TIME$ Registry key deleted.
+FALSE
+TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 2|
 SOFTWARE\ASCOM\Astrometry
 Leap Seconds
 FALSE
+{9309B52E-E81F-4A7B-A284-3B58E0CBD8DC}
+2|
+SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}
+
+TRUE
 {14A4D424-B117-4943-8443-B2433541ADE8}
 ..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 TRUE
@@ -19759,6 +19770,7 @@ C
 
 
 
+
 C
 
 
@@ -20862,6 +20874,7 @@ C
 
 
 $
+
 
 
 

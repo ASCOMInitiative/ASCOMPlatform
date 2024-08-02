@@ -1638,6 +1638,9 @@ if Variable WIN64MODE Equals TRUE
   Comment: Only install ASCOM Remote 32bit version on a 64bit OS.
   Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer\32bit, include subfolders
    
+  Comment: Copy SetNetworkPermissions to the 32bit Program Files folder.
+  Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.* to $PROGRAMFILES32$ASCOM\SetNetworkPermissions, include subfolders
+   
   Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
   Set Variable PROGRESSTEXT to Installing additional Platform 5.5 files required for 64bit systems
   Set Variable MYPROGRESS to 37
@@ -1662,6 +1665,9 @@ else
   Comment: Install ASCOM Remote
   Write into Text File $SETUPLOG$ from Value $TIME$ Installing Remote Server to: $PROGRAMFILES64$ASCOM\RemoteServer (at end of file)
   Install Files ..\AscomRemote\publish\AscomRemote\x86\*.* to $PROGRAMFILES64$ASCOM\RemoteServer, include subfolders
+   
+  Comment: Copy SetNetworkPermissions to the Program Files folder.
+  Install Files ..\AscomRemote\publish\SetNetworkPermissions\x86\*.* to $PROGRAMFILES64$ASCOM\SetNetworkPermissions, include subfolders
 end
  
 Set Variable NATIVE_ENGINE to FALSE

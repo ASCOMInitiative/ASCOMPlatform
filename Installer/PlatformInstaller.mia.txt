@@ -777,8 +777,9 @@ else
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstaller developer tools error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
   if Variable UNINSTALLCODE not Equals 0
-    MessageBox: $TITLE$ Setup, Unable to uninstall old version of Develoiper Tools. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$Error: $UNINSTALLCODE$
-    Terminate Installation
+    Write into Text File $SETUPLOG$ from Value $TIME$ Deleting installer registry entry. (at end of file)
+    Delete Registry KEY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\*.*
+    Write into Text File $SETUPLOG$ from Value $TIME$ Registry key deleted. (at end of file)
   end
   if Variable REMOVEOLD Equals REBOOT
     MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
