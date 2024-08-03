@@ -1069,7 +1069,6 @@ namespace ASCOM.DeviceInterface
         /// Sensor name, Interface Version 2 and later
         /// </summary>
         /// <returns>The name of the sensor used within the camera.</returns>
-        /// <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>

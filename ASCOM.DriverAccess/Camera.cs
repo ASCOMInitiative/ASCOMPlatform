@@ -1064,7 +1064,6 @@ namespace ASCOM.DriverAccess
         /// Sensor name, Interface Version 2 and later
         /// </summary>
         /// <returns>The name of sensor used within the camera</returns>
-        /// <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
         /// <remarks>
