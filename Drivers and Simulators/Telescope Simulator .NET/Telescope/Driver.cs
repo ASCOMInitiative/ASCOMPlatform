@@ -285,7 +285,7 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "AbortSlew: ");
             CheckParked("AbortSlew");
-            CheckCapability(TelescopeHardware.CanSlewAsync | TelescopeHardware.CanSlewAltAzAsync, "AbortSlew",$"AbortSlew is not implemented because CanSlewAsync and CanSlewAltAzAsync are both false.");
+            CheckCapability(TelescopeHardware.CanSlewAsync | TelescopeHardware.CanSlewAltAzAsync, "AbortSlew", $"AbortSlew is not implemented because CanSlewAsync and CanSlewAltAzAsync are both false.");
             TelescopeHardware.AbortSlew();
 
             SharedResources.TrafficEnd("(done)");
@@ -1528,11 +1528,20 @@ namespace ASCOM.Simulator
             }
             set
             {
-                SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
-                CheckVersionOne("TrackingRate", true);
-                if ((value < DriveRates.driveSidereal) || (value > DriveRates.driveKing)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (driveSidereal) to 3 (driveKing)");
-                TelescopeHardware.TrackingRate = value;
-                SharedResources.TrafficEnd(value.ToString() + "(done)");
+                // Adapt behaviour to whether or not the tracking rate can be set
+                if (TelescopeHardware.CanTrackingRates) // Tracking rate can be set
+                {
+                    SharedResources.TrafficStart(SharedResources.MessageType.Other, "TrackingRate: -> ");
+                    CheckVersionOne("TrackingRate", true);
+                    if ((value < DriveRates.driveSidereal) || (value > DriveRates.driveKing)) throw new InvalidValueException("TrackingRate", value.ToString(), "0 (driveSidereal) to 3 (driveKing)");
+                    TelescopeHardware.TrackingRate = value;
+                    SharedResources.TrafficEnd(value.ToString() + "(done)");
+                }
+                else // Tracking rate cannot be set so throw a not implemented exception
+                {
+                    throw new PropertyNotImplementedException("TrackingRate", true);
+                }
+
             }
         }
 
