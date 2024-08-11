@@ -36,6 +36,8 @@ namespace ASCOM.CameraHub.Camera
             this.chkTrace = new System.Windows.Forms.CheckBox();
             this.BtnChooseCamera = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblCurrentDevice = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
@@ -116,11 +118,31 @@ namespace ASCOM.CameraHub.Camera
             this.label2.Text = "Select the camera to be served using the Chooser";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label3
+            // 
+            this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label3.Location = new System.Drawing.Point(88, 96);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 18);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Current device:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCurrentDevice
+            // 
+            this.lblCurrentDevice.Location = new System.Drawing.Point(174, 99);
+            this.lblCurrentDevice.Name = "lblCurrentDevice";
+            this.lblCurrentDevice.Size = new System.Drawing.Size(244, 15);
+            this.lblCurrentDevice.TabIndex = 10;
+            this.lblCurrentDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 331);
+            this.Controls.Add(this.lblCurrentDevice);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.BtnChooseCamera);
             this.Controls.Add(this.chkTrace);
@@ -151,5 +173,7 @@ namespace ASCOM.CameraHub.Camera
         private System.Windows.Forms.CheckBox chkTrace;
         private System.Windows.Forms.Button BtnChooseCamera;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblCurrentDevice;
     }
 }

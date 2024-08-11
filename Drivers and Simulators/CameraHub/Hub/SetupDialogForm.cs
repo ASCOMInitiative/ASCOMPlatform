@@ -60,7 +60,7 @@ namespace ASCOM.CameraHub.Camera
 
             // Set the trace checkbox
             chkTrace.Checked = tl.Enabled;
-
+            lblCurrentDevice.Text = $"{CameraHub.cameraProgId}";
             tl.LogMessage("InitUI", $"Set UI controls to Trace: {chkTrace.Checked}");
         }
 
@@ -86,6 +86,11 @@ namespace ASCOM.CameraHub.Camera
                 chooser.DeviceType = "Camera";
                 CameraHub.LogMessage("BtnChooseCamera_Click", $"Device type: {chooser.DeviceType}, Current ProgID: {CameraHub.cameraProgId}");
                 newProgId = chooser.Choose(CameraHub.cameraProgId);
+                
+                // Update the setup UI with the new ProgID
+                if (!string.IsNullOrEmpty(newProgId))
+                    lblCurrentDevice.Text = $"{newProgId}";
+
                 CameraHub.LogMessage("BtnChooseCamera_Click", $"Selection made: {newProgId}");
             }
             CameraHub.LogMessage("BtnChooseCamera_Click", $"Exited");
