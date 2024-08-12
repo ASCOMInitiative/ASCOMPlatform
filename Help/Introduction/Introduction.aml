@@ -10,18 +10,13 @@
 				Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications,
 				providing an easy upgrade path and new capabilities that developers and enthusiasts can exploit.
 			</para>
-
-			<para>
-				If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" />
-				will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
-			</para>
 		</introduction>
 		<section address="Introduction-Users-Platform-7">
-			<title>Key changes in Platform 7</title>
+			<title>Key changes in Platform 7 for Everyone</title>
 			<content>
 				<list class="bullet">
 					<listItem>
-						<para>Simplified Start menu</para>
+						<para>Simplified Start menu.</para>
 					</listItem>
 					<listItem>
 						<para>The default log file location can be customised.</para>
@@ -49,19 +44,20 @@
 					</listItem>
 				</list>
 				<para>
-					A comprehensive list of changes and fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.
+					<legacyBold>Significant changes for developers</legacyBold> are described here: <link xlink:href="6cdc126a-3b1a-4a55-836f-aaf704740a33" />
+					and a comprehensive list of changes and fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.
 				</para>
 			</content>
 		</section>
 
 		<section address="PlatformNeutralInterface">
-			<title>Platform Neutral Interface Definitions</title>
+			<title>Master Interface Definitions</title>
 			<content>
 				<para>
-					The ASCOM interface definitions have been re-drafted in a platform neutral form that no longer relies on the COM implementation within the Platform. The interface 
+					The ASCOM interface definitions have been re-drafted in a platform neutral form that no longer relies on the COM implementation within the Platform. The interface
 					technical definitions remain the same and additional context is provided regarding expected behaviour.
 					<externalLink>
-						<linkText>Platform neutral definitions</linkText>
+						<linkText>ASCOM Master Interface Definitions</linkText>
 						<linkAlternateText>https://ascom-standards.org/newdocs</linkAlternateText>
 						<linkUri>https://ascom-standards.org/newdocs</linkUri>
 						<linkTarget>_blank</linkTarget>
@@ -85,6 +81,15 @@
 			</content>
 		</section>
 
+		<section address="Validation">
+			<title>Validating Correct Platform Installation</title>
+			<content>
+				<para>
+					If you would like to confirm the integrity of the installed Platform, the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" />
+					will provide a wide ranging report through a comprehensive test suite that exercises every aspect of Platform functionality.
+				</para>
+			</content>
+		</section>
 		<section address="Issues">
 			<title>Issues and Enhancement Requests</title>
 			<content>
