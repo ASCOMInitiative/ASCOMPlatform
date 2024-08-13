@@ -570,7 +570,8 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="RightAscension">The destination right ascension (hours).</param>
         /// <param name="Declination">The destination declination (degrees, positive North).</param>
-        /// <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
+        /// <returns>The pointing state that a German equatorial telescope would have if a slew to the given equatorial coordinates is performed at the current instant of time.
+        /// If the driver implements the ASCOM convention described in <see cref="SideOfPier"/>, it will also indicate the physical side of the pier on which the telescope will be.</returns>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="InvalidValueException">If an invalid RightAscension or Declination is specified.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -850,7 +851,13 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
-        /// <para>This is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
+        /// <para><b>ASCOM CONVENTION</b></para>
+        /// <para>In order to support Dome slaving for German equatorial mounts, where it is important to know on which side of the pier the mount is physically located, ASCOM has adopted the
+        /// convention that the Normal pointing state (<see cref="PierSide.pierEast"></see>) pertains when the mount is on the East side of pier, counterweights below the optical assembly, 
+        /// observing a target in the West at hour angle +3.0 on the celestial equator. See below for history and further explanation.
+        /// </para>
+        /// <para><b>Context</b></para>
+        /// <para>SideofPier is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
         /// <para>For historical reasons, this property's name does not reflect its true meaning. The name will not be changed (so as to preserve
         /// compatibility), but the meaning has since become clear. All conventional mounts have two pointing states for a given equatorial (sky) position.
         /// Mechanical limitations often make it impossible for the mount to position the optics at given HA/Dec in one of the two pointing
@@ -858,21 +865,18 @@ namespace ASCOM.DeviceInterface
         /// close to the meridian). In order to understand these pointing states, consider the following (thanks to Patrick Wallace for this info):</para>
         /// <para>All conventional telescope mounts have two axes nominally at right angles. For an equatorial, the longitude axis is mechanical
         /// hour angle and the latitude axis is mechanical declination. Sky coordinates and mechanical coordinates are two completely separate arenas.
-        /// This becomes rather more obvious if your mount is an altaz, but it's still true for an equatorial. Both mount axes can in principle
+        /// This becomes rather more obvious if your mount is alt/az aligned, but it's still true for an equatorial. Both mount axes can in principle
         /// move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90).  Apart from
         /// practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis
-        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky codeclination (90 - sky declination).</para>
-        /// <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian.
-        /// In order to support Dome slaving, where it is important to know which side of the pier the mount is actually on, ASCOM has adopted the
-        /// convention that the Normal pointing state will be the state where a German Equatorial mount is on the East side of the pier, looking West, with the
-        /// counterweights below the optical assembly and that <see cref="PierSide.pierEast"></see> will represent this pointing state.</para>
+        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co-declination (90 - sky declination).</para>
+        /// <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian.</para>
         /// <para>Move your scope to this position and consider the two mechanical encoders zeroed. The two pointing states are, then:
         /// <list type="table">
         /// <item><term><b>Normal (<see cref="PierSide.pierEast"></see>)</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
         /// <item><term><b>Beyond the pole (<see cref="PierSide.pierWest"></see>)</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
         /// </list>
         /// </para>
-        /// <para>"Side of pier" is a "consequence" of the former definition, not something fundamental.
+        /// <para>Physical "Side of pier" is a "consequence" of the former definition, not something fundamental.
         /// Apart from mechanical interference, the telescope can move from one side of the pier to the other without the mechanical Dec
         /// having changed: you could track Polaris forever with the telescope moving from west of pier to east of pier or vice versa every 12h.
         /// Thus, "side of pier" is, in general, not a useful term (except perhaps in a loose, descriptive, explanatory sense).
@@ -892,7 +896,7 @@ namespace ASCOM.DeviceInterface
         /// <item><description>Dec_sky = 180d - Dec_mech, expressed in range ± 90d</description></item>
         /// </list>
         /// </para>
-        /// <para>Astronomy software often needs to know which which pointing state the mount is in. Examples include setting guiding polarities
+        /// <para>Astronomy software often needs to know which pointing state the mount is in. Examples include setting guiding polarities
         /// and calculating dome opening azimuth/altitude. The meaning of the SideOfPier property, then is:
         /// <list type="table">
         /// <item><term><b>pierEast</b></term><description>Normal pointing state</description></item>
