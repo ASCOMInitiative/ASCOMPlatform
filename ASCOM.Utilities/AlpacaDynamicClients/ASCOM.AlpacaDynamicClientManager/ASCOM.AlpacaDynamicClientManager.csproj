@@ -59,7 +59,7 @@
 		<Content Include="ASCOM.ico" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Com.Components" Version="2.0.0-rc.23" />
+	  <PackageReference Include="ASCOM.Com.Components" Version="2.0.0-rc.30" />
 	  <PackageReference Include="ASCOM.Tools" Version="2.0.0-rc.30" />
 	</ItemGroup>
 	<ItemGroup>
