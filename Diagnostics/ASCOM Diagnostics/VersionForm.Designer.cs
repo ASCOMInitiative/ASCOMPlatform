@@ -91,11 +91,11 @@ namespace ASCOM.Utilities
             this.LblBuildSha.AutoSize = true;
             this.LblBuildSha.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LblBuildSha.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.LblBuildSha.Location = new System.Drawing.Point(92, 267);
+            this.LblBuildSha.Location = new System.Drawing.Point(119, 267);
             this.LblBuildSha.Name = "LblBuildSha";
-            this.LblBuildSha.Size = new System.Drawing.Size(73, 16);
+            this.LblBuildSha.Size = new System.Drawing.Size(42, 16);
             this.LblBuildSha.TabIndex = 6;
-            this.LblBuildSha.Text = "Build SHA:";
+            this.LblBuildSha.Text = "Build:";
             // 
             // BuildSha
             // 
