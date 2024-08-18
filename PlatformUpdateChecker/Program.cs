@@ -101,7 +101,7 @@ namespace PlatformUpdateChecker
                     case "--HELP":
                     case "/H":
                         MessageBox.Show($"Platform Update Checker - Queries the list of ASCOM Platform GitHub releases to determine whether a later Platform version is available.\r\n\r\n" +
-                                        $"Supported commands: InstallTask, RemoveTask, Version, ResetSkipped, CheckForUpdates\r\n\r\n" +
+                                        $"Supported commands: /InstallTask, /RemoveTask, /Version, /ResetSkipped, /CheckForUpdates\r\n\r\n" +
                                         @"Output is written to a log file in the Documents\ASCOM\Logs YYYY.MM.DD folder where YYYY, MM and DD are the current year, month and day numbers.",
                                         "Platform Update Checker", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
@@ -126,7 +126,7 @@ namespace PlatformUpdateChecker
                         ResetSkipped();
                         break;
 
-                    // No argument supplied so check to see if there are any updates and create a toast notification if required
+                    // No argument supplied or unknown argument so check to see if there are any updates and create a toast notification if required
                     default:
                         CheckForUpdates();
                         break;
@@ -191,7 +191,8 @@ namespace PlatformUpdateChecker
         private static void ReportVersion()
         {
             string version = UpdateCheck.GetCurrentPlatformVersion();
-            LogMessage("ReportVersion", $"The product version is: {version}");
+            LogMessage("ReportVersion", $"The current Platform version is: {version}");
+            MessageBox.Show($"Currently installed Platform version: {version}","Platform Version");
 
             SemVersion semver = SemVersion.Parse(version, SemVersionStyles.Any);
             LogMessage("ReportVersion", $"SemVersion Major: {semver.Major}, Minor: {semver.Minor}, Patch: {semver.Patch}, IsPreRelease: {semver.IsPrerelease}, Prerelease: {semver.Prerelease}, Metadata: {semver.Metadata}");
@@ -445,13 +446,23 @@ namespace PlatformUpdateChecker
                 {
                     toastHeaderId = "ASCOMPlatformUpdate";
                     toastHeaderText = "ASCOM Platform - NEW RELEASE";
-                    toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Service Pack {newRelease.Patch}");
+
+                    // Add the new version description
+                    if (newRelease.Patch == 0) // This is not a service pack release
+                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor}");
+                    else // This is a service pack release
+                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Service Pack {newRelease.Patch}");
                 }
                 else // This is a release candidate release 
                 {
                     toastHeaderId = "ASCOMPlatformRCUpdate";
                     toastHeaderText = "ASCOM PLATFORM - NEW RELEASE CANDIDATE";
-                    toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Service Pack {newRelease.Patch}");
+
+                    if (newRelease.Patch == 0) // This is not a service pack release
+                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor}");
+                    else // This is a service pack release
+                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Service Pack {newRelease.Patch}");
+
                     toastMessage.AppendLine($"Release candidate {newRelease.Prerelease.Trim('-', 'r', 'c', '.')}");
                 }
 
