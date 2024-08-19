@@ -150,9 +150,8 @@ namespace ASCOM.DynamicClients
         /// </summary>
         public void SetupDialog()
         {
-            if (connectedState) // Don't show if already connected
+            if (connectedState) // Only display Alpaca configuration buttons if already connected
             {
-                //MessageBox.Show("Already connected, just press OK");
                 using (SetupConnectedForm connectedForm = new SetupConnectedForm(TL))
                 {
                     connectedForm.DeviceNumber = state.RemoteDeviceNumber;

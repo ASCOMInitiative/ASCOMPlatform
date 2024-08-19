@@ -71,5 +71,10 @@ namespace ASCOM.DynamicClients
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
