@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.chkDebugTrace = new System.Windows.Forms.CheckBox();
             this.chkTrace = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,30 +45,30 @@
             // 
             this.groupBox1.Controls.Add(this.BtnSetupUrlDevice);
             this.groupBox1.Controls.Add(this.BtnSetupUrlMain);
-            this.groupBox1.Location = new System.Drawing.Point(203, 125);
+            this.groupBox1.Location = new System.Drawing.Point(185, 143);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(186, 78);
+            this.groupBox1.Size = new System.Drawing.Size(276, 62);
             this.groupBox1.TabIndex = 59;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Alpaca Web Configuration";
+            this.groupBox1.Text = "Web Configuration Pages";
             // 
             // BtnSetupUrlDevice
             // 
-            this.BtnSetupUrlDevice.Location = new System.Drawing.Point(101, 19);
+            this.BtnSetupUrlDevice.Location = new System.Drawing.Point(144, 20);
             this.BtnSetupUrlDevice.Name = "BtnSetupUrlDevice";
-            this.BtnSetupUrlDevice.Size = new System.Drawing.Size(75, 52);
+            this.BtnSetupUrlDevice.Size = new System.Drawing.Size(122, 31);
             this.BtnSetupUrlDevice.TabIndex = 1;
-            this.BtnSetupUrlDevice.Text = "This ASCOM Device";
+            this.BtnSetupUrlDevice.Text = "This Specific Device";
             this.BtnSetupUrlDevice.UseVisualStyleBackColor = true;
             this.BtnSetupUrlDevice.Click += new System.EventHandler(this.BtnSetupUrlDevice_Click);
             // 
             // BtnSetupUrlMain
             // 
-            this.BtnSetupUrlMain.Location = new System.Drawing.Point(6, 19);
+            this.BtnSetupUrlMain.Location = new System.Drawing.Point(8, 19);
             this.BtnSetupUrlMain.Name = "BtnSetupUrlMain";
-            this.BtnSetupUrlMain.Size = new System.Drawing.Size(75, 52);
+            this.BtnSetupUrlMain.Size = new System.Drawing.Size(130, 32);
             this.BtnSetupUrlMain.TabIndex = 0;
-            this.BtnSetupUrlMain.Text = "Whole Alpaca Device";
+            this.BtnSetupUrlMain.Text = "Overall Alpaca Device";
             this.BtnSetupUrlMain.UseVisualStyleBackColor = true;
             this.BtnSetupUrlMain.Click += new System.EventHandler(this.BtnSetupUrlMain_Click);
             // 
@@ -81,30 +82,30 @@
             this.BtnOK.TabIndex = 57;
             this.BtnOK.Text = "OK";
             this.BtnOK.UseVisualStyleBackColor = true;
-            this.BtnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.BtnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Firebrick;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(14, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(601, 20);
+            this.label1.Size = new System.Drawing.Size(606, 20);
             this.label1.TabIndex = 60;
-            this.label1.Text = "This Dynamic Client is connected and its configuration cannot be changed";
+            this.label1.Text = "This Dynamic Client is connected and its configuration cannot be changed.";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label2.Location = new System.Drawing.Point(49, 55);
+            this.label2.Location = new System.Drawing.Point(43, 72);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(516, 30);
+            this.label2.Size = new System.Drawing.Size(542, 15);
             this.label2.TabIndex = 61;
-            this.label2.Text = "It may be possible to configure the Alpaca device using its configuration pages, " +
-    "\r\nif supported, which are accessed through the buttons below.";
+            this.label2.Text = "It may be possible to configure the Alpaca device using its web configuration pag" +
+    "es.";
             // 
             // chkDebugTrace
             // 
@@ -126,11 +127,23 @@
             this.chkTrace.Text = "Enable Trace";
             this.chkTrace.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label3.Location = new System.Drawing.Point(75, 93);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(469, 15);
+            this.label3.TabIndex = 64;
+            this.label3.Text = "If supported, the web pages can be accessed through the buttons below.";
+            // 
             // SetupConnectedForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(629, 298);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.chkDebugTrace);
             this.Controls.Add(this.chkTrace);
             this.Controls.Add(this.label2);
@@ -158,5 +171,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkDebugTrace;
         private System.Windows.Forms.CheckBox chkTrace;
+        private System.Windows.Forms.Label label3;
     }
 }
