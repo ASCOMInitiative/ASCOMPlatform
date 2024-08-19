@@ -46,7 +46,7 @@ namespace ASCOM.DynamicClients
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Debug, "MainSetup Exception", ex.ToString());
+                TL.LogMessage(LogLevel.Error, "MainSetup Exception", ex.ToString());
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -67,12 +67,12 @@ namespace ASCOM.DynamicClients
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Debug, "ASCOMSetup Exception", ex.ToString());
+                TL.LogMessage(LogLevel.Error, "ASCOMSetup Exception", ex.ToString());
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void BtnOK_Click(object sender, EventArgs e)
         {
             Close();
         }

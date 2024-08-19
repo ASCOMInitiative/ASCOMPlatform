@@ -32,7 +32,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.BtnSetupUrlDevice = new System.Windows.Forms.Button();
             this.BtnSetupUrlMain = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
+            this.BtnOK = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.chkDebugTrace = new System.Windows.Forms.CheckBox();
@@ -71,23 +71,23 @@
             this.BtnSetupUrlMain.UseVisualStyleBackColor = true;
             this.BtnSetupUrlMain.Click += new System.EventHandler(this.BtnSetupUrlMain_Click);
             // 
-            // btnOK
+            // BtnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.AutoSize = true;
-            this.btnOK.Location = new System.Drawing.Point(542, 263);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 57;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.BtnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnOK.AutoSize = true;
+            this.BtnOK.Location = new System.Drawing.Point(542, 263);
+            this.BtnOK.Name = "BtnOK";
+            this.BtnOK.Size = new System.Drawing.Size(75, 23);
+            this.BtnOK.TabIndex = 57;
+            this.BtnOK.Text = "OK";
+            this.BtnOK.UseVisualStyleBackColor = true;
+            this.BtnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.label1.ForeColor = System.Drawing.Color.Firebrick;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(601, 20);
@@ -97,14 +97,14 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.label2.Location = new System.Drawing.Point(30, 55);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label2.Location = new System.Drawing.Point(49, 55);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(560, 30);
+            this.label2.Size = new System.Drawing.Size(516, 30);
             this.label2.TabIndex = 61;
-            this.label2.Text = "The Alpaca device configuration pages, which may allow the device to be configure" +
-    "d while connected, \r\ncan be accessed using the buttons below.";
+            this.label2.Text = "It may be possible to configure the Alpaca device using its configuration pages, " +
+    "\r\nif supported, which are accessed through the buttons below.";
             // 
             // chkDebugTrace
             // 
@@ -136,7 +136,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.BtnOK);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(645, 337);
             this.MinimumSize = new System.Drawing.Size(645, 337);
@@ -153,7 +153,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button BtnSetupUrlDevice;
         private System.Windows.Forms.Button BtnSetupUrlMain;
-        private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.Button BtnOK;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkDebugTrace;
