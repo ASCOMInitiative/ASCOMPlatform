@@ -645,7 +645,7 @@
             this.Controls.Add(this.addressList);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SetupDialogForm";
-            this.Text = "SetupDialogForm";
+            this.Text = "Configure Dynamic CLient";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();

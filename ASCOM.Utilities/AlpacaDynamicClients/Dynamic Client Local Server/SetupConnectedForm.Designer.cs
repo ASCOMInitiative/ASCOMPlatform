@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupConnectedForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.BtnSetupUrlDevice = new System.Windows.Forms.Button();
             this.BtnSetupUrlMain = new System.Windows.Forms.Button();
@@ -136,10 +137,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnOK);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(645, 337);
             this.MinimumSize = new System.Drawing.Size(645, 337);
             this.Name = "SetupConnectedForm";
-            this.Text = "SetupConnectedForm";
+            this.Text = "Configure Alpaca Device";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
