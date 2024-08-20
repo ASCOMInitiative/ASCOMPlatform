@@ -73,7 +73,7 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Exists " + ex.ToString());
+                Interaction.MsgBox("Exists " + ex.ToString());
                 return false; // Exception so file doesn't exist
             }
         }
@@ -92,7 +92,7 @@ namespace ASCOM.Utilities
             catch (Exception ex)
             {
                 p_TL.LogMessage("FileSystem.CreateDirectory", "Exception: " + ex.ToString());
-                MessageBox.Show("CreateDirectory Exception: " + ex.ToString());
+                Interaction.MsgBox("CreateDirectory Exception: " + ex.ToString());
             }
         }
 
@@ -109,7 +109,7 @@ namespace ASCOM.Utilities
         internal void EraseFileStore()
         {
             MsgBoxResult Response;
-            Response = MessageBox.Show("Are you sure you wish to erase the Utilities profile store?", MsgBoxStyle.OkCancel | MsgBoxStyle.Critical, "ASCOM.Utilities");
+            Response = Interaction.MsgBox("Are you sure you wish to erase the Utilities profile store?", MsgBoxStyle.OkCancel | MsgBoxStyle.Critical, "ASCOM.Utilities");
             if (Response == MsgBoxResult.Ok)
             {
                 try

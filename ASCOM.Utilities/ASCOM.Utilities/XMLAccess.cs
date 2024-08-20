@@ -93,7 +93,7 @@ namespace ASCOM.Utilities
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("XMLAccess:Dispose Exception - " + ex.ToString());
+                    Interaction.MsgBox("XMLAccess:Dispose Exception - " + ex.ToString());
                 }
             }
             disposedValue = true;
@@ -855,7 +855,7 @@ namespace ASCOM.Utilities
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("  WriteValues", "  Exception " + p_SubKeyName + " " + ex.ToString());
-                MessageBox.Show("XMLAccess:Writevalues " + p_SubKeyName + " " + ex.ToString());
+                Interaction.MsgBox("XMLAccess:Writevalues " + p_SubKeyName + " " + ex.ToString());
             }
         }
 

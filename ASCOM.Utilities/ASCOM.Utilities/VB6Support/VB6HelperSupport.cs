@@ -275,7 +275,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
             catch (Exception ex)
             {
-                MessageBox.Show("HelperProfile " + ex.ToString());
+                Interaction.MsgBox("HelperProfile " + ex.ToString());
             }
         }
 
@@ -298,7 +298,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("VB6HelperSupport ProfileAccess Exception " + ex.ToString());
+                        Interaction.MsgBox("VB6HelperSupport ProfileAccess Exception " + ex.ToString());
                     }
                     if (TL is not null)
                     {
@@ -529,7 +529,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
             catch (Exception ex)
             {
-                MessageBox.Show("SERIALSUPPORT: " + ex.ToString());
+                Interaction.MsgBox("SERIALSUPPORT: " + ex.ToString());
             }
             finally
             {
@@ -974,7 +974,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             // MsgBox("VB6Helper After New Utilities.Chooser")
             catch (Exception ex)
             {
-                MessageBox.Show("CHOOSERSUPPORT: " + ex.ToString());
+                Interaction.MsgBox("CHOOSERSUPPORT: " + ex.ToString());
             }
         }
 
@@ -1052,7 +1052,7 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
             }
             catch (Exception ex)
             {
-                MessageBox.Show("VB6HELPERSUPPORT.CHOOSE Exception " + ex.ToString());
+                Interaction.MsgBox("VB6HELPERSUPPORT.CHOOSE Exception " + ex.ToString());
                 return "EXCEPTION VALUE";
             }
         }

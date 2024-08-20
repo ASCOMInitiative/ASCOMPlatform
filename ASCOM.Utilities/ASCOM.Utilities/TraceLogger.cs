@@ -686,7 +686,7 @@ namespace ASCOM.Utilities
                     {
                         try
                         {
-                            MessageBox.Show("CreateLogFile Auto filename exception - #" + g_LogFileName + "# " + ex.ToString());
+                            Interaction.MsgBox("CreateLogFile Auto filename exception - #" + g_LogFileName + "# " + ex.ToString());
                         }
                         catch (Exception ex1)
                         {
@@ -710,7 +710,7 @@ namespace ASCOM.Utilities
                     {
                         try
                         {
-                            MessageBox.Show("CreateLogFile Manual filename exception - #" + g_LogFileName + "# " + ex.ToString());
+                            Interaction.MsgBox("CreateLogFile Manual filename exception - #" + g_LogFileName + "# " + ex.ToString());
                         }
                         catch (Exception ex1)
                         {
