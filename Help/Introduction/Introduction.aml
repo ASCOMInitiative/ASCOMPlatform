@@ -42,6 +42,9 @@
 					<listItem>
 						<para>The Platform installer is more resilient and reliable.</para>
 					</listItem>
+					<listItem>
+						<para>The Dynamic Clients provide access to the Alpaca device's configuration pages when the Alpaca device is connected.</para>
+					</listItem>
 				</list>
 				<para>
 					<legacyBold>Significant changes for developers</legacyBold> are described here: <link xlink:href="6cdc126a-3b1a-4a55-836f-aaf704740a33" />

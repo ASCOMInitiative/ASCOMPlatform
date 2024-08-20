@@ -59,7 +59,7 @@
 								When an update is available an alert will appear as a Windows message.
 							</listItem>
 							<listItem>
-								An update check can be made manually by running the Diagnostics Tool. An “Update available button will appear when an update has been posted to Github.
+								An update check can be made manually by running the Diagnostics Tool. An “Update available button will appear when an update has been posted to GitHub.
 							</listItem>
 							<listItem>
 								Update checks can be enabled and disabled through the Diagnostics Options menu.
@@ -80,6 +80,11 @@
 							</listItem>
 						</list>
 					</listItem>
+					<listItem>
+						The Dynamic Clients now provide access to the Alpaca device's HTML configuration pages though the SetupDialog method when the Alpaca device is connected. 
+						Previously all access was blocked.
+					</listItem>
+
 				</list>
 			</content>
 		</section>
@@ -89,6 +94,10 @@
 			<content>
 				<list class="bullet">
 					<listItem>The installer no longer displays a successful install message when an error occurs</listItem>
+					<listItem>
+						The Telescope simulators now respect the TrackingRates configuration setting and the TrackingRates property returns a
+						PropertyNotImplementedExcetion when tracking rates are configured to be not available.
+					</listItem>
 				</list>
 			</content>
 		</section>
@@ -132,6 +141,10 @@
 					<listItem>Fixed issue in NOVAS 3.1 component where the ephemeris file may not have been closed on DLL unload.</listItem>
 					<listItem>The installer now pre-populates historic leap second data so that AstroUtils.DeltaUT1 works out of the box when there has been no earth rotation data update.</listItem>
 					<listItem>Fixed a bug introduced in Platform 6.6 SP2 where a DriverException was returned instead of more specialised exceptions like InvalidValueException.</listItem>
+					<listItem>
+						The driver template default namespace has been changed to <literal>ASCOM.LocalServer</literal> from <literal>ASCOM.LocalServer.Server</literal> because the latter causes
+						a namespace clash with the Server class when a resources file is added.
+					</listItem>
 				</list>
 			</content>
 		</section>
