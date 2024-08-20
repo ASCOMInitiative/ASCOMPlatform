@@ -585,11 +585,12 @@ namespace ASCOM.Utilities
                     }
                 }
 
-                if (bConnected) // Already connected so cannot show the Setup dialogue
+                // Check whether the device is connected and whether it is an Alpaca dynamic client
+                if (bConnected & !sProgID.StartsWith(DRIVER_PROGID_BASE, StringComparison.InvariantCultureIgnoreCase)) // Already connected and not an Alpaca Dynamic Client
                 {
-                    Interaction.MsgBox("The device is already connected. Just click OK.", (MsgBoxStyle)((int)MsgBoxStyle.OkOnly + (int)MsgBoxStyle.Information + (int)MsgBoxStyle.MsgBoxSetForeground), ALERT_MESSAGEBOX_TITLE);
+                    MessageBox.Show("The device is already connected. Just click OK.", ALERT_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else // Not connected, so call the SetupDialog method
+                else // Not connected or a connected Alpaca Dynamic Client, so call the SetupDialog method (Dynamic clients provide access to the HTTP Alpaca Web Setup pages when connected)
                 {
                     try
                     {
