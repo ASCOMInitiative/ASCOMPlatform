@@ -162,14 +162,14 @@ namespace ASCOM.Utilities
 
             catch (DriverNotRegisteredException ex)
             {
-                Interaction.MsgBox("Chooser Exception: " + ex.Message);
+                MessageBox.Show("Chooser Exception: " + ex.Message);
                 LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString());
                 selectedProgId = "";
             }
 
             catch (Exception ex)
             {
-                Interaction.MsgBox("Chooser Exception: " + ex.ToString());
+                MessageBox.Show("Chooser Exception: " + ex.ToString());
                 LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString());
                 selectedProgId = "";
             }

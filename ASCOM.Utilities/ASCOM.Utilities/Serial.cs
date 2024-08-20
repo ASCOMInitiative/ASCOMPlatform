@@ -354,7 +354,7 @@ namespace ASCOM.Utilities
 
             catch (Exception ex)
             {
-                Interaction.MsgBox("Serial:New exception " + ex.ToString());
+                MessageBox.Show("Serial:New exception " + ex.ToString());
             }
 
         }

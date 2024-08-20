@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -35,7 +34,7 @@ namespace ASCOM.Utilities
         private const int ALPACA_STATUS_BLINK_TIME = 100; // Length of time the Alpaca status indicator spends in the on and off state (ms)
         private const string TOOLTIP_PROPERTIES_TITLE = "Driver Setup";
         private const string TOOLTIP_PROPERTIES_MESSAGE = "Check or change driver Properties (configuration)";
-        private const string TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE = "You must check driver configuration before first time use, please click the Properties... button." + Microsoft.VisualBasic.Constants.vbCrLf + "The OK button will remain greyed out until this is done.";
+        private const string TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE = "You must check driver configuration before first time use, please click the Properties... button.\r\nThe OK button will remain greyed out until this is done.";
         private const string TOOLTIP_CREATE_ALPACA_DEVICE_TITLE = "Alpaca Device Selected";
         private const string TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE = "Please click this button to create the Alpaca Dynamic driver";
         private const int TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME = 5; // Number of seconds to display the Create Alpaca Device informational message
@@ -183,6 +182,10 @@ namespace ASCOM.Utilities
         private int OriginalAlpacaStatusPosition;
         private int OriginalDividerLineWidth;
 
+        // Tooltip delegate and variables
+        private delegate void NoParameterDelegate();
+        private NoParameterDelegate displayCreateAlpacDeviceTooltip;
+
         #endregion
 
         #region Form load, close, paint and dispose event handlers
@@ -219,18 +222,16 @@ namespace ASCOM.Utilities
             TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT); // Enable the trace logger if Utility trace is enabled
 
             profile = new Profile();
-
         }
 
         private void ChooserForm_Load(object eventSender, EventArgs eventArgs)
         {
-
             try
             {
 
                 // Initialise form title and message text
                 Text = "ASCOM " + deviceTypeValue + " Chooser";
-                lblTitle.Text = "Select the type of " + Strings.LCase(deviceTypeValue) + " you have, then be " + "sure to click the Properties... button to configure the driver for your " + Strings.LCase(deviceTypeValue) + ".";
+                lblTitle.Text = "Select the type of " + deviceTypeValue.ToLowerInvariant() + " you have, then be " + "sure to click the Properties... button to configure the driver for your " + deviceTypeValue.ToLowerInvariant() + ".";
 
                 // Initialise the Profile component with the supplied device type
                 profile.DeviceType = deviceTypeValue;
@@ -272,7 +273,7 @@ namespace ASCOM.Utilities
 
             catch (Exception ex)
             {
-                Interaction.MsgBox("ChooserForm Load " + ex.ToString());
+                MessageBox.Show("ChooserForm Load " + ex.ToString());
                 LogEvent("ChooserForm Load ", ex.ToString(), EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString());
             }
         }
@@ -372,66 +373,52 @@ namespace ASCOM.Utilities
                 switch (value.ToLowerInvariant() ?? "")
                 {
                     case "camera":
-                        {
-                            deviceTypeValue = "Camera";
-                            break;
-                        }
+                        deviceTypeValue = "Camera";
+                        break;
+
                     case "covercalibrator":
-                        {
-                            deviceTypeValue = "CoverCalibrator";
-                            break;
-                        }
+                        deviceTypeValue = "CoverCalibrator";
+                        break;
+
                     case "dome":
-                        {
-                            deviceTypeValue = "Dome";
-                            break;
-                        }
+                        deviceTypeValue = "Dome";
+                        break;
+
                     case "filterwheel":
-                        {
-                            deviceTypeValue = "FilterWheel";
-                            break;
-                        }
+                        deviceTypeValue = "FilterWheel";
+                        break;
+
                     case "focuser":
-                        {
-                            deviceTypeValue = "Focuser";
-                            break;
-                        }
+                        deviceTypeValue = "Focuser";
+                        break;
+
                     case "observingconditions":
-                        {
-                            deviceTypeValue = "ObservingConditions";
-                            break;
-                        }
+                        deviceTypeValue = "ObservingConditions";
+                        break;
+
                     case "rotator":
-                        {
-                            deviceTypeValue = "Rotator";
-                            break;
-                        }
+                        deviceTypeValue = "Rotator";
+                        break;
+
                     case "safetymonitor":
-                        {
-                            deviceTypeValue = "SafetyMonitor";
-                            break;
-                        }
+                        deviceTypeValue = "SafetyMonitor";
+                        break;
+
                     case "switch":
-                        {
-                            deviceTypeValue = "Switch";
-                            break;
-                        }
+                        deviceTypeValue = "Switch";
+                        break;
+
                     case "telescope":
-                        {
-                            deviceTypeValue = "Telescope";
-                            break;
-                        }
+                        deviceTypeValue = "Telescope";
+                        break;
+
                     case "video":
-                        {
-                            deviceTypeValue = "Video"; // If not recognised just use as supplied for backward compatibility
-                            break;
-                        }
+                        deviceTypeValue = "Video"; // If not recognised just use as supplied for backward compatibility
+                        break;
 
                     default:
-                        {
-                            deviceTypeValue = value;
-                            break;
-                        }
+                        deviceTypeValue = value;
+                        break;
                 }
 
                 TL.LogMessage("DeviceType Set", deviceTypeValue);
@@ -513,20 +500,16 @@ namespace ASCOM.Utilities
         {
             if (!string.IsNullOrEmpty(currentWarningMesage))
                 WarningToolTipShow(currentWarningTitle, currentWarningMesage);
+
             DisplayAlpacaDeviceToolTip();
         }
 
         private void AlpacaStatusIndicatorTimerEventHandler(object myObject, EventArgs myEventArgs)
         {
             if (AlpacaStatus.BackColor == Color.Orange)
-            {
                 AlpacaStatus.BackColor = Color.DimGray;
-            }
             else
-            {
                 AlpacaStatus.BackColor = Color.Orange;
-            }
-
         }
 
         /// <summary>
@@ -539,7 +522,6 @@ namespace ASCOM.Utilities
             object oDrv = null; // The driver
             bool bConnected;
             string sProgID;
-            bool UseCreateObject = false;
 
             // Find ProgID corresponding to description
             sProgID = ((ChooserItem)CmbDriverSelector.SelectedItem).ProgID;
@@ -547,26 +529,9 @@ namespace ASCOM.Utilities
             TL.LogMessage("PropertiesClick", "ProgID:" + sProgID);
             try
             {
-                // Mechanic to revert to Platform 5 behaviour in the event that Activator.CreateInstance has unforeseen consequences
-                try
-                {
-                    UseCreateObject = GetBool(CHOOSER_USE_CREATEOBJECT, CHOOSER_USE_CREATEOBJECT_DEFAULT);
-                }
-                catch
-                {
-                }
-
+                // Now we only use Activator.CreateInstance
                 ProgIdType = Type.GetTypeFromProgID(sProgID);
-
-                if (UseCreateObject) // Platform 5 behaviour
-                {
-                    LogEvent("ChooserForm", "Using CreateObject for driver: \"" + sProgID + "\"", EventLogEntryType.Information, EventLogErrors.ChooserSetupFailed, "");
-                    oDrv = Interaction.CreateObject(sProgID); // Rob suggests that Activator.CreateInstance gives better error diagnostics
-                }
-                else // New Platform 6 behaviour
-                {
-                    oDrv = Activator.CreateInstance(ProgIdType);
-                }
+                oDrv = Activator.CreateInstance(ProgIdType);
 
                 // Here we try to see if a device is already connected. If so, alert and just turn on the OK button.
                 bConnected = false;
@@ -587,7 +552,7 @@ namespace ASCOM.Utilities
 
                 if (bConnected) // Already connected so cannot show the Setup dialogue
                 {
-                    Interaction.MsgBox("The device is already connected. Just click OK.", (MsgBoxStyle)((int)MsgBoxStyle.OkOnly + (int)MsgBoxStyle.Information + (int)MsgBoxStyle.MsgBoxSetForeground), ALERT_MESSAGEBOX_TITLE);
+                    MessageBox.Show("The device is already connected. Just click OK.", ALERT_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else // Not connected, so call the SetupDialog method
                 {
@@ -598,7 +563,11 @@ namespace ASCOM.Utilities
                     }
                     catch (Exception ex) // Something went wrong in the SetupDialog method so display an error message.
                     {
-                        Interaction.MsgBox($"The SetupDialog method of driver \"{sProgID}\" threw an exception when called.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"This means that the setup dialogue would not start properly.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"{ex.GetType().Name} - {ex.Message}", MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE);
+                        MessageBox.Show($"The SetupDialog method of driver \"{sProgID}\" threw an exception when called.\r\n\r\n" +
+                            $"This means that the setup dialogue would not start properly.\r\n\r\n" +
+                            $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.\r\n\r\n" +
+                            $"{ex.GetType().Name} - {ex.Message}",
+                            SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         LogEvent("ChooserForm", "Driver setup method failed for driver: \"" + sProgID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, $"{ex.GetType().Name} - {ex.Message}");
                     }
                 }
@@ -609,7 +578,10 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox($"The driver \"{sProgID}\" threw an exception when loaded.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"This means that the driver would not start properly.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"{ex}", MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE);
+                MessageBox.Show($"The driver \"{sProgID}\" threw an exception when loaded\r\n\r\n" +
+                    $"This means that the driver would not start properly.\r\n\r\n" +
+                    $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.\r\n\r\n{ex}",
+                    DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 LogEvent("ChooserForm", "Failed to load driver:  \"" + sProgID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString());
             }
 
@@ -786,7 +758,7 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("Unable to display ASCOM-Standards web site in your browser: " + ex.Message, (MsgBoxStyle)((int)MsgBoxStyle.OkOnly + (int)MsgBoxStyle.Exclamation + (int)MsgBoxStyle.MsgBoxSetForeground), ALERT_MESSAGEBOX_TITLE);
+                MessageBox.Show("Unable to display ASCOM-Standards web site in your browser: " + ex.Message, ALERT_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -803,24 +775,19 @@ namespace ASCOM.Utilities
             switch (TraceFileName ?? "") // Trace is disabled
             {
                 case var @case when @case == "":
-                    {
-                        MenuSerialTraceEnabled.Checked = false; // The trace enabled flag is unchecked and disabled
-                        MenuSerialTraceEnabled.Enabled = true;
-                        break;
-                    }
+                    MenuSerialTraceEnabled.Checked = false; // The trace enabled flag is unchecked and disabled
+                    MenuSerialTraceEnabled.Enabled = true;
+                    break;
+
                 case SERIAL_AUTO_FILENAME: // Tracing is on using an automatic filename
-                    {
-                        MenuSerialTraceEnabled.Checked = true; // The trace enabled flag is checked and enabled
-                        MenuSerialTraceEnabled.Enabled = true; // Tracing using some other fixed filename
-                        break;
-                    }
+                    MenuSerialTraceEnabled.Checked = true; // The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = true; // Tracing using some other fixed filename
+                    break;
 
                 default:
-                    {
-                        MenuSerialTraceEnabled.Checked = true; // The trace enabled flag is checked and enabled
-                        MenuSerialTraceEnabled.Enabled = true;
-                        break;
-                    }
+                    MenuSerialTraceEnabled.Checked = true; // The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = true;
+                    break;
             }
 
             // Set Profile trace checked state on menu item 
@@ -853,21 +820,16 @@ namespace ASCOM.Utilities
             switch (RetVal)
             {
                 case DialogResult.OK:
-                    {
-                        // Save the result
-                        registryAccess.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName);
-                        // Check and enable the serial trace enabled flag
-                        MenuSerialTraceEnabled.Enabled = true;
-                        // Enable manual serial trace file flag
-                        MenuSerialTraceEnabled.Checked = true; // Ignore everything else
-                        break;
-                    }
+                    // Save the result
+                    registryAccess.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName);
+                    // Check and enable the serial trace enabled flag
+                    MenuSerialTraceEnabled.Enabled = true;
+                    // Enable manual serial trace file flag
+                    MenuSerialTraceEnabled.Checked = true; // Ignore everything else
+                    break;
 
                 default:
-                    {
-                        break;
-                    }
-
+                    break;
             }
         }
 
@@ -994,11 +956,9 @@ namespace ASCOM.Utilities
                 ResizeChooser(); // Resize the chooser to reflect any configuration change
 
                 InitialiseComboBox(); // ' Kick off a discover and populate the combo box or just populate the combo box if no discovery is required
-
             }
 
             alpacaConfigurationForm.Dispose(); // Dispose of the configuration form
-
         }
 
         private void MnuManageAlpacaDevices_Click(object sender, EventArgs e)
@@ -1034,7 +994,6 @@ namespace ASCOM.Utilities
 
             // Refresh the driver list after any changes made by the management tool
             InitialiseComboBox();
-
         }
 
         /// <summary>
@@ -1077,8 +1036,8 @@ namespace ASCOM.Utilities
                 tempProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"; // Create the new ProgID to be tested
                 typeFromProgId = Type.GetTypeFromProgID(tempProgId); // Try to get the type with the new ProgID
                 TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {tempProgId} Type name: {typeFromProgId?.Name}");
-            }
-            while (typeFromProgId is not null); // Loop until the returned type is null indicating that this type is not COM registered
+            } while (typeFromProgId is not null); // Loop until the returned type is null indicating that this type is not COM registered
+
             newProgId = tempProgId;
             TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}");
 
@@ -1090,7 +1049,6 @@ namespace ASCOM.Utilities
             InitialiseComboBox();
 
             TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'");
-
         }
 
         #endregion
@@ -1125,7 +1083,7 @@ namespace ASCOM.Utilities
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("Chooser Read State " + ex.ToString());
+                MessageBox.Show("Chooser Read State " + ex.ToString());
                 LogEvent("Chooser Read State ", ex.ToString(), EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString());
                 TL?.LogMessageCrLf("ChooserReadState", ex.ToString());
             }
@@ -1133,10 +1091,8 @@ namespace ASCOM.Utilities
 
         private void WriteState(string DeviceType)
         {
-
             try
             {
-
                 // Save the enabled state per "device type" 
                 registryAccess.WriteProfile(CONFIGRATION_SUBKEY, $"{DeviceType} {ALPACA_ENABLED}", AlpacaEnabled.ToString(CultureInfo.InvariantCulture));
 
@@ -1155,11 +1111,10 @@ namespace ASCOM.Utilities
 
             catch (Exception ex)
             {
-                Interaction.MsgBox("Chooser Write State " + ex.ToString());
+                MessageBox.Show("Chooser Write State " + ex.ToString());
                 LogEvent("Chooser Write State ", ex.ToString(), EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString());
                 TL?.LogMessageCrLf("ChooserWriteState", ex.ToString());
             }
-
         }
 
         #endregion
@@ -1184,7 +1139,7 @@ namespace ASCOM.Utilities
 
             if (!File.Exists(clientManagerExeFile))
             {
-                Interaction.MsgBox("The client generator executable can not be found, please repair the ASCOM Platform.", MsgBoxStyle.Critical, "Alpaca Client Generator Not Found");
+                MessageBox.Show("The client generator executable can not be found, please repair the ASCOM Platform.", "Alpaca Client Generator Not Found", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 TL.LogMessage("RunDynamicClientManager", $"ERROR - Unable to find the client generator executable at {clientManagerExeFile}, cannot create a new Alpaca client.");
                 selectedProgIdValue = "";
                 return;
@@ -1217,7 +1172,6 @@ namespace ASCOM.Utilities
             TL.LogMessage("RunDynamicClientManager", $"Completed driver management process");
 
             ClientManagerProcess.Dispose();
-
         }
 
         /// <summary>
@@ -1241,7 +1195,6 @@ namespace ASCOM.Utilities
 
         private void InitialiseComboBox()
         {
-
             TL.LogMessage("InitialiseComboBox", $"Arrived at InitialiseComboBox - Running On thread: {Thread.CurrentThread.ManagedThreadId}.");
 
             if (AlpacaMultiThreadedChooser) // Multi-threading behaviour where the Chooser UI is displayed immediately while discovery runs in the background
@@ -1266,7 +1219,6 @@ namespace ASCOM.Utilities
         {
             try
             {
-
                 TL.LogMessage("DiscoverAlpacaDevices", $"Running On thread: {Thread.CurrentThread.ManagedThreadId}.");
 
                 chooserList = new List<ChooserItem>();
@@ -1320,8 +1272,8 @@ namespace ASCOM.Utilities
 
                 catch (Exception ex1)
                 {
-                    TL.LogMessageCrLf("DiscoverAlpacaDevices", "Exception: " + ex1.ToString());
                     // Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
+                    TL.LogMessageCrLf("DiscoverAlpacaDevices", "Exception: " + ex1.ToString());
                 }
 
                 TL.LogMessage("DiscoverAlpacaDevices", $"Completed COM driver enumeration");
@@ -1366,7 +1318,7 @@ namespace ASCOM.Utilities
                     {
                         TL.LogMessage("DiscoverAlpacaDevices", $"Discovered Alpaca device: {device.AscomDeviceType} {device.AscomDeviceName} {device.UniqueId} at  http://{device.HostName}:{device.IPEndPoint.Port}/api/v1/{deviceTypeValue}/{device.AlpacaDeviceNumber}");
 
-                        string displayHostName = Conversions.ToString(Interaction.IIf((device.HostName ?? "") == (device.IPEndPoint.Address.ToString() ?? ""), device.IPEndPoint.Address.ToString(), $"{device.HostName} ({device.IPEndPoint.Address})"));
+                        string displayHostName = (device.HostName ?? "") == (device.IPEndPoint.Address.ToString() ?? "") ? device.IPEndPoint.Address.ToString() : $"{device.HostName} ({device.IPEndPoint.Address})";
                         string displayName;
 
                         string deviceUniqueId, deviceHostName;
@@ -1451,7 +1403,6 @@ namespace ASCOM.Utilities
                                 TL.LogMessage("DiscoverAlpacaDevices", $"This device MATCHES an existing COM driver so NOT adding it to the Combo box list");
                             }
                         }
-
                         else
                         {
                             TL.LogMessage("DiscoverAlpacaDevices", $"This device does NOT match an existing COM driver so ADDING it to the Combo box list");
@@ -1466,6 +1417,7 @@ namespace ASCOM.Utilities
                 TL.LogMessage("DiscoverAlpacaDevices", $"Start of Chooser List");
                 foreach (ChooserItem item in chooserList)
                     TL.LogMessage("DiscoverAlpacaDevices", $"List includes device {item.AscomName}");
+
                 TL.LogMessage("DiscoverAlpacaDevices", $"End of Chooser List");
 
                 // Populate the device list combo box with COM and Alpaca devices.
@@ -1504,7 +1456,7 @@ namespace ASCOM.Utilities
             // Only proceed if there are drivers or Alpaca devices to display
             if (chooserList.Count == 0 & alpacaDevices.Count == 0) // No drivers to add to the combo box 
             {
-                Interaction.MsgBox("There are no ASCOM " + deviceTypeValue + " drivers installed.", (MsgBoxStyle)((int)MsgBoxStyle.OkOnly + (int)MsgBoxStyle.Exclamation + (int)MsgBoxStyle.MsgBoxSetForeground), ALERT_MESSAGEBOX_TITLE);
+                MessageBox.Show("There are no ASCOM " + deviceTypeValue + " drivers installed.", ALERT_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -1531,7 +1483,6 @@ namespace ASCOM.Utilities
                     // If a ProgID has been provided, test whether it matches a ProgID in the driver list
                     if (!string.IsNullOrEmpty(selectedProgIdValue)) // A progID was provided
                     {
-
                         // Select the current device in the list
                         foreach (ChooserItem driver in CmbDriverSelector.Items)
                         {
@@ -1570,7 +1521,6 @@ namespace ASCOM.Utilities
                             WarningTooltipClear();
                             EnablePropertiesButton(false); // Disable the Properties button because there is not yet a COM driver to configure
                             EnableOkButton(true);
-
                         }
                     }
                 }
@@ -1722,10 +1672,8 @@ namespace ASCOM.Utilities
 
             if (!string.IsNullOrEmpty(progId))
             {
-
                 if (!string.IsNullOrEmpty(progId)) // Something selected
                 {
-
                     WarningTooltipClear(); // Hide any previous message
 
                     TL.LogMessage("ValidateDriver", "ProgID:" + progId + ", Bitness: " + ApplicationBits().ToString());
@@ -1742,7 +1690,7 @@ namespace ASCOM.Utilities
                     {
                         EnablePropertiesButton(true); // Turn on Properties
                         deviceInitialised = registryAccess.GetProfile("Chooser", progId + " Init");
-                        if (Strings.LCase(deviceInitialised) == "true") // This device has been initialized
+                        if (deviceInitialised.ToLowerInvariant() == "true") // This device has been initialized
                         {
                             EnableOkButton(true);
                             currentWarningMesage = "";
@@ -1765,7 +1713,6 @@ namespace ASCOM.Utilities
                     EnableOkButton(false);
                 } // Ensure OK is disabled
             }
-
         }
 
         private void WarningToolTipShow(string Title, string Message)
@@ -1785,7 +1732,7 @@ namespace ASCOM.Utilities
             currentWarningTitle = Title;
             currentWarningMesage = Message;
 
-            if (Message.Contains(Microsoft.VisualBasic.Constants.vbCrLf))
+            if (Message.Contains("\r\n"))
             {
                 chooserWarningToolTip.Show(Message, this, MESSAGE_X_POSITION, 24); // Display at position for a two line message
             }
@@ -1794,9 +1741,6 @@ namespace ASCOM.Utilities
                 chooserWarningToolTip.Show(Message, this, MESSAGE_X_POSITION, 50);
             } // Display at position for a one line message
         }
-
-        private delegate void NoParameterDelegate();
-        private NoParameterDelegate displayCreateAlpacDeviceTooltip;
 
         private void DisplayAlpacaDeviceToolTip()
         {
@@ -1824,7 +1768,6 @@ namespace ASCOM.Utilities
                         // Only display the tooltip if the an Alpaca driver has been selected
                         if (!selectedItem.IsComDriver)
                         {
-
                             createAlpacaDeviceToolTip.RemoveAll();
 
                             createAlpacaDeviceToolTip.UseAnimation = true;
@@ -1840,7 +1783,6 @@ namespace ASCOM.Utilities
                             createAlpacaDeviceToolTip.Show(TOOLTIP_CREATE_ALPACA_DEVICE_MESSAGE, BtnOK, 45, -60, TOOLTIP_CREATE_ALPACA_DEVICE_DISPLAYTIME * 1000); // Display at position for a two line message
                             TL.LogMessage("DisplayAlpacaDeviceToolTip", $"Set tooltip on thread {Thread.CurrentThread.ManagedThreadId}");
                         }
-
                     }
                 }
             }
@@ -1865,7 +1807,6 @@ namespace ASCOM.Utilities
             LblAlpacaDiscovery.Left = OriginalLblAlpacaDiscoveryPosition + AlpacaChooserIncrementalWidth;
             AlpacaStatus.Left = OriginalAlpacaStatusPosition + AlpacaChooserIncrementalWidth;
             DividerLine.Width = OriginalDividerLineWidth + AlpacaChooserIncrementalWidth;
-
         }
 
         /// <summary>
