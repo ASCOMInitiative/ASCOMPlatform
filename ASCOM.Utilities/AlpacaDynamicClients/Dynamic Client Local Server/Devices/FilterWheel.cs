@@ -318,9 +318,19 @@ namespace ASCOM.DynamicClients
         {
             get
             {
-                // Returns the driver's connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
-                LogMessage("Connected Get", connectedState.ToString());
-                return connectedState;
+                // Handle connection management locally if required.
+                if (state.ManageConnectLocally) // Local Connected state will be returned
+                {
+                    // Returns the driver's connection state rather than the local server's connected state, which could be different because there may be other client connections still active.
+                    LogMessage("Connected Get (Local)", connectedState.ToString());
+                    return connectedState;
+                }
+                else // The remote device's Connected state will be returned
+                {
+                    bool connected = client.Connected;
+                    LogMessage("Connected Get (Remote)", connected.ToString());
+                    return connected;
+                }
             }
             set
             {
@@ -328,6 +338,7 @@ namespace ASCOM.DynamicClients
                 if (state.ManageConnectLocally) // Connected state will be set locally but will not be passed to the remote device
                 {
                     connectedState = value;
+                    LogMessage("Connected Set (Local)", $"Connected state set to: {connectedState}");
                 }
                 else // Connected state will be set locally and passed to the to the remote device
                 {
