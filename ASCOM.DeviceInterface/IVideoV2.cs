@@ -3,7 +3,7 @@
 // 
 // ASCOM Video
 // 
-// Description:	The IVideo and IVideoFrame interfaces ver 1
+// Description:	The IVideo and IVideoFrame interfaces version 1
 // 
 // Author:		(HDP) Hristo Pavlov <hristo_dpavlov@yahoo.com>
 // 
@@ -182,7 +182,7 @@ namespace ASCOM.DeviceInterface
 		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
 		/// Analogue cameras run in one of the two fixed frame rates - 25fps for PAL video and 29.97fps for NTSC video.
 		/// Digital cameras usually can run at a variable frame rate. This value is for information purposes only and cannot be set. The FrameRate has the same value during the entire operation of the device.
-		/// Changing the <see cref="IntegrationRate"/> property may change the actual variable frame rate but cannot changethe return value of this property.
+		/// Changing the <see cref="IntegrationRate"/> property may change the actual variable frame rate but cannot change the return value of this property.
 		/// </remarks>
 		VideoCameraFrameRate FrameRate { get; }
 
@@ -195,7 +195,7 @@ namespace ASCOM.DeviceInterface
 		/// <remarks>
 		/// Digital and integrating analogue video cameras allow the effective exposure of a frame to be changed. If the camera supports setting the exposure directly i.e. 2.153 sec then the driver must only
 		/// return a range of useful supported exposures. For many video cameras the supported exposures (integration rates) increase by a factor of 2 from a base exposure e.g. 1, 2, 4, 8, 16 sec or 0.04, 0.08, 0.16, 0.32, 0.64, 1.28, 2.56, 5.12, 10.24 sec.
-		/// If the camers supports only one exposure that cannot be changed (such as all non integrating PAL or NTSC video cameras) then this property must throw <see cref="PropertyNotImplementedException"/>.
+		/// If the camera supports only one exposure that cannot be changed (such as all non integrating PAL or NTSC video cameras) then this property must throw <see cref="PropertyNotImplementedException"/>.
 		/// </remarks>
 		/// <value>The list of supported integration rates in seconds.</value>
 		ArrayList SupportedIntegrationRates { get; }
@@ -238,7 +238,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
-		/// Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on
+		/// Returns the name (data-sheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on
 		/// manufacturer data sheet, subject to the following rules. All letter shall be uppercase.  Spaces shall not be included.
 		/// <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome,
 		/// etc. shall not be included. For color sensors, if a suffix differentiates different Bayer matrix encodings, it shall be
@@ -258,7 +258,7 @@ namespace ASCOM.DeviceInterface
 		string SensorName { get; }
 
 		/// <summary>
-		/// Type of colour information returned by the the camera sensor.
+		/// Type of colour information returned by the camera sensor.
 		/// </summary>
 		/// <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
 		/// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -294,7 +294,7 @@ namespace ASCOM.DeviceInterface
 		/// <td style="padding-right: 10px; padding-left: 10px; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
 		/// Colour</td>
 		/// <td style="padding-right: 10px; padding-left: 10px; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
-		/// Camera produces color image directly, requiring not Bayer decoding. The monochome pixels for the R, G and B channels are returned in this order in the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.</td>
+		/// Camera produces color image directly, requiring not Bayer decoding. The monochrome pixels for the R, G and B channels are returned in this order in the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.</td>
 		/// </tr>
 		/// <tr>
 		/// <td style="padding-right: 10px; padding-left: 10px; &#xA; border-left-color: #000000; border-left-style: Solid; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
@@ -645,7 +645,7 @@ namespace ASCOM.DeviceInterface
 		/// <item><description>2      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
 		/// </list>
 		/// <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state.
-		/// Some digital cameras or vdeo systems may suport operations that take longer to complete. Whlie those longer operations are running the camera will remain in the state it was before the operation started.</para>
+		/// Some digital cameras or video systems may support operations that take longer to complete. While those longer operations are running the camera will remain in the state it was before the operation started.</para>
 		/// <para>The video camera state diagram is shown below: </para>
 		/// <para>
 		/// <img src="../media/VideoCamera State Diagram.png"/></para>

@@ -356,7 +356,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>If <c>true</c>, the camera's cooler setpoint can be adjusted. If <c>false</c>, the camera
+        /// <para>If <c>true</c>, the camera's cooler set-point can be adjusted. If <c>false</c>, the camera
         /// either uses open-loop cooling or does not have the ability to adjust temperature
         /// from software, and setting the <see cref="SetCCDTemperature" /> property has no effect.</para>
         /// </remarks>
@@ -492,7 +492,7 @@ namespace ASCOM.DeviceInterface
         /// values are held in memory in column major order despite being stored in row major order from an <b>infrastructure</b> perspective.
         /// </para>
         /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
-        /// <para>Furthermore, for the avoidence of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
+        /// <para>Furthermore, for the avoidance of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
     object ImageArray { get; }
 
@@ -530,7 +530,7 @@ namespace ASCOM.DeviceInterface
         /// values are held in memory in column major order despite being stored in row major order from an <b>infrastructure</b> perspective.
         /// </para>
         /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
-        /// <para>Furthermore, for the avoidence of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
+        /// <para>Furthermore, for the avoidance of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
         object ImageArrayVariant { get; }
 
@@ -687,7 +687,7 @@ namespace ASCOM.DeviceInterface
         /// Sets the camera cooler set-point in degrees Celsius, and returns the current set-point.
         /// </summary>
         /// <value>The set CCD temperature.</value>
-        /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an attempt is made to set a value that is outside the camera's valid temperature setpoint range.</exception>
+        /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an attempt is made to set a value that is outside the camera's valid temperature set-point range.</exception>
         /// <exception cref="PropertyNotImplementedException">Must throw exception if <see cref="CanSetCCDTemperature" /> is <c>false</c>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>

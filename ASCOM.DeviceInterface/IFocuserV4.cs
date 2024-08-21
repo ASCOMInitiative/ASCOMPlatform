@@ -51,7 +51,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
@@ -90,7 +90,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
+        /// <p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
@@ -265,7 +265,7 @@ namespace ASCOM.DeviceInterface
         /// The current connection status can also be read back through this property.
         /// An exception will be raised if the link fails to change state for any reason.
         /// <para><b>Note</b></para>
-        /// <para>The FocuserV1 interface was the only interface to name its <i>"Connection"</i> p[roperty "Link" all others named
+        /// <para>The FocuserV1 interface was the only interface to name its <i>"Connection"</i> property "Link" all others named
         /// their <i>"Connection"</i> property as "Connected". All interfaces including Focuser now have a <see cref="Connected"></see> method and this is
         /// the recommended method to use to <i>"Connect"</i> to Focusers exposing the V2 and later interfaces.</para>
         /// <para>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</para>
@@ -312,10 +312,12 @@ namespace ASCOM.DeviceInterface
         /// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
         /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser
         /// was able to execute the move safely without disrupting temperature compensation.</para>
-        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requrement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers
-        /// are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling
+        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requirement to throw the InvalidOperationException exception. 
+        /// IFocuserV3 and later compliant drivers are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. 
+        /// For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling
         /// temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
-        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
+        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 and later drivers that throw InvalidOperationException exceptions, 
+        /// in line with this revised specification.</para>
         /// </remarks>
         void Move(int Position);
 
@@ -357,10 +359,12 @@ namespace ASCOM.DeviceInterface
         /// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
         /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser
         /// was able to execute the move safely without disrupting temperature compensation.</para>
-        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requrement to throw the InvalidOperationException exception. IFocuserV3 compliant drivers
-        /// are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling
+        /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requirement to throw the InvalidOperationException exception. 
+        /// IFocuserV3 and later compliant drivers are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. 
+        /// For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling
         /// temperature compensation or simply by moving the focuser with compensation enabled if the hardware supports this.</para>
-        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 drivers that throw InvalidOperationException exceptions, in line with this revised specification.</para>
+        /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 and later drivers 
+        /// that throw InvalidOperationException exceptions, in line with this revised specification.</para>
         /// </remarks>
         bool TempComp { get; set; }
 

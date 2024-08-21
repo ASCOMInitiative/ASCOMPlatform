@@ -39,7 +39,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>

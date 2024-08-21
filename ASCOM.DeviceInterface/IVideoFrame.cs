@@ -3,7 +3,7 @@
 // 
 // ASCOM Video
 // 
-// Description:	The IVideo and IVideoFrame interfaces ver 1
+// Description:	The IVideo and IVideoFrame interfaces version 1
 // 
 // Author:		(HDP) Hristo Pavlov <hristo_dpavlov@yahoo.com>
 // 

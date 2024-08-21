@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
-    /// Defines the IRotatorV3 Interface including new synchronisation methods. In addition cable wrap management is clarified. (see Remarks section below)
+    /// Defines the IRotatorV4 Interface.
     /// </summary>
     /// <remarks>
     /// The IRotatorV3 interface was introduced in Platform 6.5 to add support for rotator synchronisation through these new methods:
@@ -46,7 +46,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -83,7 +83,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 4 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
@@ -247,7 +247,7 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
         /// <para>During rotation, <see cref="IsMoving" /> must be True, otherwise it must be False.</para>
         /// <para><b>NOTE</b></para>
-        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// <para>IRotatorV3, released in Platform 6.5, and later interface version require this method to be implemented, in IRotatorV2 and earlier interface versions implementation was optional.</para>
         /// </remarks>
         bool IsMoving { get; }
 
@@ -266,7 +266,7 @@ namespace ASCOM.DeviceInterface
         /// <para>Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position
         /// and the value of the <see cref="Position" /> parameter (modulo 360 degrees), then starts rotation to <see cref="TargetPosition" />.</para>
         /// <para><b>NOTE</b></para>
-        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// <para>IRotatorV3, released in Platform 6.5, and later interface version require this method to be implemented, in IRotatorV2 and earlier interface versions implementation was optional.</para>
         /// </remarks>
         void Move(float Position);
 
@@ -287,7 +287,7 @@ namespace ASCOM.DeviceInterface
         /// <see cref="Position" /> parameter, then starts rotation to <see cref="TargetPosition" />. 
         /// </para>
         /// <para><b>NOTE</b></para>
-        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// <para>IRotatorV3, released in Platform 6.5, and later interface version require this method to be implemented, in IRotatorV2 and earlier interface versions implementation was optional.</para>
         /// </remarks>
         void MoveAbsolute(float Position);
 
@@ -317,7 +317,7 @@ namespace ASCOM.DeviceInterface
         /// be counter-clockwise against the sky.
         /// </para>
         /// <para><b>NOTE</b></para>
-        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// <para>IRotatorV3, released in Platform 6.5, and later interface version require this method to be implemented, in IRotatorV2 and earlier interface versions implementation was optional.</para>
         /// </remarks>
         float Position { get; }
 
@@ -331,7 +331,7 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red;margin-bottom:0"><b>Must be implemented.</b></p>
         /// <para>See the definition of <see cref="Position" />.</para>
         /// <para><b>NOTE</b></para>
-        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// <para>IRotatorV3, released in Platform 6.5, and later interface version require this method to be implemented, in IRotatorV2 and earlier interface versions implementation was optional.</para>
         /// </remarks>
         bool Reverse { get; set; }
 
@@ -358,7 +358,7 @@ namespace ASCOM.DeviceInterface
         /// <para>Upon calling <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>, this property immediately changes to the position angle to which the rotator is moving. 
         /// The value is retained until a subsequent call to <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>.</para>
         /// <para><b>NOTE</b></para>
-        /// <para>IRotatorV3, released in Platform 6.5, requires this method to be implemented, in previous interface versions implementation was optional.</para>
+        /// <para>IRotatorV3, released in Platform 6.5, and later interface version require this method to be implemented, in IRotatorV2 and earlier interface versions implementation was optional.</para>
         /// </remarks>
         float TargetPosition { get; }
 

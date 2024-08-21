@@ -38,7 +38,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -75,7 +75,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 4 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
@@ -275,7 +275,7 @@ namespace ASCOM.DeviceInterface
         bool AtHome { get; }
 
         /// <summary>
-        /// True if the telescope has been put into the parked state by the seee <see cref="Park" /> method. Set False by calling the Unpark() method.
+        /// True if the telescope has been put into the parked state by the <see cref="Park" /> method. Set False by calling the Unpark() method.
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -304,7 +304,7 @@ namespace ASCOM.DeviceInterface
         /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
         /// <para>
         /// Please note that the rate objects must contain absolute non-negative values only. Applications determine the direction by applying a
-        /// positive or negative sign to the rates provided. This obviates the need for the driver to to present a duplicate set of negative rates
+        /// positive or negative sign to the rates provided. This obviates the need for the driver to present a duplicate set of negative rates
         /// as well as the positive rates.</para>
         /// </remarks>
         IAxisRates AxisRates(TelescopeAxes Axis);
@@ -378,7 +378,7 @@ namespace ASCOM.DeviceInterface
         bool CanSetDeclinationRate { get; }
 
         /// <summary>
-        /// True if the guide rate properties used for <see cref="PulseGuide" /> can ba adjusted.
+        /// True if the guide rate properties used for <see cref="PulseGuide" /> can be adjusted.
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -617,7 +617,7 @@ namespace ASCOM.DeviceInterface
         /// Most amateur telescopes use topocentric coordinates. This coordinate system is simply the apparent position in the sky
         /// (possibly uncorrected for atmospheric refraction) for "here and now", thus these are the coordinates that one would use with digital setting
         /// circles and most amateur scopes. More sophisticated telescopes use one of the standard reference systems established by professional astronomers.
-        /// The most common is the Julian Epoch 2000 (J2000). These instruments apply corrections for precession,nutation, abberration, etc. to adjust the coordinates
+        /// The most common is the Julian Epoch 2000 (J2000). These instruments apply corrections for precession,nutation, aberration, etc. to adjust the coordinates
         /// from the standard system to the pointing direction for the time and location of "here and now".
         /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
         /// </remarks>
@@ -732,10 +732,10 @@ namespace ASCOM.DeviceInterface
         /// <b>NOTES:</b>
         /// <list type="bullet">
         /// <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the
-        /// the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the oposite direction to positive rates.</description></item>
+        /// the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the opposite direction to positive rates.</description></item>
         /// <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, determined by the sign used in this command.</description></item>
         /// <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving about any of its axes as a result of this method being called.
-        /// This can be used to simulate a handbox by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</description></item>
+        /// This can be used to simulate a hand-box by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</description></item>
         /// <item><description>When the motion is stopped by setting the rate to zero the scope will be set to the previous <see cref="TrackingRate" /> or to no movement, depending on the state of the <see cref="Tracking" /> property.</description></item>
         /// <item><description>It may be possible to implement satellite tracking by using the <see cref="MoveAxis" /> method to move the scope in the required manner to track a satellite.</description></item>
         /// </list>
@@ -907,7 +907,7 @@ namespace ASCOM.DeviceInterface
         /// (which varies from -180 to +180), a driver cannot calculate the pointing state, and *must not* implement SideOfPier.
         /// If the mount hardware reports only the mechanical declination axis position (-180 to +180) then a driver can calculate SideOfPier as follows:
         /// <list type="bullet">
-        /// <item><description>pierEast = abs(mechanical dec) &lt;= 90 deg</description></item>
+        /// <item><description>pierEast = abs(mechanical Dec) &lt;= 90 deg</description></item>
         /// <item><description>pierWest = abs(mechanical Dec) &gt; 90 deg</description></item>
         /// </list>
         /// </para>
@@ -1300,7 +1300,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If UTCDate Write is not implemented.</exception>
         /// <exception cref="InvalidValueException">If an invalid <see cref="DateTime" /> is set.</exception>
-        /// <exception cref="InvalidOperationException">When UTCDate is read and the mount cannot provide this property itslef and a value has not yet be established by writing to the property.</exception>
+        /// <exception cref="InvalidOperationException">When UTCDate is read and the mount cannot provide this property itself and a value has not yet be established by writing to the property.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>

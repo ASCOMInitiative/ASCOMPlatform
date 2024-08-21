@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 namespace ASCOM.DeviceInterface
 {
     // -----------------------------------------------------------------------
-    // <summary>Defines the ISwitchV2 Interface</summary>
+    // <summary>Defines the ISwitchV3 Interface</summary>
     // -----------------------------------------------------------------------
     /// <summary>
-    /// Defines the ISwitchV2 Interface
+    /// Defines the ISwitchV3 Interface
     /// </summary>
     /// <remarks>
     /// <para>The Switch interface is used to define a number of 'switch devices'. A switch device can be used to control something, such as a power switch
@@ -61,7 +61,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
@@ -98,7 +98,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Must return 3 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
@@ -274,7 +274,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>Decices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
+        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
         /// <para>This is a Version 2 method.</para>
         /// </remarks>
         string GetSwitchDescription(short id);
@@ -306,7 +306,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minumum
+        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minimum
         /// and either true or false as specified by the driver developer for intermediate values.</para>
         /// <para>Some devices do not support reading their state although they do allow state to be set. In these cases, on startup, the driver can not know the hardware state and it is recommended that the
         /// driver either:</para>

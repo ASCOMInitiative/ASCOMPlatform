@@ -37,7 +37,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
 		/// <summary>
-		/// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+		/// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
 		/// </summary>
 		/// <value>The description.</value>
 		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
@@ -76,7 +76,7 @@ namespace ASCOM.DeviceInterface
 		/// </summary>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
 		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
+		/// <p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
 		/// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
 		/// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
 		/// </remarks>

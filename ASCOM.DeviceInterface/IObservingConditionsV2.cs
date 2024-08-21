@@ -286,7 +286,7 @@ namespace ASCOM.DeviceInterface
 		/// <summary>
 		/// Atmospheric pressure at the observatory
 		/// </summary>
-		/// <value>Atmospheric presure at the observatory (hPa)</value>
+		/// <value>Atmospheric pressure at the observatory (hPa)</value>
 		/// <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
 		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
@@ -366,7 +366,7 @@ namespace ASCOM.DeviceInterface
 		/// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
 		/// <para>Sky quality is typically measured in units of magnitudes per square arc second. A sky quality of 20 magnitudes per square arc second means that the
 		/// overall sky appears with a brightness equivalent to having 1 magnitude 20 star in each square arc second of sky.</para>
-		/// <para >Examples of typical sky quality values were published by Sky and Telescope (<a href="http://www.skyandtelescope.com/astronomy-resources/rate-your-skyglow/">http://www.skyandtelescope.com/astronomy-resources/rate-your-skyglow/</a>) and, in slightly adpated form, are reproduced below:</para>
+		/// <para >Examples of typical sky quality values were published by Sky and Telescope (<a href="http://www.skyandtelescope.com/astronomy-resources/rate-your-skyglow/">http://www.skyandtelescope.com/astronomy-resources/rate-your-skyglow/</a>) and, in slightly adapted form, are reproduced below:</para>
 		/// <para>
 		/// <table style="width:80.0%;" cellspacing="0" width="80.0%">
 		/// <col style="width: 20.0%;"></col>
@@ -380,7 +380,7 @@ namespace ASCOM.DeviceInterface
 		/// border-bottom-color: #000000; border-bottom-style: Solid;
 		/// border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px;
 		/// background-color: #00ffff;" width="10.0">
-		/// <b>Sky Quality (mag/arcsec<sup>2</sup>)</b></td>
+		/// <b>Sky Quality (mag/arcsecond<sup>2</sup>)</b></td>
 		/// <td colspan="1" rowspan="1" style="width: 80.0%; padding-right: 10px; padding-left: 10px;
 		/// text-align: center;vertical-align: middle;
 		/// border-top-color: #000000; border-top-style: Solid;
@@ -558,7 +558,7 @@ namespace ASCOM.DeviceInterface
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks>
 		/// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
-		/// The returned value must be between 0.0 and 360.0, interpreted according to the metereological standard, where a special value of 0.0 is returned when the wind speed is 0.0.
+		/// The returned value must be between 0.0 and 360.0, interpreted according to the meteorological standard, where a special value of 0.0 is returned when the wind speed is 0.0.
 		/// Wind direction is measured clockwise from north, through east, where East=90.0, South=180.0, West=270.0 and North=360.0.
 		/// </remarks>
 		double WindDirection { get; }

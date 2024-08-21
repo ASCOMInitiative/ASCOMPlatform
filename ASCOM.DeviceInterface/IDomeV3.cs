@@ -148,7 +148,7 @@ namespace ASCOM.DeviceInterface
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented.</b></p>
 		/// <para>
-		/// Clients can detect legacy V1 drivers by trying to read ths property. If the driver raises an
+		/// Clients can detect legacy V1 drivers by trying to read this property. If the driver raises an
 		/// error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of
 		/// 1. In other words, a raised error or a return value of 1 indicates that the driver is a V1
 		/// driver.</para>
