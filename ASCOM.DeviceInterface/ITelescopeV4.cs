@@ -577,7 +577,8 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
-        /// This is only available for telescope InterfaceVersions 2 and later.
+        /// <para>This is only available for telescope interface version 2 and later.</para>
+        /// <para>Please see <see cref="SideOfPier"/> for more information on pointing state and physical side of pier for German equatorial mounts.</para>
         /// </remarks>
         PierSide DestinationSideOfPier(double RightAscension, double Declination);
 
@@ -851,13 +852,13 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
+        /// <para>SideofPier SET is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
         /// <para><b>ASCOM CONVENTION</b></para>
         /// <para>In order to support Dome slaving for German equatorial mounts, where it is important to know on which side of the pier the mount is physically located, ASCOM has adopted the
         /// convention that the Normal pointing state (<see cref="PierSide.pierEast"></see>) pertains when the mount is on the East side of pier, counterweights below the optical assembly, 
         /// observing a target in the West at hour angle +3.0 on the celestial equator. See below for history and further explanation.
         /// </para>
         /// <para><b>Context</b></para>
-        /// <para>SideofPier is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
         /// <para>For historical reasons, this property's name does not reflect its true meaning. The name will not be changed (so as to preserve
         /// compatibility), but the meaning has since become clear. All conventional mounts have two pointing states for a given equatorial (sky) position.
         /// Mechanical limitations often make it impossible for the mount to position the optics at given HA/Dec in one of the two pointing
@@ -868,8 +869,8 @@ namespace ASCOM.DeviceInterface
         /// This becomes rather more obvious if your mount is alt/az aligned, but it's still true for an equatorial. Both mount axes can in principle
         /// move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90).  Apart from
         /// practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis
-        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co-declination (90 - sky declination).</para>
-        /// <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian.</para>
+        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co-declination (90 - sky declination).
+        /// Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian.</para>
         /// <para>Move your scope to this position and consider the two mechanical encoders zeroed. The two pointing states are, then:
         /// <list type="table">
         /// <item><term><b>Normal (<see cref="PierSide.pierEast"></see>)</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>

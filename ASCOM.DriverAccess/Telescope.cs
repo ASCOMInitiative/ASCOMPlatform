@@ -646,12 +646,13 @@ namespace ASCOM.DriverAccess
         /// <exception cref="InvalidValueException">If an invalid RightAscension or Declination is specified.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// This is only available for telescope InterfaceVersions 2 and later.
-        /// </remarks>
         /// <param name="RightAscension">The destination right ascension (hours).</param>
         /// <param name="Declination">The destination declination (degrees, positive North).</param>
         /// <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
+        /// <remarks>
+        /// <para>This is only available for telescope interface version 2 and later.</para>
+        /// <para>Please see <see cref="SideOfPier"/> for more information on pointing state and physical side of pier for German equatorial mounts.</para>
+        /// </remarks>
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
             return (PierSide)memberFactory.CallMember(3, "DestinationSideOfPier", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
@@ -997,7 +998,13 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
         /// <remarks>
-        /// <para>This is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
+        /// <para>SideOfPier SET is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
+        /// <para><b>ASCOM CONVENTION</b></para>
+        /// <para>In order to support Dome slaving for German equatorial mounts, where it is important to know on which side of the pier the mount is physically located, ASCOM has adopted the
+        /// convention that the Normal pointing state (<see cref="PierSide.pierEast"></see>) pertains when the mount is on the East side of pier, counterweights below the optical assembly, 
+        /// observing a target in the West at hour angle +3.0 on the celestial equator. See below for history and further explanation.
+        /// </para>
+        /// <para><b>Context</b></para>
         /// <para>For historical reasons, this property's name does not reflect its true meaning. The name will not be changed (so as to preserve 
         /// compatibility), but the meaning has since become clear. All conventional mounts have two pointing states for a given equatorial (sky) position. 
         /// Mechanical limitations often make it impossible for the mount to position the optics at given HA/Dec in one of the two pointing 
@@ -1008,11 +1015,9 @@ namespace ASCOM.DriverAccess
         /// This becomes rather more obvious if your mount is an alt-az, but it's still true for an equatorial. Both mount axes can in principle 
         /// move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90).  Apart from 
         /// practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis 
-        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co declination (90 - sky declination).</para>
-        /// <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
-        /// In order to support Dome slaving, where it is important to know which side of the pier the mount is actually on, ASCOM has adopted the 
-        /// convention that the Normal pointing state will be the state where a German Equatorial mount is on the East side of the pier, looking West, with the 
-        /// counterweights below the optical assembly and that <see cref="PierSide.pierEast"></see> will represent this pointing state.</para>
+        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co declination (90 - sky declination).
+        /// Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
+        /// </para>
         /// <para>Move your scope to this position and consider the two mechanical encoders zeroed. The two pointing states are, then:
         /// <list type="table">
         /// <item><term><b>Normal (<see cref="PierSide.pierEast"></see>)</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
