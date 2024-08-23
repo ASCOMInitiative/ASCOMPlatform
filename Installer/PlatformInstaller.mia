@@ -1131,6 +1131,9 @@ Write to Text File
 End
 End
 Comment
+Comment
+Register Library
+Comment
 MessageBalloon
 Set Variable
 Set Variable
@@ -2196,6 +2199,12 @@ Run Program
 Set Variable
 Include Script
 End
+Comment
+Comment
+Set Variable
+Register Library
+Set Variable
+Include Script
 Comment
 Set Variable
 Set Variable
@@ -3862,6 +3871,9 @@ $
 {8EDF61B9-C40E-4590-ACAE-45921F4319F8}
 {9A5129B2-F8FF-4DFB-86F1-256E6CCDCF2C}
 {6EC8BFC8-352F-42E0-848F-295C8B89BAC2}
+{CA641DC4-3A2E-4BC0-AFBB-A74CCA2F2376}
+{2BC0831D-CC92-4776-8414-37B012FF75C6}
+{2C1BD6A1-9001-4E9F-9AD1-4C47E1C62FF8}
 {08DD1C7B-AD60-4DA9-BB5C-3A431457F36C}
 {E4D69EE8-4E7B-4516-8FA0-3F3941C267EA}
 {5298F7E6-F9FD-440C-AF49-1424150C928D}
@@ -4928,6 +4940,12 @@ $
 {714203B0-11EF-4428-AC3E-39069390B047}
 {00CD7AA1-95DB-4822-8047-1ACD7393A908}
 {9879DA19-B62C-48E2-8E4B-1A90C36C5D12}
+{09952542-A3FA-473C-8A4C-0F1539C7B264}
+{A0DB60EE-34FE-485F-9B62-8B6BED154720}
+{C769A5FB-B581-47EB-A58B-860D2A8BFDBB}
+{C1A5224A-35AB-4791-A8F8-FCC615BF2423}
+{D415F065-A860-49DB-9592-F63F454B965E}
+{76C0FA7E-8284-4CCE-990D-4E25D768643C}
 {90DB0ADB-D299-4F37-89A2-E867E540B84B}
 {BA063867-35B0-4104-A224-F97A1DE0F644}
 {08EBC472-5F1A-47A3-BA4B-9F5B02F08052}
@@ -6667,7 +6685,7 @@ Register Platform 5.5 components
 {90DB0ADB-D299-4F37-89A2-E867E540B84B}
 
 {E3AB4949-1BDF-4331-B222-8EC7BA0C4BD0}
-Register Platform 5 Simulators
+Register Platform 5 EXE Simulators
 {31A4C2A1-72D1-4053-8F34-76D42BA8D3F2}
 
 {5CD83627-3CB7-4E98-9B7F-C7ACFC1CB33F}
@@ -6767,6 +6785,14 @@ Copy SetNetworkPermissions to the 32bit Program Files folder.
 {D84C0DCC-2427-4E73-842C-53F63ADF314F}
 Copy SetNetworkPermissions to the Program Files folder.
 {CDDC5EFD-E5B3-4A09-8DDF-1F1C922D8AF0}
+
+{09952542-A3FA-473C-8A4C-0F1539C7B264}
+
+{A0DB60EE-34FE-485F-9B62-8B6BED154720}
+Register Platform 5 DLL Simulator
+{2BC0831D-CC92-4776-8414-37B012FF75C6}
+Unregister Platform 5 DLL Camera Simulator
+{CA641DC4-3A2E-4BC0-AFBB-A74CCA2F2376}
 
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
@@ -8112,6 +8138,12 @@ Setting default Platform simulators
 {EB766B91-BE17-40AF-8E89-B86B84BF757D}
 MYPROGRESS$MYAH$MYAH$FALSE
 72
+{C769A5FB-B581-47EB-A58B-860D2A8BFDBB}
+PROGRESSTEXT$MYAH$MYAH$FALSE
+Registering Platform 5 Camera Simulator
+{D415F065-A860-49DB-9592-F63F454B965E}
+ACTION$MYAH$MYAH$FALSE
+Register - Platform 5 Camera Simulaotr
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -17513,6 +17545,14 @@ TRUE
 ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
 TRUE
 
+{C1A5224A-35AB-4791-A8F8-FCC615BF2423}
+$COMMONFILES$\ASCOM\Camera\CCDSimulator.dll
+TRUE
+RC
+{2C1BD6A1-9001-4E9F-9AD1-4C47E1C62FF8}
+$COMMONFILES$\ASCOM\Camera\CCDSimulator.dll
+FALSE
+RC
 {5177FF3C-C42D-4163-ACD1-BAF4DBE0F1C2}
 TRUE
 Check Application Requirements
@@ -17886,6 +17926,8 @@ UpdateAscomError|
 {36B06A00-2B08-42C4-8D3D-05134E4810D8}
 UpdateAscomError|
 {7FF965C3-EA7D-472C-8C9D-EDBC042BDE15}
+UpdateAscomError|
+{76C0FA7E-8284-4CCE-990D-4E25D768643C}
 UpdateAscomError|
 {BE6F0167-47F0-4C0A-B473-33DB75546DE3}
 SUCCESS
@@ -19771,38 +19813,10 @@ C
 
 
 
+
+
+
 C
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 C
@@ -19836,99 +19850,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
 C
 
 
@@ -20052,6 +19973,130 @@ C
 
 
 
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20273,6 +20318,12 @@ C
 C
 C
 C
+
+
+
+
+
+
 
 
 
@@ -20874,6 +20925,15 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
 
 
 

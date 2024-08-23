@@ -1,5 +1,16 @@
+Comment: Log operation outcome and create a balloon error message if an error occurs
 Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ $ACTION$ (at end of file)
+Convert Variable RC to UPPER case
+ 
+Comment: Check if the return code is zero or COMPLETE or TRUE
 if Variable RC not Equals 0
-  MessageBalloon: Platform Install Error, $ACTION$ error - Return code: $RC$
-  Set Variable ASCOMERROR to $NEWLINE$$ACTION$ returned error code $RC$
+  Comment: Return code is not zero so check if it is COMPLETE or TRUE
+  if Variable RC not Equals COMPLETE
+    Comment: Return code is not zero or COMPLETE so check if it is TRUE
+    if Variable RC not Equals TRUE
+      Comment: Return code is not zero or COMPLETE or TRUE so this is an error: report it.
+      MessageBalloon: Platform Install Error, $ACTION$ error - Return code: $RC$
+      Set Variable ASCOMERROR to $NEWLINE$$ACTION$ returned error code $RC$
+    end
+  end
 end
