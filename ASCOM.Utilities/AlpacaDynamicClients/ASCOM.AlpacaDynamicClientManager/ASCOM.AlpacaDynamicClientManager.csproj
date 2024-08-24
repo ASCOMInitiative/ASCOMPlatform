@@ -5,7 +5,7 @@
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>ASCOM.DynamicRemoteClients</RootNamespace>
 		<AssemblyName>ASCOM.AlpacaDynamicClientManager</AssemblyName>
-		<TargetFramework>net70-windows</TargetFramework>
+		<TargetFramework>net472</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<AssemblyTitle>Alpaca Dynamic Client Manager</AssemblyTitle>
@@ -33,6 +33,10 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<ApplicationIcon>ASCOM.ico</ApplicationIcon>
+		<AnalysisLevel>latest-minimum</AnalysisLevel>
+		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="..\..\..\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />

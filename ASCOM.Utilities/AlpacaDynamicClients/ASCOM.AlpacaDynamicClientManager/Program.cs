@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
-using ASCOM.Tools;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DynamicRemoteClients
@@ -26,7 +25,7 @@ namespace ASCOM.DynamicRemoteClients
         public const string UNIQUEID_PROFILENAME = "UniqueID";
 
         // List of supported device types - this must be kept in sync with the device type numeric up-down controls on the form dialogue!
-        private static readonly List<string> supportedDeviceTypes = new() { "Camera", "CoverCalibrator", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
+        private static readonly List<string> supportedDeviceTypes = new List<string>() { "Camera", "CoverCalibrator", "Dome", "FilterWheel", "Focuser", "ObservingConditions", "Rotator", "SafetyMonitor", "Switch", "Telescope" };
 
         static Utilities.TraceLogger TL;
 
@@ -60,11 +59,11 @@ namespace ASCOM.DynamicRemoteClients
 
                 if (args.Length > 0) commandParameter = args[0]; // Copy any supplied command parameter to the parameter variable
 
-                TL.LogMessage("Main", string.Format(@"Supplied parameter: ""{0}""", commandParameter));
+                TL.LogMessage("Main", $@"Supplied parameter: ""{commandParameter}""");
                 commandParameter = commandParameter.TrimStart(' ', '-', '/', '\\'); // Remove any parameter prefixes and leading spaces
                 commandParameter = commandParameter.TrimEnd(' '); // Remove any trailing spaces
 
-                TL.LogMessage("Main", string.Format(@"Trimmed parameter: ""{0}""", commandParameter));
+                TL.LogMessage("Main", $@"Trimmed parameter: ""{commandParameter}""");
 
                 switch (commandParameter.ToUpperInvariant()) // Act on the supplied parameter, if any
                 {
@@ -201,7 +200,7 @@ namespace ASCOM.DynamicRemoteClients
             int exitCode = int.MinValue;
 
             // Set local server run time values
-            ProcessStartInfo start = new()
+            ProcessStartInfo start = new ProcessStartInfo()
             {
                 Arguments = serverParameter, // Specify the server command parameter
                 FileName = localServerExe, // Set the full local server executable path
@@ -228,14 +227,14 @@ namespace ASCOM.DynamicRemoteClients
 
         #endregion
 
-        #region Unhandled exception handlers
+        #region Un-handled exception handlers
 
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
             Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             // Create a trace logger and log the exception 
-            TraceLogger TL = new("DynamicClientThreadException",true)
+            ASCOM.Tools.TraceLogger TL = new ASCOM.Tools.TraceLogger("DynamicClientThreadException", true)
             {
                 Enabled = true
             };
@@ -258,11 +257,11 @@ namespace ASCOM.DynamicRemoteClients
             Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             // Create a trace logger and log the exception 
-            TraceLogger TL = new("DynamicClientUnhandledException",true)
+            ASCOM.Tools.TraceLogger TL = new ASCOM.Tools.TraceLogger("DynamicClientUnhandledException", true)
             {
                 Enabled = true
             };
-            TL.LogMessage("Main", string.Format("ASCOM Dynamic Client Manager - Unhandled exception. Version: {0}", assemblyVersion.ToString()));
+            TL.LogMessage("Main", string.Format("ASCOM Dynamic Client Manager - Un-handled exception. Version: {0}", assemblyVersion.ToString()));
             TL.LogMessage("Main", exception.ToString());
 
             // Display the exception in the default .txt editor and exit

@@ -1,6 +1,6 @@
 ﻿namespace ASCOM.DynamicRemoteClients
 {
-    class DynamicDriverRegistration
+    sealed class DynamicDriverRegistration
     {
 
         /// <summary>
