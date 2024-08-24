@@ -66,16 +66,4 @@
 	    <PackagePath>\</PackagePath>
 	  </None>
 	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-	  <PackageReference Include="ASCOM.Tools">
-	    <Version>2.0.0-rc.30</Version>
-	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-	  <PackageReference Include="ASCOM.Tools">
-	    <Version>2.0.0-rc.30</Version>
-	  </PackageReference>
-	</ItemGroup>
 </Project>
