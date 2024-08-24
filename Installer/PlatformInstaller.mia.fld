@@ -1,7 +1,7 @@
 ﻿Check Application Requirements
 Start installation
-Install complete dialogue
 Check Application Pre-Requisites
+Remove 64bit components
 Remove 32bit components
 Install MSI support if required
 Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
@@ -9,7 +9,7 @@ Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
 Developer files
-Validate installation
 Post install activities - 64bit only
 Post install activities - 32bit only
-Remove 64bit components
+Validate installation
+Create shortcuts

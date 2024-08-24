@@ -1131,6 +1131,9 @@ if Variable REMOVE Equals TRUE
     end
   end
    
+  Comment: Unregister Platform 5 DLL Camera Simulator
+  Unregister Library $COMMONFILES$\ASCOM\Camera\CCDSimulator.dll (get result into variable RC)
+   
   MessageBalloon: , 
   Set Variable MYPROGRESS to 95
   Set Variable PROGRESSTEXT to Removing Omni-Simulators and ASCOM Remote
@@ -2173,7 +2176,7 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to IObjectSafety type library
   Include Script: UpdateAscomError
    
-  Comment: Register Platform 5 Simulators
+  Comment: Register Platform 5 EXE Simulators
   Set Variable PROGRESSTEXT to Registering Platform 5 Telescope simulator
   Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
   Set Variable ACTION to Register ScopeSim
@@ -2196,6 +2199,12 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ACTION to Register - POTH
     Include Script: UpdateAscomError
   end
+   
+  Comment: Register Platform 5 DLL Simulator
+  Set Variable PROGRESSTEXT to Registering Platform 5 Camera Simulator
+  Register Library $COMMONFILES$\ASCOM\Camera\CCDSimulator.dll (get result into variable RC)
+  Set Variable ACTION to Register - Platform 5 Camera Simulaotr
+  Include Script: UpdateAscomError
    
   Set Variable MYPROGRESS to 55
   Set Variable PROGRESSTEXT to Registering Platform 5 Dome simulator
