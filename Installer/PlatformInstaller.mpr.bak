@@ -2902,7 +2902,7 @@ COMMONFILES64
 COMMONFILES32
 $
 1
-1
+6
 TRUE
 
 ASCOM Initiative
@@ -2915,7 +2915,7 @@ ASCOM Platform 7.0 - RC6
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{CF7F8372-2D1A-4FD3-99DD-11474B08F7A2}
+{D2B7C1A1-01AA-490D-894F-20C45B506AF2}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2924,7 +2924,7 @@ Copyright © 1998-2024, The ASCOM Initiative. All rights reserved.
 FALSE
 AscomPlatform700
 TRUE
-FALSE
+TRUE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer

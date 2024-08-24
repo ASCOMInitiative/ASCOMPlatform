@@ -2033,6 +2033,18 @@ Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $P
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
  
+Comment: Update Camera and Telescope interface version numbers to Platform 7 versions if they are set to Platform 6 versions
+Read Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\InterfaceVersion into INTERFACEVERSION
+if Variable INTERFACEVERSION Equals 3
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\InterfaceVersion, 4
+  Write into Text File $SETUPLOG$ from Value $TIME$ Updating camera simulator interface version to 4 (at end of file)
+end
+Read Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\InterfaceVersion into INTERFACEVERSION
+if Variable INTERFACEVERSION Equals 3
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\InterfaceVersion, 4
+  Write into Text File $SETUPLOG$ from Value $TIME$ Updating telescope simulator interface version to 4 (at end of file)
+end
+ 
 [END REGION]
  
 [DEFINE REGION: Create shortcuts]
@@ -2418,7 +2430,6 @@ if Variable SUCCESS not Equals ERROR
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
   Set Variable ACTION to Update checker scheduled task
   Include Script: UpdateAscomError
-  Write into Text File $SETUPLOG$ from Value  (at end of file)
    
   [END REGION]
    

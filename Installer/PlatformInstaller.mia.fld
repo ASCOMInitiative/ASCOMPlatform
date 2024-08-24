@@ -2,6 +2,7 @@
 Start installation
 Check Application Pre-Requisites
 Remove 64bit components
+Create shortcuts
 Remove 32bit components
 Install MSI support if required
 Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
@@ -12,4 +13,3 @@ Developer files
 Post install activities - 64bit only
 Post install activities - 32bit only
 Validate installation
-Create shortcuts
