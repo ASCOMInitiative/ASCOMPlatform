@@ -7,7 +7,7 @@ using ASCOM.Utilities;
 #elif NET472
 using ASCOM.Utilities;
 #else
-//using Util = ASCOM.Tools.Utilities;
+using Util = ASCOM.Tools.Utilities;
 #endif
 
 namespace ASCOM.DeviceInterface
@@ -44,7 +44,7 @@ namespace ASCOM.DeviceInterface
         bool Connected { get; set; }
 
         /// <summary>
-        /// Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used.
+        /// Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used.
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
