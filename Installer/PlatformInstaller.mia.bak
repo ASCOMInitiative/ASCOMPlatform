@@ -11405,7 +11405,7 @@ FALSE
 FALSE
 FALSE
 {959B2C0A-31CA-4EAB-B079-CF4423D46B0C}
-..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.*
+..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\*.*
 FALSE|*.xml
 $TARGETDIR$\Tools\AlpacaDynamicClientManager
 FALSE

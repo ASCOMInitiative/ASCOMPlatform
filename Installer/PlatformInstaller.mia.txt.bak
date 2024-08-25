@@ -1564,7 +1564,7 @@ Install Files ..\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationU
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
  
 Comment: Alpaca support for the Chooser
-Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net70-windows\*.* to $TARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
+Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\*.* to $TARGETDIR$\Tools\AlpacaDynamicClientManager, ignore files matching wildcard pattern(s) *.xml
 Install Files ..\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\*.* to $COMMONFILES$\ASCOM\AlpacaDynamicClients, include subfolders
  
 Comment: Device Hub

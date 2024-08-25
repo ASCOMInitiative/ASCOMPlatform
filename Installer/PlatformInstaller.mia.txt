@@ -2641,6 +2641,16 @@ if Variable SUCCESS not Equals (Ignore Case) COMPLETE
   Set Variable DISPLAY_USER_GUIDE to FALSE
 end
  
+Comment: List the installation outcome variables
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+Write into Text File $SETUPLOG$ from Value Install Outcomes (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Success: $SUCCESS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance: $MAINTENANCE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Remove: $REMOVE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Repair: $REPAIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Modify: $MODIFY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
 Comment: Test whether we have an error, if so then we just display the error messages
 if Variable SUCCESS not Equals (Ignore Case) ERROR
   Comment: No errors - great! Test for CANCEL
@@ -2688,17 +2698,23 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
         end
       else
         Comment: Unexpected value in SUCCESS variable
-        Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful.
+        Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful - Unexpected error
         Set Variable FINISH_DESCRIPTION to $NEWLINE$ An unexpected SUCCESS status was returned: $SUCCESS$$NEWLINE$$NEWLINE$ The installation may or may not have completed successfully.$NEWLINE$$NEWLINE$ Please report this issue on the Groups.Io ASCOM-Talk forum.
       end
     end
   end
 else
   Comment: ERROR - We have an error so set the error messages
-  Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful.
+  Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful - Error state.
   Set Variable FINISH_DESCRIPTION to  An error occurred while installing Platform 7.$NEWLINE$$NEWLINE$ Please zip up all files and sub-folders in your Documents\ASCOM folder and post the zip on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Many thanks, The ASCOM Platform Team.$NEWLINE$$NEWLINE$ Last error: $LASTERROR$$ASCOMERROR$
   Set Variable FINISH_CONTEXT to 
 end
+ 
+Comment: List the display fields
+Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Title: $FINISH_TITLE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Description: $FINISH_DESCRIPTION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Context: $FINISH_CONTEXT$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
 Convert Variable SUCCESS to UPPER case
