@@ -1,11 +1,13 @@
 Comment: Log operation outcome and create a balloon error message if an error occurs
-Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ $ACTION$ (at end of file)
-Convert Variable RC to UPPER case
  
 Comment: Handle responses where TRUE = success
+Convert Variable RC to UPPER case
 if Variable RC Equals TRUE
   Set Variable RC to 0
 end
+ 
+Comment: Log the outcome
+Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ $ACTION$ (at end of file)
  
 Comment: Check if the return code is zero or COMPLETE
 if Variable RC not Equals 0
