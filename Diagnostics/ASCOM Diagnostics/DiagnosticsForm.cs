@@ -296,7 +296,7 @@ namespace ASCOM.Utilities
                 TL = new TraceLogger("", "Diagnostics") { Enabled = true };
 
                 transform = new Astrometry.Transform.Transform(); // Create a new Transform component for this run
-                AstroUtil = new Astrometry.AstroUtils.AstroUtils(TL);
+                AstroUtil = new Astrometry.AstroUtils.AstroUtils(tlInternal);
                 Nov3 = new Astrometry.NOVAS.NOVAS3();
                 Nov31 = new Astrometry.NOVAS.NOVAS31();
                 AscomUtil = new Util();
@@ -6677,7 +6677,7 @@ namespace ASCOM.Utilities
             string ErrMsg;
             if ((p_New ?? "") == (p_Orig ?? ""))
             {
-                if (p_New.Length > 200)
+                if (p_New?.Length > 200)
                     p_New = p_New.Substring(1, 200) + "...";
                 TL.LogMessage(p_Section, "Matched " + p_Name + " = " + p_New);
                 NMatches += 1;
@@ -10668,48 +10668,38 @@ namespace ASCOM.Utilities
                         switch (SubKey.ToUpperInvariant() ?? "")
                         {
                             case "TYPELIB":
-                                {
-                                    // TL.LogMessage("Container", "TypeLib...")
-                                    Container = "TypeLib";
-                                    break;
-                                }
+                                // TL.LogMessage("Container", "TypeLib...")
+                                Container = "TypeLib";
+                                break;
+
                             case "CLSID":
-                                {
-                                    // TL.LogMessage("Container", "CLSID...")
-                                    Container = "CLSID";
-                                    break;
-                                }
+                                // TL.LogMessage("Container", "CLSID...")
+                                Container = "CLSID";
+                                break;
+
                             case "IMPLEMENTED CATEGORIES":
-                                {
-                                    // TL.LogMessage("Container", "Component Categories...")
-                                    Container = COMPONENT_CATEGORIES;
-                                    break;
-                                }
+                                // TL.LogMessage("Container", "Component Categories...")
+                                Container = COMPONENT_CATEGORIES;
+                                break;
 
                             default:
-                                {
-                                    // TL.LogMessage("Container", "Other...")
-                                    Container = "None";
-                                    break;
-                                }
+                                // TL.LogMessage("Container", "Other...")
+                                Container = "None";
+                                break;
                         }
                         if (Strings.Left(SubKey, 1) == "{")
                         {
                             switch (p_Container ?? "")
                             {
                                 case COMPONENT_CATEGORIES:
-                                    {
-                                        // TL.LogMessage("ImpCat", "ImpCat")
-                                        RKey = Registry.ClassesRoot.OpenSubKey(COMPONENT_CATEGORIES).OpenSubKey(SubKey);
-                                        Container = "None";
-                                        break;
-                                    }
+                                    // TL.LogMessage("ImpCat", "ImpCat")
+                                    RKey = Registry.ClassesRoot.OpenSubKey(COMPONENT_CATEGORIES).OpenSubKey(SubKey);
+                                    Container = "None";
+                                    break;
 
                                 default:
-                                    {
-                                        break;
-                                    }
                                     // Do nothing
+                                    break;
                             }
                         }
 
@@ -10956,12 +10946,12 @@ namespace ASCOM.Utilities
             {
                 RegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", false);
 
-                TL.LogMessage("Platform 5.5", Conversions.ToString(RegKey.GetValue("DisplayName")));
-                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Inno Setup App Path - ", RegKey.GetValue("Inno Setup: App Path"))));
-                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Inno Setup Version - ", RegKey.GetValue("Inno Setup: Setup Version"))));
-                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Install Date - ", RegKey.GetValue("InstallDate"))));
-                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Install Location - ", RegKey.GetValue("InstallLocation"))));
-                RegKey.Close();
+                TL.LogMessage("Platform 5.5", Conversions.ToString(RegKey?.GetValue("DisplayName")));
+                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Inno Setup App Path - ", RegKey?.GetValue("Inno Setup: App Path"))));
+                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Inno Setup Version - ", RegKey?.GetValue("Inno Setup: Setup Version"))));
+                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Install Date - ", RegKey?.GetValue("InstallDate"))));
+                TL.LogMessage("Platform 5.5", Conversions.ToString(Operators.ConcatenateObject("Install Location - ", RegKey?.GetValue("InstallLocation"))));
+                RegKey?.Close();
             }
             catch (NullReferenceException)
             {
@@ -11132,13 +11122,13 @@ namespace ASCOM.Utilities
                     }
                 }
 
-                RetVal.Add(INST_DISPLAY_NAME, Conversions.ToString(RegKey.GetValue(INST_DISPLAY_NAME, INST_NOT_KNOWN)));
-                RetVal.Add(INST_DISPLAY_VERSION, Conversions.ToString(RegKey.GetValue(INST_DISPLAY_VERSION, INST_NOT_KNOWN)));
-                RetVal.Add(INST_INSTALL_DATE, Conversions.ToString(RegKey.GetValue(INST_INSTALL_DATE, INST_NOT_KNOWN)));
-                RetVal.Add(INST_INSTALL_SOURCE, Conversions.ToString(RegKey.GetValue(INST_INSTALL_SOURCE, INST_NOT_KNOWN)));
-                RetVal.Add(INST_INSTALL_LOCATION, Conversions.ToString(RegKey.GetValue(INST_INSTALL_LOCATION, INST_NOT_KNOWN)));
+                try { RetVal.Add(INST_DISPLAY_NAME, Conversions.ToString(RegKey?.GetValue(INST_DISPLAY_NAME, INST_NOT_KNOWN))); } catch { }
+                try { RetVal.Add(INST_DISPLAY_VERSION, Conversions.ToString(RegKey?.GetValue(INST_DISPLAY_VERSION, INST_NOT_KNOWN))); } catch { }
+                try { RetVal.Add(INST_INSTALL_DATE, Conversions.ToString(RegKey?.GetValue(INST_INSTALL_DATE, INST_NOT_KNOWN))); } catch { }
+                try { RetVal.Add(INST_INSTALL_SOURCE, Conversions.ToString(RegKey?.GetValue(INST_INSTALL_SOURCE, INST_NOT_KNOWN))); } catch { }
+                try { RetVal.Add(INST_INSTALL_LOCATION, Conversions.ToString(RegKey?.GetValue(INST_INSTALL_LOCATION, INST_NOT_KNOWN))); } catch { }
 
-                RegKey.Close();
+                RegKey?.Close();
             }
 #if DEBUG_TRACE
             catch (Exception ex)
