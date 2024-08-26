@@ -1949,14 +1949,14 @@ namespace ASCOM.Utilities
                                         foreach (dynamic AxRte in (IEnumerable)DeviceAxisRates)
                                         {
                                             // Get the minimum rate
-                                            double minimum=AxRte.Minimum;
+                                            double minimum = AxRte.Minimum;
 
                                             // If we get here a maximum value could be read OK
                                             TL.LogMessage("TestSimulator", $"Got minimum rate OK: {AxRte.Minimum}");
                                             NMatches += 1;
 
                                             // Get the maximum rate
-                                            double maximum =AxRte.Maximum;
+                                            double maximum = AxRte.Maximum;
 
                                             // If we get here a maximum value could be read OK
                                             TL.LogMessage("TestSimulator", $"Got maximum rate OK: {AxRte.Maximum}");
@@ -10713,17 +10713,17 @@ namespace ASCOM.Utilities
                             }
                         }
 
-                        // Process the subkey if it is present
+                        // Process the sub-key if it is present
                         if (!(RKey == null))
                         {
                             ProcessSubKey(RKey, p_Depth + 1, Container);
+                            RKey.Close();
                         }
-                        else // Subkey cannot be opened so log message
+                        else // Sub-key cannot be opened so log message
                         {
                             TL.LogMessage("ProcessSubKey", $"Unable to open subkey {SubKey}, ignoring and continuing with next key.");
                         }
 
-                        RKey.Close();
                     }
                 }
                 catch (Exception ex)
