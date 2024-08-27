@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace PlatformUpdateChecker
 {
@@ -192,7 +193,7 @@ namespace PlatformUpdateChecker
         {
             string version = UpdateCheck.GetCurrentPlatformVersion();
             LogMessage("ReportVersion", $"The current Platform version is: {version}");
-            MessageBox.Show($"Currently installed Platform version: {version}","Platform Version");
+            MessageBox.Show($"Currently installed Platform version: {version}", "Platform Version");
 
             SemVersion semver = SemVersion.Parse(version, SemVersionStyles.Any);
             LogMessage("ReportVersion", $"SemVersion Major: {semver.Major}, Minor: {semver.Minor}, Patch: {semver.Patch}, IsPreRelease: {semver.IsPrerelease}, Prerelease: {semver.Prerelease}, Metadata: {semver.Metadata}");
@@ -284,9 +285,12 @@ namespace PlatformUpdateChecker
                             taskDefinition.Triggers.Add(weeklyTrigger);
                             LogMessage("CreateScheduledTask", $"Set trigger to repeat the job weekly starting on day {startDate}.");
 
+                            // Get the text name of the group for whom this task will run
+                            string userName = new SecurityIdentifier(WellKnownSidType.InteractiveSid, null).Translate(typeof(NTAccount)).Value;
+                            LogMessage("CreateScheduledTask", $"Registering the {UPDATE_TASK_NAME} task for user {userName}.");
+
                             // Implement the new task in the root folder either by updating the existing task or creating a new task
-                            LogMessage("CreateScheduledTask", $"Registering the {UPDATE_TASK_NAME} task.");
-                            service.RootFolder.RegisterTaskDefinition(UPDATE_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "USERS", null, TaskLogonType.Group);
+                            service.RootFolder.RegisterTaskDefinition(UPDATE_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, userName, null, TaskLogonType.Group);
                             LogMessage("CreateScheduledTask", string.Format("New task registered OK."));
                         }
                     }
