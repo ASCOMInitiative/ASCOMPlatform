@@ -269,7 +269,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>This is the correct property to use to determine successful completion of the (asynchronous) <see cref="FindHome"/> operation.</para>
+        /// <para>This is the correct property to use to determine successful completion of a <see cref="FindHome"/> operation.</para>
         /// This is only available for telescope InterfaceVersions 2 and later.
         /// </remarks>
         bool AtHome { get; }
@@ -1286,12 +1286,12 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <para>
-        /// This is an asynchronous method and <see cref="Slewing"/> must be set True while the mount is parking and False when the operation is complete. 
-        /// <see cref="AtPark"/> will be set True when the mount has parked successfully.
+        /// This is an asynchronous method and <see cref="Slewing"/> must be set True while the mount is unparking and False when the operation is complete. 
+        /// <see cref="AtPark"/> and <see cref="Slewing"/> will be set False when the mount has unparked successfully.
         /// </para>
         /// <para>
-        /// The state of <see cref="Tracking" /> after unparking is undetermined. Valid only after <see cref="Park" />. Applications must check and change Tracking as needed after unparking.
-        /// Raises an error if unparking fails. Calling this with <see cref="AtPark" /> = False does nothing (harmless)
+        /// The state of <see cref="Tracking" /> after unparking is undetermined. Applications must check and change Tracking as needed after unparking.
+        /// Raises an error if unparking fails. Calling this with <see cref="AtPark" /> = False does nothing (harmless).
         /// </para>
         /// </remarks>
         void Unpark();
