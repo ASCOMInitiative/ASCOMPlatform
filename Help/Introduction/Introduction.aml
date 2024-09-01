@@ -73,14 +73,23 @@
 			<title>Operating System Compatibility</title>
 			<content>
 				<para>
-					Platform 7 requires Windows 10 1809 (October 2018 Update) or later together with .NET Frameworks 3.5 and 4.8.
+					<legacyBold>Platform 7 requires Windows 10 1809 (October 2018 Update) or later</legacyBold> together with .NET Frameworks 3.5 and 4.8.
 				</para>
 				<para>
-					Platform 7 has been confirmed to run on Windows 7 SP1 but ASCOM support for this fifteen year old operating system is on a "best endeavours" basis. Microsoft ended Windows 7 support in 2020.
+					Platform 7 will not install on the following operating systems:
 				</para>
-				<para>
-					PCs running Windows XP should use Platform 6.4 Service Pack 1 together with .NET Framework 4 Client Profile instead.
-				</para>
+				<list class="bullet">
+					<listItem>
+						<para>
+							<legacyBold>Windows 7</legacyBold> - Windows 7 PCs should use Platform 6.6 Service Pack 2. Microsoft ended Windows 7 support in 2020.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							<legacyBold>Windows XP</legacyBold> - Windows XP PCs should use Platform 6.4 Service Pack 1 together with .NET Framework 3.5 and 4 Client Profile.
+						</para>
+					</listItem>
+				</list>
 			</content>
 		</section>
 
