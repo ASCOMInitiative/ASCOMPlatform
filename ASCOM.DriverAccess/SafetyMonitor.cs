@@ -69,12 +69,7 @@ namespace ASCOM.DriverAccess
 
         #region ISafetyMonitor Members
 
-        /// <summary>
-        /// Indicates whether the monitored state is safe for use.
-        /// </summary>
-        /// <value>True if the state is safe, False if it is unsafe.</value>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+        /// <inheritdoc/>
         public bool IsSafe
         {
             get { return (bool)_memberFactory.CallMember(1, "IsSafe", new Type[] { }, new object[] { }); }

@@ -405,7 +405,7 @@ Comment: Check that we are not running on an OS earlier than Windows 10 1809 Oct
 Get System Setting Windows 10 October 2018 Update into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Found a Windows version earlier than 10 1809 October 2018 Update, terminating installation. (at end of file)
-  MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires the operating system to be Windows 10 1809 (October 2018) and later.$NEWLINE$$NEWLINE$Please use Platform 6.6 on earlier operating systems.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+  MessageBox: $TITLE$ - OS Requirement, ASCOM Platform is not compatible with this operating system, it needs Windows 10 1809 (October 2018) or later to operate correctly.$NEWLINE$$NEWLINE$If this is a new installation, please install the latest ASCOM Platform 6 release instead.$NEWLINE$$NEWLINE$The installer will now close.
   Terminate Installation
 end
  

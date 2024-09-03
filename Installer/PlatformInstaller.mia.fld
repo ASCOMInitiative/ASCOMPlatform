@@ -1,5 +1,6 @@
 ﻿Main Setup Dialogue
 Start installation
+Install complete dialogue
 Check Application Pre-Requisites
 Set Registry Keys
 Remove 64bit components
@@ -18,4 +19,4 @@ Post install activities - 64bit only
 Post install activities - 32bit only
 Validate installation
 Post install activities - 32bit and 64bit
-Install complete dialogue
+Set up log file and variables

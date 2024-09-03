@@ -15,7 +15,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class Focuser : ReferenceCountedObjectBase, DeviceInterface.IFocuserV4, IDisposable
+    public class Focuser : ReferenceCountedObjectBase, IFocuserV4, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.Focuser;

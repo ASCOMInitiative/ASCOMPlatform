@@ -15,7 +15,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class Camera : ReferenceCountedObjectBase, DeviceInterface.ICameraV4, IDisposable
+    public class Camera : ReferenceCountedObjectBase, ICameraV4, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.Camera;

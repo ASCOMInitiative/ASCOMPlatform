@@ -263,14 +263,14 @@ namespace ASCOM.DeviceInterface
 
         /// <summary>
         /// True if the telescope is stopped in the Home position. Set only following a <see cref="FindHome"></see> operation,
-        /// and reset with any slew operation. This property must be False if the telescope does not support homing.
+        /// and reset with any slew operation. This property must be False if the telescope does not support homing. 
         /// </summary>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>This is the correct property to use to determine successful completion of a <see cref="FindHome"/> operation.</para>
-        /// This is only available for telescope InterfaceVersions 2 and later.
+        /// <p style="color:red"><b>Must be implemented, must not throw a NotImplementedException.</b></p>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-athome" target="_blank">Master Interface Document</a>.</para>
+        /// <pata>This is only available for telescope Interface Versions 2 and later.</pata>
         /// </remarks>
         bool AtHome { get; }
 
@@ -439,48 +439,54 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// True if this telescope is capable of programmed slewing (synchronous or asynchronous) to equatorial coordinates
         /// </summary>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
-        /// May raise an error if the telescope is not connected.
+        /// <p style="color:red"><b>Must be implemented, must not throw a NotImplementedException.</b></p>
+        /// May raise an error if the telescope is not connected. 
+        /// Synchronous methods are deprecated in this version (V4) of ITelescope and Clients should not use them. ASCOM COM Driver authors however must implement synchronous methods,
+        /// if the mount can slew, to ensure backward compatibility. <a href="https://ascom-standards.org/newdocs/scope-slew-faq.html#scope-slew-faq" target="_blank">Synchronous Slewing in the Telescope Interface</a> See .
         /// </remarks>
         bool CanSlew { get; }
 
         /// <summary>
         /// True if this telescope is capable of programmed slewing (synchronous or asynchronous) to local horizontal coordinates
         /// </summary>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <p style="color:red"><b>Must be implemented, must not throw a NotImplementedException.</b></p>
         /// May raise an error if the telescope is not connected. 
+        /// Synchronous methods are deprecated in this version (V4) of ITelescope and Clients should not use them. ASCOM COM Driver authors however must implement synchronous methods,
+        /// if the mount can slew, to ensure backward compatibility. <a href="https://ascom-standards.org/newdocs/scope-slew-faq.html#scope-slew-faq" target="_blank">Synchronous Slewing in the Telescope Interface</a> See .
         /// </remarks>
         bool CanSlewAltAz { get; }
 
         /// <summary>
         /// True if this telescope is capable of programmed asynchronous slewing to local horizontal coordinates
         /// </summary>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
-        /// May raise an error if the telescope is not connected.
+        /// <p style="color:red"><b>Must be implemented, must not throw a NotImplementedException.</b></p>
+        /// May raise an error if the telescope is not connected. 
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-canslewaltazasync" target="_blank">Master Interface Document</a>.</para>
+        /// <para>If the mount can slew, driver authors must implement asynchronous slewing.</para>
         /// </remarks>
         bool CanSlewAltAzAsync { get; }
 
         /// <summary>
         /// True if this telescope is capable of programmed asynchronous slewing to equatorial coordinates.
         /// </summary>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be 
+        /// accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <p style="color:red"><b>Must be implemented, must not throw a NotImplementedException.</b></p>
         /// May raise an error if the telescope is not connected.
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-canslewasync" target="_blank">Master Interface Document</a>.</para>
+        /// and will not be implemented at all by Alpaca devices.
+        /// If the mount can slew, driver authors must implement asynchronous slewing.
         /// </remarks>
         bool CanSlewAsync { get; }
 
@@ -625,17 +631,15 @@ namespace ASCOM.DeviceInterface
         EquatorialCoordinateType EquatorialSystem { get; }
 
         /// <summary>
-        /// Locates the telescope's "home" position (synchronous)
+        /// Locates the telescope's "home" position
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanFindHome" /> is False</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <para>This is an asynchronous method: Use the <see cref="Slewing"/> property to monitor the operation's progress. 
-        /// When the mount has successfully reached its home position, <see cref="Slewing"/> becomes False and <see cref="AtHome"/> becomes True.</para>
-        /// Raises an error if there is a problem.
-        /// Raises an error if AtPark is true.
-        /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
+        /// <para>This is an asynchronous method: Use the <see cref="Slewing"/> property to monitor the operation's progress. </para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-findhome" target="_blank">Master Interface Document</a>.</para>
+        /// <para>This is only available for telescope Interface Versions 2 and later.</para>
         /// </remarks>
         void FindHome();
 
@@ -748,42 +752,36 @@ namespace ASCOM.DeviceInterface
         /// Move the telescope to its park position, stop all motion (or restrict to a small safe range), and set <see cref="AtPark" /> to True.
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPark" /> is False</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <para>This is an asynchronous method: Use the <see cref="Slewing"/> property to monitor the operation's progress. 
-        /// When the mount has successfully reached its home position, <see cref="Slewing"/> becomes False and <see cref="AtPark"/> becomes True.</para>
-        /// Raises an error if there is a problem communicating with the telescope or if parking fails. Parking should put the telescope into a state where its pointing accuracy
-        /// will not be lost if it is power-cycled (without moving it).Some telescopes must be power-cycled before unparking. Others may be unparked by simply calling the <see cref="Unpark" /> method.
-        /// Calling this with <see cref="AtPark" /> = True does nothing (harmless)
+        /// <para>
+        /// This is an asynchronous method: Use the <see cref="Slewing"/> property to monitor the operation's progress. 
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-park" target="_blank">Master Interface Document</a>.</para>
+        /// </para>
         /// </remarks>
         void Park();
 
         /// <summary>
-        /// Moves the scope in the given direction for the given interval or time at
-        /// the rate given by the corresponding guide rate property
+        /// Moves the scope in the given direction for the given interval or time at 
+        /// the rate given by the corresponding guide rate property 
         /// </summary>
         /// <param name="Direction">The direction in which the guide-rate motion is to be made</param>
         /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
-        /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPulseGuide" /> is False</exception>
+        /// <exception cref="PropertyNotImplementedException">If the method is not implemented and <see cref="CanPulseGuide" /> is False</exception>
         /// <exception cref="InvalidValueException">If an invalid direction or duration is given.</exception>
-        /// <exception cref="InvalidOperationException">If the pulse guide cannot be effected e.g. if the telescope is slewing or is not tracking.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="InvalidOperationException">If the pulse guide cannot be effected e.g. if the telescope is slewing or is not tracking or a pulse guide is already in progress and a second cannot be started asynchronously.</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// This method is asynchronous and should return quickly using IsPulseGuiding as the completion property. 
-        /// If the hardware is not capable of simultaneous asynchronous north-south and east-west moves, the guide movements must be effected sequentially and <see cref="IsPulseGuiding"/> must remain 
-        /// True until both moves have completed.
         /// <para>
-        /// <b>NOTES:</b>
-        /// <list type="bullet">
-        /// <item><description>Raises an error if <see cref="AtPark" /> is true.</description></item>
-        /// <item><description>The <see cref="IsPulseGuiding" /> property must be True during pulse-guiding.</description></item>
-        /// <item><description>The PulseGuide method may throw an <see cref="InvalidValueException" /> if called when an incompatible command is already underway e.g. a slew is in progress.</description></item>
-        /// <item><description>The rate of motion for movements about the right ascension axis is specified by the <see cref="GuideRateRightAscension" /> property. The rate of motion
-        /// for movements about the declination axis is specified by the <see cref="GuideRateDeclination" /> property. These two rates may be tied together into a single rate, depending
-        /// on the driver's implementation and the capabilities of the telescope.</description></item>
-        /// </list>
+        /// This method is asynchronous and should return quickly using IsPulseGuiding as the completion property. 
+        /// </para>
+        /// <para>
+        /// If the device cannot have simultaneous PulseGuide operations in both RightAscension and Declination, it must throw InvalidOperationException when the overlapping operation is attempted.
+        /// </para>
+        /// <para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-pulseguide" target="_blank">Master Interface Document</a>.</para>
         /// </para>
         /// </remarks>
         void PulseGuide(GuideDirections Direction, int Duration);
@@ -849,77 +847,23 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
         /// <exception cref="InvalidValueException">If an invalid side of pier is set.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <para>SideofPier SET is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
-        /// <para><b>ASCOM CONVENTION</b></para>
-        /// <para>In order to support Dome slaving for German equatorial mounts, where it is important to know on which side of the pier the mount is physically located, ASCOM has adopted the
-        /// convention that the Normal pointing state (<see cref="PierSide.pierEast"></see>) pertains when the mount is on the East side of pier, counterweights below the optical assembly, 
-        /// observing a target in the West at hour angle +3.0 on the celestial equator. See below for history and further explanation.
+        /// <para>SideOfPier SET is an asynchronous method and <see cref="Slewing"/> should be set True while the operation is in progress.</para>
+        /// <para>Please note that "SideofPier" is a misnomer and that this method actually refers to the mount's pointing state. For German Equatorial mounts there is a complex
+        /// relationship between pointing state and the physical side of the pier on which the mount resides.</para>
+        /// <para>
+        /// For example, suppose the mount is tracking on the east side of the pier, counterweights down, 
+        /// observing a target on the celestial equator at hour angle +3.0.Now suppose that the observer
+        /// wishes to observe a new target at hour angle -9.0. All the mount needs to do is to rotate the declination axis, 
+        /// through the celestial pole where the hour angle will change from +3.0 to -9.0, and keep going until it gets
+        /// to the required declination at hour angle -9.0. Other than tracking, the right ascension  axis has not moved.
         /// </para>
-        /// <para><b>Context</b></para>
-        /// <para>For historical reasons, this property's name does not reflect its true meaning. The name will not be changed (so as to preserve
-        /// compatibility), but the meaning has since become clear. All conventional mounts have two pointing states for a given equatorial (sky) position.
-        /// Mechanical limitations often make it impossible for the mount to position the optics at given HA/Dec in one of the two pointing
-        /// states, but there are places where the same point can be reached sensibly in both pointing states (e.g. near the pole and
-        /// close to the meridian). In order to understand these pointing states, consider the following (thanks to Patrick Wallace for this info):</para>
-        /// <para>All conventional telescope mounts have two axes nominally at right angles. For an equatorial, the longitude axis is mechanical
-        /// hour angle and the latitude axis is mechanical declination. Sky coordinates and mechanical coordinates are two completely separate arenas.
-        /// This becomes rather more obvious if your mount is alt/az aligned, but it's still true for an equatorial. Both mount axes can in principle
-        /// move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90).  Apart from
-        /// practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis
-        /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky co-declination (90 - sky declination).
-        /// Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian.</para>
-        /// <para>Move your scope to this position and consider the two mechanical encoders zeroed. The two pointing states are, then:
-        /// <list type="table">
-        /// <item><term><b>Normal (<see cref="PierSide.pierEast"></see>)</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
-        /// <item><term><b>Beyond the pole (<see cref="PierSide.pierWest"></see>)</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
-        /// </list>
+        /// <para>
+        /// In this example the mount is still physically on the east side of the pier but the pointing state
+        /// will have changed when the declination axis moved through the celestial pole.
         /// </para>
-        /// <para>Physical "Side of pier" is a "consequence" of the former definition, not something fundamental.
-        /// Apart from mechanical interference, the telescope can move from one side of the pier to the other without the mechanical Dec
-        /// having changed: you could track Polaris forever with the telescope moving from west of pier to east of pier or vice versa every 12h.
-        /// Thus, "side of pier" is, in general, not a useful term (except perhaps in a loose, descriptive, explanatory sense).
-        /// All this applies to a fork mount just as much as to a GEM, and it would be wrong to make the "beyond pole" state illegal for the
-        /// former. Your mount may not be able to get there if your camera hits the fork, but it's possible on some mounts. Whether this is useful
-        /// depends on whether you're in Hawaii or Finland.</para>
-        /// <para>To first order, the relationship between sky and mechanical HA/Dec is as follows:</para>
-        /// <para><b>Normal state:</b>
-        /// <list type="bullet">
-        /// <item><description>HA_sky  = HA_mech</description></item>
-        /// <item><description>Dec_sky = Dec_mech</description></item>
-        /// </list>
-        /// </para>
-        /// <para><b>Beyond the pole</b>
-        /// <list type="bullet">
-        /// <item><description>HA_sky  = HA_mech + 12h, expressed in range ± 12h</description></item>
-        /// <item><description>Dec_sky = 180d - Dec_mech, expressed in range ± 90d</description></item>
-        /// </list>
-        /// </para>
-        /// <para>Astronomy software often needs to know which pointing state the mount is in. Examples include setting guiding polarities
-        /// and calculating dome opening azimuth/altitude. The meaning of the SideOfPier property, then is:
-        /// <list type="table">
-        /// <item><term><b>pierEast</b></term><description>Normal pointing state</description></item>
-        /// <item><term><b>pierWest</b></term><description>Beyond the pole pointing state</description></item>
-        /// </list>
-        /// </para>
-        /// <para>If the mount hardware reports neither the true pointing state (or equivalent) nor the mechanical declination axis position
-        /// (which varies from -180 to +180), a driver cannot calculate the pointing state, and *must not* implement SideOfPier.
-        /// If the mount hardware reports only the mechanical declination axis position (-180 to +180) then a driver can calculate SideOfPier as follows:
-        /// <list type="bullet">
-        /// <item><description>pierEast = abs(mechanical Dec) &lt;= 90 deg</description></item>
-        /// <item><description>pierWest = abs(mechanical Dec) &gt; 90 deg</description></item>
-        /// </list>
-        /// </para>
-        /// <para>It is allowed (though not required) that this property may be written to force the mount to flip. Doing so, however, may change
-        /// the right ascension of the telescope. During flipping, Telescope.Slewing must return True.</para>
-        /// <para>This property is only available in telescope InterfaceVersions 2 and later..</para>
-        /// <para><b>Pointing State and Side of Pier - Help for Driver Developers</b></para>
-        /// <para>A further document, "Pointing State and Side of Pier", is installed in the Developer Documentation folder by the ASCOM Developer
-        /// Components installer. This further explains the pointing state concept and includes diagrams illustrating how it relates
-        /// to physical side of pier for German equatorial telescopes. It also includes details of the tests performed by Conform to determine whether
-        /// the driver correctly reports the pointing state as defined above.</para>
         /// </remarks>
         PierSide SideOfPier { get; set; }
 
@@ -1016,97 +960,62 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAltAz" /> is False</exception>
         /// <exception cref="InvalidValueException">If an invalid azimuth or elevation is given.</exception>
-        /// <exception cref="ParkedException">If the telescope is parked</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Deprecated for client applications.</b></p>
-        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToAltAzAsync(double, double)"/> method instead.
-        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.</para>
-        /// <para>
-        /// This Method must be implemented if <see cref="CanSlewAltAz" /> returns True. Raises an error if the slew fails. The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-        /// Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
-        /// </para>
-        /// <para>The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method.
-        /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True. This is only available for telescope InterfaceVersions 2 and later.</para>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
-        /// </remarks>
+		/// <exception cref="ParkedException">If the telescope is parked</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
-        void SlewToAltAz(double Azimuth, double Altitude);
+        /// <remarks>
+        /// <p style="color:red"><b>Deprecated for client applications.</b></p>
+        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToAltAzAsync(double, double)"/> method instead.</para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtoaltaz" target="_blank">Master Interface Document</a>.</para>
+        /// </remarks>
+         void SlewToAltAz(double Azimuth, double Altitude);
 
         /// <summary>
         /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
-        /// It returns immediately, with Slewing set to True
         /// </summary>
         /// <param name="Azimuth">Azimuth to which to move</param>
         /// <param name="Altitude">Altitude to which to move to</param>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAltAzAsync" /> is False</exception>
         /// <exception cref="InvalidValueException">If an invalid azimuth or elevation is given.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="ParkedException">If the telescope is parked</exception>
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// This method should only be implemented if the properties <see cref="Altitude" />, <see cref="Azimuth" />,
-        /// <see cref="RightAscension" />, <see cref="Declination" /> and <see cref="Slewing" /> can be read while the scope is slewing. Raises an error if starting the slew fails. Returns immediately after starting the slew.
-        /// The client may monitor the progress of the slew by reading the <see cref="Azimuth" />, <see cref="Altitude" />, and <see cref="Slewing" /> properties during the slew. When the slew completes, Slewing becomes False.
-        /// The slew may fail if the target coordinates are beyond limits imposed within the driver component. Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
-        /// The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method.
-        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
-        /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtoaltazasync" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
         void SlewToAltAzAsync(double Azimuth, double Altitude);
 
         /// <summary>
         /// Move the telescope to the given equatorial coordinates, return when slew is complete
-        /// It does not return to the caller until the slew is complete.
         /// </summary>
+        /// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
         /// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
         /// <exception cref="ParkedException">If the telescope is parked</exception>
-        /// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Deprecated for client applications.</b></p>
-        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToCoordinates(double, double)"/> method instead.
-        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.
-        /// </para>
-        /// <para>
-        /// This Method must be implemented if <see cref="CanSlew" /> returns True. Raises an error if the slew fails.
-        /// The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-        /// Such limits include mechanical constraints imposed by the mount or attached instruments,
-        /// building or dome enclosure restrictions, etc. The target coordinates are copied to
-        /// <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> whether or not the slew succeeds.
-        /// </para>
-        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToCoordinates(double, double)"/> method instead.</para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtocoordinates" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
         void SlewToCoordinates(double RightAscension, double Declination);
 
         /// <summary>
-        /// Move the telescope to the given equatorial coordinates and return with Slewing set to True immediately after starting the slew.
+        /// Move the telescope to the given equatorial coordinates, return immediately after starting the slew.
         /// </summary>
         /// <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
         /// <exception cref="ParkedException">If the telescope is parked</exception>
         /// <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <para>This method must be implemented if <see cref="CanSlewAsync" /> returns True.Raises an error if starting the slew failed.</para>
-        /// <para>Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
-        /// the <see cref="RightAscension" />, <see cref="Declination" />, and <see cref="Slewing" /> properties during the slew. When the slew completes,
-        /// <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits
-        /// imposed within the driver component. Such limits include mechanical constraints imposed
-        /// by the mount or attached instruments, building or dome enclosure restrictions, etc.
-        /// </para>
-        /// <para>The target coordinates are copied to <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />
-        /// whether or not the slew succeeds.
-        /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtocoordinatesasync" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
         void SlewToCoordinatesAsync(double RightAscension, double Declination);
 
@@ -1115,58 +1024,40 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
         /// <exception cref="ParkedException">If the telescope is parked</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Deprecated for client applications.</b></p>
-        /// <para>
-        /// This method must not be used by applications, use the asynchronous <see cref="SlewToTargetAsync"/> method instead.
-        /// If the mount is capable of slewing, drivers must implement this method to ensure backward compatibility with older clients.
-        /// </para>
-        /// <para>This Method must be implemented if <see cref="CanSlew" /> returns True.</para>
-        /// <para>
-        /// Raises an error if the slew fails. The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-        /// Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
-        /// </para>
-        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToTargetAsync"/> method instead.</para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtotarget" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
         void SlewToTarget();
 
         /// <summary>
         /// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
-        /// returns immediately after starting the slew with Slewing set to True.
+        /// returns immediately after starting the slew.
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
         /// <exception cref="ParkedException">If the telescope is parked</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
-        /// <para>
-        /// <para>This Method must be implemented if <see cref="CanSlewAsync" /> returns True.</para>
-        /// Raises an error if starting the slew failed. Returns immediately after starting the slew. The client may monitor the progress of the slew by reading the RightAscension, Declination,
-        /// and Slewing properties during the slew. When the slew completes,  <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits imposed within
-        /// the driver component. Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
-        /// Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.
-        /// </para>
-        /// <para>See <conceptualLink target="c37349a5-a535-47d6-8c30-11c620932213"/> for important COM and Alpaca implementation requirements.</para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtotargetasync" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
-        void SlewToTargetAsync();
-
-        /// <summary>
-        /// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
-        /// </summary>
-        /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
-        /// <param name="Altitude">Target altitude (degrees, positive up)</param>
-        /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSyncAltAz" /> is False</exception>
-        /// <exception cref="InvalidValueException">If an invalid azimuth or altitude is given.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <para>This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails.</para>
-        /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
-        /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
-        /// </remarks>
+        void SlewToTargetAsync();        /// <summary>
+                                             /// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
+                                             /// </summary>
+                                             /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
+                                             /// <param name="Altitude">Target altitude (degrees, positive up)</param>
+                                             /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSyncAltAz" /> is False</exception>
+                                             /// <exception cref="InvalidValueException">If an invalid azimuth or altitude is given.</exception>
+                                             /// <exception cref="NotConnectedException">If the device is not connected</exception>
+                                             /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+                                             /// <remarks>
+                                             /// <para>This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails.</para>
+                                             /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
+                                             /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
+                                             /// </remarks>
         void SyncToAltAz(double Azimuth, double Altitude);
 
         /// <summary>
@@ -1282,17 +1173,14 @@ namespace ASCOM.DeviceInterface
         /// Takes telescope out of the Parked state.
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanUnpark" /> is False</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
         /// <para>
         /// This is an asynchronous method and <see cref="Slewing"/> must be set True while the mount is unparking and False when the operation is complete. 
         /// <see cref="AtPark"/> and <see cref="Slewing"/> will be set False when the mount has unparked successfully.
         /// </para>
-        /// <para>
-        /// The state of <see cref="Tracking" /> after unparking is undetermined. Applications must check and change Tracking as needed after unparking.
-        /// Raises an error if unparking fails. Calling this with <see cref="AtPark" /> = False does nothing (harmless).
-        /// </para>
+        /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-unpark" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
         void Unpark();
 

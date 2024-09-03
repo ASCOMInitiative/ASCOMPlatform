@@ -392,46 +392,20 @@ if Variable CHECKSYSTEM not Equals TRUE
   Terminate Installation
 end
  
-Comment: .NET Framework 4.8 - Check that SP1 is installed if we are running on Windows 7
-Get Exact OS Level into CHECKSYSTEM
-if Variable CHECKSYSTEM Equals SEVEN
-  Comment: We are running on Windows 7 so test for service pack 1
-  Get Exact SP Level into CHECKSYSTEM
-  if Variable CHECKSYSTEM not Greater Than 0
-    Comment: We are running on Windows 7 without service pack 1 so cannot proceed because Framework 4.8 is only supported on Win 7 SP1
-    Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 7 without SP1, terminating installation (at end of file)
-    MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please install Windows 7 Service Pack 1 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-    Terminate Installation
-  end
-end
- 
 Comment: .NET Framework 4.8 - Check that we are on 8.1 if we are running Windows 8
-Get Exact OS Level into CHECKSYSTEM
-if Variable CHECKSYSTEM Equals METRO
-  Comment: We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
-  Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 8.0, terminating installation (at end of file)
-  MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-  Terminate Installation
-end
+Comment: Get Exact OS Level into CHECKSYSTEM
+Comment: if Variable CHECKSYSTEM Equals METRO
+Comment: Comment: We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 8.0, terminating installation (at end of file)
+Comment: MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+Comment: Terminate Installation
+Comment: end
  
-Comment: .NET Framework 4.8 - Check that we are on at least Restone (Anniversary Update) if we are running Windows 10
-Get System Setting Windows 10 into CHECKSYSTEM
-if Variable CHECKSYSTEM Equals TRUE
-  Comment: We are running on Windows 10 so make sure that we are at least on Redstone
-  Get System Setting Windows 10 Redstone into CHECKSYSTEM
-  if Variable CHECKSYSTEM not Equals TRUE
-    Comment: We are running on Windows 10 with a Threshold version so cannot proceed because Framework 4.8 is only supported on Win 8.1
-    Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 10 Threshold, terminating installation (at end of file)
-    MessageBox: $TITLE$ Setup issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 10 Anniversary Edition (version 1607) or later if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-    Terminate Installation
-  end
-end
- 
-Comment: Check that we are not below Windows 7 i.e. on XP
-Get System Setting Windows 7 into CHECKSYSTEM
+Comment: Check that we are not running on an OS earlier than Windows 10 1809 October 2018 Update
+Get System Setting Windows 10 October 2018 Update into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
-  Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows earlier than 7, terminating installation (at end of file)
-  MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to a supported Windows version if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found a Windows version earlier than 10 1809 October 2018 Update, terminating installation. (at end of file)
+  MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires the operating system to be Windows 10 1809 (October 2018) and later.$NEWLINE$$NEWLINE$Please use Platform 6.6 on earlier operating systems.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
   Terminate Installation
 end
  

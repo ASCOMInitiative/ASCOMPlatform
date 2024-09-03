@@ -15,7 +15,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class ObservingConditions : ReferenceCountedObjectBase, DeviceInterface.IObservingConditionsV2, IDisposable
+    public class ObservingConditions : ReferenceCountedObjectBase, IObservingConditionsV2, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.ObservingConditions;

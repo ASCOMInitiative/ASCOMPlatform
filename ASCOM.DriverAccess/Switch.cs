@@ -79,207 +79,70 @@ namespace ASCOM.DriverAccess
 
         #region ISwitchV2 members
 
-        /// <summary>
-        /// Return the number of switch devices managed by this driver
-        /// </summary>
-        /// <returns>The number of devices managed by this driver.</returns>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an <see cref="T:ASCOM.PropertyNotImplementedException"/></b></p>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+        /// <inheritdoc/>
         public short MaxSwitch
         {
             get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxSwitch", new Type[] { }, new object[] { })); }
         }
 
-        /// <summary>
-        /// Return the name of switch device n. This method is mandatory.
-        /// </summary>
-        /// <param name="id">The device number to return</param>
-        /// <returns>
-        /// The name of the device
-        /// </returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+        /// <inheritdoc/>
         public string GetSwitchName(short id)
         {
             return (string)memberFactory.CallMember(3, "GetSwitchName", new Type[] { typeof(short) }, new object[] { id });
         }
 
-        /// <summary>
-        /// Sets a switch device name to a specified value.  If the device name cannot
-        /// be set by the application this must return the <see cref="T:ASCOM.MethodNotImplementedException"/> .
-        /// </summary>
-        /// <param name="id">The number of the device whose name is to be set</param>
-        /// <param name="name">The name of the device</param>
-        /// <exception cref="MethodNotImplementedException">If the device name cannot be set in the application code.</exception>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
+        /// <inheritdoc/>
         public void SetSwitchName(short id, string name)
         {
             memberFactory.CallMember(3, "SetSwitchName", new Type[] { typeof(short), typeof(string) }, new object[] { id, name });
         }
 
-        /// <summary>
-        /// Gets the description of the specified switch device. This is to allow a fuller description of
-        /// the device to be returned, for example for a tool tip.
-        /// </summary>
-        /// <param name="id">The number of the device whose description is to be returned</param>
-        /// <returns>
-        ///   String giving the device description.
-        /// </returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public string GetSwitchDescription(short id)
         {
             return (string)memberFactory.CallMember(3, "GetSwitchDescription", new Type[] { typeof(short) }, new object[] { id });
         }
 
-        /// <summary>
-        /// Reports if the specified switch device can be written to, default true.
-        /// This is false if the device cannot be written to, for example a limit switch or a sensor.
-        /// </summary>
-        /// <param name="id">The number of the device whose write state is to be returned</param>
-        /// <returns>
-        ///   <c>true</c> if the device can be written to, otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException" >An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public bool CanWrite(short id)
         {
             return (bool)memberFactory.CallMember(3, "CanWrite", new Type[] { typeof(short) }, new object[] { id });
         }
 
-        /// <summary>
-        /// Return the state of switch device id as a boolean.
-        /// </summary>
-        /// <param name="id">The switch number to return</param>
-        /// <returns>
-        /// True or false
-        /// </returns>
-        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="T:ASCOM.InvalidOperationException">If the state cannot be read. This is not recommended but it is not always possible to read
-        /// the state from some hardware. Once the state has been set the last state set must be returned.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minimum
-        /// and either true or false as specified by the driver developer for intermediate values.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public bool GetSwitch(short id)
         {
             return (bool)memberFactory.CallMember(3, "GetSwitch", new Type[] { typeof(short) }, new object[] { id });
         }
 
-        /// <summary>
-        /// Sets a switch controller device to the specified state
-        /// If the device cannot be set then throws a <see cref="T:ASCOM.MethodNotImplementedException"/>.
-        /// </summary>
-        /// <param name="id">The number of the device to set</param>
-        /// <param name="state">The required device state</param>
-        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the device cannot be written to (<see cref="CanWrite"/> is false).</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <para>The <see cref="GetSwitchValue"/> will be set to <see cref="MaxSwitchValue" /> if state is true and to <see cref="MinSwitchValue" /> if the state is False.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public void SetSwitch(short id, bool state)
         {
             memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(short), typeof(bool) }, new object[] { id, state });
         }
 
-        /// <summary>
-        /// Returns the maximum value for this switch device, this must be greater than <see cref="MinSwitchValue"/>.
-        /// </summary>
-        /// <param name="id">The device whose value must be returned</param>
-        /// <returns>
-        /// The maximum value to which this device can be set or a read only sensor will return.
-        /// </returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <para>Two state devices should return 1.0 as their maximum value.</para>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public double MaxSwitchValue(short id)
         {
             try { return (double)memberFactory.CallMember(3, "MaxSwitchValue", new Type[] { typeof(short) }, new object[] { id }); }
             catch (System.NotImplementedException) { return 1.0; }
         }
 
-        /// <summary>
-        /// Returns the minimum value for this switch device, this must be less than <see cref="MaxSwitchValue"/>.
-        /// </summary>
-        /// <param name="id">The device whose value must be returned</param>
-        /// <returns>
-        /// The minimum value to which this device can be set or a read only sensor will return.
-        /// </returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <para>Two state devices must return 0.0 as their minimum value.</para>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public double MinSwitchValue(short id)
         {
             try { return (double)memberFactory.CallMember(3, "MinSwitchValue", new Type[] { typeof(short) }, new object[] { id }); }
             catch (System.NotImplementedException) { return 0.0; }
         }
 
-        /// <summary>
-        /// Returns the step size that this device supports. This gives the difference between
-        /// successive values of the device.
-        /// </summary>
-        /// <param name="id">The device number whose value should be returned</param>
-        /// <returns>
-        /// The step size for this device.
-        /// </returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <para><see cref="SwitchStep"/> must be greater than zero, two state devices must return 1.0.</para>
-        /// <para>The number of states is determined from (<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/> ) / <see cref="SwitchStep"/> + 1,
-        /// this must be an integer, value 2 for a boolean device and more than 2 for a multi-state device.</para>
-        /// <para>SwitchStep, MinSwitchValue and MaxSwitchValue can be used to determine the way the device is controlled and/or displayed,
-        /// for example by setting the number of decimal places or number of states for a display.</para>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public double SwitchStep(short id)
         {
             try { return (double)memberFactory.CallMember(3, "SwitchStep", new Type[] { typeof(short) }, new object[] { id }); }
             catch (System.NotImplementedException) { return 1.0; }
         }
 
-        /// <summary>
-        /// Returns the value for switch device id as a double.
-        /// </summary>
-        /// <param name="id">The device number whose value must be returned</param>
-        /// <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
-        /// <see cref="MaxSwitchValue"/>.</returns>
-        /// <exception cref="InvalidOperationException">If the value cannot be read. This is not recommended but it is not always possible to read
-        /// the value from some hardware. Once the value has been set the last value set must be returned.</exception>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public double GetSwitchValue(short id)
         {
             try
@@ -289,23 +152,7 @@ namespace ASCOM.DriverAccess
             catch (System.NotImplementedException) { return this.GetSwitch(id) ? 1.0 : 0.0; }
         }
 
-        /// <summary>
-        /// Set the value for this device as a double.
-        /// If the switch cannot be set then throws a <see cref="MethodNotImplementedException"/>.
-        /// If the value is not between the <see cref="MaxSwitchValue"/> and <see cref="MinSwitchValue"/> then throws an
-        /// <see cref="InvalidValueException"/>.
-        /// </summary>
-        /// <param name="id">The switch number whose value must be set</param>
-        /// <param name="value">Value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
-        /// <exception cref="InvalidValueException">If the value is not between the maximum and minimum.</exception>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="MethodNotImplementedException">If the method is not implemented, if <see cref="CanWrite"/> is false.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception>
-        /// <remarks>
-        /// <para>A value that is intermediate between the values specified by <see cref="SwitchStep"/> must be set to an achievable value.</para>
-        /// <para>This method was first introduced in Version 2.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public void SetSwitchValue(short id, double value)
         {
             try
@@ -323,25 +170,7 @@ namespace ASCOM.DriverAccess
 
         #region ISwitchV3 members
 
-        /// <summary>
-        /// Set a boolean switch's state asynchronously
-        /// </summary>
-        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
-        /// <param name="id">Switch number.</param>
-        /// <param name="state">New boolean state.</param>
-        /// <remarks>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
-        /// <para>
-        /// This is an asynchronous method that must return as soon as the state change operation has been successfully started, with
-        /// <see cref="StateChangeComplete(short)"/> for the given switch Id = False. After the state change has completed <see cref="StateChangeComplete(short)"/> becomes True.
-        /// </para>
-        /// <para>
-        /// <see cref="GetSwitchValue"/> must return <see cref="MaxSwitchValue" /> if the set state is true and <see cref="MinSwitchValue" /> if the set state is false.
-        /// </para>
-        /// <para>
-        /// Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1
-        /// </para>
-        /// </remarks>
+        /// <inheritdoc/>
         public void SetAsync(short id, bool state)
         {
             // Call the device's SetAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -356,22 +185,7 @@ namespace ASCOM.DriverAccess
             throw new MethodNotImplementedException($"DriverAccess.Switch - SetAsync is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
-        /// <summary>
-        /// Set a switch's value asynchronously
-        /// </summary>
-        /// <param name="id">Switch number.</param>
-        /// <param name="value">New double value.</param>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
-        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
-        /// <para>This is an asynchronous method that must return as soon as the state change operation has been successfully started, with
-        /// <see cref="StateChangeComplete(short)"/> for the given switch Id = False. After the state change has completed <see cref="StateChangeComplete(short)"/> becomes True.</para>
-        /// <para>If the value is more than <see cref="MaxSwitchValue"/> or less than <see cref="MinSwitchValue"/> the method must throw an <see cref="ASCOM.InvalidValueException"/>.</para>
-        /// <para>A set value that is intermediate between the values specified by <see cref="SwitchStep"/> must result in the device being set to an achievable value close to the requested set value.</para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <inheritdoc/>
         public void SetAsyncValue(short id, double value)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -386,15 +200,7 @@ namespace ASCOM.DriverAccess
             throw new MethodNotImplementedException($"DriverAccess - SetAsyncValue is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
-        /// <summary>
-        /// Flag indicating whether this switch can operate asynchronously.
-        /// </summary>
-        /// <param name="id">Switch number.</param>
-        /// <returns>True if the switch can operate asynchronously.</returns>
-        /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
-		/// <remarks>
-        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
-		/// </remarks>
+        /// <inheritdoc/>
         public bool CanAsync(short id)
         {
             // Call the device's SetAsyncValue method if this is a Platform 7 or later device, otherwise return false to indicate no async capability.
@@ -408,15 +214,7 @@ namespace ASCOM.DriverAccess
             return false;
         }
 
-        /// <summary>
-        /// Completion variable for asynchronous switch state change operations.
-        /// </summary>
-        /// <param name="id">Switch number.</param>
-        /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
-        /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
-		/// <remarks>
-        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
-		/// </remarks>
+        /// <inheritdoc/>
         public bool StateChangeComplete(short id)
         {
             // Call the device's StateChangeComplete method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.
@@ -430,14 +228,7 @@ namespace ASCOM.DriverAccess
             throw new MethodNotImplementedException($"DriverAccess - StateChangeComplete is not supported by this device because it exposes interface ISwitchV{DriverInterfaceVersion}.");
         }
 
-        /// <summary>
-        /// Cancels an in-progress asynchronous state change operation.
-        /// </summary>
-        /// <param name="id">Switch number.</param>
-        /// <remarks>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/>.</b></p>
-		/// This method must be implemented if it is possible for the device to cancel an asynchronous state change operation, otherwise it must throw a <see cref="MethodNotImplementedException"/>.
-        /// </remarks>
+        /// <inheritdoc/>
         public void CancelAsync(short id)
         {
             // Call the device's CancelAsync method if this is a Platform 7 or later device, otherwise throw a MethodNotImplementedException.

@@ -116,392 +116,146 @@ namespace ASCOM.DriverAccess
 
         #region IDome Members
 
-        /// <summary>Immediately stops any and all movement.</summary>
-        /// <exception cref="NotConnectedException">If the device is not connected.</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a MethodNotImplementedException.</b>
-        /// </p>
-        /// Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will
-        /// become <see langword="false" />). Raises an error if a communications failure occurs, or if the
-        /// command is known to have failed.
-        /// </remarks>
+        /// <inheritdoc/>
         public void AbortSlew()
         {
             memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
         }
 
-		/// <summary>
-		/// The altitude (degrees, horizon zero and increasing positive to 90 zenith) of the part of the sky that the observer wishes to observe.
-		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <para>
-		/// The specified altitude is the position on the sky that the observer wishes to observe. It is up to the driver to determine how best to locate the dome aperture in order to expose that part of the sky to the telescope.
-		/// This means that the mechanical position to which the Dome moves may not correspond exactly to requested observing altitude because the driver must coordinate
-		/// multiple shutters, clamshell segments or roof mechanisms to provide the required aperture on the sky.
-		/// </para>
-		/// <para>
-		/// Raises an error only if no altitude control. If actual dome altitude can not be read, then reports back the altitude of the last slew position.
-		/// </para>
-		/// </remarks>
+        /// <inheritdoc/>
 		public double Altitude
         {
             get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		/// <para><see langword="true" /> when the dome is in the home position. Raises an error if not supported.</para>
-		/// <para>
-		/// This is normally used following a <see cref="FindHome" /> operation. The value is reset
-		/// with any azimuth slew operation that moves the dome away from the home position.
-		/// </para>
-		/// <para>
-		/// <see cref="AtHome" /> may optionally also become true during normal slew operations, if the
-		/// dome passes through the home position and the dome controller hardware is capable of
-		/// detecting that; or at the end of a slew operation if the dome comes to rest at the home
-		/// position.
-		/// </para>
-		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <para>
-		/// The home position is normally defined by a hardware sensor positioned around the dome circumference and represents a fixed, known azimuth reference.
-		/// </para>
-		/// <para>
-		/// Applications should not rely on the reported azimuth position being identical each time <see cref="AtHome" /> is set <see langword="true" />.
-		/// For some devices, the home position may encompass a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the home position sensor
-		/// and/or the azimuth encoder may be insufficient to return the exact same azimuth value on each occasion. On the other hand some dome controllers always force the azimuth
-		/// reading to a fixed value whenever the home position sensor is active.
-		/// </para>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool AtHome
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary><see langword="true" /> if the dome is in the programmed park position.</summary>
-		/// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <para>
-		/// Set only following a <see cref="Park" /> operation and reset with any slew operation. Raises an error if not supported.
-		/// </para>
-		/// <para>
-		/// Applications should not rely on the reported azimuth position being identical each time <see cref="AtPark" /> is set <see langword="true" />.
-		/// For some devices, the park position may encompass a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the park position sensor
-		/// and/or the azimuth encoder may be insufficient to return the exact same azimuth value on each occasion. On the other hand some dome controllers always force the azimuth
-		/// reading to a fixed value whenever the park position sensor is active.
-		/// </para>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool AtPark
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		/// The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West). North is true north and not magnetic north.
-		/// </summary>
-		/// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <para>
-		/// The specified azimuth is the position on the sky that the observer wishes to observe. It is up to the driver to determine how best to locate the dome in order to expose that part of the sky to the telescope.
-		/// This means that the mechanical position to which the Dome moves may not correspond exactly to requested observing azimuth because the driver must coordinate
-		/// multiple shutters, clamshell segments or roof mechanisms to provide the required aperture on the sky.
-		/// </para>
-		/// <para>
-		/// Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back the azimuth of the last slew position.
-		/// </para>
-		/// <para>
-		/// The supplied azimuth value is the final azimuth for the dome, not the telescope azimuth. ASCOM Dome drivers do not perform slaving calculations i.e. they do not take account of mount geometry and simply 
-		/// move where they are instructed. Any such slaving calculations must be done by the application.
-		/// </para>
-		/// </remarks>
+        /// <inheritdoc/>
 		public double Azimuth
         {
             get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary><see langword="true" /> if driver can perform a search for home position.</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanFindHome
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary><see langword="true" /> if the driver is capable of parking the dome.</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanPark
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary><see langword="true" /> if driver is capable of setting dome altitude.</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanSetAltitude
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetAltitude", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		/// <see langword="true" /> if driver is capable of rotating the dome (or controlling the roof
-		/// mechanism) in order to observe at a given azimuth.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// <para>
-		/// This property typically returns <see langword="true" /> for rotating structures and <see langword="false" /> for non-rotating structures.
-		/// </para>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanSetAzimuth
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetAzimuth", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary><see langword="true" /> if the driver can set the dome park position.</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanSetPark
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		/// <see langword="true" /> if the driver is capable of opening and closing the shutter or roof
-		/// mechanism.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanSetShutter
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetShutter", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary><see langword="true" /> if the dome hardware supports slaving to a telescope.</summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// <para>
-		/// See the notes for the <see cref="Slaved" /> property. This should only be <see langword="true" /> if the dome hardware has its own built-in slaving mechanism. 
-		/// It is not permitted for a dome driver to query a telescope driver directly.
-		/// </para>
-		/// </remarks>
-		/// <seealso cref="Slaved" />
+        /// <inheritdoc/>
 		public bool CanSlave
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSlave", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>
-		/// <see langword="true" /> if the driver is capable of synchronizing the dome azimuth position
-		/// using the <see cref="SyncToAzimuth" /> method.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red">
-		/// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool CanSyncAzimuth
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSyncAzimuth", new Type[] { }, new object[] { })); }
         }
 
-		/// <summary>Close the shutter or otherwise shield the telescope from the sky.</summary>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <inheritdoc/>
 		public void CloseShutter()
         {
             memberFactory.CallMember(3, "CloseShutter", new Type[] { }, new object[] { });
         }
 
-		/// <summary>Start operation to search for the dome home position.</summary>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="SlavedException">If slaving is enabled.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// The method should not block and the homing operation should complete asynchronously. After the
-		/// home position is established, <see cref="Azimuth" /> is synchronized to the appropriate value
-		/// and the <see cref="AtHome" /> property becomes <see langword="true" />.
-		/// </remarks>
+        /// <inheritdoc/>
 		public void FindHome()
         {
             memberFactory.CallMember(3, "FindHome", new Type[] { }, new object[] { });
         }
 
-		/// <summary>Open shutter or otherwise expose telescope to the sky.</summary>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>Raises an error if not supported or if a communications failure occurs.</remarks>
+        /// <inheritdoc/>
 		public void OpenShutter()
         {
             memberFactory.CallMember(3, "OpenShutter", new Type[] { }, new object[] { });
         }
 
-		/// <summary>Rotate dome in azimuth to park position.</summary>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// After assuming the programmed park position, sets the <see cref="AtPark" /> flag. Raises an error if <see cref="Slaved" /> is <see langword="true" />, if not supported 
-		/// or if a communications failure occurred.
-		/// </remarks>
+        /// <inheritdoc/>
 		public void Park()
         {
             memberFactory.CallMember(3, "Park", new Type[] { }, new object[] { });
         }
 
-		/// <summary>Set the current azimuth position of dome to the park position.</summary>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
+        /// <inheritdoc/>
 		public void SetPark()
         {
             memberFactory.CallMember(3, "SetPark", new Type[] { }, new object[] { });
         }
 
-		/// <summary>Gets the status of the dome shutter or roof structure.</summary>
-		/// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// Raises an error only if no shutter control. If actual shutter status can not be read, then
-		/// reports back the last shutter state.
-		/// </remarks>
+        /// <inheritdoc/>
 		public ShutterState ShutterStatus
         {
             get { return (ShutterState)memberFactory.CallMember(1, "ShutterStatus", new Type[] { }, new object[] { }); }
         }
 
-		/// <summary><see langword="true"/> if the dome is slaved to the telescope in its hardware, else <see langword="false"/>.</summary>
-		/// <exception cref="PropertyNotImplementedException">If Slaved can not be set.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red;margin-bottom:0">
-		/// <b>Slaved Read must be implemented and must not throw a PropertyNotImplementedException. </b>
-		/// </p>
-		/// <p style="color:red;margin-top:0">
-		/// <b>Slaved Write can throw a PropertyNotImplementedException.</b>
-		/// </p>
-		/// Set this property to <see langword="true"/> to enable dome-telescope hardware slaving, if supported (see
-		/// <see cref="CanSlave" />). Raises an exception on any attempt to set this property if hardware
-		/// slaving is not supported). Always returns <see langword="false"/> if hardware slaving is not supported.
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool Slaved
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "Slaved", new Type[] { }, new object[] { })); }
             set { memberFactory.CallMember(2, "Slaved", new Type[] { }, new object[] { value }); }
         }
 
-		/// <summary>
-		/// <see langword="true" /> if any part of the dome is currently moving, <see langword="false" />
-		/// if all dome components are stationary.
-		/// </summary>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// <p style="color:red;margin-bottom:0">
-		/// <b>Slewing must be implemented and must not throw a PropertyNotImplementedException. </b>
-		/// </p>
-		/// </remarks>
+        /// <inheritdoc/>
 		public bool Slewing
 		{
 			get { return Convert.ToBoolean( memberFactory.CallMember( 1, "Slewing", new Type[] { }, new object[] { } ) ); }
 		}
 
-		/// <summary>Ensure that the requested viewing altitude is available for observing.</summary>
-		/// <param name="Altitude">
-		/// The desired viewing altitude (degrees, horizon zero and increasing positive to 90 degrees at the zenith)
-		/// </param>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="InvalidValueException">If the supplied altitude is out of range.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// The requested altitude should be interpreted by the driver as the position on the sky that the observer wishes to observe. The driver has detailed knowledge of the physical structure and
-		/// must coordinate shutters, roofs or clamshell segments to open an aperture on the sky that satisfies the observer's request.
-		/// </remarks>
+        /// <inheritdoc/>
 		public void SlewToAltitude(double Altitude)
         {
             memberFactory.CallMember(3, "SlewToAltitude", new Type[] { typeof(double) }, new object[] { Altitude });
         }
 
-		/// <summary>
-		/// Ensure that the requested viewing azimuth is available for observing.
-		/// The method should not block and the slew operation should complete asynchronously.
-		/// </summary>
-		/// <param name="Azimuth">
-		/// Desired viewing azimuth (degrees, North zero and increasing clockwise. i.e., 90 East,
-		/// 180 South, 270 West)
-		/// </param>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="InvalidValueException">If the requested azimuth is greater than or equal to 360 or less than 0.</exception>
-		/// <exception cref="SlavedException">Thrown if <see cref="Slaved" /> is <see langword="true" /></exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-		/// <remarks>
-		/// The requested azimuth should be interpreted by the driver as the position on the sky that the observer wishes to observe. The driver has detailed knowledge of the physical structure and
-		/// must coordinate shutters, roofs or clamshell segments to open an aperture on the sky that satisfies the observer's request.
-		/// </remarks>
+        /// <inheritdoc/>
 		public void SlewToAzimuth(double Azimuth)
         {
             memberFactory.CallMember(3, "SlewToAzimuth", new Type[] { typeof(double) }, new object[] { Azimuth });
         }
 
-		/// <summary>Synchronize the current position of the dome to the given azimuth.</summary>
-		/// <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
-		/// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-		/// <exception cref="InvalidValueException">If the supplied azimuth is outside the range 0..360 degrees.</exception>
-		/// <exception cref="NotConnectedException">If the device is not connected.</exception>
-		/// <exception cref="DriverException">Must raise an error if the operation cannot be completed.</exception>
+        /// <inheritdoc/>
 		public void SyncToAzimuth(double Azimuth)
         {
             memberFactory.CallMember(3, "SyncToAzimuth", new Type[] { typeof(double) }, new object[] { Azimuth });

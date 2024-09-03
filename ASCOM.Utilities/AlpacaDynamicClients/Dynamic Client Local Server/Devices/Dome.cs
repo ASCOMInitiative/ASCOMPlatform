@@ -15,7 +15,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class Dome : ReferenceCountedObjectBase, DeviceInterface.IDomeV3, IDisposable
+    public class Dome : ReferenceCountedObjectBase, IDomeV3, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.Dome;

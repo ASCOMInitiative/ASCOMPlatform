@@ -15,7 +15,7 @@ namespace ASCOM.DynamicClients
     /// <summary>
     /// Driver to access the Alpaca SafetyMonitor simulator.
     /// </summary>
-    public class FilterWheel : ReferenceCountedObjectBase, DeviceInterface.IFilterWheelV3, IDisposable
+    public class FilterWheel : ReferenceCountedObjectBase, IFilterWheelV3, IDisposable
     {
         // Set the device type of this device
         private const DeviceTypes deviceType = DeviceTypes.FilterWheel;

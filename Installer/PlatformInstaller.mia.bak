@@ -396,35 +396,9 @@ Comment
 Get OS or SP Level
 If
 Comment
-Get OS or SP Level
-If
-Comment
 Write to Text File
 MessageBox
 Terminate Install
-End
-End
-Comment
-Comment
-Get OS or SP Level
-If
-Comment
-Write to Text File
-MessageBox
-Terminate Install
-End
-Comment
-Comment
-Get System Settings
-If
-Comment
-Get System Settings
-If
-Comment
-Write to Text File
-MessageBox
-Terminate Install
-End
 End
 Comment
 Comment
@@ -3160,48 +3134,22 @@ $
 {63173022-FE05-4BDE-A99F-C47D4C4F0FCA}
 {66C55603-3903-4B51-8253-4A13CA5D2E8A}
 {567224A2-19EA-4AE7-A813-B9636029FC98}
-{F18C0BDA-73C3-4E5F-AF17-82CBB6602875}
-{3D6A11A2-D262-4C33-8577-8E191EFAFE7E}
-{E67FAC4B-293F-49C6-9A3F-E48DB2C693E7}
-{B5A0433F-6B45-4B3A-94F0-7862F35C3686}
-{0F7B2E1F-0465-47EF-9979-900A3ED2CF01}
-{9C6681D7-708F-45BB-9109-DEFC60352BEA}
-{15CFCCD2-CD22-431C-BF8E-9225DD8CBCD0}
-{30B5AF73-945E-4A61-BD8B-8583FA2B6094}
-{D8E9E8C4-1277-4571-80E4-3028903D63E5}
-{CA2EDBA1-B73A-41AC-B025-64820B07A73B}
-{F7BD42EC-3F3E-402B-90F6-B952B94C006C}
-{168F95C6-33F9-4720-9C86-B1E88F985414}
-{0F7FAD0B-D368-4EC4-9F35-DD2F5F55F9E2}
-{AB6B75CD-7893-4D7C-A40D-DD9BDB452918}
-{34C6A84B-FC00-478E-AD5E-E93C06DC42A2}
-{7F6CA0E8-AB59-4437-8E2E-493A8ABF955A}
-{A4A108D2-7BB8-4B4C-B9BA-1DD2F5B52290}
-{BECCD496-109E-4200-ACC2-1F17A17A04B4}
-{A66080D9-28F7-4599-BE32-35F244255E72}
-{5CB29BA0-D2DB-4F4F-A75F-7CA7665358CD}
-{AAEC6F23-A919-4118-AD84-D49785BAAAA7}
-{7F8731CA-BD32-4A4D-84CA-5E59C045C87D}
-{D9A637E8-2BF6-4446-9F77-BD1AADBD502E}
-{476BA193-B826-4EC3-8398-95050F33470C}
-{8A70E0F2-3DD1-46CB-8169-0A9E8865C3D3}
-{6026D396-5848-4256-91D3-8BEA22780392}
-{407AD466-DC35-43ED-B98A-3322AFA90D6D}
-{75C35BD0-C7BC-4CF4-8843-7E765405C726}
-{86CA81E1-3D2C-4DD4-9FD7-9318E8DCDA3E}
-{FBE3A7FB-8098-4C76-9DFE-292E45A29A5E}
-{5BAA2F47-2B2F-494B-A2A1-430AD1335688}
-{A35374B9-4D31-49A1-BFA2-EEF205E408F0}
-{189EE5AF-113E-40F9-80A4-B6089DCC842B}
-{F1183ED9-5228-4F74-AC25-2BE97C66DCFE}
-{705AF6CD-3860-4B93-95AA-F7D3DD206C0C}
-{661028BF-07FB-4159-9DF7-962D31863EDB}
-{891F3D51-EF12-4A44-AFAA-66CA725B3BA9}
-{6CF9F796-DD4C-4351-9238-D871C8EF2529}
-{B28EDA17-EFFE-4A00-9D1C-D37A69C726C1}
-{B898B1FB-3E92-46C8-80C3-06EDDD33752A}
-{E89AD19F-1AE7-4DC0-95A0-6FF071B1AC1A}
-{26FA7D9B-6D6D-469E-96A4-2DF0676A382F}
+{F684A4C7-BEBE-478D-9D05-6A5C5954EBC3}
+{2214FC83-98F7-4F4B-BEAF-DC6B06F23E44}
+{F5A9260C-7992-4284-AA01-3B33AF0A2331}
+{3233629E-5CA5-4268-845C-6C8277193595}
+{49FB4564-EF42-488D-A0EE-5B32FDE2184C}
+{59DF64AF-A83B-403F-A4D2-DE593042E6B0}
+{E090F767-EF01-4ECB-AED0-8B8CABB867BA}
+{5999E09C-17D6-44B7-BD01-264CB2D52B18}
+{4C18E200-1617-434A-AC24-B6497FA27835}
+{94466C9F-DF87-468B-BD26-A9C893527B7A}
+{19AFCDB5-B1F7-425C-BF22-D053E0C55DD8}
+{19A9442D-3829-456B-A5F7-E00B49AD0B5F}
+{83028747-5690-4FF2-96B7-C3A87B26E5EE}
+{B0DFE6C0-1AE1-44C4-8249-487F1C40117B}
+{252A4AF6-CE25-428E-97B0-35B44EC4B14C}
+{2C0A21CD-E683-48A5-B250-E8A9FB232AF0}
 {8E7B1EA2-D090-45D7-B760-EA8A8EF4C691}
 {FDA6556D-7FB3-4A17-9C40-3D44528E12C4}
 {7E914B07-3670-4489-8E8A-F2EB97E0E06D}
@@ -5978,32 +5926,8 @@ CoverCalibrator simulator
 
 {CD1B6C19-F332-4E12-AC02-FF9A45D3E93B}
 Unexpected value in SUCCESS variable
-{F18C0BDA-73C3-4E5F-AF17-82CBB6602875}
-.NET Framework 4.8 - Check that SP1 is installed if we are running on Windows 7
-{B5A0433F-6B45-4B3A-94F0-7862F35C3686}
-We are running on Windows 7 so test for service pack 1
-{15CFCCD2-CD22-431C-BF8E-9225DD8CBCD0}
-We are running on Windows 7 without service pack 1 so cannot proceed because Framework 4.8 is only supported on Win 7 SP1
-{A4A108D2-7BB8-4B4C-B9BA-1DD2F5B52290}
-We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
-{AB6B75CD-7893-4D7C-A40D-DD9BDB452918}
-.NET Framework 4.8 - Check that we are on 8.1 if we are running Windows 8
-{0F7FAD0B-D368-4EC4-9F35-DD2F5F55F9E2}
-
-{7F8731CA-BD32-4A4D-84CA-5E59C045C87D}
-
 {567224A2-19EA-4AE7-A813-B9636029FC98}
 
-{661028BF-07FB-4159-9DF7-962D31863EDB}
-Check that we are not below Windows 7 i.e. on XP
-{705AF6CD-3860-4B93-95AA-F7D3DD206C0C}
-
-{86CA81E1-3D2C-4DD4-9FD7-9318E8DCDA3E}
-We are running on Windows 10 with a Threshold version so cannot proceed because Framework 4.8 is only supported on Win 8.1
-{D9A637E8-2BF6-4446-9F77-BD1AADBD502E}
-.NET Framework 4.8 - Check that we are on at least Restone (Anniversary Update) if we are running Windows 10
-{6026D396-5848-4256-91D3-8BEA22780392}
-We are running on Windows 10 so make sure that we are at least on Redstone
 {5E08D1D8-DBD1-44F7-8EA9-E904DE960CDB}
 Force use of the ASCOM-STANDARDS download site because of unavailability of the USNO sites and the new NASA site security policy.
 {8E7B1EA2-D090-45D7-B760-EA8A8EF4C691}
@@ -6860,6 +6784,14 @@ List the installation outcome variables
 
 {39C95616-1866-43E8-A82B-4D2BBC82F6A3}
 List the display fields
+{F684A4C7-BEBE-478D-9D05-6A5C5954EBC3}
+.NET Framework 4.8 - Check that we are on 8.1 if we are running Windows 8
+{3233629E-5CA5-4268-845C-6C8277193595}
+We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
+{4C18E200-1617-434A-AC24-B6497FA27835}
+
+{94466C9F-DF87-468B-BD26-A9C893527B7A}
+Check that we are not running on an OS earlier than Windows 10 1809 October 2018 Update
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -8545,11 +8477,6 @@ ERROROLD
 0
 99
 FALSE
-{6CF9F796-DD4C-4351-9238-D871C8EF2529}
-CHECKSYSTEM
-0
-TRUE
-TRUE
 {C4103AE2-8DF3-49FD-9B40-97CE2C63077D}
 INSTALL_DOMECONTROLHUB
 0
@@ -8590,31 +8517,6 @@ WIZARD
 0
 README
 FALSE
-{E67FAC4B-293F-49C6-9A3F-E48DB2C693E7}
-CHECKSYSTEM
-0
-SEVEN
-FALSE
-{9C6681D7-708F-45BB-9109-DEFC60352BEA}
-CHECKSYSTEM
-2
-0
-TRUE
-{7F6CA0E8-AB59-4437-8E2E-493A8ABF955A}
-CHECKSYSTEM
-0
-METRO
-FALSE
-{8A70E0F2-3DD1-46CB-8169-0A9E8865C3D3}
-CHECKSYSTEM
-0
-TRUE
-FALSE
-{75C35BD0-C7BC-4CF4-8843-7E765405C726}
-CHECKSYSTEM
-0
-TRUE
-TRUE
 {66A84DE4-F32E-44E1-91AF-5678DB00729F}
 CFA
 0
@@ -8845,6 +8747,16 @@ INTERFACEVERSION
 0
 3
 FALSE
+{F5A9260C-7992-4284-AA01-3B33AF0A2331}
+CHECKSYSTEM
+0
+METRO
+FALSE
+{19A9442D-3829-456B-A5F7-E00B49AD0B5F}
+CHECKSYSTEM
+0
+TRUE
+TRUE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -8881,30 +8793,6 @@ The ASCOM Platform has been removed, the installer will now termiinate. Please r
 0
 1
 ERROROLD
-{B898B1FB-3E92-46C8-80C3-06EDDD33752A}
-$TITLE$ Setup Issue
-The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to a supported Windows version if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-3
-1
-
-{D8E9E8C4-1277-4571-80E4-3028903D63E5}
-$TITLE$ Setup Issue
-The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please install Windows 7 Service Pack 1 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-3
-1
-
-{A66080D9-28F7-4599-BE32-35F244255E72}
-$TITLE$ Setup Issue
-The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-3
-1
-
-{5BAA2F47-2B2F-494B-A2A1-430AD1335688}
-$TITLE$ Setup issue
-The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 10 Anniversary Edition (version 1607) or later if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-3
-1
-
 {8DA5D4F1-2969-4879-A809-F1A9C4057243}
 Unable to write to Documents folder
 The installer cannot write to your Documents folder, you may have Microsoft Controlled Folder Access enabled or you may be running anti-ransomware software on this PC.$NEWLINE$$NEWLINE$Folder: $MYDOCUMENTS$$NEWLINE$$NEWLINE$The Platform's complex installation process cannot proceed without write access to create its multiple log files and is highly likely to display error messages and fail to complete successfully.$NEWLINE$$NEWLINE$At this time, the only way to install the Platform on a protected PC is to disable CFA or ransomware protection, to run the Platform installer and then to re-enable protection.$NEWLINE$$NEWLINE$Click "No" to terminate installation or click "Yes" to try anyway.
@@ -8969,6 +8857,18 @@ The installer cache has been cleared and the installer will now close.
 Clear Cache
 The installer cache has been cleared and the installer will now close.
 0
+1
+
+{59DF64AF-A83B-403F-A4D2-DE593042E6B0}
+$TITLE$ Setup Issue
+The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+3
+1
+
+{B0DFE6C0-1AE1-44C4-8249-487F1C40117B}
+$TITLE$ Setup Issue
+The ASCOM Platform requires the operating system to be Windows 10 1809 (October 2018) and later.$NEWLINE$$NEWLINE$Please use Platform 6.6 on earlier operating systems.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
+3
 1
 
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
@@ -9200,21 +9100,15 @@ ISNT
 {40F2908B-24ED-42D9-A7D6-F3171A543B1F}
 WIN64MODE
 65
-{891F3D51-EF12-4A44-AFAA-66CA725B3BA9}
-CHECKSYSTEM
-79
-{476BA193-B826-4EC3-8398-95050F33470C}
-CHECKSYSTEM
-98
-{407AD466-DC35-43ED-B98A-3322AFA90D6D}
-CHECKSYSTEM
-101
 {6AAEEB19-AF01-4548-B330-963F3C7FA424}
 ARM64MODE
 123
 {A9FAE575-03B6-4AF5-92F4-188F70D82381}
 WIN10ORLATER
 98
+{19AFCDB5-B1F7-425C-BF22-D053E0C55DD8}
+CHECKSYSTEM
+112
 {14F830BF-B824-48B5-B024-32225BFC2F05}
 CONFORMVERSIONOK
 $PROGRAMFILES$ASCOM\Conform\Conform.exe
@@ -17022,26 +16916,6 @@ $SETUPLOG$
 $TIME$ ReadMe shown
 FALSE
 TRUE
-{30B5AF73-945E-4A61-BD8B-8583FA2B6094}
-$SETUPLOG$
-$TIME$ Found Windows 7 without SP1, terminating installation
-FALSE
-TRUE
-{BECCD496-109E-4200-ACC2-1F17A17A04B4}
-$SETUPLOG$
-$TIME$ Found Windows 8.0, terminating installation
-FALSE
-TRUE
-{B28EDA17-EFFE-4A00-9D1C-D37A69C726C1}
-$SETUPLOG$
-$TIME$ Found Windows earlier than 7, terminating installation
-FALSE
-TRUE
-{FBE3A7FB-8098-4C76-9DFE-292E45A29A5E}
-$SETUPLOG$
-$TIME$ Found Windows 10 Threshold, terminating installation
-FALSE
-TRUE
 {A5A2001F-F2FE-49BE-915D-68C62B846D36}
 $SETUPLOG$
 $TIME$ Cleaning simulator 32bit COM entries
@@ -17620,6 +17494,16 @@ TRUE
 {B27BC108-59D2-4570-9623-77207566DB29}
 $SETUPLOG$
 Install Outcomes
+FALSE
+TRUE
+{49FB4564-EF42-488D-A0EE-5B32FDE2184C}
+$SETUPLOG$
+$TIME$ Found Windows 8.0, terminating installation
+FALSE
+TRUE
+{83028747-5690-4FF2-96B7-C3A87B26E5EE}
+$SETUPLOG$
+$TIME$ Found a Windows version earlier than 10 1809 October 2018 Update, terminating installation.
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
@@ -18264,15 +18148,7 @@ FALSE
 OPSYS
 TRUE
 FALSE
-{3D6A11A2-D262-4C33-8577-8E191EFAFE7E}
-CHECKSYSTEM
-TRUE
-FALSE
-{0F7B2E1F-0465-47EF-9979-900A3ED2CF01}
-CHECKSYSTEM
-FALSE
-TRUE
-{34C6A84B-FC00-478E-AD5E-E93C06DC42A2}
+{2214FC83-98F7-4F4B-BEAF-DC6B06F23E44}
 CHECKSYSTEM
 TRUE
 FALSE
@@ -18746,39 +18622,13 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C
+C
+C
+C
+C
+C
+C
 
 
 
@@ -21119,32 +20969,6 @@ C
 
 
 $
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
