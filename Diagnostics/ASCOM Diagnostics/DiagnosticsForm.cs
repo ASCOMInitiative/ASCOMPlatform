@@ -10937,7 +10937,6 @@ namespace ASCOM.Utilities
         private void ScanInstalledPlatform()
         {
             RegistryKey RegKey;
-            SortedList<string, string> platformInfo, developerInfo;
 
             GetInstalledComponent("Platform 5A", "{075F543B-97C5-4118-9D54-93910DE03FE9}", false, true, true);
             GetInstalledComponent("Platform 5B", "{14C10725-0018-4534-AE5E-547C08B737B7}", false, true, true);
@@ -10963,20 +10962,8 @@ namespace ASCOM.Utilities
             }
             TL.BlankLine();
 
-            platformInfo = this.GetInstalledComponent("Platform 7", Utilities.Global.PLATFORM_INSTALLER_PROPDUCT_CODE, true, false, true);
-            developerInfo = this.GetInstalledComponent("Platform 7 Developer", Utilities.Global.DEVELOPER_INSTALLER_PROPDUCT_CODE, false, true, true);
-
-            try
-            {
-                if ((developerInfo[INST_DISPLAY_VERSION] ?? "") != INST_NOT_KNOWN)
-                {
-                    Compare("Platform 7", "Developer and Platform Version Numbers", developerInfo[INST_DISPLAY_VERSION], platformInfo[INST_DISPLAY_VERSION]);
-                }
-            }
-            catch (KeyNotFoundException)
-            {
-                // Ignore errors due to the key being missing if the developer tools are not installed
-            }
+            GetInstalledComponent("Platform 7", Utilities.Global.PLATFORM_INSTALLER_PROPDUCT_CODE, true, false, true);
+            GetInstalledComponent("Platform 7 Developer", Utilities.Global.DEVELOPER_INSTALLER_PROPDUCT_CODE, false, true, true);
 
             TL.BlankLine();
         }
