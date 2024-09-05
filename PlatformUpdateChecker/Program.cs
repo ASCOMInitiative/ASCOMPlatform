@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using ASCOM.Utilities;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Threading;
 
 namespace PlatformUpdateChecker
 {
@@ -31,8 +32,9 @@ namespace PlatformUpdateChecker
         private const string COMMAND_DOWNLOAD = "Download";
         private const string COMMAND_REMIND_LATER = "RemindLater";
         private const string COMMAND_SKIP_RELEASE = "SkipRelease";
-        private const string COMMAND_HELP_MINUS_MINUS = "--help";
-        private const string COMMAND_HELP_SLASH_H = "/h";
+
+        // Configuration constants
+        private const int TASK_DELAY_MILLISECONDS = 20000; // Length of time after the update check is initiated before the check is run (milli-seconds).
 
         #endregion
 
@@ -102,7 +104,7 @@ namespace PlatformUpdateChecker
                     case "--HELP":
                     case "/H":
                         MessageBox.Show($"Platform Update Checker - Queries the list of ASCOM Platform GitHub releases to determine whether a later Platform version is available.\r\n\r\n" +
-                                        $"Supported commands: /InstallTask, /RemoveTask, /Version, /ResetSkipped, /CheckForUpdates\r\n\r\n" +
+                                        $"Supported commands: /InstallTask, /RemoveTask, /Version, /ResetSkipped, /CheckNow\r\n\r\n" +
                                         @"Output is written to a log file in the Documents\ASCOM\Logs YYYY.MM.DD folder where YYYY, MM and DD are the current year, month and day numbers.",
                                         "Platform Update Checker", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
@@ -127,8 +129,19 @@ namespace PlatformUpdateChecker
                         ResetSkipped();
                         break;
 
+                    // Reset the list of skipped Platform versions
+                    case "/CHECKNOW":
+                        CheckForUpdates();
+                        break;
+
                     // No argument supplied or unknown argument so check to see if there are any updates and create a toast notification if required
                     default:
+                        // Add a short delay before checking for updates
+                        LogMessage("DelayedUpdateCheck", $"Starting {TASK_DELAY_MILLISECONDS/1000:0.0} second delay...");
+                        Thread.Sleep(TASK_DELAY_MILLISECONDS);
+                        LogMessage("DelayedUpdateCheck", $"Completed delay, checking for updates.");
+
+                        // Check for updates
                         CheckForUpdates();
                         break;
                 }
@@ -139,7 +152,7 @@ namespace PlatformUpdateChecker
 
                 // Wait for a short time to allow any ToastNotificationManagerCompat.OnActivated events to fire
                 LogMessage("Main", $"Staring wait so that any ToastNotificationManagerCompat.OnActivated events can fire...");
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
                 LogMessage("Main", $"Wait completed - application finishing.");
             }
 
@@ -204,10 +217,6 @@ namespace PlatformUpdateChecker
         /// </summary>
         private static void CreateScheduledTask()
         {
-            TaskDefinition taskDefinition;
-            WeeklyTrigger weeklyTrigger;
-            string executableName;
-
             DateTime startDate = DateTime.Today.AddHours(8); // Set the start time to today at 08:00
 
             try
@@ -245,16 +254,18 @@ namespace PlatformUpdateChecker
                                 LogMessage("CreateScheduledTask", string.Format("Task {0} deleted OK.", UPDATE_TASK_NAME));
                             }
                             LogMessage("CreateScheduledTask", string.Format("{0} task will be created.", UPDATE_TASK_NAME));
-                            taskDefinition = service.NewTask();
+                            TaskDefinition taskDefinition = service.NewTask();
 
                             taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to check for Platform updates.";
 
-                            executableName = Process.GetCurrentProcess().MainModule.FileName; // Get the full path and name of the current executable
+                            // Get the full path and name of the current executable
+                            string executableName = Process.GetCurrentProcess().MainModule.FileName;
                             LogMessage("CreateScheduledTask", $"Platform update check process full name and path: {executableName}");
 
                             LogMessage("CreateScheduledTask", $"Platform update check process full name and path: {executableName}");
 
-                            taskDefinition.Actions.Clear(); // Remove any existing actions and add the current one
+                            // Remove any existing actions and add the current one
+                            taskDefinition.Actions.Clear();
                             taskDefinition.Actions.Add(new ExecAction(executableName, null, null)); // Add an action that will launch the updater application whenever the trigger fires
                             LogMessage("CreateScheduledTask", string.Format("Added scheduled job action to run {0}", executableName));
 
@@ -275,15 +286,21 @@ namespace PlatformUpdateChecker
                             taskDefinition.Settings.Enabled = true;
                             LogMessage("CreateScheduledTask", string.Format("Allow demand on start: {0}, Start when available: {1}, Execution time limit: {2} minutes, Stop if going on batteries: {3}, Disallow start if on batteries: {4}, Enabled: {5}, Run only if logged on: {6}", taskDefinition.Settings.AllowDemandStart, taskDefinition.Settings.StartWhenAvailable, taskDefinition.Settings.ExecutionTimeLimit.TotalMinutes, taskDefinition.Settings.StopIfGoingOnBatteries, taskDefinition.Settings.DisallowStartIfOnBatteries, taskDefinition.Settings.Enabled, taskDefinition.Settings.RunOnlyIfLoggedOn));
 
-                            taskDefinition.Triggers.Clear(); // Remove any previous triggers and add the new trigger to the task as the only trigger
+                            // Remove any previous triggers and add the new trigger to the task as the only trigger
+                            taskDefinition.Triggers.Clear();
 
-                            weeklyTrigger = new WeeklyTrigger
+                            // Add a weekly trigger
+                            WeeklyTrigger weeklyTrigger = new WeeklyTrigger
                             {
                                 StartBoundary = startDate, // Set the start time
                                 DaysOfWeek = DaysOfTheWeek.Saturday // Set the repeat day of the ween to Saturday
                             };
                             taskDefinition.Triggers.Add(weeklyTrigger);
                             LogMessage("CreateScheduledTask", $"Set trigger to repeat the job weekly starting on day {startDate}.");
+
+                            // Add a logon trigger
+                            LogonTrigger logonTrigger = new LogonTrigger();
+                            taskDefinition.Triggers.Add(logonTrigger);
 
                             // Get the text name of the group for whom this task will run
                             string userName = new SecurityIdentifier(WellKnownSidType.InteractiveSid, null).Translate(typeof(NTAccount)).Value;
