@@ -24,7 +24,6 @@
 		<RepositoryUrl>https://github.com/ASCOMInitiative/ASCOMPlatform</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>ASCOM;Exceptions</PackageTags>
-		<Version>7.0.0-rc.24</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
