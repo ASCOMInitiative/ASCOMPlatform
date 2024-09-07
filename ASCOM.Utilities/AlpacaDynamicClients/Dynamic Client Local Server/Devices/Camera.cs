@@ -150,34 +150,21 @@ namespace ASCOM.DynamicClients
         /// </summary>
         public void SetupDialog()
         {
-            if (connectedState) // Only display Alpaca configuration buttons if already connected
+            AlpacaCamera newclient = Server.SetupDialogue<AlpacaCamera>(state, TL);
+            if (!(newclient is null))
             {
-                using (SetupConnectedForm connectedForm = new SetupConnectedForm(TL))
+                // Dispose of the old client
+                try
                 {
-                    connectedForm.DeviceNumber = state.RemoteDeviceNumber;
-                    connectedForm.DeviceType=state.DeviceType.ToDeviceString();
-                    connectedForm.HostIpAddress = $"{state.ServiceType}://{state.IpAddressString}:{state.PortNumber}";
-                    connectedForm.ShowDialog();
+                    client?.Dispose();
                 }
-            }
-            else // Show dialogue
-            {
-                AlpacaCamera newclient = Server.SetupDialogue<AlpacaCamera>(state, TL);
-                if (!(newclient is null))
+                catch (Exception ex)
                 {
-                    // Dispose of the old client
-                    try
-                    {
-                        client?.Dispose();
-                    }
-                    catch (Exception ex)
-                    {
-                        LogMessage("SetupDialog", $"Ignoring exception when disposing current client: {ex.Message}.\r\n{ex}");
-                    }
+                    LogMessage("SetupDialog", $"Ignoring exception when disposing current client: {ex.Message}.\r\n{ex}");
+                }
 
-                    // Replace original client with new client
-                    client = newclient;
-                }
+                // Replace original client with new client
+                client = newclient;
             }
         }
 
@@ -1111,7 +1098,8 @@ namespace ASCOM.DynamicClients
 
             set
             {
-                client.Offset = value;            }
+                client.Offset = value;
+            }
         }
 
         public int OffsetMax
@@ -1157,7 +1145,8 @@ namespace ASCOM.DynamicClients
 
             set
             {
-                client.SubExposureDuration = value;            }
+                client.SubExposureDuration = value;
+            }
         }
 
         #endregion

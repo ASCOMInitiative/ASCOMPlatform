@@ -31,8 +31,8 @@ namespace ASCOM.DynamicClients
             EstablishConnectionTimeout = Convert.ToInt32(Profile.GetValue(DeviceType, ProgId, SharedConstants.ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME, EstablishConnectionTimeout.ToString()));
             StandardDeviceResponseTimeout = Convert.ToInt32(Profile.GetValue(DeviceType, ProgId, SharedConstants.STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, StandardDeviceResponseTimeout.ToString()));
             LongDeviceResponseTimeout = Convert.ToInt32(Profile.GetValue(DeviceType, ProgId, SharedConstants.LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, LongDeviceResponseTimeout.ToString()));
-            UserName = Profile.GetValue(DeviceType, ProgId, SharedConstants.USERNAME_PROFILENAME, UserName);
-            Password = Profile.GetValue(DeviceType, ProgId, SharedConstants.PASSWORD_PROFILENAME, Password);
+            UserNameEncrypted = Profile.GetValue(DeviceType, ProgId, SharedConstants.USERNAME_PROFILENAME, UserNameEncrypted);
+            PasswordEncrypted = Profile.GetValue(DeviceType, ProgId, SharedConstants.PASSWORD_PROFILENAME, PasswordEncrypted);
             ManageConnectLocally = Convert.ToBoolean(Profile.GetValue(DeviceType, ProgId, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, ManageConnectLocally.ToString()));
             ImageArrayTransferType = (ImageArrayTransferType)Convert.ToInt32(Profile.GetValue(DeviceType, ProgId, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, ((int)ImageArrayTransferType).ToString()));
             ImageArrayCompression = (ImageArrayCompression)Convert.ToInt32(Profile.GetValue(DeviceType, ProgId, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, ((int)ImageArrayCompression).ToString()));
@@ -55,8 +55,8 @@ namespace ASCOM.DynamicClients
         public int EstablishConnectionTimeout { get; set; } = SharedConstants.ESTABLISH_CONNECTION_TIMEOUT_DEFAULT;
         public int StandardDeviceResponseTimeout { get; set; } = SharedConstants.STANDARD_SERVER_RESPONSE_TIMEOUT_DEFAULT;
         public int LongDeviceResponseTimeout { get; set; } = SharedConstants.LONG_SERVER_RESPONSE_TIMEOUT_DEFAULT;
-        public string UserName { get; set; } = SharedConstants.USERNAME_DEFAULT;
-        public string Password { get; set; } = SharedConstants.PASSWORD_DEFAULT;
+        public string UserNameEncrypted { get; set; } = SharedConstants.USERNAME_DEFAULT;
+        public string PasswordEncrypted { get; set; } = SharedConstants.PASSWORD_DEFAULT;
         public bool ManageConnectLocally { get; set; } = SharedConstants.MANAGE_CONNECT_LOCALLY_DEFAULT;
         public ImageArrayTransferType ImageArrayTransferType { get; set; } = SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_DEFAULT;
         public ImageArrayCompression ImageArrayCompression { get; set; } = SharedConstants.IMAGE_ARRAY_COMPRESSION_DEFAULT;
@@ -70,7 +70,7 @@ namespace ASCOM.DynamicClients
         // Additional Properties
         public DeviceTypes DeviceType { get; set; } = DeviceTypes.Video; // Deliberately initialised to a value that is invalid for Alpaca to detect failure to initialise later in the client!
 
-        public uint ClientId { get; set; } = (uint)new Random().Next(1,65536);  // Creates a random client ID in the range 1::65535
+        public uint ClientId { get; set; } = (uint)new Random().Next(1, 65536);  // Creates a random client ID in the range 1::65535
 
         public string ProgId { get; set; }
 
@@ -90,8 +90,8 @@ namespace ASCOM.DynamicClients
             Profile.SetValue(DeviceType, ProgId, SharedConstants.ESTABLISH_CONNECTION_TIMEOUT_PROFILENAME, EstablishConnectionTimeout.ToString());
             Profile.SetValue(DeviceType, ProgId, SharedConstants.STANDARD_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, StandardDeviceResponseTimeout.ToString());
             Profile.SetValue(DeviceType, ProgId, SharedConstants.LONG_DEVICE_RESPONSE_TIMEOUT_PROFILENAME, LongDeviceResponseTimeout.ToString());
-            Profile.SetValue(DeviceType, ProgId, SharedConstants.USERNAME_PROFILENAME, UserName);
-            Profile.SetValue(DeviceType, ProgId, SharedConstants.PASSWORD_PROFILENAME, Password);
+            Profile.SetValue(DeviceType, ProgId, SharedConstants.USERNAME_PROFILENAME, UserNameEncrypted);
+            Profile.SetValue(DeviceType, ProgId, SharedConstants.PASSWORD_PROFILENAME, PasswordEncrypted);
             Profile.SetValue(DeviceType, ProgId, SharedConstants.MANAGE_CONNECT_LOCALLY_PROFILENAME, ManageConnectLocally.ToString());
             Profile.SetValue(DeviceType, ProgId, SharedConstants.IMAGE_ARRAY_TRANSFER_TYPE_PROFILENAME, ((int)ImageArrayTransferType).ToString());
             Profile.SetValue(DeviceType, ProgId, SharedConstants.IMAGE_ARRAY_COMPRESSION_PROFILENAME, ((int)ImageArrayCompression).ToString());

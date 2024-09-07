@@ -27,7 +27,7 @@ namespace ASCOM.DynamicClients
         private bool selectByMouse = false; // Variable to help select the whole contents of a numeric up-down box when tabbed into our selected by mouse
 
         // Create validating regular expression
-        readonly Regex validHostnameRegex = new Regex(@"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", RegexOptions.IgnoreCase | RegexOptions.Compiled);//ValidateHostNameRegex();
+        readonly Regex validHostnameRegex = new Regex(@"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$", RegexOptions.IgnoreCase | RegexOptions.Compiled);//ValidateHostNameRegex();
 
         // Set up a regular expression to parse out the IP address from n IPV6 address string, removing the scope id %XX element.
         readonly Regex cleanIpV6Address = new Regex(@"([a-zA-Z0-9[:]*)([%a-zA-Z0-9]*)([]])", RegexOptions.IgnoreCase | RegexOptions.Compiled);//CleanIpV6Address();
@@ -44,8 +44,8 @@ namespace ASCOM.DynamicClients
         public int EstablishConnectionTimeout { get; set; }
         public int StandardTimeout { get; set; }
         public int LongTimeout { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public string UserNameEncrypted { get; set; }
+        public string PasswordEncrypted { get; set; }
         public bool TraceState { get; set; }
         public bool DebugTraceState { get; set; }
         public bool ManageConnectLocally { get; set; }
@@ -117,12 +117,12 @@ namespace ASCOM.DynamicClients
                 numStandardTimeout.Value = Convert.ToDecimal(StandardTimeout);
                 numLongTimeout.Value = Convert.ToDecimal(LongTimeout);
                 // Decrypt the user name if present
-                if (string.IsNullOrWhiteSpace(UserName)) txtUserName.Text = "";
-                else txtUserName.Text = UserName.Unencrypt(TL);
+                if (string.IsNullOrWhiteSpace(UserNameEncrypted)) txtUserName.Text = "";
+                else txtUserName.Text = UserNameEncrypted.Unencrypt(TL);
 
                 // Decrypt the password if present
-                if (string.IsNullOrWhiteSpace(Password)) txtPassword.Text = "";
-                else txtPassword.Text = Password.Unencrypt(TL);
+                if (string.IsNullOrWhiteSpace(PasswordEncrypted)) txtPassword.Text = "";
+                else txtPassword.Text = PasswordEncrypted.Unencrypt(TL);
 
                 chkTrace.Checked = TraceState;
                 chkDebugTrace.Checked = DebugTraceState;
@@ -222,12 +222,12 @@ namespace ASCOM.DynamicClients
                 LongTimeout = Convert.ToInt32(numLongTimeout.Value);
 
                 // Encrypt user name if present
-                if (string.IsNullOrWhiteSpace(txtUserName.Text)) UserName = "";
-                else UserName = txtUserName.Text.Encrypt(TL); // Encrypt the provided username
+                if (string.IsNullOrWhiteSpace(txtUserName.Text)) UserNameEncrypted = "";
+                else UserNameEncrypted = txtUserName.Text.Encrypt(TL); // Encrypt the provided username
 
                 // Encrypt password if present
-                if (string.IsNullOrWhiteSpace(txtPassword.Text)) Password = "";
-                else Password = txtPassword.Text.Encrypt(TL);  // Encrypt the provided password
+                if (string.IsNullOrWhiteSpace(txtPassword.Text)) PasswordEncrypted = "";
+                else PasswordEncrypted = txtPassword.Text.Encrypt(TL);  // Encrypt the provided password
 
                 ManageConnectLocally = radManageConnectLocally.Checked;
                 ImageArrayTransferType = (ImageArrayTransferType)CmbImageArrayTransferType.SelectedItem;
@@ -509,18 +509,10 @@ namespace ASCOM.DynamicClients
                     addressList.Items.Add(IPAddressString); // Add the stored address to the list
                     selectedIndex = addressList.Items.Count - 1; // Select this item in the list
                 }
-                else  // One specific address so add it if it parses OK
+                else  // One specific address so just add it as provided (it may be an IP address or could be a DNS style host name)
                 {
-                    IPAddress serverIpAddress = IPAddress.Parse(IPAddressString);
-                    if (
-                            ((serverIpAddress.AddressFamily == AddressFamily.InterNetwork) & ((RadIpV4.Checked | RadIpV4AndV6.Checked))) |
-                            ((serverIpAddress.AddressFamily == AddressFamily.InterNetworkV6) & ((RadIpV6.Checked | RadIpV4AndV6.Checked)))
-                       )
-                    {
                         addressList.Items.Add(IPAddressString); // Add the stored address to the list
                         selectedIndex = addressList.Items.Count - 1; // Select this item in the list
-                    }
-                    else selectedIndex = 0;
                 }
             }
 

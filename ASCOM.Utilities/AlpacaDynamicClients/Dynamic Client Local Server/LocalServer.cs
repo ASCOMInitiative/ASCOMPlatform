@@ -959,13 +959,13 @@ namespace ASCOM.DynamicClients
             client.ClientConfiguration.IpAddress = state.IpAddressString;
             client.ClientConfiguration.Logger = TL;
             client.ClientConfiguration.LongDeviceResponseTimeout = state.LongDeviceResponseTimeout;
-            client.ClientConfiguration.Password = state.Password;
+            client.ClientConfiguration.UserName = state.UserNameEncrypted.Unencrypt(TL);
+            client.ClientConfiguration.Password = state.PasswordEncrypted.Unencrypt(TL);
             client.ClientConfiguration.PortNumber = state.PortNumber;
             client.ClientConfiguration.RemoteDeviceNumber = state.RemoteDeviceNumber;
             client.ClientConfiguration.ServiceType = state.ServiceType;
             client.ClientConfiguration.StandardDeviceResponseTimeout = state.StandardDeviceResponseTimeout;
             client.ClientConfiguration.StrictCasing = true;
-            client.ClientConfiguration.UserName = state.UserName;
             client.ClientConfiguration.ImageArrayCompression = state.ImageArrayCompression;
             client.ClientConfiguration.ImageArrayTransferType = state.ImageArrayTransferType;
 
@@ -1003,8 +1003,8 @@ namespace ASCOM.DynamicClients
                     setupForm.EstablishConnectionTimeout = state.EstablishConnectionTimeout;
                     setupForm.StandardTimeout = state.StandardDeviceResponseTimeout;
                     setupForm.LongTimeout = state.LongDeviceResponseTimeout;
-                    setupForm.UserName = state.UserName;
-                    setupForm.Password = state.Password;
+                    setupForm.UserNameEncrypted = state.UserNameEncrypted;
+                    setupForm.PasswordEncrypted = state.PasswordEncrypted;
                     setupForm.ManageConnectLocally = state.ManageConnectLocally;
                     setupForm.ImageArrayTransferType = state.ImageArrayTransferType;
                     setupForm.ImageArrayCompression = state.ImageArrayCompression;
@@ -1032,8 +1032,8 @@ namespace ASCOM.DynamicClients
                         state.EstablishConnectionTimeout = (int)setupForm.EstablishConnectionTimeout;
                         state.StandardDeviceResponseTimeout = (int)setupForm.StandardTimeout;
                         state.LongDeviceResponseTimeout = (int)setupForm.LongTimeout;
-                        state.UserName = setupForm.UserName;
-                        state.Password = setupForm.Password;
+                        state.UserNameEncrypted = setupForm.UserNameEncrypted;
+                        state.PasswordEncrypted = setupForm.PasswordEncrypted;
                         state.ManageConnectLocally = setupForm.ManageConnectLocally;
                         state.ImageArrayTransferType = setupForm.ImageArrayTransferType;
                         state.ImageArrayCompression = setupForm.ImageArrayCompression;
