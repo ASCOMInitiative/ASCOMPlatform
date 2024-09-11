@@ -67,7 +67,7 @@
 							Devices must not throw exceptions / return errors when values are not known. An empty list, with no TimeStamp, must be returned if no values are known.
 						</para>
 						<para>
-							If you wish to report additional values to clients, beyond those defined as	operational, implement an Action e.g. via 
+							If you wish to report additional values to clients, beyond those defined as	operational, implement an Action e.g. via
 							<codeEntityReference linkText="Telescope.Action(string, string)">M:ASCOM.DeviceInterface.ITelescopeV4.Action(System.String,System.String)</codeEntityReference> and
 							<codeEntityReference linkText="Telescope.SupportedActions">P:ASCOM.DeviceInterface.ITelescopeV4.SupportedActions</codeEntityReference>,
 							and return your items in this way rather than adding them to the DeviceState response.
@@ -92,17 +92,26 @@
 			<title>Time Stamps</title>
 			<content>
 				<para>
-					An optional string TimeStamp property will be defined so that the device can record the time at which the state was measured, if known. The ISO-8601 time format must be used to report:
+					An optional string TimeStamp property in ISO-8601 format can be included to record the time at which the state was measured, if known.
+					The general format (in Microsoft custom date format style) is "yyyy-MM-ddTHH:mm:ss.fffffff". If required, an optional Z can be appended to designate
+					the value as a UTC time or an optional time zone offset can be provided. E.g.
 				</para>
 				<list class="bullet">
 					<listItem>
-						<para>An unqualified local time.</para>
+						<para>
+							An unqualified local time e.g. <codeInline>2016-03-04T17:45:31.1234567</codeInline>, which corresponds to 17:45:31.1234567 local time on 4th March 2016.
+						</para>
 					</listItem>
 					<listItem>
-						<para> A local time including a time offset.</para>
+						<para>
+							A local time including the UTC time and a time zone offset e.g. <codeInline>2016-03-04T17:45:31.123456+05.30</codeInline> for the India Standard Time zone (+5.5 hours),
+							which corresponds to 23:15:31.1234567 local time on 4th March 2016.
+						</para>
 					</listItem>
 					<listItem>
-						<para> A UTC time using the Z time-zone designator.</para>
+						<para>
+							A UTC time using the Z time-zone designator e.g. <codeInline>2016-03-04T17:45:31.1234567Z</codeInline>, which corresponds to 17:45:31.1234567 UTC on 4th March 2016.
+						</para>
 					</listItem>
 				</list>
 			</content>
@@ -304,13 +313,33 @@
 						</entry>
 						<entry>
 							<para>
-								See <link xlink:href="320982e4-105d-46d8-b5f9-efce3f4dafd4" /> for further information on use and required behaviour.
+								Since a single Switch device can be configured to provide many controllable switches, a standard is required to enable the controllable switch states to be returned by
+								the Switch device. The standard is that:
 							</para>
 							<para>
-								GetSwitch0, GetSwitch1, GetSwitch2, GetSwitchN-1,
-								GetSwitchValue0, GetSwitchValue1, GetSwitchValue2, GetSwitchValueN-1,
-								StateChangeComplete0, StateChangeComplete1, StateChangeComplete2, StateChangeComplete N-1, TimeStamp
+								<codeInline>The controllable switch number is appended to the name of the property when constructing the DeviceState property name.</codeInline>
 							</para>
+							<para>
+								For the GetSwitch property, DeviceState property names would start at GetSwitch0 and progress through GetSwitch1, GetSwitch2 etc. until reaching the last
+								controllable switch number: MaxSwitch - 1. A similar model applies to the GetSwitchValue and StateChangeComplete properties.
+							</para>
+							<para>
+								E.g. For a Switch device with four controllable switches, the DeviceState property names would be:
+							</para>
+							<list class="bullet">
+								<listItem>
+									<para>GetSwitch0, GetSwitch1, GetSwitch2, GetSwitch3</para>
+								</listItem>
+								<listItem>
+									<para>GetSwitchValue0, GetSwitchValue1, GetSwitchValue2, GetSwitchValue3</para>
+								</listItem>
+								<listItem>
+									<para>StateChangeComplete0, StateChangeComplete1, StateChangeComplete2, StateChangeComplete3</para>
+								</listItem>
+								<listItem>
+									<para>TimeStamp</para>
+								</listItem>
+							</list>
 						</entry>
 					</row>
 					<row>
