@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace ASCOM.DeviceInterface
 {
@@ -732,16 +734,28 @@ namespace ASCOM.DeviceInterface
         /// <para>
         /// Raises an error if <see cref="AtPark" /> is true.
         /// This must be implemented for the if the <see cref="CanMoveAxis" /> property returns True for the given axis.</para>
-        /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
+        /// <para>This is only available for telescope Interface version 2 and later.</para>
         /// <para>
+        /// <para>
+        /// MoveAxis is best seen as an override to however the mount is configured for tracking, 
+        /// including its enabled/disabled state and the current RA and Dec rate offsets.
+        /// When MoveAxis is reset to 0 for an axis, its previous movement rate must be restored:
+        /// </para>
+        /// <list type="bullet">
+        /// <item><description><legacyBold>RA Axis Tracking Enabled</legacyBold>: the current TrackingRate plus any RA rate offset if tracking at Sidereal rate</description></item>
+        /// <item><description><legacyBold>RA Axis Tracking Disabled</legacyBold>: 0</description></item>
+        /// <item><description><legacyBold>Dec Axis Tracking Enabled</legacyBold>: the Dec axis rate offset if non-zero or 0</description></item>
+        /// <item><description><legacyBold>Dec Axis Tracking Disabled</legacyBold>: 0</description></item>
+        /// </list>
         /// <b>NOTES:</b>
         /// <list type="bullet">
+        /// <item><description>The Slewing property must remain <see langword="true"/> whenever <legacyBold>any</legacyBold> axis has a non-zero MoveAxis rate. E.g. Suppose
+        /// MoveAxis is used to make both the RA and declination axes move at valid axis rates. If the declination axis rate is then set to zero, Slewing must remain
+        /// <see langword="true"/> because the RA axis is still moving at a non-zero axis rate.</description></item>
         /// <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the
         /// the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the opposite direction to positive rates.</description></item>
         /// <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, determined by the sign used in this command.</description></item>
-        /// <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving about any of its axes as a result of this method being called.
-        /// This can be used to simulate a hand-box by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</description></item>
-        /// <item><description>When the motion is stopped by setting the rate to zero the scope will be set to the previous <see cref="TrackingRate" /> or to no movement, depending on the state of the <see cref="Tracking" /> property.</description></item>
+        /// <item><description>MoveAxis can be used to simulate a hand-box by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</description></item>
         /// <item><description>It may be possible to implement satellite tracking by using the <see cref="MoveAxis" /> method to move the scope in the required manner to track a satellite.</description></item>
         /// </list>
         /// </para>
@@ -960,7 +974,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAltAz" /> is False</exception>
         /// <exception cref="InvalidValueException">If an invalid azimuth or elevation is given.</exception>
-		/// <exception cref="ParkedException">If the telescope is parked</exception>
+        /// <exception cref="ParkedException">If the telescope is parked</exception>
         /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
@@ -970,7 +984,7 @@ namespace ASCOM.DeviceInterface
         /// <para>This method must not be used by applications, use the asynchronous <see cref="SlewToAltAzAsync(double, double)"/> method instead.</para>
         /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtoaltaz" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
-         void SlewToAltAz(double Azimuth, double Altitude);
+        void SlewToAltAz(double Azimuth, double Altitude);
 
         /// <summary>
         /// This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
@@ -1045,19 +1059,19 @@ namespace ASCOM.DeviceInterface
         /// <para>Further explanation is available in this link: <a href="https://ascom-standards.org/newdocs/telescope.html#telescope-slewtotargetasync" target="_blank">Master Interface Document</a>.</para>
         /// </remarks>
         void SlewToTargetAsync();        /// <summary>
-                                             /// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
-                                             /// </summary>
-                                             /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
-                                             /// <param name="Altitude">Target altitude (degrees, positive up)</param>
-                                             /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSyncAltAz" /> is False</exception>
-                                             /// <exception cref="InvalidValueException">If an invalid azimuth or altitude is given.</exception>
-                                             /// <exception cref="NotConnectedException">If the device is not connected</exception>
-                                             /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-                                             /// <remarks>
-                                             /// <para>This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails.</para>
-                                             /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
-                                             /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
-                                             /// </remarks>
+                                         /// Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
+                                         /// </summary>
+                                         /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
+                                         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
+                                         /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSyncAltAz" /> is False</exception>
+                                         /// <exception cref="InvalidValueException">If an invalid azimuth or altitude is given.</exception>
+                                         /// <exception cref="NotConnectedException">If the device is not connected</exception>
+                                         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+                                         /// <remarks>
+                                         /// <para>This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails.</para>
+                                         /// <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
+                                         /// <para>This is only available for telescope InterfaceVersions 2 and later.</para>
+                                         /// </remarks>
         void SyncToAltAz(double Azimuth, double Altitude);
 
         /// <summary>
