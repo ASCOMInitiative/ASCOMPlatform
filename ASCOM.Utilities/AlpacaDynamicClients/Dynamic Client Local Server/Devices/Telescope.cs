@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.Tools;
 using System.Threading;
-using System.Runtime.Remoting;
 
 namespace ASCOM.DynamicClients
 {
