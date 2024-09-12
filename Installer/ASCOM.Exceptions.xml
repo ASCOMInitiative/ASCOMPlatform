@@ -111,7 +111,7 @@
         </member>
         <member name="M:ASCOM.DriverException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref = "T:ASCOM.DriverException" /> class from another caught exception and a human-readable descriptinve message.
+            Initializes a new instance of the <see cref = "T:ASCOM.DriverException" /> class from another caught exception and a human-readable descriptive message.
             </summary>
             <param name = "message">The human-readable description of the problem.</param>
             <param name = "innerException">The caught (inner) exception.</param>
@@ -385,7 +385,7 @@
         <member name="T:ASCOM.MethodNotImplementedException">
             <summary>
             All methods defined by the relevant ASCOM standard interface must exist in each driver. However, those methods do not all have to be <i>implemented</i>. The minimum requirement
-            for each defined method is to throw the ASCOM.MethodNotImplementedException. Note that no default constructor is supplied. Throwing this requires the the method name.
+            for each defined method is to throw the ASCOM.MethodNotImplementedException. Note that no default constructor is supplied. Throwing this requires the method name.
             </summary>
             <remarks>
             <para>If you need to throw this error as a COM exception use the error number: 0x80040400.</para>
