@@ -119,7 +119,7 @@ namespace ASCOM.DeviceInterface
             {
                 if (disposing)
                 {
-                    //logger.LogMessage("Enumerator.Dispose", $"Ignoring Dispose() - Disposing: {disposing}");
+                    stateValues = null;
                 }
 
                 disposedValue = true;
