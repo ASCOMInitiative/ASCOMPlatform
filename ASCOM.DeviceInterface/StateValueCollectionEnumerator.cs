@@ -11,6 +11,9 @@ namespace ASCOM.DeviceInterface
     /// <summary>
     /// An enumerator for IStateValue collections
     /// </summary>
+    /// <remarks>
+    /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
+    /// </remarks>
     [Guid("792C4234-C136-4600-988B-A80D03608534")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]

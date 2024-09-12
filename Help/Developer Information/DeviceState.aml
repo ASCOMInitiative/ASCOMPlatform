@@ -142,7 +142,6 @@
 							Each element of the enumeration must be a COM registered class that implements the <codeEntityReference>T:ASCOM.DeviceInterface.IStateValue</codeEntityReference>
 							interface and exposes the two properties below. The <codeEntityReference>T:ASCOM.DeviceInterface.StateValue</codeEntityReference> class is provided
 							specifically for this purpose.
-							class
 						</para>
 						<code language="c#">
 							public interface IStateValue
