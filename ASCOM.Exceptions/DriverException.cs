@@ -67,7 +67,7 @@ namespace ASCOM
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref = "DriverException" /> class from another caught exception and a human-readable descriptinve message.
+        /// Initializes a new instance of the <see cref = "DriverException" /> class from another caught exception and a human-readable descriptive message.
         /// </summary>
         /// <param name = "message">The human-readable description of the problem.</param>
         /// <param name = "innerException">The caught (inner) exception.</param>

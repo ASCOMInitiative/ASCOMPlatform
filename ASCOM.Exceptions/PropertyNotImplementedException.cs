@@ -20,7 +20,7 @@ namespace ASCOM
     {
         [NonSerialized] const string csMessage = "Property {0} {1}";
         [NonSerialized] readonly bool accessorSet;
-        [NonSerialized] readonly string property = "Unknown"; // Should not need initialization (typ.)
+        [NonSerialized] readonly string property = "Unknown"; // Should not need initialization
 
         /// <summary>
         /// Create a new exception object and identify the specified driver property and accessor as the source.

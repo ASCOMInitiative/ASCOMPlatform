@@ -19,7 +19,6 @@ using ASCOM.Utilities;
 #elif NET472
 using ASCOM.Utilities;
 #else
-//using Util = ASCOM.Tools.Utilities;
 #endif
 
 namespace ASCOM.DeviceInterface
@@ -96,31 +95,31 @@ namespace ASCOM.DeviceInterface
 		/// <value>The image array.</value>
 		object ImageArray { get; }
 
-		/// <summary>
-		/// Returns a preview bitmap for the last video frame as an array of byte.
-		/// </summary>
-		/// <example> The following code can be used to create a Bitmap from the returned byte array
-		/// <code lang="cs">
-		/// using (var memStr = new MemoryStream(frame.PreviewBitmap))
-		/// {
-		/// bmp = (Bitmap)Image.FromStream(memStr);
-		/// }
-		/// </code>
-		/// <code lang="VB">
-		/// Using memStr = New MemoryStream(frame.PreviewBitmap)
-		/// bmp = DirectCast(Image.FromStream(memStr), Bitmap)
-		/// End Using
-		/// </code>
-		/// </example>
-		/// <exception cref="NotConnectedException">If the device is not connected</exception>
-		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>
-		/// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for
-		/// those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file.
-		/// <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
-		/// </remarks>
-		/// <value>The preview bitmap image.</value>
-		byte[] PreviewBitmap { get; }
+        /// <summary>
+        /// Returns a preview bitmap for the last video frame as an array of byte.
+        /// </summary>
+        /// <example> The following code can be used to create a Bitmap from the returned byte array
+        /// <code lang="cs">
+        /// using (var memStr = new MemoryStream(frame.PreviewBitmap))
+        /// {
+        /// bitmap = (Bitmap)Image.FromStream(memStr);
+        /// }
+        /// </code>
+        /// <code lang="VB">
+        /// Using memStr = New MemoryStream(frame.PreviewBitmap)
+        /// bitmap = DirectCast(Image.FromStream(memStr), Bitmap)
+        /// End Using
+        /// </code>
+        /// </example>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for
+        /// those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file.
+        /// <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
+        /// </remarks>
+        /// <value>The preview bitmap image.</value>
+        byte[] PreviewBitmap { get; }
 
 		/// <summary>
 		/// Returns the frame number.

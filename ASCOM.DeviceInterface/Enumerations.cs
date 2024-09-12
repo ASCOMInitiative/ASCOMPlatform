@@ -213,7 +213,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         equB1950 = 4,
 
-        // This entry has been moved to the end of the enum rather than leaving it in the middle so that anyone who is extractiung values from the enum,
+        // This entry has been moved to the end of the enum rather than leaving it in the middle so that anyone who is extracting values from the enum,
         // based on position within the list, will continue to receive the values they are expecting.
         /// <summary>
         /// Please use equTopocentric instead - see <conceptualLink target="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7">Astronomical Coordinates</conceptualLink> for an explanation.
