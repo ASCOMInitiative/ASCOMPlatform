@@ -739,13 +739,14 @@ namespace ASCOM.DeviceInterface
         /// <para>
         /// MoveAxis is best seen as an override to however the mount is configured for tracking, 
         /// including its enabled/disabled state and the current RA and Dec rate offsets.
-        /// When MoveAxis is reset to 0 for an axis, its previous movement rate must be restored:
+        /// When MoveAxis is reset to 0 for an axis, its previous movement rate must be restored, specifically:
         /// </para>
         /// <list type="bullet">
-        /// <item><description><legacyBold>RA Axis Tracking Enabled</legacyBold>: the current TrackingRate plus any RA rate offset if tracking at Sidereal rate</description></item>
-        /// <item><description><legacyBold>RA Axis Tracking Disabled</legacyBold>: 0</description></item>
-        /// <item><description><legacyBold>Dec Axis Tracking Enabled</legacyBold>: the Dec axis rate offset if non-zero or 0</description></item>
-        /// <item><description><legacyBold>Dec Axis Tracking Disabled</legacyBold>: 0</description></item>
+        /// <item><description><legacyBold>RA Axis with <see cref="Tracking"/> is Enabled</legacyBold>: The current <see cref="TrackingRate"/>, plus any <see cref="RightAscensionRate" /> 
+        /// ( the latter is valid only if <see cref="TrackingRate"/> is <see cref="DriveRates.driveSidereal"/> )</description></item>
+        /// <item><description><legacyBold>RA Axis with <see cref="Tracking"/> is Disabled</legacyBold>: 0</description></item>
+        /// <item><description><legacyBold>Dec Axis with <see cref="Tracking"/> is Enabled</legacyBold>: The <see cref="DeclinationRate" /> if non-zero or 0</description></item>
+        /// <item><description><legacyBold>Dec Axis with <see cref="Tracking"/> is Disabled</legacyBold>: 0</description></item>
         /// </list>
         /// <b>NOTES:</b>
         /// <list type="bullet">
