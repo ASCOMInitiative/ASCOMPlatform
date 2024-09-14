@@ -770,9 +770,13 @@ end
 [DEFINE REGION: Remove any items left from previous instals]
  
 Set Variable MYPROGRESS to 23
-Comment: Clean up start menu entries that may not have been aren't removed by the uninstaller.
 Set Variable NATIVE_ENGINE to TRUE
+ 
+Comment: Clean up start menu entries that may not have been aren't removed by the uninstaller.
 Recursively Delete Files $SHORTCUTFILESALL$ASCOM Diagnostics.lnk
+Recursively Delete Files $SHORTCUTFILESALL$ASCOM Omni-Simulators.lnk
+Recursively Delete Files $SHORTCUTFILESALL$ASCOM Remote Server.lnk
+Recursively Delete Files $SHORTCUTFILESALL$ASCOM Profile Explorer.lnk
  
 Remove Directory (including all its files and subfolders) $SHORTCUTFILES$$PLATFORMMENU$
 Write into Text File $SETUPLOG$ from Value $TIME$ Removed folder $SHORTCUTFILES$$PLATFORMMENU$ (at end of file)
@@ -1118,8 +1122,13 @@ if Variable REMOVE Equals TRUE
     Comment: Switch to 64bit mode on a 64bit OS
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
      
-    Comment: Remove Omni-Simulators and ASCOM Remote
+    Comment: Remove 64bit Omni-Simulator files
     Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\OmniSimulator
+     
+    Comment: Remove 32bit Omni-Simulator files
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\OmniSimulator
+     
+    Comment: Remove ASCOM Remote files
     Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\RemoteServer
      
     Comment: Remove other Platform 7 content
@@ -2044,11 +2053,11 @@ Create Shortcut $SHORTCUTFILESALL$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM 
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Omni-Simulators to $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Remote Server to $PROGRAMFILES64$ASCOM\RemoteServer\RemoteServer.exe
 Create Shortcut $SHORTCUTFILESALL$\ASCOM Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-Create Shortcut $SHORTCUTFOLDER$\Compatible Software to http://ascom-standards.org/Community/Partners.htm
-Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+Create Shortcut $SHORTCUTFOLDER$\Compatible Software to https://ascom-standards.org/Community/Partners.htm
+Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to https://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
 Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $TARGETDIR$\Docs\PlatformHelp.chm
-Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/Index.htm
+Create Shortcut $SHORTCUTFOLDER$\How to get support to https://ascom-standards.org/Support/Index.htm
  
 Comment: Install simulator shortcuts if required
 if Variable INSTALL_SIMULATOR_SHORTCUTS Equals TRUE

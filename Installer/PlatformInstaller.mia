@@ -770,8 +770,12 @@ Comment
 Code Folding Region
 Comment
 Set Variable
-Comment
 Set Variable
+Comment
+Comment
+Delete Files Recursive
+Delete Files Recursive
+Delete Files Recursive
 Delete Files Recursive
 Comment
 Remove Directory
@@ -1120,6 +1124,11 @@ Set 64 Bit Mode
 Comment
 Comment
 Remove Directory
+Comment
+Comment
+Remove Directory
+Comment
+Comment
 Remove Directory
 Comment
 Comment
@@ -3512,9 +3521,13 @@ $
 {4751EC5E-F56F-433C-8CD7-D7D9B87F0D00}
 {9BC56B58-E737-4C0B-B884-F93144DFE78D}
 {C21B4DF1-4770-4D78-9F7A-D3007E9E728F}
-{130EED36-5AA7-47CD-AD03-2BCB306F2B93}
 {C947AE6D-7F28-4EE4-A184-72C9BDCEBB3C}
+{D1F21D39-061B-407D-96C5-6B41D909A44E}
+{8A496C93-56DD-4B6B-AC5B-2E0181299D82}
 {E84A99BF-8591-44AA-A7C3-A992E4D589EB}
+{0FBAACFF-0EBB-4791-B20E-6C00FE863521}
+{89459890-B16B-46F1-9801-123BF21A9273}
+{2C9E2E41-1FF1-4305-8DB7-1A25F3666C33}
 {61D02BAD-55DE-4667-A08F-6D1FA9086346}
 {3B655B4C-624C-40B1-957D-23B5B216B6E2}
 {F3AF9D7F-0BC8-43B8-9948-911D3DCB30B7}
@@ -3862,6 +3875,11 @@ $
 {99A4B6CB-A908-4E37-996C-5D1F47BA2E0F}
 {4EAE6322-24E6-4F8F-888B-30A26DA3E574}
 {291FA09B-CDE8-48C8-B55A-ABC8CE2BB685}
+{3817922C-15DA-4BE3-AD6F-E81999196AC8}
+{6222FE34-C330-4B75-A596-EC5138E3A388}
+{1DB6FDD0-D864-4BE8-9BF6-F787B2B24457}
+{40271647-EC3A-414E-9F1B-2078B892082A}
+{8F60E674-3366-48AB-BEF9-4EFA2AE11876}
 {5535578D-F248-459C-AC2B-90D8B82DA78D}
 {642FCA61-72A8-40C3-B87E-B1B92A7E0663}
 {7F85C0A6-4DA7-41A7-8867-90D4A542DE3B}
@@ -6040,8 +6058,6 @@ Registry log path has not been set so use the Documents default value.
 Create the correct log name depending on whether we are installing or uninstalling
 {B079F7AC-0723-4426-AAE3-20E2897ADB88}
 
-{130EED36-5AA7-47CD-AD03-2BCB306F2B93}
-Clean up start menu entries that may not have been aren't removed by the uninstaller.
 {51760A60-2C31-4519-9807-9B03DED96A88}
 
 {ED16C236-DD4E-405B-AD20-4945C6E2C545}
@@ -6221,7 +6237,7 @@ Pre-populate leap second data so that DeltaUT1 functions correctly before an aut
 {389F5CF9-7242-4E7F-B773-60F9FA9D9DCB}
 Ensure that all items installed by the installer are removed.
 {4EAE6322-24E6-4F8F-888B-30A26DA3E574}
-Remove Omni-Simulators and ASCOM Remote
+Remove 64bit Omni-Simulator files
 {99A4B6CB-A908-4E37-996C-5D1F47BA2E0F}
 
 {7EA05CEB-AB81-493A-B509-DC8790E46B61}
@@ -6792,6 +6808,18 @@ We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only su
 
 {94466C9F-DF87-468B-BD26-A9C893527B7A}
 Check that we are not running on an OS earlier than Windows 10 1809 October 2018 Update
+{D1F21D39-061B-407D-96C5-6B41D909A44E}
+
+{8A496C93-56DD-4B6B-AC5B-2E0181299D82}
+Clean up start menu entries that may not have been aren't removed by the uninstaller.
+{3817922C-15DA-4BE3-AD6F-E81999196AC8}
+
+{40271647-EC3A-414E-9F1B-2078B892082A}
+
+{6222FE34-C330-4B75-A596-EC5138E3A388}
+Remove 32bit Omni-Simulator files
+{8F60E674-3366-48AB-BEF9-4EFA2AE11876}
+Remove ASCOM Remote files
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -14206,7 +14234,7 @@ $COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 |
 0|
 {E8DB6673-1522-4784-BCAD-A16F3972FF65}
-http://ascom-standards.org/Support/Index.htm|FALSE
+https://ascom-standards.org/Support/Index.htm|FALSE
 How to get support
 $SHORTCUTFOLDER$|FALSE
 
@@ -14236,7 +14264,7 @@ $COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 |
 0|
 {8932B917-47EE-46BD-B10F-A7F228844059}
-http://www.ascom-standards.org/Downloads/Index.htm|FALSE
+https://www.ascom-standards.org/Downloads/Index.htm|FALSE
 Drivers and Downloads
 $SHORTCUTFOLDER$|FALSE
 
@@ -14246,7 +14274,7 @@ $COMMONFILES$\ASCOM\Platform\Internet.ico|FALSE
 |
 0|
 {D4CF13E7-C1D1-4ACC-A2DA-2CC95ED4A9ED}
-http://ascom-standards.org/Community/Partners.htm|FALSE
+https://ascom-standards.org/Community/Partners.htm|FALSE
 Compatible Software
 $SHORTCUTFOLDER$|FALSE
 
@@ -17989,6 +18017,12 @@ $SHORTCUTFILESALL$ASCOM Diagnostics.lnk
 $ENGINECACHE$*.*
 {045DFE38-1DB5-4858-8058-B4BB665200C4}
 $ENGINECACHE$*.*
+{0FBAACFF-0EBB-4791-B20E-6C00FE863521}
+$SHORTCUTFILESALL$ASCOM Omni-Simulators.lnk
+{89459890-B16B-46F1-9801-123BF21A9273}
+$SHORTCUTFILESALL$ASCOM Remote Server.lnk
+{2C9E2E41-1FF1-4305-8DB7-1A25F3666C33}
+$SHORTCUTFILESALL$ASCOM Profile Explorer.lnk
 {FD19DB59-9886-4C25-B0BF-ABAAB32B66A9}
 GACInstall
 DriverAccess install error RC: $GACINSTALLRC$
@@ -18226,6 +18260,8 @@ $PROGRAMFILES$ASCOMPlatform 6 \Developer Components
 $PROGRAMFILES$ASCOM\Developer
 {94B3F1CA-CEE5-42BC-9CFA-6DD0341BB0AA}
 $PROGRAMFILES$ASCOM\Platform
+{1DB6FDD0-D864-4BE8-9BF6-F787B2B24457}
+$PROGRAMFILES$ASCOM\OmniSimulator
 $
 
 
@@ -19833,6 +19869,15 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -20969,6 +21014,15 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
 
 
 

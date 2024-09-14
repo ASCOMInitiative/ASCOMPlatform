@@ -1,10 +1,8 @@
 ﻿Main Setup Dialogue
-Start installation
 Install complete dialogue
 Check Application Pre-Requisites
 Set Registry Keys
 Remove 64bit components
-Create shortcuts
 Remove 32bit components
 Maintenance Dialogue
 Install MSI support if required
@@ -12,11 +10,9 @@ Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any 
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
-Uninstall previous Platform
 Install Platform files
 Developer files
 Post install activities - 64bit only
 Post install activities - 32bit only
-Set up log file and variables
 Validate installation
 Post install activities - 32bit and 64bit
