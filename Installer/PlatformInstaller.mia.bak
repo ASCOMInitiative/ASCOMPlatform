@@ -8867,7 +8867,7 @@ The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1
 
 {B0DFE6C0-1AE1-44C4-8249-487F1C40117B}
 $TITLE$ - OS Requirement
-ASCOM Platform is not compatible with this operating system, it needs Windows 10 1809 (October 2018) or later to operate correctly.$NEWLINE$$NEWLINE$ASCOM Platform 6.6 SP2 is the latest version that is compatible with Windows 7.$NEWLINE$$NEWLINE$ASCOM Platform 6.4 SP1 is the latest version that is compatible with Windows XP.$NEWLINE$$NEWLINE$The installer will now close.
+ASCOM Platform is not compatible with this operating system and only runs correctly on Windows 10 1809 (October 2018) and later operating systems.$NEWLINE$$NEWLINE$ASCOM Platform 6.6 SP2 is the latest version that is compatible with Windows 7.$NEWLINE$$NEWLINE$ASCOM Platform 6.4 SP1 is the latest version that is compatible with Windows XP.$NEWLINE$$NEWLINE$The installer will now close.
 3
 1
 
