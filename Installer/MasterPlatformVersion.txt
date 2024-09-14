@@ -1,25 +1,25 @@
 7
 0
 0
-
+Release
 
 The first line of this file must contain the major Platform version number
 The second line of this file must contain the minor Platform version number
 The third line of this file must contain the service pack number starting with 0 for the initial release
-The fourth line must contain any Semver release candidate string such as -rc.3 or be an empty line
+The fourth line must contain any Semver release candidate string such as -rc.3 or be "Release" without quotes
 
 E.g for the initial release of Platform 6.0 the first four lines of this file would be:
 6
 0
 0
-
+Release
 ===========
 
 While for service pack 2 of Platform 6.1 the first four lines would be:
 6
 1
 2
-
+Release
 ===========
 
 And for the first release candidate for Platform 7.0 the first four lines would be:
