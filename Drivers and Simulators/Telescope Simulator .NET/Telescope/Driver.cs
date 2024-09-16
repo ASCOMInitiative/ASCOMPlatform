@@ -1511,6 +1511,7 @@ namespace ASCOM.Simulator
             set
             {
                 CheckCapability(TelescopeHardware.CanSetTracking, "Tracking", true);
+                CheckParked("Tracking");
                 SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
                 TelescopeHardware.Tracking = value;
             }
