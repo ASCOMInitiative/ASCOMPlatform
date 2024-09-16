@@ -1140,7 +1140,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If Tracking Write is not implemented.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="ParkedException">When the mount is parked.</exception>
+        /// <exception cref="ParkedException">When the mount is parked. (Added in ITelescopeV4)</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
         /// <p style="color:red;margin-bottom:0"><b>Tracking Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
