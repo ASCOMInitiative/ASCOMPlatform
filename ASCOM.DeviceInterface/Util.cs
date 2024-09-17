@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Dummy class to remove compile warnings for the .NET Standard implementation. Not required for .NET Framework 3.5 or 4.7.2.
 
 namespace ASCOM.DeviceInterface
 {
-    // Dummy class to remove compile warnings for the .NET Standard implementation. Not required for .NET Framework 3.5 or 4.7.2.
+
 #if NETSTANDARD2_0_OR_GREATER
 
     /// <summary>

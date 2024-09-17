@@ -4,10 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.DeviceInterface
 {
-
-    // -----------------------------------------------------------------------
-    // <summary>Defines the ICamera Interface</summary>
-    // -----------------------------------------------------------------------
     /// <summary>
     /// Defines the ICameraV3 Interface
     /// </summary>

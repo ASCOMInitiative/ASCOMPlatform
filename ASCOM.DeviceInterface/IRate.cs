@@ -3,9 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.DeviceInterface
 {
-    // -----------------------------------------------------------------------
-    // <summary>Defines the IRate Interface</summary>
-    // -----------------------------------------------------------------------
     /// <summary>
     /// Describes a range of rates supported by the <see cref="ITelescopeV4.MoveAxis" /> method (degrees/per second)
     /// These are contained within an <see cref="IAxisRates" /> collection and serve to describe one or more supported ranges of rates of motion about a mechanical axis.

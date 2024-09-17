@@ -1,7 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <summary>Defines the ISafetyMonitor Interface</summary>
-// -----------------------------------------------------------------------
-using System.Collections;
+﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
 
@@ -15,6 +12,7 @@ namespace ASCOM.DeviceInterface
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface ISafetyMonitorV3
     {
+
         #region ISafetyMonitorV2 members
 
         /// <summary>

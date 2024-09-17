@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace ASCOM.DeviceInterface
 {
@@ -38,11 +35,5 @@ namespace ASCOM.DeviceInterface
         /// <returns>An enumerator</returns>
         /// <remarks></remarks>
         IEnumerator GetEnumerator();
-
-        ///// <summary>
-        ///// Disposes of the object and cleans up
-        ///// </summary>
-        ///// <remarks></remarks>
-        //void Dispose();
     }
 }

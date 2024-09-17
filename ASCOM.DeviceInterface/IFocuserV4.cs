@@ -10,7 +10,6 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DeviceInterface
 {
-
     /// <summary>
     /// Provides universal access to Focuser drivers - Updated to IFocuserV3 and later - see remarks below
     /// </summary>

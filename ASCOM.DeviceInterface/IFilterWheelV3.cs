@@ -4,10 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.DeviceInterface
 {
-    // Imports ASCOM.Conform
-    // -----------------------------------------------------------------------
-    // <summary>Defines the IFilterWheel Interface</summary>
-    // -----------------------------------------------------------------------
     /// <summary>
     /// Defines the IFilterWheel Interface
     /// </summary>
@@ -16,6 +12,7 @@ namespace ASCOM.DeviceInterface
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface IFilterWheelV3
     {
+
         #region IFilerWheelV2 members
 
         /// <summary>

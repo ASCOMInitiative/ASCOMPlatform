@@ -1,11 +1,6 @@
-﻿// -----------------------------------------------------------------------
-// <summary>Defines the IObservingConditions Interface</summary>
-// -----------------------------------------------------------------------
-using System.Collections;
+﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
-
 
 #if NET35
 using ASCOM.Utilities;

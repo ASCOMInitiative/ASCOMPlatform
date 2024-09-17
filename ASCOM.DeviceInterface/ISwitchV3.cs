@@ -4,9 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.DeviceInterface
 {
-    // -----------------------------------------------------------------------
-    // <summary>Defines the ISwitchV3 Interface</summary>
-    // -----------------------------------------------------------------------
     /// <summary>
     /// Defines the ISwitchV3 Interface
     /// </summary>

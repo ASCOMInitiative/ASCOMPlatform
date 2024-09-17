@@ -4,9 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.DeviceInterface
 {
-    // -----------------------------------------------------------------------
-    // <summary>Defines the IAxisRates Interface</summary>
-    // -----------------------------------------------------------------------
     /// <summary>
     /// A collection of rates at which the telescope may be moved about the specified axis by the <see cref="ITelescopeV4.MoveAxis" /> method.
     /// This is only used if the telescope interface version is 2 or 3

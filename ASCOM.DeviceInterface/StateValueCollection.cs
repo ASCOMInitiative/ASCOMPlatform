@@ -2,14 +2,15 @@
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Globalization;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+
 #if NETSTANDARD2_0
 //using ASCOM.Tools;
 #else
 using ASCOM.Utilities;
 #endif
+
 namespace ASCOM.DeviceInterface
 {
     /// <summary>
