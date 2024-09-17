@@ -1,15 +1,9 @@
 ﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 
 namespace ASCOM.DeviceInterface
 {
-
-    // -----------------------------------------------------------------------
-    // <summary>Defines the ITelescope Interface</summary>
-    // -----------------------------------------------------------------------
     /// <summary>
     /// Defines the ITelescope Interface
     /// </summary>
@@ -734,12 +728,18 @@ namespace ASCOM.DeviceInterface
         /// <para>
         /// Raises an error if <see cref="AtPark" /> is true.
         /// This must be implemented for the if the <see cref="CanMoveAxis" /> property returns True for the given axis.</para>
-        /// <para>This is only available for telescope Interface version 2 and later.</para>
+        /// <para>This is only available for telescope Interface version 2 and later.
+        /// </para>
         /// <para>
+        /// <see cref="MoveAxis" /> is best seen as an override to however the mount is configured for Tracking, including its enabled/disabled state and any 
+        /// current RightAscensionRate and DeclinationRate offsets. 
+        /// </para>
         /// <para>
-        /// MoveAxis is best seen as an override to however the mount is configured for tracking, 
-        /// including its enabled/disabled state and the current RA and Dec rate offsets.
-        /// When MoveAxis is reset to 0 for an axis, its previous movement rate must be restored, specifically:
+        /// While MoveAxis is in effect, TrackingRate, RightAscensionRate and DeclinationRate should retain their current values and will become 
+        /// effective again when MoveAxis is set to zero for the relevant axis.
+        /// </para>
+        /// <para>
+        /// When <see cref="MoveAxis" /> is reset to zero for an axis, its previous state must be restored as shown below:
         /// </para>
         /// <list type="bullet">
         /// <item><description><legacyBold>RA Axis with <see cref="Tracking"/> is Enabled</legacyBold>: The current <see cref="TrackingRate"/>, plus any <see cref="RightAscensionRate" /> 
@@ -759,7 +759,6 @@ namespace ASCOM.DeviceInterface
         /// <item><description>MoveAxis can be used to simulate a hand-box by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</description></item>
         /// <item><description>It may be possible to implement satellite tracking by using the <see cref="MoveAxis" /> method to move the scope in the required manner to track a satellite.</description></item>
         /// </list>
-        /// </para>
         /// </remarks>
         void MoveAxis(TelescopeAxes Axis, double Rate);
 
