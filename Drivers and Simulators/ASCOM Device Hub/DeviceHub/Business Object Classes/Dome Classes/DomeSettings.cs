@@ -15,7 +15,7 @@ namespace ASCOM.DeviceHub
 		private const string _zOffsetProfileName = "Z Offset";
 		private const string _offsetDefault = "0.0";
 		private const string _radiusProfileName = "Dome Radius";
-		private const string _radiusDefault = "0";
+		private const string _radiusDefault = "2000";
 		private const string _gemAxisOffsetProfileName = "GEM Axis Offset";
 		private const string _gemAxisOffsetDefault = "0";
 		private const string _azimuthAccuracyProfileName = "Azimuth Accuracy";
