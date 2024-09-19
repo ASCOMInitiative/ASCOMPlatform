@@ -2414,6 +2414,12 @@ Run Program
 Set Variable
 Include Script
 Comment
+Comment
+Read Registry
+If
+Write Registry
+End
+Comment
 Code Folding Region
 Comment
 Code Folding Region
@@ -5164,6 +5170,12 @@ $
 {1CA5D589-2413-4B48-8FAC-89B042E29030}
 {44EABD96-C028-41FC-8295-165C290D2145}
 {A1C0ECFD-B9EB-4B0E-A39A-E0393A4DE0FE}
+{9BA18A14-C4CD-4443-9571-02A1945E3145}
+{59887ECC-A215-492E-9E9C-E9DFCE41B105}
+{C244DAF0-F1B5-4BC2-AC8E-133DB5221906}
+{782AD485-DD79-4D6E-AC57-67BD14A162CF}
+{B0E557E9-17C1-440C-A1BD-8AF6882F6B95}
+{DEADF088-246B-4903-98AA-02AA46275FBB}
 {02FD7EBE-6BE0-44E9-A21C-310599D3B144}
 {827C7019-DF51-476B-8098-86AB4788B243}
 {60AB2ED8-10BF-4B5D-B234-07C32C2D3FF5}
@@ -6820,6 +6832,10 @@ Clean up start menu entries that may not have been aren't removed by the uninsta
 Remove 32bit Omni-Simulator files
 {8F60E674-3366-48AB-BEF9-4EFA2AE11876}
 Remove ASCOM Remote files
+{59887ECC-A215-492E-9E9C-E9DFCE41B105}
+Update the Device Hub default dcome radius to 2000 if currently set at the Platform 6 default value of zero. A value of zero causes dome synchronisation to fail, a bad out of the box experience.
+{9BA18A14-C4CD-4443-9571-02A1945E3145}
+
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -8785,6 +8801,11 @@ CHECKSYSTEM
 0
 TRUE
 TRUE
+{782AD485-DD79-4D6E-AC57-67BD14A162CF}
+DEVICEHUB_DOME_RADIUS
+0
+0
+FALSE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -14678,6 +14699,11 @@ INTERFACEVERSION|
 2
 SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera
 InterfaceVersion
+{C244DAF0-F1B5-4BC2-AC8E-133DB5221906}
+DEVICEHUB_DOME_RADIUS|
+2
+SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome
+Dome Radius
 {7653D287-A413-450E-A782-DF14170DA6EE}
 10
 2
@@ -16092,6 +16118,14 @@ FALSE
 SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera
 InterfaceVersion
 4
+TRUE
+FALSE
+{B0E557E9-17C1-440C-A1BD-8AF6882F6B95}
+0
+2|
+SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome
+Dome Radius
+2000
 TRUE
 FALSE
 {52985478-9961-4678-AF16-B58E479D28A0}
@@ -20918,6 +20952,12 @@ C
 
 
 
+
+
+
+
+
+
 C
 C
 C
@@ -21014,6 +21054,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 

@@ -8,6 +8,4 @@ Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Install Platform files
 Developer files
-Post install activities - 64bit only
-Post install activities - 32bit only
 Validate installation
