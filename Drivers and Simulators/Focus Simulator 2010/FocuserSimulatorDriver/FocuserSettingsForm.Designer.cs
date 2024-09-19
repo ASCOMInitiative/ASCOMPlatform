@@ -42,6 +42,7 @@
             this.radRelativeFocuser = new System.Windows.Forms.RadioButton();
             this.radAbsoluteFocuser = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxLogging = new System.Windows.Forms.CheckBox();
             this.chkIsSynchronous = new System.Windows.Forms.CheckBox();
             this.chkCanHalt = new System.Windows.Forms.CheckBox();
             this.chkCanChangeStepSize = new System.Windows.Forms.CheckBox();
@@ -59,7 +60,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtCurrentTemperature = new System.Windows.Forms.TextBox();
             this.btnON = new System.Windows.Forms.Button();
-            this.checkBoxLogging = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -197,6 +197,7 @@
             this.radAbsoluteFocuser.TabStop = true;
             this.radAbsoluteFocuser.Text = "Absolute";
             this.radAbsoluteFocuser.UseVisualStyleBackColor = true;
+            this.radAbsoluteFocuser.CheckedChanged += new System.EventHandler(this.radAbsoluteFocuser_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -213,6 +214,16 @@
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Capabilities";
+            // 
+            // checkBoxLogging
+            // 
+            this.checkBoxLogging.AutoSize = true;
+            this.checkBoxLogging.Location = new System.Drawing.Point(13, 134);
+            this.checkBoxLogging.Name = "checkBoxLogging";
+            this.checkBoxLogging.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxLogging.TabIndex = 5;
+            this.checkBoxLogging.Text = "Logging";
+            this.checkBoxLogging.UseVisualStyleBackColor = true;
             // 
             // chkIsSynchronous
             // 
@@ -378,16 +389,6 @@
             this.btnON.Text = "OK";
             this.btnON.UseVisualStyleBackColor = true;
             this.btnON.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // checkBoxLogging
-            // 
-            this.checkBoxLogging.AutoSize = true;
-            this.checkBoxLogging.Location = new System.Drawing.Point(13, 134);
-            this.checkBoxLogging.Name = "checkBoxLogging";
-            this.checkBoxLogging.Size = new System.Drawing.Size(64, 17);
-            this.checkBoxLogging.TabIndex = 5;
-            this.checkBoxLogging.Text = "Logging";
-            this.checkBoxLogging.UseVisualStyleBackColor = true;
             // 
             // FocuserSettingsForm
             // 
