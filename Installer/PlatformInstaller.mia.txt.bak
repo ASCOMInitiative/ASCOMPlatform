@@ -2420,341 +2420,340 @@ if Variable SUCCESS not Equals ERROR
   Write into Text File $SETUPLOG$ from Value $TIME$ Device hub dome radius: '$DEVICEHUB_DOME_RADIUS$' (at end of file)
   if Variable DEVICEHUB_DOME_RADIUS Equals 0
     Write into Text File $SETUPLOG$ from Value $TIME$ Device hub dome radius: Found zero value, writing new value 2000. (at end of file)
-    if Variable DEVICEHUB_DOME_RADIUS Equals 0
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius, 2000
-    end
-     
-    [END REGION]
-     
-    [DEFINE REGION: Post install activities - 32bit only]
-     
-    if Variable WIN64MODE not Equals TRUE
-      Comment: Register the Omni-Simulators
-      Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Omni-Simulators
-      Include Script: UpdateAscomError
-       
-      Comment: Set the default Platform COM simulators
-      Set Variable MYPROGRESS to 72
-      Set Variable PROGRESSTEXT to Setting default Platform simulators
-      Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-      Set Variable ACTION to Set COM simulators to use OmniSimulators
-      Include Script: UpdateAscomError
-    end
-     
-    [END REGION]
-     
-    [DEFINE REGION: Post install activities - 64bit only]
-     
-    Comment: Extra registration of 64bit components if on 64bit system
-    if Variable WIN64MODE Equals TRUE
-      Set Variable MYPROGRESS to 80
-       
-      Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
-       
-      Comment: Register 64bit Omni-Simulators
-      Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Omni-Simulators - 64bit
-      Include Script: UpdateAscomError
-       
-      Comment: Register core components
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
-      Set Variable ACTION to Register ASCOM.Astrometry - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Exceptions.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
-      Set Variable ACTION to Register ASCOM.Exceptions - 64bit
-      Include Script: UpdateAscomError
-      Set Variable MYPROGRESS to 83
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
-      Set Variable ACTION to Register ASCOM.Utilities - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Deviceinterfaces.dll" (WAIT, get result into variable RC)
-      Set Variable ACTION to Register ASCOM.Deviceinterfaces - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Video Utilities - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Cache.dll for COM
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
-      Set Variable ACTION to Register ASCOM.Cache - 64bit
-      Include Script: UpdateAscomError
-       
-      Comment: Register simulators
-      Set Variable MYPROGRESS to 86
-      Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register ASCOM Camera Simulator - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering Platform 7  Focuser simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Focuser Simulator - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register CoverCalibrator Simulator - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering Platform 7 Safety Monitor simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register SafetyMonitor Simulator - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Dome Simulator - 64bit
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Video Simulator- 64bit
-      Set Variable PROGRESSTEXT to Registering Platform 7 Open Weathermap Driver
-      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC)
-      Set Variable ACTION to Register Open Weathermap Driver - 64bit
-      Include Script: UpdateAscomError
-       
-      Comment: Create 64bit native images
-      Set Variable MYPROGRESS to 89
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - DeviceInterfaces 6
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - DriverAccess 6
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - Exceptions 6
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - Utilities 6
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
-      Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - Video Utilities 6
-      Include Script: UpdateAscomError
-      Set Variable MYPROGRESS to 92
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
-      Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - Astrometry 5.5.6
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - Astrometry 6
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
-      Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - DirectShowLib
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
-      Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-      Set Variable ACTION to NGen64 Install - ASCOM Cache
-      Include Script: UpdateAscomError
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
-       
-      Comment: Set the default Platform COM simulators
-      Set Variable MYPROGRESS to 72
-      Set Variable PROGRESSTEXT to Setting default Platform simulators
-      Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-      Set Variable ACTION to Set COM simulators to use OmniSimulators
-      Include Script: UpdateAscomError
-       
-      Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-    end
-     
-    [END REGION]
-     
-    [DEFINE REGION: Validate installation]
-     
-    Comment: Run basic 32bit Platform validation
-    Set Variable PROGRESSTEXT to Validate 32bit Platform operation
-    Set Variable MYPROGRESS to 95
-    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
-    Set Variable ACTION to ValidatePlatform - 32bit
-    Include Script: UpdateAscomError
-     
-    Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
-    Set Variable MYPROGRESS to 97
-    if Variable WIN64MODE Equals TRUE
-      Set Variable PROGRESSTEXT to Validate 64bit Platform operation
-      Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
-      Set Variable ACTION to ValidatePlatform - 64bit
-      Include Script: UpdateAscomError
-      Write into Text File $SETUPLOG$ from Value  (at end of file)
-    end
-     
-    Comment: The Platform 6 Conform will fail on Platform 7 because internal functions had to be moved when Utilities was ported from VB to C# (no equivalent of module level functions)
-    Set Variable CONFORMPRESENT to 
-    Set Variable CONFORMVERSIONOK to 
-    Set Variable MYPROGRESS to 99
-    Set Variable PROGRESSTEXT to Check Conform version
-     
-    Does File Exist $PROGRAMFILES$ASCOM\Conform\Conform.exe (get result into variable CONFORMPRESENT)
-    if Variable CONFORMPRESENT Equals TRUE
-       
-      Check File Version $PROGRAMFILES$ASCOM\Conform\Conform.exe into Variable CONFORMVERSIONOK
-      Write into Text File $SETUPLOG$ from Value $TIME$ Conform version OK: $CONFORMVERSIONOK$, Conform file location: $PROGRAMFILES$ASCOM\Conform\Conform.exe (at end of file)
-       
-      if Variable CONFORMVERSIONOK not Equals TRUE
-        MessageBox: Platform 6 Conform Detected, Platform 6 versions of Conform are not compatible with Platform 7 due to internal Platform changes.$NEWLINE$$NEWLINE$Please install the latest version from https://ascom-standards.org/Downloads/DevTools.htm
-      end
-    else
-      Write into Text File $SETUPLOG$ from Value $TIME$ Conform not found on this system. (at end of file)
-    end
-     
-    [END REGION]
-     
-  end
-   
-  Set Variable MYPROGRESS to 100
-  Set Variable PROGRESSTEXT to Platform install complete.
-   
-  [DEFINE REGION: Install complete dialogue]
-   
-  label: Finish Setup
-  Hide Dialog
-   
-  Comment: Initialise finish dialogue message display variables
-  Set Variable FINISH_TITLE to 
-  Set Variable FINISH_TITLE_POSITION to 
-  Set Variable FINISH_DESCRIPTION to 
-  Set Variable FINISH_CONTEXT to 
-   
-  Comment: We Ensure that the SUCCESS variable reflects the overall ewrror state
-  if Variable ASCOMERROR not Equals 
-    Comment: We have an ASCOM error so reflect this in the SUCCESS variable
-    Set Variable SUCCESS to ERROR
-  end
-  Comment: Only show the User Guide if the installation competed properly
-  if Variable SUCCESS not Equals (Ignore Case) COMPLETE
-    Comment: We do not have a normal comlete install so we don't want to show the user guide even if it was requested
-    Set Variable DISPLAY_USER_GUIDE to FALSE
-  end
-   
-  Comment: List the installation outcome variables
-  Write into Text File $SETUPLOG$ from Value   (at end of file)
-  Write into Text File $SETUPLOG$ from Value Install Outcomes (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Success: $SUCCESS$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance: $MAINTENANCE$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Remove: $REMOVE$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Repair: $REPAIR$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Modify: $MODIFY$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value   (at end of file)
-   
-  Comment: Test whether we have an error, if so then we just display the error messages
-  if Variable SUCCESS not Equals (Ignore Case) ERROR
-    Comment: No errors - great! Test for CANCEL
-    if Variable SUCCESS Equals (Ignore Case) CANCEL
-      Comment: CANCEL requested
-      Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
-    else
-      Comment: SUCCESS is not CANCEL, test for reboot required
-      if Variable SUCCESS Equals (Ignore Case) REBOOT
-        Comment: REBOOT Required
-        Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$(Reboot required)
-        Set Variable FINISH_DESCRIPTION to $NEWLINE$ Your PC needs to be restarted to complete installation.$NEWLINE$$NEWLINE$ Leave the checkbox below checked to restart now. $NEWLINE$$NEWLINE$  Uncheck the checkbox to restart later.
-      else
-        Comment: SUCCESS is not CANCEL or REBOOT so test for a successful outcome (COMPLETE)
-        if Variable SUCCESS Equals (Ignore Case) COMPLETE
-          Comment: SUCCESS in both new install and maintenmance modes, so create good outcome messages
-          Set Variable FINISH_TITLE to $TITLE$ installed successfully.
-          Set Variable FINISH_DESCRIPTION to $NEWLINE$$NEWLINE$ If you are new to Platform 7, you will find information about new$NEWLINE$ features in the "Introduction" section of the Help file in the$NEWLINE$ Start / ASCOM Platform 7 folder.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ ASCOM Diagnostics Tool that you will find in the Start menu and$NEWLINE$ report the issues on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
-          Comment: Enable a note saying when the user guide will be displayed.
-          Comment: if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
-          Comment: Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
-          Comment: else
-          Set Variable FINISH_CONTEXT to The user guide is in your Start / ASCOM Platform 6 folder.
-          Comment: end
-          Comment: Revise messages if in maintenance mode
-          if Variable MAINTENANCE Equals (Ignore Case) TRUE
-            Comment: MAINTENANCE mode is active
-            Set Variable FINISH_TITLE to $TITLE$ - Maintenance complete
-            Set Variable FINISH_CONTEXT to 
-            Comment: MAINTENANCE - Check whether we are uninstalling the Platform
-            if Variable REMOVE Equals (Ignore Case) TRUE
-              Comment: UNINSTALL - User requested uninstall
-              Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been uninstalled.
-            end
-            Comment: MAINTENANCE - Check whether we are repairing the Platform
-            if Variable REPAIR Equals (Ignore Case) TRUE
-              Comment: REPAIR - User requested repair
-              Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been repaired.
-            end
-            Comment: MAINTENANCE - Check whether we are modifying the Platform
-            if Variable MODIFY Equals (Ignore Case) TRUE
-              Comment: MODIFY - User requested change features
-              Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been modified as requested.
-            end
-          end
-        else
-          Comment: Unexpected value in SUCCESS variable
-          Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful - Unexpected error
-          Set Variable FINISH_DESCRIPTION to $NEWLINE$ An unexpected SUCCESS status was returned: $SUCCESS$$NEWLINE$$NEWLINE$ The installation may or may not have completed successfully.$NEWLINE$$NEWLINE$ Please report this issue on the Groups.Io ASCOM-Talk forum.
-        end
-      end
-    end
-  else
-    Comment: ERROR - We have an error so set the error messages
-    Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful - Error state.
-    Set Variable FINISH_DESCRIPTION to  An error occurred while installing Platform 7.$NEWLINE$$NEWLINE$ Please zip up all files and sub-folders in your Documents\ASCOM folder and post the zip on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Many thanks, The ASCOM Platform Team.$NEWLINE$$NEWLINE$ Last error: $LASTERROR$$ASCOMERROR$
-    Set Variable FINISH_CONTEXT to 
-  end
-   
-  Comment: List the display fields
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Title: $FINISH_TITLE$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Description: $FINISH_DESCRIPTION$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Context: $FINISH_CONTEXT$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value   (at end of file)
-   
-  Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
-  Convert Variable SUCCESS to UPPER case
-  Display Dialog: finish, wait for dialog to return (modal)
-   
-  if Variable SILENT Equals FALSE
-    Comment: Check whether a reboot is required and do this if required
-    if Variable REBOOTCOMPUTER Equals TRUE
-      if Variable SUCCESS Equals REBOOT
-        Reboot Computer
-      end
-    end
-     
-    Comment: Show the user guide if we are not removing and not repairing the install
-    Set Variable NATIVE_ENGINE to TRUE
-    Write into Text File $SETUPLOG$ from Value   (at end of file)
-    if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
-      if Variable MAINTENANCE not Equals (Ignore Case) TRUE
-        Comment: Display the user guide if Acrobat is installed
-        if Variable ACROBATKEY not Equals 
-          Comment: Acrobat is installed
-          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
-          Comment: Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
-          Run Program  $WINDIR$\explorer.exe "$TARGETDIR$\Docs\ASCOM User Guide.pdf" (WAIT)
-          Set Variable ACTION to Display User Guide
-          Include Script: UpdateAscomError
-        else
-          Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
-          if Variable OSCURRENTBUILD Greater Than 9600
-            Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
-            Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
-            Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
-            Set Variable ACTION to Display User Guide (Win 10)
-            Include Script: UpdateAscomError
-          else
-            Comment: We are not running on Windows 10 so display an error message.
-            Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
-            MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 7.
-          end
-        end
-      end
-    else
-      Comment: User guide display not requested
-      Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: User guide display not requested (at end of file)
-    end
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius, 2000
   end
    
   [END REGION]
    
-  label: End of Script
+  [DEFINE REGION: Post install activities - 32bit only]
+   
+  if Variable WIN64MODE not Equals TRUE
+    Comment: Register the Omni-Simulators
+    Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Omni-Simulators
+    Include Script: UpdateAscomError
+     
+    Comment: Set the default Platform COM simulators
+    Set Variable MYPROGRESS to 72
+    Set Variable PROGRESSTEXT to Setting default Platform simulators
+    Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
+    Set Variable ACTION to Set COM simulators to use OmniSimulators
+    Include Script: UpdateAscomError
+  end
+   
+  [END REGION]
+   
+  [DEFINE REGION: Post install activities - 64bit only]
+   
+  Comment: Extra registration of 64bit components if on 64bit system
+  if Variable WIN64MODE Equals TRUE
+    Set Variable MYPROGRESS to 80
+     
+    Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
+     
+    Comment: Register 64bit Omni-Simulators
+    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Omni-Simulators - 64bit
+    Include Script: UpdateAscomError
+     
+    Comment: Register core components
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
+    Set Variable ACTION to Register ASCOM.Astrometry - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Exceptions.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
+    Set Variable ACTION to Register ASCOM.Exceptions - 64bit
+    Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 83
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
+    Set Variable ACTION to Register ASCOM.Utilities - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Deviceinterfaces.dll" (WAIT, get result into variable RC)
+    Set Variable ACTION to Register ASCOM.Deviceinterfaces - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Video Utilities - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Cache.dll for COM
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
+    Set Variable ACTION to Register ASCOM.Cache - 64bit
+    Include Script: UpdateAscomError
+     
+    Comment: Register simulators
+    Set Variable MYPROGRESS to 86
+    Set Variable PROGRESSTEXT to Registering Platform 7 Camera simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register ASCOM Camera Simulator - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Platform 7  Focuser simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Focuser Simulator - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Platform 7 CoverCalibrator simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\CoverCalibrator\ASCOM.Simulator.CoverCalibrator\ASCOM.Simulator.CoverCalibrator.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register CoverCalibrator Simulator - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Platform 7 Safety Monitor simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register SafetyMonitor Simulator - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Platform 7 Dome simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Dome Simulator - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Platform 7 Video simulator
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Video Simulator- 64bit
+    Set Variable PROGRESSTEXT to Registering Platform 7 Open Weathermap Driver
+    Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Open Weathermap Driver - 64bit
+    Include Script: UpdateAscomError
+     
+    Comment: Create 64bit native images
+    Set Variable MYPROGRESS to 89
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - DeviceInterfaces 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - DriverAccess 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - Exceptions 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - Utilities 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
+    Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - Video Utilities 6
+    Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 92
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
+    Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - Astrometry 5.5.6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - Astrometry 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
+    Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - DirectShowLib
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
+    Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen64 Install - ASCOM Cache
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
+     
+    Comment: Set the default Platform COM simulators
+    Set Variable MYPROGRESS to 72
+    Set Variable PROGRESSTEXT to Setting default Platform simulators
+    Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
+    Set Variable ACTION to Set COM simulators to use OmniSimulators
+    Include Script: UpdateAscomError
+     
+    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+  end
+   
+  [END REGION]
+   
+  [DEFINE REGION: Validate installation]
+   
+  Comment: Run basic 32bit Platform validation
+  Set Variable PROGRESSTEXT to Validate 32bit Platform operation
+  Set Variable MYPROGRESS to 95
+  Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform.exe  (WAIT, get result into variable RC)
+  Set Variable ACTION to ValidatePlatform - 32bit
+  Include Script: UpdateAscomError
+   
+  Comment: Run basic 64bit Platform validation if we are running on a 64bit OS
+  Set Variable MYPROGRESS to 97
+  if Variable WIN64MODE Equals TRUE
+    Set Variable PROGRESSTEXT to Validate 64bit Platform operation
+    Run Program $TARGETDIR$\Tools\Validation\ValidatePlatform64.exe  (WAIT, get result into variable RC)
+    Set Variable ACTION to ValidatePlatform - 64bit
+    Include Script: UpdateAscomError
+    Write into Text File $SETUPLOG$ from Value  (at end of file)
+  end
+   
+  Comment: The Platform 6 Conform will fail on Platform 7 because internal functions had to be moved when Utilities was ported from VB to C# (no equivalent of module level functions)
+  Set Variable CONFORMPRESENT to 
+  Set Variable CONFORMVERSIONOK to 
+  Set Variable MYPROGRESS to 99
+  Set Variable PROGRESSTEXT to Check Conform version
+   
+  Does File Exist $PROGRAMFILES$ASCOM\Conform\Conform.exe (get result into variable CONFORMPRESENT)
+  if Variable CONFORMPRESENT Equals TRUE
+     
+    Check File Version $PROGRAMFILES$ASCOM\Conform\Conform.exe into Variable CONFORMVERSIONOK
+    Write into Text File $SETUPLOG$ from Value $TIME$ Conform version OK: $CONFORMVERSIONOK$, Conform file location: $PROGRAMFILES$ASCOM\Conform\Conform.exe (at end of file)
+     
+    if Variable CONFORMVERSIONOK not Equals TRUE
+      MessageBox: Platform 6 Conform Detected, Platform 6 versions of Conform are not compatible with Platform 7 due to internal Platform changes.$NEWLINE$$NEWLINE$Please install the latest version from https://ascom-standards.org/Downloads/DevTools.htm
+    end
+  else
+    Write into Text File $SETUPLOG$ from Value $TIME$ Conform not found on this system. (at end of file)
+  end
+   
+  [END REGION]
+   
+end
+ 
+Set Variable MYPROGRESS to 100
+Set Variable PROGRESSTEXT to Platform install complete.
+ 
+[DEFINE REGION: Install complete dialogue]
+ 
+label: Finish Setup
+Hide Dialog
+ 
+Comment: Initialise finish dialogue message display variables
+Set Variable FINISH_TITLE to 
+Set Variable FINISH_TITLE_POSITION to 
+Set Variable FINISH_DESCRIPTION to 
+Set Variable FINISH_CONTEXT to 
+ 
+Comment: We Ensure that the SUCCESS variable reflects the overall ewrror state
+if Variable ASCOMERROR not Equals 
+  Comment: We have an ASCOM error so reflect this in the SUCCESS variable
+  Set Variable SUCCESS to ERROR
+end
+Comment: Only show the User Guide if the installation competed properly
+if Variable SUCCESS not Equals (Ignore Case) COMPLETE
+  Comment: We do not have a normal comlete install so we don't want to show the user guide even if it was requested
+  Set Variable DISPLAY_USER_GUIDE to FALSE
+end
+ 
+Comment: List the installation outcome variables
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+Write into Text File $SETUPLOG$ from Value Install Outcomes (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Success: $SUCCESS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance: $MAINTENANCE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Remove: $REMOVE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Repair: $REPAIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Modify: $MODIFY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
+Comment: Test whether we have an error, if so then we just display the error messages
+if Variable SUCCESS not Equals (Ignore Case) ERROR
+  Comment: No errors - great! Test for CANCEL
+  if Variable SUCCESS Equals (Ignore Case) CANCEL
+    Comment: CANCEL requested
+    Set Variable FINISH_TITLE to Platform installation has been cancelled at your request.
+  else
+    Comment: SUCCESS is not CANCEL, test for reboot required
+    if Variable SUCCESS Equals (Ignore Case) REBOOT
+      Comment: REBOOT Required
+      Set Variable FINISH_TITLE to $TITLE$ has been successfully installed.$NEWLINE$(Reboot required)
+      Set Variable FINISH_DESCRIPTION to $NEWLINE$ Your PC needs to be restarted to complete installation.$NEWLINE$$NEWLINE$ Leave the checkbox below checked to restart now. $NEWLINE$$NEWLINE$  Uncheck the checkbox to restart later.
+    else
+      Comment: SUCCESS is not CANCEL or REBOOT so test for a successful outcome (COMPLETE)
+      if Variable SUCCESS Equals (Ignore Case) COMPLETE
+        Comment: SUCCESS in both new install and maintenmance modes, so create good outcome messages
+        Set Variable FINISH_TITLE to $TITLE$ installed successfully.
+        Set Variable FINISH_DESCRIPTION to $NEWLINE$$NEWLINE$ If you are new to Platform 7, you will find information about new$NEWLINE$ features in the "Introduction" section of the Help file in the$NEWLINE$ Start / ASCOM Platform 7 folder.$NEWLINE$$NEWLINE$ If you experience issues after installing this release please run the$NEWLINE$ ASCOM Diagnostics Tool that you will find in the Start menu and$NEWLINE$ report the issues on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Best wishes, The ASCOM Platform Team.
+        Comment: Enable a note saying when the user guide will be displayed.
+        Comment: if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+        Comment: Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
+        Comment: else
+        Set Variable FINISH_CONTEXT to The user guide is in your Start / ASCOM Platform 6 folder.
+        Comment: end
+        Comment: Revise messages if in maintenance mode
+        if Variable MAINTENANCE Equals (Ignore Case) TRUE
+          Comment: MAINTENANCE mode is active
+          Set Variable FINISH_TITLE to $TITLE$ - Maintenance complete
+          Set Variable FINISH_CONTEXT to 
+          Comment: MAINTENANCE - Check whether we are uninstalling the Platform
+          if Variable REMOVE Equals (Ignore Case) TRUE
+            Comment: UNINSTALL - User requested uninstall
+            Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been uninstalled.
+          end
+          Comment: MAINTENANCE - Check whether we are repairing the Platform
+          if Variable REPAIR Equals (Ignore Case) TRUE
+            Comment: REPAIR - User requested repair
+            Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been repaired.
+          end
+          Comment: MAINTENANCE - Check whether we are modifying the Platform
+          if Variable MODIFY Equals (Ignore Case) TRUE
+            Comment: MODIFY - User requested change features
+            Set Variable FINISH_DESCRIPTION to $NEWLINE$ $TITLE$ has been modified as requested.
+          end
+        end
+      else
+        Comment: Unexpected value in SUCCESS variable
+        Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful - Unexpected error
+        Set Variable FINISH_DESCRIPTION to $NEWLINE$ An unexpected SUCCESS status was returned: $SUCCESS$$NEWLINE$$NEWLINE$ The installation may or may not have completed successfully.$NEWLINE$$NEWLINE$ Please report this issue on the Groups.Io ASCOM-Talk forum.
+      end
+    end
+  end
+else
+  Comment: ERROR - We have an error so set the error messages
+  Set Variable FINISH_TITLE to $TITLE$ installation unsuccessful - Error state.
+  Set Variable FINISH_DESCRIPTION to  An error occurred while installing Platform 7.$NEWLINE$$NEWLINE$ Please zip up all files and sub-folders in your Documents\ASCOM folder and post the zip on the ASCOM Talk Groups.Io forum.$NEWLINE$$NEWLINE$ Many thanks, The ASCOM Platform Team.$NEWLINE$$NEWLINE$ Last error: $LASTERROR$$ASCOMERROR$
+  Set Variable FINISH_CONTEXT to 
+end
+ 
+Comment: List the display fields
+Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Title: $FINISH_TITLE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Description: $FINISH_DESCRIPTION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Finish Dialogue Context: $FINISH_CONTEXT$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
+Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
+Convert Variable SUCCESS to UPPER case
+Display Dialog: finish, wait for dialog to return (modal)
+ 
+if Variable SILENT Equals FALSE
+  Comment: Check whether a reboot is required and do this if required
+  if Variable REBOOTCOMPUTER Equals TRUE
+    if Variable SUCCESS Equals REBOOT
+      Reboot Computer
+    end
+  end
+   
+  Comment: Show the user guide if we are not removing and not repairing the install
+  Set Variable NATIVE_ENGINE to TRUE
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+  if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
+    if Variable MAINTENANCE not Equals (Ignore Case) TRUE
+      Comment: Display the user guide if Acrobat is installed
+      if Variable ACROBATKEY not Equals 
+        Comment: Acrobat is installed
+        Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is installed - displaying guide (at end of file)
+        Comment: Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+        Run Program  $WINDIR$\explorer.exe "$TARGETDIR$\Docs\ASCOM User Guide.pdf" (WAIT)
+        Set Variable ACTION to Display User Guide
+        Include Script: UpdateAscomError
+      else
+        Comment: Acrobat is not installed so check whether we are running on Windows 10 i.e. the build number is > 9600
+        if Variable OSCURRENTBUILD Greater Than 9600
+          Comment: We are running on Windows 10 so run the program and leave it to the user to display it in the MS Edge browser or application of their choice
+          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed but we are running on Windows 10 - displaying guide (at end of file)
+          Run Program $TARGETDIR$\Docs\ASCOM User Guide.pdf 
+          Set Variable ACTION to Display User Guide (Win 10)
+          Include Script: UpdateAscomError
+        else
+          Comment: We are not running on Windows 10 so display an error message.
+          Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: Acrobat is not installed and we are not running on Windows 10 - showing cannot display message (at end of file)
+          MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 7.
+        end
+      end
+    end
+  else
+    Comment: User guide display not requested
+    Write into Text File $SETUPLOG$ from Value $TIME$ UserGuide: User guide display not requested (at end of file)
+  end
+end
+ 
+[END REGION]
+ 
+label: End of Script

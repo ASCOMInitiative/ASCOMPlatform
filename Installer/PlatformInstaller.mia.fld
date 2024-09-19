@@ -1,23 +1,22 @@
-﻿Main Setup Dialogue
+﻿Check Application Requirements
+Main Setup Dialogue
+Start installation
 Install complete dialogue
 Check Application Pre-Requisites
+Remove Previous Platform install if present
+Uninstall items installed by this installer
+Remove Previous Platforms 4 and 5 if present
+Create shortcuts
 Maintenance Dialogue
+Clean up any remaining simulator COM entries
 Install MSI support if required
+Remove any items left from previous instals
 Uninstall any ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
+Set Profile ACL
+Uninstall previous Platform
 Install Platform files
 Developer files
-Validate installation
 Set up log file and variables
-Start installation
-Remove Previous Platform install if present
-Remove any items left from previous instals
-Remove Previous Platforms 4 and 5 if present
-Uninstall items installed by this installer
-Clean up any remaining simulator COM entries
-Check Application Requirements
-Uninstall previous Platform
-Set Profile ACL
-Set Registry Keys
-Create shortcuts
+Validate installation
