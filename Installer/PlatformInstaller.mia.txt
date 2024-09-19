@@ -2036,6 +2036,8 @@ if Variable DEVICEHUB_DOME_RADIUS Equals 0
   Comment: Platform 6 default value detected
   Write into Text File $SETUPLOG$ from Value $TIME$ Updating Device Hub Dome Radius to: 2000. (at end of file)
   Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius, 2000 (permanent)
+else
+  Write into Text File $SETUPLOG$ from Value $TIME$ Retinaing current Device Hub Dome Radius: $DEVICEHUB_DOME_RADIUS$ (at end of file)
 end
  
 [END REGION]
