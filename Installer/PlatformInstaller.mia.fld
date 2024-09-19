@@ -9,3 +9,15 @@ Remove the earth rotation update scheduled job.
 Install Platform files
 Developer files
 Validate installation
+Set up log file and variables
+Start installation
+Remove Previous Platform install if present
+Remove any items left from previous instals
+Remove Previous Platforms 4 and 5 if present
+Uninstall items installed by this installer
+Clean up any remaining simulator COM entries
+Check Application Requirements
+Uninstall previous Platform
+Set Profile ACL
+Set Registry Keys
+Create shortcuts
