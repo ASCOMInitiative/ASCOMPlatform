@@ -2029,6 +2029,14 @@ if Variable INTERFACEVERSION Equals 3
   Write into Text File $SETUPLOG$ from Value $TIME$ Updating telescope simulator interface version to 4 (at end of file)
 end
  
+Comment: Update the Device Hub default dcome radius to 2000 if currently set at the Platform 6 default value of zero. A value of zero causes dome synchronisation to fail, a bad out of the box experience.
+Read Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius into DEVICEHUB_DOME_RADIUS
+Write into Text File $SETUPLOG$ from Value $TIME$ Current Device Hub dome radius: '$DEVICEHUB_DOME_RADIUS$' (at end of file)
+if Variable DEVICEHUB_DOME_RADIUS Equals 0
+  Write into Text File $SETUPLOG$ from Value $TIME$ Device hub dome radius: Found value: zero, writing new value: 2000. (at end of file)
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius, 2000
+end
+ 
 [END REGION]
  
 [DEFINE REGION: Create shortcuts]
@@ -2414,14 +2422,6 @@ if Variable SUCCESS not Equals ERROR
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
   Set Variable ACTION to Update checker scheduled task
   Include Script: UpdateAscomError
-   
-  Comment: Update the Device Hub default dcome radius to 2000 if currently set at the Platform 6 default value of zero. A value of zero causes dome synchronisation to fail, a bad out of the box experience.
-  Read Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius into DEVICEHUB_DOME_RADIUS
-  Write into Text File $SETUPLOG$ from Value $TIME$ Device hub dome radius: '$DEVICEHUB_DOME_RADIUS$' (at end of file)
-  if Variable DEVICEHUB_DOME_RADIUS Equals 0
-    Write into Text File $SETUPLOG$ from Value $TIME$ Device hub dome radius: Found zero value, writing new value 2000. (at end of file)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius, 2000
-  end
    
   [END REGION]
    
