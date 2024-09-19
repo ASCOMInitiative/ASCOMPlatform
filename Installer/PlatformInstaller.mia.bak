@@ -17579,12 +17579,12 @@ FALSE
 TRUE
 {4BB7C0F7-EA41-409F-8800-0947D3BD15CB}
 $SETUPLOG$
-$TIME$ Device hub dome radius: Found value: zero, writing new value: 2000.
+$TIME$ Updating Device Hub Dome Radius to: 2000.
 FALSE
 TRUE
 {2ADB29CA-9E50-4D97-919C-77C013C02A06}
 $SETUPLOG$
-$TIME$ Current Device Hub dome radius: '$DEVICEHUB_DOME_RADIUS$'
+$TIME$ Current Device Hub Dome Radius: '$DEVICEHUB_DOME_RADIUS$'
 FALSE
 TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}

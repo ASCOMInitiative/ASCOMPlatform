@@ -2033,6 +2033,7 @@ Comment
 Read Registry
 Write to Text File
 If
+Comment
 Write to Text File
 Write Registry
 End
@@ -4793,6 +4794,7 @@ $
 {5BCE8093-4A6D-49F1-954C-4B873571D682}
 {2ADB29CA-9E50-4D97-919C-77C013C02A06}
 {9BFBF5F0-E008-427C-9A76-064541E0682A}
+{FB47CEE6-420C-4C7B-8751-7E3701C6A7F0}
 {4BB7C0F7-EA41-409F-8800-0947D3BD15CB}
 {E198FD8A-3324-4D3E-8DE8-E8D6224E06E3}
 {966CFD98-7307-49BF-B593-414D14DB4A17}
@@ -6842,6 +6844,8 @@ Remove ASCOM Remote files
 
 {EDA8A52A-CD6E-4029-AC0A-B692B4BCE775}
 Update the Device Hub default dcome radius to 2000 if currently set at the Platform 6 default value of zero. A value of zero causes dome synchronisation to fail, a bad out of the box experience.
+{FB47CEE6-420C-4C7B-8751-7E3701C6A7F0}
+Platform 6 default value detected
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -20439,6 +20443,7 @@ C
 
 
 
+
 C
 
 
@@ -21076,6 +21081,7 @@ C
 
 
 $
+
 
 
 
