@@ -1122,8 +1122,13 @@ if Variable REMOVE Equals TRUE
     Comment: Switch to 64bit mode on a 64bit OS
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
      
-    Comment: Remove Omni-Simulators and ASCOM Remote
+    Comment: Remove 64bit Omni-Simulator files
     Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\OmniSimulator
+     
+    Comment: Remove 32bit Omni-Simulator files
+    Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\OmniSimulator
+     
+    Comment: Remove ASCOM Remote files
     Remove Directory (including all its files and subfolders) $PROGRAMFILES64$ASCOM\RemoteServer
      
     Comment: Remove other Platform 7 content
