@@ -2017,16 +2017,28 @@ Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $P
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
 Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
  
-Comment: Update Camera and Telescope interface version numbers to Platform 7 versions if they are set to Platform 6 versions
-Read Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\InterfaceVersion into INTERFACEVERSION
-if Variable INTERFACEVERSION Equals 3
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\InterfaceVersion, 4
+Comment: One time only - Update Camera interface version number to Platform 7 version. One time only in case the user intentionally reverts the change post install.
+Read Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\PlatformInstaller\InterfaceVersionUpdated into INTERFACEVERSION_UPDATED
+if Variable INTERFACEVERSION_UPDATED Equals 
+  Comment: This is a first time Platform install so update the interface version and set a flag that it has been updated.
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\InterfaceVersion, 4 (permanent)
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\ASCOM.Simulator.Camera\PlatformInstaller\InterfaceVersionUpdated, True (permanent)
   Write into Text File $SETUPLOG$ from Value $TIME$ Updating camera simulator interface version to 4 (at end of file)
+else
+  Comment: Not a first time install so no action to take.
+  Write into Text File $SETUPLOG$ from Value $TIME$ Camera simulator interface version has already been updated once, taking no action. (at end of file)
 end
-Read Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\InterfaceVersion into INTERFACEVERSION
-if Variable INTERFACEVERSION Equals 3
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\InterfaceVersion, 4
+ 
+Comment: One time only - Update Telescope interface version number to Platform 7 version. One time only in case the user intentionally reverts the change post install.
+Read Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\PlatformInstaller\InterfaceVersionUpdated into INTERFACEVERSION_UPDATED
+if Variable INTERFACEVERSION_UPDATED Equals 
+  Comment: This is a first time Platform install so update the interface version and set a flag that it has been updated.
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\InterfaceVersion, 4 (permanent)
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\PlatformInstaller\InterfaceVersionUpdated, True (permanent)
   Write into Text File $SETUPLOG$ from Value $TIME$ Updating telescope simulator interface version to 4 (at end of file)
+else
+  Comment: Not a first time install so no action to take.
+  Write into Text File $SETUPLOG$ from Value $TIME$ Telescope simulator interface version has already been updated once, taking no action. (at end of file)
 end
  
 Comment: Update the Device Hub default dcome radius to 2000 if currently set at the Platform 6 default value of zero. A value of zero causes dome synchronisation to fail, a bad out of the box experience.
