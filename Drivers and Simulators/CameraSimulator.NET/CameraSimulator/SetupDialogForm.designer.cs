@@ -103,6 +103,9 @@ namespace ASCOM.Simulator
             this.label1 = new System.Windows.Forms.Label();
             this.NumInterfaceVersion = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.LblConnectDelay1 = new System.Windows.Forms.Label();
+            this.NumStartDelay = new System.Windows.Forms.NumericUpDown();
+            this.LblConnectDelay2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -115,6 +118,7 @@ namespace ASCOM.Simulator
             this.GrpSimulatorSetup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumInterfaceVersion)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumStartDelay)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -839,7 +843,7 @@ namespace ASCOM.Simulator
             this.checkBoxLogging.AutoSize = true;
             this.checkBoxLogging.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxLogging.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.checkBoxLogging.Location = new System.Drawing.Point(39, 18);
+            this.checkBoxLogging.Location = new System.Drawing.Point(39, 21);
             this.checkBoxLogging.Name = "checkBoxLogging";
             this.checkBoxLogging.Size = new System.Drawing.Size(64, 17);
             this.checkBoxLogging.TabIndex = 13;
@@ -935,6 +939,9 @@ namespace ASCOM.Simulator
             // 
             // GrpSimulatorSetup
             // 
+            this.GrpSimulatorSetup.Controls.Add(this.LblConnectDelay2);
+            this.GrpSimulatorSetup.Controls.Add(this.LblConnectDelay1);
+            this.GrpSimulatorSetup.Controls.Add(this.NumStartDelay);
             this.GrpSimulatorSetup.Controls.Add(this.label1);
             this.GrpSimulatorSetup.Controls.Add(this.NumInterfaceVersion);
             this.GrpSimulatorSetup.Controls.Add(this.checkBoxLogging);
@@ -952,7 +959,7 @@ namespace ASCOM.Simulator
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label1.Location = new System.Drawing.Point(95, 44);
+            this.label1.Location = new System.Drawing.Point(95, 47);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(87, 13);
             this.label1.TabIndex = 15;
@@ -961,7 +968,7 @@ namespace ASCOM.Simulator
             // NumInterfaceVersion
             // 
             this.NumInterfaceVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NumInterfaceVersion.Location = new System.Drawing.Point(39, 41);
+            this.NumInterfaceVersion.Location = new System.Drawing.Point(39, 44);
             this.NumInterfaceVersion.Maximum = new decimal(new int[] {
             4,
             0,
@@ -995,6 +1002,48 @@ namespace ASCOM.Simulator
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Simulated Image";
+            // 
+            // LblConnectDelay1
+            // 
+            this.LblConnectDelay1.AutoSize = true;
+            this.LblConnectDelay1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblConnectDelay1.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.LblConnectDelay1.Location = new System.Drawing.Point(95, 70);
+            this.LblConnectDelay1.Name = "LblConnectDelay1";
+            this.LblConnectDelay1.Size = new System.Drawing.Size(83, 13);
+            this.LblConnectDelay1.TabIndex = 17;
+            this.LblConnectDelay1.Text = "Connect() Delay";
+            // 
+            // NumStartDelay
+            // 
+            this.NumStartDelay.DecimalPlaces = 1;
+            this.NumStartDelay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumStartDelay.Location = new System.Drawing.Point(39, 73);
+            this.NumStartDelay.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            65536});
+            this.NumStartDelay.Name = "NumStartDelay";
+            this.NumStartDelay.Size = new System.Drawing.Size(50, 20);
+            this.NumStartDelay.TabIndex = 16;
+            this.NumStartDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.NumStartDelay.Value = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            // 
+            // LblConnectDelay2
+            // 
+            this.LblConnectDelay2.AutoSize = true;
+            this.LblConnectDelay2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblConnectDelay2.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.LblConnectDelay2.Location = new System.Drawing.Point(95, 83);
+            this.LblConnectDelay2.Name = "LblConnectDelay2";
+            this.LblConnectDelay2.Size = new System.Drawing.Size(53, 13);
+            this.LblConnectDelay2.TabIndex = 18;
+            this.LblConnectDelay2.Text = "(seconds)";
             // 
             // SetupDialogForm
             // 
@@ -1045,6 +1094,7 @@ namespace ASCOM.Simulator
             ((System.ComponentModel.ISupportInitialize)(this.NumInterfaceVersion)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumStartDelay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1125,5 +1175,8 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox TxtSubExposure;
         private System.Windows.Forms.CheckBox ChkHasSubExposure;
+        private System.Windows.Forms.Label LblConnectDelay1;
+        private System.Windows.Forms.NumericUpDown NumStartDelay;
+        private System.Windows.Forms.Label LblConnectDelay2;
     }
 }

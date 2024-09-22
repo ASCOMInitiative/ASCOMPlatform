@@ -95,7 +95,7 @@ namespace ASCOM.Simulator
         {
             okButtonPressed = true;
             validationErrorsOccurred = false; // Initialise to the success condition
-            SaveProperties(); // If validation fails the valiudation flag will be set false and the form close will be cancelled
+            SaveProperties(); // If validation fails the validation flag will be set false and the form close will be cancelled
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -208,6 +208,9 @@ namespace ASCOM.Simulator
             {
                 checkBoxUseReadoutModes.Checked = theCamera.readoutModes.Count > 1;
             }
+
+            // Set the startup delay
+            NumStartDelay.Value = theCamera.startupDelay;
 
             // Set interface version last so that appropriate text box controls are enabled and disabled correctly per what is available in each interface version
             NumInterfaceVersion.Value = theCamera.interfaceVersion;
@@ -357,6 +360,8 @@ namespace ASCOM.Simulator
 
             camera.interfaceVersion = Decimal.ToInt16(NumInterfaceVersion.Value);
 
+            camera.startupDelay = NumStartDelay.Value;
+
             camera.canFastReadout = checkBoxCanFastReadout.Checked;
             if (checkBoxUseReadoutModes.Checked)
             {
@@ -433,8 +438,13 @@ namespace ASCOM.Simulator
             RadOffsets.Enabled = NumInterfaceVersion.Value >= 3;
             TxtOffsetMax.Enabled = NumInterfaceVersion.Value >= 3;
             TxtOffsetMin.Enabled = NumInterfaceVersion.Value >= 3;
-            ChkHasSubExposure.Enabled= NumInterfaceVersion.Value >= 3;
-            TxtSubExposure.Enabled= (NumInterfaceVersion.Value >= 3) & ChkHasSubExposure.Checked;
+            ChkHasSubExposure.Enabled = NumInterfaceVersion.Value >= 3;
+            TxtSubExposure.Enabled = (NumInterfaceVersion.Value >= 3) & ChkHasSubExposure.Checked;
+
+            // Enable the Connect() Delay control if required
+            NumStartDelay.Enabled = NumInterfaceVersion.Value >= 4;
+            LblConnectDelay1.Enabled = NumInterfaceVersion.Value >= 4;
+            LblConnectDelay2.Enabled = NumInterfaceVersion.Value >= 4;
         }
 
         private void ChkHasSubExposure_CheckedChanged(object sender, EventArgs e)

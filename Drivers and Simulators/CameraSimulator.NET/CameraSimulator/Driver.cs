@@ -69,6 +69,7 @@ namespace ASCOM.Simulator
 
         #region Profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
+        private const string STR_StartupDelay = "StartupDelay";
         private const string STR_PixelSizeX = "PixelSizeX";
         private const string STR_PixelSizeY = "PixelSizeY";
         private const string STR_FullWellCapacity = "FullWellCapacity";
@@ -273,6 +274,7 @@ namespace ASCOM.Simulator
         internal bool omitOddBins; // True if bins of 3, 5, 7 etc. should throw NotImplementedExceptions
 
         internal bool connected = false;
+        internal decimal startupDelay;
         internal CameraStates cameraState = CameraStates.cameraIdle;
 
         private int[,] imageArray;
@@ -2520,21 +2522,30 @@ namespace ASCOM.Simulator
             // Test whether we are  behaving as ICameraV4 or later
             CheckSupportedInThisInterfaceVersion("Connect", 4);
 
-            // Set the completion variable to the "process running" state
-            Connecting = true;
-
-            // Start a task that will flag the Connect operation as complete after a set time interval
-            Task.Run(() =>
+            // Check whether a startup delay is required
+            if (startupDelay > 0.0M) // Delay is required
             {
-                // Simulate a long connection phase
-                Thread.Sleep(3000);
+                // Set the completion variable to the "process running" state
+                Connecting = true;
 
-                // Set the Connected state to true
+                // Start a task that will flag the Connect operation as complete after a set time interval
+                Task.Run(() =>
+                {
+                    // Simulate a long connection phase
+                    Thread.Sleep(Convert.ToInt32(startupDelay * 1000.0M));
+
+                    // Set the Connected state to true
+                    Connected = true;
+
+                    // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                    Connecting = false;
+                });
+            }
+            else // No delay required
+            {
+                // Set the Connected state to true immediately
                 Connected = true;
-
-                // Set the completion variable to the "process complete" state to show that the Connect operation has completed
-                Connecting = false;
-            });
+            }
 
             // End of the Connect operation initiator
         }
@@ -2569,7 +2580,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Connect / Disconnect cokmpleti0n variable. Returns true when an operation is underway, otherwise false
         /// </summary>
-        public bool Connecting 
+        public bool Connecting
         {
             get
             {
@@ -2656,6 +2667,7 @@ namespace ASCOM.Simulator
                 // read properties from profile
                 Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
                 interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "3"), CultureInfo.InvariantCulture);
+                startupDelay = Convert.ToDecimal(profile.GetValue(s_csDriverID, STR_StartupDelay, string.Empty, "0.0"), CultureInfo.InvariantCulture);
                 pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
                 pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
                 fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
@@ -2749,31 +2761,6 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Save only the cooler variables to the Profile store
-        /// </summary>
-        internal void SaveCoolerToProfile()
-        {
-            using (Profile profile = new Profile(true))
-            {
-                profile.DeviceType = "Camera";
-
-                // Save the cooler configuration to the Profile
-                profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerDeltaTMax, coolerDeltaTMax.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerMode, coolerMode.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerTimeToSetPoint, coolerTimeToSetPoint.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerResetToAmbient, coolerResetToAmbient.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerFluctuations, coolerFluctuation.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerOvershoot, coolerOvershoot.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, setCcdTemperature.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, STR_CoolerPowerUpState, coolerPowerUpState.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerUnderDampedCycles, coolerUnderDampedCycles.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerSetPointMinimum, coolerSetPointMinimum.ToString(CultureInfo.InvariantCulture), "Cooler");
-                profile.WriteValue(s_csDriverID, STR_CoolerGraphRange, coolerGraphRange.ToString(CultureInfo.InvariantCulture), "Cooler");
-            }
-        }
-
-        /// <summary>
         ///  Save all variables to the Profile store, including cooler variables
         /// </summary>
         private void SaveToProfile()
@@ -2785,6 +2772,7 @@ namespace ASCOM.Simulator
                 // Save camera configuration to the Profile
                 profile.WriteValue(s_csDriverID, "Trace", Log.Enabled.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_InterfaceVersion, interfaceVersion.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_StartupDelay, startupDelay.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_PixelSizeX, pixelSizeX.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_PixelSizeY, pixelSizeY.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_FullWellCapacity, fullWellCapacity.ToString(CultureInfo.InvariantCulture));
@@ -2869,6 +2857,31 @@ namespace ASCOM.Simulator
                 }
             }
             SaveCoolerToProfile(); // Save the cooler profile as well
+        }
+
+        /// <summary>
+        /// Save only the cooler variables to the Profile store
+        /// </summary>
+        internal void SaveCoolerToProfile()
+        {
+            using (Profile profile = new Profile(true))
+            {
+                profile.DeviceType = "Camera";
+
+                // Save the cooler configuration to the Profile
+                profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerDeltaTMax, coolerDeltaTMax.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerMode, coolerMode.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerTimeToSetPoint, coolerTimeToSetPoint.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerResetToAmbient, coolerResetToAmbient.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerFluctuations, coolerFluctuation.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerOvershoot, coolerOvershoot.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_SetCCDTemperature, setCcdTemperature.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_CoolerPowerUpState, coolerPowerUpState.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerUnderDampedCycles, coolerUnderDampedCycles.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerSetPointMinimum, coolerSetPointMinimum.ToString(CultureInfo.InvariantCulture), "Cooler");
+                profile.WriteValue(s_csDriverID, STR_CoolerGraphRange, coolerGraphRange.ToString(CultureInfo.InvariantCulture), "Cooler");
+            }
         }
 
         /// <summary>
