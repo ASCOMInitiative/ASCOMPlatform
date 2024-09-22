@@ -98,10 +98,7 @@ namespace ASCOM.Utilities
 
         private void KeyValues_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            int ColumnWidth;
-
-            ColumnWidth = (KeyValues.Width - 60) / 2;
-            KeyValues.Columns[1].Width = KeyValues.Width - KeyValues.Columns[0].Width - 60;
+            KeyValues.Columns[1].Width = KeyValues.Width - KeyValues.Columns[0].Width - 40;
         }
 
         private void ExpandedNodesGet(TreeNode ThisNode, ref List<string> ExpandedNodes)
