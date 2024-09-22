@@ -2558,21 +2558,30 @@ namespace ASCOM.Simulator
             // Test whether we are  behaving as ICameraV4 or later
             CheckSupportedInThisInterfaceVersion("Disconnect", 4);
 
-            // Set the completion variable to the "process running" state
-            Connecting = true;
-
-            // Start a task that will flag the Disconnect operation as complete after a set time interval
-            Task.Run(() =>
+            // Check whether a startup delay is required
+            if (startupDelay > 0.0M) // Delay is required
             {
-                // Simulate a long connection phase
-                Thread.Sleep(3000);
+                // Set the completion variable to the "process running" state
+                Connecting = true;
 
-                // Set the Connected state to true
+                // Start a task that will flag the Connect operation as complete after a set time interval
+                Task.Run(() =>
+                {
+                    // Simulate a long connection phase
+                    Thread.Sleep(Convert.ToInt32(startupDelay * 1000.0M));
+
+                    // Set the Connected state to false
+                    Connected = false;
+
+                    // Set the completion variable to the "process complete" state to show that the Connect operation has completed
+                    Connecting = false;
+                });
+            }
+            else // No delay required
+            {
+                // Set the Connected state to false immediately
                 Connected = false;
-
-                // Set the completion variable to the "process complete" state to show that the Disconnect operation has completed
-                Connecting = false;
-            });
+            }
 
             // End of the Disconnect operation initiator
         }
