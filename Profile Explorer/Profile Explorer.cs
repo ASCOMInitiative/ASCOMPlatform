@@ -76,6 +76,9 @@ namespace ASCOM.Utilities
                 KeyTree.TopNode.Expand();
                 SelectedFullPath = ROOT_NAME;
                 KeyValues.Columns[0].Width = 200;
+
+                Form1_Resize(null, EventArgs.Empty);
+
                 logger?.LogMessage("FORMlOad", "Completed");
             }
             catch (Exception ex)
@@ -87,8 +90,9 @@ namespace ASCOM.Utilities
         private void Form1_Resize(object sender, EventArgs e)
         {
             KeyValues.Width = Width - 350;
-            KeyValues.Height = Height - 65;
-            KeyTree.Height = Height - 65;
+            KeyValues.Height = Height - 85;
+            KeyTree.Height = Height - 85;
+
             KeyValues_ColumnWidthChanged(null, null);
         }
 
@@ -270,12 +274,12 @@ namespace ASCOM.Utilities
                                     {
                                         logger?.LogMessage("CellValueChanged", $"Setting cell 0 to empty string");
 
-                                        valueName= "";
+                                        valueName = "";
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-                                    valueName= "";
+                                    valueName = "";
                                     logger?.LogMessage("CellValueChanged", $"Exception: {ex}");
                                 }
                                 // Turn the (Default) key name into empty string
@@ -287,7 +291,7 @@ namespace ASCOM.Utilities
                                 }
 
                                 logger?.LogMessage("CellValueChanged", $"Setting profile to - KeyPath: {KeyPath}, Cell 0 value: {valueName}, Cell 1 value: {KeyValues.CurrentRow.Cells[1].Value}");
-                                
+
                                 Prof.WriteProfile(KeyPath, valueName, KeyValues.CurrentRow.Cells[1].Value.ToString());
                                 RefreshKeyValues();
                                 break;
@@ -546,7 +550,7 @@ namespace ASCOM.Utilities
                         KeyValues.Rows[KeyValues.RowCount - 1].Cells[1].Style.BackColor = Color.Crimson;
                     }
                 }
-                catch (System.InvalidOperationException )
+                catch (System.InvalidOperationException)
                 {
                 }
                 // Ignore these re-entrant error messages

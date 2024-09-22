@@ -41,243 +41,262 @@ namespace ASCOM.Utilities
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            var DataGridViewCellStyle1 = new DataGridViewCellStyle();
-            var DataGridViewCellStyle2 = new DataGridViewCellStyle();
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProfileExplorer));
-            KeyTree = new TreeView();
-            KeyTree.KeyUp += new KeyEventHandler(KeyTree_KeyUp);
-            KeyTree.NodeMouseClick += new TreeNodeMouseClickEventHandler(KeyTree_NodeMouseClick);
-            KeyTree.AfterLabelEdit += new NodeLabelEditEventHandler(KeyTree_AfterLabelEdit);
-            KeyTree.MouseUp += new MouseEventHandler(KeyTree_MouseUp);
-            KeyValues = new DataGridView();
-            KeyValues.ColumnWidthChanged += new DataGridViewColumnEventHandler(KeyValues_ColumnWidthChanged);
-            KeyValues.CellValueChanged += new DataGridViewCellEventHandler(KeyValues_CellValueChanged);
-            KeyValues.UserDeletingRow += new DataGridViewRowCancelEventHandler(KeyValues_UserDeletingRow);
-            KeyValues.KeyUp += new KeyEventHandler(KeyValues_KeyUp);
-            KeyValues.MouseUp += new MouseEventHandler(KeyValues_MouseUp);
-            Value = new DataGridViewTextBoxColumn();
-            Data = new DataGridViewTextBoxColumn();
-            mnuCtxKeys = new ContextMenuStrip(components);
-            mnuNewKey = new ToolStripMenuItem();
-            mnuNewKey.MouseUp += new MouseEventHandler(mnuNewKey_MouseUp);
-            ToolStripSeparator1 = new ToolStripSeparator();
-            mnuDeleteKey = new ToolStripMenuItem();
-            mnuDeleteKey.MouseUp += new MouseEventHandler(mnuDeleteKey_MouseUp);
-            mnuRenameKey = new ToolStripMenuItem();
-            mnuRenameKey.MouseUp += new MouseEventHandler(mnuRenameKey_MouseUp);
-            MenuStrip1 = new MenuStrip();
-            mnuFile = new ToolStripMenuItem();
-            mnuExit = new ToolStripMenuItem();
-            mnuExit.Click += new EventHandler(mnuExit_Click);
-            mnuOptions = new ToolStripMenuItem();
-            mnuRootEdit = new ToolStripMenuItem();
-            mnuRootEdit.Click += new EventHandler(mnuRootEdit_Click);
-            mnuHelp = new ToolStripMenuItem();
-            mnuAbout = new ToolStripMenuItem();
-            mnuAbout.Click += new EventHandler(mnuAbout_Click);
-            mnuCtxValues = new ContextMenuStrip(components);
-            mnuEditData = new ToolStripMenuItem();
-            mnuEditData.MouseUp += new MouseEventHandler(mnuEditData_MouseUp);
-            mnuClearData = new ToolStripMenuItem();
-            mnuClearData.MouseUp += new MouseEventHandler(mnuClearData_MouseUp);
-            mnuRenameValue = new ToolStripMenuItem();
-            mnuRenameValue.MouseUp += new MouseEventHandler(mnuRenameValue_MouseUp);
-            mnuValueSeparator = new ToolStripSeparator();
-            mnuNewValue = new ToolStripMenuItem();
-            mnuNewValue.MouseUp += new MouseEventHandler(mnuNewValue_MouseUp);
-            mnuDeleteValue = new ToolStripMenuItem();
-            mnuDeleteValue.MouseUp += new MouseEventHandler(mnuDeleteValue_MouseUp);
-            ((System.ComponentModel.ISupportInitialize)KeyValues).BeginInit();
-            mnuCtxKeys.SuspendLayout();
-            MenuStrip1.SuspendLayout();
-            mnuCtxValues.SuspendLayout();
-            SuspendLayout();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProfileExplorer));
+            this.KeyTree = new System.Windows.Forms.TreeView();
+            this.KeyValues = new System.Windows.Forms.DataGridView();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mnuCtxKeys = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuNewKey = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuDeleteKey = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRenameKey = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRootEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCtxValues = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuEditData = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuClearData = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRenameValue = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuValueSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuNewValue = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuDeleteValue = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.KeyValues)).BeginInit();
+            this.mnuCtxKeys.SuspendLayout();
+            this.MenuStrip1.SuspendLayout();
+            this.mnuCtxValues.SuspendLayout();
+            this.SuspendLayout();
             // 
             // KeyTree
             // 
-            KeyTree.Location = new Point(13, 27);
-            KeyTree.Name = "KeyTree";
-            KeyTree.Size = new Size(299, 501);
-            KeyTree.TabIndex = 0;
+            this.KeyTree.Location = new System.Drawing.Point(13, 27);
+            this.KeyTree.Name = "KeyTree";
+            this.KeyTree.Size = new System.Drawing.Size(299, 501);
+            this.KeyTree.TabIndex = 0;
+            this.KeyTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.KeyTree_AfterLabelEdit);
+            this.KeyTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.KeyTree_NodeMouseClick);
+            this.KeyTree.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyTree_KeyUp);
+            this.KeyTree.MouseUp += new System.Windows.Forms.MouseEventHandler(this.KeyTree_MouseUp);
             // 
             // KeyValues
             // 
-            KeyValues.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            KeyValues.Columns.AddRange(new DataGridViewColumn[] { Value, Data });
-            KeyValues.Location = new Point(328, 27);
-            KeyValues.Name = "KeyValues";
-            DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            DataGridViewCellStyle1.BackColor = SystemColors.Control;
-            DataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-            DataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            KeyValues.RowHeadersDefaultCellStyle = DataGridViewCellStyle1;
-            DataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-            KeyValues.RowsDefaultCellStyle = DataGridViewCellStyle2;
-            KeyValues.RowTemplate.Height = 17;
-            KeyValues.ScrollBars = ScrollBars.Vertical;
-            KeyValues.Size = new Size(628, 501);
-            KeyValues.TabIndex = 1;
+            this.KeyValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.KeyValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Value,
+            this.Data});
+            this.KeyValues.Location = new System.Drawing.Point(328, 27);
+            this.KeyValues.Name = "KeyValues";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.KeyValues.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.KeyValues.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.KeyValues.RowTemplate.Height = 17;
+            this.KeyValues.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.KeyValues.Size = new System.Drawing.Size(628, 501);
+            this.KeyValues.TabIndex = 1;
+            this.KeyValues.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.KeyValues_CellValueChanged);
+            this.KeyValues.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.KeyValues_ColumnWidthChanged);
+            this.KeyValues.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.KeyValues_UserDeletingRow);
+            this.KeyValues.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyValues_KeyUp);
+            this.KeyValues.MouseUp += new System.Windows.Forms.MouseEventHandler(this.KeyValues_MouseUp);
             // 
             // Value
             // 
-            Value.HeaderText = "Value";
-            Value.Name = "Value";
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
             // 
             // Data
             // 
-            Data.HeaderText = "Data";
-            Data.Name = "Data";
+            this.Data.HeaderText = "Data";
+            this.Data.Name = "Data";
             // 
             // mnuCtxKeys
             // 
-            mnuCtxKeys.Items.AddRange(new ToolStripItem[] { mnuNewKey, ToolStripSeparator1, mnuDeleteKey, mnuRenameKey });
-            mnuCtxKeys.Name = "mnuCtx";
-            mnuCtxKeys.Size = new Size(159, 76);
+            this.mnuCtxKeys.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuNewKey,
+            this.ToolStripSeparator1,
+            this.mnuDeleteKey,
+            this.mnuRenameKey});
+            this.mnuCtxKeys.Name = "mnuCtx";
+            this.mnuCtxKeys.Size = new System.Drawing.Size(159, 76);
             // 
             // mnuNewKey
             // 
-            mnuNewKey.Name = "mnuNewKey";
-            mnuNewKey.ShortcutKeyDisplayString = "Ins";
-            mnuNewKey.Size = new Size(158, 22);
-            mnuNewKey.Text = "New Key";
-            mnuNewKey.ToolTipText = "Create a new key";
+            this.mnuNewKey.Name = "mnuNewKey";
+            this.mnuNewKey.ShortcutKeyDisplayString = "Ins";
+            this.mnuNewKey.Size = new System.Drawing.Size(158, 22);
+            this.mnuNewKey.Text = "New Key";
+            this.mnuNewKey.ToolTipText = "Create a new key";
+            this.mnuNewKey.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuNewKey_MouseUp);
             // 
             // ToolStripSeparator1
             // 
-            ToolStripSeparator1.Name = "ToolStripSeparator1";
-            ToolStripSeparator1.Size = new Size(155, 6);
+            this.ToolStripSeparator1.Name = "ToolStripSeparator1";
+            this.ToolStripSeparator1.Size = new System.Drawing.Size(155, 6);
             // 
             // mnuDeleteKey
             // 
-            mnuDeleteKey.Name = "mnuDeleteKey";
-            mnuDeleteKey.ShortcutKeyDisplayString = "Del";
-            mnuDeleteKey.Size = new Size(158, 22);
-            mnuDeleteKey.Text = "Delete Key";
-            mnuDeleteKey.ToolTipText = "Delete a key";
+            this.mnuDeleteKey.Name = "mnuDeleteKey";
+            this.mnuDeleteKey.ShortcutKeyDisplayString = "Del";
+            this.mnuDeleteKey.Size = new System.Drawing.Size(158, 22);
+            this.mnuDeleteKey.Text = "Delete Key";
+            this.mnuDeleteKey.ToolTipText = "Delete a key";
+            this.mnuDeleteKey.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuDeleteKey_MouseUp);
             // 
             // mnuRenameKey
             // 
-            mnuRenameKey.Name = "mnuRenameKey";
-            mnuRenameKey.ShortcutKeyDisplayString = "F2";
-            mnuRenameKey.ShortcutKeys = Keys.F2;
-            mnuRenameKey.Size = new Size(158, 22);
-            mnuRenameKey.Text = "Rename Key";
-            mnuRenameKey.ToolTipText = "Rename a key";
+            this.mnuRenameKey.Name = "mnuRenameKey";
+            this.mnuRenameKey.ShortcutKeyDisplayString = "F2";
+            this.mnuRenameKey.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.mnuRenameKey.Size = new System.Drawing.Size(158, 22);
+            this.mnuRenameKey.Text = "Rename Key";
+            this.mnuRenameKey.ToolTipText = "Rename a key";
+            this.mnuRenameKey.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuRenameKey_MouseUp);
             // 
             // MenuStrip1
             // 
-            MenuStrip1.Items.AddRange(new ToolStripItem[] { mnuFile, mnuOptions, mnuHelp });
-            MenuStrip1.Location = new Point(0, 0);
-            MenuStrip1.Name = "MenuStrip1";
-            MenuStrip1.Size = new Size(968, 24);
-            MenuStrip1.TabIndex = 2;
-            MenuStrip1.Text = "MenuStrip1";
+            this.MenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFile,
+            this.mnuOptions,
+            this.mnuHelp});
+            this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.MenuStrip1.Name = "MenuStrip1";
+            this.MenuStrip1.Size = new System.Drawing.Size(968, 24);
+            this.MenuStrip1.TabIndex = 2;
+            this.MenuStrip1.Text = "MenuStrip1";
             // 
             // mnuFile
             // 
-            mnuFile.DropDownItems.AddRange(new ToolStripItem[] { mnuExit });
-            mnuFile.Name = "mnuFile";
-            mnuFile.Size = new Size(37, 20);
-            mnuFile.Text = "File";
+            this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuExit});
+            this.mnuFile.Name = "mnuFile";
+            this.mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.mnuFile.Text = "File";
             // 
             // mnuExit
             // 
-            mnuExit.Name = "mnuExit";
-            mnuExit.Size = new Size(92, 22);
-            mnuExit.Text = "Exit";
+            this.mnuExit.Name = "mnuExit";
+            this.mnuExit.Size = new System.Drawing.Size(93, 22);
+            this.mnuExit.Text = "Exit";
+            this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
             // mnuOptions
             // 
-            mnuOptions.DropDownItems.AddRange(new ToolStripItem[] { mnuRootEdit });
-            mnuOptions.Name = "mnuOptions";
-            mnuOptions.Size = new Size(61, 20);
-            mnuOptions.Text = "Options";
+            this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuRootEdit});
+            this.mnuOptions.Name = "mnuOptions";
+            this.mnuOptions.Size = new System.Drawing.Size(61, 20);
+            this.mnuOptions.Text = "Options";
             // 
             // mnuRootEdit
             // 
-            mnuRootEdit.Name = "mnuRootEdit";
-            mnuRootEdit.Size = new Size(160, 22);
-            mnuRootEdit.Text = "Enable Root Edit";
+            this.mnuRootEdit.Name = "mnuRootEdit";
+            this.mnuRootEdit.Size = new System.Drawing.Size(160, 22);
+            this.mnuRootEdit.Text = "Enable Root Edit";
+            this.mnuRootEdit.Click += new System.EventHandler(this.mnuRootEdit_Click);
             // 
             // mnuHelp
             // 
-            mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuAbout });
-            mnuHelp.Name = "mnuHelp";
-            mnuHelp.Size = new Size(44, 20);
-            mnuHelp.Text = "Help";
+            this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAbout});
+            this.mnuHelp.Name = "mnuHelp";
+            this.mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.mnuHelp.Text = "Help";
             // 
             // mnuAbout
             // 
-            mnuAbout.Name = "mnuAbout";
-            mnuAbout.Size = new Size(152, 22);
-            mnuAbout.Text = "About";
+            this.mnuAbout.Name = "mnuAbout";
+            this.mnuAbout.Size = new System.Drawing.Size(107, 22);
+            this.mnuAbout.Text = "About";
+            this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
             // mnuCtxValues
             // 
-            mnuCtxValues.Items.AddRange(new ToolStripItem[] { mnuEditData, mnuClearData, mnuRenameValue, mnuValueSeparator, mnuNewValue, mnuDeleteValue });
-            mnuCtxValues.Name = "mnuCtxValues";
-            mnuCtxValues.Size = new Size(153, 142);
+            this.mnuCtxValues.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEditData,
+            this.mnuClearData,
+            this.mnuRenameValue,
+            this.mnuValueSeparator,
+            this.mnuNewValue,
+            this.mnuDeleteValue});
+            this.mnuCtxValues.Name = "mnuCtxValues";
+            this.mnuCtxValues.Size = new System.Drawing.Size(149, 120);
             // 
             // mnuEditData
             // 
-            mnuEditData.Name = "mnuEditData";
-            mnuEditData.Size = new Size(152, 22);
-            mnuEditData.Text = "Edit Data";
+            this.mnuEditData.Name = "mnuEditData";
+            this.mnuEditData.Size = new System.Drawing.Size(148, 22);
+            this.mnuEditData.Text = "Edit Data";
+            this.mnuEditData.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuEditData_MouseUp);
             // 
             // mnuClearData
             // 
-            mnuClearData.Name = "mnuClearData";
-            mnuClearData.Size = new Size(152, 22);
-            mnuClearData.Text = "Clear Data";
+            this.mnuClearData.Name = "mnuClearData";
+            this.mnuClearData.Size = new System.Drawing.Size(148, 22);
+            this.mnuClearData.Text = "Clear Data";
+            this.mnuClearData.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuClearData_MouseUp);
             // 
             // mnuRenameValue
             // 
-            mnuRenameValue.Name = "mnuRenameValue";
-            mnuRenameValue.Size = new Size(152, 22);
-            mnuRenameValue.Text = "Rename Value";
+            this.mnuRenameValue.Name = "mnuRenameValue";
+            this.mnuRenameValue.Size = new System.Drawing.Size(148, 22);
+            this.mnuRenameValue.Text = "Rename Value";
+            this.mnuRenameValue.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuRenameValue_MouseUp);
             // 
             // mnuValueSeparator
             // 
-            mnuValueSeparator.Name = "mnuValueSeparator";
-            mnuValueSeparator.Size = new Size(149, 6);
+            this.mnuValueSeparator.Name = "mnuValueSeparator";
+            this.mnuValueSeparator.Size = new System.Drawing.Size(145, 6);
             // 
             // mnuNewValue
             // 
-            mnuNewValue.Name = "mnuNewValue";
-            mnuNewValue.Size = new Size(152, 22);
-            mnuNewValue.Text = "New Value";
+            this.mnuNewValue.Name = "mnuNewValue";
+            this.mnuNewValue.Size = new System.Drawing.Size(148, 22);
+            this.mnuNewValue.Text = "New Value";
+            this.mnuNewValue.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuNewValue_MouseUp);
             // 
             // mnuDeleteValue
             // 
-            mnuDeleteValue.Name = "mnuDeleteValue";
-            mnuDeleteValue.Size = new Size(152, 22);
-            mnuDeleteValue.Text = "Delete Value";
+            this.mnuDeleteValue.Name = "mnuDeleteValue";
+            this.mnuDeleteValue.Size = new System.Drawing.Size(148, 22);
+            this.mnuDeleteValue.Text = "Delete Value";
+            this.mnuDeleteValue.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mnuDeleteValue_MouseUp);
             // 
             // frmProfileExplorer
             // 
-            AutoScaleDimensions = new SizeF(6.0f, 13.0f);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(968, 651);
-            Controls.Add(MenuStrip1);
-            Controls.Add(KeyValues);
-            Controls.Add(KeyTree);
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = MenuStrip1;
-            Name = "frmProfileExplorer";
-            Text = "Profile Explorer";
-            ((System.ComponentModel.ISupportInitialize)KeyValues).EndInit();
-            mnuCtxKeys.ResumeLayout(false);
-            MenuStrip1.ResumeLayout(false);
-            MenuStrip1.PerformLayout();
-            mnuCtxValues.ResumeLayout(false);
-            Load += new EventHandler(Form1_Load);
-            Resize += new EventHandler(Form1_Resize);
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(968, 651);
+            this.Controls.Add(this.MenuStrip1);
+            this.Controls.Add(this.KeyValues);
+            this.Controls.Add(this.KeyTree);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.MenuStrip1;
+            this.MinimumSize = new System.Drawing.Size(500, 200);
+            this.Name = "frmProfileExplorer";
+            this.Text = "Profile Explorer";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.KeyValues)).EndInit();
+            this.mnuCtxKeys.ResumeLayout(false);
+            this.MenuStrip1.ResumeLayout(false);
+            this.MenuStrip1.PerformLayout();
+            this.mnuCtxValues.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         internal TreeView KeyTree;
