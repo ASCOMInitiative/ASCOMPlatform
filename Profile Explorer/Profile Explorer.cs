@@ -89,9 +89,9 @@ namespace ASCOM.Utilities
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            KeyValues.Width = Width - 350;
-            KeyValues.Height = Height - 85;
-            KeyTree.Height = Height - 85;
+            KeyValues.Width = Width - 354;
+            KeyValues.Height = Height - 78;
+            KeyTree.Height = Height - 78;
 
             KeyValues_ColumnWidthChanged(null, null);
         }

@@ -91,7 +91,7 @@ namespace ASCOM.Utilities
             this.KeyValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Value,
             this.Data});
-            this.KeyValues.Location = new System.Drawing.Point(328, 27);
+            this.KeyValues.Location = new System.Drawing.Point(325, 27);
             this.KeyValues.Name = "KeyValues";
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
