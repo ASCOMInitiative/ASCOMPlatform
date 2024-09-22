@@ -31,6 +31,8 @@ using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
 using PlatformUpdateChecker;
 using Semver;
+using static System.Collections.Specialized.BitVector32;
+
 
 //using Semver;
 using static ASCOM.Utilities.Global;
@@ -2322,39 +2324,56 @@ namespace ASCOM.Utilities
                             {
                                 case "Move":
                                     {
-                                        // Find the larger of either 0 to Position or Position to MaxStep and then move to half of that
-                                        // Calculate the upper portion size, the lower portion size is given by Position
-                                        // 0.................................................Pos..........................Max
-                                        // Lower Portion                               Upper Portion
-
-                                        FocuserMax = Conversions.ToInteger(DeviceObject.MaxStep);
-                                        FocuserPosition = Conversions.ToInteger(DeviceObject.Position);
-                                        TL.LogMessage("DeviceTest", "Focuser Position: " + FocuserPosition + ", Focuser Maximum: " + FocuserMax);
-
-                                        FocuserUpperPortion = FocuserMax - FocuserPosition;
-
-                                        if (FocuserUpperPortion > FocuserPosition) // Upper portion is larger
+                                        // Handle absolute and relative mode behaviours
+                                        if (DeviceObject.Absolute) // Absolute mode
                                         {
-                                            FocuserTargetPosition = FocuserPosition + (int)Math.Round(FocuserUpperPortion / 2d);
-                                            TL.LogMessage("DeviceTest", "Moving upward to: " + FocuserTargetPosition.ToString());
-                                            DeviceObject.Move(FocuserTargetPosition);
-                                        }
-                                        else // Lower portion is larger
-                                        {
-                                            FocuserTargetPosition = (int)Math.Round(FocuserPosition / 2d);
-                                            TL.LogMessage("DeviceTest", "Moving downward to: " + FocuserTargetPosition.ToString());
-                                            DeviceObject.Move(FocuserTargetPosition);
-                                        }
+                                            // Find the larger of either 0 to Position or Position to MaxStep and then move to half of that
+                                            // Calculate the upper portion size, the lower portion size is given by Position
+                                            // 0.................................................Pos..........................Max
+                                            // Lower Portion                               Upper Portion
 
-                                        do
-                                        {
-                                            Thread.Sleep(200);
-                                            Application.DoEvents();
-                                            Action(Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(Test + " ", DeviceObject.Position), " / "), FocuserTargetPosition))); // Now.Subtract(StartTime).Seconds)
+                                            FocuserMax = Conversions.ToInteger(DeviceObject.MaxStep);
+                                            FocuserPosition = Conversions.ToInteger(DeviceObject.Position);
+                                            TL.LogMessage("DeviceTest", "Focuser Position: " + FocuserPosition + ", Focuser Maximum: " + FocuserMax);
+
+                                            FocuserUpperPortion = FocuserMax - FocuserPosition;
+
+                                            if (FocuserUpperPortion > FocuserPosition) // Upper portion is larger
+                                            {
+                                                FocuserTargetPosition = FocuserPosition + (int)Math.Round(FocuserUpperPortion / 2d);
+                                                TL.LogMessage("DeviceTest", "Moving upward to: " + FocuserTargetPosition.ToString());
+                                                DeviceObject.Move(FocuserTargetPosition);
+                                            }
+                                            else // Lower portion is larger
+                                            {
+                                                FocuserTargetPosition = (int)Math.Round(FocuserPosition / 2d);
+                                                TL.LogMessage("DeviceTest", "Moving downward to: " + FocuserTargetPosition.ToString());
+                                                DeviceObject.Move(FocuserTargetPosition);
+                                            }
+
+                                            do
+                                            {
+                                                Thread.Sleep(200);
+                                                Application.DoEvents();
+                                                Action(Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(Test + " ", DeviceObject.Position), " / "), FocuserTargetPosition))); // Now.Subtract(StartTime).Seconds)
+                                            }
+                                            while (DeviceObject.IsMoving);
+                                            CompareInteger("DeviceTest", Test, Conversions.ToInteger(DeviceObject.Position), FocuserTargetPosition);
+                                            TL.LogMessage("DeviceTest", string.Format("Temperature compensation is available: {0} and enabled: {1}", DeviceObject.TempCompAvailable, DeviceObject.TempComp));
                                         }
-                                        while (DeviceObject.IsMoving);
-                                        CompareInteger("DeviceTest", Test, Conversions.ToInteger(DeviceObject.Position), FocuserTargetPosition);
-                                        TL.LogMessage("DeviceTest", string.Format("Temperature compensation is available: {0} and enabled: {1}", DeviceObject.TempCompAvailable, DeviceObject.TempComp));
+                                        else // Relative mode
+                                        {
+                                            DeviceObject.Move(20);
+                                            do
+                                            {
+                                                Thread.Sleep(200);
+                                                Application.DoEvents();
+                                                Action("Moving relative focuser by +20 steps."); // Now.Subtract(StartTime).Seconds)
+                                            }
+                                            while (DeviceObject.IsMoving);
+                                            TL.LogMessage("DeviceTest", "Successfully moved the relative focuser by +20 steps.");
+                                            NMatches += 1;
+                                        }
                                         break;
                                     }
 
