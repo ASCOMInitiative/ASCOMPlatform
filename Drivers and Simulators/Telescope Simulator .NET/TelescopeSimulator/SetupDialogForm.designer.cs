@@ -412,7 +412,8 @@ namespace ASCOM.Simulator
             this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.Location = new System.Drawing.Point(168, 134);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(205, 90);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 0, 3, 6);
+            this.groupBox3.Size = new System.Drawing.Size(205, 94);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Optics";
@@ -422,25 +423,26 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 54.27136F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.72864F));
-            this.tableLayoutPanel3.Controls.Add(this.textBoxFocalLength, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.textBoxAperture, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.label6, 0, 2);
-            this.tableLayoutPanel3.Controls.Add(this.label4, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.label5, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.textBoxApertureArea, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.textBoxApertureArea, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.textBoxAperture, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.textBoxFocalLength, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label4, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label5, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 13);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 3;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(199, 71);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(199, 75);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // textBoxFocalLength
             // 
-            this.textBoxFocalLength.Location = new System.Drawing.Point(111, 53);
+            this.textBoxFocalLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.textBoxFocalLength.Location = new System.Drawing.Point(111, 30);
             this.textBoxFocalLength.Name = "textBoxFocalLength";
             this.textBoxFocalLength.Size = new System.Drawing.Size(85, 20);
             this.textBoxFocalLength.TabIndex = 14;
@@ -454,8 +456,9 @@ namespace ASCOM.Simulator
             // 
             // label6
             // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 50);
+            this.label6.Location = new System.Drawing.Point(3, 58);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(89, 13);
             this.label6.TabIndex = 8;
@@ -463,8 +466,9 @@ namespace ASCOM.Simulator
             // 
             // label4
             // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Location = new System.Drawing.Point(3, 34);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(67, 13);
             this.label4.TabIndex = 6;
@@ -472,8 +476,9 @@ namespace ASCOM.Simulator
             // 
             // label5
             // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 25);
+            this.label5.Location = new System.Drawing.Point(3, 7);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(101, 13);
             this.label5.TabIndex = 7;
@@ -481,7 +486,8 @@ namespace ASCOM.Simulator
             // 
             // textBoxApertureArea
             // 
-            this.textBoxApertureArea.Location = new System.Drawing.Point(111, 28);
+            this.textBoxApertureArea.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.textBoxApertureArea.Location = new System.Drawing.Point(111, 57);
             this.textBoxApertureArea.Name = "textBoxApertureArea";
             this.textBoxApertureArea.Size = new System.Drawing.Size(85, 20);
             this.textBoxApertureArea.TabIndex = 12;
