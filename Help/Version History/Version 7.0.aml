@@ -66,6 +66,7 @@
 							</listItem>
 						</list>
 					</listItem>
+					<listItem>The Platform Focuser simulator has better field labelling when in relative mode and accepts negative movement offsets.</listItem>
 					<listItem>
 						Platform Installer
 						<list class="bullet">
@@ -81,7 +82,7 @@
 						</list>
 					</listItem>
 					<listItem>
-						The Dynamic Clients now provide access to the Alpaca device's HTML configuration pages though the SetupDialog method when the Alpaca device is connected. 
+						The Dynamic Clients now provide access to the Alpaca device's HTML configuration pages though the SetupDialog method when the Alpaca device is connected.
 						Previously all access was blocked.
 					</listItem>
 
@@ -93,11 +94,20 @@
 			<title>Issues Fixed in 7.0 - Platform</title>
 			<content>
 				<list class="bullet">
-					<listItem>The installer no longer displays a successful install message when an error occurs</listItem>
 					<listItem>
-						The Telescope simulators now respect the TrackingRates configuration setting and the TrackingRates property returns a
+						Installer
+						<list class="bullet">
+							<listItem>The installer no longer displays a successful install message when an error occurs.</listItem>
+							<listItem>All external links now use https rather than http.</listItem>
+						</list>
+					</listItem>
+					<listItem>
+						Telescope Simulators - These now respect the TrackingRates configuration setting and the TrackingRates property returns a
 						PropertyNotImplementedExcetion when tracking rates are configured to be not available.
 					</listItem>
+					<listItem>Profile Explorer - The visual appearance has been improved when the application starts and is re-sized.</listItem>
+					<listItem>Device Hub - Changed the default dome radius in the dome geometry configuration from 0.0 to 2000.0 to ensure that dome synchronisation works "out of the box".</listItem>
+					<listItem>Diagnostics - Fixed a bug where a non-existent directory could cause an unexpected Diagnostics error.</listItem>
 				</list>
 			</content>
 		</section>
