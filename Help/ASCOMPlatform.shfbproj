@@ -23,21 +23,21 @@
     <CopyrightText>Copyright &amp;#169%3b 2009-24, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.DeviceInterface" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV3" filterName="ICameraV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICoverCalibratorV1" filterName="ICoverCalibratorV1" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IDomeV2" filterName="IDomeV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFilterWheelV2" filterName="IFilterWheelV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV3" filterName="IFocuserV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IObservingConditions" filterName="IObservingConditions" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV3" filterName="IRotatorV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISafetyMonitor" filterName="ISafetyMonitor" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISwitchV2" filterName="ISwitchV2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
-</Filter>
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV2" filterName="ICameraV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICameraV3" filterName="ICameraV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ICoverCalibratorV1" filterName="ICoverCalibratorV1" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IDomeV2" filterName="IDomeV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFilterWheelV2" filterName="IFilterWheelV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV2" filterName="IFocuserV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IFocuserV3" filterName="IFocuserV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IObservingConditions" filterName="IObservingConditions" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV2" filterName="IRotatorV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IRotatorV3" filterName="IRotatorV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISafetyMonitor" filterName="ISafetyMonitor" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ISwitchV2" filterName="ISwitchV2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.ITelescopeV3" filterName="ITelescopeV3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
+      </Filter>
     </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
@@ -188,6 +188,10 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <Image Include="Tools and Features\ProfileExplorer.png">
+      <ImageId>ProfileExplorer</ImageId>
+      <AlternateText>Profile Explorer</AlternateText>
+    </Image>
     <None Include="Introduction\Introduction - Developer.aml" />
     <None Include="Version History\Version 7.0.aml" />
     <None Include="Version History\Version 6.6 SP2.aml" />

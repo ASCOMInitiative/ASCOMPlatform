@@ -8,7 +8,7 @@
     <section address="DiagTool">
       <title>Diagnostics Tool</title>
       <content>
-         <para>This tool can be found in your Start Menu ASCOM Platform 6 folder and collects a variety of information about the system to help diagnose driver and client issues. The collected data is:
+         <para>This tool can be found in your Start Menu folder and collects a variety of information about the system to help diagnose driver and client issues. The collected data is:
          </para>
   		 <list class="bullet">
 		    <listItem>Operating system name and version including 32/64bit</listItem>
@@ -24,7 +24,7 @@
 		    <listItem>Version information for key ASCOM GAC files</listItem>
 		    <listItem>Version information for some installed applications that use ASCOM drivers</listItem>
 		    <listItem>List of driver registration and compatibility messages. On a 64bit OS a driver's suitability for running in a 64bit application is also reported.</listItem>
-		    <listItem>Contents of ASCOM releated installer setup logs</listItem>
+		    <listItem>Contents of ASCOM related installer setup logs</listItem>
 		    <listItem>Results of several hundred application functionality tests on Platform components and Simulators</listItem>
 		    <listItem>List of Platform errors from the Windows ASCOM error log</listItem>
 		 </list>
