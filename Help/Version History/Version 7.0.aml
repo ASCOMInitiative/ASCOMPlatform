@@ -201,26 +201,5 @@
 			</content>
 		</section>
 
-		<section address="PreReqs70">
-			<title>Platform Prerequisites</title>
-			<content>
-				<para>Platform 7.0 requires the following .NET framework versions:</para>
-				<list class="bullet">
-					<listItem>.NET Framework 3.5</listItem>
-					<listItem>.NET Framework 4.8</listItem>
-					<listItem>For Windows 8 and Windows 10 the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
-				</list>
-				<para>
-					The installer will advise you if your PC does not have the required framework support and will request that you install or enable it
-					before continuing with the installation. In some circumstances the installer can install framework support for you.
-					<externalLink>
-						<linkText>Microsoft Download Centre</linkText>
-						<linkAlternateText>https://www.microsoft.com/downloads</linkAlternateText>
-						<linkUri>https://www.microsoft.com/downloads</linkUri>
-						<linkTarget>_blank</linkTarget>
-					</externalLink>
-				</para>
-			</content>
-		</section>
 	</developerConceptualDocument>
 </topic>

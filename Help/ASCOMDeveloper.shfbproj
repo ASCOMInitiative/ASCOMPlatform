@@ -140,7 +140,7 @@
     <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
-    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <MaximumGroupParts>2</MaximumGroupParts>
     <NamespaceGrouping>True</NamespaceGrouping>
     <SdkLinkTarget>Blank</SdkLinkTarget>

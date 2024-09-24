@@ -16,34 +16,34 @@
 			<content>
 				<list class="bullet">
 					<listItem>
-						<para>Simplified Start menu.</para>
+						Simplified Start menu.
 					</listItem>
 					<listItem>
-						<para>The default log file location can be customised.</para>
+						The default log file location can be customised.
 					</listItem>
 					<listItem>
-						<para>Focus on technical changes to improve performance and application usability.</para>
+						Focus on technical changes to improve performance and application usability.
 					</listItem>
 					<listItem>
-						<para>Updated user guide that includes Alpaca.</para>
+						Updated user guide that includes Alpaca.
 					</listItem>
 					<listItem>
-						<para>ASCOM Remote and the ASCOM Omni-simulators are now installed as part of the Platform.</para>
+						ASCOM Remote and the ASCOM Omni-simulators are now installed as part of the Platform.
 					</listItem>
 					<listItem>
-						<para>The Omni-Simulators are now the default Platform simulators.</para>
+						The Omni-Simulators are now the default Platform simulators.
 					</listItem>
 					<listItem>
-						<para>A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.</para>
+						A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.
 					</listItem>
 					<listItem>
-						<para>An alert will be generated when a new Platform version is released.</para>
+						An alert will be generated when a new Platform version is released.
 					</listItem>
 					<listItem>
-						<para>The Platform installer is more resilient and reliable.</para>
+						The Platform installer is more resilient and reliable.
 					</listItem>
 					<listItem>
-						<para>The Dynamic Clients provide access to the Alpaca device's configuration pages when the Alpaca device is connected.</para>
+						The Dynamic Clients provide access to the Alpaca device's configuration pages when the Alpaca device is connected.
 					</listItem>
 				</list>
 				<para>
@@ -73,23 +73,46 @@
 			<title>Operating System Compatibility</title>
 			<content>
 				<para>
-					<legacyBold>Platform 7 requires Windows 10 1809 (October 2018 Update) or later</legacyBold> together with .NET Frameworks 3.5 and 4.8.
+					<legacyBold>Platform 7 requires Windows 10 1809 (October 2018 Update) or later</legacyBold>.
 				</para>
 				<para>
-					Platform 7 will not install on the following operating systems:
+					Platform 7 is not compatible with the following operating systems:
 				</para>
 				<list class="bullet">
 					<listItem>
-						<para>
-							<legacyBold>Windows 7</legacyBold> - Windows 7 PCs should use Platform 6.6 Service Pack 2. Microsoft ended Windows 7 support in 2020.
-						</para>
+						<legacyBold>Windows 7, 8, 8.1 and Windows 10 1507 to 1803</legacyBold> - PCs with these operating systems should use Platform 6.6 Service Pack 2.
 					</listItem>
 					<listItem>
-						<para>
-							<legacyBold>Windows XP</legacyBold> - Windows XP PCs should use Platform 6.4 Service Pack 1 together with .NET Framework 3.5 and 4 Client Profile.
-						</para>
+						<legacyBold>Windows XP</legacyBold> - PCs with this operating system should use Platform 6.4 Service Pack 1.
 					</listItem>
 				</list>
+			</content>
+		</section>
+
+		<section address="PreReqs70">
+			<title>Platform Prerequisites</title>
+			<content>
+				<para>Platform 7.0 requires the following .NET framework versions:</para>
+				<list class="bullet">
+					<listItem>
+						.NET Framework 3.5
+					</listItem>
+					<listItem>
+						.NET Framework 4.8 Runtime
+					</listItem>
+				</list>
+				<para>
+					The installer will offer to install .NET 3.5 for you and it can also be installed manually through the Control Panel / Programs and Features / Turn Windows Features On and Off dialogue.
+				</para>
+				<para>
+					If not already installed, .NET Framework 4.8 can be downloaded from the
+					<externalLink>
+						<linkText>Microsoft .NET 4.8 Download Page</linkText>
+						<linkAlternateText>https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48</linkAlternateText>
+						<linkUri>https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>.
+				</para>
 			</content>
 		</section>
 
