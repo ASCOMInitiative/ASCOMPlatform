@@ -47,7 +47,8 @@
 					</listItem>
 				</list>
 				<para>
-					<legacyBold>Significant changes for developers</legacyBold> are described here: <link xlink:href="6cdc126a-3b1a-4a55-836f-aaf704740a33" />
+					<legacyBold>Significant changes for developers</legacyBold> are described in the 
+					<link xlink:href="6cdc126a-3b1a-4a55-836f-aaf704740a33" >Help for ASCOM Platform Developers</link>
 					and a comprehensive list of changes and fixes is given here: <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />.
 				</para>
 			</content>
