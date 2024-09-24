@@ -158,7 +158,7 @@
 						This platform appears as <quoteInline>ASCOM Platform 7</quoteInline> in the Apps and add/remove programs dialogues
 					</listItem>
 					<listItem>
-						The Platform has been tested in 32bit Windows 7, 64bit Windows 7, 32bit Windows 10, 64bit Windows 10 and Windows 11.
+						The Platform has been tested in 32bit Windows 10 and 64bit Windows 10 and Windows 11.
 					</listItem>
 				</list>
 			</content>
