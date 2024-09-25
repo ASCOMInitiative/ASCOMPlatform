@@ -1,48 +1,89 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>The Diagnostics Tool collects information about the ASCOM Platform to aid support.</para>
-    </introduction>
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>The Diagnostics Tool collects information about the ASCOM Platform to aid support and allows Platform operation to be tailored.</para>
+			<autoOutline excludeRelatedTopics="true" />
+		</introduction>
 
-    <section address="DiagTool">
-      <title>Diagnostics Tool</title>
-      <content>
-         <para>This tool can be found in your Start Menu folder and collects a variety of information about the system to help diagnose driver and client issues. The collected data is:
-         </para>
-  		 <list class="bullet">
-		    <listItem>Operating system name and version including 32/64bit</listItem>
-		    <listItem>Installed Platform version</listItem>
-		    <listItem>Memory size</listItem>
-		    <listItem>Common Language Runtime version </listItem>
-		    <listItem>Key directory locations</listItem>
-		    <listItem>List of drives and free space</listItem>
-		    <listItem>List of COM ports</listItem>
-		    <listItem>List of loaded assemblies</listItem>
-		    <listItem>COM Registration entries from the registry</listItem>
-		    <listItem>Version information for key ASCOM files</listItem>
-		    <listItem>Version information for key ASCOM GAC files</listItem>
-		    <listItem>Version information for some installed applications that use ASCOM drivers</listItem>
-		    <listItem>List of driver registration and compatibility messages. On a 64bit OS a driver's suitability for running in a 64bit application is also reported.</listItem>
-		    <listItem>Contents of ASCOM related installer setup logs</listItem>
-		    <listItem>Results of several hundred application functionality tests on Platform components and Simulators</listItem>
-		    <listItem>List of Platform errors from the Windows ASCOM error log</listItem>
-		 </list>
-		 <para>When the "Run Diagnostics" button is pressed, the information above is collected into a log file
-		 titled ASCOM.Diagnostics.hhmmssssss.txt that will be found in "My Documents\ASCOM\Logs yyyy-mm-dd".
-		 This file should be forwarded, together with other log files in the directory, to the person who
-		 is helping you.
-		 </para>
-		 <para>A suite of functional tests are also run to confirm that the installation performs as expected.</para>
-		 <para>
-			<alert class="note">
-  				<para>No personal information or passwords are recorded in the diagnostics file with the exception of 
-  				machine name, username and domain name. If you do not wish to reveal this information, 
-  				please delete these three lines in the diagnostic log.
-  				</para>
-			</alert>
-		 </para>
-      </content>
-    </section>
-  </developerConceptualDocument>
+		<section address="SelectSimulators">
+			<title>Selecting the Default Simulators</title>
+			<content>
+				<para>
+					The Omni-Simulators or the original Platform simulators can be selected by checking or unchecking the "Options" menu "Use Omni-Simulators as Platform simulators" check-box.
+				</para>
+				<mediaLink>
+					<image placement="center" xlink:href="DiagnosticsSelectSimulators"/>
+				</mediaLink>
+			</content>
+		</section>
+
+		<section address="LogFileLocation">
+			<title>Setting the Log File Root Folder</title>
+			<content>
+				<para>
+					The log file root is the folder under which the Platform installer and Platform utilities store their log files. Platform installer logs are created in the root folder while utility
+					logs appear in date based subfolders with the name format "Logs YYYY-MM-DD", where YYYY, MM and DD are the year month and day on which the log was started.
+					In Platform 6 the root folder location could not be changed.
+				</para>
+				<para>
+					In Platform 7 the log file root folder can be changed through the Diagnostics "Options" menu entry: "Set Log File Location". By default the root folder is set to 
+					the Platform 6 location: "Documents\ASCOM".
+				</para>
+				<para>
+					<legacyBold>Please note:</legacyBold> The log file root only controls logs created by the Platform's TraceLogger component. If a driver or application developer has written 
+					their own log file management, rather than using TraceLogger, their logs will continue to be found in the locations set by the driver or application.
+				</para>
+				<mediaLink>
+					<image placement="center" xlink:href="DiagnosticsLogFileLocation"/>
+				</mediaLink>
+				<mediaLink>
+					<image placement="center" xlink:href="DiagnosticsLogFileFolder"/>
+				</mediaLink>
+			</content>
+		</section>
+
+		<section address="DiagTool">
+			<title>Collecting Diagnostic Information</title>
+			<content>
+				<para>
+					This tool can be found in your Start Menu folder and collects a variety of information about the system to help diagnose driver and client issues. The collected data is:
+				</para>
+				<list class="bullet">
+					<listItem>Operating system name and version including 32/64bit</listItem>
+					<listItem>Installed Platform version</listItem>
+					<listItem>Memory size</listItem>
+					<listItem>Common Language Runtime version </listItem>
+					<listItem>Key directory locations</listItem>
+					<listItem>List of drives and free space</listItem>
+					<listItem>List of COM ports</listItem>
+					<listItem>List of loaded assemblies</listItem>
+					<listItem>COM Registration entries from the registry</listItem>
+					<listItem>Version information for key ASCOM files</listItem>
+					<listItem>Version information for key ASCOM GAC files</listItem>
+					<listItem>Version information for some installed applications that use ASCOM drivers</listItem>
+					<listItem>List of driver registration and compatibility messages. On a 64bit OS a driver's suitability for running in a 64bit application is also reported.</listItem>
+					<listItem>Contents of ASCOM related installer setup logs</listItem>
+					<listItem>Results of several hundred application functionality tests on Platform components and Simulators</listItem>
+					<listItem>List of Platform errors from the Windows ASCOM error log</listItem>
+				</list>
+				<para>
+					When the "Run Diagnostics" button is pressed, the information above is collected into a log file
+					titled ASCOM.Diagnostics.hhmmssssss.txt that will be found in "My Documents\ASCOM\Logs yyyy-mm-dd".
+					This file should be forwarded, together with other log files in the directory, to the person who
+					is helping you.
+				</para>
+				<para>A suite of functional tests are also run to confirm that the installation performs as expected.</para>
+				<para>
+					<alert class="note">
+						<para>
+							No personal information or passwords are recorded in the diagnostics file with the exception of
+							machine name, username and domain name. If you do not wish to reveal this information,
+							please delete these three lines in the diagnostic log.
+						</para>
+					</alert>
+				</para>
+			</content>
+		</section>
+	</developerConceptualDocument>
 </topic>

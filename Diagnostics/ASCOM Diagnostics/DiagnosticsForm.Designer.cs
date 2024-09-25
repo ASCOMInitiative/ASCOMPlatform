@@ -50,7 +50,6 @@ namespace ASCOM.Utilities
             this.ChooserNETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ListAvailableCOMPortsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EarthRotationDataUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SetLogFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTrace = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLeaveUnset = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -80,6 +79,7 @@ namespace ASCOM.Utilities
             this.OptionsCheckForPlatformReleases = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsCheckForPlatformPreReleases = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsUseOmniSimulators = new System.Windows.Forms.ToolStripMenuItem();
+            this.SetLogFileLocationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAction = new System.Windows.Forms.Label();
             this.btnViewLastLog = new System.Windows.Forms.Button();
@@ -188,8 +188,7 @@ namespace ASCOM.Utilities
             this.ChooserToolStripMenuItem1,
             this.ChooserNETToolStripMenuItem,
             this.ListAvailableCOMPortsToolStripMenuItem,
-            this.EarthRotationDataUpdateToolStripMenuItem,
-            this.SetLogFileLocationToolStripMenuItem});
+            this.EarthRotationDataUpdateToolStripMenuItem});
             this.mnuTools.Name = "mnuTools";
             this.mnuTools.Size = new System.Drawing.Size(46, 20);
             this.mnuTools.Text = "Tools";
@@ -221,13 +220,6 @@ namespace ASCOM.Utilities
             this.EarthRotationDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
             this.EarthRotationDataUpdateToolStripMenuItem.Text = "Earth Rotation Data";
             this.EarthRotationDataUpdateToolStripMenuItem.Click += new System.EventHandler(this.EarthRotationDataUpdateToolStripMenuItem_Click);
-            // 
-            // SetLogFileLocationToolStripMenuItem
-            // 
-            this.SetLogFileLocationToolStripMenuItem.Name = "SetLogFileLocationToolStripMenuItem";
-            this.SetLogFileLocationToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
-            this.SetLogFileLocationToolStripMenuItem.Text = "Set Log File Location";
-            this.SetLogFileLocationToolStripMenuItem.Click += new System.EventHandler(this.SetLogFileLocationToolStripMenuItem_Click);
             // 
             // mnuTrace
             // 
@@ -426,7 +418,8 @@ namespace ASCOM.Utilities
             this.MenuAutoViewLog,
             this.OptionsCheckForPlatformReleases,
             this.OptionsCheckForPlatformPreReleases,
-            this.OptionsUseOmniSimulators});
+            this.OptionsUseOmniSimulators,
+            this.SetLogFileLocationToolStripMenuItem1});
             this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
             this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.OptionsToolStripMenuItem.Text = "Options";
@@ -458,6 +451,13 @@ namespace ASCOM.Utilities
             this.OptionsUseOmniSimulators.Size = new System.Drawing.Size(308, 22);
             this.OptionsUseOmniSimulators.Text = "Use Omni-Simulators as Platform simulators";
             this.OptionsUseOmniSimulators.Click += new System.EventHandler(this.OptionsUseOmniSimulators_Click);
+            // 
+            // SetLogFileLocationToolStripMenuItem1
+            // 
+            this.SetLogFileLocationToolStripMenuItem1.Name = "SetLogFileLocationToolStripMenuItem1";
+            this.SetLogFileLocationToolStripMenuItem1.Size = new System.Drawing.Size(308, 22);
+            this.SetLogFileLocationToolStripMenuItem1.Text = "Set Log File Root Folder";
+            this.SetLogFileLocationToolStripMenuItem1.Click += new System.EventHandler(this.SetLogFileLocationToolStripMenuItem_Click);
             // 
             // AboutToolStripMenuItem
             // 
@@ -575,11 +575,11 @@ namespace ASCOM.Utilities
         internal ToolStripMenuItem EarthRotationDataUpdateToolStripMenuItem;
         internal ToolStripMenuItem MenuEarthRotationDataFormTraceEnabled;
         internal ToolStripMenuItem MenuRegistryTraceEnabled;
-        private ToolStripMenuItem SetLogFileLocationToolStripMenuItem;
         private ToolStripMenuItem OptionsCheckForPlatformReleases;
         private ToolStripMenuItem OptionsCheckForPlatformPreReleases;
         internal Button BtnUpdateAvailable;
         private ToolStripMenuItem OptionsUseOmniSimulators;
         private ToolStripMenuItem MenuDiagnosticsTraceEnabled;
+        private ToolStripMenuItem SetLogFileLocationToolStripMenuItem1;
     }
 }
