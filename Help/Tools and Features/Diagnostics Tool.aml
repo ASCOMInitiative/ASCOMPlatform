@@ -1,8 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<summary>
+			<para>
+				The Diagnostics Tool allows Platform operation to be configured and can confirm whether all Platform components are fully functional.
+			</para>
+		</summary>
 		<introduction>
-			<para>The Diagnostics Tool collects information about the ASCOM Platform to aid support and allows Platform operation to be tailored.</para>
+			<para>
+				The "ASCOM Diagnostics" entry in the Start menu will start the utility to enable testing and configuration changes.
+			</para>
 			<autoOutline excludeRelatedTopics="true" />
 		</introduction>
 
@@ -27,11 +34,11 @@
 					In Platform 6 the root folder location could not be changed.
 				</para>
 				<para>
-					In Platform 7 the log file root folder can be changed through the Diagnostics "Options" menu entry: "Set Log File Location". By default the root folder is set to 
+					In Platform 7 the log file root folder can be changed through the Diagnostics "Options" menu entry: "Set Log File Location". By default the root folder is set to
 					the Platform 6 location: "Documents\ASCOM".
 				</para>
 				<para>
-					<legacyBold>Please note:</legacyBold> The log file root only controls logs created by the Platform's TraceLogger component. If a driver or application developer has written 
+					<legacyBold>Please note:</legacyBold> The log file root only controls logs created by the Platform's TraceLogger component. If a driver or application developer has written
 					their own log file management, rather than using TraceLogger, their logs will continue to be found in the locations set by the driver or application.
 				</para>
 				<mediaLink>

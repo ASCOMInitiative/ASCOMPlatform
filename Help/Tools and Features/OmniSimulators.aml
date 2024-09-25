@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="905bf41a-9a13-47c1-a9dd-4a354a8c4432" revisionNumber="1">
+	<developerConceptualDocument
+	  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+	  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<summary>
+			<para>The Omni-Simulators are a "start from scratch" re-write of the Platform 6 device simulators that provide both Alpaca and traditional COM driver interfaces.</para>
+		</summary>
+
+		<introduction>
+			<autoOutline />
+		</introduction>
+
+		<section address="Section1">
+			<title>Using the Omni-Simulators as Alpaca Devices</title>
+			<content>
+				<para>
+					The OmniSimulators can be started through the ASCOM Omni-Simulators entry in the Start menu. By default the Omni-Simulators start
+					with no user interface and with the console minimised to the task bar, however, they are fully functional as Alpaca devices and can be discovered and used as expected.
+					To stop the Omni-Simulators close the console window.
+				</para>
+				<para>
+					The user interface is browser based and can be accessed by navigating to
+					<externalLink>
+						<linkText>Omni-Simulator Home</linkText>
+						<linkAlternateText>Omni-Simulator Home</linkAlternateText>
+						<linkUri>http://localhost:32323</linkUri>
+					</externalLink>
+					(http://localhost:32323).
+				</para>
+				<mediaLink>
+					<image placement="center" xlink:href="OmniStartScreen"/>
+				</mediaLink>
+				<para></para>
+			</content>
+		</section>
+		<section address="Section2">
+			<title>Configuring the Omni-Simulator</title>
+			<content>
+				<para>
+					Overall Omni-Simulator configuration can be changed on the Driver Setup page.The following settings can be configured:
+				</para>
+				<list class="bullet">
+					<listItem>Check for updates</listItem>
+					<listItem>Server location name (default: Unknown)</listItem>
+					<listItem>Allow remote access (default: true)</listItem>
+					<listItem>Startup IP port (default: 32323)</listItem>
+					<listItem>Open the browser user interface at start (default: false)</listItem>
+					<listItem>Start with the console visible, minimised or invisible (default: minimized)</listItem>
+					<listItem>Require clients to use strictly correct Alpaca commands (default: true)</listItem>
+					<listItem>Prevent the device from disconnecting (default: false)</listItem>
+					<listItem>Allow discovery (default: true)</listItem>
+					<listItem>Discovery Port (default: 32323) - Don't change this unless you are sure you know what you are doing!</listItem>
+					<listItem>Only communicate localhost addresses in responses to discovery packets from applications running on the local host (default: true)</listItem>
+					<listItem>Require basic authentication (default: false)</listItem>
+					<listItem>User name and password for basic authentication (default: empty string)</listItem>
+					<listItem>Log level (default: Information)</listItem>
+					<listItem>Run OpenAPI / Swagger interface (default: true)</listItem>
+					<listItem>Write logs to console (default: true)</listItem>
+					<listItem>Enable SSL using with a user generated certificate (default: false)</listItem>
+					<listItem>Shut down the server - Check the box in order to activate the Shutdown button.</listItem>
+				</list>
+				<mediaLink>
+					<image placement="center" xlink:href="OmniSetup"/>
+				</mediaLink>
+			</content>
+		</section>
+		<section address="Section3">
+			<title>Configuring Omni-Simulator Devices</title>
+			<content>
+				<para>
+					Each device can be configured through the Setup button on its device page. For example, the CoverCalibrator simulator configuration page looks like this:
+				</para>
+				<mediaLink>
+					<image placement="center" xlink:href="OmniCoverCalibrator"/>
+				</mediaLink>
+				<para>
+					The configuration is shared by both Alpaca and COM interfaces, the COM and Alpaca interfaces can not be configured to behave differently to each other.
+				</para>
+			</content>
+		</section>
+		<section address="Section4">
+			<title>Using the Omni-Simulators as COM Drivers</title>
+			<content>
+				<para>
+					The Platform installer registers the Omni-Simulators for COM and re-configures the original Platform simulator ProgIDs to start the 
+					Omni-Simulators instead of the discreet Platform simulators. This means that any applications that are already configured to use the Platform simulators will work 
+					with the Omni-Simulators without change.
+				</para>
+				<para>
+					Use of the discreet simulators can be restored through an option in the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29">Diagnostics Options</link> menu if required.
+				</para>
+				<para>
+					<legacyBold>Note: </legacyBold>There is no need to start the Omni-Simulator main executable before using the COM drivers because they will automatically 
+					start the executable if it is not already running.
+				</para>
+				<mediaLink>
+					<image placement="center" xlink:href="OmniChooser"/>
+				</mediaLink>
+			</content>
+		</section>
+		<relatedTopics>
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

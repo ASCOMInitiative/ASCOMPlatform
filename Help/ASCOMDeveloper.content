@@ -4,7 +4,7 @@
   <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" title="Introduction - ASCOM Platform 7  For Developers" tocTitle="Introduction - Developers" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
-  <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" title="Version History">
+  <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" title="Version History">
     <Topic id="4eb05978-d9b4-4465-896b-e9ed09bff8c1" visible="True" />
     <Topic id="aa55983a-7030-4db2-a5b0-b24480703726" visible="True" />
     <Topic id="81df3663-6fff-439a-8c64-5ca3989126d8" visible="True" />
@@ -41,19 +41,21 @@
   </Topic>
   <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" isExpanded="true" title="Tools and Features">
     <Topic id="e3870a2f-582a-4ab4-b37f-e9b1c37a2030" visible="True" title="Alpaca through the Chooser" />
+    <Topic id="0254d2da-144b-49dd-8172-b03cd8048bec" visible="True" title="ASCOM Remote" />
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
     <Topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" visible="True" />
     <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />
+    <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
     <Topic id="79d0c293-9ca0-466f-8dda-b974ea8b7383" visible="True" />
+    <Topic id="905bf41a-9a13-47c1-a9dd-4a354a8c4432" visible="True" isSelected="true" title="Omni-Simulators" />
     <Topic id="f52483b9-e922-4079-afa9-5e6f1a3ab5a5" visible="True" />
     <Topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" visible="True" />
-    <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
   </Topic>
-  <Topic id="98b612bf-f22c-428f-af22-7a77e9907b7f" visible="True" noFile="true" isExpanded="true" title="Developer Information">
+  <Topic id="98b612bf-f22c-428f-af22-7a77e9907b7f" visible="True" noFile="true" title="Developer Information">
     <Topic id="72A95B28-BBE2-4C7D-BC03-2D6AB324B6F7" visible="True" />
     <Topic id="84ec64a2-c029-45fb-91ff-78ff3d683a0c" visible="True" />
     <Topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" visible="True" title="Coordinate Conversion" />
-    <Topic id="320982e4-105d-46d8-b5f9-efce3f4dafd4" visible="True" isSelected="true" title="Device State Implementation and Requirements" />
+    <Topic id="320982e4-105d-46d8-b5f9-efce3f4dafd4" visible="True" title="Device State Implementation and Requirements" />
     <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
     <Topic id="A8BA6881-8D00-44C2-BEAE-9B81039FE0F5" visible="True" title="Links to extended developer documentation" />
     <Topic id="c37349a5-a535-47d6-8c30-11c620932213" visible="True" title="Synchronous and Asynchronous Slewing" />

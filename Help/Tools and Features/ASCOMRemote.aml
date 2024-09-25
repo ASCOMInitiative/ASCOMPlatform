@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0254d2da-144b-49dd-8172-b03cd8048bec" revisionNumber="1">
+	<developerConceptualDocument
+	  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+	  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<summary>
+			<para>The ASCOM Remote Server hosts Windows drivers and presents them as Alpaca devices that can be accessed from any network connected device that has an Alpaca client.</para>
+		</summary>
+
+		<introduction>
+			<autoOutline />
+		</introduction>
+
+		<section address="Section1">
+			<title>Remote Server Uses</title>
+			<content>
+				<para>The Remote Server has two primary uses:</para>
+				<list class="bullet">
+					<listItem>
+						<para>
+							To enable astronomy applications to run on a Windows "remote PC" away from the observatory, while astronomy devices are connected to a Windows "observatory PC"
+							that is physically close to the devices to support cabled connections such as serial and USB.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							To enable astronomy client applications that run on non-Windows operating systems to use astronomy devices that are controlled
+							by a Windows PC in the observatory. ASCOM Remote can be used from clients on almost any operating system including
+							MacOS, Linux, Android and IOS because it uses the Alpaca protocol, which is based on standard HTTP and REST network protocols.
+						</para>
+					</listItem>
+				</list>
+				<mediaLink>
+					<image placement="center" xlink:href="RemoteMainPage"/>
+				</mediaLink>
+			</content>
+		</section>
+
+		<section address="Section2">
+			<title>Starting the Remote Server and Configuration</title>
+			<content>
+				<para>
+					The Remote Server can be started with the Start menu entry labelled "ASCOM Remote Server". A basic configuration just requires you to
+					click the Setup button and select one of the installed drivers by setting the required device type and selecting a driver from the drop-down list.
+					Initial testing will be easier if you first configure a simulator rather than a real device.
+				</para>
+				<para>
+					Comprehensive information on configuring the Remote Server is provided in the
+					<link  xlink:href="#seeAlsoSection">ASCOM Remote Configuration</link>
+					link in the See Also section.
+				</para>
+				<para>
+					<legacyBold>NOTE: </legacyBold>For security reasons, the Remote Server will only connect to the "localhost (127.0.0.1)" address when first run, which is only accessible within the
+					host PC and cannot be seen by other devices on the network. To enable other devices to see the Remote Server you will need to select the PC's network address from the
+					drop-down list on the "Server Configuration"Setup tab.
+				</para>
+				<para>
+					<legacyBold>NOTE: </legacyBold>On first use and when the network address is changed you will need to provide administrator approval in order to allow the 
+					Remote Server to access the network.</para>
+				<mediaLink>
+					<image placement="center" xlink:href="RemoteSetupDevice"/>
+				</mediaLink>
+				<mediaLink>
+					<image placement="center" xlink:href="RemoteSetupIp"/>
+				</mediaLink>
+			</content>
+		</section>
+
+		<relatedTopics>
+			<externalLink>
+				<linkText address="remoteconfig">ASCOM Remote Configuration</linkText>
+				<linkAlternateText>ASCOM Remote Configuration</linkAlternateText>
+				<linkUri>https://download.ascom-standards.org/docs/RemoteInstConf.pdf</linkUri>
+			</externalLink>
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

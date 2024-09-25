@@ -289,14 +289,44 @@
       <CopyToMedia>True</CopyToMedia>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <Image Include="Tools and Features\OmniChooser.png">
+      <ImageId>OmniChooser</ImageId>
+      <AlternateText>Omni Chooser</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\OmniCoverCalibrator.png">
+      <ImageId>OmniCoverCalibrator</ImageId>
+      <AlternateText>Omni Cover Calibrator</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\OmniSetup.png">
+      <ImageId>OmniSetup</ImageId>
+      <AlternateText>Omni Setup</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\OmniStartScreen.png">
+      <ImageId>OmniStartScreen</ImageId>
+      <AlternateText>Omni Start Screen</AlternateText>
+    </Image>
     <Image Include="Tools and Features\ProfileExplorer.png">
       <ImageId>ProfileExplorer</ImageId>
       <AlternateText>Profile Explorer</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\RemoteMainPage.png">
+      <ImageId>RemoteMainPage</ImageId>
+      <AlternateText>Remote Main Page</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\RemoteSetupDevice.png">
+      <ImageId>RemoteSetupDevice</ImageId>
+      <AlternateText>Remote Setup Device</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\RemoteSetupIp.png">
+      <ImageId>RemoteSetupIp</ImageId>
+      <AlternateText>Remote Setup Ip</AlternateText>
     </Image>
     <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Developer Information\Developer Links.aml" />
     <None Include="Developer Information\DeviceState.aml" />
     <None Include="Developer Information\SynchronousAndAsynchronousSlewing.aml" />
+    <None Include="Tools and Features\ASCOMRemote.aml" />
+    <None Include="Tools and Features\OmniSimulators.aml" />
     <None Include="Version History\Version 6.6 SP2.aml" />
     <None Include="Version History\Version 6.6 SP1.aml" />
     <None Include="Version History\Version 6.6.aml" />
