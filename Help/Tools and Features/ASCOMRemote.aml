@@ -5,7 +5,7 @@
 	  xmlns:xlink="http://www.w3.org/1999/xlink">
 
 		<summary>
-			<para>The ASCOM Remote Server hosts Windows drivers and presents them as Alpaca devices that can be accessed from any network connected device that has an Alpaca client.</para>
+			<para>The Remote Server hosts Windows drivers and presents them as Alpaca devices that can be accessed from any network connected device that has an Alpaca client.</para>
 		</summary>
 
 		<introduction>
@@ -26,7 +26,7 @@
 					<listItem>
 						<para>
 							To enable astronomy client applications that run on non-Windows operating systems to use astronomy devices that are controlled
-							by a Windows PC in the observatory. ASCOM Remote can be used from clients on almost any operating system including
+							by a Windows PC in the observatory. The Remote Server can be used from clients on almost any operating system including
 							MacOS, Linux, Android and IOS because it uses the Alpaca protocol, which is based on standard HTTP and REST network protocols.
 						</para>
 					</listItem>
@@ -46,9 +46,13 @@
 					Initial testing will be easier if you first configure a simulator rather than a real device.
 				</para>
 				<para>
-					Comprehensive information on configuring the Remote Server is provided in the
-					<link  xlink:href="#seeAlsoSection">ASCOM Remote Configuration</link>
-					link in the See Also section.
+					Comprehensive information on configuring the Remote Server is provided in the PDF that can be downloaded from this link:
+					<externalLink>
+						<linkText>Remote Server Configuration</linkText>
+						<linkAlternateText>Remote Server Configuration</linkAlternateText>
+						<linkUri>https://download.ascom-standards.org/docs/RemoteInstConf.pdf</linkUri>
+					</externalLink>
+					.
 				</para>
 				<para>
 					<legacyBold>NOTE: </legacyBold>For security reasons, the Remote Server will only connect to the "localhost (127.0.0.1)" address when first run, which is only accessible within the
@@ -66,11 +70,19 @@
 				</mediaLink>
 			</content>
 		</section>
-
+		<section address="Section3">
+			<title>Out-of-band Updates</title>
+			<content>
+				<para>
+					The Platform will always install the latest version of the Remote Server, however, if revisions are released between Platform updates, they will be issued as stand-alone installers
+					that will replace the Platform version with the updated version.
+				</para>
+			</content>
+		</section>
 		<relatedTopics>
 			<externalLink>
-				<linkText address="remoteconfig">ASCOM Remote Configuration</linkText>
-				<linkAlternateText>ASCOM Remote Configuration</linkAlternateText>
+				<linkText>Remote Server Configuration</linkText>
+				<linkAlternateText>Remote Server Configuration</linkAlternateText>
 				<linkUri>https://download.ascom-standards.org/docs/RemoteInstConf.pdf</linkUri>
 			</externalLink>
 		</relatedTopics>

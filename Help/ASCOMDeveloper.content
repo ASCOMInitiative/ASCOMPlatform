@@ -41,13 +41,13 @@
   </Topic>
   <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" isExpanded="true" title="Tools and Features">
     <Topic id="e3870a2f-582a-4ab4-b37f-e9b1c37a2030" visible="True" title="Alpaca through the Chooser" />
-    <Topic id="0254d2da-144b-49dd-8172-b03cd8048bec" visible="True" title="ASCOM Remote" />
+    <Topic id="0254d2da-144b-49dd-8172-b03cd8048bec" visible="True" isSelected="true" title="ASCOM Remote Server" />
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
     <Topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" visible="True" />
     <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />
     <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
     <Topic id="79d0c293-9ca0-466f-8dda-b974ea8b7383" visible="True" />
-    <Topic id="905bf41a-9a13-47c1-a9dd-4a354a8c4432" visible="True" isSelected="true" title="Omni-Simulators" />
+    <Topic id="905bf41a-9a13-47c1-a9dd-4a354a8c4432" visible="True" title="Omni-Simulators" />
     <Topic id="f52483b9-e922-4079-afa9-5e6f1a3ab5a5" visible="True" />
     <Topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" visible="True" />
   </Topic>

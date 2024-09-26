@@ -5,7 +5,11 @@
 	  xmlns:xlink="http://www.w3.org/1999/xlink">
 
 		<summary>
-			<para>The Omni-Simulators are a "start from scratch" re-write of the Platform 6 device simulators that provide both Alpaca and traditional COM driver interfaces.</para>
+			<para>
+				The Omni-Simulators application provides simulators for all ASCOM device types from a single application. It is a "start from scratch" re-write
+				and provides both <legacyBold>Alpaca</legacyBold> and traditional <legacyBold>COM driver</legacyBold> interfaces from a single code base. 
+				This will enable us to add features more easily in future.
+			</para>
 		</summary>
 
 		<introduction>
@@ -84,20 +88,29 @@
 			<title>Using the Omni-Simulators as COM Drivers</title>
 			<content>
 				<para>
-					The Platform installer registers the Omni-Simulators for COM and re-configures the original Platform simulator ProgIDs to start the 
-					Omni-Simulators instead of the discreet Platform simulators. This means that any applications that are already configured to use the Platform simulators will work 
+					The Platform installer registers the Omni-Simulators for COM and re-configures the original Platform simulator ProgIDs to start the
+					Omni-Simulators instead of the discreet Platform simulators. This means that any applications that are already configured to use the Platform simulators will work
 					with the Omni-Simulators without change.
 				</para>
 				<para>
 					Use of the discreet simulators can be restored through an option in the <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29">Diagnostics Options</link> menu if required.
 				</para>
 				<para>
-					<legacyBold>Note: </legacyBold>There is no need to start the Omni-Simulator main executable before using the COM drivers because they will automatically 
+					<legacyBold>Note: </legacyBold>There is no need to start the Omni-Simulator main executable before using the COM drivers because they will automatically
 					start the executable if it is not already running.
 				</para>
 				<mediaLink>
 					<image placement="center" xlink:href="OmniChooser"/>
 				</mediaLink>
+			</content>
+		</section>
+		<section address="Section5">
+			<title>Out-of-band Updates</title>
+			<content>
+				<para>
+					The Platform will always install the latest version of the Omni-Simulators, however, if revisions are released between Platform updates, they will be issued as stand-alone installers
+					that will replace the Platform version with the updated version.
+				</para>
 			</content>
 		</section>
 		<relatedTopics>

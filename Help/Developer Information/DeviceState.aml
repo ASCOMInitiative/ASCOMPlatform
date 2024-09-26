@@ -372,7 +372,11 @@
 					As a convenience for application developers, all ASCOM client toolkit devices will provide an additional property that presents the device’s DeviceState response as a class.
 					The name of the additional property for most devices will follow the format: {DeviceType}State where {DeviceType} is Dome, Telescope etc. The Camera property will be named
 					CameraDeviceState to avoid a conflict with the ICamera.CameraState property.
-					Due to the variable nature of the Switch’s device state response there is no helper class for the Switch device.
+				</para>
+				<para>
+					<legacyBold>Note: </legacyBold>Due to the variable nature of the Switch’s device state response there is no helper class for the Switch device.
+				</para>
+				<para>
 					The signature of these additional properties will be:
 				</para>
 				<code>
