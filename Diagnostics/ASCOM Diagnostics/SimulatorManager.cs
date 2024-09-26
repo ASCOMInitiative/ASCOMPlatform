@@ -43,8 +43,8 @@ namespace ASCOM.Utilities
             {"ASCOM.Simulator.Telescope", "{124d5b35-2435-43c5-bb02-1af3edfa6dbe}"}
         };
 
-    // List of standard simulator names
-    private static Dictionary<string, string> standardSimulatorNames = new Dictionary<string, string>()
+        // List of standard simulator names
+        private static Dictionary<string, string> standardSimulatorNames = new Dictionary<string, string>()
         {
             { @"Camera Drivers\ASCOM.Simulator.Camera","ASCOM Camera Simulator"},
             { @"CoverCalibrator Drivers\ASCOM.Simulator.CoverCalibrator","ASCOM Cover Calibrator Simulator"},
@@ -313,11 +313,17 @@ namespace ASCOM.Utilities
                         // Handle Omni-Simulators have been selected
                         case OMNI_SIMULATORS_NAME_UPPERCASE:
                             LogMessage("SimulatorsHaveBeenSet", $"The Omni-Simulators are already selected", TL);
+
+                            // Make sure that the OmniSim GUIDs are in place
+                            SetOmniSimulators(false, TL);
                             return true;
 
                         // Handle Platform 6 Simulators have been selected
                         case PLATFORM6_SIMULATORS_NAME_UPPERCASE:
                             LogMessage("SimulatorsHaveBeenSet", $"The Platform 6 Simulators are already selected", TL);
+
+                            // Make sure that the Platform 6 simulator GUIDs are in place
+                            SetPlatform6Simulators(false, TL);
                             return true;
 
                         // All other values are reported as no simulators have been selected
