@@ -162,6 +162,18 @@
       <ImageId>ChooserTest</ImageId>
       <AlternateText>Chooser Test</AlternateText>
     </Image>
+    <Image Include="Tools and Features\DiagnosticsLogFileFolder.png">
+      <ImageId>DiagnosticsLogFileFolder</ImageId>
+      <AlternateText>Diagnostics Log File Folder</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\DiagnosticsLogFileLocation.png">
+      <ImageId>DiagnosticsLogFileLocation</ImageId>
+      <AlternateText>Diagnostics Log File Location</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\DiagnosticsSelectSimulators.png">
+      <ImageId>DiagnosticsSelectSimulators</ImageId>
+      <AlternateText>Diagnostics Select Simulators</AlternateText>
+    </Image>
     <Image Include="Tools and Features\OCHSetup.PNG">
       <ImageId>OCHSetup</ImageId>
       <AlternateText>OCHSetup</AlternateText>
