@@ -11722,6 +11722,10 @@ namespace ASCOM.Utilities
             // Set the check for updates check marks
             OptionsCheckForPlatformReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_UPDATES, Utilities.Global.CHECK_FOR_RELEASE_UPDATES_DEFAULT);
             OptionsCheckForPlatformPreReleases.Checked = Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES_DEFAULT);
+            LogInternal("RefreshTraceItems", $"OptionsCheckForPlatformReleases.Checked: {OptionsCheckForPlatformReleases.Checked}, " +
+                $"Registry: {Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_UPDATES, Utilities.Global.CHECK_FOR_RELEASE_UPDATES_DEFAULT)}" +
+                $"OptionsCheckForPlatformPreReleases.Checked: {OptionsCheckForPlatformPreReleases.Checked}, " +
+                $"Registry: {Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES_DEFAULT)}");
 
             // Set the Is using Omni-Simulators check mark
             OptionsUseOmniSimulators.Checked = SimulatorManager.IsUsingOmniSimulators(tlInternal);
@@ -12079,12 +12083,16 @@ namespace ASCOM.Utilities
             try
             {
                 LogInternal("DiagnosticsUpdateCheck", "Diagnostics is checking for updates");
+                LogInternal("DiagnosticsUpdateCheck", $"OptionsCheckForPlatformReleases.Checked: {OptionsCheckForPlatformReleases.Checked}, " +
+                    $"Registry: {Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_UPDATES, Utilities.Global.CHECK_FOR_RELEASE_UPDATES_DEFAULT)}" +
+                    $"OptionsCheckForPlatformPreReleases.Checked: {OptionsCheckForPlatformPreReleases.Checked}, " +
+                    $"Registry: {Utilities.Global.GetBool(Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES, Utilities.Global.CHECK_FOR_RELEASE_CANDIDATES_DEFAULT)}");
 
                 // Check whether updates are to be checked at all
-                if (OptionsCheckForPlatformPreReleases.Checked | OptionsCheckForPlatformPreReleases.Checked) // Either release or pre-release updates are to be checked
+                if (OptionsCheckForPlatformReleases.Checked | OptionsCheckForPlatformPreReleases.Checked) // Either release or pre-release updates are to be checked
                 {
-                    // Delay for a few seconds to allow the GUI to initialise
-                    LogInternal("DiagnosticsUpdateCheck", $"Entered Delaying...");
+                    // Delay for a second to allow the GUI to initialise
+                    LogInternal("DiagnosticsUpdateCheck", $"Starting 1 second Delay...");
                     Thread.Sleep(1000);
                     LogInternal("DiagnosticsUpdateCheck", $"Running update check");
 
