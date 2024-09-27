@@ -1,9 +1,7 @@
 ﻿// Errors and strings reported by the VB6 COM components
 
-
 namespace ASCOM.Utilities
 {
-
     static class VB6COMErrors
     {
         // =============
@@ -57,11 +55,11 @@ namespace ASCOM.Utilities
         internal const int SCODE_DRIVER_NOT_REG = Microsoft.VisualBasic.Constants.vbObjectError + 0x420;
         // This uses runtime-generated message
         internal const int SCODE_ILLEGAL_DRIVERID = Microsoft.VisualBasic.Constants.vbObjectError + 0x421;
-        internal const string MSG_ILLEGAL_DRIVERID = "Illegal DriverID value \"\" (empty string)";
+        internal const string MSG_ILLEGAL_DRIVERID = "Illegal DriverID value: null or empty string";
         internal const int SCODE_ILLEGAL_REGACC = Microsoft.VisualBasic.Constants.vbObjectError + 0x422;
         internal const string MSG_ILLEGAL_REGACC = "Illegal access to registry area";
         internal const int SCODE_ILLEGAL_DEVTYPE = Microsoft.VisualBasic.Constants.vbObjectError + 0x423;
-        internal const string MSG_ILLEGAL_DEVTYPE = "Illegal DeviceType value \"\" (empty string)";
+        internal const string MSG_ILLEGAL_DEVTYPE = "Illegal DeviceType value: null or empty string";
         // 
         // Util.cls (base = &H430)
         // 

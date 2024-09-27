@@ -245,7 +245,6 @@ namespace ASCOM.Utilities
             return IsRegisteredPrv(DriverID, false);
         }
 
-
         /// <summary>
         /// Registers a supplied DriverID and associates a descriptive name with the device
         /// </summary>
@@ -718,19 +717,18 @@ namespace ASCOM.Utilities
             // Confirm that the specified driver is registered
             System.Collections.Generic.SortedList<string, string> keys;
             string IndStr = "";
+            bool IsRegisteredPrvRet = false;
 
             if (Indent)
                 IndStr = "  ";
 
-            TL.LogStart(IndStr + "IsRegistered", IndStr + DriverID.ToString() + " ");
-
-            bool IsRegisteredPrvRet = false;
             if (string.IsNullOrEmpty(DriverID))
             {
-                TL.LogFinish("Null string so exiting False");
+                TL.LogMessage(IndStr + "IsRegistered", $"{IndStr}{DriverID} - Null or empty string so exiting False");
                 return IsRegisteredPrvRet; // Nothing is a failure
             }
 
+            TL.LogStart(IndStr + "IsRegistered", IndStr + DriverID.ToString() + " ");
             try
             {
                 keys = ProfileStore.EnumKeys(MakeKey("", ""));
@@ -755,7 +753,6 @@ namespace ASCOM.Utilities
             }
 
             return IsRegisteredPrvRet;
-
         }
 
         private string MakeKey(string BaseKey, string SubKey)
@@ -772,7 +769,7 @@ namespace ASCOM.Utilities
         private void CheckRegistered(string DriverID)
         {
             // Confirm that a given driver exists
-            TL.LogMessage("  CheckRegistered", "\"" + DriverID + "\" DeviceType: " + m_sDeviceType);
+            TL.LogMessage("  CheckRegistered", $"DriverId: '{DriverID}', DeviceType: '{m_sDeviceType}'");
             if (!IsRegisteredPrv(DriverID, true))
             {
                 TL.LogMessage("  CheckRegistered", "Driver is not registered");

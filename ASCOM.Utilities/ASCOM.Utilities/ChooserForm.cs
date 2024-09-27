@@ -1004,12 +1004,16 @@ namespace ASCOM.Utilities
 
         private void MnuManageAlpacaDevices_Click(object sender, EventArgs e)
         {
-            bool deviceWasRegistered;
+            string deviceProgId = ""; // Initialise to an empty string because using a null string will cause exceptions in this code
+            bool deviceWasRegistered = false;
 
-            // Get the current registration state for the selected ProgID
-            deviceWasRegistered = profile.IsRegistered(selectedProgIdValue);
-
-            TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} of type {profile.DeviceType} is registered: {deviceWasRegistered}");
+            // Get the current registration state for the selected ProgID if it is not null
+            if (selectedProgIdValue is not null)
+            {
+                deviceProgId = selectedProgIdValue;
+                deviceWasRegistered = profile.IsRegistered(deviceProgId);
+            }
+            TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID '{deviceProgId}' of type {profile.DeviceType} is registered: {deviceWasRegistered}");
 
             // Run the client manager in manage mode
             RunDynamicClientManager("ManageDevices");
@@ -1018,24 +1022,23 @@ namespace ASCOM.Utilities
             if (deviceWasRegistered)
             {
                 // Unselect the ProgID if it has just been deleted
-                if (!profile.IsRegistered(selectedProgIdValue))
+                if (!profile.IsRegistered(deviceProgId))
                 {
                     selectedChooserItem = null;
-                    TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} was registered but has been deleted");
+                    TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID '{deviceProgId}' was registered but has been deleted");
                 }
                 else
                 {
-                    TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} is still registered - no action");
+                    TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID '{deviceProgId}' is still registered - no action");
                 }
             }
             else
             {
-                TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID {selectedProgIdValue} was NOT registered - no action");
+                TL.LogMessage("ManageAlpacaDevicesClick", $"ProgID '{deviceProgId}' was NOT registered - no action");
             }
 
             // Refresh the driver list after any changes made by the management tool
             InitialiseComboBox();
-
         }
 
         /// <summary>
