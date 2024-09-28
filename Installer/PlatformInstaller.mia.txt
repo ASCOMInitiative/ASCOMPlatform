@@ -691,7 +691,7 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Comment: Report location of our uninstaller
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$PRODUCTCODE$\UninstallString into UNINSTALLER
   Set Variable MYPROGRESS to 10
-  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform - $UNINSTALLER$ (at end of file)
    
   Comment: Run uninstaller
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
@@ -840,7 +840,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Finished cleaning templates - 
  
 Comment: Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
 if Variable MAINTENANCE not Equals TRUE
-  Comment: Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform 6 install
+  Comment: Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform install
   if Variable REQUIRESUPGRADE Equals FALSE
     Write into Text File $SETUPLOG$ from Value $TIME$ Straight forward install - removing old Platform 4 or 5 if it exists (at end of file)
     Comment: Check for Platform 4.1
@@ -2681,7 +2681,7 @@ if Variable SUCCESS not Equals (Ignore Case) ERROR
         Comment: if Variable DISPLAY_USER_GUIDE Equals (Ignore Case) TRUE
         Comment: Set Variable FINISH_CONTEXT to The user guide will be displayed after you click the Finish button
         Comment: else
-        Set Variable FINISH_CONTEXT to The user guide is in your Start / ASCOM Platform 6 folder.
+        Set Variable FINISH_CONTEXT to The user guide is in your Start / ASCOM Platform folder.
         Comment: end
         Comment: Revise messages if in maintenance mode
         if Variable MAINTENANCE Equals (Ignore Case) TRUE

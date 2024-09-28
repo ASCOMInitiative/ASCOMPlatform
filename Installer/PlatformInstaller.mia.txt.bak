@@ -34,6 +34,7 @@ Set Variable FILEEXISTS to
 Set Variable UNINSTALLER to 
 Set Variable ACTION to 
 Set Variable CLEARCACHE to 
+Set Variable DEVICEHUB_DOME_RADIUS to 
  
 Comment: Set a variable indicating whether the installer was started from a stand alone exe or from the control panel
 Set Variable STARTEDFROMCONTROLPANEL to FALSE
@@ -2044,9 +2045,7 @@ end
 Comment: Update the Device Hub default dcome radius to 2000 if currently set at the Platform 6 default value of zero. A value of zero causes dome synchronisation to fail, a bad out of the box experience.
 Read Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius into DEVICEHUB_DOME_RADIUS
 Write into Text File $SETUPLOG$ from Value $TIME$ Current Device Hub Dome Radius: '$DEVICEHUB_DOME_RADIUS$' (at end of file)
-Evaluate Expression $DEVICEHUB_DOME_RADIUS = 0 or $DEVICEHUB_DOME_RADIUS = "" into variable DEVICEHUB_DOME_RADIUS_STATE
-Write into Text File $SETUPLOG$ from Value $TIME$ Device Hub Dome Radius requires update: '$DEVICEHUB_DOME_RADIUS_STATE$' (at end of file)
-if Variable DEVICEHUB_DOME_RADIUS_STATE Equals TRUE
+if Variable DEVICEHUB_DOME_RADIUS Equals 0
   Comment: Platform 6 default value detected
   Write into Text File $SETUPLOG$ from Value $TIME$ Updating Device Hub Dome Radius to: 2000. (at end of file)
   Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOM.DeviceHub.Dome\Dome Radius, 2000 (permanent)
