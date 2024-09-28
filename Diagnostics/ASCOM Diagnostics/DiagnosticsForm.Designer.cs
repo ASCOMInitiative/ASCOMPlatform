@@ -112,7 +112,7 @@ namespace ASCOM.Utilities
             // lblMessage
             // 
             this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(12, 109);
+            this.lblMessage.Location = new System.Drawing.Point(11, 104);
             this.lblMessage.MinimumSize = new System.Drawing.Size(505, 0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(505, 13);
@@ -495,7 +495,7 @@ namespace ASCOM.Utilities
             this.BtnUpdateAvailable.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.BtnUpdateAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnUpdateAvailable.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.BtnUpdateAvailable.Location = new System.Drawing.Point(408, 76);
+            this.BtnUpdateAvailable.Location = new System.Drawing.Point(408, 71);
             this.BtnUpdateAvailable.Name = "BtnUpdateAvailable";
             this.BtnUpdateAvailable.Size = new System.Drawing.Size(110, 42);
             this.BtnUpdateAvailable.TabIndex = 8;

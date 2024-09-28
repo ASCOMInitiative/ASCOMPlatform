@@ -275,6 +275,8 @@ namespace ASCOM.Utilities
                 BringToFront();
                 KeyPreview = true; // Ensure that key press events are sent to the form so that the key press event handler can respond to them
 
+                Status("Diagnostics may take several minutes to complete");
+
                 LogInternal("Load", "Complete");
                 LogInternal(" ", " ");
             }
@@ -1425,7 +1427,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.Telescope",
-                    Description = "Platform 6 Telescope Simulator",
+                    Description = "Platform Telescope Simulator",
                     DeviceType = "Telescope",
                     Name = "Simulator",
                     DriverVersion = "7.0",
@@ -1441,7 +1443,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.CoverCalibrator",
-                    Description = "Platform 6 CoverCalibrator Simulator",
+                    Description = "Platform CoverCalibrator Simulator",
                     DeviceType = "CoverCalibrator",
                     Name = "CoverCalibrator Simulator",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1485,7 +1487,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.Camera",
-                    Description = "Platform 6 Camera Simulator",
+                    Description = "Platform Camera Simulator",
                     DeviceType = "Camera",
                     Name = "Sim ",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1498,7 +1500,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.Dome",
-                    Description = "Platform 6 Dome Simulator",
+                    Description = "Platform Dome Simulator",
                     DeviceType = "Dome",
                     Name = "Simulator",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1540,7 +1542,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.FilterWheel",
-                    Description = "Platform 6 FilterWheel Simulator",
+                    Description = "Platform FilterWheel Simulator",
                     DeviceType = "FilterWheel",
                     Name = "Filter Wheel Simulator .NET",
                     DriverVersion = DiagnosticsMajorNumber + ".0",
@@ -1568,7 +1570,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.Focuser",
-                    Description = "Platform 6 Focuser Simulator",
+                    Description = "Platform Focuser Simulator",
                     DeviceType = "Focuser",
                     Name = "ASCOM.Simulator.Focuser",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1582,7 +1584,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.SafetyMonitor",
-                    Description = "Platform 6 Safety Monitor Simulator",
+                    Description = "Platform Safety Monitor Simulator",
                     DeviceType = "SafetyMonitor",
                     Name = "ASCOM.Simulator.SafetyMonitor",
                     DriverVersion = DiagnosticsMajorNumber + ".0",
@@ -1610,7 +1612,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.Switch",
-                    Description = "Platform 6 Switch Simulator",
+                    Description = "Platform Switch Simulator",
                     DeviceType = "Switch",
                     Name = "ASCOM Switch V2 Simulator",
                     DriverVersion = "7.0",
@@ -1624,7 +1626,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.Video",
-                    Description = "Platform 6 Video Simulator",
+                    Description = "Platform Video Simulator",
                     DeviceType = "Video",
                     Name = "Video Simulator",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1638,7 +1640,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.Simulator.ObservingConditions",
-                    Description = "Platform 6 ObservingConditions Simulator",
+                    Description = "Platform ObservingConditions Simulator",
                     DeviceType = "ObservingConditions",
                     Name = "ASCOM Observing Conditions Simulator",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1652,7 +1654,7 @@ namespace ASCOM.Utilities
                 Sim = new SimulatorDescriptor()
                 {
                     ProgID = "ASCOM.OCH.ObservingConditions",
-                    Description = "Platform 6 ObservingConditions Hub",
+                    Description = "Platform ObservingConditions Hub",
                     DeviceType = "ObservingConditionsHub",
                     Name = "ASCOM Observing Conditions Hub (OCH)",
                     DriverVersion = DiagnosticsMajorMinorVersionNumber,
@@ -1786,7 +1788,7 @@ namespace ASCOM.Utilities
                         try
                         {
                             RetValString = DeviceObject.Description;
-                            Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True");
+                            Compare("TestSimulator", "Description member is present in Platform Simulator", "True", "True");
                             NMatches += 1;
                         }
                         catch (NotSupportedException ex1)
@@ -1819,7 +1821,7 @@ namespace ASCOM.Utilities
                         try
                         {
                             RetValString = DeviceObject.DriverInfo;
-                            Compare("TestSimulator", "DriverInfo member is present in Platform 6 Simulator", "True", "True");
+                            Compare("TestSimulator", "DriverInfo member is present in Platform Simulator", "True", "True");
                         }
                         catch (NotSupportedException ex1)
                         {
@@ -1851,7 +1853,7 @@ namespace ASCOM.Utilities
                         try
                         {
                             RetValString = DeviceObject.Name;
-                            Compare("TestSimulator", "Name member is present in Platform 6 Simulator", "True", "True");
+                            Compare("TestSimulator", "Name member is present in Platform Simulator", "True", "True");
                         }
                         catch (NotSupportedException ex1)
                         {
@@ -11012,7 +11014,7 @@ namespace ASCOM.Utilities
         {
             var InstallInfo = new SortedList<string, string>();
 
-            try // Platform 7 installer GUID, should always be present in Platform 6
+            try // Platform 7 installer GUID, should always be present in Platform 7
             {
                 InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller);
                 if (InstallInfo.Count > 0)
