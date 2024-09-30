@@ -34,3 +34,26 @@ Delete Registry KEY HKCR\CLSID\{ad3ff473-56b5-4e04-af93-185d9cb42395}\*.*
 Comment: Remove ObservingConditions Hub (OCH) COM entry
 Delete Registry KEY HKCR\CLSID\{6e5ed281-7149-44e9-9dfe-eb5425c00273}\*.*
  
+Comment: Remove incorrect OmniSim COMProxy 64bit CLSID entries left over from development. COMProxy is a 32bit app.
+ 
+Comment: Remove Camera simulator COM entry
+Delete Registry KEY HKCR\CLSID\{DE992041-27FC-45CA-BC58-7507994973EA}\*.*
+Comment: Remove CoverCalibrator simulator COM entry
+Delete Registry KEY HKCR\CLSID\{97A847F6-2522-4007-842A-AE2339B1D70D}\*.*
+Comment: Remove Dome simulator COM entry
+Delete Registry KEY HKCR\CLSID\{1E074DDB-D020-4045-8DB0-CFBBA81A6172}\*.*
+Comment: Remove FilterWheel simulator COM entry
+Delete Registry KEY HKCR\CLSID\{568961E4-0D98-4B9F-947E-B467C4AAC5FC}\*.*
+Comment: Remove Focuser simulator COM entry
+Delete Registry KEY HKCR\CLSID\{A8904146-656B-4852-96CB-53C1229FF0E8}\*.*
+Comment: Remove ObservingConditions simulator COM entry
+Delete Registry KEY HKCR\CLSID\{38620AE3-E175-4153-8871-85EE1023C5AD}\*.*
+Comment: Remove Rotator simulator COM entry
+Delete Registry KEY HKCR\CLSID\{23B464ED-B86A-4276-AB2C-69FF65DF9477}\*.*
+Comment: Remove SafetyMonitor simulator COM entry
+Delete Registry KEY HKCR\CLSID\{269F2A82-98B6-46EE-88F7-5A6C794E5D9A}\*.*
+Comment: Remove Switch simulator COM entry
+Delete Registry KEY HKCR\CLSID\{D0EFCD2B-00D6-42B6-9F16-795CF09FBEE8}\*.*
+Comment: Remove Telescope simulator COM entry
+Delete Registry KEY HKCR\CLSID\{124D5B35-2435-43C5-BB02-1AF3EDFA6DBE}\*.*
+ 
