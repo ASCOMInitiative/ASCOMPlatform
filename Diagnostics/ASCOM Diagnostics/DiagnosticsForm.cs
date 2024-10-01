@@ -1719,6 +1719,14 @@ namespace ASCOM.Utilities
                                     DeviceObject.TempComp = false;
                                     Compare("TestSimulator", "Temperature compensation disabled OK", "True", "True");
                                 }
+                                catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                {
+                                    Compare("TestSimulator", "Setting TempComp false threw a not implemented exception, which the interface specification allows.", "True", "True");
+                                }
+                                catch (PropertyNotImplementedException)
+                                {
+                                    Compare("TestSimulator", "Setting TempComp false threw a not implemented exception, which the interface specification allows.", "True", "True");
+                                }
                                 catch (Exception ex1)
                                 {
                                     LogException("TestSimulator", "Exception setting temperature compensation: " + ex1.ToString());
@@ -2166,7 +2174,7 @@ namespace ASCOM.Utilities
                         switch (Test ?? "")
                         {
                             case "IsSafe":
-                                Compare("DeviceTest", Test, Conversions.ToString(string.IsNullOrEmpty(DeviceObject.IsSafe)), "False");
+                                Compare("DeviceTest", Test, Conversions.ToString(string.IsNullOrEmpty(DeviceObject.IsSafe.ToString())), "False");
                                 break;
 
                             default:
@@ -2572,7 +2580,7 @@ namespace ASCOM.Utilities
                                 {
                                     Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
                                 }
-                                catch (MethodNotImplementedException)
+                                catch (PropertyNotImplementedException)
                                 {
                                     Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
                                 }
@@ -2589,7 +2597,7 @@ namespace ASCOM.Utilities
                                 {
                                     Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True");
                                 }
-                                catch (MethodNotImplementedException)
+                                catch (PropertyNotImplementedException)
                                 {
                                     Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True");
                                 }
