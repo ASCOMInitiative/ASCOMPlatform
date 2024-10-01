@@ -42,6 +42,15 @@
 			Globals.UseCompositeSlewingFlag = settings.UseCompositeSlewingFlag;
 			Globals.IsDomeExpanded = settings.IsDomeExpanded;
 			Globals.IsFocuserExpanded = settings.IsFocuserExpanded;
+
+			Globals.ActivityLogTelescopeDevice = settings.ActivityLogTelescopeDevice;
+			Globals.ActivityLogDomeDevice = settings.ActivityLogDomeDevice;
+			Globals.ActivityLogFocuserDevice = settings.ActivityLogFocuserDevice;
+			Globals.ActivityLogCapabilities = settings.ActivityLogCapabilities;
+			Globals.ActivityLogCommands = settings.ActivityLogCommands;
+			Globals.ActivityLogOtherActivity = settings.ActivityLogOtherActivity;
+			Globals.ActivityLogParameters = settings.ActivityLogParameters;
+			Globals.ActivityLogStatus = settings.ActivityLogStatus;
 		}
 
 		public static void LoadMainWindowSettings()
@@ -73,7 +82,15 @@
 				AlwaysOnTop = Globals.AlwaysOnTop,
 				UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag,
 				IsDomeExpanded = Globals.IsDomeExpanded,
-				IsFocuserExpanded = Globals.IsFocuserExpanded
+				IsFocuserExpanded = Globals.IsFocuserExpanded,
+				ActivityLogTelescopeDevice = Globals.ActivityLogTelescopeDevice,
+				ActivityLogDomeDevice = Globals.ActivityLogDomeDevice,
+				ActivityLogFocuserDevice= Globals.ActivityLogFocuserDevice,
+				ActivityLogCapabilities = Globals.ActivityLogCapabilities,
+				ActivityLogCommands = Globals.ActivityLogCommands,
+				ActivityLogOtherActivity = Globals.ActivityLogOtherActivity,
+				ActivityLogParameters = Globals.ActivityLogParameters,
+				ActivityLogStatus = Globals.ActivityLogStatus,
 			};
 
 			ServiceContainer.Instance.GetService<IAppSettingsService>().SaveSettings( settings );

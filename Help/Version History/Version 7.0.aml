@@ -85,7 +85,7 @@
 						The Dynamic Clients now provide access to the Alpaca device's HTML configuration pages though the SetupDialog method when the Alpaca device is connected.
 						Previously all access was blocked.
 					</listItem>
-
+					<listItem>Device Hub activity log settings are now saved when the log is closed and restored when the log is opened.</listItem>
 				</list>
 			</content>
 		</section>

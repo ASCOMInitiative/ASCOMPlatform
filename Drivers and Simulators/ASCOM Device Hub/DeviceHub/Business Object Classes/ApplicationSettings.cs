@@ -48,12 +48,21 @@ namespace ASCOM.DeviceHub
 		public bool UseCompositeSlewingFlag { get; set; }
 		public bool IsDomeExpanded { get; set; }
 		public bool IsFocuserExpanded { get; set; }
+        public bool ActivityLogTelescopeDevice { get; set; }
+        public bool ActivityLogDomeDevice { get; set; }
+        public bool ActivityLogFocuserDevice { get; set; }
+        public bool ActivityLogCommands { get; set; }
+        public bool ActivityLogStatus { get; set; }
+        public bool ActivityLogParameters { get; set; }
+        public bool ActivityLogCapabilities { get; set; }
+        public bool ActivityLogOtherActivity { get; set; }
 
-		#endregion Public Properties
+        #endregion Public Properties
 
-		#region Public Methods
 
-		public void ToXmlFile()
+        #region Public Methods
+
+        public void ToXmlFile()
 		{
 			XDocument doc = new XDocument();
 
