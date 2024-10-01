@@ -21,6 +21,7 @@
 		<local:HourAngleValueConverter x:Key="HourAngleValueConverter" />
 		<local:AltitudeValueConverter x:Key="AltitudeValueConverter" />
         <local:BooleanOnOffConverter x:Key="BooleanOnOffConverter" />
+        <local:DoubleEmptyStringConverter x:Key="DoubleEmptyStringConverter" />
 
         <Style x:Key="SlewValue" TargetType="{x:Type TextBox}">
 			<Setter Property="VerticalAlignment" Value="Stretch" />
@@ -232,7 +233,7 @@
 
 					<local:DoubleEntryBox Grid.Row="1" Height="22" Width="80" HorizontalAlignment="Left" Style="{StaticResource SlewValue}" 
 										  Minimum="0" Maximum="24" IsMaximumInclusive="False" TabIndex="3" 
-										  Text="{Binding TargetRightAscension, StringFormat=F5, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"								
+										  Text="{Binding TargetRightAscension, StringFormat=F5, Converter={StaticResource DoubleEmptyStringConverter}, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"								
 										  Visibility="{Binding UseDecimalHours, Converter={StaticResource BoolVisConverter}}" />
 				</Grid>
 
@@ -277,7 +278,7 @@
 
 					<local:DoubleEntryBox Grid.Row="1" Height="22" Width="80" HorizontalAlignment="Left" Style="{StaticResource SlewValue}" 
 										  Minimum="-90" Maximum="90" IsMaximumInclusive="False"
-										  Text="{Binding TargetDeclination, StringFormat=F5, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+										  Text="{Binding TargetDeclination, StringFormat=F5, Converter={StaticResource DoubleEmptyStringConverter}, UpdateSourceTrigger=LostFocus, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
 										  Visibility="{Binding UseDecimalHours, Converter={StaticResource BoolVisConverter}}" TabIndex="4" />
 				</Grid>
 			</Grid>

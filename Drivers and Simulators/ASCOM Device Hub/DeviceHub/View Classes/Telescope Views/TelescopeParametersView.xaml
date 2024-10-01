@@ -11,8 +11,9 @@
 	<UserControl.Resources>
 		<local:AlignmentModeToStringConverter x:Key="AlignModeConverter" />
 		<local:EquCoordTypeToStringConverter x:Key="EquCoordConverter" />
+        <local:DoubleConverter x:Key="DoubleConverter" />
 
-		<Style x:Key="CapLabel" TargetType="{x:Type Label}">
+        <Style x:Key="CapLabel" TargetType="{x:Type Label}">
 			<Setter Property="HorizontalAlignment" Value="Right" />
 			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
 			<Setter Property="Margin" Value="6,0,0,0" />
@@ -74,12 +75,12 @@
 			<Label Grid.Row="0" Grid.Column="1" Content="{Binding Parameters.AlignmentMode, Converter={StaticResource AlignModeConverter}}" Style="{StaticResource CapValue}" />
             <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CapValue}">
                 <Label.Content>
-                    <TextBlock Text="{Binding Parameters.ApertureArea, StringFormat=F5, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.ApertureArea, StringFormat=F5, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                 </Label.Content>
             </Label>
             <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource CapValue}">
                 <Label.Content>
-                    <TextBlock Text="{Binding Parameters.ApertureDiameter, StringFormat=F3, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.ApertureDiameter, StringFormat=F3, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                 </Label.Content>
             </Label>
 			<Label Grid.Row="3" Grid.Column="1" Content="{Binding Parameters.Description}" Style="{StaticResource CapValue}"
@@ -91,33 +92,33 @@
 			<Label Grid.Row="7" Grid.Column="1" Content="{Binding Parameters.EquatorialSystem, Converter={StaticResource EquCoordConverter}}" Style="{StaticResource CapValue}" />
             <Label Grid.Row="8" Grid.Column="1" Style="{StaticResource CapValue}">
                 <Label.Content>
-                    <TextBlock Text="{Binding Parameters.FocalLength, StringFormat=F3, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.FocalLength, StringFormat=F3, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                 </Label.Content>
             </Label>
 			<Label Grid.Row="9" Grid.Column="1" Style="{StaticResource CapValue}">
 				<Label.Content>
-					<TextBlock Text="{Binding Parameters.GuideRateDeclination, StringFormat=F5, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.GuideRateDeclination, StringFormat=F5, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 				</Label.Content>
 			</Label>
 			<Label Grid.Row="10" Grid.Column="1" Style="{StaticResource CapValue}">
 				<Label.Content>
-					<TextBlock Text="{Binding Parameters.GuideRateRightAscension, StringFormat=F5, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.GuideRateRightAscension, StringFormat=F5, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 				</Label.Content>
 			</Label>
 			<Label Grid.Row="11" Grid.Column="1" Content="{Binding Parameters.InterfaceVersion}" Style="{StaticResource CapValue}" />
             <Label Grid.Row="12" Grid.Column="1" Style="{StaticResource CapValue}">
                 <Label.Content>
-                    <TextBlock Text="{Binding Parameters.SiteElevation, StringFormat=F0, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.SiteElevation, StringFormat=F0, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                 </Label.Content>
             </Label>
             <Label Grid.Row="13" Grid.Column="1" Style="{StaticResource CapValue}">
                 <Label.Content>
-                    <TextBlock Text="{Binding Parameters.SiteLatitude, StringFormat=F5, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.SiteLatitude, StringFormat=F5, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                 </Label.Content>
             </Label>
             <Label Grid.Row="14" Grid.Column="1" Style="{StaticResource CapValue}">
                 <Label.Content>
-                    <TextBlock Text="{Binding Parameters.SiteLongitude, StringFormat=F5, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                    <TextBlock Text="{Binding Parameters.SiteLongitude, StringFormat=F5, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                 </Label.Content>
             </Label>
             <Label Grid.Row="15" Grid.Column="1" Content="{Binding Parameters.SlewSettleTime}" Style="{StaticResource CapValue}" />

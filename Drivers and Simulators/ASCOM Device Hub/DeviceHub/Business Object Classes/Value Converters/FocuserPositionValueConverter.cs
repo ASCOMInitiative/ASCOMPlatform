@@ -5,7 +5,7 @@ namespace ASCOM.DeviceHub
 {
 	public class FocuserPositionValueConverter : IValueConverter
 	{
-		private const string NoData = "NO DATA";
+		private const string NoData = Globals.NO_DATA_MESSAGE;
 
 		#region IValueConverter Members
 

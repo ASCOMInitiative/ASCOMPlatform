@@ -11,8 +11,9 @@
 	<UserControl.Resources>
 		<local:BooleanBooleanValueConverter x:Key="BoolBoolConverter"  />
 		<local:UnitsBooleanToStringConverter x:Key="UnitsConverter" />
+        <local:DoubleConverter x:Key="DoubleConverter" />
 
-		<Style x:Key="RateLabel" TargetType="{x:Type Label}">
+        <Style x:Key="RateLabel" TargetType="{x:Type Label}">
 			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
 			<Setter Property="Margin" Value="0" />
 			<Setter Property="Padding" Value="0" />
@@ -61,7 +62,7 @@
 				<Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
 					   Foreground="{DynamicResource DynamicTextBrush}" Padding="0">
 					<Label.Content>
-						<TextBlock Text="{Binding RaRateOffset, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                        <TextBlock Text="{Binding RaRateOffset, StringFormat=F7, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 					</Label.Content>
 				</Label>
 				<Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Padding="0"
@@ -73,7 +74,7 @@
 				<Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
 					    Padding="0" Foreground="{DynamicResource DynamicTextBrush}">
 					<Label.Content>
-						<TextBlock Text="{Binding DecRateOffset, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                        <TextBlock Text="{Binding DecRateOffset, StringFormat=F7, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 					</Label.Content>
 				</Label>
 				<Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"

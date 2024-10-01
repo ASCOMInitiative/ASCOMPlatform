@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
              d:DesignHeight="400" d:DesignWidth="440" MinWidth="428">
 	<UserControl.Resources>
-		<Style x:Key="ParmLabel" TargetType="{x:Type Label}">
+        <local:DoubleConverter x:Key="DoubleConverter" />
+        <Style x:Key="ParmLabel" TargetType="{x:Type Label}">
 			<Setter Property="HorizontalAlignment" Value="Right" />
 			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
 			<Setter Property="Margin" Value="6,0,0,0" />
@@ -67,7 +69,7 @@
 		<!--<Label Grid.Row="7" Grid.Column="1" Content="{Binding Parameters.StepSize, StringFormat=F1}" Style="{StaticResource ParmValue}" />-->
 		<Label Grid.Row="7" Grid.Column="1">
 			<Label.Content>
-				<TextBlock Text="{Binding Parameters.StepSize, StringFormat=F1, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+                <TextBlock Text="{Binding Parameters.StepSize, StringFormat=F1, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
 						   Style="{StaticResource ParmText}"/>
 			</Label.Content>
 		</Label>

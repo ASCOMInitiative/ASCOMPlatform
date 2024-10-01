@@ -13,8 +13,9 @@
 		<local:HomingStateVisibilityConverter x:Key="HomingStateVisConverter" />
 		<local:BooleanVisibilityConverter x:Key="BoolVisConverter" />
 		<local:BooleanToConnectStringConverter x:Key="BoolConnectConverter" />
+        <local:DoubleConverter x:Key="DoubleConverter" />
 
-		<Style x:Key="Text" TargetType="{x:Type Label}">
+        <Style x:Key="Text" TargetType="{x:Type Label}">
 			<Setter Property="Margin" Value="0" />
 			<Setter Property="Padding" Value="0" />
 			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
@@ -153,7 +154,7 @@
 				<Label Grid.Row="3" Grid.Column="0" Content="Azimuth:" Style="{StaticResource StateLabel}" />
                 <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource StateValue}">
                     <Label.Content>
-                        <TextBlock Text="{Binding Status.Azimuth, StringFormat=F1, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                        <TextBlock Text="{Binding Status.Azimuth, StringFormat=F1, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
                     </Label.Content>
                 </Label>
 

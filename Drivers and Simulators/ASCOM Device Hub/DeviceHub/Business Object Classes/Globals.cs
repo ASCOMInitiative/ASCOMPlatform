@@ -16,6 +16,8 @@ namespace ASCOM.DeviceHub
         public const string DevHubDomeID = "ASCOM.DeviceHub.Dome";
         public const string DevHubFocuserID = "ASCOM.DeviceHub.Focuser";
 
+        public const string NO_DATA_MESSAGE = "Unavailable";
+
         public const double DegRad = Math.PI / 180.0;
         public const double UTC_SECS_PER_SIDEREAL_SEC = 0.997269566334879;
 

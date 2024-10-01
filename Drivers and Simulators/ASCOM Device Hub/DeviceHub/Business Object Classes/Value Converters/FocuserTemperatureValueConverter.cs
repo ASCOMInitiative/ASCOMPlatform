@@ -9,7 +9,7 @@ namespace ASCOM.DeviceHub
 	{
 		public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
 		{
-			string retval = "NO DATA";
+			string retval = Globals.NO_DATA_MESSAGE;
 			double rawTemp = 0.0;
 			bool convertToF = true;
 			double offset = 0.0;

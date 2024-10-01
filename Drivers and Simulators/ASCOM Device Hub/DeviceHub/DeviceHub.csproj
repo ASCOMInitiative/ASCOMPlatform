@@ -86,6 +86,8 @@
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\DeviceConnectedValueConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DoubleConverter.cs" />
+    <Compile Include="Business Object Classes\Value Converters\DoubleEmptyStringConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBooleanVisibilityConverter.cs" />
     <Compile Include="Business Object Classes\Value Converters\MultiBindingTrueIfNotParking.cs" />
     <Compile Include="Business Object Classes\Value Converters\EditLockTextBooleanValueConverter.cs" />

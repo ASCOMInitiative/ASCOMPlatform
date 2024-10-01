@@ -9,7 +9,7 @@ namespace ASCOM.DeviceHub
 
 		public object Convert( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
 		{
-			string retval = "NO DATA";
+			string retval = Globals.NO_DATA_MESSAGE;
 			double rawDec = (double)value;
 
 			if ( !Double.IsNaN( rawDec ) )

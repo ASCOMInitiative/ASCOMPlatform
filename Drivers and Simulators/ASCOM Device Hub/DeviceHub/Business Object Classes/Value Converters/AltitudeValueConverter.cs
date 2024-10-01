@@ -8,7 +8,7 @@ namespace ASCOM.DeviceHub
 	{
 		public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
 		{
-			string retval = "NO DATA";
+			string retval = Globals.NO_DATA_MESSAGE;
 			double rawAltitude = (double)value;
 
 			if ( !Double.IsNaN( rawAltitude ) )
