@@ -1693,58 +1693,59 @@ namespace ASCOM.Utilities
                     try
                     {
                         TL.LogMessage("TestSimulator", "CreateObject for Device: " + Sim.ProgID + " " + Sim.Description);
+
+                        #region Connect to device
+
                         DeviceType = Type.GetTypeFromProgID(Sim.ProgID);
                         DeviceObject = Activator.CreateInstance(DeviceType);
 
                         switch (Sim.DeviceType ?? "")
                         {
                             case "Focuser":
-                                {
-                                    try
-                                    {
-                                        DeviceObject.Connected = true;
-                                        Compare("TestSimulator", "Connected OK", "True", "True");
-                                    }
-                                    catch (RuntimeBinderException) // Could be a Platform 5 driver that uses "Link" instead of "Connected"
-                                    {
-                                        DeviceObject.Link = true; // Try Link, if it fails the outer try will catch the exception
-                                        Compare("TestSimulator", "Linked OK", "True", "True");
-                                    }
-
-                                    // Disable temperature compensation if its available
-                                    try
-                                    {
-                                        DeviceObject.TempComp = false;
-                                        Compare("TestSimulator", "Temperature compensation disabled OK", "True", "True");
-                                    }
-                                    catch (Exception ex1)
-                                    {
-                                        LogException("TestSimulator", "Exception setting temperature compensation: " + ex1.ToString());
-                                    }
-
-                                    break;
-                                }
-
-                            case "ObservingConditionsHub":
-                                {
-                                    // The ObservingConditions Hub is un-configured on initial installation and so has a special test mode that fakes a valid configuration
-                                    // This unpublicised Action initiates the test mode
-                                    returnString = Conversions.ToString(DeviceObject.Action("SetTestMode", ""));
-                                    TL.LogMessage("TestSimulator", "Observing conditions hub test mode request returned: " + returnString);
-                                    DeviceObject.Connected = true;
-                                    Compare("TestSimulator", "Connected OK", "True", "True"); // Everything else should be Connected 
-                                    break;
-                                }
-
-                            default:
+                                try
                                 {
                                     DeviceObject.Connected = true;
                                     Compare("TestSimulator", "Connected OK", "True", "True");
-                                    break;
                                 }
+                                catch (RuntimeBinderException) // Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                                {
+                                    DeviceObject.Link = true; // Try Link, if it fails the outer try will catch the exception
+                                    Compare("TestSimulator", "Linked OK", "True", "True");
+                                }
+
+                                // Disable temperature compensation if its available
+                                try
+                                {
+                                    DeviceObject.TempComp = false;
+                                    Compare("TestSimulator", "Temperature compensation disabled OK", "True", "True");
+                                }
+                                catch (Exception ex1)
+                                {
+                                    LogException("TestSimulator", "Exception setting temperature compensation: " + ex1.ToString());
+                                }
+
+                                break;
+
+                            case "ObservingConditionsHub":
+                                // The ObservingConditions Hub is un-configured on initial installation and so has a special test mode that fakes a valid configuration
+                                // This unpublicised Action initiates the test mode
+                                returnString = Conversions.ToString(DeviceObject.Action("SetTestMode", ""));
+                                TL.LogMessage("TestSimulator", "Observing conditions hub test mode request returned: " + returnString);
+                                DeviceObject.Connected = true;
+                                Compare("TestSimulator", "Connected OK", "True", "True"); // Everything else should be Connected 
+                                break;
+
+                            default:
+                                DeviceObject.Connected = true;
+                                Compare("TestSimulator", "Connected OK", "True", "True");
+                                break;
                         }
 
                         Thread.Sleep(1000);
+
+                        #endregion
+
+                        #region Check common methods
 
                         try
                         {
@@ -1920,156 +1921,147 @@ namespace ASCOM.Utilities
                             LogException("TestSimulator", "DriverVersion Exception: " + ex1.ToString());
                         }
 
+                        #endregion
+
+                        #region Check device specific methods
+
                         switch (Sim.DeviceType ?? "")
                         {
                             case "Telescope":
+                                DeviceTest("Telescope", "UnPark");
+                                DeviceTest("Telescope", "TrackingTrue");
+                                DeviceTest("Telescope", "SiderealTime");
+                                DeviceTest("Telescope", "TargetDeclination");
+                                DeviceTest("Telescope", "TargetRightAscension");
+                                DeviceTest("Telescope", "Slew");
+                                DeviceTest("Telescope", "TrackingRates");
+                                DeviceAxisRates = DeviceTest("Telescope", "AxisRates");
+                                try
                                 {
-                                    DeviceTest("Telescope", "UnPark");
-                                    DeviceTest("Telescope", "TrackingTrue");
-                                    DeviceTest("Telescope", "SiderealTime");
-                                    DeviceTest("Telescope", "TargetDeclination");
-                                    DeviceTest("Telescope", "TargetRightAscension");
-                                    DeviceTest("Telescope", "Slew");
-                                    DeviceTest("Telescope", "TrackingRates");
-                                    DeviceAxisRates = DeviceTest("Telescope", "AxisRates");
-                                    try
+                                    // The maximum slew rate is a user configurable value so we need to read it here in order to conduct slew rate value tests
+                                    // Get the maximum slew rate stored in the simulator Profile for use in relative rates tests
+                                    using (Profile profileSlew = new())
                                     {
-                                        // The maximum slew rate is a user configurable value so we need to read it here in order to conduct slew rate value tests
-                                        // Get the maximum slew rate stored in the simulator Profile for use in relative rates tests
-                                        using (Profile profileSlew = new())
-                                        {
-                                            // Handle the possibility that the Platform 6 simulator has never been started and so a max slew rate doesn't exist.
-                                            string maxSlewRateString = profileSlew.GetValue(Sim.ProgID, MAX_SLEW_RATE_PROFILE_NAME); // Get the max slew rate string
+                                        // Handle the possibility that the Platform 6 simulator has never been started and so a max slew rate doesn't exist.
+                                        string maxSlewRateString = profileSlew.GetValue(Sim.ProgID, MAX_SLEW_RATE_PROFILE_NAME); // Get the max slew rate string
 
-                                            // Check whether the max slew rate has a value
-                                            if (!string.IsNullOrEmpty(maxSlewRateString)) // There is a value
-                                                MaxSlewRate = Conversions.ToDouble(maxSlewRateString);
-                                            else // There is no value so set a low value that should be OK
-                                                MaxSlewRate = 1.0;
-                                        }
-
-                                        ct = Conversions.ToInteger(DeviceObject.InterfaceVersion());
-                                        ct = 0;
-                                        foreach (dynamic AxRte in (IEnumerable)DeviceAxisRates)
-                                        {
-                                            // Get the minimum rate
-                                            double minimum = AxRte.Minimum;
-
-                                            // If we get here a maximum value could be read OK
-                                            TL.LogMessage("TestSimulator", $"Got minimum rate OK: {AxRte.Minimum}");
-                                            NMatches += 1;
-
-                                            // Get the maximum rate
-                                            double maximum = AxRte.Maximum;
-
-                                            // If we get here a maximum value could be read OK
-                                            TL.LogMessage("TestSimulator", $"Got maximum rate OK: {AxRte.Maximum}");
-                                            NMatches += 1;
-                                        }
-                                    }
-                                    catch (COMException ex1)
-                                    {
-                                        if (ex1.ErrorCode == int.MinValue + 0x00040400)
-                                        {
-                                            Compare("TestSimulator", "TrackingRates - Simulator is in Interface V1 mode", "True", "True");
-                                        }
+                                        // Check whether the max slew rate has a value
+                                        if (!string.IsNullOrEmpty(maxSlewRateString)) // There is a value
+                                            MaxSlewRate = Conversions.ToDouble(maxSlewRateString);
+                                        else // There is no value so set a low value that should be OK
+                                            MaxSlewRate = 1.0;
                                     }
 
-                                    break;
+                                    ct = Conversions.ToInteger(DeviceObject.InterfaceVersion());
+                                    ct = 0;
+                                    foreach (dynamic AxRte in (IEnumerable)DeviceAxisRates)
+                                    {
+                                        // Get the minimum rate
+                                        double minimum = AxRte.Minimum;
+
+                                        // If we get here a maximum value could be read OK
+                                        TL.LogMessage("TestSimulator", $"Got minimum rate OK: {AxRte.Minimum}");
+                                        NMatches += 1;
+
+                                        // Get the maximum rate
+                                        double maximum = AxRte.Maximum;
+
+                                        // If we get here a maximum value could be read OK
+                                        TL.LogMessage("TestSimulator", $"Got maximum rate OK: {AxRte.Maximum}");
+                                        NMatches += 1;
+                                    }
                                 }
+                                catch (COMException ex1)
+                                {
+                                    if (ex1.ErrorCode == int.MinValue + 0x00040400)
+                                    {
+                                        Compare("TestSimulator", "TrackingRates - Simulator is in Interface V1 mode", "True", "True");
+                                    }
+                                }
+                                break;
 
                             case "Camera":
-                                {
-                                    DeviceTest("Camera", "StartExposure");
-                                    break;
-                                }
+                                DeviceTest("Camera", "StartExposure");
+                                break;
+
                             case "CoverCalibrator":
+                                coverState = (CoverStatus)Conversions.ToInteger(DeviceObject.CoverState); // Confirm that these  properties can be read and then they can be used to determine which tests to apply
+                                calibratorState = (CalibratorStatus)Conversions.ToInteger(DeviceObject.CalibratorState);
+
+                                // If we get here we have successfully read the two status properties
+                                NMatches += 2;
+                                TL.LogMessage("CoverCalibrator", $"CoverState: {coverState}, CalibratorState: {calibratorState}");
+
+                                if (calibratorState != CalibratorStatus.NotPresent) // The Calibrator capability is active so test these properties
                                 {
-                                    coverState = (CoverStatus)Conversions.ToInteger(DeviceObject.CoverState); // Confirm that these  properties can be read and then they can be used to determine which tests to apply
-                                    calibratorState = (CalibratorStatus)Conversions.ToInteger(DeviceObject.CalibratorState);
-
-                                    // If we get here we have successfully read the two status properties
-                                    NMatches += 2;
-                                    TL.LogMessage("CoverCalibrator", $"CoverState: {coverState}, CalibratorState: {calibratorState}");
-
-                                    if (calibratorState != CalibratorStatus.NotPresent) // The Calibrator capability is active so test these properties
-                                    {
-                                        DeviceTest("CoverCalibrator", "Brightness");
-                                        DeviceTest("CoverCalibrator", "MaxBrightness");
-                                    }
-
-                                    break;
+                                    DeviceTest("CoverCalibrator", "Brightness");
+                                    DeviceTest("CoverCalibrator", "MaxBrightness");
                                 }
+                                break;
+
                             case "FilterWheel":
-                                {
-                                    DeviceTest("FilterWheel", "Position");
-                                    break;
-                                }
-                            case "Focuser":
-                                {
-                                    DeviceTest("Focuser", "Move");
-                                    break;
-                                }
-                            case "SafetyMonitor":
-                                {
-                                    DeviceTest("SafetyMonitor", "IsSafe");
-                                    break;
-                                }
-                            case "Switch":
-                                {
-                                    if (Sim.IsPlatform5)
-                                    {
-                                        DeviceTest("Switch", "GetSwitch");
-                                        DeviceTest("Switch", "GetSwitchName");
-                                    }
-                                    else // Is Platform v6.1
-                                    {
-                                        DeviceTest("Switch", "MaxSwitch");
-                                        DeviceTest("Switch", "CanWrite");
-                                        DeviceTest("Switch", "GetSwitch");
-                                        DeviceTest("Switch", "GetSwitchDescription");
-                                        DeviceTest("Switch", "GetSwitchName");
-                                        DeviceTest("Switch", "GetSwitchValue");
-                                        DeviceTest("Switch", "MaxSwitchValue");
-                                        DeviceTest("Switch", "MinSwitchValue");
-                                        DeviceTest("Switch", "SwitchStep");
-                                    }
+                                DeviceTest("FilterWheel", "Position");
+                                break;
 
-                                    break;
+                            case "Focuser":
+                                DeviceTest("Focuser", "Move");
+                                break;
+
+                            case "SafetyMonitor":
+                                DeviceTest("SafetyMonitor", "IsSafe");
+                                break;
+
+                            case "Switch":
+                                if (Sim.IsPlatform5)
+                                {
+                                    DeviceTest("Switch", "GetSwitch");
+                                    DeviceTest("Switch", "GetSwitchName");
                                 }
+                                else // Is Platform v6.1
+                                {
+                                    DeviceTest("Switch", "MaxSwitch");
+                                    DeviceTest("Switch", "CanWrite");
+                                    DeviceTest("Switch", "GetSwitch");
+                                    DeviceTest("Switch", "GetSwitchDescription");
+                                    DeviceTest("Switch", "GetSwitchName");
+                                    DeviceTest("Switch", "GetSwitchValue");
+                                    DeviceTest("Switch", "MaxSwitchValue");
+                                    DeviceTest("Switch", "MinSwitchValue");
+                                    DeviceTest("Switch", "SwitchStep");
+                                }
+                                break;
+
                             case "Dome":
-                                {
-                                    DeviceTest("Dome", "ShutterStatus");
-                                    DeviceTest("Dome", "Slewing");
-                                    DeviceTest("Dome", "OpenShutter");
-                                    DeviceTest("Dome", "CloseShutter");
-                                    DeviceTest("Dome", "SlewToAltitude");
-                                    DeviceTest("Dome", "SlewToAzimuth");
-                                    break;
-                                }
+                                DeviceTest("Dome", "ShutterStatus");
+                                DeviceTest("Dome", "Slewing");
+                                DeviceTest("Dome", "OpenShutter");
+                                DeviceTest("Dome", "CloseShutter");
+                                DeviceTest("Dome", "SlewToAltitude");
+                                DeviceTest("Dome", "SlewToAzimuth");
+                                break;
+
                             case "Video":
-                                {
-                                    DeviceTest("Video", "BitDepth");
-                                    DeviceTest("Video", "CanConfigureDeviceProperties");
-                                    DeviceTest("Video", "ExposureMin");
-                                    DeviceTest("Video", "Height");
-                                    DeviceTest("Video", "Width");
-                                    break;
-                                }
+                                DeviceTest("Video", "BitDepth");
+                                DeviceTest("Video", "CanConfigureDeviceProperties");
+                                DeviceTest("Video", "ExposureMin");
+                                DeviceTest("Video", "Height");
+                                DeviceTest("Video", "Width");
+                                break;
+
                             case "ObservingConditions":
                             case "ObservingConditionsHub":
-                                {
-                                    DeviceTest("ObservingConditions", "AveragePeriod");
-                                    DeviceTest("ObservingConditions", "TimeSinceLastUpdate");
-                                    break;
-                                }
+                                DeviceTest("ObservingConditions", "AveragePeriod");
+                                DeviceTest("ObservingConditions", "TimeSinceLastUpdate");
+                                break;
 
                             default:
-                                {
-                                    LogException("TestSimulator", "Unknown device type: " + Sim.DeviceType);
-                                    break;
-                                }
+                                LogException("TestSimulator", "Unknown device type: " + Sim.DeviceType);
+                                break;
                         }
+
+                        #endregion
+
+                        #region Disconnect from the device
 
                         // Disconnect the device
                         switch (Sim.DeviceType ?? "")
@@ -2098,6 +2090,9 @@ namespace ASCOM.Utilities
                                     break;
                                 }
                         }
+
+                        #endregion
+
                         TL.LogMessage("TestSimulator", "Completed Device: " + Sim.ProgID + " OK");
                     }
                     catch (Exception ex)
@@ -2151,751 +2146,643 @@ namespace ASCOM.Utilities
                 switch (Device ?? "")
                 {
                     case "CoverCalibrator":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "Brightness":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Conversions.ToBoolean(Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.Brightness, 0, false)), true);
-                                        break;
-                                    }
-                                case "MaxBrightness":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Conversions.ToBoolean(Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.MaxBrightness, 1, false)), true);
-                                        break;
-                                    }
+                            case "Brightness":
+                                CompareBoolean("DeviceTest", Test, Conversions.ToBoolean(Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.Brightness, 0, false)), true);
+                                break;
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
-                                        break;
-                                    }
-                            }
+                            case "MaxBrightness":
+                                CompareBoolean("DeviceTest", Test, Conversions.ToBoolean(Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.MaxBrightness, 1, false)), true);
+                                break;
 
-                            break;
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "SafetyMonitor":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "IsSafe":
-                                    {
-                                        Compare("DeviceTest", Test, Conversions.ToString(DeviceObject.IsSafe), "False");
-                                        break;
-                                    }
+                            case "IsSafe":
+                                Compare("DeviceTest", Test, Conversions.ToString(string.IsNullOrEmpty(DeviceObject.IsSafe)), "False");
+                                break;
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
-                                        break;
-                                    }
-                            }
-
-                            break;
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "Switch":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "MaxSwitch":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Conversions.ToBoolean(Operators.ConditionalCompareObjectGreater(DeviceObject.MaxSwitch, 0, false)), true);
-                                        break;
-                                    }
-                                case "CanWrite":
-                                    {
-                                        Compare("DeviceTest", Test, Interaction.IIf(Conversions.ToBoolean(DeviceObject.CanWrite((object)0)), "OK", "OK").ToString(), "OK");
-                                        break;
-                                    }
-                                case "GetSwitch":
-                                    {
-                                        Compare("DeviceTest", Test, Interaction.IIf(Conversions.ToBoolean(DeviceObject.GetSwitch((object)0)), "OK", "OK").ToString(), "OK");
-                                        break;
-                                    }
-                                case "GetSwitchName":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, string.IsNullOrEmpty(Conversions.ToString(DeviceObject.GetSwitchName((object)0))), false);
-                                        break;
-                                    }
-                                case "GetSwitchDescription":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, string.IsNullOrEmpty(Conversions.ToString(DeviceObject.GetSwitchDescription((object)0))), false);
-                                        break;
-                                    }
-                                case "GetSwitchValue":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.GetSwitchValue((object)0)), true);
-                                        break;
-                                    }
-                                case "MaxSwitchValue":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.MaxSwitchValue((object)0)), true);
-                                        break;
-                                    }
-                                case "MinSwitchValue":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.MinSwitchValue((object)0)), true);
-                                        break;
-                                    }
-                                case "SwitchStep":
-                                    {
-                                        CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.SwitchStep((object)0)), true);
-                                        break;
-                                    }
+                            case "MaxSwitch":
+                                CompareBoolean("DeviceTest", Test, Conversions.ToBoolean(Operators.ConditionalCompareObjectGreater(DeviceObject.MaxSwitch, 0, false)), true);
+                                break;
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
-                                        break;
-                                    }
-                            }
+                            case "CanWrite":
+                                Compare("DeviceTest", Test, Interaction.IIf(Conversions.ToBoolean(DeviceObject.CanWrite((object)0)), "OK", "OK").ToString(), "OK");
+                                break;
 
-                            break;
+                            case "GetSwitch":
+                                Compare("DeviceTest", Test, Interaction.IIf(Conversions.ToBoolean(DeviceObject.GetSwitch((object)0)), "OK", "OK").ToString(), "OK");
+                                break;
+
+                            case "GetSwitchName":
+                                CompareBoolean("DeviceTest", Test, string.IsNullOrEmpty(Conversions.ToString(DeviceObject.GetSwitchName((object)0))), false);
+                                break;
+
+                            case "GetSwitchDescription":
+                                CompareBoolean("DeviceTest", Test, string.IsNullOrEmpty(Conversions.ToString(DeviceObject.GetSwitchDescription((object)0))), false);
+                                break;
+
+                            case "GetSwitchValue":
+                                CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.GetSwitchValue((object)0)), true);
+                                break;
+
+                            case "MaxSwitchValue":
+                                CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.MaxSwitchValue((object)0)), true);
+                                break;
+
+                            case "MinSwitchValue":
+                                CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.MinSwitchValue((object)0)), true);
+                                break;
+
+                            case "SwitchStep":
+                                CompareBoolean("DeviceTest", Test, Information.IsNumeric(DeviceObject.SwitchStep((object)0)), true);
+                                break;
+
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "FilterWheel":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "Position":
-                                    {
-                                        int numberOfOffsets, testFilter;
-                                        testFilter = 0; // Initialise test filter number
+                            case "Position":
+                                int numberOfOffsets, testFilter;
+                                testFilter = 0; // Initialise test filter number
 
-                                        // Determine a valid filter wheel position to run the test
-                                        numberOfOffsets = ((Array)DeviceObject.FocusOffsets).Length;
+                                // Determine a valid filter wheel position to run the test
+                                numberOfOffsets = ((Array)DeviceObject.FocusOffsets).Length;
 
-                                        switch (numberOfOffsets)
-                                        {
-                                            case 0: // No filtgers so this is an error because we can't run the test.
-                                                {
-                                                    LogError("DeviceTest", "There are no filters defined, unable to test the FilterWheel position property.");
-                                                    break;
-                                                }
-                                            case 1: // Only 1 so choose position 0 - the only option!
-                                                {
-                                                    testFilter = 0;
-                                                    break;
-                                                }
-                                            case 2: // 2 filters so choose the lat one, position 1
-                                                {
-                                                    testFilter = 1; // More than 2 filters so go with one less than maximum (note filter position is 0 based!)
-                                                    break;
-                                                }
-
-                                            default:
-                                                {
-                                                    testFilter = numberOfOffsets - 2;
-                                                    break;
-                                                }
-                                        }
-                                        TL.LogMessage("DeviceTest", $"Number of filter wheel filters: {numberOfOffsets}, Chosen wheel: {testFilter}");
-
-                                        // Select the desired filter
-                                        DeviceObject.Position = (object)testFilter;
-
-                                        // Wait for the wheel to stop moving
-                                        do
-                                        {
-                                            Thread.Sleep(100);
-                                            Application.DoEvents();
-                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds);
-                                        }
-                                        while (!Operators.ConditionalCompareObjectGreater(DeviceObject.Position, -1, false));
-
-                                        // Test the outcome.
-                                        CompareDouble("DeviceTest", Test, Conversions.ToDouble(DeviceObject.Position), testFilter, 0.000001d);
+                                switch (numberOfOffsets)
+                                {
+                                    case 0: // No filters so this is an error because we can't run the test.
+                                        LogError("DeviceTest", "There are no filters defined, unable to test the FilterWheel position property.");
                                         break;
-                                    }
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
+                                    case 1: // Only 1 so choose position 0 - the only option!
+                                        testFilter = 0;
                                         break;
-                                    }
-                            }
 
-                            break;
+                                    case 2: // 2 filters so choose the lat one, position 1
+                                        testFilter = 1; // More than 2 filters so go with one less than maximum (note filter position is 0 based!)
+                                        break;
+
+                                    default:
+                                        testFilter = numberOfOffsets - 2;
+                                        break;
+                                }
+                                TL.LogMessage("DeviceTest", $"Number of filter wheel filters: {numberOfOffsets}, Chosen wheel: {testFilter}");
+
+                                // Select the desired filter
+                                DeviceObject.Position = (object)testFilter;
+
+                                // Wait for the wheel to stop moving
+                                do
+                                {
+                                    Thread.Sleep(100);
+                                    Application.DoEvents();
+                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds);
+                                }
+                                while (!Operators.ConditionalCompareObjectGreater(DeviceObject.Position, -1, false));
+
+                                // Test the outcome.
+                                CompareDouble("DeviceTest", Test, Conversions.ToDouble(DeviceObject.Position), testFilter, 0.000001d);
+                                break;
+
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "Focuser":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "Move":
+                            case "Move":
+                                // Handle absolute and relative mode behaviours
+                                if (DeviceObject.Absolute) // Absolute mode
+                                {
+                                    // Find the larger of either 0 to Position or Position to MaxStep and then move to half of that
+                                    // Calculate the upper portion size, the lower portion size is given by Position
+                                    // 0.................................................Pos..........................Max
+                                    // Lower Portion                               Upper Portion
+
+                                    FocuserMax = Conversions.ToInteger(DeviceObject.MaxStep);
+                                    FocuserPosition = Conversions.ToInteger(DeviceObject.Position);
+                                    TL.LogMessage("DeviceTest", "Focuser Position: " + FocuserPosition + ", Focuser Maximum: " + FocuserMax);
+
+                                    FocuserUpperPortion = FocuserMax - FocuserPosition;
+
+                                    if (FocuserUpperPortion > FocuserPosition) // Upper portion is larger
                                     {
-                                        // Handle absolute and relative mode behaviours
-                                        if (DeviceObject.Absolute) // Absolute mode
-                                        {
-                                            // Find the larger of either 0 to Position or Position to MaxStep and then move to half of that
-                                            // Calculate the upper portion size, the lower portion size is given by Position
-                                            // 0.................................................Pos..........................Max
-                                            // Lower Portion                               Upper Portion
-
-                                            FocuserMax = Conversions.ToInteger(DeviceObject.MaxStep);
-                                            FocuserPosition = Conversions.ToInteger(DeviceObject.Position);
-                                            TL.LogMessage("DeviceTest", "Focuser Position: " + FocuserPosition + ", Focuser Maximum: " + FocuserMax);
-
-                                            FocuserUpperPortion = FocuserMax - FocuserPosition;
-
-                                            if (FocuserUpperPortion > FocuserPosition) // Upper portion is larger
-                                            {
-                                                FocuserTargetPosition = FocuserPosition + (int)Math.Round(FocuserUpperPortion / 2d);
-                                                TL.LogMessage("DeviceTest", "Moving upward to: " + FocuserTargetPosition.ToString());
-                                                DeviceObject.Move(FocuserTargetPosition);
-                                            }
-                                            else // Lower portion is larger
-                                            {
-                                                FocuserTargetPosition = (int)Math.Round(FocuserPosition / 2d);
-                                                TL.LogMessage("DeviceTest", "Moving downward to: " + FocuserTargetPosition.ToString());
-                                                DeviceObject.Move(FocuserTargetPosition);
-                                            }
-
-                                            do
-                                            {
-                                                Thread.Sleep(200);
-                                                Application.DoEvents();
-                                                Action(Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(Test + " ", DeviceObject.Position), " / "), FocuserTargetPosition))); // Now.Subtract(StartTime).Seconds)
-                                            }
-                                            while (DeviceObject.IsMoving);
-                                            CompareInteger("DeviceTest", Test, Conversions.ToInteger(DeviceObject.Position), FocuserTargetPosition);
-                                            TL.LogMessage("DeviceTest", string.Format("Temperature compensation is available: {0} and enabled: {1}", DeviceObject.TempCompAvailable, DeviceObject.TempComp));
-                                        }
-                                        else // Relative mode
-                                        {
-                                            DeviceObject.Move(20);
-                                            do
-                                            {
-                                                Thread.Sleep(200);
-                                                Application.DoEvents();
-                                                Action("Moving relative focuser by +20 steps."); // Now.Subtract(StartTime).Seconds)
-                                            }
-                                            while (DeviceObject.IsMoving);
-                                            TL.LogMessage("DeviceTest", "Successfully moved the relative focuser by +20 steps.");
-                                            NMatches += 1;
-                                        }
-                                        break;
+                                        FocuserTargetPosition = FocuserPosition + (int)Math.Round(FocuserUpperPortion / 2d);
+                                        TL.LogMessage("DeviceTest", "Moving upward to: " + FocuserTargetPosition.ToString());
+                                        DeviceObject.Move(FocuserTargetPosition);
+                                    }
+                                    else // Lower portion is larger
+                                    {
+                                        FocuserTargetPosition = (int)Math.Round(FocuserPosition / 2d);
+                                        TL.LogMessage("DeviceTest", "Moving downward to: " + FocuserTargetPosition.ToString());
+                                        DeviceObject.Move(FocuserTargetPosition);
                                     }
 
-                                default:
+                                    do
                                     {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
-                                        break;
+                                        Thread.Sleep(200);
+                                        Application.DoEvents();
+                                        Action(Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(Test + " ", DeviceObject.Position), " / "), FocuserTargetPosition))); // Now.Subtract(StartTime).Seconds)
                                     }
-                            }
+                                    while (DeviceObject.IsMoving);
+                                    CompareInteger("DeviceTest", Test, Conversions.ToInteger(DeviceObject.Position), FocuserTargetPosition);
+                                    TL.LogMessage("DeviceTest", string.Format("Temperature compensation is available: {0} and enabled: {1}", DeviceObject.TempCompAvailable, DeviceObject.TempComp));
+                                }
+                                else // Relative mode
+                                {
+                                    DeviceObject.Move(20);
+                                    do
+                                    {
+                                        Thread.Sleep(200);
+                                        Application.DoEvents();
+                                        Action("Moving relative focuser by +20 steps."); // Now.Subtract(StartTime).Seconds)
+                                    }
+                                    while (DeviceObject.IsMoving);
+                                    TL.LogMessage("DeviceTest", "Successfully moved the relative focuser by +20 steps.");
+                                    NMatches += 1;
+                                }
+                                break;
 
-                            break;
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "Camera":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "StartExposure":
-                                    {
-                                        StartTime = DateTime.Now;
-                                        DeviceObject.StartExposure(3.0d, true);
-                                        TL.LogMessage(Device, "Start exposure duration: " + DateTime.Now.Subtract(StartTime).TotalSeconds);
+                            case "StartExposure":
+                                StartTime = DateTime.Now;
+                                DeviceObject.StartExposure(3.0d, true);
+                                TL.LogMessage(Device, "Start exposure duration: " + DateTime.Now.Subtract(StartTime).TotalSeconds);
 
-                                        // Wait until exposure phase is complete and the simulator moves to the Downloading state
-                                        do
-                                        {
-                                            Thread.Sleep(100);
-                                            Application.DoEvents();
-                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds");
-                                        }
-                                        while (!Operators.OrObject(Operators.ConditionalCompareObjectNotEqual(DeviceObject.CameraState, CameraStates.cameraExposing, false), DateTime.Now.Subtract(StartTime).TotalSeconds > 15.0d));
-                                        CompareDouble(Device, "StartExposure", DateTime.Now.Subtract(StartTime).TotalSeconds, 3.0d, 0.2d);
+                                // Wait until exposure phase is complete and the simulator moves to the Downloading state
+                                do
+                                {
+                                    Thread.Sleep(100);
+                                    Application.DoEvents();
+                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds");
+                                }
+                                while (!Operators.OrObject(Operators.ConditionalCompareObjectNotEqual(DeviceObject.CameraState, CameraStates.cameraExposing, false), DateTime.Now.Subtract(StartTime).TotalSeconds > 15.0d));
+                                CompareDouble(Device, "StartExposure", DateTime.Now.Subtract(StartTime).TotalSeconds, 3.0d, 0.2d);
 
-                                        // Wait until the camera is idle before testing ImageReady
-                                        do
-                                        {
-                                            Thread.Sleep(100);
-                                            Application.DoEvents();
-                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds");
-                                        }
-                                        while (!Operators.OrObject(Operators.ConditionalCompareObjectEqual(DeviceObject.CameraState, CameraStates.cameraIdle, false), DateTime.Now.Subtract(StartTime).TotalSeconds > 15.0d));
-                                        Compare(Device, "ImageReady", Conversions.ToString(DeviceObject.ImageReady), Conversions.ToString(true));
-                                        break;
-                                    }
+                                // Wait until the camera is idle before testing ImageReady
+                                do
+                                {
+                                    Thread.Sleep(100);
+                                    Application.DoEvents();
+                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds");
+                                }
+                                while (!Operators.OrObject(Operators.ConditionalCompareObjectEqual(DeviceObject.CameraState, CameraStates.cameraIdle, false), DateTime.Now.Subtract(StartTime).TotalSeconds > 15.0d));
+                                Compare(Device, "ImageReady", Conversions.ToString(DeviceObject.ImageReady), Conversions.ToString(true));
+                                break;
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
-                                        break;
-                                    }
-                            }
-
-                            break;
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "Telescope":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "UnPark":
+                            case "UnPark":
+                                canUnpark = Conversions.ToBoolean(DeviceObject.CanUnpark);
+                                Compare(Device, "CanUnPark - Simulator does return a value from CanUnpark.", "True", "True");
+                                if (canUnpark) // Test Unpark if it is supported
+                                {
+                                    try
                                     {
-                                        canUnpark = Conversions.ToBoolean(DeviceObject.CanUnpark);
-                                        Compare(Device, "CanUnPark - Simulator does return a value from CanUnpark.", "True", "True");
-                                        if (canUnpark) // Test Unpark if it is supported
-                                        {
-                                            try
-                                            {
-                                                DeviceObject.UnPark();
-                                                Compare(Device, Test, Conversions.ToString(DeviceObject.AtPark), "False");
-                                            }
-                                            catch (COMException ex1)
-                                            {
-                                                if (ex1.ErrorCode == int.MinValue + 0x00040400)
-                                                {
-                                                    Compare(Device, "UnPark - Simulator is in Interface V1 mode", "True", "True");
-                                                }
-                                            }
-                                        }
-
-                                        break;
+                                        DeviceObject.UnPark();
+                                        Compare(Device, Test, Conversions.ToString(DeviceObject.AtPark), "False");
                                     }
-                                case "TrackingTrue":
+                                    catch (COMException ex1)
                                     {
-                                        if (canUnpark)
-                                            DeviceObject.UnPark();
-                                        canSetTracking = Conversions.ToBoolean(DeviceObject.CanSetTracking);
-                                        Compare(Device, "CanSetTracking - Simulator does return a value from CanSetTracking.", "True", "True");
-                                        if (canSetTracking)
+                                        if (ex1.ErrorCode == int.MinValue + 0x00040400)
                                         {
-                                            DeviceObject.Tracking = (object)true;
-                                            Compare(Device, Test, Conversions.ToString(DeviceObject.Tracking), "True");
+                                            Compare(Device, "UnPark - Simulator is in Interface V1 mode", "True", "True");
+                                        }
+                                    }
+                                }
+                                break;
+
+                            case "TrackingTrue":
+                                if (canUnpark)
+                                    DeviceObject.UnPark();
+                                canSetTracking = Conversions.ToBoolean(DeviceObject.CanSetTracking);
+                                Compare(Device, "CanSetTracking - Simulator does return a value from CanSetTracking.", "True", "True");
+
+                                if (canSetTracking)
+                                {
+                                    DeviceObject.Tracking = (object)true;
+                                    Compare(Device, Test, Conversions.ToString(DeviceObject.Tracking), "True");
+                                }
+                                else
+                                {
+                                    TL.LogMessage(Device, "Tracking test skipped because CanSetTrackling is False");
+                                }
+                                break;
+
+                            case "SiderealTime":
+                                try
+                                {
+                                    SiderealTime = Conversions.ToDouble(DeviceObject.SiderealTime);
+                                    canReadSiderealTime = true;
+                                    Compare(Device, "SiderealTime - Simulator does return a value from SiderealTime.", "True", "True");
+
+                                    TL.LogMessage(Device, "Received Sidereal time from telescope: " + SiderealTime);
+                                    RetValDouble = Conversions.ToDouble(DeviceObject.SiderealTime);
+                                    CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24);
+                                }
+
+                                catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                {
+                                    Compare(Device, "SiderealTime - Property is configured not to return a value.", "True", "True");
+                                }
+                                catch (PropertyNotImplementedException)
+                                {
+                                    Compare(Device, "SiderealTime - Property is configured not to return a value.", "True", "True");
+                                }
+                                break;
+
+                            case "TargetDeclination":
+                                try
+                                {
+                                    DeviceObject.TargetDeclination = (object)0.0d;
+                                    canSetTargetDeclination = true;
+                                    RetValDouble = Conversions.ToDouble(DeviceObject.TargetDeclination);
+                                    CompareDouble(Device, Test, RetValDouble, 0.0d, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180);
+                                }
+                                catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                {
+                                    Compare(Device, "TargetDeclination - Property is configured not to return a value.", "True", "True");
+                                }
+                                catch (PropertyNotImplementedException)
+                                {
+                                    Compare(Device, "TargetDeclination - Property is configured not to return a value.", "True", "True");
+                                }
+                                break;
+
+                            case "TargetRightAscension":
+                                if (canReadSiderealTime)
+                                {
+                                    SiderealTime = Conversions.ToDouble(DeviceObject.SiderealTime);
+                                    TL.LogMessage(Device, "Received Sidereal time from telescope: " + AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3));
+                                    try
+                                    {
+                                        DeviceObject.TargetRightAscension = (object)SiderealTime;
+                                        canSetTargetRightAscension = true;
+                                        TL.LogMessage(Device, Conversions.ToString(Operators.ConcatenateObject("Target RA set to: ", DeviceObject.TargetRightAscension)));
+                                        RetValDouble = Conversions.ToDouble(DeviceObject.TargetRightAscension);
+                                        CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24);
+                                    }
+                                    catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                    {
+                                        Compare(Device, "TargetRightAscension - Property is configured not to return a value.", "True", "True");
+                                    }
+                                    catch (PropertyNotImplementedException)
+                                    {
+                                        Compare(Device, "TargetRightAscension - Property is configured not to return a value.", "True", "True");
+                                    }
+                                }
+                                else
+                                {
+                                    TL.LogMessage(Device, "TargetRightAscension test skipped because can't read sidereal time");
+                                }
+                                break;
+
+                            case "Slew":
+                                if (canUnpark & canSetTracking & canReadSiderealTime & canSetTargetRightAscension & canSetTargetDeclination)
+                                {
+                                    DeviceObject.UnPark();
+                                    DeviceObject.Tracking = (object)true;
+                                    SiderealTime = Conversions.ToDouble(DeviceObject.SiderealTime);
+                                    TL.LogMessage(Device, "Received Sidereal time from telescope: " + AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3));
+                                    TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0d); // Set the RA target to be 1 hour before zenith
+                                    TL.LogMessage(Device, "Target RA calculated as: " + AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3));
+                                    DeviceObject.TargetRightAscension = (object)TargetRA;
+                                    TL.LogMessage(Device, "Target RA set to: " + AscomUtil.HoursToHMS(Conversions.ToDouble(DeviceObject.TargetRightAscension), ":", ":", "", 3));
+                                    DeviceObject.TargetDeclination = (object)0.0d;
+                                    TL.LogMessage(Device, "Target Dec set to: " + AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.TargetDeclination), ":", ":", "", 3));
+                                    TL.LogMessage(Device, "Pre-slew RA is: " + AscomUtil.HoursToHMS(Conversions.ToDouble(DeviceObject.RightAscension), ":", ":", "", 3));
+                                    TL.LogMessage(Device, "Pre-slew Dec is: " + AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Declination), ":", ":", "", 3));
+                                    TL.LogMessage(Device, string.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Azimuth), ":", ":", "", 3), AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Altitude), ":", ":", "", 3)));
+                                    DeviceObject.SlewToTarget();
+                                    Thread.Sleep(1000); // Wait a short while to ensure the simulator has stabilised
+                                    TL.LogMessage(Device, "Post-slew RA is: " + AscomUtil.HoursToHMS(Conversions.ToDouble(DeviceObject.RightAscension), ":", ":", "", 3));
+                                    TL.LogMessage(Device, "Post-slew Dec is: " + AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Declination), ":", ":", "", 3));
+                                    TL.LogMessage(Device, string.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Azimuth), ":", ":", "", 3), AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Altitude), ":", ":", "", 3)));
+                                    CompareDouble(Device, Test + " RA", Conversions.ToDouble(DeviceObject.RightAscension), TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24);
+                                    CompareDouble(Device, Test + " Dec", Conversions.ToDouble(DeviceObject.Declination), 0.0d, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180);
+                                }
+                                else
+                                {
+                                    TL.LogMessage(Device, $"Slew test skipped because CanUnpark: {canUnpark}, CanSetTracking: {canSetTracking}, CanReadSidferalTime: {canReadSiderealTime}, CanSetTargetRightAscension: {canSetTargetRightAscension}, CanSetTargetDeclination: {canSetTargetDeclination}");
+                                }
+                                break;
+
+                            case "TrackingRates":
+                                try
+                                {
+                                    DeviceTrackingRates = DeviceObject.TrackingRates;
+                                    foreach (DriveRates TrackingRate in (IEnumerable)DeviceTrackingRates)
+                                    {
+                                        if (PossibleDriveRates.Contains(TrackingRate.ToString()))
+                                        {
+                                            NMatches += 1;
+                                            TL.LogMessage(Device, "Matched Tracking Rate = " + TrackingRate.ToString());
                                         }
                                         else
                                         {
-                                            TL.LogMessage(Device, "Tracking test skipped because CanSetTrackling is False");
+                                            LogException(Device, "Found unexpected tracking rate: \"" + TrackingRate.ToString() + "\"");
                                         }
-
-                                        break;
                                     }
-                                case "SiderealTime":
+                                }
+                                catch (COMException ex1)
+                                {
+                                    if (ex1.ErrorCode == int.MinValue + 0x00040400)
                                     {
-                                        try
-                                        {
-                                            SiderealTime = Conversions.ToDouble(DeviceObject.SiderealTime);
-                                            canReadSiderealTime = true;
-                                            Compare(Device, "SiderealTime - Simulator does return a value from SiderealTime.", "True", "True");
-
-                                            TL.LogMessage(Device, "Received Sidereal time from telescope: " + SiderealTime);
-                                            RetValDouble = Conversions.ToDouble(DeviceObject.SiderealTime);
-                                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24);
-                                        }
-
-                                        catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                        {
-                                        }
-                                        catch (PropertyNotImplementedException)
-                                        {
-                                            Compare(Device, "SiderealTime - Property is configured not to return a value.", "True", "True");
-                                        }
-
-                                        break;
+                                        Compare(Device, "TrackingRates - Simulator is in Interface V1 mode", "True", "True");
                                     }
-                                case "TargetDeclination":
+                                }
+                                break;
+
+                            case "AxisRates":
+                                try
+                                {
+                                    RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary);
+                                    Compare(Device, "AxisRates returned OK", "True", "True");
+                                }
+                                catch (COMException ex1)
+                                {
+                                    if (ex1.ErrorCode == int.MinValue + 0x00040400)
                                     {
-                                        try
-                                        {
-                                            DeviceObject.TargetDeclination = (object)0.0d;
-                                            canSetTargetDeclination = true;
-                                            RetValDouble = Conversions.ToDouble(DeviceObject.TargetDeclination);
-                                            CompareDouble(Device, Test, RetValDouble, 0.0d, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180);
-                                        }
-                                        catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                        {
-                                        }
-                                        catch (PropertyNotImplementedException)
-                                        {
-                                            Compare(Device, "TargetDeclination - Property is configured not to return a value.", "True", "True");
-                                        }
-
-                                        break;
+                                        Compare(Device, "AxisRates - Simulator is in Interface V1 mode", "True", "True");
                                     }
-                                case "TargetRightAscension":
-                                    {
-                                        if (canReadSiderealTime)
-                                        {
-                                            SiderealTime = Conversions.ToDouble(DeviceObject.SiderealTime);
-                                            TL.LogMessage(Device, "Received Sidereal time from telescope: " + AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3));
-                                            try
-                                            {
-                                                DeviceObject.TargetRightAscension = (object)SiderealTime;
-                                                canSetTargetRightAscension = true;
-                                                TL.LogMessage(Device, Conversions.ToString(Operators.ConcatenateObject("Target RA set to: ", DeviceObject.TargetRightAscension)));
-                                                RetValDouble = Conversions.ToDouble(DeviceObject.TargetRightAscension);
-                                                CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24);
-                                            }
-                                            catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                            }
-                                            catch (PropertyNotImplementedException)
-                                            {
-                                                Compare(Device, "TargetRightAscension - Property is configured not to return a value.", "True", "True");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            TL.LogMessage(Device, "TargetRightAscension test skipped because can't read sidereal time");
-                                        }
+                                }
+                                break;
 
-                                        break;
-                                    }
-                                case "Slew":
-                                    {
-                                        if (canUnpark & canSetTracking & canReadSiderealTime & canSetTargetRightAscension & canSetTargetDeclination)
-                                        {
-                                            DeviceObject.UnPark();
-                                            DeviceObject.Tracking = (object)true;
-                                            SiderealTime = Conversions.ToDouble(DeviceObject.SiderealTime);
-                                            TL.LogMessage(Device, "Received Sidereal time from telescope: " + AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3));
-                                            TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0d); // Set the RA target to be 1 hour before zenith
-                                            TL.LogMessage(Device, "Target RA calculated as: " + AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3));
-                                            DeviceObject.TargetRightAscension = (object)TargetRA;
-                                            TL.LogMessage(Device, "Target RA set to: " + AscomUtil.HoursToHMS(Conversions.ToDouble(DeviceObject.TargetRightAscension), ":", ":", "", 3));
-                                            DeviceObject.TargetDeclination = (object)0.0d;
-                                            TL.LogMessage(Device, "Target Dec set to: " + AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.TargetDeclination), ":", ":", "", 3));
-                                            TL.LogMessage(Device, "Pre-slew RA is: " + AscomUtil.HoursToHMS(Conversions.ToDouble(DeviceObject.RightAscension), ":", ":", "", 3));
-                                            TL.LogMessage(Device, "Pre-slew Dec is: " + AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Declination), ":", ":", "", 3));
-                                            TL.LogMessage(Device, string.Format("Pre-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Azimuth), ":", ":", "", 3), AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Altitude), ":", ":", "", 3)));
-                                            DeviceObject.SlewToTarget();
-                                            Thread.Sleep(1000); // Wait a short while to ensure the simulator has stabilised
-                                            TL.LogMessage(Device, "Post-slew RA is: " + AscomUtil.HoursToHMS(Conversions.ToDouble(DeviceObject.RightAscension), ":", ":", "", 3));
-                                            TL.LogMessage(Device, "Post-slew Dec is: " + AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Declination), ":", ":", "", 3));
-                                            TL.LogMessage(Device, string.Format("Post-slew Az/Alt is: {0} {1}", AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Azimuth), ":", ":", "", 3), AscomUtil.DegreesToDMS(Conversions.ToDouble(DeviceObject.Altitude), ":", ":", "", 3)));
-                                            CompareDouble(Device, Test + " RA", Conversions.ToDouble(DeviceObject.RightAscension), TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24);
-                                            CompareDouble(Device, Test + " Dec", Conversions.ToDouble(DeviceObject.Declination), 0.0d, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180);
-                                        }
-                                        else
-                                        {
-                                            TL.LogMessage(Device, $"Slew test skipped because CanUnpark: {canUnpark}, CanSetTracking: {canSetTracking}, CanReadSidferalTime: {canReadSiderealTime}, CanSetTargetRightAscension: {canSetTargetRightAscension}, CanSetTargetDeclination: {canSetTargetDeclination}");
-                                        }
-
-                                        break;
-                                    }
-                                case "TrackingRates":
-                                    {
-                                        try
-                                        {
-                                            DeviceTrackingRates = DeviceObject.TrackingRates;
-                                            foreach (DriveRates TrackingRate in (IEnumerable)DeviceTrackingRates)
-                                            {
-                                                if (PossibleDriveRates.Contains(TrackingRate.ToString()))
-                                                {
-                                                    NMatches += 1;
-                                                    TL.LogMessage(Device, "Matched Tracking Rate = " + TrackingRate.ToString());
-                                                }
-                                                else
-                                                {
-                                                    LogException(Device, "Found unexpected tracking rate: \"" + TrackingRate.ToString() + "\"");
-                                                }
-                                            }
-                                        }
-                                        catch (COMException ex1)
-                                        {
-                                            if (ex1.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                                Compare(Device, "TrackingRates - Simulator is in Interface V1 mode", "True", "True");
-                                            }
-                                        }
-
-                                        break;
-                                    }
-                                case "AxisRates":
-                                    {
-                                        try
-                                        {
-                                            RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary);
-                                            Compare(Device, "AxisRates returned OK", "True", "True");
-                                        }
-                                        catch (COMException ex1)
-                                        {
-                                            if (ex1.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                                Compare(Device, "AxisRates - Simulator is in Interface V1 mode", "True", "True");
-                                            }
-                                        }
-
-                                        break;
-                                    }
-
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Test: " + Test);
-                                        break;
-                                    }
-                            }
-
-                            break;
+                            default:
+                                LogException("DeviceTest", "Unknown Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "Dome":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "ShutterStatus":
-                                    {
-                                        try
-                                        {
-                                            shutterStatus = (ShutterState)DeviceObject.ShutterStatus;
-                                            canReadShutterStatus = true;
-                                            Compare(Device, "ShutterStatus - Simulator can read the shutter status", "True", "True");
-                                        }
-                                        catch (RuntimeBinderException)
-                                        {
-                                            Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
-                                        }
-                                        catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                        {
-                                            Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
-                                        }
-                                        catch (MethodNotImplementedException)
-                                        {
-                                            Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
-                                        }
-                                        break;
-                                    }
-                                case "Slewing":
-                                    {
-                                        try
-                                        {
-                                            slewing = DeviceObject.Slewing;
-                                            canReadSlewing = true;
-                                            Compare(Device, "Slewing - Simulator can read the Slewing status", "True", "True");
-                                        }
-                                        catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                        {
-                                        }
-                                        catch (MethodNotImplementedException)
-                                        {
-                                            Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True");
-                                        }
+                            case "ShutterStatus":
+                                try
+                                {
+                                    shutterStatus = (ShutterState)DeviceObject.ShutterStatus;
+                                    canReadShutterStatus = true;
+                                    Compare(Device, "ShutterStatus - Simulator can read the shutter status", "True", "True");
+                                }
+                                catch (RuntimeBinderException)
+                                {
+                                    Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
+                                }
+                                catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                {
+                                    Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
+                                }
+                                catch (MethodNotImplementedException)
+                                {
+                                    Compare(Device, "ShutterStatus - Simulator ShutterStatus property is not accessible", "True", "True");
+                                }
+                                break;
 
-                                        break;
-                                    }
-                                case "OpenShutter":
+                            case "Slewing":
+                                try
+                                {
+                                    slewing = DeviceObject.Slewing;
+                                    canReadSlewing = true;
+                                    Compare(Device, "Slewing - Simulator can read the Slewing status", "True", "True");
+                                }
+                                catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                {
+                                    Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True");
+                                }
+                                catch (MethodNotImplementedException)
+                                {
+                                    Compare(Device, "Slewing - Simulator Slewing property is not accessible", "True", "True");
+                                }
+                                break;
+
+                            case "OpenShutter":
+                                if (canReadShutterStatus)
+                                {
+                                    try
                                     {
-                                        if (canReadShutterStatus)
+                                        StartTime = DateTime.Now;
+                                        DeviceObject.OpenShutter();
+                                        Compare(Device, "OpenShutter - Simulator can open the shutter", "True", "True");
+                                        while (Operators.AndObject(!Operators.ConditionalCompareObjectEqual(DeviceObject.ShutterStatus, ShutterState.shutterOpen, false), DateTime.Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT))
                                         {
-                                            try
-                                            {
-                                                StartTime = DateTime.Now;
-                                                DeviceObject.OpenShutter();
-                                                Compare(Device, "OpenShutter - Simulator can open the shutter", "True", "True");
-                                                while (Operators.AndObject(!Operators.ConditionalCompareObjectEqual(DeviceObject.ShutterStatus, ShutterState.shutterOpen, false), DateTime.Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT))
-                                                {
-                                                    Thread.Sleep(100);
-                                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
-                                                    Application.DoEvents();
-                                                }
-                                                Compare(Device, Test + " Timeout", Conversions.ToString(DateTime.Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT), "False");
-                                                Compare(Device, Test, Conversions.ToInteger(DeviceObject.ShutterStatus).ToString(), ((int)ShutterState.shutterOpen).ToString());
-                                            }
-                                            catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                            }
-                                            catch (MethodNotImplementedException)
-                                            {
-                                                Compare(Device, "OpenShutter - Simulator open shutter is disabled", "True", "True");
-                                            }
+                                            Thread.Sleep(100);
+                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
+                                            Application.DoEvents();
                                         }
-                                        else
-                                        {
-                                            Compare(Device, "OpenShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True");
-                                        }
-
-                                        break;
+                                        Compare(Device, Test + " Timeout", Conversions.ToString(DateTime.Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT), "False");
+                                        Compare(Device, Test, Conversions.ToInteger(DeviceObject.ShutterStatus).ToString(), ((int)ShutterState.shutterOpen).ToString());
                                     }
-                                case "CloseShutter":
+                                    catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                     {
-                                        if (canReadShutterStatus)
-                                        {
-                                            try
-                                            {
-                                                StartTime = DateTime.Now;
-                                                DeviceObject.CloseShutter();
-                                                Compare(Device, "OpenShutter - Simulator can close the shutter", "True", "True");
-                                                while (Operators.AndObject(!Operators.ConditionalCompareObjectEqual(DeviceObject.ShutterStatus, ShutterState.shutterClosed, false), DateTime.Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT))
-                                                {
-                                                    Thread.Sleep(100);
-                                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
-                                                    Application.DoEvents();
-                                                }
-                                                Compare(Device, Test + " Timeout", Conversions.ToString(DateTime.Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT), "False");
-                                                Compare(Device, Test, Conversions.ToInteger(DeviceObject.ShutterStatus).ToString(), ((int)ShutterState.shutterClosed).ToString());
-                                            }
-                                            catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                            }
-                                            catch (MethodNotImplementedException)
-                                            {
-                                                Compare(Device, "CloseShutter - Simulator close shutter is disabled", "True", "True");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Compare(Device, "CloseShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True");
-                                        }
-
-                                        break;
+                                        Compare(Device, "OpenShutter - Simulator open shutter is disabled", "True", "True");
                                     }
-                                case "SlewToAltitude":
+                                    catch (MethodNotImplementedException)
                                     {
-                                        if (canReadSlewing)
-                                        {
-                                            try
-                                            {
-                                                StartTime = DateTime.Now;
-                                                DeviceObject.SlewToAltitude((object)45.0d);
-                                                do
-                                                {
-                                                    Thread.Sleep(100);
-                                                    Application.DoEvents();
-                                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
-                                                }
-                                                while (!Operators.OrObject(Operators.ConditionalCompareObjectEqual(DeviceObject.Slewing, false, false), DateTime.Now.Subtract(StartTime).TotalSeconds > DOME_SLEW_TIMEOUT));
-                                                this.Compare(Device, Test + " Not Complete", DeviceObject.Slewing.ToString(), "False");
-                                                CompareDouble(Device, Test, Conversions.ToDouble(DeviceObject.Altitude), 45.0d, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180);
-                                            }
-                                            catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                            }
-                                            catch (MethodNotImplementedException)
-                                            {
-                                                Compare(Device, "SlewToAltitude - Simulator SlewToAltitude method is disabled", "True", "True");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Compare(Device, "SlewToAltitude - Skipping test because simulator Slewing property is not accessible", "True", "True");
-                                        }
-
-                                        break;
+                                        Compare(Device, "OpenShutter - Simulator open shutter is disabled", "True", "True");
                                     }
-                                case "SlewToAzimuth":
+                                }
+                                else
+                                {
+                                    Compare(Device, "OpenShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True");
+                                }
+                                break;
+
+                            case "CloseShutter":
+                                if (canReadShutterStatus)
+                                {
+                                    try
                                     {
-                                        if (canReadSlewing)
+                                        StartTime = DateTime.Now;
+                                        DeviceObject.CloseShutter();
+                                        Compare(Device, "OpenShutter - Simulator can close the shutter", "True", "True");
+                                        while (Operators.AndObject(!Operators.ConditionalCompareObjectEqual(DeviceObject.ShutterStatus, ShutterState.shutterClosed, false), DateTime.Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT))
                                         {
-                                            try
-                                            {
-                                                StartTime = DateTime.Now;
-                                                DeviceObject.SlewToAzimuth((object)225.0d);
-                                                do
-                                                {
-                                                    Thread.Sleep(100);
-                                                    Application.DoEvents();
-                                                    Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
-                                                }
-                                                while (!Operators.OrObject(Operators.ConditionalCompareObjectEqual(DeviceObject.Slewing, false, false), DateTime.Now.Subtract(StartTime).TotalSeconds > DOME_SLEW_TIMEOUT));
-                                                this.Compare(Device, Test + " Not Complete", DeviceObject.Slewing.ToString(), "False");
-                                                CompareDouble(Device, Test, Conversions.ToDouble(DeviceObject.Azimuth), 225.0d, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360);
-                                            }
-                                            catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
-                                            {
-                                            }
-                                            catch (MethodNotImplementedException)
-                                            {
-                                                Compare(Device, "SlewToAzimuth - Simulator SlewToAzimuth method is disabled", "True", "True");
-                                            }
+                                            Thread.Sleep(100);
+                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
+                                            Application.DoEvents();
                                         }
-                                        else
-                                        {
-                                            Compare(Device, "SlewToAzimuth - Skipping test because simulator Slewing property is not accessible", "True", "True");
-                                        }
-
-                                        break;
+                                        Compare(Device, Test + " Timeout", Conversions.ToString(DateTime.Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT), "False");
+                                        Compare(Device, Test, Conversions.ToInteger(DeviceObject.ShutterStatus).ToString(), ((int)ShutterState.shutterClosed).ToString());
                                     }
-
-                                default:
+                                    catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
                                     {
-                                        LogException("DeviceTest", "Unknown Dome Test: " + Test);
-                                        break;
+                                        Compare(Device, "CloseShutter - Simulator close shutter is disabled", "True", "True");
                                     }
-                            }
+                                    catch (MethodNotImplementedException)
+                                    {
+                                        Compare(Device, "CloseShutter - Simulator close shutter is disabled", "True", "True");
+                                    }
+                                }
+                                else
+                                {
+                                    Compare(Device, "CloseShutter - Skipping test because simulator ShutterStatus property is not accessible", "True", "True");
+                                }
+                                break;
 
-                            break;
+                            case "SlewToAltitude":
+                                if (canReadSlewing)
+                                {
+                                    try
+                                    {
+                                        StartTime = DateTime.Now;
+                                        DeviceObject.SlewToAltitude((object)45.0d);
+                                        do
+                                        {
+                                            Thread.Sleep(100);
+                                            Application.DoEvents();
+                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
+                                        }
+                                        while (!Operators.OrObject(Operators.ConditionalCompareObjectEqual(DeviceObject.Slewing, false, false), DateTime.Now.Subtract(StartTime).TotalSeconds > DOME_SLEW_TIMEOUT));
+                                        this.Compare(Device, Test + " Not Complete", DeviceObject.Slewing.ToString(), "False");
+                                        CompareDouble(Device, Test, Conversions.ToDouble(DeviceObject.Altitude), 45.0d, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180);
+                                    }
+                                    catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                    {
+                                        Compare(Device, "SlewToAltitude - Simulator SlewToAltitude method is disabled", "True", "True");
+                                    }
+                                    catch (MethodNotImplementedException)
+                                    {
+                                        Compare(Device, "SlewToAltitude - Simulator SlewToAltitude method is disabled", "True", "True");
+                                    }
+                                }
+                                else
+                                {
+                                    Compare(Device, "SlewToAltitude - Skipping test because simulator Slewing property is not accessible", "True", "True");
+                                }
+                                break;
+
+                            case "SlewToAzimuth":
+                                if (canReadSlewing)
+                                {
+                                    try
+                                    {
+                                        StartTime = DateTime.Now;
+                                        DeviceObject.SlewToAzimuth((object)225.0d);
+                                        do
+                                        {
+                                            Thread.Sleep(100);
+                                            Application.DoEvents();
+                                            Action(Test + " " + DateTime.Now.Subtract(StartTime).Seconds + " seconds / " + DOME_SLEW_TIMEOUT);
+                                        }
+                                        while (!Operators.OrObject(Operators.ConditionalCompareObjectEqual(DeviceObject.Slewing, false, false), DateTime.Now.Subtract(StartTime).TotalSeconds > DOME_SLEW_TIMEOUT));
+                                        this.Compare(Device, Test + " Not Complete", DeviceObject.Slewing.ToString(), "False");
+                                        CompareDouble(Device, Test, Conversions.ToDouble(DeviceObject.Azimuth), 225.0d, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360);
+                                    }
+                                    catch (COMException ex) when (ex.ErrorCode == int.MinValue + 0x00040400)
+                                    {
+                                        Compare(Device, "SlewToAzimuth - Simulator SlewToAzimuth method is disabled", "True", "True");
+                                    }
+                                    catch (MethodNotImplementedException)
+                                    {
+                                        Compare(Device, "SlewToAzimuth - Simulator SlewToAzimuth method is disabled", "True", "True");
+                                    }
+                                }
+                                else
+                                {
+                                    Compare(Device, "SlewToAzimuth - Skipping test because simulator Slewing property is not accessible", "True", "True");
+                                }
+                                break;
+
+                            default:
+                                LogException("DeviceTest", "Unknown Dome Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "Video":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "FrameNumber":
-                                    {
-                                        Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.FrameNumber, 0, false).ToString(), "True");
-                                        break;
-                                    }
-                                case "BitDepth":
-                                    {
-                                        Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0, false).ToString(), "True");
-                                        break;
-                                    }
-                                case "CanConfigureDeviceProperties":
-                                    {
-                                        this.Compare(Device, Test, DeviceObject.CanConfigureDeviceProperties.ToString(), "True");
-                                        break;
-                                    }
-                                case "ExposureMin":
-                                    {
-                                        Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0.0d, false).ToString(), "True");
-                                        break;
-                                    }
-                                case "Height":
-                                    {
-                                        Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0, false).ToString(), "True");
-                                        break;
-                                    }
-                                case "Width":
-                                    {
-                                        Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0, false).ToString(), "True");
-                                        break;
-                                    }
+                            case "FrameNumber":
+                                Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.FrameNumber, 0, false).ToString(), "True");
+                                break;
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown Video Test: " + Test);
-                                        break;
-                                    }
-                            }
+                            case "BitDepth":
+                                Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0, false).ToString(), "True");
+                                break;
 
-                            break;
+                            case "CanConfigureDeviceProperties":
+                                this.Compare(Device, Test, DeviceObject.CanConfigureDeviceProperties.ToString(), "True");
+                                break;
+
+                            case "ExposureMin":
+                                Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0.0d, false).ToString(), "True");
+                                break;
+
+                            case "Height":
+                                Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0, false).ToString(), "True");
+                                break;
+
+                            case "Width":
+                                Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.BitDepth, 0, false).ToString(), "True");
+                                break;
+
+                            default:
+                                LogException("DeviceTest", "Unknown Video Test: " + Test);
+                                break;
                         }
+                        break;
 
                     case "ObservingConditions":
+                        switch (Test ?? "")
                         {
-                            switch (Test ?? "")
-                            {
-                                case "AveragePeriod":
-                                    {
-                                        Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.AveragePeriod, 0.0d, false).ToString(), "True");
-                                        break;
-                                    }
-                                case "TimeSinceLastUpdate":
-                                    {
-                                        Compare(Device, Test, Information.IsNumeric(DeviceObject.TimeSinceLastUpdate("")).ToString(), "True");
-                                        break;
-                                    }
+                            case "AveragePeriod":
+                                Compare(Device, Test, Operators.ConditionalCompareObjectGreaterEqual(DeviceObject.AveragePeriod, 0.0d, false).ToString(), "True");
+                                break;
 
-                                default:
-                                    {
-                                        LogException("DeviceTest", "Unknown ObservingConditions Test: " + Test);
-                                        break;
-                                    }
-                            }
+                            case "TimeSinceLastUpdate":
+                                Compare(Device, Test, Information.IsNumeric(DeviceObject.TimeSinceLastUpdate("")).ToString(), "True");
+                                break;
 
-                            break;
+                            default:
+                                LogException("DeviceTest", "Unknown ObservingConditions Test: " + Test);
+                                break;
+
                         }
+                        break;
 
                     default:
-                        {
-                            LogException("DeviceTest", "Unknown Device: " + Device);
-                            break;
-                        }
+                        LogException("DeviceTest", "Unknown Device: " + Device);
+                        break;
                 }
             }
             catch (Exception ex)
