@@ -394,21 +394,6 @@ namespace ASCOM.DeviceHub
             _closeLogCommand = null;
         }
 
-        public void SaveSettings()
-        {
-            Globals.ActivityLogTelescopeDevice = EnableTelescopeLogging;
-            Globals.ActivityLogDomeDevice = EnableDomeLogging;
-            Globals.ActivityLogFocuserDevice = EnableFocuserLogging;
-            Globals.ActivityLogCommands = EnableCommandLogging;
-            Globals.ActivityLogStatus = EnableStatusLogging;
-            Globals.ActivityLogParameters = EnableParametersLogging;
-            Globals.ActivityLogCapabilities = EnableCapabilitiesLogging;
-            Globals.ActivityLogOtherActivity = EnableOthersLogging;
-
-            AppSettingsManager.SaveAppSettings();
-
-        }
-
         #endregion Helper Methods
 
         #region Relay Commands
@@ -552,8 +537,6 @@ namespace ASCOM.DeviceHub
 
         internal void CloseLog()
         {
-            SaveSettings();
-
             Messenger.Default.Unregister<ActivityMessage>(this);
 
             BufferingCts.Cancel();
@@ -563,6 +546,42 @@ namespace ASCOM.DeviceHub
             DataBuffer = null;
             OnRequestClose(true);
             IsActive = false;
+        }
+
+        #endregion CloseLogCommand
+
+        #region SaveSettingsCommand
+
+        private ICommand _saveSettingsCommand;
+
+        public ICommand SaveSettingsCommand
+        {
+            get
+            {
+                if (_saveSettingsCommand == null)
+                {
+                    _saveSettingsCommand = new RelayCommand(
+                        param => this.SaveSettings());
+                }
+
+                return _saveSettingsCommand;
+            }
+        }
+
+        public void SaveSettings()
+        {
+            // Update the global settings values
+            Globals.ActivityLogTelescopeDevice = EnableTelescopeLogging;
+            Globals.ActivityLogDomeDevice = EnableDomeLogging;
+            Globals.ActivityLogFocuserDevice = EnableFocuserLogging;
+            Globals.ActivityLogCommands = EnableCommandLogging;
+            Globals.ActivityLogStatus = EnableStatusLogging;
+            Globals.ActivityLogParameters = EnableParametersLogging;
+            Globals.ActivityLogCapabilities = EnableCapabilitiesLogging;
+            Globals.ActivityLogOtherActivity = EnableOthersLogging;
+
+            // Save the global settings to disk
+            AppSettingsManager.SaveAppSettings();
         }
 
         #endregion CloseLogCommand
