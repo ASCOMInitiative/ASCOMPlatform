@@ -1,5 +1,4 @@
 using ASCOM.Alpaca.Clients;
-using ASCOM.Common;
 using ASCOM.DeviceInterface;
 using ASCOM.Common.Interfaces;
 using ASCOM.Tools;
@@ -18,7 +17,7 @@ namespace ASCOM.DynamicClients
     public class SafetyMonitor : ReferenceCountedObjectBase, ISafetyMonitorV3, IDisposable
     {
         // Set the device type of this device
-        private const DeviceTypes deviceType = DeviceTypes.SafetyMonitor;
+        private const Common.DeviceTypes deviceType = Common.DeviceTypes.SafetyMonitor;
 
         // The ASCOM Library Alpaca client that is used to communicate with the Alpaca device.
         private AlpacaSafetyMonitor client;
@@ -640,7 +639,7 @@ namespace ASCOM.DynamicClients
         private void LogMessage(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Information, identifier, message, includeLib: false);
+            TL?.LogMessage(identifier, message);
         }
 
         /// <summary>
@@ -651,7 +650,7 @@ namespace ASCOM.DynamicClients
         private void LogDebug(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Debug, identifier, message, includeLib: false);
+            TL?.LogMessage(identifier, message);
         }
 
         #endregion

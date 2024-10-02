@@ -1,5 +1,4 @@
 ﻿using ASCOM.Alpaca.Clients;
-using ASCOM.Common;
 using ASCOM.DeviceInterface;
 using ASCOM.Common.Interfaces;
 using System;
@@ -19,7 +18,7 @@ namespace ASCOM.DynamicClients
     public class Telescope : ReferenceCountedObjectBase, ITelescopeV4, IDisposable
     {
         // Set the device type of this device
-        private const DeviceTypes deviceType = DeviceTypes.Telescope;
+        private const Common.DeviceTypes deviceType = Common.DeviceTypes.Telescope;
 
         // The ASCOM Library Alpaca client that is used to communicate with the Alpaca device.
         private AlpacaTelescope client;
@@ -1285,7 +1284,7 @@ namespace ASCOM.DynamicClients
         private void LogMessage(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Information, identifier, message, includeLib: false);
+            TL?.LogMessage(identifier, message);
         }
 
         /// <summary>
@@ -1296,7 +1295,7 @@ namespace ASCOM.DynamicClients
         private void LogError(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Error, identifier, message, includeLib: false);
+            TL?.LogMessage(identifier, message);
         }
 
         /// <summary>

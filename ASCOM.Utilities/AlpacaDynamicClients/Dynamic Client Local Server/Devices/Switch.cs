@@ -1,5 +1,4 @@
 ﻿using ASCOM.Alpaca.Clients;
-using ASCOM.Common;
 using ASCOM.DeviceInterface;
 using ASCOM.Tools;
 using System;
@@ -17,7 +16,7 @@ namespace ASCOM.DynamicClients
     public class Switch : ReferenceCountedObjectBase, ISwitchV3, IDisposable
     {
         // Set the device type of this device
-        private const DeviceTypes deviceType = DeviceTypes.Switch;
+        private const Common.DeviceTypes deviceType = Common.DeviceTypes.Switch;
 
         // The ASCOM Library Alpaca client that is used to communicate with the Alpaca device.
         private AlpacaSwitch client;
