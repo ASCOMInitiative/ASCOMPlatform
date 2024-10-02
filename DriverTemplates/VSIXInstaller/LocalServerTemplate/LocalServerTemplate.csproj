@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.props" Condition="Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.props')" />
+  <Import Project="..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.props" Condition="Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -202,11 +202,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.17.7.41\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VisualStudio.SDK.Analyzers.17.7.41\build\Microsoft.VisualStudio.SDK.Analyzers.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.11.20\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.11.20\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets'))" />
   </Target>
   <Import Project="..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.11.20\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\..\..\packages\Microsoft.VisualStudio.Threading.Analyzers.17.11.20\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
-  <Import Project="..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets" Condition="Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.11.435\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets')" />
+  <Import Project="..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets" Condition="Exists('..\..\..\packages\Microsoft.VsSDK.CompatibilityAnalyzer.17.12.2069\build\Microsoft.VsSDK.CompatibilityAnalyzer.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

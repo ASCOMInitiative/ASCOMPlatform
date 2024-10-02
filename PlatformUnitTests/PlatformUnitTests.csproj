@@ -55,16 +55,16 @@
       <Version>17.11.1</Version>
     </PackageReference>
     <PackageReference Include="xunit">
-      <Version>2.9.1</Version>
+      <Version>2.9.2</Version>
     </PackageReference>
     <PackageReference Include="xunit.abstractions">
       <Version>2.0.3</Version>
     </PackageReference>
     <PackageReference Include="xunit.assert">
-      <Version>2.9.1</Version>
+      <Version>2.9.2</Version>
     </PackageReference>
     <PackageReference Include="xunit.extensibility.core">
-      <Version>2.9.1</Version>
+      <Version>2.9.2</Version>
     </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio">
       <Version>2.8.2</Version>
