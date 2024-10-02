@@ -23,7 +23,10 @@ namespace ASCOM.DeviceHub
 
 		public object ConvertBack( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
 		{
-			throw new NotImplementedException();
+			if ((string)value == Globals.NO_DATA_MESSAGE)
+				return Double.NaN;
+
+			return System.Convert.ToDouble(value);
 		}
 
 		#endregion
