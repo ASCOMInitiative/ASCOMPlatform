@@ -12,6 +12,9 @@ namespace ASCOM.DeviceHub
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return Globals.NO_DATA_MESSAGE;
+
             double d = (double)value;
             if (double.IsNaN(d))
                 return string.Empty;

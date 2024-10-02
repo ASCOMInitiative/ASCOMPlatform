@@ -96,7 +96,7 @@
                     Command="{Binding CloseLogCommand}" />
         <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Height="60" Width="60" Margin="0,6,65,0" Style="{StaticResource CircleButton}"
             Command="{Binding SaveSettingsCommand}" >
-            <TextBlock Text="Save Settings" TextWrapping="Wrap" TextAlignment="Center" Margin="0,-5,0,0"/>
+            <TextBlock Text="Save Settings" TextWrapping="Wrap" TextAlignment="Center" Margin="0,-3,0,0"/>
         </Button>
     </Grid>
 </Window>
