@@ -21,7 +21,7 @@ namespace ASCOM.DynamicClients
         {
             InitializeComponent();
             this.TL = TL;
-            TL.LogMessage(LogLevel.Debug, "SetupConnected", $"Connected-setup form created");
+            TL.LogMessage(LogLevel.Debug, "SetupConnected", $"Connected-setup form created", includeLib: false);
         }
 
         public string HostIpAddress { get; set; }
@@ -35,7 +35,7 @@ namespace ASCOM.DynamicClients
             try
             {
                 string setupUrl = $"{HostIpAddress}/setup";
-                TL.LogMessage(LogLevel.Debug, "MainSetupURL", $"{setupUrl}");
+                TL.LogMessage(LogLevel.Debug, "MainSetupURL", $"{setupUrl}", includeLib: false);
 
                 ProcessStartInfo psi = new ProcessStartInfo()
                 {
@@ -56,7 +56,7 @@ namespace ASCOM.DynamicClients
             try
             {
                 string setupUrl = $"{HostIpAddress}/setup/v1/{DeviceType.ToLowerInvariant()}/{DeviceNumber}/setup";
-                TL.LogMessage(LogLevel.Debug, "DeviceSetupURL", $"{setupUrl}");
+                TL.LogMessage(LogLevel.Debug, "DeviceSetupURL", $"{setupUrl}", includeLib: false );
 
                 ProcessStartInfo psi = new ProcessStartInfo()
                 {
@@ -67,7 +67,7 @@ namespace ASCOM.DynamicClients
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Error, "ASCOMSetup Exception", ex.ToString());
+                TL.LogMessage(LogLevel.Error, "ASCOMSetup Exception", ex.ToString(), includeLib: false);
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

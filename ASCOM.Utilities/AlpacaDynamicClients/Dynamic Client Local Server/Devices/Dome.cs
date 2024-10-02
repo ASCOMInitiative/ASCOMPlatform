@@ -787,7 +787,7 @@ namespace ASCOM.DynamicClients
         private void LogMessage(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Information, identifier, message);
+            TL?.LogMessage(LogLevel.Information, identifier, message, includeLib: false);
         }
 
         /// <summary>
@@ -798,7 +798,7 @@ namespace ASCOM.DynamicClients
         private void LogDebug(string identifier, string message)
         {
             // Write to the log for this specific instance (if enabled by the driver having a TraceLogger instance)
-            TL?.LogMessage(LogLevel.Debug, identifier, message);
+            TL?.LogMessage(LogLevel.Debug, identifier, message, includeLib: false);
         }
 
         #endregion

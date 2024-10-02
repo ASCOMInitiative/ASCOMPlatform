@@ -104,7 +104,7 @@ namespace ASCOM.DynamicClients
         {
             try
             {
-                TL.LogMessage(LogLevel.Debug, "SetupForm Load", "Start");
+                LogDebug( "SetupForm Load", "Start");
 
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 this.Text = $"{DriverDisplayName} Configuration - Version {version} - {DeviceType}";
@@ -116,6 +116,7 @@ namespace ASCOM.DynamicClients
                 numEstablishCommunicationsTimeout.Value = Convert.ToDecimal(EstablishConnectionTimeout);
                 numStandardTimeout.Value = Convert.ToDecimal(StandardTimeout);
                 numLongTimeout.Value = Convert.ToDecimal(LongTimeout);
+
                 // Decrypt the user name if present
                 if (string.IsNullOrWhiteSpace(UserNameEncrypted)) txtUserName.Text = "";
                 else txtUserName.Text = UserNameEncrypted.Unencrypt(TL);
@@ -258,7 +259,7 @@ namespace ASCOM.DynamicClients
             catch (Exception ex)
             {
                 MessageBox.Show($"Exception on saving new configuration: {ex.Message}", "Error saving new configuration.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                TL.LogMessage(LogLevel.Error, "Setup-OK-Button", $"Exception: {ex.Message}\r\n{ex}");
+                TL.LogMessage(LogLevel.Error, "Setup-OK-Button", $"Exception: {ex.Message}\r\n{ex}", includeLib: false);
             }
 
             Close();
@@ -269,7 +270,7 @@ namespace ASCOM.DynamicClients
             try
             {
                 string setupUrl = $"{cmbServiceType.Text.ToLowerInvariant()}://{CleanUrl(addressList.Text)}:{numPort.Value}/setup";
-                TL.LogMessage(LogLevel.Debug, "MainSetupURL", $"{setupUrl}");
+                LogDebug( "MainSetupURL", $"{setupUrl}");
 
                 ProcessStartInfo psi = new ProcessStartInfo()
                 {
@@ -280,7 +281,7 @@ namespace ASCOM.DynamicClients
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Debug, "MainSetup Exception", ex.ToString());
+                LogDebug( "MainSetup Exception", ex.ToString());
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -290,7 +291,7 @@ namespace ASCOM.DynamicClients
             try
             {
                 string setupUrl = $"{cmbServiceType.Text.ToLowerInvariant()}://{CleanUrl(addressList.Text)}:{numPort.Value}/setup/v1/{DeviceType.ToLowerInvariant()}/{numRemoteDeviceNumber.Value}/setup";
-                TL.LogMessage(LogLevel.Debug, "DeviceSetupURL", $"{setupUrl}");
+                LogDebug( "DeviceSetupURL", $"{setupUrl}");
 
                 ProcessStartInfo psi = new ProcessStartInfo()
                 {
@@ -301,7 +302,7 @@ namespace ASCOM.DynamicClients
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Debug, "ASCOMSetup Exception", ex.ToString());
+                LogDebug( "ASCOMSetup Exception", ex.ToString());
                 MessageBox.Show($"An error occurred when contacting the Alpaca device: {ex.Message}", "Setup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -367,23 +368,23 @@ namespace ASCOM.DynamicClients
         private void AddressList_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             bool isValid = false; // Assume that the address is invalid until proven otherwise
-            TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text}");
+            LogDebug( "AddressList_Validating", $"Address item: {addressList.Text}");
 
             // Test whether the supplied IP address is valid and, if it is an IPv6 address, test whether it is in canonical form
             if (IPAddress.TryParse(addressList.Text.Trim(), out IPAddress ipAddress)) // The host name is an IP address
             {
                 if (ipAddress.AddressFamily == AddressFamily.InterNetworkV6) // This is an IPv6 address
                 {
-                    TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text} is an IPv6 address");
+                    LogDebug( "AddressList_Validating", $"Address item: {addressList.Text} is an IPv6 address");
                     if (addressList.Text.Trim().StartsWith("[") & addressList.Text.Trim().EndsWith("]"))
                     {
-                        TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text} is a canonical IPv6 address");
+                        LogDebug( "AddressList_Validating", $"Address item: {addressList.Text} is a canonical IPv6 address");
                         // The IP v6 address is already in canonical form, no action required
                         isValid = true;
                     }
                     else // The IPv6 address is not in canonical form so we need to add square brackets
                     {
-                        TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text} is NOT a canonical IPv6 address");
+                        LogDebug( "AddressList_Validating", $"Address item: {addressList.Text} is NOT a canonical IPv6 address");
                         SetupErrorProvider.SetError(addressList, "IPv6 addresses must be in canonical form i.e. start with [ and end with ].");
                     }
                 }
@@ -395,16 +396,16 @@ namespace ASCOM.DynamicClients
             }
             else // The host name is either an invalid IP address or a string so validate this
             {
-                TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text} is NOT a valid IP address");
+                LogDebug( "AddressList_Validating", $"Address item: {addressList.Text} is NOT a valid IP address");
                 MatchCollection matches = validHostnameRegex.Matches(addressList.Text);
                 if (matches.Count == 0)
                 {
-                    TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text} is NOT a valid IP address or Host Name");
+                    LogDebug( "AddressList_Validating", $"Address item: {addressList.Text} is NOT a valid IP address or Host Name");
                     SetupErrorProvider.SetError(addressList, "Not a valid IP address or host name.");
                 }
                 else
                 {
-                    TL.LogMessage(LogLevel.Debug, "AddressList_Validating", $"Address item: {addressList.Text} is a valid Host Name");
+                    LogDebug( "AddressList_Validating", $"Address item: {addressList.Text} is a valid Host Name");
                     isValid = true;
                 }
             }
@@ -458,7 +459,7 @@ namespace ASCOM.DynamicClients
             bool foundTheIPAddress = false;
             int selectedIndex = 0;
 
-            TL.LogMessage(LogLevel.Debug, "PopulateAddressList", "Start");
+            LogDebug( "PopulateAddressList", "Start");
 
             addressList.Items.Clear();
 
@@ -470,7 +471,7 @@ namespace ASCOM.DynamicClients
                 foreach (IPAddress ipAddress in HostPc.IpV4Addresses)
                 {
                     addressList.Items.Add(ipAddress.ToString());
-                    TL.LogMessage(LogLevel.Debug, "PopulateAddressList", string.Format("  Added {0} Address: {1}", ipAddress.AddressFamily.ToString(), ipAddress.ToString()));
+                    LogDebug( "PopulateAddressList", string.Format("  Added {0} Address: {1}", ipAddress.AddressFamily.ToString(), ipAddress.ToString()));
 
                     foundAnIPAddress = true;
 
@@ -488,7 +489,7 @@ namespace ASCOM.DynamicClients
                 foreach (IPAddress ipAddress in HostPc.IpV6Addresses)
                 {
                     addressList.Items.Add($"[{ipAddress}]");
-                    TL.LogMessage(LogLevel.Debug, "PopulateAddressList", string.Format("  Added {0} Address: {1}", ipAddress.AddressFamily.ToString(), ipAddress.ToString()));
+                    LogDebug( "PopulateAddressList", string.Format("  Added {0} Address: {1}", ipAddress.AddressFamily.ToString(), ipAddress.ToString()));
 
                     foundAnIPAddress = true;
 
@@ -500,7 +501,7 @@ namespace ASCOM.DynamicClients
                 }
             }
 
-            TL.LogMessage(LogLevel.Debug, "PopulateAddressList", string.Format($"Found an IP address: {foundAnIPAddress}, Found the IP address: {foundTheIPAddress}, Stored IP Address: {IPAddressString}"));
+            LogDebug( "PopulateAddressList", string.Format($"Found an IP address: {foundAnIPAddress}, Found the IP address: {foundTheIPAddress}, Stored IP Address: {IPAddressString}"));
 
             if ((!foundTheIPAddress) & (IPAddressString != "")) // Add the last stored IP address if it isn't found in the search above
             {
@@ -511,8 +512,8 @@ namespace ASCOM.DynamicClients
                 }
                 else  // One specific address so just add it as provided (it may be an IP address or could be a DNS style host name)
                 {
-                        addressList.Items.Add(IPAddressString); // Add the stored address to the list
-                        selectedIndex = addressList.Items.Count - 1; // Select this item in the list
+                    addressList.Items.Add(IPAddressString); // Add the stored address to the list
+                    selectedIndex = addressList.Items.Count - 1; // Select this item in the list
                 }
             }
 
@@ -534,7 +535,7 @@ namespace ASCOM.DynamicClients
         private string CleanUrl(string url)
         {
             string cleanUrl = url;
-            TL.LogMessage(LogLevel.Debug, "CleanUrl", $"Input URL: {cleanUrl}");
+            LogDebug( "CleanUrl", $"Input URL: {cleanUrl}");
 
             if (url.Contains("%"))
             {
@@ -542,12 +543,22 @@ namespace ASCOM.DynamicClients
                 if (match.Success)
                 {
                     cleanUrl = $"{match.Groups[1].Value}]";
-                    TL.LogMessage(LogLevel.Debug, "CleanUrl", $"Cleaned URL to: {cleanUrl}. Match 1: {match.Groups[1]}, Match 2: {match.Groups[2]}");
+                    LogDebug( "CleanUrl", $"Cleaned URL to: {cleanUrl}. Match 1: {match.Groups[1]}, Match 2: {match.Groups[2]}");
                 }
             }
 
-            TL.LogMessage(LogLevel.Debug, "CleanUrl", $"Returned URL: {cleanUrl}");
+            LogDebug( "CleanUrl", $"Returned URL: {cleanUrl}");
             return cleanUrl;
+        }
+
+        /// <summary>
+        /// Log a debug message without adding [Lib]
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="message"></param>
+        private void LogDebug(string method, string message)
+        {
+            TL?.LogMessage(LogLevel.Debug, method, message, includeLib: false);
         }
 
         #endregion

@@ -29,12 +29,12 @@ namespace ASCOM.DynamicClients
                 byte[] entropyBytes = Encoding.UTF8.GetBytes(GenerateEntropy());
                 byte[] encryptedBytes = ProtectedData.Protect(clearBytes, entropyBytes, dataProtectionScope);
                 string encryptedText = Convert.ToBase64String(encryptedBytes);
-                TL.LogMessage(LogLevel.Debug,"Encrypt", encryptedText);
+                TL.LogMessage(LogLevel.Debug,"Encrypt", encryptedText, includeLib: false);
                 return encryptedText;
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Debug, "Encrypt", ex.ToString());
+                TL.LogMessage(LogLevel.Debug, "Encrypt", ex.ToString(), includeLib: false);
                 return "Unable to encrypt this value";
             }
         }
@@ -49,12 +49,12 @@ namespace ASCOM.DynamicClients
                 byte[] entropyBytes = Encoding.UTF8.GetBytes(GenerateEntropy());
                 byte[] clearBytes = ProtectedData.Unprotect(encryptedBytes, entropyBytes, dataProtectionScope);
                 string clearText = Encoding.UTF8.GetString(clearBytes);
-                TL.LogMessage(LogLevel.Debug,"Unencrypt", encryptedText);
+                TL.LogMessage(LogLevel.Debug,"Unencrypt", encryptedText, includeLib: false);
                 return clearText;
             }
             catch (Exception ex)
             {
-                TL.LogMessage(LogLevel.Debug, "Unencrypt", ex.ToString());
+                TL.LogMessage(LogLevel.Debug, "Unencrypt", ex.ToString(), includeLib: false);
                 return "Unable to decrypt this value";
             }
         }
