@@ -9,343 +9,362 @@ using ASCOM.DeviceHub.MvvmMessenger;
 
 namespace ASCOM.DeviceHub
 {
-	public class TelescopeTrackingRatesViewModel : DeviceHubViewModelBase
-	{
-		#region Public Properties
+    public class TelescopeTrackingRatesViewModel : DeviceHubViewModelBase
+    {
+        #region Public Properties
 
-		public TelescopeCapabilities Capabilities { get; set; }
-		public TelescopeParameters Parameters { get; set; }
-		public DevHubTelescopeStatus Status { get; set; }
+        public TelescopeCapabilities Capabilities { get; set; }
+        public TelescopeParameters Parameters { get; set; }
+        public DevHubTelescopeStatus Status { get; set; }
 
-		public ITelescopeManager TelescopeManager { get; private set; }
+        public ITelescopeManager TelescopeManager { get; private set; }
 
-		private string _ratesNote;
+        private string _ratesNote;
 
-		public string RatesNote
-		{
-			get { return _ratesNote; }
-		}
+        public string RatesNote
+        {
+            get { return _ratesNote; }
+        }
 
-		public string AscomRaUnits => "seconds / sidereal second";
-		public string AscomDecUnits => "arc-seconds / SI second";
-		public string NasaJplRaUnits => "arc-seconds / hour";
-		public string NasaJplDecUnits => "arc-seconds / hour";
+        public string AscomRaUnits => "seconds / sidereal second";
+        public string AscomDecUnits => "arc-seconds / SI second";
+        public string NasaJplRaUnits => "arc-seconds / hour";
+        public string NasaJplDecUnits => "arc-seconds / hour";
 
-		#endregion Public Properties
+        #endregion Public Properties
 
-		#region Constructor
+        #region Constructor
 
-		public TelescopeTrackingRatesViewModel( ITelescopeManager telescopeManager )
-		{
-			string caller = "TelescopeTrackingRatesViewModel ctor";
+        public TelescopeTrackingRatesViewModel(ITelescopeManager telescopeManager)
+        {
+            string caller = "TelescopeTrackingRatesViewModel ctor";
 
-			LogAppMessage( "Initializing Instance constructor", caller );
+            LogAppMessage("Initializing Instance constructor", caller);
 
-			TelescopeManager = telescopeManager;
+            TelescopeManager = telescopeManager;
 
-			_raRateOffset = null;
-			_decRateOffset = null;	
-			_newRaOffsetRate = 0.0;
-			_newDecOffsetRate = 0.0;
-			_ratesNote = "These offsets are only applied when the tracking rate is set to Sidereal.";
-			UpdateTrackingRateText();
+            _raRateOffset = null;
+            _decRateOffset = null;
+            _newRaOffsetRate = 0.0;
+            _newDecOffsetRate = 0.0;
+            _ratesNote = "These offsets are only applied when the tracking rate is set to Sidereal.";
+            UpdateTrackingRateText();
 
-			LogAppMessage( "Registering message handlers", caller );
+            LogAppMessage("Registering message handlers", caller);
 
-			Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>( this, ( action ) => UpdateCapabilities( action ) );
-			Messenger.Default.Register<TelescopeParametersUpdatedMessage>( this, ( action ) => UpdateParameters( action ) );
-			Messenger.Default.Register<TelescopeStatusUpdatedMessage>( this, ( action ) => UpdateStatus( action ) );
-			Messenger.Default.Register<DeviceDisconnectedMessage>( this, (action) => InvalidateDeviceValues( action ) );
+            Messenger.Default.Register<TelescopeCapabilitiesUpdatedMessage>(this, (action) => UpdateCapabilities(action));
+            Messenger.Default.Register<TelescopeParametersUpdatedMessage>(this, (action) => UpdateParameters(action));
+            Messenger.Default.Register<TelescopeStatusUpdatedMessage>(this, (action) => UpdateStatus(action));
+            Messenger.Default.Register<DeviceDisconnectedMessage>(this, (action) => InvalidateDeviceValues(action));
 
-			LogAppMessage( "Instance constructor initialization complete", caller );
-		}
+            LogAppMessage("Instance constructor initialization complete", caller);
+        }
 
-		#endregion Constructor
+        #endregion Constructor
 
-		#region Change Notification Properties
+        #region Change Notification Properties
 
-		private bool _isConnected;
 
-		public bool IsConnected
-		{
-			get { return _isConnected; }
-			set
-			{
-				if ( value != _isConnected )
-				{
-					_isConnected = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        bool _isSiderealTracking;
+        public bool IsSiderealTracking
+        {
+            get { return _isSiderealTracking; }
+            set
 
-		private double _newRaOffsetRate;
+            {
+                if (value != _isSiderealTracking)
+                {
+                    _isSiderealTracking = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public double NewRaOffsetRate
-		{
-			get { return _newRaOffsetRate; }
-			set
-			{
-				if ( value != _newRaOffsetRate )
-				{
-					_newRaOffsetRate = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private bool _isConnected;
 
-		private double _newDecOffsetRate;
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                if (value != _isConnected)
+                {
+                    _isConnected = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public double NewDecOffsetRate
-		{
-			get { return _newDecOffsetRate; }
-			set
-			{
-				if ( value != _newDecOffsetRate )
-				{
-					_newDecOffsetRate = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private double _newRaOffsetRate;
 
-		private string _trackingRateText;
+        public double NewRaOffsetRate
+        {
+            get { return _newRaOffsetRate; }
+            set
+            {
+                if (value != _newRaOffsetRate)
+                {
+                    _newRaOffsetRate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public string TrackingRateText
-		{
-			get { return _trackingRateText; }
-			set
-			{
-				if ( value != _trackingRateText )
-				{
-					_trackingRateText = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private double _newDecOffsetRate;
 
-		// The rate offsets are nullable so that no value is displayed when we are not connected to a scope.
+        public double NewDecOffsetRate
+        {
+            get { return _newDecOffsetRate; }
+            set
+            {
+                if (value != _newDecOffsetRate)
+                {
+                    _newDecOffsetRate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private double? _raRateOffset;
+        private string _trackingRateText;
 
-		public double? RaRateOffset
-		{
-			get { return _raRateOffset; }
-			set
-			{
-				if ( value != _raRateOffset )
-				{
-					_raRateOffset = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public string TrackingRateText
+        {
+            get { return _trackingRateText; }
+            set
+            {
+                if (value != _trackingRateText)
+                {
+                    _trackingRateText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private double? _decRateOffset;
+        // The rate offsets are nullable so that no value is displayed when we are not connected to a scope.
 
-		public double? DecRateOffset
-		{
-			get { return _decRateOffset; }
-			set
-			{
-				if ( value != _decRateOffset )
-				{
-					_decRateOffset = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private double? _raRateOffset;
 
-		private bool _useNasaJplUnits;
+        public double? RaRateOffset
+        {
+            get { return _raRateOffset; }
+            set
+            {
+                if (value != _raRateOffset)
+                {
+                    _raRateOffset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public bool UseNasaJplUnits
-		{
-			get { return _useNasaJplUnits; }
-			set
-			{
-				if ( value != _useNasaJplUnits )
-				{
-					_useNasaJplUnits = value;
-					OnPropertyChanged();
-					RecalculateNewRates( _useNasaJplUnits );
-				}
-			}
-		}
+        private double? _decRateOffset;
 
-		private string _newRaOffsetUnits;
+        public double? DecRateOffset
+        {
+            get { return _decRateOffset; }
+            set
+            {
+                if (value != _decRateOffset)
+                {
+                    _decRateOffset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public string NewRaOffsetUnits
-		{
-			get { return _newRaOffsetUnits; }
-			set
-			{
-				if ( value != _newRaOffsetUnits )
-				{
-					_newRaOffsetUnits = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private bool _useNasaJplUnits;
 
-		private string _newDecOffsetUnits;
+        public bool UseNasaJplUnits
+        {
+            get { return _useNasaJplUnits; }
+            set
+            {
+                if (value != _useNasaJplUnits)
+                {
+                    _useNasaJplUnits = value;
+                    OnPropertyChanged();
+                    RecalculateNewRates(_useNasaJplUnits);
+                }
+            }
+        }
 
-		public string NewDecOffsetUnits
-		{
-			get { return _newDecOffsetUnits; }
-			set
-			{
-				if ( value != _newDecOffsetUnits )
-				{
-					_newDecOffsetUnits = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private string _newRaOffsetUnits;
 
-		#endregion Change Notification Properties
+        public string NewRaOffsetUnits
+        {
+            get { return _newRaOffsetUnits; }
+            set
+            {
+                if (value != _newRaOffsetUnits)
+                {
+                    _newRaOffsetUnits = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		#region Private Helper Methods
+        private string _newDecOffsetUnits;
 
-		private void UpdateStatus( TelescopeStatusUpdatedMessage action )
-		{
-			// This is a registered message handler. It could be called from a worker thread
-			// and we need to be sure that the work is done on the U/I thread.
+        public string NewDecOffsetUnits
+        {
+            get { return _newDecOffsetUnits; }
+            set
+            {
+                if (value != _newDecOffsetUnits)
+                {
+                    _newDecOffsetUnits = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-			if ( Capabilities == null )
-			{
-				return;
-			}
+        #endregion Change Notification Properties
 
-			Task.Factory.StartNew( () =>
-			{
-				Status = action.Status;
-				IsConnected = Status.Connected;
+        #region Private Helper Methods
 
-				UpdateTrackingRateText();
-				RaRateOffset = Status.RightAscensionRate;
-				DecRateOffset = Status.DeclinationRate;
-			}, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
-		}
+        private void UpdateStatus(TelescopeStatusUpdatedMessage action)
+        {
+            // This is a registered message handler. It could be called from a worker thread
+            // and we need to be sure that the work is done on the U/I thread.
 
-		private void ApplyStandardTrackingRate( DriveRates rate )
-		{
-			if ( !IsConnected )
-			{
-				return;
-			}
+            if (Capabilities == null)
+            {
+                return;
+            }
 
-			if ( rate != Status.TrackingRate )
-			{
-				try
-				{
-					TelescopeManager.SetTrackingRate( rate );
+            Task.Factory.StartNew(() =>
+            {
+                Status = action.Status;
+                IsConnected = Status.Connected;
+                IsSiderealTracking = Status.TrackingRate == DriveRates.driveSidereal;
 
-					Status.TrackingRate = rate;
-					UpdateTrackingRateText();
-				}
-				catch ( Exception xcp )
-				{
-					string msg = "The telescope driver returned an error when trying to change the tracking rate. "
-						+ $"Details follow:\r\n\r\n{xcp}";
-					ShowMessage( msg, "Telescope Driver Error" );
-				}
-			}
-		}
+                UpdateTrackingRateText();
+                RaRateOffset = Status.RightAscensionRate;
+                DecRateOffset = Status.DeclinationRate;
+            }, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+        }
 
-		private void UpdateTrackingRateText()
-		{
-			if ( !IsConnected )
-			{
-				TrackingRateText = "The tracking rate is not known.";
-			}
-			else
-			{
-				DriveRates driveRate = Status.TrackingRate;
-				string rate = "Sidereal";
+        private void ApplyStandardTrackingRate(DriveRates rate)
+        {
+            if (!IsConnected)
+            {
+                return;
+            }
 
-				switch ( driveRate )
-				{
-					case DriveRates.driveLunar:
-						rate = "Lunar";
+            if (rate != Status.TrackingRate)
+            {
+                try
+                {
+                    TelescopeManager.SetTrackingRate(rate);
 
-						break;
+                    Status.TrackingRate = rate;
+                    UpdateTrackingRateText();
 
-					case DriveRates.driveSolar:
-						rate = "Solar";
+                    IsSiderealTracking = rate == DriveRates.driveSidereal;
+                }
+                catch (Exception xcp)
+                {
+                    string msg = "The telescope driver returned an error when trying to change the tracking rate. "
+                        + $"Details follow:\r\n\r\n{xcp}";
+                    ShowMessage(msg, "Telescope Driver Error");
+                }
+            }
+        }
 
-						break;
+        private void UpdateTrackingRateText()
+        {
+            if (!IsConnected)
+            {
+                TrackingRateText = "The tracking rate is not known.";
+            }
+            else
+            {
+                DriveRates driveRate = Status.TrackingRate;
+                string rate = "Sidereal";
 
-					case DriveRates.driveKing:
-						rate = "King";
+                switch (driveRate)
+                {
+                    case DriveRates.driveLunar:
+                        rate = "Lunar";
 
-						break;
-				}
+                        break;
 
-				TrackingRateText = $"Currently tracking at the {rate} rate.";
-			}
-		}
+                    case DriveRates.driveSolar:
+                        rate = "Solar";
 
-		private void InvalidateDeviceValues( DeviceDisconnectedMessage action )
-		{
-			if ( action.DeviceType == DeviceTypeEnum.Telescope )
-			{
-				RaRateOffset = null;
-				DecRateOffset = null;
-				SetCapabilities( null );
-				SetParameters( null );
-			}
-		}
+                        break;
 
-		private void UpdateCapabilities( TelescopeCapabilitiesUpdatedMessage action )
-		{
-			SetCapabilities( action.Capabilities );
-		}
+                    case DriveRates.driveKing:
+                        rate = "King";
 
-		private void SetCapabilities( TelescopeCapabilities capabilities )
-		{
-			// Make sure that we update the Paremeters on the U/I thread.
+                        break;
+                }
 
-			Task.Factory.StartNew( () => Capabilities = capabilities, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
-		}
+                TrackingRateText = $"Currently tracking at the {rate} rate.";
+            }
+        }
 
-		private void UpdateParameters( TelescopeParametersUpdatedMessage action )
-		{
-			SetParameters( action.Parameters );
-		}
+        private void InvalidateDeviceValues(DeviceDisconnectedMessage action)
+        {
+            if (action.DeviceType == DeviceTypeEnum.Telescope)
+            {
+                RaRateOffset = null;
+                DecRateOffset = null;
+                SetCapabilities(null);
+                SetParameters(null);
+            }
+        }
 
-		private void SetParameters( TelescopeParameters parameters )
-		{
-			// Make sure that we update the Paremeters on the U/I thread.
+        private void UpdateCapabilities(TelescopeCapabilitiesUpdatedMessage action)
+        {
+            SetCapabilities(action.Capabilities);
+        }
 
-			Task.Factory.StartNew( () => Parameters = parameters, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext );
-		}
+        private void SetCapabilities(TelescopeCapabilities capabilities)
+        {
+            // Make sure that we update the Paremeters on the U/I thread.
 
-		protected override void DoDispose()
-		{
-			Messenger.Default.Unregister<DeviceDisconnectedMessage>( this );
-			Messenger.Default.Unregister<TelescopeCapabilitiesUpdatedMessage>( this );
-			Messenger.Default.Unregister<TelescopeParametersUpdatedMessage>( this );
-			Messenger.Default.Unregister<TelescopeStatusUpdatedMessage>( this );
+            Task.Factory.StartNew(() => Capabilities = capabilities, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+        }
 
-			_applySiderealTrackingCommand = null;
-			_applyLunarTrackingCommand = null;
-			_applySolarTrackingCommand = null;
-			_applyKingTrackingCommand = null;
-			_commitNewRatesCommand = null;
-		}
+        private void UpdateParameters(TelescopeParametersUpdatedMessage action)
+        {
+            SetParameters(action.Parameters);
+        }
 
-		private double ConvertTrackingRate( double rate, bool isRaRate, bool toNasaJplUnits )
-		{
+        private void SetParameters(TelescopeParameters parameters)
+        {
+            // Make sure that we update the Paremeters on the U/I thread.
+
+            Task.Factory.StartNew(() => Parameters = parameters, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+        }
+
+        protected override void DoDispose()
+        {
+            Messenger.Default.Unregister<DeviceDisconnectedMessage>(this);
+            Messenger.Default.Unregister<TelescopeCapabilitiesUpdatedMessage>(this);
+            Messenger.Default.Unregister<TelescopeParametersUpdatedMessage>(this);
+            Messenger.Default.Unregister<TelescopeStatusUpdatedMessage>(this);
+
+            _applySiderealTrackingCommand = null;
+            _applyLunarTrackingCommand = null;
+            _applySolarTrackingCommand = null;
+            _applyKingTrackingCommand = null;
+            _commitNewRatesCommand = null;
+        }
+
+        private double ConvertTrackingRate(double rate, bool isRaRate, bool toNasaJplUnits)
+        {
             double factor;
 
-            if ( isRaRate )
-			{
-				factor = Globals.UTC_SECS_PER_SIDEREAL_SEC / ( 15.0 * 3600.0 );
-			}
-			else // is Dec rate
-			{
-				factor = 1.0 / 3600.0;
-			}
+            if (isRaRate)
+            {
+                factor = Globals.UTC_SECS_PER_SIDEREAL_SEC / (15.0 * 3600.0);
+            }
+            else // is Dec rate
+            {
+                factor = 1.0 / 3600.0;
+            }
 
             double retval;
             if (toNasaJplUnits)
@@ -362,260 +381,260 @@ namespace ASCOM.DeviceHub
             }
 
             return retval;
-		}
+        }
 
-		private void RecalculateNewRates( bool useNasaJplUnits )
-		{	
-			NewRaOffsetRate = ConvertTrackingRate( NewRaOffsetRate, true, useNasaJplUnits );
-			NewDecOffsetRate = ConvertTrackingRate( NewDecOffsetRate, false, useNasaJplUnits );
-		}
+        private void RecalculateNewRates(bool useNasaJplUnits)
+        {
+            NewRaOffsetRate = ConvertTrackingRate(NewRaOffsetRate, true, useNasaJplUnits);
+            NewDecOffsetRate = ConvertTrackingRate(NewDecOffsetRate, false, useNasaJplUnits);
+        }
 
-		#endregion Private Helper Methods
+        #endregion Private Helper Methods
 
-		#region Commands
+        #region Commands
 
-		#region ApplySiderealTrackingCommand
+        #region ApplySiderealTrackingCommand
 
-		private ICommand _applySiderealTrackingCommand;
+        private ICommand _applySiderealTrackingCommand;
 
-		public ICommand ApplySiderealTrackingCommand
-		{
-			get
-			{
-				if ( _applySiderealTrackingCommand == null )
-				{
-					_applySiderealTrackingCommand = new RelayCommand(
-						param => this.ApplySiderealTracking(),
-						param => this.CanApplySiderealTracking() );
-				}
+        public ICommand ApplySiderealTrackingCommand
+        {
+            get
+            {
+                if (_applySiderealTrackingCommand == null)
+                {
+                    _applySiderealTrackingCommand = new RelayCommand(
+                        param => this.ApplySiderealTracking(),
+                        param => this.CanApplySiderealTracking());
+                }
 
-				return _applySiderealTrackingCommand;
-			}
-		}
+                return _applySiderealTrackingCommand;
+            }
+        }
 
-		private void ApplySiderealTracking()
-		{
-			ApplyStandardTrackingRate( DriveRates.driveSidereal );
-		}
+        private void ApplySiderealTracking()
+        {
+            ApplyStandardTrackingRate(DriveRates.driveSidereal);
+        }
 
-		private bool CanApplySiderealTracking()
-		{
-			bool retval = IsConnected && Parameters != null && Status != null;
+        private bool CanApplySiderealTracking()
+        {
+            bool retval = IsConnected && Parameters != null && Status != null;
 
-			if ( retval )
-			{
-				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveSidereal ) && !Status.Slewing;
-			}
+            if (retval)
+            {
+                retval = Array.Exists(Parameters.TrackingRates, r => r.Rate == DriveRates.driveSidereal) && !Status.Slewing;
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		#endregion ApplySiderealTrackingCommand
+        #endregion ApplySiderealTrackingCommand
 
-		#region ApplyLunarTrackingCommand
+        #region ApplyLunarTrackingCommand
 
-		private ICommand _applyLunarTrackingCommand;
+        private ICommand _applyLunarTrackingCommand;
 
-		public ICommand ApplyLunarTrackingCommand
-		{
-			get
-			{
-				if ( _applyLunarTrackingCommand == null )
-				{
-					_applyLunarTrackingCommand = new RelayCommand(
-						param => this.ApplyLunarTracking(),
-						param => this.CanApplyLunarTracking() );
-				}
+        public ICommand ApplyLunarTrackingCommand
+        {
+            get
+            {
+                if (_applyLunarTrackingCommand == null)
+                {
+                    _applyLunarTrackingCommand = new RelayCommand(
+                        param => this.ApplyLunarTracking(),
+                        param => this.CanApplyLunarTracking());
+                }
 
-				return _applyLunarTrackingCommand;
-			}
-		}
+                return _applyLunarTrackingCommand;
+            }
+        }
 
-		private void ApplyLunarTracking()
-		{
-			ApplyStandardTrackingRate( DriveRates.driveLunar );
-		}
+        private void ApplyLunarTracking()
+        {
+            ApplyStandardTrackingRate(DriveRates.driveLunar);
+        }
 
-		private bool CanApplyLunarTracking()
-		{
-			bool retval = IsConnected && Parameters != null && Status != null;
+        private bool CanApplyLunarTracking()
+        {
+            bool retval = IsConnected && Parameters != null && Status != null;
 
-			if ( retval )
-			{
-				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveLunar ) && !Status.Slewing;
-			}
+            if (retval)
+            {
+                retval = Array.Exists(Parameters.TrackingRates, r => r.Rate == DriveRates.driveLunar) && !Status.Slewing;
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		#endregion ApplyLunarTrackingCommand
+        #endregion ApplyLunarTrackingCommand
 
-		#region ApplySolarTrackingCommand
+        #region ApplySolarTrackingCommand
 
-		private ICommand _applySolarTrackingCommand;
+        private ICommand _applySolarTrackingCommand;
 
-		public ICommand ApplySolarTrackingCommand
-		{
-			get
-			{
-				if ( _applySolarTrackingCommand == null )
-				{
-					_applySolarTrackingCommand = new RelayCommand(
-						param => this.ApplySolarTracking(),
-						param => this.CanApplySolarTracking() );
-				}
+        public ICommand ApplySolarTrackingCommand
+        {
+            get
+            {
+                if (_applySolarTrackingCommand == null)
+                {
+                    _applySolarTrackingCommand = new RelayCommand(
+                        param => this.ApplySolarTracking(),
+                        param => this.CanApplySolarTracking());
+                }
 
-				return _applySolarTrackingCommand;
-			}
-		}
+                return _applySolarTrackingCommand;
+            }
+        }
 
-		private void ApplySolarTracking()
-		{
-			ApplyStandardTrackingRate( DriveRates.driveSolar );
-		}
+        private void ApplySolarTracking()
+        {
+            ApplyStandardTrackingRate(DriveRates.driveSolar);
+        }
 
-		private bool CanApplySolarTracking()
-		{
-			bool retval = IsConnected && Parameters != null && Status != null;
-			retval &= Capabilities != null && Capabilities.CanSetRightAscensionRate && Capabilities.CanSetDeclinationRate;
+        private bool CanApplySolarTracking()
+        {
+            bool retval = IsConnected && Parameters != null && Status != null;
+            retval &= Capabilities != null && Capabilities.CanSetRightAscensionRate && Capabilities.CanSetDeclinationRate;
 
-			if ( retval )
-			{ 
-				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveSolar ) && !Status.Slewing;
-			}
+            if (retval)
+            {
+                retval = Array.Exists(Parameters.TrackingRates, r => r.Rate == DriveRates.driveSolar) && !Status.Slewing;
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		#endregion ApplyOffsetTrackingCommand
+        #endregion ApplyOffsetTrackingCommand
 
-		#region ApplyKingTrackingCommand
+        #region ApplyKingTrackingCommand
 
-		private ICommand _applyKingTrackingCommand;
+        private ICommand _applyKingTrackingCommand;
 
-		public ICommand ApplyKingTrackingCommand
-		{
-			get
-			{
-				if ( _applyKingTrackingCommand == null )
-				{
-					_applyKingTrackingCommand = new RelayCommand(
-						param => this.ApplyKingTracking(),
-						param => this.CanApplyKingTracking() );
-				}
+        public ICommand ApplyKingTrackingCommand
+        {
+            get
+            {
+                if (_applyKingTrackingCommand == null)
+                {
+                    _applyKingTrackingCommand = new RelayCommand(
+                        param => this.ApplyKingTracking(),
+                        param => this.CanApplyKingTracking());
+                }
 
-				return _applyKingTrackingCommand;
-			}
-		}
+                return _applyKingTrackingCommand;
+            }
+        }
 
-		private void ApplyKingTracking()
-		{
-			ApplyStandardTrackingRate( DriveRates.driveKing );
-		}
+        private void ApplyKingTracking()
+        {
+            ApplyStandardTrackingRate(DriveRates.driveKing);
+        }
 
-		private bool CanApplyKingTracking()
-		{
-			bool retval = IsConnected && Parameters != null && Status != null;
+        private bool CanApplyKingTracking()
+        {
+            bool retval = IsConnected && Parameters != null && Status != null;
 
-			if ( retval )
-			{
-				retval = Array.Exists( Parameters.TrackingRates, r => r.Rate == DriveRates.driveKing ) && !Status.Slewing;
-			}
+            if (retval)
+            {
+                retval = Array.Exists(Parameters.TrackingRates, r => r.Rate == DriveRates.driveKing) && !Status.Slewing;
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		#endregion ApplyKingTrackingCommand
+        #endregion ApplyKingTrackingCommand
 
-		#region ChangeRateUnitsCommand
+        #region ChangeRateUnitsCommand
 
-		private ICommand _changeRateUnitsCommand;
+        private ICommand _changeRateUnitsCommand;
 
-		public ICommand ChangeRateUnitsCommand
-		{
-			get
-			{
-				if ( _changeRateUnitsCommand == null )
-				{
-					_changeRateUnitsCommand = new RelayCommand(
-						param => this.ChangeRateUnits(),
-						param => this.CanChangeRateUnits() );
-				}
+        public ICommand ChangeRateUnitsCommand
+        {
+            get
+            {
+                if (_changeRateUnitsCommand == null)
+                {
+                    _changeRateUnitsCommand = new RelayCommand(
+                        param => this.ChangeRateUnits(),
+                        param => this.CanChangeRateUnits());
+                }
 
-				return _changeRateUnitsCommand;
-			}
-		}
+                return _changeRateUnitsCommand;
+            }
+        }
 
-		private void ChangeRateUnits()
-		{
-			if ( UseNasaJplUnits )
-			{
-				NewRaOffsetUnits = NasaJplRaUnits;
-				NewDecOffsetUnits = NasaJplDecUnits;
-			}
-			else
-			{
-				NewRaOffsetUnits = AscomRaUnits;
-				NewDecOffsetUnits = AscomDecUnits;
-			}
-		}
+        private void ChangeRateUnits()
+        {
+            if (UseNasaJplUnits)
+            {
+                NewRaOffsetUnits = NasaJplRaUnits;
+                NewDecOffsetUnits = NasaJplDecUnits;
+            }
+            else
+            {
+                NewRaOffsetUnits = AscomRaUnits;
+                NewDecOffsetUnits = AscomDecUnits;
+            }
+        }
 
-		private bool CanChangeRateUnits()
-		{
-			return true;
-		}
+        private bool CanChangeRateUnits()
+        {
+            return true;
+        }
 
-		#endregion ChangeRateUnitsCommand
+        #endregion ChangeRateUnitsCommand
 
 
-		#region CommitNewRatesCommand
+        #region CommitNewRatesCommand
 
-		private ICommand _commitNewRatesCommand;
+        private ICommand _commitNewRatesCommand;
 
-		public ICommand CommitNewRatesCommand
-		{
-			get
-			{
-				if ( _commitNewRatesCommand == null )
-				{
-					_commitNewRatesCommand = new RelayCommand(
-						param => this.CommitNewRates(),
-						param => this.CanCommitNewRates() );
-				}
+        public ICommand CommitNewRatesCommand
+        {
+            get
+            {
+                if (_commitNewRatesCommand == null)
+                {
+                    _commitNewRatesCommand = new RelayCommand(
+                        param => this.CommitNewRates(),
+                        param => this.CanCommitNewRates());
+                }
 
-				return _commitNewRatesCommand;
-			}
-		}
+                return _commitNewRatesCommand;
+            }
+        }
 
-		private void CommitNewRates()
-		{
-			double raOffset = NewRaOffsetRate;
-			double decOffset = NewDecOffsetRate;
+        private void CommitNewRates()
+        {
+            double raOffset = NewRaOffsetRate;
+            double decOffset = NewDecOffsetRate;
 
-			if ( UseNasaJplUnits )
-			{
-				// New values are in NASA JPL units so convert to ASCOM units.
+            if (UseNasaJplUnits)
+            {
+                // New values are in NASA JPL units so convert to ASCOM units.
 
-				raOffset = ConvertTrackingRate( raOffset, true, false );
-				decOffset = ConvertTrackingRate( decOffset, false, false );
-			}
+                raOffset = ConvertTrackingRate(raOffset, true, false);
+                decOffset = ConvertTrackingRate(decOffset, false, false);
+            }
 
-			TelescopeManager.SetRaOffsetTrackingRate( raOffset );
-			TelescopeManager.SetDecOffsetTrackingRate( decOffset );
-		}
+            TelescopeManager.SetRaOffsetTrackingRate(raOffset);
+            TelescopeManager.SetDecOffsetTrackingRate(decOffset);
+        }
 
-		private bool CanCommitNewRates()
-		{
-			if ( Capabilities != null )
-			{
-				return IsConnected == true && Capabilities.CanSetDeclinationRate && Capabilities.CanSetRightAscensionRate;
-			}
+        private bool CanCommitNewRates()
+        {
+            if (Capabilities != null)
+            {
+                return IsConnected == true && Capabilities.CanSetDeclinationRate && Capabilities.CanSetRightAscensionRate;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		#endregion CommitNewRatesCommand
+        #endregion CommitNewRatesCommand
 
-		#endregion Commands
-	}
+        #endregion Commands
+    }
 }

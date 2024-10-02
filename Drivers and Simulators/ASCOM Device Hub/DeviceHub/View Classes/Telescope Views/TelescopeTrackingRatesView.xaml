@@ -125,9 +125,9 @@
 				<Label Grid.Row="1" Grid.Column="0" Content="RA Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
 				<local:DoubleEntryBox Grid.Row="1" Grid.Column="1" Height="22" Width="76" Margin="6" HorizontalAlignment="Left"  VerticalAlignment="Center" 
-							 Text="{Binding NewRaOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
-				<Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="2" Height="80" Width="80" Style="{StaticResource CircleButton}" 
-						Command="{Binding CommitNewRatesCommand}">
+							 Text="{Binding NewRaOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" IsEnabled="{Binding IsSiderealTracking}" TextChanged="DoubleEntryBox_TextChanged"/>
+                <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="2" Height="80" Width="80" Style="{StaticResource CircleButton}" 
+						Command="{Binding CommitNewRatesCommand}" IsEnabled="{Binding IsSiderealTracking}">
 					<Button.Content>
 						<TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Send To Telescope" />
 					</Button.Content>
@@ -146,7 +146,7 @@
 				<Label Grid.Row="2" Grid.Column="0" Content="Dec Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
 				<local:DoubleEntryBox Grid.Row="2" Grid.Column="1" Height="22" Width="76" Margin="6" HorizontalAlignment="Left"  VerticalAlignment="Center" 
-							 Text="{Binding NewDecOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+							 Text="{Binding NewDecOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" IsEnabled="{Binding IsSiderealTracking}"/>
 				<Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="2" MinWidth="140"
 					   Foreground="{DynamicResource NormalTextBrush}">
 					<Label.Content>
