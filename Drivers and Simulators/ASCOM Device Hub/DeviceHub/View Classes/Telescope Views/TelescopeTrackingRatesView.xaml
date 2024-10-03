@@ -8,156 +8,156 @@
 			 mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
 			 d:DesignHeight="400" d:DesignWidth="440">
-	<UserControl.Resources>
-		<local:BooleanBooleanValueConverter x:Key="BoolBoolConverter"  />
-		<local:UnitsBooleanToStringConverter x:Key="UnitsConverter" />
+    <UserControl.Resources>
+        <local:BooleanBooleanValueConverter x:Key="BoolBoolConverter"  />
+        <local:UnitsBooleanToStringConverter x:Key="UnitsConverter" />
         <local:DoubleConverter x:Key="DoubleConverter" />
 
         <Style x:Key="RateLabel" TargetType="{x:Type Label}">
-			<Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Padding" Value="0" />
-		</Style>
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
 
-		<Style x:Key="RateValue" TargetType="{x:Type Label}">
-			<Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Padding" Value="0" />
-			<Setter Property="FontSize" Value="16" />
-		</Style>
+        <Style x:Key="RateValue" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{DynamicResource DynamicTextBrush}" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
 
-		<Style x:Key="Buttons" TargetType="{x:Type Button}">
-			<Setter Property="MinWidth" Value="50"/>
-			<Setter Property="Height" Value="22"/>
-		</Style>
-	</UserControl.Resources>
-	<Grid HorizontalAlignment="Center">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" MinHeight="10" />
-			<RowDefinition Height="Auto" MinHeight="10" />
-			<RowDefinition Height="Auto" MinHeight="10" />
-			<RowDefinition Height="Auto" MinHeight="10" />
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-		</Grid.ColumnDefinitions>
+        <Style x:Key="Buttons" TargetType="{x:Type Button}">
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="Height" Value="22"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="10" />
+            <RowDefinition Height="Auto" MinHeight="10" />
+            <RowDefinition Height="Auto" MinHeight="10" />
+            <RowDefinition Height="Auto" MinHeight="10" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-		<Label Grid.Row="0" Grid.Column="0" Margin="0,3" HorizontalAlignment="Center" Style="{StaticResource RateValue}" 
+        <Label Grid.Row="0" Grid.Column="0" Margin="0,3" HorizontalAlignment="Center" Style="{StaticResource RateValue}" 
 						   Content="{Binding TrackingRateText, FallbackValue=Tracking Rate Info goes here.}" />
-		<GroupBox Grid.Row="1" Grid.Column="0" Header="Current Telescope Tracking Rate Offsets"
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Current Telescope Tracking Rate Offsets"
 				  Foreground="{DynamicResource NormalTextBrush}" HorizontalAlignment="Center">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" MinHeight="10"/>
-					<RowDefinition Height="Auto" MinHeight="10"/>
-					<RowDefinition Height="Auto" MinHeight="10"/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" MinWidth="30"/>
-					<ColumnDefinition Width="Auto" MinWidth="60"/>
-					<ColumnDefinition Width="Auto" MinWidth="90"/>
-				</Grid.ColumnDefinitions>
-				<Label Grid.Row="0" Grid.Column="0" Content="RA Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" MinHeight="10"/>
+                    <RowDefinition Height="Auto" MinHeight="10"/>
+                    <RowDefinition Height="Auto" MinHeight="10"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="30"/>
+                    <ColumnDefinition Width="Auto" MinWidth="60"/>
+                    <ColumnDefinition Width="Auto" MinWidth="90"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="RA Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
-				<Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
 					   Foreground="{DynamicResource DynamicTextBrush}" Padding="0">
-					<Label.Content>
+                    <Label.Content>
                         <TextBlock Text="{Binding RaRateOffset, StringFormat=F7, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
-					</Label.Content>
-				</Label>
-				<Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Padding="0"
+                    </Label.Content>
+                </Label>
+                <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Padding="0"
 					   Margin="6,0,0,1" Foreground="{DynamicResource NormalTextBrush}"
 					   Content="{Binding AscomRaUnits}" />
 
-				<Label Grid.Row="1" Grid.Column="0" Content="Dec Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
+                <Label Grid.Row="1" Grid.Column="0" Content="Dec Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
-				<Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
 					    Padding="0" Foreground="{DynamicResource DynamicTextBrush}">
-					<Label.Content>
+                    <Label.Content>
                         <TextBlock Text="{Binding DecRateOffset, StringFormat=F7, Converter={StaticResource DoubleConverter}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
-					</Label.Content>
-				</Label>
-				<Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    </Label.Content>
+                </Label>
+                <Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"
 					   Margin="6,0,0,0" Foreground="{DynamicResource NormalTextBrush}" Padding="0" 
 					   Content="{Binding AscomDecUnits}" />
-				<Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Foreground="{DynamicResource NormalTextBrush}" Padding="1" 
+                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Foreground="{DynamicResource NormalTextBrush}" Padding="1" 
 					   Content="{Binding RatesNote}" />
 
-			</Grid>
-		</GroupBox>
-		<StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Height="Auto" HorizontalAlignment="Center"
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Height="Auto" HorizontalAlignment="Center"
 					Margin="0,8,0,0">
-			<Button Content="Sidereal" Height="60" Width="60" Style="{StaticResource CircleButton}" 
+            <Button Content="Sidereal" Height="60" Width="60" Style="{StaticResource CircleButton}" 
 					Command="{Binding ApplySiderealTrackingCommand}" />
-			<Button Content="Lunar" Height="60" Width="60" Style="{StaticResource CircleButton}" 
+            <Button Content="Lunar" Height="60" Width="60" Style="{StaticResource CircleButton}" 
 					Command="{Binding ApplyLunarTrackingCommand}" />
-			<Button Content="Solar" Height="60" Width="60" Style="{StaticResource CircleButton}" 
+            <Button Content="Solar" Height="60" Width="60" Style="{StaticResource CircleButton}" 
 					Command="{Binding ApplySolarTrackingCommand}" />
-			<Button Content="King" Height="60" Width="60" Style="{StaticResource CircleButton}" 
+            <Button Content="King" Height="60" Width="60" Style="{StaticResource CircleButton}" 
 					Command="{Binding ApplyKingTrackingCommand}" />
-		</StackPanel>
+        </StackPanel>
 
-		<GroupBox Grid.Row="3" Grid.Column="0" Header="Change Sidereal Tracking Offsets" HorizontalAlignment="Center"
+        <GroupBox Grid.Row="3" Grid.Column="0" Header="Change Sidereal Tracking Offsets" HorizontalAlignment="Center"
 				  Foreground="{DynamicResource NormalTextBrush}">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" MinHeight="10" />
-					<RowDefinition Height="Auto" MinHeight="10" />
-					<RowDefinition Height="Auto" MinHeight="10" />
-					<RowDefinition Height="Auto" MinHeight="10" />
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" MinWidth="30" />
-					<ColumnDefinition Width="Auto" MinWidth="60" />
-					<ColumnDefinition Width="Auto" MinWidth="90" />
-					<ColumnDefinition Width="Auto" MinWidth="40" />
-				</Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" MinHeight="10" />
+                    <RowDefinition Height="Auto" MinHeight="10" />
+                    <RowDefinition Height="Auto" MinHeight="10" />
+                    <RowDefinition Height="Auto" MinHeight="10" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="30" />
+                    <ColumnDefinition Width="Auto" MinWidth="60" />
+                    <ColumnDefinition Width="Auto" MinWidth="90" />
+                    <ColumnDefinition Width="Auto" MinWidth="40" />
+                </Grid.ColumnDefinitions>
 
-				<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
-					<Label Content="Rate Units: " Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center"/>
-					<RadioButton Content="ASCOM Units" VerticalAlignment="Center" Foreground="{DynamicResource NormalTextBrush}"
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                    <Label Content="Rate Units: " Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center"/>
+                    <RadioButton Content="ASCOM Units" VerticalAlignment="Center" Foreground="{DynamicResource NormalTextBrush}"
 								 ToolTip="See the current rates above for ASCOM Units" 
 								 IsChecked="{Binding UseNasaJplUnits, Converter={StaticResource BoolBoolConverter}, ConverterParameter=False}" />
-					<RadioButton Content="JPL Horizons Units" VerticalAlignment="Center" Foreground="{DynamicResource NormalTextBrush}" Margin="8,0,0,0" 
+                    <RadioButton Content="JPL Horizons Units" VerticalAlignment="Center" Foreground="{DynamicResource NormalTextBrush}" Margin="8,0,0,0" 
 								 ToolTip="NASA JPL Horizons rate units are arc-seconds per hour" 
 								 IsChecked="{Binding UseNasaJplUnits, Converter={StaticResource BoolBoolConverter}, ConverterParameter=True}" />
-				</StackPanel>
-				<Label Grid.Row="1" Grid.Column="0" Content="RA Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
+                </StackPanel>
+                <Label Grid.Row="1" Grid.Column="0" Content="RA Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
-				<local:DoubleEntryBox Grid.Row="1" Grid.Column="1" Height="22" Width="76" Margin="6" HorizontalAlignment="Left"  VerticalAlignment="Center" 
-							 Text="{Binding NewRaOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" IsEnabled="{Binding IsSiderealTracking}" TextChanged="DoubleEntryBox_TextChanged"/>
+                <local:DoubleEntryBox Grid.Row="1" Grid.Column="1" Height="22" Width="76" Margin="6" HorizontalAlignment="Left"  VerticalAlignment="Center" 
+							 Text="{Binding NewRaOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" IsEnabled="{Binding IsSiderealTracking}"/>
                 <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="2" Height="80" Width="80" Style="{StaticResource CircleButton}" 
 						Command="{Binding CommitNewRatesCommand}" IsEnabled="{Binding IsSiderealTracking}">
-					<Button.Content>
-						<TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Send To Telescope" />
-					</Button.Content>
-				</Button>
+                    <Button.Content>
+                        <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Send To Telescope" />
+                    </Button.Content>
+                </Button>
 
-				<Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="2" MinWidth="140"
+                <Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="2" MinWidth="140"
 					   Foreground="{DynamicResource NormalTextBrush}">
-					<Label.Content>
-						<MultiBinding Converter="{StaticResource UnitsConverter}">
-							<Binding Path="UseNasaJplUnits" />
-							<Binding Path="NasaJplRaUnits" />
-							<Binding Path="AscomRaUnits" />
-						</MultiBinding>
-					</Label.Content>					
-				</Label>
-				<Label Grid.Row="2" Grid.Column="0" Content="Dec Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource UnitsConverter}">
+                            <Binding Path="UseNasaJplUnits" />
+                            <Binding Path="NasaJplRaUnits" />
+                            <Binding Path="AscomRaUnits" />
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+                <Label Grid.Row="2" Grid.Column="0" Content="Dec Offset Rate:" HorizontalAlignment="Right" VerticalAlignment="Center"
 					   Foreground="{DynamicResource NormalTextBrush}" Padding="1" />
-				<local:DoubleEntryBox Grid.Row="2" Grid.Column="1" Height="22" Width="76" Margin="6" HorizontalAlignment="Left"  VerticalAlignment="Center" 
+                <local:DoubleEntryBox Grid.Row="2" Grid.Column="1" Height="22" Width="76" Margin="6" HorizontalAlignment="Left"  VerticalAlignment="Center" 
 							 Text="{Binding NewDecOffsetRate, StringFormat=F7, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" IsEnabled="{Binding IsSiderealTracking}"/>
-				<Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="2" MinWidth="140"
+                <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="2" MinWidth="140"
 					   Foreground="{DynamicResource NormalTextBrush}">
-					<Label.Content>
-						<MultiBinding Converter="{StaticResource UnitsConverter}">
-							<Binding Path="UseNasaJplUnits" />
-							<Binding Path="NasaJplDecUnits" />
-							<Binding Path="AscomDecUnits" />
-						</MultiBinding>
-					</Label.Content>
-				</Label>
-			</Grid>
-		</GroupBox>
-	</Grid>
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource UnitsConverter}">
+                            <Binding Path="UseNasaJplUnits" />
+                            <Binding Path="NasaJplDecUnits" />
+                            <Binding Path="AscomDecUnits" />
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+            </Grid>
+        </GroupBox>
+    </Grid>
 </UserControl>
