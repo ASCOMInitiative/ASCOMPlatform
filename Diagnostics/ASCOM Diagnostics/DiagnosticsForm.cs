@@ -325,6 +325,7 @@ namespace ASCOM.Utilities
                 TL.BlankLine();
                 TL.LogMessage("CurrentCulture", CultureInfo.CurrentCulture.EnglishName + " " + CultureInfo.CurrentCulture.Name + " Decimal Separator \"" + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator + "\"" + " Number Group Separator \"" + CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + "\"");
                 TL.LogMessage("CurrentUICulture", CultureInfo.CurrentUICulture.EnglishName + " " + CultureInfo.CurrentUICulture.Name + " Decimal Separator \"" + CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator + "\"" + " Number Group Separator \"" + CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator + "\"");
+                TL.BlankLine();
 
                 try
                 {
@@ -336,8 +337,36 @@ namespace ASCOM.Utilities
                     string currentBuildNumber = regKey.GetValue("currentBuildNumber", "").ToString();
                     string ubr = regKey.GetValue("UBR", "").ToString();
 
-                    TL.BlankLine();
-                    TL.LogMessage("OS Version", $"{productName} {currentType} {currentMajorVersionNumber}.{currentMinorVersionNumber}.{currentBuildNumber}.{ubr}");
+                    // Use the build num,ber to determine the OS version label
+                    string productVersionName = "Unknown OS version";
+                    try
+                    {
+                        int buildNumber = Int32.Parse(currentBuildNumber);
+
+                        // Select the appropriate OS product label based on the build number
+                        productVersionName = buildNumber switch
+                        {
+                            int build when build < 10000 => "Earlier than Windows 10",
+                            int build when (build >= 10000) & (build < 19041) => "Windows 10",
+                            19041 => "Windows 10 (2004)",
+                            19042 => "Windows 10 (20H2)",
+                            19043 => "Windows 10 (21H1)",
+                            19044 => "Windows 10 (21H2)",
+                            19045 => "Windows 10 (22H2)",
+                            22000 => "Windows 11 (21H2)",
+                            22621 => "Windows 11 (22H2)",
+                            22631 => "Windows 11 (23H2)",
+                            26100 => "Windows 11 (24H2)",
+                            _ => $"Windows 11 or later"
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessageCrLf("OSVersion", $"Exception parsing OS version - {ex.Message}\r\n{ex}");
+                        TL.LogMessageCrLf("OSVersion", $"Major version number: {currentMajorVersionNumber}, Minor version number: {currentMinorVersionNumber}, Build number: {currentBuildNumber}");
+                    }
+
+                    TL.LogMessage("OS Version", $"{productVersionName} {currentType} {currentMajorVersionNumber}.{currentMinorVersionNumber}.{currentBuildNumber}.{ubr}");
                     TL.BlankLine();
                 }
                 catch (Exception ex)
