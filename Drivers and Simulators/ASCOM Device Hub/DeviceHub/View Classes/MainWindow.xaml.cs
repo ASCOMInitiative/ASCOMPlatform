@@ -9,176 +9,181 @@ using System.Windows.Input;
 
 namespace ASCOM.DeviceHub
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
-		private List<Expander> _expanders;
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private List<Expander> _expanders;
 
-		public MainWindow()
-		{
-			InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
 
-			Left = Globals.MainWindowLeft;
-			Top = Globals.MainWindowTop;
-			Topmost = Globals.AlwaysOnTop;
+            Left = Globals.MainWindowLeft;
+            Top = Globals.MainWindowTop;
+            Topmost = Globals.AlwaysOnTop;
 
-			// Call the extension method to allow us to minimize the app to
-			// the system tray, rather than the task bar.
+            // Call the extension method to allow us to minimize the app to
+            // the system tray, rather than the task bar.
 
-			this.EnableMinimizeToTray();
+            this.EnableMinimizeToTray();
 
-			_expanders = new List<Expander>
-			{
-				_domeControl,
-				_focuserControl
-			};
+            _expanders = new List<Expander>
+            {
+                _domeControl,
+                _focuserControl
+            };
 
-			if ( Globals.UseExpandedScreenLayout )
-			{
-				// We are in expanded view mode, check which expanders to expand.
+            if (Globals.UseExpandedScreenLayout)
+            {
+                // We are in expanded view mode, check which expanders to expand.
 
-				if ( Globals.IsDomeExpanded )
-				{
-					_domeControl.IsExpanded = true;
-				}
+                if (Globals.IsDomeExpanded)
+                {
+                    _domeControl.IsExpanded = true;
+                }
 
-				if ( Globals.IsFocuserExpanded )
-				{
-					_focuserControl.IsExpanded = true;
-				}
-			}
+                if (Globals.IsFocuserExpanded)
+                {
+                    _focuserControl.IsExpanded = true;
+                }
+            }
 
-			// Now that we have restored the IsExpanded states, we can hook up the event handlers
+            // Now that we have restored the IsExpanded states, we can hook up the event handlers
 
-			_domeControl.Expanded += new RoutedEventHandler( _domeControl_Expanded );
-			_domeControl.Collapsed += new RoutedEventHandler( _domeControl_Collapsed );
-			_focuserControl.Expanded += new RoutedEventHandler( _focuserControl_Expanded );
-			_focuserControl.Collapsed += new RoutedEventHandler( _focuserControl_Collapsed );
+            _domeControl.Expanded += new RoutedEventHandler(_domeControl_Expanded);
+            _domeControl.Collapsed += new RoutedEventHandler(_domeControl_Collapsed);
+            _focuserControl.Expanded += new RoutedEventHandler(_focuserControl_Expanded);
+            _focuserControl.Collapsed += new RoutedEventHandler(_focuserControl_Collapsed);
 
-			Messenger.Default.Register<SignalWaitMessage>( this, ( action ) => ShowHideWaitCursor( action ) );
-		}
+            Messenger.Default.Register<SignalWaitMessage>(this, (action) => ShowHideWaitCursor(action));
+        }
 
-		private void ShowHideWaitCursor( SignalWaitMessage action )
-		{
-			// Used by ViewModels to cause a wait cursor to be displayed when Connecting devices,
-			// in case connect takes time to complete.
+        private void ShowHideWaitCursor(SignalWaitMessage action)
+        {
+            // Used by ViewModels to cause a wait cursor to be displayed when Connecting devices,
+            // in case connect takes time to complete.
 
-			Cursor cursor = ( action.Wait ) ? Cursors.Wait : null;
+            Cursor cursor = (action.Wait) ? Cursors.Wait : null;
 
-			Mouse.OverrideCursor = cursor;	
-		}
+            Mouse.OverrideCursor = cursor;
+        }
 
-		protected override void OnClosing( CancelEventArgs e )
-		{
-			Messenger.Default.Unregister<SignalWaitMessage>( this );
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Messenger.Default.Unregister<SignalWaitMessage>(this);
 
-			base.OnClosing( e );
-		}
+            base.OnClosing(e);
+        }
 
-		private void Window_LocationChanged( object sender, EventArgs e )
-		{
-			if ( sender is Window main )
-			{
-				// When the window is minimized, the window position is set to (-32000,-32000). 
-				// We don't want to remember this!
-				Globals.MainWindowLeft = main.Left > 0 ? main.Left : Globals.MainWindowLeft;
-				Globals.MainWindowTop = main.Top > 0 ? main.Top : Globals.MainWindowTop;
-			}
-		}
+        private void Window_LocationChanged(object sender, EventArgs e)
+        {
+            if (sender is Window main)
+            {
+                // When the window is minimized, the window position is set to (-32000,-32000). 
+                // We don't want to remember this!
+                Globals.MainWindowLeft = main.Left > 0 ? main.Left : Globals.MainWindowLeft;
+                Globals.MainWindowTop = main.Top > 0 ? main.Top : Globals.MainWindowTop;
+            }
+        }
 
-		private void Window_Loaded( object sender, RoutedEventArgs e )
-		{
-			// By setting the window state after the main window has loaded, it will
-			// trigger the StateChanged event which will put the icon in the tray rather
-			// than on the task bar.
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Create the activity log dialogue so it runs hidden from the start of the application
+            ActivityLogViewModel ActivityLogVm = new ActivityLogViewModel();
+            IActivityLogService svc = ServiceContainer.Instance.GetService<IActivityLogService>();
+            svc.CreateActivityLog(ActivityLogVm, Globals.ActivityWindowLeft, Globals.ActivityWindowTop, Globals.ActivityWindowWidth, Globals.ActivityWindowHeight);
 
-			if ( Server.StartedByCOM )
-			{
-				WindowState = WindowState.Minimized;
-			}
-		}
+            // By setting the window state after the main window has loaded, it will
+            // trigger the StateChanged event which will put the icon in the tray rather
+            // than on the task bar.
 
-		private void ExitMenuItem_Click( object sender, RoutedEventArgs e )
-		{
-			this.Close();
-		}
+            if (Server.StartedByCOM)
+            {
+                WindowState = WindowState.Minimized;
+            }
+        }
 
-		private void TabControl_SelectionChanged( object sender, System.Windows.Controls.SelectionChangedEventArgs e )
-		{
-			if ( sender is TabControl ctrl )
-			{
-				if ( ctrl.SelectedItem is TabItem item )
-				{
-					string label = item.Header.ToString().ToLower();
+        private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
 
-					DeviceTypeEnum device = DeviceTypeEnum.Telescope;
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is TabControl ctrl)
+            {
+                if (ctrl.SelectedItem is TabItem item)
+                {
+                    string label = item.Header.ToString().ToLower();
 
-					if ( label == "dome" )
-					{
-						device = DeviceTypeEnum.Dome;
-					}
-					else if ( label == "focuser")
-					{
-						device = DeviceTypeEnum.Focuser;
-					}
+                    DeviceTypeEnum device = DeviceTypeEnum.Telescope;
 
-					Globals.ActiveDevice = device;
-				}
-			}
-		}
+                    if (label == "dome")
+                    {
+                        device = DeviceTypeEnum.Dome;
+                    }
+                    else if (label == "focuser")
+                    {
+                        device = DeviceTypeEnum.Focuser;
+                    }
 
-		private void _domeControl_Expanded( object sender, RoutedEventArgs e )
-		{
-			Globals.IsDomeExpanded = true;
+                    Globals.ActiveDevice = device;
+                }
+            }
+        }
 
-			AdjustOtherExpanders( sender );
-		}
+        private void _domeControl_Expanded(object sender, RoutedEventArgs e)
+        {
+            Globals.IsDomeExpanded = true;
 
-		private void _focuserControl_Expanded( object sender, RoutedEventArgs e )
-		{
-			Globals.IsFocuserExpanded = true;
+            AdjustOtherExpanders(sender);
+        }
 
-			AdjustOtherExpanders( sender );
-		}
+        private void _focuserControl_Expanded(object sender, RoutedEventArgs e)
+        {
+            Globals.IsFocuserExpanded = true;
 
-		private void AdjustOtherExpanders( object sender )
-		{
-			Expander sendingExpander = sender as Expander;
+            AdjustOtherExpanders(sender);
+        }
 
-			if ( sendingExpander == null )
-			{
-				return;
-			}
+        private void AdjustOtherExpanders(object sender)
+        {
+            Expander sendingExpander = sender as Expander;
 
-			bool collapseOthers = true;
+            if (sendingExpander == null)
+            {
+                return;
+            }
 
-			if ( collapseOthers && Keyboard.IsKeyDown( Key.LeftCtrl ) || Keyboard.IsKeyDown( Key.RightCtrl ) )
-			{
-				collapseOthers = false;
-			}
+            bool collapseOthers = true;
 
-			if ( collapseOthers )
-			{
-				foreach ( Expander expander in _expanders )
-				{
-					if ( expander != sendingExpander )
-					{
-						expander.IsExpanded = false;
-					}
-				}
-			}
-		}
+            if (collapseOthers && Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                collapseOthers = false;
+            }
 
-		private void _domeControl_Collapsed( object sender, RoutedEventArgs e )
-		{
-			Globals.IsDomeExpanded = false;
-		}
+            if (collapseOthers)
+            {
+                foreach (Expander expander in _expanders)
+                {
+                    if (expander != sendingExpander)
+                    {
+                        expander.IsExpanded = false;
+                    }
+                }
+            }
+        }
 
-		private void _focuserControl_Collapsed( object sender, RoutedEventArgs e )
-		{
-			Globals.IsFocuserExpanded = false;
-		}
-	}
+        private void _domeControl_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Globals.IsDomeExpanded = false;
+        }
+
+        private void _focuserControl_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Globals.IsFocuserExpanded = false;
+        }
+    }
 }

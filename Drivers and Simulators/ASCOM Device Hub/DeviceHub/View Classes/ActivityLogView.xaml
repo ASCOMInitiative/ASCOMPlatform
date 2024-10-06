@@ -93,7 +93,7 @@
             </Label.Content>
         </Label>
         <Button Grid.Row="4" Grid.Column="2" Content="Close" HorizontalAlignment="Right" Height="60" Width="60" Margin="0,6,0,0" Style="{StaticResource CircleButton}"
-                    Command="{Binding CloseLogCommand}" />
+                    Command="{Binding HideLogCommand}" />
         <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Height="60" Width="60" Margin="0,6,65,0" Style="{StaticResource CircleButton}"
             Command="{Binding SaveSettingsCommand}" >
             <TextBlock Text="Save Settings" TextWrapping="Wrap" TextAlignment="Center" Margin="0,-3,0,0"/>

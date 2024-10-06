@@ -24,6 +24,7 @@ namespace ASCOM.DeviceHub
         private TaskScheduler UISyncContext { get; set; }
         private StringBuilder DataBuffer { get; set; }
         private CancellationTokenSource BufferingCts { get; set; }
+        private IActivityLogService ActivityLogService { get; set; }
 
         public ActivityLogViewModel()
             : base("Activity Log")
@@ -40,6 +41,8 @@ namespace ASCOM.DeviceHub
             BufferingCts = new CancellationTokenSource();
             Task.Factory.StartNew(() => AppendBufferToLog(BufferingCts.Token),
                                         BufferingCts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+            ActivityLogService = ServiceContainer.Instance.GetService<IActivityLogService>();
 
             // Set initial states for activity logging variables
             EnableTelescopeLogging = Globals.ActivityLogTelescopeDevice;
@@ -383,7 +386,6 @@ namespace ASCOM.DeviceHub
         private void UpdateMemoryUsage()
         {
             MemoryUsage = (double)GC.GetTotalMemory(false) / Math.Pow(1024.0, 2.0);
-
         }
 
         protected override void DoDispose()
@@ -391,7 +393,7 @@ namespace ASCOM.DeviceHub
             _pauseLoggingCommand = null;
             _clearLogCommand = null;
             _copyLogCommand = null;
-            _closeLogCommand = null;
+            _hideLogCommand = null;
         }
 
         #endregion Helper Methods
@@ -517,22 +519,29 @@ namespace ASCOM.DeviceHub
 
         #endregion CopyLogCommand
 
-        #region CloseLogCommand
+        #region HideLogCommand
 
-        private ICommand _closeLogCommand;
+        private ICommand _hideLogCommand;
 
-        public ICommand CloseLogCommand
+        public ICommand HideLogCommand
         {
             get
             {
-                if (_closeLogCommand == null)
+                if (_hideLogCommand == null)
                 {
-                    _closeLogCommand = new RelayCommand(
-                        param => this.CloseLog());
+                    _hideLogCommand = new RelayCommand(
+                        param => HideLog(),
+                        parm => true); // Always true because the close log button now only hides the dialogue rrather than closing it, and we always want to be able to open the dialogue again.
                 }
 
-                return _closeLogCommand;
+                return _hideLogCommand;
             }
+        }
+
+        internal void HideLog()
+        {
+            // Hide the activity log dialogue
+            ActivityLogService.HideActivityLog();
         }
 
         internal void CloseLog()
