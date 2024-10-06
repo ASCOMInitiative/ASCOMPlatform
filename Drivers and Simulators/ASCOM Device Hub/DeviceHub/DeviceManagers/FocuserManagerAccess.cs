@@ -239,8 +239,6 @@ namespace ASCOM.DeviceHub
 					}
 				}
 
-				LogActivityEnd( ActivityMessageTypes.Other, retval );
-
 				return retval;
 			}
 			set
