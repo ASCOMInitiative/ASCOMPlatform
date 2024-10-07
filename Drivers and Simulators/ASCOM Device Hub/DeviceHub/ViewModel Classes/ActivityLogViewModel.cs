@@ -557,7 +557,7 @@ namespace ASCOM.DeviceHub
             IsActive = false;
         }
 
-        #endregion CloseLogCommand
+        #endregion HideLogCommand
 
         #region SaveSettingsCommand
 
@@ -593,7 +593,7 @@ namespace ASCOM.DeviceHub
             AppSettingsManager.SaveAppSettings();
         }
 
-        #endregion CloseLogCommand
+        #endregion SaveSettingsCommand
 
         #endregion Relay Commands
     }

@@ -64,6 +64,7 @@ namespace ASCOM.DeviceHub
         public static bool UseExpandedScreenLayout { get; set; }
         public static double DomeAzimuthAdjustment { get; set; }
         public static bool UseCompositeSlewingFlag { get; set; }
+        public static bool ShowActivityLogWhenStarted { get; set; }
 
         // Activity log settings
         public static bool ActivityLogTelescopeDevice { get; set; }

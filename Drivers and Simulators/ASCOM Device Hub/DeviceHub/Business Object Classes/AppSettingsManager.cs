@@ -51,6 +51,7 @@
 			Globals.ActivityLogOtherActivity = settings.ActivityLogOtherActivity;
 			Globals.ActivityLogParameters = settings.ActivityLogParameters;
 			Globals.ActivityLogStatus = settings.ActivityLogStatus;
+			Globals.ShowActivityLogWhenStarted = settings.ShowActivityLogWhenStarted;
 		}
 
 		public static void LoadMainWindowSettings()
@@ -91,6 +92,7 @@
 				ActivityLogOtherActivity = Globals.ActivityLogOtherActivity,
 				ActivityLogParameters = Globals.ActivityLogParameters,
 				ActivityLogStatus = Globals.ActivityLogStatus,
+				ShowActivityLogWhenStarted = Globals.ShowActivityLogWhenStarted
 			};
 
 			ServiceContainer.Instance.GetService<IAppSettingsService>().SaveSettings( settings );

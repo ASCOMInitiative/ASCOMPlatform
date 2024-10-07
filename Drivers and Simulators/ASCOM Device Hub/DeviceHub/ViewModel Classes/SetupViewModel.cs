@@ -17,6 +17,7 @@ namespace ASCOM.DeviceHub
 			UseExpandedScreenLayout = Globals.UseExpandedScreenLayout;
 			KeepWindowOnTop = Globals.AlwaysOnTop;
 			UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag;
+			ShowActivityLogWhenStarted = Globals.ShowActivityLogWhenStarted;
 
 			TelescopeSetupVm = new TelescopeSetupViewModel();
 			DomeSetupVm = new DomeSetupViewModel();
@@ -27,8 +28,22 @@ namespace ASCOM.DeviceHub
 		public DomeSetupViewModel DomeSetupVm { get; set; }
 		public FocuserSetupViewModel FocuserSetupVm { get; set; }
 
+        private bool _showActivityLogWhenStarted;
 
-		private bool _suppressTrayBubble;
+        public bool ShowActivityLogWhenStarted
+        {
+            get { return _showActivityLogWhenStarted; }
+            set
+            {
+                if (value != _showActivityLogWhenStarted)
+                {
+                    _showActivityLogWhenStarted = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _suppressTrayBubble;
 
 		public bool SuppressTrayBubble
 		{
@@ -88,7 +103,6 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-
 		private bool _useCompositeSlewingFlag;
 
 		public bool UseCompositeSlewingFlag
@@ -103,6 +117,7 @@ namespace ASCOM.DeviceHub
 				}
 			}
 		}
+
 		private bool _isTelescopeActive;
 
 		public bool IsTelescopeActive
@@ -220,7 +235,7 @@ namespace ASCOM.DeviceHub
 			Globals.UseCustomTheme = UseCustomTheme;
 			Globals.AlwaysOnTop = KeepWindowOnTop;
 			Globals.UseCompositeSlewingFlag = UseCompositeSlewingFlag;
-
+			Globals.ShowActivityLogWhenStarted = ShowActivityLogWhenStarted;
 			AppSettingsManager.SaveAppSettings();
 		}
 

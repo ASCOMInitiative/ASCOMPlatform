@@ -44,7 +44,12 @@ namespace ASCOM.DeviceHub
                 DataContext = ViewModel
             };
 
-            View.Hide();
+            // Show or hide the activity log as determined by the user configuration
+            if (Globals.ShowActivityLogWhenStarted)
+                View.Show();
+            else
+                View.Hide();
+
             View.AdjustWindowPlacement();
         }
 

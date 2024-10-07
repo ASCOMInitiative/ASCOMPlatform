@@ -62,7 +62,8 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
@@ -85,9 +86,13 @@
 						<CheckBox Grid.Row="4" Grid.Column="0" Margin="10,6" Content="Report Composite Slewing When Dome Is Slaved" Foreground="{DynamicResource NormalTextBrush}" 								  
 							  ToolTip="When the dome is slaved to the telescope, both devices report Slewing = True while either device is slewing."
 							  IsChecked="{Binding UseCompositeSlewingFlag}" />
-					</Grid>
+                        <CheckBox Grid.Row="5" Grid.Column="0" Margin="10,6" Content="Show Activity Log When Started" Foreground="{DynamicResource NormalTextBrush}" 								  
+							  ToolTip="When the dome is slaved to the telescope, both devices report Slewing = True while either device is slewing."
+							  IsChecked="{Binding ShowActivityLogWhenStarted}" />
+                    </Grid>
 				</Grid>
 			</TabItem>
+            
 			<TabItem Header="Telescope Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
                      Tag="Telescope"
 					 ToolTip ="Telescope Setup is disabled when a telescope is connected."

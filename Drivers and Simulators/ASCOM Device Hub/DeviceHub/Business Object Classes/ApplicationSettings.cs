@@ -46,7 +46,8 @@ namespace ASCOM.DeviceHub
 		public bool UseExpandedScreenLayout { get; set; }
 		public bool AlwaysOnTop { get; set; }
 		public bool UseCompositeSlewingFlag { get; set; }
-		public bool IsDomeExpanded { get; set; }
+        public bool ShowActivityLogWhenStarted { get; set; }
+        public bool IsDomeExpanded { get; set; }
 		public bool IsFocuserExpanded { get; set; }
         public bool ActivityLogTelescopeDevice { get; set; }
         public bool ActivityLogDomeDevice { get; set; }
