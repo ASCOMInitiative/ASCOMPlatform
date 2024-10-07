@@ -49,11 +49,12 @@ namespace ASCOM.DeviceHub
         {
             get
             {
-                bool retval; // Value is false by default.
+                bool retval=false; // Value is false by default.
 
                 try
                 {
-                    retval = Telescope.Connected;
+                    if (!(Telescope is null))
+                        retval = Telescope.Connected;
                 }
                 catch (DriverException)
                 {

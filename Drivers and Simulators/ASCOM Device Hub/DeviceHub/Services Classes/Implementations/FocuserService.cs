@@ -49,11 +49,12 @@ namespace ASCOM.DeviceHub
         {
             get
             {
-                bool retval; // Defaulted to false
+                bool retval = false; // Defaulted to false
 
                 try
                 {
-                    retval = Focuser.Connected;
+                    if (!(Focuser is null))
+                        retval = Focuser.Connected;
                 }
                 catch (DriverException)
                 {
