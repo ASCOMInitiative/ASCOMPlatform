@@ -1160,6 +1160,9 @@ namespace ASCOM.DeviceHub
             {
                 Task.Run(() => ParkScopeTask());
 
+                // Wait for 500ms so that the Park() method can be called asynchronously to ensure the device is trying to park when this call returns
+                Thread.Sleep(500);
+
                 SetFastPolling();
             }
         }

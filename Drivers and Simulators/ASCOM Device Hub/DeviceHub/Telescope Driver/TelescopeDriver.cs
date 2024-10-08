@@ -506,20 +506,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.Altitude;
+                    retval = TelescopeManager.Altitude;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -611,20 +603,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.AtHome;
+                    retval = TelescopeManager.AtHome;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -648,20 +632,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    atPark = TelescopeManager.Status.AtPark;
+                    atPark = TelescopeManager.AtPark;
                     msg += $"{atPark}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -709,20 +685,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.Azimuth;
+                    retval = TelescopeManager.Azimuth;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -1330,20 +1298,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.Declination;
+                    retval = TelescopeManager.Declination;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -1398,7 +1358,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.DeclinationRate = value;
-                    msg += $"{value:F1}{_done}";
+                    string outcome = AttemptToSet(() => TelescopeManager.Status.DeclinationRate = value);
+                    msg += $"{value:F1}{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -1480,7 +1441,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.DoesRefraction = value;
-                    msg += $"{value}{_done}";
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.DoesRefraction= value);
+                    msg += $"{value}{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -1632,7 +1594,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.GuideRateDeclination = value;
-                    msg += $"{value:F1}{_done}";
+                    string outcome = AttemptToSet(() => TelescopeManager.Status.GuideRateDeclination = value);
+                    msg += $"{value:F1}{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -1693,8 +1656,8 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    TelescopeManager.GuideRateRightAscension = value;
-                    msg += $"{value:F1}{_done}";
+                    string outcome = AttemptToSet(() => TelescopeManager.Status.GuideRateRightAscension = value);
+                    msg += $"{value:F1}{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -1724,20 +1687,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.IsPulseGuiding;
+                    retval = TelescopeManager.IsPulseGuiding;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -1801,7 +1756,7 @@ namespace ASCOM.DeviceHub
             CheckConnected(name);
             CheckCapabilityForMethod(name, "CanPark", TelescopeManager.Capabilities.CanPark);
 
-            if (TelescopeManager.Status.AtPark)
+            if (TelescopeManager.AtPark)
             {
                 return;
             }
@@ -1867,20 +1822,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.RightAscension;
+                    retval = TelescopeManager.RightAscension;
                     msg += $"{Utilities.HoursToHMS(retval)}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -1939,7 +1886,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.RightAscensionRate = value;
-                    msg += _done;
+                    string outcome = AttemptToSet(() => TelescopeManager.Status.RightAscensionRate = value);
+                    msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -1993,21 +1941,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.Status.SideOfPier;
-
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
+                    retval = TelescopeManager.SideOfPier;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -2056,43 +1995,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    // I chose to return the telescope's sidereal time rather than the PC's sidereal time.
-                    // However, I kept the template code below that shows how to use NOVAS 3.1 to calculate it.
-
-                    //// Use NOVAS 3.1 to get the GreenwichApparentSiderealTime (GAST).
-
-                    //using ( var novas = new ASCOM.Astrometry.NOVAS.NOVAS31() )
-                    //{
-                    //	var jd = Utilities.DateUTCToJulian( DateTime.UtcNow );
-                    //	novas.SiderealTime( jd, 0, novas.DeltaT( jd ),
-                    //		ASCOM.Astrometry.GstType.GreenwichApparentSiderealTime,
-                    //		ASCOM.Astrometry.Method.EquinoxBased,
-                    //		ASCOM.Astrometry.Accuracy.Reduced, ref siderealTime );
-                    //}
-
-                    //// Adjust for the longitude.
-
-                    //siderealTime += SiteLongitude / 360.0 * 24.0;
-
-                    //// Normalize the time to the range 0 to 24 hours.
-
-                    //siderealTime += 24.0; // Make sure it is not negative.
-                    //siderealTime = siderealTime % 24.0;
-
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    siderealTime = TelescopeManager.Status.SiderealTime;
+                    siderealTime = TelescopeManager.SiderealTime;
                     msg += $"{siderealTime:F5}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -2143,7 +2051,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.SiteElevation = value;
-                    msg += _done;
+                    string outcome= AttemptToSet(() => TelescopeManager.Parameters.SiteElevation = value);
+                    msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -2197,7 +2106,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.SiteLatitude = value;
-                    msg += _done;
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.SiteLatitude = value);
+                    msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -2251,7 +2161,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.SiteLongitude = value;
-                    msg += _done;
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.SiteLongitude = value);
+                    msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -2305,7 +2216,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.SlewSettleTime = value;
-                    msg += _done;
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.SlewSettleTime= value);
+                    msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -2507,20 +2419,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.Slewing;
+                    retval = TelescopeManager.Slewing;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -2758,20 +2662,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.Tracking;
+                    retval = TelescopeManager.Tracking;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -2842,7 +2738,8 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.TrackingRate = value;
-                    msg += _done;
+                    string outcome = AttemptToSet(() => TelescopeManager.Status.TrackingRate= value);
+                    msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
                 {
@@ -2902,20 +2799,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = TelescopeManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = TelescopeManager.Status.UTCDate;
+                    retval = TelescopeManager.UTCDate;
                     msg += $"{retval:MM/dd/yy HH:mm:ss}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -3124,6 +3013,43 @@ namespace ASCOM.DeviceHub
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Make two attempts to carry out the supplied action, waiting 500ms before the second attempt if the first attempt fails.
+        /// </summary>
+        /// <param name="action">Action to carry out</param>
+        /// <returns>Error message string or empty string for success.</returns>
+        private string AttemptToSet(Action action)
+        {
+            try
+            {
+                // First attempt at completing the action
+                action();
+
+                // Success so return an empty string
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                // SOmething went wrong so make a second attempt
+                try
+                {
+                    // Wait for 500ms
+                    Thread.Sleep(500);
+
+                    // Retry the action
+                    action();
+
+                    // Success so return an empty string
+                    return string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    // Failure. Return the exception as a string to be reported in the log
+                    return ex.ToString();
+                }
+            }
+        }
 
         private void CheckConnected(string identifier)
         {
