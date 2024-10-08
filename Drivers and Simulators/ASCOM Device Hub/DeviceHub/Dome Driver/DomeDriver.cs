@@ -468,24 +468,16 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Exception xcp = DomeManager.Status.GetException();
-
-					if ( xcp != null )
-					{
-						throw xcp;
-					}
-
-					retval = DomeManager.Status.Altitude;
+					retval = DomeManager.Altitude;
 					msg += $"{Utilities.DegreesToDMS( retval )}{_done}";
 				}
-				catch ( Exception )
-				{
-					msg += _failed;
-
-					throw;
-				}
-				finally
-				{
+                catch (Exception ex)
+                {
+                    msg += $"{_failed} - {ex.Message}";
+                    throw;
+                }
+                finally
+                {
 					LogMessage( name, msg );
 				}
 
@@ -505,24 +497,16 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Exception xcp = DomeManager.Status.GetException();
-
-					if ( xcp != null )
-					{
-						throw xcp;
-					}
-
-					retval = DomeManager.Status.AtHome;
+					retval = DomeManager.AtHome;
 					msg += $"{retval}{_done}";
 				}
-				catch ( Exception )
-				{
-					msg += _failed;
-
-					throw;
-				}
-				finally
-				{
+                catch (Exception ex)
+                {
+                    msg += $"{_failed} - {ex.Message}";
+                    throw;
+                }
+                finally
+                {
 					LogMessage( name, msg );
 				}
 
@@ -542,24 +526,16 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Exception xcp = DomeManager.Status.GetException();
-
-					if ( xcp != null )
-					{
-						throw xcp;
-					}
-
-					atPark = DomeManager.Status.AtPark;
+					atPark = DomeManager.AtPark;
 					msg += $"{atPark}{_done}";
 				}
-				catch ( Exception )
-				{
-					msg += _failed;
-
-					throw;
-				}
-				finally
-				{
+                catch (Exception ex)
+                {
+                    msg += $"{_failed} - {ex.Message}";
+                    throw;
+                }
+                finally
+                {
 					LogMessage( name, msg );
 				}
 
@@ -579,25 +555,16 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Exception xcp = DomeManager.Status.GetException();
-
-					if ( xcp != null )
-					{
-						throw xcp;
-					}
-
-					retval = DomeManager.Status.Azimuth;
+					retval = DomeManager.Azimuth;
 					msg += $"{Utilities.DegreesToDMS( retval )}{ _done}";
-
 				}
-				catch ( Exception )
-				{
-					msg += _failed;
-
-					throw;
-				}
-				finally
-				{
+                catch (Exception ex)
+                {
+                    msg += $"{_failed} - {ex.Message}";
+                    throw;
+                }
+                finally
+                {
 					LogMessage( name, msg );
 				}
 
@@ -938,7 +905,7 @@ namespace ASCOM.DeviceHub
 			CheckConnected( name );
 			CheckCapabilityForMethod( name, "CanPark", DomeManager.Capabilities.CanPark );
 
-			if ( DomeManager.Status.AtPark )
+			if ( DomeManager.AtPark )
 			{
 				return;
 			}
@@ -950,14 +917,13 @@ namespace ASCOM.DeviceHub
 				DomeManager.ParkTheDome();
 				msg += _done;
 			}
-			catch ( Exception )
-			{
-				msg += _failed;
-
-				throw;
-			}
-			finally
-			{
+            catch (Exception ex)
+            {
+                msg += $"{_failed} - {ex.Message}";
+                throw;
+            }
+            finally
+            {
 				LogMessage( name, msg );
 			}
 		}
@@ -1002,24 +968,16 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Exception xcp = DomeManager.Status.GetException();
-
-					if ( xcp != null )
-					{
-						throw xcp;
-					}
-
-					retval = DomeManager.Status.ShutterStatus;
+					retval = DomeManager.ShutterStatus;
 					msg += $"{retval}{_done}";
 				}
-				catch ( Exception )
-				{
-					msg += _failed;
-
-					throw;
-				}
-				finally
-				{
+                catch (Exception ex)
+                {
+                    msg += $"{_failed} - {ex.Message}";
+                    throw;
+                }
+                finally
+                {
 					LogMessage( name, msg );
 				}
 
@@ -1177,24 +1135,16 @@ namespace ASCOM.DeviceHub
 
 				try
 				{
-					Exception xcp = DomeManager.Status.GetException();
-
-					if ( xcp != null )
-					{
-						throw xcp;
-					}
-
-					retval = DomeManager.Status.Slewing;
+					retval = DomeManager.Slewing;
 					msg += $"{retval}{_done}";
 				}
-				catch ( Exception )
-				{
-					msg += _failed;
-
-					throw;
-				}
-				finally
-				{
+                catch (Exception ex)
+                {
+                    msg += $"{_failed} - {ex.Message}";
+                    throw;
+                }
+                finally
+                {
 					LogMessage( "Get Slewing:", msg );
 				}
 

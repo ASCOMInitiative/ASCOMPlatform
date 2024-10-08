@@ -504,20 +504,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = FocuserManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = FocuserManager.Status.IsMoving;
+                    retval = FocuserManager.IsMoving;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -703,20 +695,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = FocuserManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = FocuserManager.Status.Position;
+                    retval = FocuserManager.Position;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
@@ -869,20 +853,12 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = FocuserManager.Status.GetException();
-
-                    if (xcp != null)
-                    {
-                        throw xcp;
-                    }
-
-                    retval = FocuserManager.Status.Temperature;
+                    retval = FocuserManager.Temperature;
                     msg += $"{retval}{_done}";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    msg += _failed;
-
+                    msg += $"{_failed} - {ex.Message}";
                     throw;
                 }
                 finally
