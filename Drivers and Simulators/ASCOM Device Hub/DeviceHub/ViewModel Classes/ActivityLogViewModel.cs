@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -258,6 +259,22 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
+        int _numberOfLogEntries;
+        public int NumberOfLogEntries
+        {
+            get
+            {
+                return _numberOfLogEntries;
+            }
+            set
+            {
+                if (value != _numberOfLogEntries)
+                {
+                    _numberOfLogEntries = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         #endregion Change Notification Properties
 
@@ -374,6 +391,18 @@ namespace ASCOM.DeviceHub
 
                 LogContents = sb.ToString();
                 UpdateMemoryUsage();
+
+                // Calculate the number of log entries by counting the number of line feed characters.
+                // Scanning the string builder 'sb' variable rather than the string property 'LogContents' because it is way faster.
+                // Using a for loop because it is faster than using LINQ.
+                int count = 0;
+                Stopwatch sw = Stopwatch.StartNew();
+                for (int i = 0; i < sb.Length; i++)
+                {
+                    if (sb[i] == '\n') count++;
+                }
+
+                NumberOfLogEntries = count;
 
             }, CancellationToken.None, TaskCreationOptions.None, UISyncContext);
 

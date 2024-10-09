@@ -89,7 +89,10 @@
                  Text="{Binding LogContents, Mode=OneWay, NotifyOnTargetUpdated=True}" UndoLimit="0"  />
         <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource DevLabel}" Grid.ColumnSpan="2" Margin="0,25">
             <Label.Content>
-                <TextBlock Text="{Binding MemoryUsage, FallbackValue=Memory Usage: 1 MB, StringFormat=Memory Usage: {0:F3} MB, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                <TextBlock>
+                    <Run Text="{Binding MemoryUsage, FallbackValue=Memory Usage: Unknown, StringFormat=Memory Usage: {0:F3} MB, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                    <Run Text="{Binding NumberOfLogEntries, FallbackValue=(Log Entries: Unknown), StringFormat=(Log Entries: {0:N0}), ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                </TextBlock>
             </Label.Content>
         </Label>
         <Button Grid.Row="4" Grid.Column="2" Content="Close" HorizontalAlignment="Right" Height="60" Width="60" Margin="0,6,0,0" Style="{StaticResource CircleButton}"
