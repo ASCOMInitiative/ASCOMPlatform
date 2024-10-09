@@ -90,7 +90,7 @@
 							</listItem>
 							<listItem>
 								When connecting to an Alpaca device that cannot be reached, the Dynamic Clients now time out in about 4 seconds rather than the 10 second delay in Platform 6.
-								The quicker return on fail now also applies to the InterfaceVersion property, which some applications call before connecting, and which suffered from a 30 second 
+								The quicker return on fail now also applies to the InterfaceVersion property, which some applications call before connecting, and which suffered from a 30 second
 								delay before reporting a failed connection.
 							</listItem>
 						</list>
@@ -102,7 +102,17 @@
 								The activity log page now has a "Save Settings" button to save the current logging configuration, which will be restored when the activity log is next used.
 							</listItem>
 							<listItem>
+								The activity log now starts recording activity as soon as Device Hub is started, even if the activity log  is not visible, and limits capacity to about the most 
+								recent 1600 entries to prevent excessive memory consumption. In previous versions, activity that occurred before opening the activity log was not recorded.
+							</listItem>
+							<listItem>
+								A configuration option has been added that will automatically show the activity log when Device Hub starts.
+							</listItem>
+							<listItem>
 								The telescope rate offset fields and "Send to telescope" buttons are now enabled only when tracking at sidereal rate in line with the interface specification.
+							</listItem>
+							<listItem>
+								Device Hub now shuts down more quickly than previously.
 							</listItem>
 						</list>
 					</listItem>
@@ -129,16 +139,19 @@
 					<listItem>
 						Device Hub
 						<list class="bullet">
-							<listItem>Changed the default dome radius in the dome geometry configuration from 0.0 to 2000.0 to ensure that dome synchronisation works "out of the box".</listItem>
-							<listItem>When a device does not supply an expected numeric value, the displayed text is now "Unavailable" rather than "NaN".</listItem>
+							<listItem>
+								Hosted devices are now polled directly every time a client application asks for an operational property value such as Telescope.RightAscension.
+								The previous behaviour of returning cached values could result in incorrect values being returned to clients because the caches could be as much as 3 seconds (telescope) 
+								or 5 seconds (dome, focuser) out of date with current device values.
+							</listItem>
+							<listItem>The default dome radius in the dome geometry configuration has been changed from 0.0 to 2000.0 to ensure that dome synchronisation works "out of the box".</listItem>
+							<listItem>When a device does not supply an expected numeric value, the displayed text in the Device Hub is now "Unavailable" rather than "NaN".</listItem>
 						</list>
 					</listItem>
 					<listItem>
 						Diagnostics
 						<list class="bullet">
-							<listItem>
-								Diagnostics - Fixed a bug where a non-existent directory could cause an unexpected Diagnostics error.
-							</listItem>
+							<listItem>Fixed a bug where a non-existent directory could cause an unexpected Diagnostics error.</listItem>
 							<listItem>Fixed issues being reported when some telescope simulator settings were not at their default values.</listItem>
 						</list>
 					</listItem>

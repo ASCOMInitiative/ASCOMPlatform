@@ -37,6 +37,12 @@
 						A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.
 					</listItem>
 					<listItem>
+						Device Hub returns more accurate information about the state of hosted devices, enabling applications to respond more appropriately to device behaviour. 
+					</listItem>
+					<listItem>
+						Device Hub activity log management has also been improved.
+					</listItem>
+					<listItem>
 						An alert will be generated when a new Platform version is released.
 					</listItem>
 					<listItem>
