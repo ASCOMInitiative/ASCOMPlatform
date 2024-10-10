@@ -185,5 +185,18 @@ namespace ASCOM.DeviceHub
         {
             Globals.IsFocuserExpanded = false;
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Check whether the key being pressed is the F12 key
+            if (e.Key == Key.F12) // The F12 key is pressed
+            {
+                // Toggle the TopMost state so the main windows either will or will not stay on top.
+                Topmost = !Topmost;
+
+                // Flag the event as handled, so no further action is required by the application
+                e.Handled = true;
+            }
+        }
     }
 }

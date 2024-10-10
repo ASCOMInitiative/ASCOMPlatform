@@ -8,7 +8,7 @@
 		WindowStyle="ThreeDBorderWindow"
 		Background="{DynamicResource WindowBackgroundBrush}"
         Title="ASCOM Device Hub" Icon="/ASCOM.DeviceHub;component/Images/ASCOM.ico" ResizeMode="CanMinimize" 
-		LocationChanged="Window_LocationChanged" Loaded="Window_Loaded" SizeToContent="WidthAndHeight">
+		LocationChanged="Window_LocationChanged" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" KeyDown="Window_KeyDown">
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:TelescopeViewModel}">
             <local:TelescopeView />
