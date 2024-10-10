@@ -47,6 +47,17 @@ namespace ASCOM
         }
 
         /// <summary>
+        /// Create a not implemented exception using a provided member name, error message and inner exception
+        /// </summary>
+        /// <param name="memberName">The member name that threw the exception</param>
+        /// <param name="errorMessage">The error message</param>
+        /// <param name="innerException">An optional inner exception or null.</param>
+        public NotImplementedException(string memberName, string errorMessage, Exception innerException) : base(errorMessage, ErrorCodes.NotImplemented, innerException)
+        {
+            propertyOrMethod = memberName;
+        }
+
+        /// <summary>
         /// Added to keep Code analysis happy, please don't use it.
         /// </summary>
         public NotImplementedException() : base("Unspecified", ErrorCodes.NotImplemented)

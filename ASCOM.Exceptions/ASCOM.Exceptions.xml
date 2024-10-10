@@ -511,6 +511,14 @@
             <param name = "propertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
             <param name = "inner">The caught exception</param>
         </member>
+        <member name="M:ASCOM.NotImplementedException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Create a not implemented exception using a provided member name, error message and inner exception
+            </summary>
+            <param name="memberName">The member name that threw the exception</param>
+            <param name="errorMessage">The error message</param>
+            <param name="innerException">An optional inner exception or null.</param>
+        </member>
         <member name="M:ASCOM.NotImplementedException.#ctor">
             <summary>
             Added to keep Code analysis happy, please don't use it.
