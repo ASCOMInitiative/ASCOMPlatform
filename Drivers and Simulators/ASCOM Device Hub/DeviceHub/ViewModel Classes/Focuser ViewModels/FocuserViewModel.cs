@@ -180,7 +180,7 @@ namespace ASCOM.DeviceHub
 
 				if ( message != null )
 				{
-					ShowMessage( message, "Telescope Connection Error" );
+					ShowMessage( message, "Focuser Connection Error" );
 				}
 			}
 		}
