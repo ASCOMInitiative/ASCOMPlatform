@@ -337,34 +337,8 @@ namespace ASCOM.Utilities
                     string currentBuildNumber = regKey.GetValue("currentBuildNumber", "").ToString();
                     string ubr = regKey.GetValue("UBR", "").ToString();
 
-                    // Use the build num,ber to determine the OS version label
-                    string productVersionName = "Unknown OS version";
-                    try
-                    {
-                        int buildNumber = Int32.Parse(currentBuildNumber);
-
-                        // Select the appropriate OS product label based on the build number
-                        productVersionName = buildNumber switch
-                        {
-                            int build when build < 10000 => "Earlier than Windows 10",
-                            int build when (build >= 10000) & (build < 19041) => "Windows 10",
-                            19041 => "Windows 10 (2004)",
-                            19042 => "Windows 10 (20H2)",
-                            19043 => "Windows 10 (21H1)",
-                            19044 => "Windows 10 (21H2)",
-                            19045 => "Windows 10 (22H2)",
-                            22000 => "Windows 11 (21H2)",
-                            22621 => "Windows 11 (22H2)",
-                            22631 => "Windows 11 (23H2)",
-                            26100 => "Windows 11 (24H2)",
-                            _ => $"Windows 11 or later"
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        TL.LogMessageCrLf("OSVersion", $"Exception parsing OS version - {ex.Message}\r\n{ex}");
-                        TL.LogMessageCrLf("OSVersion", $"Major version number: {currentMajorVersionNumber}, Minor version number: {currentMinorVersionNumber}, Build number: {currentBuildNumber}");
-                    }
+                    // Use the build number to determine the OS version label through an ASCOM Library function.
+                    string productVersionName = ASCOM.Com.PlatformUtilities.OSBuildName();
 
                     TL.LogMessage("OS Version", $"{productVersionName} {currentType} {currentMajorVersionNumber}.{currentMinorVersionNumber}.{currentBuildNumber}.{ubr}");
                     TL.BlankLine();

@@ -5927,7 +5927,7 @@ Check for Platform 4.1
 {A235EB25-AD15-4101-AC7F-709537082D24}
 Check for Platform 4.1
 {A90494BD-6865-4B79-BEDB-8A75C209CB71}
-Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform 6 install
+Only try and remove Platforms 4 and  5 if we are not upgrading a previous Platform install
 {0E3B2602-6FD9-4E8C-A479-8A7660F79038}
 Remove Platform 5 and 5.5 if we are in initial install mode and not Maintenance or Upgrade modes
 {FF3486BF-EA1D-42DA-BD9A-17146E7DA813}
@@ -8207,7 +8207,7 @@ STARTEDFROMCONTROLPANEL$MYAH$MYAH$FALSE
 FALSE
 {7F9E1618-A248-4DC6-A11E-E1C16351BF88}
 FINISH_CONTEXT$MYAH$MYAH$FALSE
-The user guide is in your Start / ASCOM Platform 6 folder.
+The user guide is in your Start / ASCOM Platform folder.
 {945FCAA1-C29F-4810-8835-84F5B81899BC}
 NATIVE_ENGINE$MYAH$MYAH$FALSE
 TRUE
@@ -16399,7 +16399,7 @@ FALSE
 TRUE
 {BB73ACBB-49B8-4599-9EE8-7C47E4767929}
 $SETUPLOG$
-$TIME$ Uninstalling old Platform 6 - $UNINSTALLER$
+$TIME$ Uninstalling old Platform - $UNINSTALLER$
 FALSE
 TRUE
 {86D219E7-CEDE-4108-A685-4CCD45E7146E}

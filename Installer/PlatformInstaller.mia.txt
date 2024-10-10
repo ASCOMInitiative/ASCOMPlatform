@@ -1430,6 +1430,9 @@ Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Semver.dll to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Octokit.dll to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.COM.dll to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Common.dll to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Tools.dll to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
