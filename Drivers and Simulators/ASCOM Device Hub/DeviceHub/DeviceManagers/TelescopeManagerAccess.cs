@@ -103,7 +103,6 @@ namespace ASCOM.DeviceHub
             set
             {
                 ActivityMessageTypes msgType = ActivityMessageTypes.Other;
-                LogActivityStart(msgType, "Set Connected flag -> {0}", value);
 
                 try
                 {
@@ -136,14 +135,14 @@ namespace ASCOM.DeviceHub
 
                         if (value == isConnected)
                         {
-                            LogActivityEnd(msgType, value ? "(connected)" : "(disconnected)");
+                            LogActivityLine(msgType, $"Set Connected flag -> {value} {(value ? "(connected)" : "(disconnected)")}");
                             LogActivityLine(msgType, "{0} took {1} milliseconds."
                                             , (value) ? "Connection" : "Disconnection"
                                             , i * msDelay);
                         }
                         else
                         {
-                            LogActivityEnd(msgType, Failed);
+                            LogActivityLine(msgType, $"Set Connected flag -> {value} {Failed}");
                             LogActivityLine(msgType, "{0} failed after {1} milliseconds"
                                             , (value) ? "Connection" : "Disconnection"
                                             , numTries * msDelay);
@@ -151,12 +150,12 @@ namespace ASCOM.DeviceHub
                     }
                     else
                     {
-                        LogActivityEnd(msgType, "(no change)");
+                        LogActivityLine(msgType, $"Set Connected flag -> {value} (no change)");
                     }
                 }
                 catch (Exception xcp)
                 {
-                    LogActivityEnd(msgType, Failed);
+                    LogActivityLine(msgType, $"Set Connected flag -> {value} {Failed}");
                     LogActivityLine(msgType, xcp.ToString());
 
                     throw;

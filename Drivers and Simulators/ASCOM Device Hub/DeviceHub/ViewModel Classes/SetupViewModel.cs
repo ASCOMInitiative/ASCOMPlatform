@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASCOM.DeviceHub.MvvmMessenger;
+using System;
 using System.Windows.Input;
 
 namespace ASCOM.DeviceHub
@@ -18,7 +19,7 @@ namespace ASCOM.DeviceHub
 			KeepWindowOnTop = Globals.AlwaysOnTop;
 			UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag;
 			ShowActivityLogWhenStarted = Globals.ShowActivityLogWhenStarted;
-
+			WriteActivityLogToDisk=Globals.WriteLogActivityToDisk;
 			TelescopeSetupVm = new TelescopeSetupViewModel();
 			DomeSetupVm = new DomeSetupViewModel();
 			FocuserSetupVm = new FocuserSetupViewModel();
@@ -38,6 +39,21 @@ namespace ASCOM.DeviceHub
                 if (value != _showActivityLogWhenStarted)
                 {
                     _showActivityLogWhenStarted = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _writeActivityLogToDisk;
+
+        public bool WriteActivityLogToDisk
+        {
+            get { return _writeActivityLogToDisk; }
+            set
+            {
+                if (value != _writeActivityLogToDisk)
+                {
+                    _writeActivityLogToDisk = value;
                     OnPropertyChanged();
                 }
             }
@@ -236,10 +252,12 @@ namespace ASCOM.DeviceHub
 			Globals.AlwaysOnTop = KeepWindowOnTop;
 			Globals.UseCompositeSlewingFlag = UseCompositeSlewingFlag;
 			Globals.ShowActivityLogWhenStarted = ShowActivityLogWhenStarted;
+			Globals.WriteLogActivityToDisk=WriteActivityLogToDisk;
 			AppSettingsManager.SaveAppSettings();
-		}
+            Messenger.Default.Send(new ApplicationSettingsUpdatedMessage());
+        }
 
-		private void SaveTelescopeSettings()
+        private void SaveTelescopeSettings()
 		{
 			// Read the current settings and update them with the changes
 			// to preserve the logging flag.

@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 
 using ASCOM.DeviceHub.MvvmMessenger;
+using ASCOM.Utilities;
 
 namespace ASCOM.DeviceHub
 {
@@ -27,21 +28,26 @@ namespace ASCOM.DeviceHub
         private CancellationTokenSource BufferingCts { get; set; }
         private IActivityLogService ActivityLogService { get; set; }
 
-        public ActivityLogViewModel()
-            : base("Activity Log")
+        private TraceLogger TL;
+
+        public ActivityLogViewModel() : base("Activity Log")
         {
+            // Create an activity log file if required
+            if (Globals.WriteLogActivityToDisk)
+                CreateActivityLog();
+
             _isActive = false;
             _logContents = String.Empty;
             _allLoggingPaused = false;
             _pausedCommandText = "Pause";
             UpdateMemoryUsage();
             Messenger.Default.Register<ActivityMessage>(this, (action) => AppendToLog(action));
+            Messenger.Default.Register<ApplicationSettingsUpdatedMessage>(this, (action) => ApplicationSettingsUpdatedEventHandler(action));
             UISyncContext = TaskScheduler.FromCurrentSynchronizationContext();
             DataBuffer = new StringBuilder();
 
             BufferingCts = new CancellationTokenSource();
-            Task.Factory.StartNew(() => AppendBufferToLog(BufferingCts.Token),
-                                        BufferingCts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            Task.Factory.StartNew(() => AppendBufferToLog(BufferingCts.Token), BufferingCts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
             ActivityLogService = ServiceContainer.Instance.GetService<IActivityLogService>();
 
@@ -54,6 +60,14 @@ namespace ASCOM.DeviceHub
             EnableParametersLogging = Globals.ActivityLogParameters;
             EnableCapabilitiesLogging = Globals.ActivityLogCapabilities;
             EnableOthersLogging = Globals.ActivityLogOtherActivity;
+        }
+
+        private void CreateActivityLog()
+        {
+            TL = new TraceLogger("", "DeviceHub.Activity");
+            TL.Enabled = Globals.WriteLogActivityToDisk;
+            TL.LogMessage("CreateActivityLog", "Logger created");
+            TL.LogMessage("", "");
         }
 
         private bool _isActive;
@@ -309,9 +323,34 @@ namespace ASCOM.DeviceHub
                     lock (_bufferLock)
                     {
                         DataBuffer.Append(newText);
+
+                        // Write the message to the activity log file.
+                        // The incoming message is parsed to extract the core message and discard the time stamp and device type prefixes before being logged
+
+                        // Locate the position of the '-' separator character
+                        int spacePosition = newText.IndexOf("-");
+
+                        // Create a string builder from the message having stripped any trailing carriage return and line feed characters
+                        StringBuilder textSubset = new StringBuilder(newText.TrimEnd('\r', '\n'));
+
+                        // Discard everything before the '-' separator, the '-' separator itself, and the following space if these are present
+                        if ((spacePosition >= 0) & (spacePosition <= textSubset.Length - 3))
+                            textSubset = textSubset.Remove(0, spacePosition + 2);
+
+                        // Write the message to the log file
+                        TL?.LogMessageCrLf($"{action.DeviceType}", textSubset.ToString());
                     }
                 }
             }
+        }
+
+        private void ApplicationSettingsUpdatedEventHandler(ApplicationSettingsUpdatedMessage message)
+        {
+            // Create the activity log if required
+            if (Globals.WriteLogActivityToDisk & (TL is null))
+                CreateActivityLog();
+
+            TL.Enabled = Globals.WriteLogActivityToDisk;
         }
 
         private void AppendBufferToLog(CancellationToken token)
@@ -423,6 +462,14 @@ namespace ASCOM.DeviceHub
             _clearLogCommand = null;
             _copyLogCommand = null;
             _hideLogCommand = null;
+
+            try
+            {
+                TL?.LogMessage("Dispose", "Closing activity log");
+                TL?.Dispose();
+                TL = null;
+            }
+            catch (Exception) { }
         }
 
         #endregion Helper Methods

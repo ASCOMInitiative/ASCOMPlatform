@@ -63,6 +63,7 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -87,8 +88,11 @@
 							  ToolTip="When the dome is slaved to the telescope, both devices report Slewing = True while either device is slewing."
 							  IsChecked="{Binding UseCompositeSlewingFlag}" />
                         <CheckBox Grid.Row="5" Grid.Column="0" Margin="10,6" Content="Show Activity Log When Started" Foreground="{DynamicResource NormalTextBrush}" 								  
-							  ToolTip="When the dome is slaved to the telescope, both devices report Slewing = True while either device is slewing."
+							  ToolTip="Displays the activity log immediately Device Hub is started."
 							  IsChecked="{Binding ShowActivityLogWhenStarted}" />
+                        <CheckBox Grid.Row="6" Grid.Column="0" Margin="10,6" Content="Write Activity Log to Disk" Foreground="{DynamicResource NormalTextBrush}" 								  
+							  ToolTip="Writes activity log entries to a log file as well as displaying them in the activity log window.&#x0a;The log file name format is: ASCOM.DeviceHub.Activity.HHmm.ssffff.txt"
+							  IsChecked="{Binding WriteActivityLogToDisk}" />
                     </Grid>
 				</Grid>
 			</TabItem>
