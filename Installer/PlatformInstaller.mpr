@@ -2954,7 +2954,7 @@ ASCOM Platform 7.0
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{7645F330-F2A1-4402-AA4C-5FE6702A780D}
+{A30D95CF-EA3E-4B0D-AE2B-634F1692BB97}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -2963,7 +2963,7 @@ Copyright © 1998-2024, The ASCOM Initiative. All rights reserved.
 FALSE
 AscomPlatform700
 TRUE
-TRUE
+FALSE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer
