@@ -63,8 +63,8 @@
 		<Content Include="ASCOM.ico" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Com.Components" Version="2.0.4" />
-	  <PackageReference Include="ASCOM.Tools" Version="2.0.4" />
+	  <PackageReference Include="ASCOM.Com.Components" Version="2.0.5" />
+	  <PackageReference Include="ASCOM.Tools" Version="2.0.5" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities.csproj" />
