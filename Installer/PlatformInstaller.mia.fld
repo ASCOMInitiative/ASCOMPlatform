@@ -4,10 +4,20 @@ Remove 64bit components
 Remove 32bit components
 Maintenance Dialogue
 Clean up any remaining simulator COM entries
-Install MSI support if required
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
 Post install activities - 64bit only
 Post install activities - 32bit only
-Post install activities - 32bit and 64bit
+Check Application Requirements
+Start installation
+Remove Previous Platform install if present
+Remove any items left from previous instals
+Remove Previous Platforms 4 and 5 if present
+Uninstall items installed by this installer
+Install Platform files
+Set Registry Keys
+Create shortcuts
+Validate installation
+Install complete dialogue
+Install MSI support if required
