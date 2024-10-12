@@ -106,6 +106,9 @@
 								recent 1600 entries to prevent excessive memory consumption. In previous versions, activity that occurred before opening the activity log was not recorded.
 							</listItem>
 							<listItem>
+								The activity log can now optionally be written to disk.
+							</listItem>
+							<listItem>
 								A configuration option has been added that will automatically show the activity log when Device Hub starts.
 							</listItem>
 							<listItem>
@@ -113,6 +116,9 @@
 							</listItem>
 							<listItem>
 								Device Hub now shuts down more quickly than previously.
+							</listItem>
+							<listItem>
+								The F12 key now toggles the Device Hub "Keep on top" state.
 							</listItem>
 						</list>
 					</listItem>
@@ -153,6 +159,7 @@
 						<list class="bullet">
 							<listItem>Fixed a bug where a non-existent directory could cause an unexpected Diagnostics error.</listItem>
 							<listItem>Fixed issues being reported when some telescope simulator settings were not at their default values.</listItem>
+							<listItem>The full Windows 10/11 version name e.g. "Windows 11 24H2" is now displayed rather than "Windows 10".</listItem>
 						</list>
 					</listItem>
 					<listItem>Chooser - Fixed exception when starting the Alpaca device manager application when no device was selected in the Chooser drop-down list.</listItem>
