@@ -1436,16 +1436,11 @@ Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions
  
 Comment: Platform 6 Tools
 Install Files ..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\*.dll to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
+Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
 Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Semver.dll to $TARGETDIR$\Tools
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Octokit.dll to $TARGETDIR$\Tools
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.COM.dll to $TARGETDIR$\Tools
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Common.dll to $TARGETDIR$\Tools
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Tools.dll to $TARGETDIR$\Tools
-Install Files ..\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
 Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
 Install Files ..\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64

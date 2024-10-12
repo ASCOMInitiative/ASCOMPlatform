@@ -1,15 +1,10 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
-Start installation
 Install complete dialogue
 Check Application Pre-Requisites
 Set Registry Keys
 Remove Previous Platform install if present
-Uninstall items installed by this installer
-Remove 64bit components
-Remove Previous Platforms 4 and 5 if present
 Create shortcuts
-Remove 32bit components
 Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
@@ -17,7 +12,7 @@ Remove any items left from previous instals
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
-Install Platform files
 Post install activities - 64bit only
 Post install activities - 32bit only
 Validate installation
+Remove 32bit components
