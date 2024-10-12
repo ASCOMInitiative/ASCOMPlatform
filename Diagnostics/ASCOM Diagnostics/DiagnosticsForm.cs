@@ -1130,71 +1130,56 @@ namespace ASCOM.Utilities
             switch (astronomyApplication)
             {
                 case AstronomyApplication.ACPApplication:
-                    {
-                        GetApplicationViaAppid(astronomyApplication, "acp.exe");
-                        break;
-                    }
+                    GetApplicationViaAppid(astronomyApplication, "acp.exe");
+                    break;
+
                 case AstronomyApplication.ACPFiles:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "ACP Obs Control");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "ACP Obs Control");
+                    break;
+
                 case AstronomyApplication.Alcyone:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "Alcyone");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "Alcyone");
+                    break;
+
                 case AstronomyApplication.CCDWare:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "CCDWare");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "CCDWare");
+                    break;
+
                 case AstronomyApplication.DiffractionLtd:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "Diffraction Limited");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "Diffraction Limited");
+                    break;
+
                 case AstronomyApplication.FocusMax:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "FocusMax");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "FocusMax");
+                    break;
+
                 case AstronomyApplication.GeminiControlCenter:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "Gemini Control Center");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "Gemini Control Center");
+                    break;
+
                 case AstronomyApplication.MaximDL:
-                    {
-                        GetApplicationViaProgID(astronomyApplication, "Maxim.Application");
-                        break;
-                    }
+                    GetApplicationViaProgID(astronomyApplication, "Maxim.Application");
+                    break;
+
                 case AstronomyApplication.Pinpoint:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "Pinpoint");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "Pinpoint");
+                    break;
+
                 case AstronomyApplication.StarryNight:
-                    {
-                        GetApplicationViaSubDirectories(astronomyApplication, "*Starry Night*");
-                        break;
-                    }
+                    GetApplicationViaSubDirectories(astronomyApplication, "*Starry Night*");
+                    break;
+
                 case AstronomyApplication.TheSkyX:
-                    {
-                        GetApplicationViaProgID(astronomyApplication, "TheSkyXAdaptor.TheSky");
-                        break;
-                    }
+                    GetApplicationViaProgID(astronomyApplication, "TheSkyXAdaptor.TheSky");
+                    break;
+
                 case AstronomyApplication.SWBisque:
-                    {
-                        GetApplicationViaDirectory(astronomyApplication, "Software Bisque");
-                        break;
-                    }
+                    GetApplicationViaDirectory(astronomyApplication, "Software Bisque");
+                    break;
 
                 default:
-                    {
-                        LogError("ScanApplication", "Unimplemented application test for: " + astronomyApplication.ToString());
-                        break;
-                    }
+                    LogError("ScanApplication", "Unimplemented application test for: " + astronomyApplication.ToString());
+                    break;
             }
         }
 
@@ -1216,7 +1201,7 @@ namespace ASCOM.Utilities
             }
             try
             {
-                Directories = [.. Directory.GetDirectories(PathShell.ToString(), appDirectory, SearchOption.TopDirectoryOnly)];
+                Directories = Directory.GetDirectories(PathShell.ToString(), appDirectory, SearchOption.TopDirectoryOnly).ToList<string>();
                 foreach (string Dir in Directories)
                     GetApplicationViaDirectory(astronomyApplication, Path.GetFileName(Dir));
             }
@@ -1250,8 +1235,9 @@ namespace ASCOM.Utilities
             AppPath = PathShell.ToString() + @"\" + appDirectory;
             try
             {
-                Executables = [.. Directory.GetFiles(AppPath, "*.exe", SearchOption.AllDirectories)];
-                Executables.AddRange([.. Directory.GetFiles(AppPath, "*.dll", SearchOption.AllDirectories)]);
+                Executables = Directory.GetFiles(AppPath, "*.exe", SearchOption.AllDirectories).ToList<string>();
+                Executables.AddRange(Directory.GetFiles(AppPath, "*.dll", SearchOption.AllDirectories));
+
                 if (Executables.Count == 0) // No executables found
                 {
                     TL.LogMessage("ScanApplication", "Application " + astronomyApplication.ToString() + " not found in " + AppPath);
@@ -1294,7 +1280,6 @@ namespace ASCOM.Utilities
                     FileName = FileName.Trim(['"']); // TrimChars)
                     if (!string.IsNullOrEmpty(FileName)) // We have a file name so see if it exists
                     {
-
                         if (File.Exists(FileName)) // Get details
                         {
                             TL.LogMessage("ScanApplication", "Found " + Application.ToString());
