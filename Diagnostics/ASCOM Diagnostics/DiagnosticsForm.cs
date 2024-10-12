@@ -1097,7 +1097,7 @@ namespace ASCOM.Utilities
 
         }
 
-        private enum ApplicationList
+        private enum AstronomyApplication
         {
             ACPApplication,
             ACPFiles,
@@ -1117,90 +1117,94 @@ namespace ASCOM.Utilities
         {
             Status("Scanning Applications");
             TL.LogMessage("ScanApplications", "Starting scan");
-            foreach (ApplicationList App in Enum.GetValues(typeof(ApplicationList)))
+            foreach (AstronomyApplication App in Enum.GetValues(typeof(AstronomyApplication)))
                 ScanApplication(App);
             Status("");
             Action("");
         }
 
-        private void ScanApplication(ApplicationList Application)
+        private void ScanApplication(AstronomyApplication astronomyApplication)
         {
-            Action(Application.ToString());
-            switch (Application)
+            Action(astronomyApplication.ToString());
+
+            switch (astronomyApplication)
             {
-                case ApplicationList.ACPApplication:
+                case AstronomyApplication.ACPApplication:
                     {
-                        GetApplicationViaAppid(Application, "acp.exe");
+                        GetApplicationViaAppid(astronomyApplication, "acp.exe");
                         break;
                     }
-                case ApplicationList.ACPFiles:
+                case AstronomyApplication.ACPFiles:
                     {
-                        GetApplicationViaDirectory(Application, "ACP Obs Control");
+                        GetApplicationViaDirectory(astronomyApplication, "ACP Obs Control");
                         break;
                     }
-                case ApplicationList.Alcyone:
+                case AstronomyApplication.Alcyone:
                     {
-                        GetApplicationViaDirectory(Application, "Alcyone");
+                        GetApplicationViaDirectory(astronomyApplication, "Alcyone");
                         break;
                     }
-                case ApplicationList.CCDWare:
+                case AstronomyApplication.CCDWare:
                     {
-                        GetApplicationViaDirectory(Application, "CCDWare");
+                        GetApplicationViaDirectory(astronomyApplication, "CCDWare");
                         break;
                     }
-                case ApplicationList.DiffractionLtd:
+                case AstronomyApplication.DiffractionLtd:
                     {
-                        GetApplicationViaDirectory(Application, "Diffraction Limited");
+                        GetApplicationViaDirectory(astronomyApplication, "Diffraction Limited");
                         break;
                     }
-                case ApplicationList.FocusMax:
+                case AstronomyApplication.FocusMax:
                     {
-                        GetApplicationViaDirectory(Application, "FocusMax");
+                        GetApplicationViaDirectory(astronomyApplication, "FocusMax");
                         break;
                     }
-                case ApplicationList.GeminiControlCenter:
+                case AstronomyApplication.GeminiControlCenter:
                     {
-                        GetApplicationViaDirectory(Application, "Gemini Control Center");
+                        GetApplicationViaDirectory(astronomyApplication, "Gemini Control Center");
                         break;
                     }
-                case ApplicationList.MaximDL:
+                case AstronomyApplication.MaximDL:
                     {
-                        GetApplicationViaProgID(Application, "Maxim.Application");
+                        GetApplicationViaProgID(astronomyApplication, "Maxim.Application");
                         break;
                     }
-                case ApplicationList.Pinpoint:
+                case AstronomyApplication.Pinpoint:
                     {
-                        GetApplicationViaDirectory(Application, "Pinpoint");
+                        GetApplicationViaDirectory(astronomyApplication, "Pinpoint");
                         break;
                     }
-                case ApplicationList.StarryNight:
+                case AstronomyApplication.StarryNight:
                     {
-                        GetApplicationViaSubDirectories(Application, "*Starry Night*");
+                        GetApplicationViaSubDirectories(astronomyApplication, "*Starry Night*");
                         break;
                     }
-                case ApplicationList.TheSkyX:
+                case AstronomyApplication.TheSkyX:
                     {
-                        GetApplicationViaProgID(Application, "TheSkyXAdaptor.TheSky");
+                        GetApplicationViaProgID(astronomyApplication, "TheSkyXAdaptor.TheSky");
                         break;
                     }
-                case ApplicationList.SWBisque:
+                case AstronomyApplication.SWBisque:
                     {
-                        GetApplicationViaDirectory(Application, "Software Bisque");
+                        GetApplicationViaDirectory(astronomyApplication, "Software Bisque");
                         break;
                     }
 
                 default:
                     {
-                        LogError("ScanApplication", "Unimplemented application test for: " + Application.ToString());
+                        LogError("ScanApplication", "Unimplemented application test for: " + astronomyApplication.ToString());
                         break;
                     }
             }
         }
 
-        private void GetApplicationViaSubDirectories(ApplicationList Application, string AppDirectory)
+        private void GetApplicationViaSubDirectories(AstronomyApplication astronomyApplication, string appDirectory)
         {
             var PathShell = new StringBuilder(260);
             List<string> Directories;
+
+            TL.LogMessage("GetAppViaSubDirectories", $"Scanning for astronomy application: {astronomyApplication} in folder {appDirectory}");
+
             if (Utilities.Global.ApplicationBits() == Bitness.Bits64)
             {
                 // Find the program files (x86) path
@@ -1212,13 +1216,13 @@ namespace ASCOM.Utilities
             }
             try
             {
-                Directories = [.. Directory.GetDirectories(PathShell.ToString(), AppDirectory, SearchOption.TopDirectoryOnly)];
+                Directories = [.. Directory.GetDirectories(PathShell.ToString(), appDirectory, SearchOption.TopDirectoryOnly)];
                 foreach (string Dir in Directories)
-                    GetApplicationViaDirectory(Application, Path.GetFileName(Dir));
+                    GetApplicationViaDirectory(astronomyApplication, Path.GetFileName(Dir));
             }
             catch (DirectoryNotFoundException)
             {
-                TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not installed in " + PathShell.ToString() + @"\" + AppDirectory);
+                TL.LogMessage("ScanApplication", "Application " + astronomyApplication.ToString() + " not installed in " + PathShell.ToString() + @"\" + appDirectory);
             }
             catch (Exception ex)
             {
@@ -1226,11 +1230,14 @@ namespace ASCOM.Utilities
             }
         }
 
-        private void GetApplicationViaDirectory(ApplicationList Application, string AppDirectory)
+        private void GetApplicationViaDirectory(AstronomyApplication astronomyApplication, string appDirectory)
         {
             var PathShell = new StringBuilder(260);
             string AppPath;
             List<string> Executables;
+
+            TL.LogMessage("GetAppViaDirectory", $"Scanning for astronomy application: {astronomyApplication} in folder {appDirectory}");
+
             if (Utilities.Global.ApplicationBits() == Bitness.Bits64)
             {
                 // Find the program files (x86) path
@@ -1240,18 +1247,18 @@ namespace ASCOM.Utilities
             {
                 SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES, false);
             }
-            AppPath = PathShell.ToString() + @"\" + AppDirectory;
+            AppPath = PathShell.ToString() + @"\" + appDirectory;
             try
             {
                 Executables = [.. Directory.GetFiles(AppPath, "*.exe", SearchOption.AllDirectories)];
                 Executables.AddRange([.. Directory.GetFiles(AppPath, "*.dll", SearchOption.AllDirectories)]);
                 if (Executables.Count == 0) // No executables found
                 {
-                    TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not found in " + AppPath);
+                    TL.LogMessage("ScanApplication", "Application " + astronomyApplication.ToString() + " not found in " + AppPath);
                 }
                 else // Some executables were found
                 {
-                    TL.LogMessage("ScanApplication", "Found " + Application.ToString());
+                    TL.LogMessage("ScanApplication", "Found " + astronomyApplication.ToString());
 
                     foreach (string Executable in Executables)
                         FileDetails(Path.GetDirectoryName(Executable) + @"\", Path.GetFileName(Executable));
@@ -1259,7 +1266,7 @@ namespace ASCOM.Utilities
             }
             catch (DirectoryNotFoundException)
             {
-                TL.LogMessage("ScanApplication", "Application " + Application.ToString() + " not installed in " + AppPath);
+                TL.LogMessage("ScanApplication", "Application " + astronomyApplication.ToString() + " not installed in " + AppPath);
             }
             catch (Exception ex)
             {
@@ -1267,7 +1274,7 @@ namespace ASCOM.Utilities
             }
         }
 
-        private void GetApplicationViaProgID(ApplicationList Application, string ProgID)
+        private void GetApplicationViaProgID(AstronomyApplication Application, string ProgID)
         {
             RegistryAccess Reg;
             RegistryKey AppKey;
@@ -1316,7 +1323,7 @@ namespace ASCOM.Utilities
 
         }
 
-        private void GetApplicationViaAppid(ApplicationList Application, string Executable)
+        private void GetApplicationViaAppid(AstronomyApplication Application, string Executable)
         {
             RegistryAccess Reg;
             RegistryKey AppKey;
@@ -10003,7 +10010,7 @@ namespace ASCOM.Utilities
         {
             NNonMatches += 1;
             ErrorList.Add(Section + " - " + Message);
-            TL.LogMessage(Section, Message);
+            TL.LogMessageCrLf(Section, Message);
         }
 
         private void ScanGac()
