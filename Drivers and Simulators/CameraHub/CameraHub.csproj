@@ -75,8 +75,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassFactory.cs" />
-    <Compile Include="Hub\CameraHubDriver.cs" />
-    <Compile Include="Hub\CameraHub..cs" />
+    <Compile Include="Camera Driver\CameraDriver.cs" />
+    <Compile Include="Camera Driver\CameraHardware..cs" />
+    <Compile Include="FilterWheel Driver\FilterWheelDriver.cs" />
+    <Compile Include="FilterWheel Driver\FilterWheelHardware.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +157,7 @@
       <Version>2.0.5</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

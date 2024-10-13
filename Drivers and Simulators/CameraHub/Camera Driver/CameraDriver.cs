@@ -6,7 +6,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.CameraHub.Camera
+namespace ASCOM.CameraHub
 {
     /// <summary>
     /// ASCOM Driver for the Camera Hub.
@@ -14,12 +14,11 @@ namespace ASCOM.CameraHub.Camera
     [ComVisible(true)]
     [Guid("c60093ec-65a2-4604-91df-998e208d6b14")]
     [ProgId("ASCOM.CameraHub.Camera")]
-    [ServedClassName("ASCOM Camera Hub")] // Driver description that appears in the Chooser, customise as required
+    [ServedClassName("ASCOM Camera Hub Camera")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
-    public class Camera : ReferenceCountedObjectBase, ASCOM.DeviceInterface.ICameraV4, IDisposable
+    public class Camera : ReferenceCountedObjectBase, ICameraV4, IDisposable
     {
-        internal static string hubProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ProgId attribute in the class initialiser.
-        internal static string hubDescription; // Chooser descriptive text. The value is retrieved from the ServedClassName attribute in the class initialiser.
+        internal static string cameraDescription; // Chooser descriptive text. The value is retrieved from the ServedClassName attribute in the class initialiser.
 
         private Guid uniqueId; // A unique ID for this instance of the driver
 
@@ -28,33 +27,37 @@ namespace ASCOM.CameraHub.Camera
 
         #region Initialisation and Dispose
 
+        static Camera()
+        {
+            // Pull the ProgID from the ProgID class attribute.
+            Attribute attr = Attribute.GetCustomAttribute(typeof(Camera), typeof(ProgIdAttribute));
+            CameraProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
+                                                                                // Pull the display name from the ServedClassName class attribute.
+            attr = Attribute.GetCustomAttribute(typeof(Camera), typeof(ServedClassNameAttribute));
+            cameraDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
+
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ASCOM.CameraHub"/> class. Must be public to successfully register for COM.
+        /// Initializes a new instance of the <see cref="ASCOM.Camera"/> class. Must be public to successfully register for COM.
         /// </summary>
         public Camera()
         {
             try
             {
-                // Pull the ProgID from the ProgID class attribute.
-                Attribute attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ProgIdAttribute));
-                hubProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
-
-                // Pull the display name from the ServedClassName class attribute.
-                attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ServedClassNameAttribute));
-                hubDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
 
                 // LOGGING CONFIGURATION
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "CameraHub.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl = new TraceLogger("", "CameraHub.Camera.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
                 SetTraceState();
 
                 // Initialise the hardware if required
-                CameraHub.InitialiseHub();
+                CameraHardware.InitialiseCamera();
 
                 LogMessage("Camera", "Starting driver initialisation");
-                LogMessage("Camera", $"ProgID: {hubProgId}, Description: {hubDescription}");
+                LogMessage("Camera", $"ProgID: {CameraProgId}, Description: {cameraDescription}");
 
                 // Create a unique ID to identify this driver instance
                 uniqueId = Guid.NewGuid();
@@ -168,24 +171,7 @@ namespace ASCOM.CameraHub.Camera
         /// </summary>
         public void SetupDialog()
         {
-            try
-            {
-                if (CameraHub.IsConnected(uniqueId)) // Don't show if already connected
-                {
-                    MessageBox.Show("Already connected, just press OK");
-                }
-                else // Show dialogue
-                {
-                    LogMessage("SetupDialog", $"Calling SetupDialog.");
-                    CameraHub.SetupDialog();
-                    LogMessage("SetupDialog", $"Completed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                LogMessage("SetupDialog", $"Threw an exception: \r\n{ex}");
-                throw;
-            }
+            Server.SetupDialog();
         }
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -197,7 +183,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected($"SupportedActions");
-                    ArrayList actions = CameraHub.SupportedActions;
+                    ArrayList actions = CameraHardware.SupportedActions;
                     LogMessage("SupportedActions", $"Returning {actions.Count} actions.");
                     return actions;
                 }
@@ -222,7 +208,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected($"Action {actionName} - {actionParameters}");
                 LogMessage("", $"Calling Action: {actionName} with parameters: {actionParameters}");
-                string actionResponse = CameraHub.Action(actionName, actionParameters);
+                string actionResponse = CameraHardware.Action(actionName, actionParameters);
                 LogMessage("Action", $"Completed.");
                 return actionResponse;
             }
@@ -248,7 +234,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected($"CommandBlind: {command}, Raw: {raw}");
                 LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
-                CameraHub.CommandBlind(command, raw);
+                CameraHardware.CommandBlind(command, raw);
                 LogMessage("CommandBlind", $"Completed.");
             }
             catch (Exception ex)
@@ -276,7 +262,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected($"CommandBool: {command}, Raw: {raw}");
                 LogMessage("CommandBlind", $"Calling method - Command: {command}, Raw: {raw}");
-                bool commandBoolResponse = CameraHub.CommandBool(command, raw);
+                bool commandBoolResponse = CameraHardware.CommandBool(command, raw);
                 LogMessage("CommandBlind", $"Returning: {commandBoolResponse}.");
                 return commandBoolResponse;
             }
@@ -305,7 +291,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected($"CommandString: {command}, Raw: {raw}");
                 LogMessage("CommandString", $"Calling method - Command: {command}, Raw: {raw}");
-                string commandStringResponse = CameraHub.CommandString(command, raw);
+                string commandStringResponse = CameraHardware.CommandString(command, raw);
                 LogMessage("CommandString", $"Returning: {commandStringResponse}.");
                 return commandStringResponse;
             }
@@ -328,7 +314,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     // Return the driver's connection state which could be different to the hardware connected state, because there may be other client connections still active.
-                    bool connectedState = CameraHub.IsConnected(uniqueId);
+                    bool connectedState = CameraHardware.IsConnected(uniqueId);
                     LogMessage("Connected Get", connectedState.ToString());
                     return connectedState;
                 }
@@ -346,12 +332,12 @@ namespace ASCOM.CameraHub.Camera
                     if (value) // Request to connect
                     {
                         LogMessage("Connected Set", "Connecting to device");
-                        CameraHub.Connect(uniqueId, CameraHub.ConnectType.Connected);
+                        CameraHardware.Connect(uniqueId, CameraHardware.ConnectType.Connected);
                     }
                     else // Request to disconnect
                     {
                         LogMessage("Connected Set", "Disconnecting from device");
-                        CameraHub.Disconnect(uniqueId, CameraHub.ConnectType.Connected);
+                        CameraHardware.Disconnect(uniqueId, CameraHardware.ConnectType.Connected);
                     }
                 }
                 catch (Exception ex)
@@ -373,7 +359,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected($"Description");
-                    string description = CameraHub.Description;
+                    string description = CameraHardware.Description;
                     LogMessage("Description", description);
                     return description;
                 }
@@ -395,7 +381,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    string driverInfo = CameraHub.DriverInfo;
+                    string driverInfo = CameraHardware.DriverInfo;
                     LogMessage("DriverInfo", driverInfo);
                     return driverInfo;
                 }
@@ -417,7 +403,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    string driverVersion = CameraHub.DriverVersion;
+                    string driverVersion = CameraHardware.DriverVersion;
                     LogMessage("DriverVersion", driverVersion);
                     return driverVersion;
                 }
@@ -439,7 +425,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    short interfaceVersion = CameraHub.InterfaceVersion;
+                    short interfaceVersion = CameraHardware.InterfaceVersion;
                     LogMessage("InterfaceVersion", interfaceVersion.ToString());
                     return interfaceVersion;
                 }
@@ -461,7 +447,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     // This should work regardless of whether or not the driver is Connected, hence no CheckConnected method.
-                    string name = CameraHub.Name;
+                    string name = CameraHardware.Name;
                     LogMessage("Name Get", name);
                     return name;
                 }
@@ -486,7 +472,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected("AbortExposure");
                 LogMessage("AbortExposure", $"Calling method.");
-                CameraHub.AbortExposure();
+                CameraHardware.AbortExposure();
                 LogMessage("AbortExposure", $"Completed.");
             }
             catch (Exception ex)
@@ -507,7 +493,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("AbortExposure");
-                    short bayerOffsetX = CameraHub.BayerOffsetX;
+                    short bayerOffsetX = CameraHardware.BayerOffsetX;
                     LogMessage("AbortExposure", bayerOffsetX.ToString());
                     return bayerOffsetX;
                 }
@@ -530,7 +516,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("BayerOffsetY");
-                    short bayerOffsetY = CameraHub.BayerOffsetY;
+                    short bayerOffsetY = CameraHardware.BayerOffsetY;
                     LogMessage("BayerOffsetY", bayerOffsetY.ToString());
                     return bayerOffsetY;
                 }
@@ -553,7 +539,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("BinX Get");
-                    short binX = CameraHub.BinX;
+                    short binX = CameraHardware.BinX;
                     LogMessage("BinX Get", binX.ToString());
                     return binX;
                 }
@@ -569,7 +555,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("BinX Set");
                     LogMessage("BinX Set", value.ToString());
-                    CameraHub.BinX = value;
+                    CameraHardware.BinX = value;
                 }
                 catch (Exception ex)
                 {
@@ -590,7 +576,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("BinY Get");
-                    short binY = CameraHub.BinY;
+                    short binY = CameraHardware.BinY;
                     LogMessage("BinY Get", binY.ToString());
                     return binY;
                 }
@@ -606,7 +592,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("BinY Set");
                     LogMessage("BinY Set", value.ToString());
-                    CameraHub.BinY = value;
+                    CameraHardware.BinY = value;
                 }
                 catch (Exception ex)
                 {
@@ -627,7 +613,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CCDTemperature");
-                    double ccdTemperature = CameraHub.CCDTemperature;
+                    double ccdTemperature = CameraHardware.CCDTemperature;
                     LogMessage("CCDTemperature", ccdTemperature.ToString());
                     return ccdTemperature;
                 }
@@ -650,7 +636,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CameraState");
-                    CameraStates cameraState = CameraHub.CameraState;
+                    CameraStates cameraState = CameraHardware.CameraState;
                     LogMessage("CameraState", cameraState.ToString());
                     return cameraState;
                 }
@@ -673,7 +659,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CameraXSize");
-                    int cameraXSize = CameraHub.CameraXSize;
+                    int cameraXSize = CameraHardware.CameraXSize;
                     LogMessage("CameraXSize", cameraXSize.ToString());
                     return cameraXSize;
                 }
@@ -696,7 +682,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CameraYSize");
-                    int cameraYSize = CameraHub.CameraYSize;
+                    int cameraYSize = CameraHardware.CameraYSize;
                     LogMessage("CameraYSize", cameraYSize.ToString());
                     return cameraYSize;
                 }
@@ -719,7 +705,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CanAbortExposure");
-                    bool canAbortExposure = CameraHub.CanAbortExposure;
+                    bool canAbortExposure = CameraHardware.CanAbortExposure;
                     LogMessage("CanAbortExposure", canAbortExposure.ToString());
                     return canAbortExposure;
                 }
@@ -744,7 +730,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CanAsymmetricBin");
-                    bool canAsymmetricBin = CameraHub.CanAsymmetricBin;
+                    bool canAsymmetricBin = CameraHardware.CanAsymmetricBin;
                     LogMessage("CanAsymmetricBin", canAsymmetricBin.ToString());
                     return canAsymmetricBin;
                 }
@@ -768,7 +754,7 @@ namespace ASCOM.CameraHub.Camera
                     try
                     {
                         CheckConnected("CanFastReadout");
-                        bool canFastReadout = CameraHub.CanFastReadout;
+                        bool canFastReadout = CameraHardware.CanFastReadout;
                         LogMessage("CanFastReadout", canFastReadout.ToString());
                         return canFastReadout;
                     }
@@ -794,7 +780,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CanGetCoolerPower");
-                    bool canGetCoolerPower = CameraHub.CanGetCoolerPower;
+                    bool canGetCoolerPower = CameraHardware.CanGetCoolerPower;
                     LogMessage("CanGetCoolerPower", canGetCoolerPower.ToString());
                     return canGetCoolerPower;
                 }
@@ -819,7 +805,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CanPulseGuide");
-                    bool canPulseGuide = CameraHub.CanPulseGuide;
+                    bool canPulseGuide = CameraHardware.CanPulseGuide;
                     LogMessage("CanPulseGuide", canPulseGuide.ToString());
                     return canPulseGuide;
                 }
@@ -844,7 +830,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CanSetCCDTemperature");
-                    bool canSetCCDTemperature = CameraHub.CanSetCCDTemperature;
+                    bool canSetCCDTemperature = CameraHardware.CanSetCCDTemperature;
                     LogMessage("CanSetCCDTemperature", canSetCCDTemperature.ToString());
                     return canSetCCDTemperature;
                 }
@@ -869,7 +855,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CanStopExposure");
-                    bool canStopExposure = CameraHub.CanStopExposure;
+                    bool canStopExposure = CameraHardware.CanStopExposure;
                     LogMessage("CanStopExposure", canStopExposure.ToString());
                     return canStopExposure;
                 }
@@ -892,7 +878,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CoolerOn Get");
-                    bool coolerOn = CameraHub.CoolerOn;
+                    bool coolerOn = CameraHardware.CoolerOn;
                     LogMessage("CoolerOn Get", coolerOn.ToString());
                     return coolerOn;
                 }
@@ -908,7 +894,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("CoolerOn Set");
                     LogMessage("CoolerOn Set", value.ToString());
-                    CameraHub.CoolerOn = value;
+                    CameraHardware.CoolerOn = value;
                 }
                 catch (Exception ex)
                 {
@@ -929,7 +915,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("CoolerPower");
-                    double coolerPower = CameraHub.CoolerPower;
+                    double coolerPower = CameraHardware.CoolerPower;
                     LogMessage("CoolerPower", coolerPower.ToString());
                     return coolerPower;
                 }
@@ -952,7 +938,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ElectronsPerADU");
-                    double electronsPerAdu = CameraHub.ElectronsPerADU;
+                    double electronsPerAdu = CameraHardware.ElectronsPerADU;
                     LogMessage("ElectronsPerADU", electronsPerAdu.ToString());
                     return electronsPerAdu;
                 }
@@ -975,7 +961,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ExposureMax");
-                    double exposureMax = CameraHub.ExposureMax;
+                    double exposureMax = CameraHardware.ExposureMax;
                     LogMessage("ExposureMax", exposureMax.ToString());
                     return exposureMax;
                 }
@@ -998,7 +984,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ExposureMin");
-                    double exposureMin = CameraHub.ExposureMin;
+                    double exposureMin = CameraHardware.ExposureMin;
                     LogMessage("ExposureMin", exposureMin.ToString());
                     return exposureMin;
                 }
@@ -1021,7 +1007,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ExposureResolution");
-                    double exposureResolution = CameraHub.ExposureResolution;
+                    double exposureResolution = CameraHardware.ExposureResolution;
                     LogMessage("ExposureResolution", exposureResolution.ToString());
                     return exposureResolution;
                 }
@@ -1044,7 +1030,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("FastReadout Get");
-                    bool fastreadout = CameraHub.FastReadout;
+                    bool fastreadout = CameraHardware.FastReadout;
                     LogMessage("FastReadout Get", fastreadout.ToString());
                     return fastreadout;
                 }
@@ -1060,7 +1046,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("FastReadout Set");
                     LogMessage("FastReadout Set", value.ToString());
-                    CameraHub.FastReadout = value;
+                    CameraHardware.FastReadout = value;
                 }
                 catch (Exception ex)
                 {
@@ -1081,7 +1067,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("FullWellCapacity");
-                    double fullWellCapacity = CameraHub.FullWellCapacity;
+                    double fullWellCapacity = CameraHardware.FullWellCapacity;
                     LogMessage("FullWellCapacity", fullWellCapacity.ToString());
                     return fullWellCapacity;
                 }
@@ -1107,7 +1093,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("Gain Get");
-                    short gain = CameraHub.Gain;
+                    short gain = CameraHardware.Gain;
                     LogMessage("Gain Get", gain.ToString());
                     return gain;
                 }
@@ -1120,7 +1106,7 @@ namespace ASCOM.CameraHub.Camera
             set
             {
                 LogMessage("Gain Set", value.ToString());
-                CameraHub.Gain = value;
+                CameraHardware.Gain = value;
                 try
                 {
                     CheckConnected("Gain Set");
@@ -1144,7 +1130,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("GainMax");
-                    short gainMax = CameraHub.GainMax;
+                    short gainMax = CameraHardware.GainMax;
                     LogMessage("GainMax", gainMax.ToString());
                     return gainMax;
                 }
@@ -1167,7 +1153,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("GainMin");
-                    short gainMin = CameraHub.GainMin;
+                    short gainMin = CameraHardware.GainMin;
                     LogMessage("GainMin", gainMin.ToString());
                     return gainMin;
                 }
@@ -1190,7 +1176,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("Gains");
-                    ArrayList gains = CameraHub.Gains;
+                    ArrayList gains = CameraHardware.Gains;
                     LogMessage("Gains", $"Received {gains.Count} gain values.");
                     return gains;
                 }
@@ -1215,7 +1201,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("HasShutter");
-                    bool hasShutter = CameraHub.HasShutter;
+                    bool hasShutter = CameraHardware.HasShutter;
                     LogMessage("HasShutter", hasShutter.ToString());
                     return hasShutter;
                 }
@@ -1238,7 +1224,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("HeatSinkTemperature");
-                    double heatSinkTemperature = CameraHub.HeatSinkTemperature;
+                    double heatSinkTemperature = CameraHardware.HeatSinkTemperature;
                     LogMessage("HeatSinkTemperature", heatSinkTemperature.ToString());
                     return heatSinkTemperature;
                 }
@@ -1262,7 +1248,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("ImageArray");
                     LogMessage("ImageArray", $"Retrieving image array");
-                    return CameraHub.ImageArray;
+                    return CameraHardware.ImageArray;
                 }
                 catch (Exception ex)
                 {
@@ -1284,7 +1270,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("ImageArrayVariant");
                     LogMessage("ImageArrayVariant", $"Retrieving image array");
-                    return CameraHub.ImageArrayVariant;
+                    return CameraHardware.ImageArrayVariant;
                 }
                 catch (Exception ex)
                 {
@@ -1305,7 +1291,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ImageReady");
-                    bool imageReady = CameraHub.ImageReady;
+                    bool imageReady = CameraHardware.ImageReady;
                     LogMessage("ImageReady", imageReady.ToString());
                     return imageReady;
                 }
@@ -1330,7 +1316,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("IsPulseGuiding");
-                    bool isPulseGuiding = CameraHub.IsPulseGuiding;
+                    bool isPulseGuiding = CameraHardware.IsPulseGuiding;
                     LogMessage("IsPulseGuiding", isPulseGuiding.ToString());
                     return isPulseGuiding;
                 }
@@ -1353,7 +1339,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("LastExposureDuration");
-                    double lastExposureDuration = CameraHub.LastExposureDuration;
+                    double lastExposureDuration = CameraHardware.LastExposureDuration;
                     LogMessage("LastExposureDuration", lastExposureDuration.ToString());
                     return lastExposureDuration;
                 }
@@ -1377,7 +1363,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("LastExposureStartTime");
-                    string lastExposureStartTime = CameraHub.LastExposureStartTime;
+                    string lastExposureStartTime = CameraHardware.LastExposureStartTime;
                     LogMessage("LastExposureStartTime", lastExposureStartTime.ToString());
                     return lastExposureStartTime;
                 }
@@ -1400,7 +1386,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("MaxADU");
-                    int maxAdu = CameraHub.MaxADU;
+                    int maxAdu = CameraHardware.MaxADU;
                     LogMessage("MaxADU", maxAdu.ToString());
                     return maxAdu;
                 }
@@ -1423,7 +1409,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("MaxBinX");
-                    short maxBinX = CameraHub.MaxBinX;
+                    short maxBinX = CameraHardware.MaxBinX;
                     LogMessage("MaxBinX", maxBinX.ToString());
                     return maxBinX;
                 }
@@ -1446,7 +1432,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("MaxBinY");
-                    short maxBinY = CameraHub.MaxBinY;
+                    short maxBinY = CameraHardware.MaxBinY;
                     LogMessage("MaxBinY", maxBinY.ToString());
                     return maxBinY;
                 }
@@ -1469,7 +1455,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("NumX Get");
-                    int numX = CameraHub.NumX;
+                    int numX = CameraHardware.NumX;
                     LogMessage("NumX Get", numX.ToString());
                     return numX;
                 }
@@ -1485,7 +1471,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("NumX Set");
                     LogMessage("NumX Set", value.ToString());
-                    CameraHub.NumX = value;
+                    CameraHardware.NumX = value;
                 }
                 catch (Exception ex)
                 {
@@ -1506,7 +1492,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("NumY Get");
-                    int numY = CameraHub.NumY;
+                    int numY = CameraHardware.NumY;
                     LogMessage("NumY Get", numY.ToString());
                     return numY;
                 }
@@ -1519,7 +1505,7 @@ namespace ASCOM.CameraHub.Camera
             set
             {
                 LogMessage("NumY Set", value.ToString());
-                CameraHub.NumY = value;
+                CameraHardware.NumY = value;
                 try
                 {
                     CheckConnected("NumY Set");
@@ -1546,7 +1532,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("Offset Get");
-                    int offset = CameraHub.Offset;
+                    int offset = CameraHardware.Offset;
                     LogMessage("Offset Get", offset.ToString());
                     return offset;
                 }
@@ -1562,7 +1548,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("Offset Set");
                     LogMessage("Offset Set", value.ToString());
-                    CameraHub.Offset = value;
+                    CameraHardware.Offset = value;
                 }
                 catch (Exception ex)
                 {
@@ -1583,7 +1569,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("OffsetMax");
-                    int offsetMax = CameraHub.OffsetMax;
+                    int offsetMax = CameraHardware.OffsetMax;
                     LogMessage("OffsetMax", offsetMax.ToString());
                     return offsetMax;
                 }
@@ -1606,7 +1592,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("OffsetMin");
-                    int offsetMin = CameraHub.OffsetMin;
+                    int offsetMin = CameraHardware.OffsetMin;
                     LogMessage("OffsetMin", offsetMin.ToString());
                     return offsetMin;
                 }
@@ -1629,7 +1615,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("Offsets");
-                    ArrayList offsets = CameraHub.Offsets;
+                    ArrayList offsets = CameraHardware.Offsets;
                     LogMessage("Offsets", $"{offsets.Count} offsets were returned.");
                     return offsets;
                 }
@@ -1652,7 +1638,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("PercentCompleted");
-                    short percentCompleted = CameraHub.PercentCompleted;
+                    short percentCompleted = CameraHardware.PercentCompleted;
                     LogMessage("PercentCompleted", percentCompleted.ToString());
                     return percentCompleted;
                 }
@@ -1675,7 +1661,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("PixelSizeX");
-                    double pixelSizeX = CameraHub.PixelSizeX;
+                    double pixelSizeX = CameraHardware.PixelSizeX;
                     LogMessage("PixelSizeX", pixelSizeX.ToString());
                     return pixelSizeX;
                 }
@@ -1698,7 +1684,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("PixelSizeY");
-                    double pixelSizeY = CameraHub.PixelSizeY;
+                    double pixelSizeY = CameraHardware.PixelSizeY;
                     LogMessage("PixelSizeY", pixelSizeY.ToString());
                     return pixelSizeY;
                 }
@@ -1721,7 +1707,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected("PulseGuide");
                 LogMessage("PulseGuide", $"Direction: {direction}, Duration: {duration}");
-                CameraHub.PulseGuide(direction, duration);
+                CameraHardware.PulseGuide(direction, duration);
                 LogMessage("PulseGuide", $"Completed.");
             }
             catch (Exception ex)
@@ -1744,7 +1730,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ReadoutMode Get");
-                    short readoutMode = CameraHub.ReadoutMode;
+                    short readoutMode = CameraHardware.ReadoutMode;
                     LogMessage("ReadoutMode Get", readoutMode.ToString());
                     return readoutMode;
                 }
@@ -1760,7 +1746,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("ReadoutMode Set");
                     LogMessage("ReadoutMode Set", value.ToString());
-                    CameraHub.ReadoutMode = value;
+                    CameraHardware.ReadoutMode = value;
                 }
                 catch (Exception ex)
                 {
@@ -1781,7 +1767,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("ReadoutModes");
-                    ArrayList readoutMode = CameraHub.ReadoutModes;
+                    ArrayList readoutMode = CameraHardware.ReadoutModes;
                     LogMessage("ReadoutModes", $"Received {readoutMode.Count} readout modes.");
                     return readoutMode;
                 }
@@ -1804,7 +1790,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("SensorName");
-                    string sensorName = CameraHub.SensorName;
+                    string sensorName = CameraHardware.SensorName;
                     LogMessage("SensorName", sensorName.ToString());
                     return sensorName;
                 }
@@ -1827,7 +1813,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("SensorType");
-                    SensorType sensorType = CameraHub.SensorType;
+                    SensorType sensorType = CameraHardware.SensorType;
                     LogMessage("SensorType", sensorType.ToString());
                     return sensorType;
                 }
@@ -1850,7 +1836,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("SetCCDTemperature Get");
-                    double setCcdTemperature = CameraHub.SetCCDTemperature;
+                    double setCcdTemperature = CameraHardware.SetCCDTemperature;
                     LogMessage("SetCCDTemperature Get", setCcdTemperature.ToString());
                     return setCcdTemperature;
                 }
@@ -1866,7 +1852,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("SetCCDTemperature Set");
                     LogMessage("SetCCDTemperature Set", value.ToString());
-                    CameraHub.SetCCDTemperature = value;
+                    CameraHardware.SetCCDTemperature = value;
                 }
                 catch (Exception ex)
                 {
@@ -1887,7 +1873,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected("StartExposure");
                 LogMessage("StartExposure", $"Duration: {duration}, Light: {light}");
-                CameraHub.StartExposure(duration, light);
+                CameraHardware.StartExposure(duration, light);
                 LogMessage("StartExposure", $"Completed.");
             }
             catch (Exception ex)
@@ -1907,7 +1893,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("tartX Get");
-                    int setCcdTemperature = CameraHub.StartX;
+                    int setCcdTemperature = CameraHardware.StartX;
                     LogMessage("StartX Get", setCcdTemperature.ToString());
                     return setCcdTemperature;
                 }
@@ -1923,7 +1909,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("StartX Set");
                     LogMessage("StartX Set", value.ToString());
-                    CameraHub.StartX = value;
+                    CameraHardware.StartX = value;
                 }
                 catch (Exception ex)
                 {
@@ -1943,7 +1929,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("StartY Get");
-                    int setCcdTemperature = CameraHub.StartY;
+                    int setCcdTemperature = CameraHardware.StartY;
                     LogMessage("StartY Get", setCcdTemperature.ToString());
                     return setCcdTemperature;
                 }
@@ -1959,7 +1945,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("StartY Set");
                     LogMessage("StartY Set", value.ToString());
-                    CameraHub.StartY = value;
+                    CameraHardware.StartY = value;
                 }
                 catch (Exception ex)
                 {
@@ -1978,7 +1964,7 @@ namespace ASCOM.CameraHub.Camera
             {
                 CheckConnected("StopExposure");
                 LogMessage("StopExposure", $"Method called");
-                CameraHub.StopExposure();
+                CameraHardware.StopExposure();
                 LogMessage("StopExposure", $"Completed.");
             }
             catch (Exception ex)
@@ -1998,7 +1984,7 @@ namespace ASCOM.CameraHub.Camera
                 try
                 {
                     CheckConnected("SubExposureDuration Get");
-                    double subExposureDuration = CameraHub.SubExposureDuration;
+                    double subExposureDuration = CameraHardware.SubExposureDuration;
                     LogMessage("SubExposureDuration Get", subExposureDuration.ToString());
                     return subExposureDuration;
                 }
@@ -2014,7 +2000,7 @@ namespace ASCOM.CameraHub.Camera
                 {
                     CheckConnected("SubExposureDuration Set");
                     LogMessage("SubExposureDuration Set", value.ToString());
-                    CameraHub.SubExposureDuration = value;
+                    CameraHardware.SubExposureDuration = value;
                 }
                 catch (Exception ex)
                 {
@@ -2034,9 +2020,9 @@ namespace ASCOM.CameraHub.Camera
         /// <param name="message"></param>
         private void CheckConnected(string message)
         {
-            if (!CameraHub.IsConnected(uniqueId))
+            if (!CameraHardware.IsConnected(uniqueId))
             {
-                throw new NotConnectedException($"{hubDescription} ({hubProgId}) is not connected: {message}");
+                throw new NotConnectedException($"{cameraDescription} ({CameraProgId}) is not connected: {message}");
             }
         }
 
@@ -2056,7 +2042,7 @@ namespace ASCOM.CameraHub.Camera
             }
 
             // Write to the common hardware log shared by all running instances of the driver.
-            CameraHub.LogMessage(identifier, message); // Write to the local server logger
+            CameraHardware.LogMessage(identifier, message); // Write to the local server logger
         }
 
         /// <summary>
@@ -2067,7 +2053,7 @@ namespace ASCOM.CameraHub.Camera
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = "Camera";
-                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(hubProgId, CameraHub.TRACE_STATE_PROFILE_NAME, string.Empty, CameraHub.TRACE_STATE_DEFAULT));
+                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(CameraProgId, CameraHardware.TRACE_STATE_PROFILE_NAME, string.Empty, CameraHardware.TRACE_STATE_DEFAULT));
             }
         }
 
@@ -2083,16 +2069,16 @@ namespace ASCOM.CameraHub.Camera
         public void Connect()
         {
             // Check whether the connected device is Platform 7 or later
-            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so Connect
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHardware.GetInterfaceVersion())) // Platform 7 or later device so Connect
             {
                 LogMessage("Connect", "Issuing Connect command");
-                CameraHub.Connect(uniqueId, CameraHub.ConnectType.Connect_Disconnect);
+                CameraHardware.Connect(uniqueId, CameraHardware.ConnectType.Connect_Disconnect);
                 return;
             }
 
             // Platform 6 or earlier so reject the method call
             LogMessage("Connect", "Throwing a MethodNotImplementedException because the connected camera is a Platform 6 or earlier device.");
-            throw new MethodNotImplementedException($"Connect is not implemented in this ICameraV{CameraHub.GetInterfaceVersion()} device.");
+            throw new MethodNotImplementedException($"Connect is not implemented in this ICameraV{CameraHardware.GetInterfaceVersion()} device.");
         }
 
         /// <summary>
@@ -2101,16 +2087,16 @@ namespace ASCOM.CameraHub.Camera
         public void Disconnect()
         {
             // Check whether the connected device is Platform 7 or later
-            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so Disconnect
+            if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHardware.GetInterfaceVersion())) // Platform 7 or later device so Disconnect
             {
                 LogMessage("Disconnect", "Issuing Disconnect command");
-                CameraHub.Disconnect(uniqueId, CameraHub.ConnectType.Connect_Disconnect);
+                CameraHardware.Disconnect(uniqueId, CameraHardware.ConnectType.Connect_Disconnect);
                 return;
             }
 
             // Platform 6 or earlier so reject the method call
             LogMessage("Disconnect", "Throwing a MethodNotImplementedException because the connected camera is a Platform 6 or earlier device.");
-            throw new MethodNotImplementedException($"Disconnect is not implemented in this ICameraV{CameraHub.GetInterfaceVersion()} device.");
+            throw new MethodNotImplementedException($"Disconnect is not implemented in this ICameraV{CameraHardware.GetInterfaceVersion()} device.");
         }
 
         /// <summary>
@@ -2121,15 +2107,15 @@ namespace ASCOM.CameraHub.Camera
             get
             {
                 // Check whether the connected device is Platform 7 or later
-                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so call Connecting
+                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHardware.GetInterfaceVersion())) // Platform 7 or later device so call Connecting
                 {
                     LogMessage("Connecting", "Calling Connecting property");
-                    return CameraHub.Connecting;
+                    return CameraHardware.Connecting;
                 }
 
                 // Platform 6 or earlier so reject the method call
                 LogMessage("Connecting", "Throwing a PropertyNotImplementedException because the connected camera is a Platform 6 or earlier device.");
-                throw new PropertyNotImplementedException($"Connecting is not implemented in this ICameraV{CameraHub.GetInterfaceVersion()} device.");
+                throw new PropertyNotImplementedException($"Connecting is not implemented in this ICameraV{CameraHardware.GetInterfaceVersion()} device.");
             }
         }
 
@@ -2143,10 +2129,10 @@ namespace ASCOM.CameraHub.Camera
                 CheckConnected("DeviceState");
 
                 // Check whether the connected device is Platform 7 or later
-                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHub.GetInterfaceVersion())) // Platform 7 or later device so call Connecting
+                if (Common.DeviceInterfaces.DeviceCapabilities.HasConnectAndDeviceState(Common.DeviceTypes.Camera, CameraHardware.GetInterfaceVersion())) // Platform 7 or later device so call Connecting
                 {
                     LogMessage("DeviceState", "Calling DeviceState property");
-                    return CameraHub.DeviceState;
+                    return CameraHardware.DeviceState;
                 }
 
                 // Platform 6 or earlier so return an empty ArrayList because this feature isn't supported
@@ -2157,5 +2143,10 @@ namespace ASCOM.CameraHub.Camera
 
         #endregion
 
+        #region Internal members
+
+        internal static string CameraProgId { get; private set; }
+
+        #endregion
     }
 }

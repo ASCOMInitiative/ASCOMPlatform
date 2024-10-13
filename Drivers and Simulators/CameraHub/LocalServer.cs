@@ -177,6 +177,34 @@ namespace ASCOM.LocalServer
 
         #endregion
 
+        #region Setup Dialogue
+
+        /// <summary>
+        /// Displays the Setup Dialogue form.
+        /// If the user clicks the OK button to dismiss the form, then
+        /// the new settings are saved, otherwise the old values are reloaded.
+        /// THIS IS THE ONLY PLACE WHERE SHOWING USER INTERFACE IS ALLOWED!
+        /// </summary>
+        public static void SetupDialog()
+        {
+            using (CameraHub.SetupDialogForm F = new CameraHub.SetupDialogForm(TL))
+            {
+                var result = F.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    // Persist device configuration values to the ASCOM Profile store
+                    CameraHub.CameraHardware.WriteProfile();
+                    CameraHub.FilterWheelHardware.WriteProfile();
+
+                    // Kill the current instance and create a new once in case the configuration has changed
+                    CameraHub.CameraHardware.CreateCameraInstance();
+                    CameraHub.FilterWheelHardware.CreateFilterWheelInstance();
+                }
+            }
+        }
+
+        #endregion
+
         #region Server Lock, Object Counting, and AutoQuit on COM start-up
 
         /// <summary>
@@ -510,6 +538,19 @@ namespace ASCOM.LocalServer
                         profile.DeviceType = deviceType;
                         profile.Register(progId, chooserName);
                     }
+
+                    // Update the chooser name for the camera hub camera device in case it was registered before adding the filter wheel device when the camera device name was changed.
+                    if (deviceType == "Camera")
+                    {
+                        using (RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ASCOM\Camera Drivers\ASCOM.CameraHub.Camera", true))
+                        {
+                            if (registryKey != null)
+                            {
+                                registryKey.SetValue(null, chooserName);
+                                TL.LogMessage("RegisterObjects", $"Set default entry for {deviceType} {progId} to {chooserName}");
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -580,22 +621,22 @@ namespace ASCOM.LocalServer
                     }
                 }
 
-                        // Uncomment the following lines to remove ASCOM Profile information when unregistering.
-                        // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
-                        // For this reason, enabling this capability is not recommended.
+                // Uncomment the following lines to remove ASCOM Profile information when unregistering.
+                // Unregistering often occurs during version upgrades and, if the code below is enabled, will result in loss of all device configuration during the upgrade.
+                // For this reason, enabling this capability is not recommended.
 
-                        //try
-                        //{
-                        //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
-                        //    using (var profile = new Profile())
-                        //    {
-                        //        profile.DeviceType = driverType.Name;
-                        //        profile.Unregister(progId);
-                        //    }
-                        //}
-                        //catch (Exception) { }
-                    }
-                }
+                //try
+                //{
+                //    TL.LogMessage("UnregisterObjects", $"Deleting ASCOM Profile registration for {driverType.Name} ({progId})");
+                //    using (var profile = new Profile())
+                //    {
+                //        profile.DeviceType = driverType.Name;
+                //        profile.Unregister(progId);
+                //    }
+                //}
+                //catch (Exception) { }
+            }
+        }
 
         /// <summary>
         /// Test whether the session is running with elevated credentials

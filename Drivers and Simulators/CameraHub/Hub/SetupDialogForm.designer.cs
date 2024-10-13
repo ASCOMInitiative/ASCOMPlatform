@@ -1,4 +1,4 @@
-namespace ASCOM.CameraHub.Camera
+namespace ASCOM.CameraHub
 {
     partial class SetupDialogForm
     {
@@ -37,7 +37,11 @@ namespace ASCOM.CameraHub.Camera
             this.BtnChooseCamera = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.lblCurrentDevice = new System.Windows.Forms.Label();
+            this.LblCurrentCameraDevice = new System.Windows.Forms.Label();
+            this.LblCurrentFilterWheelDevice = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.BtnChooseFilterWheel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,7 +71,7 @@ namespace ASCOM.CameraHub.Camera
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(44, 171);
+            this.label1.Location = new System.Drawing.Point(47, 224);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(458, 31);
             this.label1.TabIndex = 2;
@@ -101,9 +105,9 @@ namespace ASCOM.CameraHub.Camera
             // 
             // BtnChooseCamera
             // 
-            this.BtnChooseCamera.Location = new System.Drawing.Point(338, 130);
+            this.BtnChooseCamera.Location = new System.Drawing.Point(338, 108);
             this.BtnChooseCamera.Name = "BtnChooseCamera";
-            this.BtnChooseCamera.Size = new System.Drawing.Size(107, 23);
+            this.BtnChooseCamera.Size = new System.Drawing.Size(122, 23);
             this.BtnChooseCamera.TabIndex = 7;
             this.BtnChooseCamera.Text = "Choose Camera";
             this.BtnChooseCamera.UseVisualStyleBackColor = true;
@@ -111,7 +115,7 @@ namespace ASCOM.CameraHub.Camera
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(88, 135);
+            this.label2.Location = new System.Drawing.Point(78, 112);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(244, 15);
             this.label2.TabIndex = 8;
@@ -121,27 +125,68 @@ namespace ASCOM.CameraHub.Camera
             // label3
             // 
             this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label3.Location = new System.Drawing.Point(88, 96);
+            this.label3.Location = new System.Drawing.Point(78, 94);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 18);
             this.label3.TabIndex = 9;
-            this.label3.Text = "Current device:";
+            this.label3.Text = "Current camera device:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblCurrentDevice
+            // LblCurrentCameraDevice
             // 
-            this.lblCurrentDevice.Location = new System.Drawing.Point(174, 99);
-            this.lblCurrentDevice.Name = "lblCurrentDevice";
-            this.lblCurrentDevice.Size = new System.Drawing.Size(244, 15);
-            this.lblCurrentDevice.TabIndex = 10;
-            this.lblCurrentDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LblCurrentCameraDevice.Location = new System.Drawing.Point(164, 94);
+            this.LblCurrentCameraDevice.Name = "LblCurrentCameraDevice";
+            this.LblCurrentCameraDevice.Size = new System.Drawing.Size(244, 15);
+            this.LblCurrentCameraDevice.TabIndex = 10;
+            this.LblCurrentCameraDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LblCurrentFilterWheelDevice
+            // 
+            this.LblCurrentFilterWheelDevice.Location = new System.Drawing.Point(185, 153);
+            this.LblCurrentFilterWheelDevice.Name = "LblCurrentFilterWheelDevice";
+            this.LblCurrentFilterWheelDevice.Size = new System.Drawing.Size(244, 15);
+            this.LblCurrentFilterWheelDevice.TabIndex = 14;
+            this.LblCurrentFilterWheelDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            this.label5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label5.Location = new System.Drawing.Point(78, 150);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(101, 18);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Current filter wheel";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(64, 168);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(268, 16);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Select the filter wheel to be served using the Chooser";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // BtnChooseFilterWheel
+            // 
+            this.BtnChooseFilterWheel.Location = new System.Drawing.Point(338, 164);
+            this.BtnChooseFilterWheel.Name = "BtnChooseFilterWheel";
+            this.BtnChooseFilterWheel.Size = new System.Drawing.Size(122, 23);
+            this.BtnChooseFilterWheel.TabIndex = 11;
+            this.BtnChooseFilterWheel.Text = "Choose Filter Wheel";
+            this.BtnChooseFilterWheel.UseVisualStyleBackColor = true;
+            this.BtnChooseFilterWheel.Click += new System.EventHandler(this.BtnChooseFilterWheel_Click);
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 331);
-            this.Controls.Add(this.lblCurrentDevice);
+            this.Controls.Add(this.LblCurrentFilterWheelDevice);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.BtnChooseFilterWheel);
+            this.Controls.Add(this.LblCurrentCameraDevice);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.BtnChooseCamera);
@@ -174,6 +219,10 @@ namespace ASCOM.CameraHub.Camera
         private System.Windows.Forms.Button BtnChooseCamera;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label lblCurrentDevice;
+        private System.Windows.Forms.Label LblCurrentCameraDevice;
+        private System.Windows.Forms.Label LblCurrentFilterWheelDevice;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button BtnChooseFilterWheel;
     }
 }
