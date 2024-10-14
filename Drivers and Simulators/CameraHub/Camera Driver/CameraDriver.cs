@@ -6,15 +6,15 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.CameraHub
+namespace ASCOM.HostHub
 {
     /// <summary>
-    /// ASCOM Driver for the Camera Hub.
+    /// ASCOM Driver for the Host Hub.
     /// </summary>
     [ComVisible(true)]
-    [Guid("c60093ec-65a2-4604-91df-998e208d6b14")]
-    [ProgId("ASCOM.CameraHub.Camera")]
-    [ServedClassName("ASCOM Camera Hub Camera")] // Driver description that appears in the Chooser, customise as required
+    [Guid("37B234A1-A742-4366-9C66-83B9FE05FCE0")]
+    [ProgId("ASCOM.HostHub.Camera")]
+    [ServedClassName("ASCOM Host Hub Camera")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class Camera : ReferenceCountedObjectBase, ICameraV4, IDisposable
     {
@@ -31,11 +31,10 @@ namespace ASCOM.CameraHub
         {
             // Pull the ProgID from the ProgID class attribute.
             Attribute attr = Attribute.GetCustomAttribute(typeof(Camera), typeof(ProgIdAttribute));
-            CameraProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
+            ProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
                                                                                 // Pull the display name from the ServedClassName class attribute.
             attr = Attribute.GetCustomAttribute(typeof(Camera), typeof(ServedClassNameAttribute));
             cameraDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
-
         }
 
         /// <summary>
@@ -50,14 +49,14 @@ namespace ASCOM.CameraHub
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "CameraHub.Camera.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
-                SetTraceState();
+                tl = new TraceLogger("", "HostHub.Camera.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl.Enabled = Settings.CameraDriverLogging;
 
                 // Initialise the hardware if required
                 CameraHardware.InitialiseCamera();
 
                 LogMessage("Camera", "Starting driver initialisation");
-                LogMessage("Camera", $"ProgID: {CameraProgId}, Description: {cameraDescription}");
+                LogMessage("Camera", $"ProgID: {ProgId}, Description: {cameraDescription}");
 
                 // Create a unique ID to identify this driver instance
                 uniqueId = Guid.NewGuid();
@@ -67,7 +66,7 @@ namespace ASCOM.CameraHub
             catch (Exception ex)
             {
                 LogMessage("Camera", $"Initialisation exception: {ex}");
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -171,7 +170,9 @@ namespace ASCOM.CameraHub
         /// </summary>
         public void SetupDialog()
         {
-            Server.SetupDialog();
+            Server.SetupDialog("Camera");
+            // Update the trace setting in case it was changed
+            tl.Enabled= Settings.CameraDriverLogging;
         }
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -2022,7 +2023,7 @@ namespace ASCOM.CameraHub
         {
             if (!CameraHardware.IsConnected(uniqueId))
             {
-                throw new NotConnectedException($"{cameraDescription} ({CameraProgId}) is not connected: {message}");
+                throw new NotConnectedException($"{cameraDescription} ({ProgId}) is not connected: {message}");
             }
         }
 
@@ -2043,18 +2044,6 @@ namespace ASCOM.CameraHub
 
             // Write to the common hardware log shared by all running instances of the driver.
             CameraHardware.LogMessage(identifier, message); // Write to the local server logger
-        }
-
-        /// <summary>
-        /// Read the trace state from the driver's Profile and enable / disable the trace log accordingly.
-        /// </summary>
-        private void SetTraceState()
-        {
-            using (Profile driverProfile = new Profile())
-            {
-                driverProfile.DeviceType = "Camera";
-                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(CameraProgId, CameraHardware.TRACE_STATE_PROFILE_NAME, string.Empty, CameraHardware.TRACE_STATE_DEFAULT));
-            }
         }
 
         #endregion
@@ -2145,7 +2134,7 @@ namespace ASCOM.CameraHub
 
         #region Internal members
 
-        internal static string CameraProgId { get; private set; }
+        internal static string ProgId { get; private set; }
 
         #endregion
     }

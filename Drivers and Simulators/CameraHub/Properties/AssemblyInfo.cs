@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("ASCOM Camera Hub")]
-[assembly: AssemblyDescription("ASCOM Local Server for Camera Hub")]
+[assembly: AssemblyTitle("ASCOM Host Hub")]
+[assembly: AssemblyDescription("ASCOM Local Server for Host Hub")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
-[assembly: AssemblyProduct("ASCOM Camera Hub")]
+[assembly: AssemblyProduct("ASCOM Host Hub")]
 [assembly: AssemblyCopyright("Copyright © 2024 The ASCOM Initiative")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -30,5 +30,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("7.0.0.0")]
-[assembly: AssemblyFileVersion("7.0.0.2")]
+[assembly: AssemblyFileVersion("7.0.0.0")]
 [assembly: Guid("4FE42B85-A500-425F-9B6A-22F5BE7BA69E")]

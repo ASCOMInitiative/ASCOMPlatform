@@ -6,15 +6,15 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.CameraHub
+namespace ASCOM.HostHub
 {
     /// <summary>
-    /// ASCOM Driver for the Camera Hub.
+    /// ASCOM Driver for the Host Hub.
     /// </summary>
     [ComVisible(true)]
-    [Guid("B26F2567-59F9-4A85-AF02-9AD44B752322")]
-    [ProgId("ASCOM.CameraHub.FilterWheel")]
-    [ServedClassName("ASCOM Camera Hub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
+    [Guid("54AB9669-FE77-4DEC-A72B-4B237F110061")]
+    [ProgId("ASCOM.HostHub.FilterWheel")]
+    [ServedClassName("ASCOM Host Hub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class FilterWheel : ReferenceCountedObjectBase, IFilterWheelV3, IDisposable
     {
@@ -31,7 +31,7 @@ namespace ASCOM.CameraHub
         {
             // Pull the ProgID from the ProgID class attribute.
             Attribute attr = Attribute.GetCustomAttribute(typeof(FilterWheel), typeof(ProgIdAttribute));
-            FilterWheelProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
+            ProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
                                                                                 // Pull the display name from the ServedClassName class attribute.
             attr = Attribute.GetCustomAttribute(typeof(FilterWheel), typeof(ServedClassNameAttribute));
             filterWheelDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
@@ -46,7 +46,7 @@ namespace ASCOM.CameraHub
             {
                 // Pull the ProgID from the ProgID class attribute.
                 Attribute attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ProgIdAttribute));
-                FilterWheelProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
+                ProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
 
                 // Pull the display name from the ServedClassName class attribute.
                 attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ServedClassNameAttribute));
@@ -56,14 +56,14 @@ namespace ASCOM.CameraHub
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "CameraHub.FilterWheel.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
-                SetTraceState();
+                tl = new TraceLogger("", "HostHub.FilterWheel.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl.Enabled = Settings.FilterWheelDriverLogging;
 
                 // Initialise the hardware if required
                 FilterWheelHardware.InitialiseFilterWheel();
 
                 LogMessage("FilterWheel", "Starting driver initialisation");
-                LogMessage("FilterWheel", $"ProgID: {FilterWheelProgId}, Description: {filterWheelDescription}");
+                LogMessage("FilterWheel", $"ProgID: {ProgId}, Description: {filterWheelDescription}");
 
                 // Create a unique ID to identify this driver instance
                 uniqueId = Guid.NewGuid();
@@ -73,7 +73,7 @@ namespace ASCOM.CameraHub
             catch (Exception ex)
             {
                 LogMessage("FilterWheel", $"Initialisation exception: {ex}");
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.CameraHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -163,7 +163,10 @@ namespace ASCOM.CameraHub
         /// </summary>
         public void SetupDialog()
         {
-            Server.SetupDialog();
+            Server.SetupDialog("FilterWheel");
+
+            // Update the trace setting in case it was changed
+            tl.Enabled = Settings.FilterWheelDriverLogging;
         }
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -468,6 +471,10 @@ namespace ASCOM.CameraHub
                 else
                 {
                     LogMessage("FocusOffsets Get", $"Received {focusOffsets.Length} offsets.");
+                    foreach ( int i in focusOffsets )
+                    {
+                        LogMessage("FocusOffsets Get", $"Received offset: {i}.");
+                    }
                     return focusOffsets;
                 }
             }
@@ -486,6 +493,10 @@ namespace ASCOM.CameraHub
                 else
                 {
                     LogMessage("Names Get", $"Received {names.Length} names.");
+                    foreach (string name in names)
+                    {
+                        LogMessage("FocusOffsets Get", $"Received name: {name}.");
+                    }
                     return names;
                 }
             }
@@ -527,7 +538,7 @@ namespace ASCOM.CameraHub
         {
             if (!FilterWheelHardware.IsConnected(uniqueId))
             {
-                throw new NotConnectedException($"{filterWheelDescription} ({FilterWheelProgId}) is not connected: {message}");
+                throw new NotConnectedException($"{filterWheelDescription} ({ProgId}) is not connected: {message}");
             }
         }
 
@@ -548,18 +559,6 @@ namespace ASCOM.CameraHub
 
             // Write to the common hardware log shared by all running instances of the driver.
             FilterWheelHardware.LogMessage(identifier, message); // Write to the local server logger
-        }
-
-        /// <summary>
-        /// Read the trace state from the driver's Profile and enable / disable the trace log accordingly.
-        /// </summary>
-        private void SetTraceState()
-        {
-            using (Profile driverProfile = new Profile())
-            {
-                driverProfile.DeviceType = "FilterWheel";
-                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(FilterWheelProgId, FilterWheelHardware.TRACE_STATE_PROFILE_NAME, string.Empty, FilterWheelHardware.TRACE_STATE_DEFAULT));
-            }
         }
 
         #endregion
@@ -650,7 +649,7 @@ namespace ASCOM.CameraHub
 
         #region Internal members
 
-        internal static string FilterWheelProgId { get; private set; }
+        internal static string ProgId { get; private set; }
 
         #endregion
     }

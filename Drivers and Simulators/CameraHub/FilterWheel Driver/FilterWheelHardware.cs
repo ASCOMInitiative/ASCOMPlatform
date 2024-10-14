@@ -7,10 +7,10 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.CameraHub
+namespace ASCOM.HostHub
 {
     /// <summary>
-    /// ASCOM Camera Hub main functional class shared by all instances of the driver class.
+    /// ASCOM Host Hub main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class FilterWheelHardware
@@ -24,17 +24,11 @@ namespace ASCOM.CameraHub
             Connected
         }
 
-        // Constants used for Profile persistence
-        internal const string TRACE_STATE_PROFILE_NAME = "Trace Level"; internal const string TRACE_STATE_DEFAULT = "true";
-        internal const string FILTERWHEEL_PROGID_PROFILE_NAME = "FilterWheel ProgID"; internal const string FILTERWHEEL_PROGID_DEFAULT = "ASCOM.Simulator.FilterWheel";
-        internal static string hostedFilterWheelProgId;
-
 #if DEBUG
         private static DriverAccess.FilterWheel filterWheelDevice; // Filter wheel device being hosted
 #else
         private static dynamic filterWheelDevice; // Filter wheel device being hosted
 #endif
-        private static readonly string filterWheelProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
         private static string filterWheelDescription = ""; // The value is set by the driver's class initialiser.
 
         private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -54,20 +48,18 @@ namespace ASCOM.CameraHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "CameraHub.FilterWheel.Proxy");
-
-                // DriverProgId has to be set here because it used by ReadProfile to get the TraceState flag.
-                filterWheelProgId = FilterWheel.FilterWheelProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
-
-                // ReadProfile has to go here before anything is written to the log because it loads the TraceLogger enable / disable state.
-                ReadProfile(); // Read device configuration from the ASCOM Profile store, including the trace state
+                TL = new TraceLogger("", "HostHub.FilterWheel.Proxy");
+                bool logState = Settings.FilterWheelDriverLogging;
+                LogMessage("FilterWheelHardware", $"Hosted ProgID: {Settings.FilterWheelHostedProgId}.");
+                LogMessage("FilterWheelHardware", $"Log activity: {Settings.FilterWheelDriverLogging}.");
+                LogMessage("FilterWheelHardware", $"Debug Trace state: {Settings.FilterWheelHardwareLogging}.");
 
                 LogMessage("FilterWheelHardware", $"Static initialiser completed.");
             }
             catch (Exception ex)
             {
                 try { LogMessage("FilterWheelHardware", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.CameraHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -88,7 +80,7 @@ namespace ASCOM.CameraHub
 
                 filterWheelDescription = FilterWheel.filterWheelDescription; // Get this device's Chooser description
 
-                LogMessage("InitialiseFilterWheel", $"ProgID: {filterWheelProgId}, Description: {filterWheelDescription}");
+                LogMessage("InitialiseFilterWheel", $"ProgID: {FilterWheel.ProgId}, Description: {filterWheelDescription}");
 
                 utilities = new Util(); //Initialise ASCOM Utilities object
 
@@ -98,7 +90,7 @@ namespace ASCOM.CameraHub
 
                 CreateFilterWheelInstance();
 
-                if (string.IsNullOrEmpty(hostedFilterWheelProgId))
+                if (string.IsNullOrEmpty(Settings.FilterWheelHostedProgId))
                     throw new InvalidValueException("The filter wheel ProgID is null or empty");
 
                 LogMessage("InitialiseFilterWheel", $"One-off initialisation complete.");
@@ -146,7 +138,7 @@ namespace ASCOM.CameraHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"CameraHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -206,7 +198,7 @@ namespace ASCOM.CameraHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"CameraHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -283,7 +275,6 @@ namespace ASCOM.CameraHub
             }
             try
             {
-
                 // Create an instance of the filter wheel
                 try
                 {
@@ -292,20 +283,20 @@ namespace ASCOM.CameraHub
                     filterWheelDevice = new DriverAccess.FilterWheel(hostedFilterWheelProgId);
 #else
                     // Get the Type of this ProgID
-                    Type filterWheelType = Type.GetTypeFromProgID(hostedFilterWheelProgId);
-                    LogMessage("CreateFilterWheelInstance", $"Created Type for ProgID: {hostedFilterWheelProgId} OK.");
+                    Type filterWheelType = Type.GetTypeFromProgID(Settings.FilterWheelHostedProgId);
+                    LogMessage("CreateFilterWheelInstance", $"Created Type for ProgID: {Settings.FilterWheelHostedProgId} OK.");
                     filterWheelDevice = Activator.CreateInstance(filterWheelType);
 #endif
-                    LogMessage("CreateFilterWheelInstance", $"Created COM object for ProgID: {hostedFilterWheelProgId} OK.");
+                    LogMessage("CreateFilterWheelInstance", $"Created COM object for ProgID: {Settings.FilterWheelHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the filter wheel with ProgID {hostedFilterWheelProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the filter wheel with ProgID {Settings.FilterWheelHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {hostedFilterWheelProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.FilterWheelHostedProgId}: {ex.Message}");
             }
         }
 
@@ -585,32 +576,6 @@ namespace ASCOM.CameraHub
             if (!filterWheelDevice.Connected)
             {
                 throw new NotConnectedException(message);
-            }
-        }
-
-        /// <summary>
-        /// Read the device configuration from the ASCOM Profile store
-        /// </summary>
-        internal static void ReadProfile()
-        {
-            using (Profile hubProfile = new Profile())
-            {
-                hubProfile.DeviceType = "FilterWheel";
-                TL.Enabled = Convert.ToBoolean(hubProfile.GetValue(filterWheelProgId, TRACE_STATE_PROFILE_NAME, string.Empty, TRACE_STATE_DEFAULT));
-                hostedFilterWheelProgId = hubProfile.GetValue(filterWheelProgId, FILTERWHEEL_PROGID_PROFILE_NAME, string.Empty, FILTERWHEEL_PROGID_DEFAULT);
-            }
-        }
-
-        /// <summary>
-        /// Write the device configuration to the  ASCOM  Profile store
-        /// </summary>
-        internal static void WriteProfile()
-        {
-            using (Profile hubProfile = new Profile())
-            {
-                hubProfile.DeviceType = "FilterWheel";
-                hubProfile.WriteValue(filterWheelProgId, TRACE_STATE_PROFILE_NAME, TL.Enabled.ToString());
-                hubProfile.WriteValue(filterWheelProgId, FILTERWHEEL_PROGID_PROFILE_NAME, hostedFilterWheelProgId);
             }
         }
 

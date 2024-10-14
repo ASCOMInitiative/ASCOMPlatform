@@ -1,5 +1,5 @@
 //
-// ASCOM.CameraHub.Camera Local COM Server
+// ASCOM.HostHub.Camera Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -12,6 +12,7 @@
 // Modified by Chris Rowland and Peter Simpson to allow use with multiple devices of the same type March 2011
 //
 //
+using ASCOM.HostHub;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using System;
@@ -56,10 +57,11 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("", "CameraHub.LocalServer")
+            TL = new TraceLogger("", "HostHub.LocalServer")
             {
-                Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
+                Enabled = Settings.LocalServerLogging // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
+
             TL.LogMessage("Main", $"Server started - OS is {(Environment.Is64BitOperatingSystem ? "64bit" : "32bit")}, Application is {(Environment.Is64BitProcess ? "64bit" : "32bit")}");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
@@ -75,7 +77,7 @@ namespace ASCOM.LocalServer
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "CameraHub Local Server Thread";
+            Thread.CurrentThread.Name = "HostHub Local Server Thread";
 
             // Create and configure the local server host form that runs the Windows message loop required to support driver operation
             TL.LogMessage("Main", $"Creating host form");
@@ -185,20 +187,19 @@ namespace ASCOM.LocalServer
         /// the new settings are saved, otherwise the old values are reloaded.
         /// THIS IS THE ONLY PLACE WHERE SHOWING USER INTERFACE IS ALLOWED!
         /// </summary>
-        public static void SetupDialog()
+        public static void SetupDialog(string deviceType)
         {
-            using (CameraHub.SetupDialogForm F = new CameraHub.SetupDialogForm(TL))
+            using (HostHub.SetupDialogForm F = new HostHub.SetupDialogForm(TL, deviceType))
             {
                 var result = F.ShowDialog();
                 if (result == DialogResult.OK)
                 {
                     // Persist device configuration values to the ASCOM Profile store
-                    CameraHub.CameraHardware.WriteProfile();
-                    CameraHub.FilterWheelHardware.WriteProfile();
+                    Settings.SaveSettings();
 
                     // Kill the current instance and create a new once in case the configuration has changed
-                    CameraHub.CameraHardware.CreateCameraInstance();
-                    CameraHub.FilterWheelHardware.CreateFilterWheelInstance();
+                    CameraHardware.CreateCameraInstance();
+                    FilterWheelHardware.CreateFilterWheelInstance();
                 }
             }
         }
@@ -409,34 +410,11 @@ namespace ASCOM.LocalServer
                     exeNameKey.SetValue("AppID", localServerAppId);
                 }
                 TL.LogMessage("RegisterObjects", $"APPID set successfully");
-
-                // Add entries in the 32bit registry on a 64bit OS
-                //if (Environment.Is64BitProcess)
-                //{
-                //    // Set HKCR\APPID\appid for 32bit mode on a 64bit OS
-                //    using (RegistryKey clsRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
-                //    {
-                //        using (RegistryKey appIdKey = clsRootKey.CreateSubKey($"APPID\\{localServerAppId}"))
-                //        {
-                //            appIdKey.SetValue(null, assemblyDescription);
-                //            appIdKey.SetValue("AppID", localServerAppId);
-                //            appIdKey.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                //            appIdKey.SetValue("RunAs", "Interactive User", RegistryValueKind.String); // Added to ensure that only one copy of the local server runs if the user uses both elevated and non-elevated clients concurrently
-                //        }
-
-                //        // Set HKCR\APPID\exename.ext for 32bit mode on a 64bit OS
-                //        using (RegistryKey exeNameKey = clsRootKey.CreateSubKey($"APPID\\{Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)}"))
-                //        {
-                //            exeNameKey.SetValue("AppID", localServerAppId);
-                //        }
-                //        TL.LogMessage("RegisterObjects", $"32bit APPID set successfully");
-                //    }
-                //}
             }
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("RegisterObjects", $"Setting AppID exception: {ex}");
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
@@ -486,47 +464,6 @@ namespace ASCOM.LocalServer
                     }
                     TL.LogMessage("RegisterObjects", $"Added driver registry entries");
 
-                    // Add entries in the 32bit registry on a 64bit OS
-                    //if (Environment.Is64BitProcess)
-                    //{
-                    //    using (RegistryKey clsRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
-                    //    {
-                    //        using (RegistryKey clsIdKey = clsRootKey.CreateSubKey($"CLSID\\{clsId}"))
-                    //        {
-                    //            clsIdKey.SetValue(null, progId);
-                    //            clsIdKey.SetValue("AppId", localServerAppId);
-                    //            using (RegistryKey implementedCategoriesKey = clsIdKey.CreateSubKey("Implemented Categories"))
-                    //            {
-                    //                implementedCategoriesKey.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                    //            }
-
-                    //            using (RegistryKey progIdKey = clsIdKey.CreateSubKey("ProgId"))
-                    //            {
-                    //                progIdKey.SetValue(null, progId);
-                    //            }
-                    //            clsIdKey.CreateSubKey("Programmable");
-
-                    //            using (RegistryKey localServer32Key = clsIdKey.CreateSubKey("LocalServer32"))
-                    //            {
-                    //                TL.LogMessage("RegisterObjects", $"Driver 32bit executable path: {Application.ExecutablePath}, Assembly location: {Assembly.GetExecutingAssembly().Location}");
-                    //                localServer32Key.SetValue(null, Application.ExecutablePath);
-                    //            }
-                    //        }
-
-                    //        // HKCR\CLSID\progid
-                    //        using (RegistryKey progIdKey = clsRootKey.CreateSubKey(progId))
-                    //        {
-                    //            progIdKey.SetValue(null, assemblyTitle);
-                    //            using (RegistryKey clsIdKey = progIdKey.CreateSubKey("CLSID"))
-                    //            {
-                    //                clsIdKey.SetValue(null, clsId);
-                    //            }
-                    //        }
-                    //    }
-                    //    TL.LogMessage("RegisterObjects", $"Added driver 32bit registry entries");
-
-                    //}
-
                     // Add the ASCOM Profile entries
                     // Pull the display name from the ServedClassName attribute.
                     assemblyTitleAttribute = Attribute.GetCustomAttribute(driverType, typeof(ServedClassNameAttribute));
@@ -537,17 +474,16 @@ namespace ASCOM.LocalServer
                     {
                         profile.DeviceType = deviceType;
                         profile.Register(progId, chooserName);
-                    }
 
-                    // Update the chooser name for the camera hub camera device in case it was registered before adding the filter wheel device when the camera device name was changed.
-                    if (deviceType == "Camera")
-                    {
-                        using (RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ASCOM\Camera Drivers\ASCOM.CameraHub.Camera", true))
+                        // Unregister the original Camera Hub ProgID used in Platform 7 release candidate because it is replaced with HostHub
+                        const string CAMERHUB_CAMERA = "ASCOM.CameraHub.Camera";
+                        if (deviceType == "Camera")
                         {
-                            if (registryKey != null)
+                            TL.LogMessage("RegisterObjects", $"Camera device - Camera Hub is registered: {profile.IsRegistered(CAMERHUB_CAMERA)}");
+                            if (profile.IsRegistered(CAMERHUB_CAMERA))
                             {
-                                registryKey.SetValue(null, chooserName);
-                                TL.LogMessage("RegisterObjects", $"Set default entry for {deviceType} {progId} to {chooserName}");
+                                TL.LogMessage("RegisterObjects", $"Unregistering Camera Hub");
+                                profile.Unregister(CAMERHUB_CAMERA);
                             }
                         }
                     }
@@ -555,7 +491,7 @@ namespace ASCOM.LocalServer
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("RegisterObjects", $"Driver registration exception: {ex}");
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
 
@@ -674,13 +610,13 @@ namespace ASCOM.LocalServer
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                TL.LogMessage("IsAdministrator", $"The ASCOM.CameraHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
-                MessageBox.Show("The ASCOM.CameraHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                TL.LogMessage("IsAdministrator", $"The ASCOM.HostHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                MessageBox.Show("The ASCOM.HostHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Warning));
             }
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("IsAdministrator", $"Exception: {ex}");
-                MessageBox.Show(ex.ToString(), "ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(ex.ToString(), "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
         }
@@ -708,7 +644,7 @@ namespace ASCOM.LocalServer
                 if (!factory.RegisterClassObject())
                 {
                     TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
-                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
                 TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
@@ -778,7 +714,7 @@ namespace ASCOM.LocalServer
 
                     default:
                         TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }

@@ -7,10 +7,10 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.CameraHub
+namespace ASCOM.HostHub
 {
     /// <summary>
-    /// ASCOM Camera Hub main functional class shared by all instances of the driver class.
+    /// ASCOM Host Hub main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class CameraHardware
@@ -23,11 +23,6 @@ namespace ASCOM.CameraHub
             Connect_Disconnect,
             Connected
         }
-
-        // Constants used for Profile persistence
-        internal const string TRACE_STATE_PROFILE_NAME = "Trace Level"; internal const string TRACE_STATE_DEFAULT = "true";
-        internal const string CAMERA_PROGID_PROFILE_NAME = "Camera ProgID"; internal const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
-        internal static string hostedCameraProgId;
 
 #if DEBUG
         private static DriverAccess.Camera cameraDevice; // Camera device being hosted
@@ -54,20 +49,18 @@ namespace ASCOM.CameraHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "CameraHub.Camera.Proxy");
+                TL = new TraceLogger("", "HostHub.Camera.Proxy");
+                TL.Enabled = Settings.CameraHardwareLogging;
 
                 // DriverProgId has to be set here because it used by ReadProfile to get the TraceState flag.
-                cameraProgId = Camera.CameraProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
+                cameraProgId = Camera.ProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
 
-                // ReadProfile has to go here before anything is written to the log because it loads the TraceLogger enable / disable state.
-                ReadProfile(); // Read device configuration from the ASCOM Profile store, including the trace state
-
-                LogMessage("CameraHub", $"Static initialiser completed.");
+                LogMessage("HostHub", $"Static initialiser completed.");
             }
             catch (Exception ex)
             {
-                try { LogMessage("CameraHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.CameraHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try { LogMessage("HostHub", $"Initialisation exception: {ex}"); } catch { }
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -98,7 +91,7 @@ namespace ASCOM.CameraHub
 
                 CreateCameraInstance();
 
-                if (string.IsNullOrEmpty(hostedCameraProgId))
+                if (string.IsNullOrEmpty(Settings.CameraHostedProgId))
                     throw new InvalidValueException("The camera ProgID is null or empty");
 
                 LogMessage("InitialiseCamera", $"One-off initialisation complete.");
@@ -146,7 +139,7 @@ namespace ASCOM.CameraHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"CameraHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -206,7 +199,7 @@ namespace ASCOM.CameraHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"CameraHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -292,20 +285,20 @@ namespace ASCOM.CameraHub
                     cameraDevice = new DriverAccess.Camera(hostedCameraProgId);
 #else
                     // Get the Type of this ProgID
-                    Type cameraType = Type.GetTypeFromProgID(hostedCameraProgId);
-                    LogMessage("CreateCameraInstance", $"Created Type for ProgID: {hostedCameraProgId} OK.");
+                    Type cameraType = Type.GetTypeFromProgID(Settings.CameraHostedProgId);
+                    LogMessage("CreateCameraInstance", $"Created Type for ProgID: {Settings.CameraHostedProgId} OK.");
                     cameraDevice = Activator.CreateInstance(cameraType);
 #endif
-                    LogMessage("CreateCameraInstance", $"Created COM object for ProgID: {hostedCameraProgId} OK.");
+                    LogMessage("CreateCameraInstance", $"Created COM object for ProgID: {Settings.CameraHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the camera with ProgID {hostedCameraProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the camera with ProgID {Settings.CameraHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {hostedCameraProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.CameraHostedProgId}: {ex.Message}");
             }
         }
 
@@ -407,17 +400,17 @@ namespace ASCOM.CameraHub
         /// </remarks>
         public static void Dispose()
         {
-            try { LogMessage("CameraHub.Dispose", $"Disposing of assets and closing down."); } catch { }
+            try { LogMessage("HostHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
             if (!(cameraDevice is null))
             {
 #if DEBUG
                 try { cameraDevice.Dispose(); } catch (Exception) { }
-                try { LogMessage("CameraHub.Dispose", $"Disposed DriverAccess camera object."); } catch { }
+                try { LogMessage("HostHub.Dispose", $"Disposed DriverAccess camera object."); } catch { }
                 try { cameraDevice = null; } catch (Exception) { }
 #else
                 try { Marshal.ReleaseComObject(cameraDevice); } catch (Exception) { }
-                try { LogMessage("CameraHub.Dispose", $"Released camera COM object."); } catch { }
+                try { LogMessage("HostHub.Dispose", $"Released camera COM object."); } catch { }
                 try { cameraDevice = null; } catch (Exception) { }
 #endif
             }
@@ -1308,32 +1301,6 @@ namespace ASCOM.CameraHub
             if (!cameraDevice.Connected)
             {
                 throw new NotConnectedException(message);
-            }
-        }
-
-        /// <summary>
-        /// Read the device configuration from the ASCOM Profile store
-        /// </summary>
-        internal static void ReadProfile()
-        {
-            using (Profile hubProfile = new Profile())
-            {
-                hubProfile.DeviceType = "Camera";
-                TL.Enabled = Convert.ToBoolean(hubProfile.GetValue(cameraProgId, TRACE_STATE_PROFILE_NAME, string.Empty, TRACE_STATE_DEFAULT));
-                hostedCameraProgId = hubProfile.GetValue(cameraProgId, CAMERA_PROGID_PROFILE_NAME, string.Empty, CAMERA_PROGID_DEFAULT);
-            }
-        }
-
-        /// <summary>
-        /// Write the device configuration to the  ASCOM  Profile store
-        /// </summary>
-        internal static void WriteProfile()
-        {
-            using (Profile hubProfile = new Profile())
-            {
-                hubProfile.DeviceType = "Camera";
-                hubProfile.WriteValue(cameraProgId, TRACE_STATE_PROFILE_NAME, TL.Enabled.ToString());
-                hubProfile.WriteValue(cameraProgId, CAMERA_PROGID_PROFILE_NAME, hostedCameraProgId);
             }
         }
 
