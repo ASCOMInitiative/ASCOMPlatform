@@ -7,10 +7,10 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM Host Hub main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub filter wheel main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class FilterWheelHardware
@@ -29,7 +29,6 @@ namespace ASCOM.HostHub
 #else
         private static dynamic filterWheelDevice; // Filter wheel device being hosted
 #endif
-        private static string filterWheelDescription = ""; // The value is set by the driver's class initialiser.
 
         private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
 
@@ -48,7 +47,7 @@ namespace ASCOM.HostHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "HostHub.FilterWheel.Proxy");
+                TL = new TraceLogger("", "JustAHub.FilterWheel.Proxy");
                 bool logState = Settings.FilterWheelDriverLogging;
                 LogMessage("FilterWheelHardware", $"Hosted ProgID: {Settings.FilterWheelHostedProgId}.");
                 LogMessage("FilterWheelHardware", $"Log activity: {Settings.FilterWheelDriverLogging}.");
@@ -59,7 +58,7 @@ namespace ASCOM.HostHub
             catch (Exception ex)
             {
                 try { LogMessage("FilterWheelHardware", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -78,9 +77,7 @@ namespace ASCOM.HostHub
             {
                 LogMessage("InitialiseFilterWheel", $"Starting one-off initialisation.");
 
-                filterWheelDescription = FilterWheel.filterWheelDescription; // Get this device's Chooser description
-
-                LogMessage("InitialiseFilterWheel", $"ProgID: {FilterWheel.ProgId}, Description: {filterWheelDescription}");
+                LogMessage("InitialiseFilterWheel", $"ProgID: {FilterWheel.ProgId}, Description: {FilterWheel.ChooserDescription}");
 
                 utilities = new Util(); //Initialise ASCOM Utilities object
 
@@ -138,7 +135,7 @@ namespace ASCOM.HostHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"JustAHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -198,7 +195,7 @@ namespace ASCOM.HostHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"JustAHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 

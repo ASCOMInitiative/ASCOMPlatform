@@ -1,11 +1,10 @@
 using ASCOM.Utilities;
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     [ComVisible(false)] // Form not registered for COM!
     public partial class SetupDialogForm : Form
@@ -28,7 +27,7 @@ namespace ASCOM.HostHub
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"HostHub SetupDialogForm (calling device: {callingDeviceType}) exception: {ex.Message}\r\n{ex}");
+                MessageBox.Show($"JustAHub SetupDialogForm (calling device: {callingDeviceType}) exception: {ex.Message}\r\n{ex}");
             }
 
         }
@@ -87,7 +86,7 @@ namespace ASCOM.HostHub
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"HostHub Setup Form-Load exception: {ex.Message}\r\n{ex}");
+                MessageBox.Show($"JustAHub Setup Form-Load exception: {ex.Message}\r\n{ex}");
             }
         }
 

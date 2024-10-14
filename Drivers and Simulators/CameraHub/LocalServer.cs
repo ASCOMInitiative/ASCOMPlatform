@@ -1,5 +1,5 @@
 //
-// ASCOM.HostHub.Camera Local COM Server
+// ASCOM.JustAHub.Camera Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -12,7 +12,7 @@
 // Modified by Chris Rowland and Peter Simpson to allow use with multiple devices of the same type March 2011
 //
 //
-using ASCOM.HostHub;
+using ASCOM.JustAHub;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using System;
@@ -57,7 +57,7 @@ namespace ASCOM.LocalServer
         static void Main(string[] args)
         {
             // Create a trace logger for the local server.
-            TL = new TraceLogger("", "HostHub.LocalServer")
+            TL = new TraceLogger("", "JustAHub.LocalServer")
             {
                 Enabled = Settings.LocalServerLogging // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -77,7 +77,7 @@ namespace ASCOM.LocalServer
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "HostHub Local Server Thread";
+            Thread.CurrentThread.Name = "JustAHub Local Server Thread";
 
             // Create and configure the local server host form that runs the Windows message loop required to support driver operation
             TL.LogMessage("Main", $"Creating host form");
@@ -189,7 +189,7 @@ namespace ASCOM.LocalServer
         /// </summary>
         public static void SetupDialog(string deviceType)
         {
-            using (HostHub.SetupDialogForm F = new HostHub.SetupDialogForm(TL, deviceType))
+            using (JustAHub.SetupDialogForm F = new JustAHub.SetupDialogForm(TL, deviceType))
             {
                 var result = F.ShowDialog();
                 if (result == DialogResult.OK)
@@ -414,7 +414,7 @@ namespace ASCOM.LocalServer
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("RegisterObjects", $"Setting AppID exception: {ex}");
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
@@ -475,7 +475,7 @@ namespace ASCOM.LocalServer
                         profile.DeviceType = deviceType;
                         profile.Register(progId, chooserName);
 
-                        // Unregister the original Camera Hub ProgID used in Platform 7 release candidate because it is replaced with HostHub
+                        // Unregister the original Camera Hub ProgID used in Platform 7 release candidate because it is replaced with JustAHub
                         const string CAMERHUB_CAMERA = "ASCOM.CameraHub.Camera";
                         if (deviceType == "Camera")
                         {
@@ -491,7 +491,7 @@ namespace ASCOM.LocalServer
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("RegisterObjects", $"Driver registration exception: {ex}");
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
 
@@ -610,13 +610,13 @@ namespace ASCOM.LocalServer
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                TL.LogMessage("IsAdministrator", $"The ASCOM.HostHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
-                MessageBox.Show("The ASCOM.HostHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                TL.LogMessage("IsAdministrator", $"The ASCOM.JustAHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                MessageBox.Show("The ASCOM.JustAHub.Camera was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Warning));
             }
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("IsAdministrator", $"Exception: {ex}");
-                MessageBox.Show(ex.ToString(), "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(ex.ToString(), "ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
         }
@@ -644,7 +644,7 @@ namespace ASCOM.LocalServer
                 if (!factory.RegisterClassObject())
                 {
                     TL.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
-                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
                 TL.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
@@ -714,7 +714,7 @@ namespace ASCOM.LocalServer
 
                     default:
                         TL.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }

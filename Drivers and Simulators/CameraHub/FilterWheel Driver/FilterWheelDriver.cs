@@ -6,20 +6,18 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM Driver for the Host Hub.
+    /// ASCOM FilterWheel driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
-    [Guid("54AB9669-FE77-4DEC-A72B-4B237F110061")]
-    [ProgId("ASCOM.HostHub.FilterWheel")]
-    [ServedClassName("ASCOM Host Hub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
+    [Guid("CDE29007-89B1-4163-9E63-F374264CD2EC")]
+    [ProgId("ASCOM.JustAHub.FilterWheel")]
+    [ServedClassName("ASCOM JustAHub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class FilterWheel : ReferenceCountedObjectBase, IFilterWheelV3, IDisposable
     {
-        internal static string filterWheelDescription; // Chooser descriptive text. The value is retrieved from the ServedClassName attribute in the class initialiser.
-
         private Guid uniqueId; // A unique ID for this instance of the driver
 
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
@@ -34,7 +32,7 @@ namespace ASCOM.HostHub
             ProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
                                                                                 // Pull the display name from the ServedClassName class attribute.
             attr = Attribute.GetCustomAttribute(typeof(FilterWheel), typeof(ServedClassNameAttribute));
-            filterWheelDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
+            ChooserDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
 
         }
         /// <summary>
@@ -44,26 +42,18 @@ namespace ASCOM.HostHub
         {
             try
             {
-                // Pull the ProgID from the ProgID class attribute.
-                Attribute attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ProgIdAttribute));
-                ProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
-
-                // Pull the display name from the ServedClassName class attribute.
-                attr = Attribute.GetCustomAttribute(this.GetType(), typeof(ServedClassNameAttribute));
-                filterWheelDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
-
                 // LOGGING CONFIGURATION
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "HostHub.FilterWheel.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl = new TraceLogger("", "JustAHub.FilterWheel.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
                 tl.Enabled = Settings.FilterWheelDriverLogging;
 
                 // Initialise the hardware if required
                 FilterWheelHardware.InitialiseFilterWheel();
 
                 LogMessage("FilterWheel", "Starting driver initialisation");
-                LogMessage("FilterWheel", $"ProgID: {ProgId}, Description: {filterWheelDescription}");
+                LogMessage("FilterWheel", $"ProgID: {ProgId}, Description: {ChooserDescription}");
 
                 // Create a unique ID to identify this driver instance
                 uniqueId = Guid.NewGuid();
@@ -73,7 +63,7 @@ namespace ASCOM.HostHub
             catch (Exception ex)
             {
                 LogMessage("FilterWheel", $"Initialisation exception: {ex}");
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -538,7 +528,7 @@ namespace ASCOM.HostHub
         {
             if (!FilterWheelHardware.IsConnected(uniqueId))
             {
-                throw new NotConnectedException($"{filterWheelDescription} ({ProgId}) is not connected: {message}");
+                throw new NotConnectedException($"{ChooserDescription} ({ProgId}) is not connected: {message}");
             }
         }
 
@@ -650,6 +640,7 @@ namespace ASCOM.HostHub
         #region Internal members
 
         internal static string ProgId { get; private set; }
+        internal static string ChooserDescription { get; private set; }
 
         #endregion
     }

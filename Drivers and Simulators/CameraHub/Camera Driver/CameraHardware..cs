@@ -7,10 +7,10 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM Host Hub main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub camera main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class CameraHardware
@@ -29,8 +29,6 @@ namespace ASCOM.HostHub
 #else
         private static dynamic cameraDevice; // Camera device being hosted
 #endif
-        private static readonly string cameraProgId = ""; // ASCOM DeviceID (COM ProgID) for this driver, the value is set by the driver's class initialiser.
-        private static string cameraDescription = ""; // The value is set by the driver's class initialiser.
 
         private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
 
@@ -49,18 +47,15 @@ namespace ASCOM.HostHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "HostHub.Camera.Proxy");
+                TL = new TraceLogger("", "JustAHub.Camera.Proxy");
                 TL.Enabled = Settings.CameraHardwareLogging;
 
-                // DriverProgId has to be set here because it used by ReadProfile to get the TraceState flag.
-                cameraProgId = Camera.ProgId; // Get this device's ProgID so that it can be used to read the Profile configuration values
-
-                LogMessage("HostHub", $"Static initialiser completed.");
+                LogMessage("JustAHub", $"Static initialiser completed.");
             }
             catch (Exception ex)
             {
-                try { LogMessage("HostHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -79,9 +74,7 @@ namespace ASCOM.HostHub
             {
                 LogMessage("InitialiseCamera", $"Starting one-off initialisation.");
 
-                cameraDescription = Camera.cameraDescription; // Get this device's Chooser description
-
-                LogMessage("InitialiseCamera", $"ProgID: {cameraProgId}, Description: {cameraDescription}");
+                LogMessage("InitialiseCamera", $"ProgID: {Camera.ProgId}, Description: {Camera.ChooserDescription}");
 
                 utilities = new Util(); //Initialise ASCOM Utilities object
 
@@ -139,7 +132,7 @@ namespace ASCOM.HostHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"JustAHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -199,7 +192,7 @@ namespace ASCOM.HostHub
                         break;
 
                     default:
-                        throw new InvalidOperationException($"HostHub.Connect - Unknown connection type: {connectType}");
+                        throw new InvalidOperationException($"JustAHub.Connect - Unknown connection type: {connectType}");
                 }
             }
 
@@ -400,17 +393,17 @@ namespace ASCOM.HostHub
         /// </remarks>
         public static void Dispose()
         {
-            try { LogMessage("HostHub.Dispose", $"Disposing of assets and closing down."); } catch { }
+            try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
             if (!(cameraDevice is null))
             {
 #if DEBUG
                 try { cameraDevice.Dispose(); } catch (Exception) { }
-                try { LogMessage("HostHub.Dispose", $"Disposed DriverAccess camera object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess camera object."); } catch { }
                 try { cameraDevice = null; } catch (Exception) { }
 #else
                 try { Marshal.ReleaseComObject(cameraDevice); } catch (Exception) { }
-                try { LogMessage("HostHub.Dispose", $"Released camera COM object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Released camera COM object."); } catch { }
                 try { cameraDevice = null; } catch (Exception) { }
 #endif
             }

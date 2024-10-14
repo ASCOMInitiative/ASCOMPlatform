@@ -1,13 +1,9 @@
 ﻿using ASCOM.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     internal static class Settings
     {
@@ -30,6 +26,12 @@ namespace ASCOM.HostHub
                     // Load settings stored in the camera profile
                     profile.DeviceType = "Camera";
 
+                    // Register the drivers in the Profile in case they are not already registered
+                    if (!profile.IsRegistered(Camera.ProgId))
+                    {
+                        profile.Register(Camera.ProgId, Camera.ChooserDescription);
+                    }
+
                     // Get global values that are stored in the camera profile
                     LocalServerLogging = Convert.ToBoolean(profile.GetValue(Camera.ProgId, LOCAL_SERVER_LOGGING_PROFILE_NAME, string.Empty, LOCAL_SERVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
@@ -40,6 +42,12 @@ namespace ASCOM.HostHub
 
                     // Load settings stored in the filter wheel profile
                     profile.DeviceType = "FilterWheel";
+
+                    if (!profile.IsRegistered(FilterWheel.ProgId))
+                    {
+                        profile.Register(FilterWheel.ProgId, FilterWheel.ChooserDescription);
+                    }
+
                     FilterWheelHostedProgId = profile.GetValue(FilterWheel.ProgId, FILTERWHEEL_PROGID_PROFILE_NAME, string.Empty, FILTERWHEEL_PROGID_DEFAULT);
                     FilterWheelDriverLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, FILTERWHEEL_DRIVER_LOGGING_PROFILE_NAME, string.Empty, FILTERWHEEL_DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                     FilterWheelHardwareLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, FILTERWHEEL_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, FILTERWHEEL_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);

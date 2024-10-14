@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.LocalServer.Server</RootNamespace>
-    <AssemblyName>ASCOM.HostHub</AssemblyName>
+    <AssemblyName>ASCOM.JustAHub</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

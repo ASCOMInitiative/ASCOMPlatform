@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("ASCOM Host Hub")]
-[assembly: AssemblyDescription("ASCOM Local Server for Host Hub")]
+[assembly: AssemblyTitle("ASCOM JustAHub")]
+[assembly: AssemblyDescription("ASCOM Local Server for JustAHub")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
-[assembly: AssemblyProduct("ASCOM Host Hub")]
+[assembly: AssemblyProduct("ASCOM JustAHub")]
 [assembly: AssemblyCopyright("Copyright © 2024 The ASCOM Initiative")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

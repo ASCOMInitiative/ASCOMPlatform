@@ -6,20 +6,18 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM Driver for the Host Hub.
+    /// ASCOM Camera Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
-    [Guid("37B234A1-A742-4366-9C66-83B9FE05FCE0")]
-    [ProgId("ASCOM.HostHub.Camera")]
-    [ServedClassName("ASCOM Host Hub Camera")] // Driver description that appears in the Chooser, customise as required
+    [Guid("559600B3-D579-440F-996C-6BB0748E8812")]
+    [ProgId("ASCOM.JustAHub.Camera")]
+    [ServedClassName("ASCOM JustAHub Camera")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class Camera : ReferenceCountedObjectBase, ICameraV4, IDisposable
     {
-        internal static string cameraDescription; // Chooser descriptive text. The value is retrieved from the ServedClassName attribute in the class initialiser.
-
         private Guid uniqueId; // A unique ID for this instance of the driver
 
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
@@ -34,7 +32,7 @@ namespace ASCOM.HostHub
             ProgId = ((ProgIdAttribute)attr).Value ?? "PROGID NOT SET!";  // Get the driver ProgIDfrom the ProgID attribute.
                                                                                 // Pull the display name from the ServedClassName class attribute.
             attr = Attribute.GetCustomAttribute(typeof(Camera), typeof(ServedClassNameAttribute));
-            cameraDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
+            ChooserDescription = ((ServedClassNameAttribute)attr).DisplayName ?? "DISPLAY NAME NOT SET!";  // Get the driver description that displays in the ASCOM Chooser from the ServedClassName attribute.
         }
 
         /// <summary>
@@ -44,19 +42,18 @@ namespace ASCOM.HostHub
         {
             try
             {
-
                 // LOGGING CONFIGURATION
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "HostHub.Camera.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
+                tl = new TraceLogger("", "JustAHub.Camera.Driver"); // Remove the leading ASCOM. from the ProgId because this will be added back by TraceLogger.
                 tl.Enabled = Settings.CameraDriverLogging;
 
                 // Initialise the hardware if required
                 CameraHardware.InitialiseCamera();
 
                 LogMessage("Camera", "Starting driver initialisation");
-                LogMessage("Camera", $"ProgID: {ProgId}, Description: {cameraDescription}");
+                LogMessage("Camera", $"ProgID: {ProgId}, Description: {ChooserDescription}");
 
                 // Create a unique ID to identify this driver instance
                 uniqueId = Guid.NewGuid();
@@ -66,7 +63,7 @@ namespace ASCOM.HostHub
             catch (Exception ex)
             {
                 LogMessage("Camera", $"Initialisation exception: {ex}");
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.HostHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.Camera", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -2023,7 +2020,7 @@ namespace ASCOM.HostHub
         {
             if (!CameraHardware.IsConnected(uniqueId))
             {
-                throw new NotConnectedException($"{cameraDescription} ({ProgId}) is not connected: {message}");
+                throw new NotConnectedException($"{ChooserDescription} ({ProgId}) is not connected: {message}");
             }
         }
 
@@ -2135,6 +2132,7 @@ namespace ASCOM.HostHub
         #region Internal members
 
         internal static string ProgId { get; private set; }
+        internal static string ChooserDescription { get; private set; }
 
         #endregion
     }

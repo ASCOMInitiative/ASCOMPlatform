@@ -1,4 +1,4 @@
-namespace ASCOM.HostHub
+namespace ASCOM.JustAHub
 {
     partial class SetupDialogForm
     {
@@ -281,7 +281,7 @@ namespace ASCOM.HostHub
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Host Hub Setup";
+            this.Text = "JustAHub Setup";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.TabDevices.ResumeLayout(false);
