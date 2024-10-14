@@ -34,7 +34,7 @@
 						The Omni-Simulators are now the default Platform simulators.
 					</listItem>
 					<listItem>
-						A Camera Hub has been added to enable 32bit camera drivers to be used by 64bit applications.
+						The Platform now includes the "JustAHub" hub application to host 32bit in-process (DLL based) drivers and enable them to be used by 64bit applications.
 					</listItem>
 					<listItem>
 						Device Hub returns more accurate information about the state of hosted devices, enabling applications to respond more appropriately to device behaviour. 

@@ -51,7 +51,17 @@
 							</listItem>
 						</list>
 					</listItem>
-					<listItem>A Camera Hub application has been added to host 32bit camera driver DLLs and enable them to be used by 64bit applications.</listItem>
+					<listItem>
+						<para>
+							The Platform now includes the "JustAHub" hub application to host 32bit in-process (DLL based) drivers and enable them to be used by 64bit applications.
+							JustAHub is intentionally straight-forward to configure and, unlike Device Hub, has no user interface of its own beyond selecting which
+							devices are hosted.
+						</para>
+						<para>
+							Initially, JustAHub hosts camera and filter wheel drivers, to support cameras that have built in filter wheels and which are controlled through
+							a single physical connection. Support for further ASCOM device types will be added in future releases.
+						</para>
+					</listItem>
 					<listItem>
 						There is now a weekly scheduled Platform update availability check.
 						<list class="bullet">
@@ -102,7 +112,7 @@
 								The activity log page now has a "Save Settings" button to save the current logging configuration, which will be restored when the activity log is next used.
 							</listItem>
 							<listItem>
-								The activity log now starts recording activity as soon as Device Hub is started, even if the activity log  is not visible, and limits capacity to about the most 
+								The activity log now starts recording activity as soon as Device Hub is started, even if the activity log  is not visible, and limits capacity to about the most
 								recent 1600 entries to prevent excessive memory consumption. In previous versions, activity that occurred before opening the activity log was not recorded.
 							</listItem>
 							<listItem>
@@ -147,7 +157,7 @@
 						<list class="bullet">
 							<listItem>
 								Hosted devices are now polled directly every time a client application asks for an operational property value such as Telescope.RightAscension.
-								The previous behaviour of returning cached values could result in incorrect values being returned to clients because the caches could be as much as 3 seconds (telescope) 
+								The previous behaviour of returning cached values could result in incorrect values being returned to clients because the caches could be as much as 3 seconds (telescope)
 								or 5 seconds (dome, focuser) out of date with current device values.
 							</listItem>
 							<listItem>The default dome radius in the dome geometry configuration has been changed from 0.0 to 2000.0 to ensure that dome synchronisation works "out of the box".</listItem>
