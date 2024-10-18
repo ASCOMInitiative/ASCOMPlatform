@@ -346,11 +346,14 @@ namespace ASCOM.DeviceHub
 
         private void ApplicationSettingsUpdatedEventHandler(ApplicationSettingsUpdatedMessage message)
         {
-            // Create the activity log if required
+            // Create the activity log if this is the first time that tracing has been enabled in this Device Hub session
             if (Globals.WriteLogActivityToDisk & (TL is null))
                 CreateActivityLog();
 
-            TL.Enabled = Globals.WriteLogActivityToDisk;
+            // Set the trace state if the logging is, or has been previously, enabled in this Device Hub session
+            // TL will be null, not TraceLogger, if logging has never been enabled
+            if (TL is TraceLogger)
+                TL.Enabled = Globals.WriteLogActivityToDisk;
         }
 
         private void AppendBufferToLog(CancellationToken token)
