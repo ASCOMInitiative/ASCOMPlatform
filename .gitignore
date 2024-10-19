@@ -314,3 +314,4 @@ Help/Output
 /Installer/SuppressWinErrors.exe.manifest
 /Installer/FinaliseInstall.exe.manifest
 /Drivers and Simulators/JustAHub/Setup/Builds
+/Drivers and Simulators/ASCOM Device Hub/Inno Setup/Builds
