@@ -1724,16 +1724,18 @@ namespace ASCOM.Utilities
         {
             string deviceInitialised;
 
+            // Check that a ProgID has been selected
             if (!string.IsNullOrEmpty(progId))
             {
-
                 if (!string.IsNullOrEmpty(progId)) // Something selected
                 {
-
-                    WarningTooltipClear(); // Hide any previous message
+                    // Hide any previous message
+                    WarningTooltipClear();
 
                     TL.LogMessage("ValidateDriver", "ProgID:" + progId + ", Bitness: " + ApplicationBits().ToString());
-                    driverIsCompatible = DriverCompatibilityMessage(progId, ApplicationBits(), TL); // Get compatibility warning message, if any
+
+                    // Get compatibility warning message, if any
+                    driverIsCompatible = DriverCompatibilityMessage(progId, ApplicationBits(), TL);
 
                     if (!string.IsNullOrEmpty(driverIsCompatible)) // This is an incompatible driver so we need to prevent access
                     {
@@ -1766,10 +1768,11 @@ namespace ASCOM.Utilities
                     TL.LogMessage("ValidateDriver", "Nothing has been selected");
                     selectedProgIdValue = "";
                     EnablePropertiesButton(false);
-                    EnableOkButton(false);
-                } // Ensure OK is disabled
-            }
 
+                    // Ensure OK is disabled
+                    EnableOkButton(false);
+                }
+            }
         }
 
         private void WarningToolTipShow(string Title, string Message)

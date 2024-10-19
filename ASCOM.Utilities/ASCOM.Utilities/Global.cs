@@ -1032,7 +1032,7 @@ namespace ASCOM.Utilities
             // Picks up some COM registration issues as well as a by-product.
             if (RequiredBitness == Bitness.Bits64) // We have a 64bit application so check to see whether this is a 32bit only driver
             {
-                RK = CreateClsidKey(ProgID + @"\CLSID", Bitness.Bits64); // Look in the 64bit section first
+                RK = Registry.ClassesRoot.OpenSubKey(ProgID + @"\CLSID"); // Same path for both 32bit and 64bit applications because they share a single part of the HKCR hive.
                 if (RK is not null) // ProgID is registered and has a CLSID!
                 {
                     CLSID = RK.GetValue("").ToString(); // Get the CLSID for this ProgID
@@ -1135,7 +1135,6 @@ namespace ASCOM.Utilities
                                                 if ((peKind & PortableExecutableKinds.NotAPortableExecutableImage) != 0)
                                                     TL.LogMessage("DriverCompatibilityX64", "     Kind Not PE Executable");
                                             }
-
                                             catch (Exception)
                                             {
                                                 // Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
@@ -1232,7 +1231,7 @@ namespace ASCOM.Utilities
             }
             else // We are running a 32bit application test so make sure the executable is not 64bit only
             {
-                RK = CreateClsidKey(ProgID + @"\CLSID", Bitness.Bits32); // Look in the 32bit registry
+                RK = Registry.ClassesRoot.OpenSubKey(ProgID + @"\CLSID"); // Same path for both 32bit and 64bit applications because they share a single part of the HKCR hive.
 
                 if (RK is not null) // ProgID is registered and has a CLSID!
                 {
@@ -1420,6 +1419,7 @@ namespace ASCOM.Utilities
                                 // No codebase or not a DLL so can't test this driver, don't give an error message, just have to take a chance!
                                 TL.LogMessage("DriverCompatibility", "No codebase or not a DLL so can't test this driver, don't give an error message, just have to take a chance!");
                             } // Process as a native executable
+
                             RKInprocServer32.Close(); // Clean up the InProcServer registry key
                         }
                         else // This is not an in-process DLL so no need to test further and no error message to return
@@ -1438,7 +1438,6 @@ namespace ASCOM.Utilities
                 {
                     CompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install.";
                 }
-
             }
 
             TL.LogMessage("DriverCompatibility", "     Returning: \"" + CompatibilityMessage + "\"");
@@ -1446,7 +1445,7 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Create a registry key that points at an entry in the 32 or 64bit portions of the HKCR hive as determined b the supplied bitness parameter
+        /// Create a registry key that points at an entry in the 32 or 64bit portions of the HKCR hive as determined by the supplied bitness parameter
         /// </summary>
         /// <param name="key">Name of the registry key to ope</param>
         /// <param name="requiredBitness">Required bitness 32bit or 64bit</param>
@@ -1454,21 +1453,20 @@ namespace ASCOM.Utilities
         public static RegistryKey CreateClsidKey(string key, Bitness requiredBitness)
         {
             // Handle 32bit and 64bit OS behaviour
-            if (OSBits() == Bitness.Bits32) // 32bit OS
-            {
-                // Only one possibility
-                return Registry.ClassesRoot.OpenSubKey(key);
-            }
-            // Select the key in the appropriate part of the HKCR hive
-            else if (requiredBitness == Bitness.Bits32) // 64bit OS
-                                                        // Open the key in the 32bit portion of the HKCR hive
-            {
-                return Registry.ClassesRoot.OpenSubKey($@"WOW6432Node\{key}");
-            }
-
-            else // Open the key in the 64bit portion of the HKCR hive
+            if (OSBits() == Bitness.Bits32) // 32bit OS - only one possibility
             {
                 return Registry.ClassesRoot.OpenSubKey(key);
+            }
+            else // 64bit OS - select the key in the appropriate part of the HKCR hive
+            {
+                if (requiredBitness == Bitness.Bits32) // Open the key in the 32bit portion of the HKCR hive
+                {
+                    return Registry.ClassesRoot.OpenSubKey($@"WOW6432Node\{key}");
+                }
+                else // Open the key in the 64bit portion of the HKCR hive
+                {
+                    return Registry.ClassesRoot.OpenSubKey(key);
+                }
             }
         }
 
