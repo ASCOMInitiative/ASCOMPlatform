@@ -1602,9 +1602,10 @@ Install Files ..\PlatformUpdateChecker\bin\Release\Semver.dll to $TARGETDIR$\Too
 Install Files ..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
  
 Comment: Install the updater checker application
-Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.exe to $COMMONFILES$\ASCOM\Camera\CameraHub
-Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.CameraHub.pdb to $COMMONFILES$\ASCOM\Camera\CameraHub
-Install Files ..\Drivers and Simulators\CameraHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\Camera\CameraHub
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.JustAHub.exe to $COMMONFILES$\ASCOM\JustAHub
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.JustAHub.exe.config to $COMMONFILES$\ASCOM\JustAHub
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.JustAHub.pdb to $COMMONFILES$\ASCOM\JustAHub
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\JustAHub
  
 Comment: Install the use simulators application to choose which simulators to use.
 Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe to $TARGETDIR$\Tools\SetSimulators
@@ -2431,10 +2432,10 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to Initialise earth rotation data
   Include Script: UpdateAscomError
    
-  Set Variable PROGRESSTEXT to Registering Camera Hub
+  Set Variable PROGRESSTEXT to Registering JustAHub
   Set Variable MYPROGRESS to 71
-  Run Program $COMMONFILES$\ASCOM\Camera\CameraHub\ASCOM.CameraHub.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register CameraHub
+  Run Program $COMMONFILES$\ASCOM\JustAHub\ASCOM.JustAHub.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register JustAHub
   Include Script: UpdateAscomError
    
   Comment: Tidy up COM registration (add AppID for DCOM etc.) 
