@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+
 // Class to read and write profile values to the registry
 
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text;
 using ASCOM.Utilities.Exceptions;
 using ASCOM.Utilities.Interfaces;
 using Microsoft.VisualBasic;
@@ -17,7 +20,6 @@ namespace ASCOM.Utilities
 
     internal class RegistryAccess : IAccess, IDisposable
     {
-
         private RegistryKey ProfileRegKey;
 
         private System.Threading.Mutex ProfileMutex;
@@ -29,13 +31,15 @@ namespace ASCOM.Utilities
 
         private Stopwatch sw, swSupport;
 
+        private List<IntPtr> HandleList = new List<IntPtr>();
+
         /// <summary>
         /// Enum containing all the possible registry access rights values. The built-in RegistryRights enum only has a partial collection
         /// and often returns values such as -1 or large positive and negative integer values when converted to a string
         /// The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
         /// </summary>
         [Flags()]
-        public enum AccessRights
+        public enum RegistryAccessRights
         {
             Query = 1,
             SetKey = 2,
@@ -75,6 +79,7 @@ namespace ASCOM.Utilities
         }
 
         #region New and IDisposable Support
+
         public RegistryAccess() : this(false) // Create but respect any exceptions thrown
         {
         }
@@ -85,7 +90,7 @@ namespace ASCOM.Utilities
             TL = TraceLoggerToUse;
             DisableTLOnExit = false;
 
-            RunningVersions(TL);
+            //RunningVersions(TL);
 
             sw = new Stopwatch(); // Create the stopwatch instances
             swSupport = new Stopwatch();
@@ -101,7 +106,7 @@ namespace ASCOM.Utilities
                 TL = new TraceLogger("", "ProfileMigration"); // Create a new trace logger
                 TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT); // Get enabled / disabled state from the user registry
 
-                RunningVersions(TL);
+                //RunningVersions(TL);
 
                 sw = new Stopwatch(); // Create the stopwatch instances
                 swSupport = new Stopwatch();
@@ -132,7 +137,7 @@ namespace ASCOM.Utilities
             TL = new TraceLogger("", "RegistryAccess"); // Create a new trace logger
             TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT); // Get enabled / disabled state from the user registry
 
-            RunningVersions(TL); // Include version information
+            //RunningVersions(TL); // Include version information
 
             sw = new Stopwatch(); // Create the stopwatch instances
             swSupport = new Stopwatch();
@@ -140,7 +145,7 @@ namespace ASCOM.Utilities
 
             try
             {
-                ProfileRegKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegWow64Options.KEY_WOW64_32KEY);
+                ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegistryAccessRights.Wow64_32Key);
                 PlatformVersion = GetProfile(@"\", "PlatformVersion");
             }
             // OK, no exception so assume that we are initialised
@@ -175,94 +180,20 @@ namespace ASCOM.Utilities
         {
             if (!disposedValue)
             {
-                try
-                {
-                    sw.Stop();
-                }
-                catch
-                {
-                } // Clean up the stopwatches
-                try
-                {
-                    sw = null;
-                }
-                catch
-                {
-                }
-                try
-                {
-                    swSupport.Stop();
-                }
-                catch
-                {
-                }
-                try
-                {
-                    swSupport = null;
-                }
-                catch
-                {
-                }
-                try
-                {
-                    ProfileMutex.Close();
-                }
-                catch
-                {
-                }
-                try
-                {
-                    ProfileMutex = null;
-                }
-                catch
-                {
-                }
-                try
-                {
-                    ProfileRegKey.Close();
-                }
-                catch
-                {
-                }
-
-                try
-                {
-                    ProfileRegKey.Close();
-                }
-                catch
-                {
-                }
-                try
-                {
-                    ProfileRegKey = null;
-                }
-                catch
-                {
-                }
+                try { sw.Stop(); } catch { } // Clean up the stopwatches
+                try { sw = null; } catch { }
+                try { swSupport.Stop(); } catch { }
+                try { swSupport = null; } catch { }
+                try { ProfileMutex.Close(); } catch { }
+                try { ProfileMutex = null; } catch { }
+                try { ProfileRegKey?.Close(); } catch { }
+                try { ProfileRegKey = null; } catch { }
 
                 if (DisableTLOnExit)
                 {
-                    try
-                    {
-                        TL.Enabled = false;
-                    }
-                    catch
-                    {
-                    } // Clean up the logger
-                    try
-                    {
-                        TL.Dispose();
-                    }
-                    catch
-                    {
-                    }
-                    try
-                    {
-                        TL = null;
-                    }
-                    catch
-                    {
-                    }
+                    try { TL.Enabled = false; } catch { } // Clean up the logger
+                    try { TL.Dispose(); } catch { }
+                    try { TL = null; } catch { }
                 }
             }
             disposedValue = true;
@@ -779,7 +710,7 @@ namespace ASCOM.Utilities
                 }
 
                 // Make sure we have a valid key now that we have migrated the profile to the registry
-                ProfileRegKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegWow64Options.KEY_WOW64_32KEY);
+                ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegistryAccessRights.Wow64_32Key);
 
                 sw.Stop();
                 LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
@@ -1044,7 +975,7 @@ namespace ASCOM.Utilities
             swLocal = Stopwatch.StartNew();
 
             // FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
-            FromKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, false, RegWow64Options.KEY_WOW64_32KEY);
+            FromKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, false, RegistryAccessRights.Wow64_32Key);
             ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME + @"\" + REGISTRY_5_BACKUP_SUBKEY);
             PlatformVersion = ToKey.GetValue("PlatformVersion", "").ToString(); // Test whether we have already backed up the profile
             if (string.IsNullOrEmpty(PlatformVersion))
@@ -1075,7 +1006,7 @@ namespace ASCOM.Utilities
             RuleCollection = KeySec.GetAccessRules(true, true, typeof(NTAccount)); // Get the access rules
 
             foreach (RegistryAccessRule RegRule in RuleCollection) // Iterate over the rule set and list them
-                LogMessage("ListRegistryACLs", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((AccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
+                LogMessage("ListRegistryACLs", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((RegistryAccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
             TL.BlankLine();
         }
 
@@ -1110,8 +1041,8 @@ namespace ASCOM.Utilities
                 ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT");
                 ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE"), @"HKEY_LOCAL_MACHINE\SOFTWARE");
                 ListRegistryACLs(Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft"), @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft");
-                ListRegistryACLs(OpenSubKey3264(RegistryHive.LocalMachine, "SOFTWARE", true, RegWow64Options.KEY_WOW64_64KEY), @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node");
-                ListRegistryACLs(OpenSubKey3264(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft", true, RegWow64Options.KEY_WOW64_32KEY), @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft");
+                ListRegistryACLs(OpenSubKey3264(Registry.LocalMachine, "SOFTWARE", true, RegistryAccessRights.Wow64_64Key), @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node");
+                ListRegistryACLs(OpenSubKey3264(Registry.LocalMachine, @"SOFTWARE\Microsoft", true, RegistryAccessRights.Wow64_32Key), @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft");
             }
             else
             {
@@ -1122,7 +1053,7 @@ namespace ASCOM.Utilities
             }
 
             LogMessage("SetRegistryACL", @"Creating root ASCOM key ""\""");
-            Key = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegWow64Options.KEY_WOW64_32KEY); // Always create the key in the 32bit portion of the registry for backward compatibility
+            Key = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegistryAccessRights.Wow64_32Key); // Always create the key in the 32bit portion of the registry for backward compatibility
 
             LogMessage("SetRegistryACL", "Retrieving ASCOM key ACL rule");
             TL.BlankLine();
@@ -1133,7 +1064,7 @@ namespace ASCOM.Utilities
             {
                 try
                 {
-                    LogMessage("SetRegistryACL Before", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((AccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
+                    LogMessage("SetRegistryACL Before", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((RegistryAccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
                 }
                 catch (Exception ex) // Report but ignore errors when logging information
                 {
@@ -1160,7 +1091,7 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        LogMessage("SetRegistryACL Canon", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((AccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
+                        LogMessage("SetRegistryACL Canon", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((RegistryAccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
                     }
                     catch (Exception ex) // Report but ignore errors when logging information
                     {
@@ -1180,7 +1111,7 @@ namespace ASCOM.Utilities
             {
                 try
                 {
-                    LogMessage("SetRegistryACL After", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((AccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
+                    LogMessage("SetRegistryACL After", RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + ((RegistryAccessRights)RegRule.RegistryRights).ToString() + " " + Interaction.IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() + " " + RegRule.InheritanceFlags.ToString() + " " + RegRule.PropagationFlags.ToString());
                 }
                 catch (Exception ex) // Report but ignore errors when logging information
                 {
@@ -1248,7 +1179,7 @@ namespace ASCOM.Utilities
                         try
                         {
                             LogMessage("CanonicalizeDacl", "Found Inherited Ace");
-                            LogMessage("CanonicalizeDacl", "Found Inherited Ace,                  " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", "Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                            LogMessage("CanonicalizeDacl", "Found Inherited Ace,                  " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", "Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                             inheritedDacl.Add(ace);
                         }
                         catch (Exception ex1)
@@ -1266,7 +1197,7 @@ namespace ASCOM.Utilities
                                     try
                                     {
                                         LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Allow");
-                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace,               Allow: " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace,               Allow: " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                                         implicitAllowDacl.Add(ace);
                                     }
                                     catch (IdentityNotMappedException ex1)
@@ -1282,7 +1213,7 @@ namespace ASCOM.Utilities
                                     try
                                     {
                                         LogMessage("CanonicalizeDacl", "Found NotInherited Ace Deny");
-                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace,                Deny: " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace,                Deny: " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                                         implicitDenyDacl.Add(ace);
                                     }
                                     catch (IdentityNotMappedException ex1)
@@ -1298,7 +1229,7 @@ namespace ASCOM.Utilities
                                     try
                                     {
                                         LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object Allow");
-                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object        Allow:" + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object        Allow:" + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                                         implicitAllowObjectDacl.Add(ace);
                                     }
                                     catch (IdentityNotMappedException ex1)
@@ -1314,7 +1245,7 @@ namespace ASCOM.Utilities
                                     try
                                     {
                                         LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object Deny");
-                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object         Deny: " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                                        LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object         Deny: " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                                         implicitDenyObjectDacl.Add(ace);
                                         break;
                                     }
@@ -1350,7 +1281,7 @@ namespace ASCOM.Utilities
                         LogMessage("CanonicalizeDacl", "Adding NonInherited Implicit Deny Ace");
                         newDacl.InsertAce(aceIndex, ace);
                         aceIndex += 1;
-                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Deny Ace,         " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Deny Ace,         " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                     }
                     catch (IdentityNotMappedException ex1)
                     {
@@ -1366,7 +1297,7 @@ namespace ASCOM.Utilities
                         LogMessage("CanonicalizeDacl", "Adding NonInherited Implicit Deny Object Ace");
                         newDacl.InsertAce(aceIndex, ace);
                         aceIndex += 1;
-                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Deny Object Ace,  " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Deny Object Ace,  " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                     }
                     catch (IdentityNotMappedException ex1)
                     {
@@ -1382,7 +1313,7 @@ namespace ASCOM.Utilities
                         LogMessage("CanonicalizeDacl", "Adding NonInherited Implicit Allow Ace");
                         newDacl.InsertAce(aceIndex, ace);
                         aceIndex += 1;
-                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Allow Ace,        " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Allow Ace,        " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                     }
                     catch (IdentityNotMappedException ex1)
                     {
@@ -1398,7 +1329,7 @@ namespace ASCOM.Utilities
                         LogMessage("CanonicalizeDacl", "Adding NonInherited Implicit Allow Object Ace");
                         newDacl.InsertAce(aceIndex, ace);
                         aceIndex += 1;
-                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Allow Object Ace, " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                        LogMessage("CanonicalizeDacl", "Added NonInherited Implicit Allow Object Ace, " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                     }
                     catch (IdentityNotMappedException ex1)
                     {
@@ -1414,7 +1345,7 @@ namespace ASCOM.Utilities
                         LogMessage("CanonicalizeDacl", "Adding Inherited Ace");
                         newDacl.InsertAce(aceIndex, ace);
                         aceIndex += 1;
-                        LogMessage("CanonicalizeDacl", "Added Inherited Ace,                 " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((AccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
+                        LogMessage("CanonicalizeDacl", "Added Inherited Ace,                 " + Interaction.IIf(ace.AceType == AceType.AccessAllowed, "Allow", " Deny").ToString() + ": " + ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() + " " + ((RegistryAccessRights)ace.AccessMask).ToString().ToString() + " " + ace.AceFlags.ToString());
                     }
                     catch (IdentityNotMappedException ex1)
                     {
@@ -1512,7 +1443,7 @@ namespace ASCOM.Utilities
             swLocal = Stopwatch.StartNew();
 
             FromKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME + @"\" + REGISTRY_5_BACKUP_SUBKEY);
-            ToKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegWow64Options.KEY_WOW64_32KEY);
+            ToKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegistryAccessRights.Wow64_32Key);
             LogMessage("Restore50", "Restoring Profile 5 to " + ToKey.Name);
             CopyRegistry(FromKey, ToKey);
             FromKey.Close(); // Close the key after migration
@@ -1530,7 +1461,7 @@ namespace ASCOM.Utilities
             swLocal = Stopwatch.StartNew();
 
             FromKey = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT_KEY_NAME + @"\" + REGISTRY_55_BACKUP_SUBKEY);
-            ToKey = OpenSubKey3264(RegistryHive.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegWow64Options.KEY_WOW64_32KEY);
+            ToKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegistryAccessRights.Wow64_32Key);
             LogMessage("Restore55", "Restoring Profile 5.5 to " + ToKey.Name);
             CopyRegistry(FromKey, ToKey);
             FromKey.Close(); // Close the key after migration
@@ -1604,106 +1535,115 @@ namespace ASCOM.Utilities
             }
         }
 
+        #endregion
+
         #region 32/64bit registry access code
-        // There is a better way to achieve a 64bit registry view in framework 4. 
-        // Only OpenSubKey is used in the code, the rest of these routines are support for OpenSubKey.
-        // OpenSubKey should be replaced with Microsoft.Win32.RegistryKey.OpenBaseKey method
 
-        // <Obsolete("Replace with Microsoft.Win32.RegistryKey.OpenBaseKey method in Framework 4", False)> _
-        internal RegistryKey OpenSubKey3264(RegistryHive ParentKey, string SubKeyName, bool Writeable, RegWow64Options Options)
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto)]
+        private static extern int RegOpenKeyEx(IntPtr hKey, string lpSubKey, int ulOptions, int samDesired, out int phkResult);
+
+        [DllImport("advapi32.dll", EntryPoint = "RegQueryValueEx", CharSet = CharSet.Auto)]
+        public static extern int RegQueryValueEx(int hKey, string lpValueName, int lpReserved, ref uint lpType, System.Text.StringBuilder lpData, ref uint lpcbData);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto)]
+        private static extern int RegCreateKeyEx(IntPtr hKey, string lpSubKey, int Reserved, IntPtr lpClass, int dwOptions, int samDesired, int lpSecurityAttributes, out int phkResult, out int lpdwDisposition);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern int CloseHandle(IntPtr hObject);
+
+        /// <summary>
+        /// Open a registry key with given access e.g. the 32 bit or 64bit registry view on a 64bit OS
+        /// </summary>
+        /// <param name="parentKey">Parent key - usually a registry hive such as Registry.ClassesRoot</param>
+        /// <param name="keyName">The name of the key to open</param>
+        /// <param name="writeable">Open the key for writing</param>
+        /// <param name="options">Registry options such as selecting the 32bit or 64bit registry view.</param>
+        /// <returns>A registry key</returns>
+        /// <exception cref="ProfilePersistenceException">When the key cannot be opened.</exception>
+        internal RegistryKey OpenSubKey3264(RegistryKey parentKey, string keyName, bool writeable, RegistryAccessRights options)
         {
-            var Result = default(int);
-            RegistryKey resultKey;
+            var subKeyHandle = default(int);
+            int result, disposition;
 
-            TL.LogMessage("OpenSubKey3264", $"Hive: {ParentKey}, SubKey: {SubKeyName}, Writeable: {Writeable}, Options: {Options}, Application bits: {ApplicationBits()}");
-
-            // Handle the various registry hives
-            switch (ParentKey)
+            if (parentKey is null || GetRegistryKeyHandle(parentKey).Equals(IntPtr.Zero))
             {
-                case RegistryHive.ClassesRoot: // HKEY classes root
-                    {
-                        // Test whether the application is 32bit or 64bit
-                        if (ApplicationBits() == Bitness.Bits64) // 64bit application
-                        {
-                            // Force access to the 32bit portion of the registry (different on a 64bit machine from the 64bit portion of the registry)
-                            resultKey = Registry.ClassesRoot.OpenSubKey($@"WOW6432Node\{SubKeyName}", Writeable);
-                        }
+                throw new ProfilePersistenceException("OpenSubKey: Parent key is not open");
+            }
 
-                        else // 32bit application
-                        {
-                            // Access the 32bit portion of the registry (only one version because 32bit only)
-                            resultKey = Registry.ClassesRoot.OpenSubKey(SubKeyName, Writeable);
-                        }
+            int Rights = (int)RegistryRights.ReadKey; // Or RegistryRights.EnumerateSubKeys Or RegistryRights.QueryValues Or RegistryRights.Notify
+            if (writeable)
+            {
+                Rights = (int)RegistryRights.WriteKey;
+                // hKey                             SubKey      Res lpClass     dwOpts samDesired     SecAttr      Handle        Disp
+                result = RegistryAccess.RegCreateKeyEx(GetRegistryKeyHandle(parentKey), keyName, 0, IntPtr.Zero, 0, Rights | (int)options, IntPtr.Zero.ToInt32(), out subKeyHandle, out disposition);
+                HandleList.Add((IntPtr)subKeyHandle);
+            }
+            else
+            {
+                result = RegistryAccess.RegOpenKeyEx(GetRegistryKeyHandle(parentKey), keyName, 0, Rights | (int)options, out subKeyHandle);
+                HandleList.Add((IntPtr)subKeyHandle);
+            }
 
-                        break;
-                    }
+            switch (result)
+            {
+                case 0: // All OK so return result
+                    return PointerToRegistryKey((IntPtr)subKeyHandle, writeable, false, options); // Now pass the options as well for Framework 4 compatibility
 
-                case RegistryHive.LocalMachine: // HKEY local machine
-                    {
-                        // Test whether the application is 32bit or 64bit
-                        if (ApplicationBits() == Bitness.Bits64) // 64bit application
-                        {
-                            // Check whether we are accessing the SOFTWARE key
-                            string cleanedKey = SubKeyName.Trim().TrimStart('\\'); // Remove leading and trailing spaces and leading \ characters
-
-                            if (cleanedKey.StartsWith("SOFTWARE", StringComparison.OrdinalIgnoreCase)) // We need to access the 32bit version of the SOFTWARE key 
-                            {
-                                // Force access to the 32bit portion of the registry (different on a 64bit machine from the 64bit portion of the registry)
-                                // extract any sub-key that follows SOFTWARE
-                                if (cleanedKey.Length > 8) // There is something after the key SOFTWARE
-                                {
-                                    cleanedKey = $@"SOFTWARE\WOW6432Node\{cleanedKey.Substring(8)}";
-                                }
-                                else
-                                {
-                                    cleanedKey = $@"SOFTWARE\WOW6432Node\";
-                                }
-                                TL.LogMessage("OpenSubKey3264", $"Cleaned key: {cleanedKey}");
-
-                                resultKey = Registry.LocalMachine.OpenSubKey(cleanedKey, Writeable);
-                            }
-
-                            else
-                            {
-                                resultKey = Registry.LocalMachine.OpenSubKey(SubKeyName, Writeable);
-                            }
-                        }
-
-                        else // 32bit application
-                        {
-                            // Access the 32bit portion of the registry (only one version because 32bit only)
-                            resultKey = Registry.LocalMachine.OpenSubKey(SubKeyName, Writeable);
-                        } // Other hives are not supported
-
-                        break;
-                    }
+                case 2: // Key not found so return nothing
+                    throw new ProfilePersistenceException("Cannot open key " + keyName + " as it does not exist - Result: 0x" + Conversion.Hex(result)); // Some other error so throw an error
 
                 default:
-                    {
-                        throw new InvalidValueException($@"RegistryAccess - OpenSubKey3264 - The {ParentKey} hive is not yet supported.
-");
-                    }
+                    throw new ProfilePersistenceException("OpenSubKey: Exception encountered opening key - Result: 0x" + Conversion.Hex(result));
             }
-
-            // Test whether the sub-key was found
-            if (resultKey is null) // Sub-key not found so throw an exception
-            {
-                throw new ProfilePersistenceException("Cannot open key " + SubKeyName + " as it does not exist - Result: 0x" + Conversion.Hex(Result));
-            }
-
-            // Sub-key found so return it
-            return resultKey;
         }
 
-        internal enum RegWow64Options : int
+        private RegistryKey PointerToRegistryKey(IntPtr hKey, bool writable, bool ownsHandle, RegistryAccessRights options)
         {
-            // Basis from: http://www.pinvoke.net/default.aspx/advapi32/RegOpenKeyEx.html
-            None = 0,
-            KEY_WOW64_64KEY = 0x100,
-            KEY_WOW64_32KEY = 0x200
+            // Create a SafeHandles.SafeRegistryHandle from this pointer - this is a private class
+            System.Reflection.BindingFlags privateConstructors, publicConstructors;
+            Type safeRegistryHandleType;
+            Type[] safeRegistryHandleConstructorTypes = new[] { typeof(IntPtr), typeof(bool) };
+            System.Reflection.ConstructorInfo safeRegistryHandleConstructor;
+            object safeHandle;
+            Type registryKeyType;
+            System.Reflection.ConstructorInfo registryKeyConstructor;
+            RegistryKey result;
+
+            publicConstructors = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+            privateConstructors = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            safeRegistryHandleType = typeof(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.SafeHandles.SafeRegistryHandle");
+            safeRegistryHandleConstructor = safeRegistryHandleType.GetConstructor(publicConstructors, null, safeRegistryHandleConstructorTypes, null);
+            safeHandle = safeRegistryHandleConstructor.Invoke(new object[] { hKey, ownsHandle });
+
+            // Create a new Registry key using the private constructor using the safeHandle - this should then behave like a .NET natively opened handle and disposed of correctly
+            if (Environment.Version.Major >= 4) // Deal with MS having added a new parameter to the RegistryKey private constructor!!
+            {
+                var RegistryViewType = typeof(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.RegistryView"); // This is the new parameter type
+                Type[] registryKeyConstructorTypes = new[] { safeRegistryHandleType, typeof(bool), RegistryViewType }; // Add the extra parameter to the list of parameter types
+                registryKeyType = typeof(RegistryKey);
+                registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, null, registryKeyConstructorTypes, null);
+                result = (RegistryKey)registryKeyConstructor.Invoke(new object[] { safeHandle, writable, (int)options }); // Version 4 and later
+            }
+            else // Only two parameters for Frameworks 3.5 and below
+            {
+                Type[] registryKeyConstructorTypes = new[] { safeRegistryHandleType, typeof(bool) };
+                registryKeyType = typeof(RegistryKey);
+                registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, null, registryKeyConstructorTypes, null);
+                result = (RegistryKey)registryKeyConstructor.Invoke(new object[] { safeHandle, writable });
+            } // Version 3.5 and earlier
+            return result;
         }
 
-        #endregion
+        private IntPtr GetRegistryKeyHandle(RegistryKey registryKey)
+        {
+            // Basis from http://blogs.msdn.com/cumgranosalis/archive/2005/12/09/Win64RegistryPart1.aspx
+            var Type = System.Type.GetType("Microsoft.Win32.RegistryKey");
+            var Info = Type.GetField("hkey", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            SafeHandle Handle = (SafeHandle)Info.GetValue(registryKey);
+
+            return Handle.DangerousGetHandle();
+        }
 
         #endregion
 

@@ -31,7 +31,7 @@ namespace ASCOM.Utilities
 
                 using (var Profile = new RegistryAccess())
                 {
-                    ProfileKey = Profile.OpenSubKey3264(RegistryHive.LocalMachine, @"SOFTWARE\ASCOM\Platform", false, RegWow64Options.KEY_WOW64_32KEY);
+                    ProfileKey = Profile.OpenSubKey3264(Registry.LocalMachine, @"SOFTWARE\ASCOM\Platform", false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
 
                     NameLbl.Text = Conversions.ToString(ProfileKey.GetValue("Platform Name", "Unknown Name"));
                     Version.Text = Conversions.ToString(ProfileKey.GetValue("Platform Version", "Unknown Version"));

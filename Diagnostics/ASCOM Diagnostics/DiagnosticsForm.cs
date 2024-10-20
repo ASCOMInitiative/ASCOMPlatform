@@ -1270,12 +1270,12 @@ namespace ASCOM.Utilities
 
             try
             {
-                AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, ProgID + @"\CLSID", false, RegWow64Options.KEY_WOW64_32KEY);
+                AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, ProgID + @"\CLSID", false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
                 CLSIDString = Conversions.ToString(AppKey.GetValue("", ""));
                 AppKey.Close();
                 if (!string.IsNullOrEmpty(CLSIDString)) // Got a GUID value so try and process it
                 {
-                    AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, @"CLSID\" + CLSIDString + @"\LocalServer32", false, RegWow64Options.KEY_WOW64_32KEY);
+                    AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, @"CLSID\" + CLSIDString + @"\LocalServer32", false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
                     FileName = Conversions.ToString(AppKey.GetValue("", ""));
                     FileName = FileName.Trim(['"']); // TrimChars)
                     if (!string.IsNullOrEmpty(FileName)) // We have a file name so see if it exists
@@ -1325,7 +1325,7 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        AppKey = Reg.OpenSubKey3264(RegistryHive.ClassesRoot, @"CLSID\" + CLSIDString + @"\LocalServer32", false, RegWow64Options.KEY_WOW64_32KEY);
+                        AppKey = Reg.OpenSubKey3264(Registry.ClassesRoot, @"CLSID\" + CLSIDString + @"\LocalServer32", false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
                         FileName = Conversions.ToString(AppKey.GetValue("", ""));
                         if (!string.IsNullOrEmpty(FileName)) // We have a file name so see if it exists
                         {
@@ -8881,7 +8881,7 @@ namespace ASCOM.Utilities
                         RegistryRights(Registry.LocalMachine, @"SOFTWARE\WOW6432Node\ASCOM", false);
                         RegistryRights(Registry.LocalMachine, @"SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers", false);
                         RegistryRights(Registry.LocalMachine, @"SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope", false);
-                        Key = ASCOMRegistryAccess.OpenSubKey3264(RegistryHive.LocalMachine, Utilities.Global.REGISTRY_ROOT_KEY_NAME, false, RegWow64Options.KEY_WOW64_32KEY);
+                        Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, Utilities.Global.REGISTRY_ROOT_KEY_NAME, false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
                         RecursionLevel = -1;
                         RecurseRegistrySecurity(Key);
                     }
@@ -9120,7 +9120,7 @@ namespace ASCOM.Utilities
                 {
                     // List the 32bit registry
                     TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 32bit Registry)");
-                    Key = ASCOMRegistryAccess.OpenSubKey3264(RegistryHive.LocalMachine, Utilities.Global.REGISTRY_ROOT_KEY_NAME, false, RegWow64Options.KEY_WOW64_32KEY);
+                    Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, Utilities.Global.REGISTRY_ROOT_KEY_NAME, false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
                     RecursionLevel = -1;
                     RecurseRegistry(Key);
                 }
@@ -9134,7 +9134,7 @@ namespace ASCOM.Utilities
                 {
                     // List the 64bit registry
                     TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 64bit Registry)");
-                    Key = ASCOMRegistryAccess.OpenSubKey3264(RegistryHive.LocalMachine, Utilities.Global.REGISTRY_ROOT_KEY_NAME, false, RegWow64Options.KEY_WOW64_64KEY);
+                    Key = ASCOMRegistryAccess.OpenSubKey3264(Registry.LocalMachine, Utilities.Global.REGISTRY_ROOT_KEY_NAME, false, RegistryAccess.RegistryAccessRights.Wow64_64Key);
                     RecursionLevel = -1;
                     RecurseRegistry(Key);
                 }
@@ -9848,42 +9848,31 @@ namespace ASCOM.Utilities
                         switch (Utilities.Global.ApplicationBits())
                         {
                             case Bitness.Bits32: // We are a 32bit application so look in the default registry position
-                                {
-                                    RKeyCLSID = Registry.ClassesRoot.OpenSubKey(@"CLSID\" + CLSID, false);
-                                    break;
-                                }
+                                RKeyCLSID = Registry.ClassesRoot.OpenSubKey(@"CLSID\" + CLSID, false);
+                                break;
+
                             case Bitness.Bits64: // We are a 64bit application so look in the 32bit registry section
+                                switch (Bitness)
                                 {
-                                    switch (Bitness)
-                                    {
-                                        case Bitness.Bits32: // Open the 32bit registry
-                                            {
-                                                RKeyCLSID = RegAccess.OpenSubKey3264(RegistryHive.ClassesRoot, @"CLSID\" + CLSID, false, RegWow64Options.KEY_WOW64_32KEY);
-                                                break;
-                                            }
-                                        case Bitness.Bits64: // Open the 64bit registry
-                                            {
-                                                RKeyCLSID = Registry.ClassesRoot.OpenSubKey(@"CLSID\" + CLSID, false);
-                                                break;
-                                            }
+                                    case Bitness.Bits32: // Open the 32bit registry
+                                        RKeyCLSID = RegAccess.OpenSubKey3264(Registry.ClassesRoot, @"CLSID\" + CLSID, false, RegistryAccess.RegistryAccessRights.Wow64_32Key);
+                                        break;
 
-                                        default:
-                                            {
-                                                RKeyCLSID = null;
-                                                this.Compare("HelperHijacking", "Requested Bitness", Utilities.Global.ApplicationBits().ToString(), Bitness.Bits64.ToString());
-                                                break;
-                                            }
-                                    }
+                                    case Bitness.Bits64: // Open the 64bit registry
+                                        RKeyCLSID = Registry.ClassesRoot.OpenSubKey(@"CLSID\" + CLSID, false);
+                                        break;
 
-                                    break;
+                                    default:
+                                        RKeyCLSID = null;
+                                        this.Compare("HelperHijacking", "Requested Bitness", Utilities.Global.ApplicationBits().ToString(), Bitness.Bits64.ToString());
+                                        break;
                                 }
+                                break;
 
                             default:
-                                {
-                                    this.Compare("HelperHijacking", "Requested Bitness", Utilities.Global.ApplicationBits().ToString(), Bitness.Bits64.ToString());
-                                    RKeyCLSID = null;
-                                    break;
-                                }
+                                this.Compare("HelperHijacking", "Requested Bitness", Utilities.Global.ApplicationBits().ToString(), Bitness.Bits64.ToString());
+                                RKeyCLSID = null;
+                                break;
                         }
                         if (RKeyCLSID is not null) // CLSID value does exist
                         {
@@ -9908,15 +9897,12 @@ namespace ASCOM.Utilities
                                             switch (Bitness)
                                             {
                                                 case Bitness.Bits32: // Run the 32bit Regedit
-                                                    {
                                                         SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEMX86, false); // Get the 32bit system directory
                                                         break;
-                                                    }
+
                                                 case Bitness.Bits64: // Run the 64bit Regedit
-                                                    {
                                                         SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, false); // Get the 64bit system directory
                                                         break;
-                                                    }
                                             }
                                         }
                                         else // We are running on a 32bit OS

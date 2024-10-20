@@ -299,87 +299,55 @@ namespace ASCOM.Utilities
                 switch (hResult)
                 {
                     case COR_E_BADIMAGEFORMAT:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_BADIMAGEFORMAT. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_BADIMAGEFORMAT. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case CLDB_E_FILE_OLDVER:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CLDB_E_FILE_OLDVER. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CLDB_E_FILE_OLDVER. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case CLDB_E_INDEX_NOTFOUND:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CLDB_E_INDEX_NOTFOUND. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CLDB_E_INDEX_NOTFOUND. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case CLDB_E_FILE_CORRUPT:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CLDB_E_FILE_CORRUPT. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CLDB_E_FILE_CORRUPT. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case COR_E_NEWER_RUNTIME: // This is an assembly but it requires a newer runtime than is currently running, so flag it as an assembly even though we can't load it
-                        {
-                            IsAssembly = true;
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_NEWER_RUNTIME. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        IsAssembly = true;
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_NEWER_RUNTIME. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case COR_E_ASSEMBLYEXPECTED:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_ASSEMBLYEXPECTED. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_ASSEMBLYEXPECTED. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case ERROR_BAD_EXE_FORMAT:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_BAD_EXE_FORMAT. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_BAD_EXE_FORMAT. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case ERROR_EXE_MARKED_INVALID:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_EXE_MARKED_INVALID. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_EXE_MARKED_INVALID. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case CORSEC_E_INVALID_IMAGE_FORMAT:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CORSEC_E_INVALID_IMAGE_FORMAT. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - CORSEC_E_INVALID_IMAGE_FORMAT. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case ERROR_NOACCESS:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_NOACCESS. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_NOACCESS. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case ERROR_INVALID_ORDINAL:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_INVALID_ORDINAL. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_INVALID_ORDINAL. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case ERROR_INVALID_DLL:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_INVALID_DLL. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_INVALID_DLL. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case ERROR_FILE_CORRUPT:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_FILE_CORRUPT. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - ERROR_FILE_CORRUPT. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case COR_E_LOADING_REFERENCE_ASSEMBLY:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_LOADING_REFERENCE_ASSEMBLY. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - COR_E_LOADING_REFERENCE_ASSEMBLY. Setting IsAssembly to: " + IsAssembly);
+                        break;
                     case META_E_BAD_SIGNATURE:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - META_E_BAD_SIGNATURE. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - META_E_BAD_SIGNATURE. Setting IsAssembly to: " + IsAssembly);
+                        break;
 
                     default:
-                        {
-                            TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - Meaning of error code is unknown. Setting IsAssembly to: " + IsAssembly);
-                            break;
-                        }
+                        TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " + hResult.ToString("X8") + " - Meaning of error code is unknown. Setting IsAssembly to: " + IsAssembly);
+                        break;
                 }
             }
 
