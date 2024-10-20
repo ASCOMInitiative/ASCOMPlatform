@@ -780,18 +780,13 @@ namespace ASCOM.Utilities
                 switch (IntPtr.Size)
                 {
                     case 4:
-                        {
-                            return Bitness.Bits32;
-                        }
+                        return Bitness.Bits32;
+
                     case 8:
-                        {
-                            return Bitness.Bits64;
-                        }
+                        return Bitness.Bits64;
 
                     default:
-                        {
-                            return Bitness.BitsUnknown;
-                        }
+                        return Bitness.BitsUnknown;
                 }
             }
 
@@ -802,18 +797,13 @@ namespace ASCOM.Utilities
             switch (IntPtr.Size)
             {
                 case 4:
-                    {
-                        return Bitness.Bits32;
-                    }
+                    return Bitness.Bits32;
+
                 case 8:
-                    {
-                        return Bitness.Bits64;
-                    }
+                    return Bitness.Bits64;
 
                 default:
-                    {
-                        return Bitness.BitsUnknown;
-                    }
+                    return Bitness.BitsUnknown;
             }
         }
 
@@ -1022,14 +1012,7 @@ namespace ASCOM.Utilities
 
             string CompatibilityMessage = ""; // Set default return value as OK
 
-            // Validate incoming required bitness parameter
-            if (applicationBitness == Bitness.Bits64 & ApplicationBits() == Bitness.Bits32)
-            {
-                throw new InvalidOperationException($"Cannot validate a driver for 64bit operation using a 32bit application! Requested application bitness: {applicationBitness}, " +
-                    $"Actual application bitness: {ApplicationBits()}, OS bitness: {OSBits()}");
-            }
-
-            TL.LogMessage("DriverCompatibility", $"     ProgID: {progID}, Application Bitness: {applicationBitness} ");
+            TL.LogMessage("DriverCompatibility", $"     ProgID: {progID}, Testing for compatibility with application Bitness: {applicationBitness} on an OS with bitness: {OSBits()}");
 
             // Parse the COM registry section to determine whether this ProgID is an in-process DLL server.
             // If it is then parse the executable to determine whether it is a 32bit only driver and give a suitable message if it is
@@ -1058,7 +1041,7 @@ namespace ASCOM.Utilities
 
                     if (applicationBitness == Bitness.Bits64) // We are making a 64bit application check so assume we are on a 64bit OS and check to see whether this is a 32bit only driver
                     {
-                        RK = CreateClsidKey(clsId, RegistryAccessRights.Wow64_64Key,TL); // Check the 64bit registry section for this CLSID
+                        RK = CreateClsidKey(clsId, RegistryAccessRights.Wow64_64Key, TL); // Check the 64bit registry section for this CLSID
                         if (RK is null) // We don't have an entry in the 64bit CLSID registry section so try the 32bit section
                         {
                             TL.LogMessage("DriverCompatibility", "     No entry in the 64bit registry, checking the 32bit registry");
@@ -1498,11 +1481,11 @@ namespace ASCOM.Utilities
             {
                 try
                 {
-                return registryAccess.OpenSubKey3264(Registry.ClassesRoot, clsId, false, requiredBitness);
+                    return registryAccess.OpenSubKey3264(Registry.ClassesRoot, clsId, false, requiredBitness);
                 }
-                catch(ProfilePersistenceException ex)
+                catch (ProfilePersistenceException ex)
                 {
-                    TL.LogMessageCrLf("CreateClsidKey",$"     Key HKeyClassesRoot\\{clsId} does not exist for view {requiredBitness}");
+                    TL.LogMessageCrLf("CreateClsidKey", $"     Key HKeyClassesRoot\\{clsId} does not exist for view {requiredBitness}");
                     return null;
                 }
                 catch (Exception ex)
