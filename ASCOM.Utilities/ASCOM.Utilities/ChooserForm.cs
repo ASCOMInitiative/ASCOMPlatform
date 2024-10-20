@@ -126,6 +126,7 @@ namespace ASCOM.Utilities
         private ToolTip createAlpacaDeviceToolTip;
         private ToolStripLabel alpacaStatusToolstripLabel;
         private System.Windows.Forms.Timer _AlpacaStatusIndicatorTimer;
+        private bool warningTooltipVisible = false;
 
         private System.Windows.Forms.Timer AlpacaStatusIndicatorTimer
         {
@@ -248,6 +249,9 @@ namespace ASCOM.Utilities
                 chooserPropertiesToolTip.ToolTipTitle = TOOLTIP_PROPERTIES_TITLE;
                 chooserPropertiesToolTip.SetToolTip(BtnProperties, TOOLTIP_PROPERTIES_MESSAGE);
 
+                // Add an event handler for the Properties tooltip so we can suppress the tooltip when a warning message is displayed
+                chooserPropertiesToolTip.Popup += ChooserPropertiesToolTip_Popup;
+
                 // Create Alpaca information tooltip 
                 createAlpacaDeviceToolTip = new ToolTip();
 
@@ -275,6 +279,13 @@ namespace ASCOM.Utilities
                 Interaction.MsgBox("ChooserForm Load " + ex.ToString());
                 LogEvent("ChooserForm Load ", ex.ToString(), EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString());
             }
+        }
+
+        private void ChooserPropertiesToolTip_Popup(object sender, PopupEventArgs e)
+        {
+            // Prevent the properties tooltip from displaying when a warning message is visible
+            if (warningTooltipVisible)
+                e.Cancel = true;
         }
 
         private void ChooserForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -1782,6 +1793,8 @@ namespace ASCOM.Utilities
             currentWarningTitle = Title;
             currentWarningMesage = Message;
 
+            warningTooltipVisible = true;
+
             if (Message.Contains(Microsoft.VisualBasic.Constants.vbCrLf))
             {
                 chooserWarningToolTip.Show(Message, this, MESSAGE_X_POSITION, 24); // Display at position for a two line message
@@ -1848,6 +1861,7 @@ namespace ASCOM.Utilities
             chooserWarningToolTip.RemoveAll();
             currentWarningTitle = "";
             currentWarningMesage = "";
+            warningTooltipVisible = false;
         }
 
 
