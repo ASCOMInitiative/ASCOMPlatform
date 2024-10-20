@@ -987,6 +987,10 @@ namespace ASCOM.Utilities
         [DllImport("Kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         private static extern bool IsWow64Process(IntPtr hProcess, ref bool wow64Process);
 
+        #endregion
+
+        #region Driver Compatibility Checks
+
         /// <summary>
         /// Return a message when a driver is not compatible with the requested 32/64bit application type. Returns an empty string if the driver is compatible
         /// </summary>
@@ -1229,7 +1233,8 @@ namespace ASCOM.Utilities
                     } // We are making a 64bit application check so assume we are on a 64bit OS and check to see whether this is a 32bit only driver
                     else // We are running a 32bit application test so make sure the executable is not 64bit only
                     {
-                        if (ApplicationBits() == Bitness.Bits64) // We want to test as if we are a 32bit app on a 64bit OS
+                        // Test if we are on a 64bit OS
+                        if (OSBits() == Bitness.Bits64) // 64bit OS - Test as a 32bit app on a 64bit OS
                         {
                             try { RK32 = CreateClsidKey(clsId, RegistryAccessRights.Wow64_32Key, TL); } catch (Exception) { } // Ignore any exceptions, they just mean the operation wasn't successful
                             try { RK64 = CreateClsidKey(clsId, RegistryAccessRights.Wow64_64Key, TL); } catch (Exception) { } // Ignore any exceptions, they just mean the operation wasn't successful                            
@@ -1239,8 +1244,8 @@ namespace ASCOM.Utilities
                                 RK = RK32;
                             else // Otherwise return the 64bit key
                                 RK = RK64;
-                        }// We want to test as if we are a 32bit app on a 64bit OS
-                        else // We are running in a 32bit application
+                        }// 64bit OS - Test as a 32bit app on a 64bit OS
+                        else // 32bit OS - Test as a 32bit app
                         {
                             RK = CreateClsidKey(clsId, RegistryAccessRights.Wow64_32Key, TL); // Check the 32bit registry section for this CLSID
                             TL.LogMessage("DriverCompatibility", "     Running on a 32bit OS, Is 32Bit Registered: " + (RK is not null));
@@ -1494,24 +1499,6 @@ namespace ASCOM.Utilities
                     throw;
                 }
             }
-
-
-            // Handle 32bit and 64bit OS behaviour
-            //if (ApplicationBits() == Bitness.Bits32) // We are running in a 32bit application - only one possibility
-            //{
-            //    return Registry.ClassesRoot.OpenSubKey(clsId);
-            //}
-            //else // 64bit application - select the key in the appropriate part of the HKCR hive
-            //{
-            //    if (requiredBitness == Bitness.Bits32) // Open the key in the 32bit portion of the HKCR hive
-            //    {
-            //        return Registry.ClassesRoot.OpenSubKey($@"WOW6432Node\{clsId}");
-            //    }
-            //    else // Open the key in the 64bit portion of the HKCR hive
-            //    {
-            //        return Registry.ClassesRoot.OpenSubKey(clsId);
-            //    }
-            //}
         }
 
         #endregion
