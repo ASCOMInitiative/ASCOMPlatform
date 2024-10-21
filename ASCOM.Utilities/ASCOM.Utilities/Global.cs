@@ -1488,7 +1488,7 @@ namespace ASCOM.Utilities
                 {
                     return registryAccess.OpenSubKey3264(Registry.ClassesRoot, clsId, false, requiredBitness);
                 }
-                catch (ProfilePersistenceException ex)
+                catch (ProfilePersistenceException)
                 {
                     TL.LogMessageCrLf("CreateClsidKey", $"     Key HKeyClassesRoot\\{clsId} does not exist for view {requiredBitness}");
                     return null;
