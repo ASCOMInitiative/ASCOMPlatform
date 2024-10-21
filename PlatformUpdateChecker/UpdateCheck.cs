@@ -113,7 +113,7 @@ namespace PlatformUpdateChecker
                 // Check whether some results were obtained
                 if (results.Count > 0) // Some results were returned
                 {
-                    // Iterate over the results and process one at a time to find the latest reelase and pre-release versions
+                    // Iterate over the results and process one at a time to find the latest release and pre-release versions
                     foreach (Octokit.Release release in results)
                     {
                         try

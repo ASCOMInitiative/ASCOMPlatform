@@ -1,7 +1,7 @@
 7
 0
 1
--rc.1
+Release
 
 The first line of this file must contain the major Platform version number
 The second line of this file must contain the minor Platform version number
