@@ -1371,6 +1371,13 @@ $
 
 
 
+
+
+
+
+
+
+
 B
 
 
@@ -2941,30 +2948,30 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 7.0
+ASCOM Platform 7.0 - Update 1
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 7.0.9999.9999
 English
-ASCOM Platform 7.0
+ASCOM Platform 7.0 - Update 1
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{A30D95CF-EA3E-4B0D-AE2B-634F1692BB97}
+{269D39D2-AA38-446F-9166-170D1DF2FF97}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2024, The ASCOM Initiative. All rights reserved. 
 FALSE
-AscomPlatform700
+AscomPlatform701
 TRUE
-TRUE
+FALSE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer
 https://ascom-standards.org
-UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE,CACHESOURCES=TRUE,SINGLEINSTANCE=TRUE,LONGCOMPONENTS=TRUE,MIN_EXTRACT=AUTO
+UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,LOADOLDDATA=TRUE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE,CACHESOURCES=TRUE,SINGLEINSTANCE=FALSE,LONGCOMPONENTS=TRUE,MIN_EXTRACT=AUTO
 $
 $
 

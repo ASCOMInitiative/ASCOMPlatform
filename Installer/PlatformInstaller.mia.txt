@@ -1,6 +1,12 @@
 Comment: ASCOM Platform installation script 
 Comment: NOTE: The required Platform version number is read at build time by this script from the MasterPlatformVersion.txt file that is maintained through the main Visual Studio project
  
+Comment: Clean the TEMP folder of previous build artefacts because if $REVISIONCODE$.mia exists it can stop the installer GUI from appearing. I'm cleaning the PRODUCTCODE just in case.
+Comment: We shouldn't need to do this but it seems safe and enables the installer to always show its GUI.
+Comment: The single instance feature has also been disabled, which suppresses generation of the $REVISIONCODE$.mia file in the first place.
+Recursively Delete Files $TEMPDIR$$REVISIONCODE$.mia
+Recursively Delete Files $TEMPDIR$$PRODUCTCODE$.mia
+ 
 [DEFINE REGION: Set up log file and variables]
  
 Comment: Set the Platform and developer target directories

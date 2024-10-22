@@ -1,6 +1,12 @@
 Comment
 Comment
 Comment
+Comment
+Comment
+Comment
+Delete Files Recursive
+Delete Files Recursive
+Comment
 Code Folding Region
 Comment
 Comment
@@ -2787,6 +2793,12 @@ Label
 $
 {A0BF7AED-96C7-4B31-B1FC-DFCB5A0CFB07}
 {39EB71ED-7656-4050-AC68-84D640571E11}
+{57B7FA12-7FF3-4E73-9CEB-AA135054C160}
+{7AEC9729-3612-4978-A662-7C6B21159B3F}
+{5EC51765-A355-4965-BFF9-38732EAD69DC}
+{269FB133-8234-4E48-B257-AE4BFB41C248}
+{E5CC9520-3E5A-4A70-A382-7D750F436D76}
+{5686D106-1A4F-481B-9EE1-3557C80F2290}
 {26CF807C-D540-4DDB-B958-1139C253CD95}
 {609F21EE-0D19-4AFB-A55D-7D7916490377}
 {69585A4E-6DC0-4B2D-84D1-2FCEA81148C7}
@@ -6914,6 +6926,14 @@ Not a first time install so no action to take.
 
 {F5B18E28-FB66-40B7-868F-C76412C8B0A4}
 Uninstall the stand-alone Device Hub if present
+{57B7FA12-7FF3-4E73-9CEB-AA135054C160}
+
+{7AEC9729-3612-4978-A662-7C6B21159B3F}
+Clean the TEMP folder of previous build artefacts because if $REVISIONCODE$.mia exists it can stop the installer GUI from appearing. I'm cleaning the PRODUCTCODE just in case.
+{5EC51765-A355-4965-BFF9-38732EAD69DC}
+We shouldn't need to do this but it seems safe and enables the installer to always show its GUI.
+{269FB133-8234-4E48-B257-AE4BFB41C248}
+The single instance feature has also been disabled, which suppresses generation of the $REVISIONCODE$.mia file in the first place.
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -18201,6 +18221,10 @@ $SHORTCUTFILESALL$ASCOM Omni-Simulators.lnk
 $SHORTCUTFILESALL$ASCOM Remote Server.lnk
 {2C9E2E41-1FF1-4305-8DB7-1A25F3666C33}
 $SHORTCUTFILESALL$ASCOM Profile Explorer.lnk
+{E5CC9520-3E5A-4A70-A382-7D750F436D76}
+$TEMPDIR$$REVISIONCODE$.mia
+{5686D106-1A4F-481B-9EE1-3557C80F2290}
+$TEMPDIR$$PRODUCTCODE$.mia
 {FD19DB59-9886-4C25-B0BF-ABAAB32B66A9}
 GACInstall
 DriverAccess install error RC: $GACINSTALLRC$
@@ -18570,6 +18594,12 @@ $
 
 
 
+
+
+
+
+
+
 C
 
 
@@ -21232,6 +21262,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 
