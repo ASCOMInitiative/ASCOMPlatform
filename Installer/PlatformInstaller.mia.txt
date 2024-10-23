@@ -28,6 +28,9 @@ Get Free Space on C: into variable DISKSPACE
 Comment: Suppress InstallAware branding in dialogues
 Set Variable MYAHLOGO to TRUE
  
+Comment: Disable automatic, unprompted reboots in silent mode
+Set Variable REBOOTNOW to NEVER
+ 
 Comment: Set the dialogue transition style: Empty / FADE / SLIDE
 Set Variable FX to 
 Set Variable MYPROGRESS to 0
@@ -111,6 +114,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (a
 Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ SFX path: $SFXPATH$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ SFX file: $SFXFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Silent: $SILENT$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Comment: Run the RemoveASCOM program if requested on the command line
@@ -2745,14 +2749,34 @@ Comment: Ensure that the variables are all upper case so that tests conducted wi
 Convert Variable SUCCESS to UPPER case
 Display Dialog: finish, wait for dialog to return (modal)
  
-if Variable SILENT Equals FALSE
-  Comment: Check whether a reboot is required and do this if required
-  if Variable REBOOTCOMPUTER Equals TRUE
-    if Variable SUCCESS Equals REBOOT
+Comment: Test whether the user checked the reboot checkbox on the finish dialogue and do this if required
+if Variable REBOOTCOMPUTER Equals TRUE
+  if Variable SUCCESS Equals REBOOT
+    Reboot Computer
+  end
+end
+ 
+Comment: Check whether to reboot NOW when in SILENT mode and do this if required
+if Variable SILENT Equals TRUE
+  Comment: We're in silent mode, uninstalling the Platform
+  Write into Text File $SETUPLOG$ from Value $TIME$ Silent mode - Success: $SUCCESS$ (at end of file)
+  if Variable SUCCESS Equals REBOOT
+    Comment: A reboot is required so show a message box asking for permission to reboot the computer
+    Set Variable SILENT to FALSE
+    MessageBox: Reboot Required, Your PC needs to reboot in order to complete the install or uninstall.$NEWLINE$$NEWLINE$Press OK to reboot now or Cancel to reboot later.
+    Write into Text File $SETUPLOG$ from Value $TIME$ Silent mode - User reboot choice: $REBOOTNOW$ (at end of file)
+    if Variable REBOOTNOW Equals OK
+      Comment: User pressed the OK button so reboot nbow
+      Write into Text File $SETUPLOG$ from Value $TIME$ Silent mode - Rebooting the PC (at end of file)
       Reboot Computer
+    else
+      Comment: User pressed the Cancel button so close down now
+      Write into Text File $SETUPLOG$ from Value $TIME$ Silent mode - Ending the install (at end of file)
+      Terminate Installation
     end
   end
-   
+  Comment: This is effectively the end of the script when uninstalling
+else
   Comment: Show the user guide if we are not removing and not repairing the install
   Set Variable NATIVE_ENGINE to TRUE
   Write into Text File $SETUPLOG$ from Value   (at end of file)

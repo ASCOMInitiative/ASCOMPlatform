@@ -1377,6 +1377,10 @@ $
 
 
 
+
+
+
+
 B
 
 
@@ -2189,6 +2193,26 @@ B
 
 
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2943,7 +2967,7 @@ COMMONFILES64
 COMMONFILES32
 $
 1
-6
+1
 TRUE
 
 ASCOM Initiative
@@ -2956,7 +2980,7 @@ ASCOM Platform 7.0 - Update 1
 ASCOM Platform 7.0 - Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{269D39D2-AA38-446F-9166-170D1DF2FF97}
+{4250DC59-5B42-4DE7-A835-A8277A983C8A}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
