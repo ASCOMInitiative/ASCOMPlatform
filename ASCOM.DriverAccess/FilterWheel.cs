@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to FilterWheel drivers
     /// </summary>
-    public class FilterWheel : AscomDriver, IFilterWheelV3
+    public class FilterWheel : AscomDriver, IFilterWheelV2, IFilterWheelV3
     {
         private MemberFactory memberFactory;
 
@@ -30,19 +30,19 @@ namespace ASCOM.DriverAccess
             memberFactory = base.MemberFactory; //Get the member factory created by the base class
         }
 
-		#region IDisposable Members
-		// No member here, we are relying on Dispose in the base class
-		#endregion
+        #region IDisposable Members
+        // No member here, we are relying on Dispose in the base class
+        #endregion
 
-		#endregion
+        #endregion
 
-		#region Convenience Members
-		/// <summary>
-		/// Brings up the ASCOM Chooser Dialogue to choose a FilterWheel
-		/// </summary>
-		/// <param name="filterWheelId">FilterWheel Prog ID for default or null for None</param>
-		/// <returns>Prog ID for chosen FilterWheel or null for none</returns>
-		public static string Choose(string filterWheelId)
+        #region Convenience Members
+        /// <summary>
+        /// Brings up the ASCOM Chooser Dialogue to choose a FilterWheel
+        /// </summary>
+        /// <param name="filterWheelId">FilterWheel Prog ID for default or null for None</param>
+        /// <returns>Prog ID for chosen FilterWheel or null for none</returns>
+        public static string Choose(string filterWheelId)
         {
             using (Chooser chooser = new Chooser())
             {

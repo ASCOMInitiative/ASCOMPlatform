@@ -36,7 +36,7 @@ namespace ASCOM.DriverAccess
     /// <para>For convenience devices are referred to as Boolean if the device can only have two states, and multi-state if it can have more than two values.
     /// <b>These are treated the same in the interface definition</b>.</para>
     /// </remarks>
-    public class Switch : AscomDriver, ISwitchV3
+    public class Switch : AscomDriver, ISwitchV2, ISwitchV3
     {
         private MemberFactory memberFactory;
 
@@ -192,7 +192,7 @@ namespace ASCOM.DriverAccess
             if (HasConnectAndDeviceState) // We are presenting a Platform 7 or later device so call the device's method
             {
                 TL.LogMessage("SetAsyncValue", "Issuing SetAsyncValue command");
-                memberFactory.CallMember(3, "SetAsyncValue", new Type[] { typeof(short), typeof(bool) }, new object[] { id, value});
+                memberFactory.CallMember(3, "SetAsyncValue", new Type[] { typeof(short), typeof(bool) }, new object[] { id, value });
                 return;
             }
 

@@ -61,7 +61,7 @@ namespace ASCOM.DriverAccess
     /// </item>
     /// </list>
     /// </remarks>
-    public class Dome : AscomDriver, IDomeV3
+    public class Dome : AscomDriver, IDomeV2, IDomeV3
     {
         private MemberFactory memberFactory;
 
@@ -239,9 +239,9 @@ namespace ASCOM.DriverAccess
 
         /// <inheritdoc/>
 		public bool Slewing
-		{
-			get { return Convert.ToBoolean( memberFactory.CallMember( 1, "Slewing", new Type[] { }, new object[] { } ) ); }
-		}
+        {
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { })); }
+        }
 
         /// <inheritdoc/>
 		public void SlewToAltitude(double Altitude)

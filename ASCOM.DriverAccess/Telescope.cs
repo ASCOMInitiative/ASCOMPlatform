@@ -18,7 +18,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : AscomDriver, ITelescopeV4
+    public class Telescope : AscomDriver, ITelescopeV3, ITelescopeV4
     {
         internal MemberFactory memberFactory;
         internal bool isPlatform7Telescope = false;

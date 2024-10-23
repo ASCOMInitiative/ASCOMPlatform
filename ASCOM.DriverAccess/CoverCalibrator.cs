@@ -7,7 +7,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to CoverCalibrator drivers
     /// </summary>
-    public class CoverCalibrator : AscomDriver, ICoverCalibratorV2
+    public class CoverCalibrator : AscomDriver, ICoverCalibratorV1, ICoverCalibratorV2
     {
         private MemberFactory memberFactory;
 

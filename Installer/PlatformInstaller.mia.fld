@@ -12,7 +12,7 @@ Remove any items left from previous instals
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
+Post install activities - 64bit only
 Post install activities - 32bit only
 Validate installation
 Post install activities - 32bit and 64bit
-Post install activities - 64bit only

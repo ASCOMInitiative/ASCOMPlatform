@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Focuser drivers
     /// </summary>
-    public class Focuser : AscomDriver, IFocuserV4
+    public class Focuser : AscomDriver, IFocuserV2, IFocuserV3, IFocuserV4
     {
         private MemberFactory memberFactory;
 
@@ -28,15 +28,15 @@ namespace ASCOM.DriverAccess
         {
             memberFactory = base.MemberFactory;
         }
-		#endregion
+        #endregion
 
-		#region Convenience Members
-		/// <summary>
-		/// Brings up the ASCOM Chooser Dialogue to choose a Focuser
-		/// </summary>
-		/// <param name="focuserId">Focuser Prog ID for default or null for None</param>
-		/// <returns>Prog ID for chosen focuser or null for none</returns>
-		public static string Choose(string focuserId)
+        #region Convenience Members
+        /// <summary>
+        /// Brings up the ASCOM Chooser Dialogue to choose a Focuser
+        /// </summary>
+        /// <param name="focuserId">Focuser Prog ID for default or null for None</param>
+        /// <returns>Prog ID for chosen focuser or null for none</returns>
+        public static string Choose(string focuserId)
         {
             using (Chooser chooser = new Chooser())
             {

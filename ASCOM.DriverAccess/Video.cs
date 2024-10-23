@@ -14,7 +14,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Defines the IVideo Interface. - NOW DEPRECATED, ONLY RETAINED FOR BACKWARD COMPATIBILITY
     /// </summary>
-    public class Video : AscomDriver, IVideoV2
+    public class Video : AscomDriver, IVideo, IVideoV2
     {
         private MemberFactory memberFactory;
 

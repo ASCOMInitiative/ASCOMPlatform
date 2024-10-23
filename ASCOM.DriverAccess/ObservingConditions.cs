@@ -16,7 +16,7 @@ namespace ASCOM.DriverAccess
     /// <see cref="IObservingConditionsV2.SupportedActions">SupportedActions</see> property 
     /// can be used to add driver-specific sensors.
     /// </remarks>
-    public class ObservingConditions : AscomDriver, IObservingConditionsV2
+    public class ObservingConditions : AscomDriver, IObservingConditions, IObservingConditionsV2
     {
         private readonly MemberFactory _memberFactory;
 

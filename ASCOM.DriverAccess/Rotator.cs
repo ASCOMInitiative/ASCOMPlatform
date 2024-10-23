@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Rotator drivers
     /// </summary>
-    public class Rotator : AscomDriver, IRotatorV4
+    public class Rotator : AscomDriver, IRotatorV2, IRotatorV3, IRotatorV4
     {
         private MemberFactory memberFactory;
 
@@ -28,15 +28,15 @@ namespace ASCOM.DriverAccess
         {
             memberFactory = base.MemberFactory;
         }
-		#endregion
+        #endregion
 
-		#region Convenience Members
-		/// <summary>
-		/// Brings up the ASCOM Chooser Dialogue to choose a Rotator
-		/// </summary>
-		/// <param name="rotatorId">Rotator ProgID for default or null for None</param>
-		/// <returns>ProgID for chosen Rotator or null for none</returns>
-		public static string Choose(string rotatorId)
+        #region Convenience Members
+        /// <summary>
+        /// Brings up the ASCOM Chooser Dialogue to choose a Rotator
+        /// </summary>
+        /// <param name="rotatorId">Rotator ProgID for default or null for None</param>
+        /// <returns>ProgID for chosen Rotator or null for none</returns>
+        public static string Choose(string rotatorId)
         {
             using (Chooser chooser = new Chooser())
             {
