@@ -34,7 +34,7 @@ welcome.dfm.miaf
 wizard.dfm
 wizard.dfm.miaf
 $
-ASCOM Platform 6.4.mtx
+ASCOMPlatform.mtx
 ASCOM.Exceptions.dll
 ASCOM.Exceptions.pdb
 EnableDotNet35.cmd
