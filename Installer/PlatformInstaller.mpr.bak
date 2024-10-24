@@ -34,9 +34,9 @@ welcome.dfm.miaf
 wizard.dfm
 wizard.dfm.miaf
 $
-ASCOMPlatform.mtx
 ASCOM.Exceptions.dll
 ASCOM.Exceptions.pdb
+ASCOMPlatform.mtx
 EnableDotNet35.cmd
 FinaliseInstall.exe
 FinaliseInstall.pdb
@@ -2967,17 +2967,17 @@ COMMONFILES64
 COMMONFILES32
 $
 1
-1
+6
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 7.0 - Update 2
+ASCOMPlatformName
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 7.0.9999.9999
 English
-ASCOM Platform 7.0 - Update 2
-ASCOM Platform 7.0 - Installation
+ASCOMPlatformName
+ASCOMPlatformName
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
 {4250DC59-5B42-4DE7-A835-A8277A983C8A}
@@ -2987,7 +2987,7 @@ https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2024, The ASCOM Initiative. All rights reserved. 
 FALSE
-AscomPlatform702
+AscomPlatformInstaller
 TRUE
 TRUE
 |Sectigo_20231013130838
