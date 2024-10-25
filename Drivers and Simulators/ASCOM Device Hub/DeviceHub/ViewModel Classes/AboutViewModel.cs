@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
 
 namespace ASCOM.DeviceHub
 {
@@ -7,10 +9,10 @@ namespace ASCOM.DeviceHub
 		public AboutViewModel()
 			: base( "About Device Hub")
 		{
-			string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
-			ProductVersion = version;
-		}
+            string assemblyFileLocation=Assembly.GetExecutingAssembly().Location;
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assemblyFileLocation);
+            ProductVersion = fileVersionInfo.ProductVersion;
+        }
 
 		private string _productVersion;
 
