@@ -58,6 +58,7 @@ namespace ASCOM.DeviceHub
         #region Private Fields and Properties
 
         private TelescopeManager TelescopeManager => TelescopeManager.Instance;
+        private DomeManager DomeManager => DomeManager.Instance;
 
         /// <summary>
         /// Returns true if there is a valid connection to the driver hardware
@@ -1441,7 +1442,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.DoesRefraction = value;
-                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.DoesRefraction= value);
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.DoesRefraction = value);
                     msg += $"{value}{_done} {outcome}";
                 }
                 catch (Exception)
@@ -2051,7 +2052,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.SiteElevation = value;
-                    string outcome= AttemptToSet(() => TelescopeManager.Parameters.SiteElevation = value);
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.SiteElevation = value);
                     msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
@@ -2216,7 +2217,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.SlewSettleTime = value;
-                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.SlewSettleTime= value);
+                    string outcome = AttemptToSet(() => TelescopeManager.Parameters.SlewSettleTime = value);
                     msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
@@ -2419,7 +2420,13 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
+                    // Get the telescope slewing state
                     retval = TelescopeManager.Slewing;
+
+                    // Create a composite slewing state if the dome is slaved and composite slewing is configured
+                    if (Globals.IsDomeSlaved & Globals.UseCompositeSlewingFlag)
+                        retval = retval || DomeManager.Slewing;
+
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -2738,7 +2745,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     TelescopeManager.TrackingRate = value;
-                    string outcome = AttemptToSet(() => TelescopeManager.Status.TrackingRate= value);
+                    string outcome = AttemptToSet(() => TelescopeManager.Status.TrackingRate = value);
                     msg += $"{_done} {outcome}";
                 }
                 catch (Exception)
