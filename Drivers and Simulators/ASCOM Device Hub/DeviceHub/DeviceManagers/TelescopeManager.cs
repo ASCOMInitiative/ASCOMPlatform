@@ -440,6 +440,8 @@ namespace ASCOM.DeviceHub
 
         public void BeginSlewToCoordinatesAsync(double ra, double dec)
         {
+            LogAppMessage($"Method entered", "BeginSlewToCoordinatesAsync");
+
             if (!IsConnected || !Capabilities.CanSlewAsync || !IsValidRightAscension(ra) || !IsValidDeclination(dec))
             {
                 return;
@@ -451,14 +453,18 @@ namespace ASCOM.DeviceHub
             {
                 // In case the dome is slaved to us, send it a message to start moving.
 
+                LogAppMessage($"Sending Slew Message", "BeginSlewToCoordinatesAsync");
                 SendSlewMessage(ra, dec);
+                LogAppMessage($"Calling SlewToCoordinatesAsync", "BeginSlewToCoordinatesAsync");
                 SlewToCoordinatesAsync(ra, dec);
+                LogAppMessage($"SlewToCoordinatesAsync returned OK", "BeginSlewToCoordinatesAsync");
                 slewed = true;
 
                 SetFastPolling();
             }
             catch (Exception xcp)
             {
+                LogAppMessage($"Exception: {xcp.Message}", "BeginSlewToCoordinatesAsync");
                 throw xcp;
             }
             finally
@@ -468,6 +474,8 @@ namespace ASCOM.DeviceHub
                     throw new Exception("Unable to start the direct slew!!!");
                 }
             }
+            LogAppMessage($"Method exited", "BeginSlewToCoordinatesAsync");
+            LogAppMessage($"", "BeginSlewToCoordinatesAsync");
         }
 
         public void DoSlewToTarget(bool useSynchronousMethodCall = true)
@@ -519,6 +527,8 @@ namespace ASCOM.DeviceHub
 
         public void BeginSlewToTargetAsync()
         {
+            LogAppMessage($"Method entered", "BeginSlewToTargetAsync");
+
             if (!IsConnected || !Capabilities.CanSlewAsync)
             {
                 return;
@@ -530,14 +540,18 @@ namespace ASCOM.DeviceHub
             {
                 // In case the dome is slaved to us, send it a message to start moving.
 
+                LogAppMessage($"Sending Slew Message", "BeginSlewToTargetAsync");
                 SendSlewMessage(TargetRightAscension, TargetDeclination);
+                LogAppMessage($"Calling SlewToTargetAsync", "BeginSlewToTargetAsync");
                 SlewToTargetAsync();
+                LogAppMessage($"SlewToTargetAsync returned OK", "BeginSlewToTargetAsync");
                 slewed = true;
 
                 SetFastPolling();
             }
             catch (Exception xcp)
             {
+                LogAppMessage($"Exception: {xcp.Message}", "BeginSlewToTargetAsync");
                 throw xcp;
             }
             finally
@@ -547,6 +561,8 @@ namespace ASCOM.DeviceHub
                     throw new Exception("Unable to start the slew to target!!!");
                 }
             }
+            LogAppMessage($"Method exited", "BeginSlewToTargetAsync");
+            LogAppMessage($"", "BeginSlewToTargetAsync");
         }
 
         public void DoSlewToAltAz(double azimuth, double altitude, bool useSynchronousMethodCall = true)

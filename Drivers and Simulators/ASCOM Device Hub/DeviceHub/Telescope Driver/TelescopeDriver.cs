@@ -2236,12 +2236,15 @@ namespace ASCOM.DeviceHub
         public void SlewToAltAz(double azimuth, double altitude)
         {
             string name = "SlewToAltAz:";
+            LogMessage(name, $"Method entered");
+
             CheckCapabilityForMethod(name, "CanSlewAltAz", TelescopeManager.Capabilities.CanSlewAltAz);
             CheckParked(name, TelescopeManager.Status.AtPark);
             CheckParkingStatus(name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked);
             CheckTracking(name, false);
             CheckRange(name, azimuth, 0, 360);
             CheckRange(name, altitude, -90, 90);
+            LogMessage(name, $"Execution checks completed, starting slew");
 
             string msg = $"Altitude = {altitude:F5}, Azimuth = {azimuth:F5}";
 
@@ -2260,17 +2263,21 @@ namespace ASCOM.DeviceHub
             {
                 LogMessage(name, msg);
             }
+            LogMessage(name, $"Method exited");
         }
 
         public void SlewToAltAzAsync(double azimuth, double altitude)
         {
             string name = "SlewToAltAzAsync:";
             CheckCapabilityForMethod(name, "CanSlewAltAzAzsync", TelescopeManager.Capabilities.CanSlewAltAzAsync);
+            LogMessage(name, $"Method entered");
+
             CheckParked(name, TelescopeManager.Status.AtPark);
             CheckParkingStatus(name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked);
             CheckTracking(name, false);
             CheckRange(name, azimuth, 0, 360);
             CheckRange(name, altitude, -90, 90);
+            LogMessage(name, $"Execution checks completed, starting slew");
 
             string msg = $"Altitude = {altitude:f5}, Azimuth = {azimuth:f5}";
 
@@ -2288,17 +2295,21 @@ namespace ASCOM.DeviceHub
             {
                 LogMessage(name, msg);
             }
+            LogMessage(name, $"Method exited");
         }
 
         public void SlewToCoordinates(double rightAscension, double declination)
         {
             string name = "SlewToCoordinates:";
+            LogMessage(name, $"Method entered");
+
             CheckCapabilityForMethod(name, "CanSlew", TelescopeManager.Capabilities.CanSlew);
             CheckRange(name, rightAscension, 0.0, 24.0);
             CheckRange(name, declination, -90.0, 90.0);
             CheckParked(name, TelescopeManager.Status.AtPark);
             CheckParkingStatus(name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked);
             CheckTracking(name, true);
+            LogMessage(name, $"Execution checks completed, starting slew");
 
             string msg = "";
             try
@@ -2318,11 +2329,14 @@ namespace ASCOM.DeviceHub
             {
                 LogMessage(name, msg);
             }
+            LogMessage(name, $"Method exited");
         }
 
         public void SlewToCoordinatesAsync(double rightAscension, double declination)
         {
             string name = "SlewToCoordinatesAsync:";
+            LogMessage(name, $"Method entered");
+
             CheckCapabilityForMethod(name, "CanSlew", TelescopeManager.Capabilities.CanSlew);
             CheckCapabilityForMethod(name, "CanSlewAsync", TelescopeManager.Capabilities.CanSlewAsync);
             CheckRange(name, rightAscension, 0.0, 24.0);
@@ -2330,12 +2344,14 @@ namespace ASCOM.DeviceHub
             CheckParked(name, TelescopeManager.Status.AtPark);
             CheckParkingStatus(name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked);
             CheckTracking(name, true);
+            LogMessage(name, $"Execution checks completed, starting slew");
 
             string msg = $"RightAscension = {rightAscension:f5}, Declination = {declination:f5}";
 
             try
             {
                 TelescopeManager.BeginSlewToCoordinatesAsync(rightAscension, declination);
+                LogMessage(name, $"Slew initiated OK");
             }
             catch (Exception)
             {
@@ -2347,17 +2363,21 @@ namespace ASCOM.DeviceHub
             {
                 LogMessage(name, msg);
             }
+            LogMessage(name, $"Method exited");
         }
 
         public void SlewToTarget()
         {
             string name = "SlewToTarget:";
+            LogMessage(name, $"Method entered");
+
             CheckCapabilityForMethod(name, "CanSlew", TelescopeManager.Capabilities.CanSlew);
             CheckRange(name, TelescopeManager.TargetRightAscension, 0.0, 24.0);
             CheckRange(name, TelescopeManager.TargetDeclination, -90.0, 90.0);
             CheckParked(name, TelescopeManager.Status.AtPark);
             CheckParkingStatus(name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked);
             CheckTracking(name, true);
+            LogMessage(name, $"Execution checks completed, starting slew");
 
             string msg = "";
 
@@ -2376,11 +2396,14 @@ namespace ASCOM.DeviceHub
             {
                 LogMessage(name, msg);
             }
+            LogMessage(name, $"Method exited");
         }
 
         public void SlewToTargetAsync()
         {
             string name = "SlewToTargetAsync:";
+            LogMessage(name, $"Method entered");
+
             CheckCapabilityForMethod(name, "CanSlew", TelescopeManager.Capabilities.CanSlew);
             CheckCapabilityForMethod(name, "CanSlewAsync", TelescopeManager.Capabilities.CanSlew);
             CheckRange(name, TelescopeManager.TargetRightAscension, 0.0, 24.0);
@@ -2388,12 +2411,14 @@ namespace ASCOM.DeviceHub
             CheckParked(name, TelescopeManager.Status.AtPark);
             CheckParkingStatus(name, TelescopeManager.Status.ParkingState, ParkingStateEnum.Unparked);
             CheckTracking(name, true);
+            LogMessage(name, $"Execution checks completed, starting slew");
 
             string msg = "";
 
             try
             {
                 TelescopeManager.BeginSlewToTargetAsync();
+                LogMessage(name, $"Slew initiated OK");
             }
             catch (Exception)
             {
@@ -2405,6 +2430,7 @@ namespace ASCOM.DeviceHub
             {
                 LogMessage(name, msg);
             }
+            LogMessage(name, $"Method exited");
         }
 
         public bool Slewing
