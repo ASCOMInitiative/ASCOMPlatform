@@ -1582,6 +1582,7 @@ namespace ASCOM.Simulator
 
         public void Unpark()
         {
+            TelescopeHardware.TL.LogMessage("Unpark", $"Entered Unpark method, Interface version: {TelescopeHardware.InterfaceVersion}");
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
             CheckCapability(TelescopeHardware.CanUnpark, "UnPark");
 
@@ -1601,6 +1602,7 @@ namespace ASCOM.Simulator
                 if (AtPark)
                 {
                     unParking = true; // Set the unparking flag so that Slewing will return true
+                    TelescopeHardware.TL.LogMessage("Unpark", $"Starting unpark task...");
                     Task.Run(() =>
                     {
                         try
@@ -1610,8 +1612,8 @@ namespace ASCOM.Simulator
 
                             TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
                             TelescopeHardware.ChangePark(false);
-                            unParking = false; // Reset the unparking flag
-                            TelescopeHardware.EndOperation("Unpark V4 - Parked");
+                            unParking = false; // Reset the unparking flag so that Slewing will return false
+                            TelescopeHardware.EndOperation("Unpark V4 - Unparked");
                             TelescopeHardware.TL.LogMessage("UnparkTask", $"Unpark completed.");
                         }
                         catch (Exception ex)
@@ -1625,11 +1627,13 @@ namespace ASCOM.Simulator
                 {
                     TelescopeHardware.Tracking = TelescopeHardware.AutoTrack;
                     TelescopeHardware.ChangePark(false);
+                    unParking = false; // Make sure that the unparking flag is unset so that Slewing will return false
                     TelescopeHardware.EndOperation("Unpark V4 - Not Parked");
                 }
             }
 
             SharedResources.TrafficEnd("(done)");
+            TelescopeHardware.TL.LogMessage("Unpark", $"Exited Unpark method.");
         }
 
         #endregion
