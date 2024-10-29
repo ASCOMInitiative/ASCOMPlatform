@@ -74,6 +74,23 @@ namespace ASCOM.Astrometry
             {
                 semiMajorAxis = NOT_SET;
                 perihelionDistance = NOT_SET;
+                obname = "";
+                epoch = 0.0;
+                i = 0.0;
+                W=0.0;
+                wp = 0.0;
+                a = 0.0;
+                dm = 0.0;
+                ecc = 0.0;
+                M = 0.0;
+                equinox = 0.0;
+                mag = 0.0;
+                sdiam = 0.0;
+                ptable = new plantbl();
+                L = 0.0;
+                r = 0.0;
+                plat = 0.0;
+                eccentricityHasBeenSet = false;
             }
 
             internal Orbit(string obn, double ep, double i_p, double W_p, double wp_p, double a_p, double dm_p, double ecc_p, double M_p, double eq, double mg, double sd, plantbl pt, double L_p, double r_p, double pl)
@@ -94,6 +111,7 @@ namespace ASCOM.Astrometry
                 L = L_p;
                 r = r_p;
                 plat = pl;
+                eccentricityHasBeenSet = false;
 
                 // Initialize the semi-major axis to default 'unset' states
                 semiMajorAxis = NOT_SET;
