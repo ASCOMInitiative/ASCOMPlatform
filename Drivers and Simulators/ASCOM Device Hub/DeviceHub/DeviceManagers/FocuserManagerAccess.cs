@@ -20,7 +20,7 @@ namespace ASCOM.DeviceHub
 
         private IFocuserService _service;
 
-        private IFocuserService Service
+        public IFocuserService Service
         {
             get
             {
@@ -31,7 +31,7 @@ namespace ASCOM.DeviceHub
 
                 return _service;
             }
-            set
+            private set
             {
                 _service = value;
             }

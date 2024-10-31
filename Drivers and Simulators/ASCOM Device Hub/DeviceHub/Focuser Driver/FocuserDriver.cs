@@ -504,7 +504,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = FocuserManager.IsMoving;
+                    retval = FocuserManager.Service.IsMoving;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -695,7 +695,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = FocuserManager.Position;
+                    retval = FocuserManager.Service.Position;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -853,7 +853,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = FocuserManager.Temperature;
+                    retval = FocuserManager.Service.Temperature;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)

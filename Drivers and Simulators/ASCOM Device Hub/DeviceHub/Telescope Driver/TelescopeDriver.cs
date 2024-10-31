@@ -507,7 +507,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.Altitude;
+                    retval = TelescopeManager.Service.Altitude;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
                 catch (Exception ex)
@@ -604,7 +604,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.AtHome;
+                    retval = TelescopeManager.Service.AtHome;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -633,7 +633,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    atPark = TelescopeManager.AtPark;
+                    atPark = TelescopeManager.Service.AtPark;
                     msg += $"{atPark}{_done}";
                 }
                 catch (Exception ex)
@@ -686,7 +686,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.Azimuth;
+                    retval = TelescopeManager.Service.Azimuth;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
                 catch (Exception ex)
@@ -1299,7 +1299,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.Declination;
+                    retval = TelescopeManager.Service.Declination;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
                 catch (Exception ex)
@@ -1688,7 +1688,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.IsPulseGuiding;
+                    retval = TelescopeManager.Service.IsPulseGuiding;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -1823,7 +1823,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.RightAscension;
+                    retval = TelescopeManager.Service.RightAscension;
                     msg += $"{Utilities.HoursToHMS(retval)}{_done}";
                 }
                 catch (Exception ex)
@@ -1942,7 +1942,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.SideOfPier;
+                    retval = TelescopeManager.Service.SideOfPier;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -1996,7 +1996,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    siderealTime = TelescopeManager.SiderealTime;
+                    siderealTime = TelescopeManager.Service.SiderealTime;
                     msg += $"{siderealTime:F5}{_done}";
                 }
                 catch (Exception ex)
@@ -2447,11 +2447,11 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     // Get the telescope slewing state
-                    retval = TelescopeManager.Slewing;
+                    retval = TelescopeManager.Service.Slewing;
 
                     // Create a composite slewing state if the dome is slaved and composite slewing is configured
                     if (Globals.IsDomeSlaved & Globals.UseCompositeSlewingFlag)
-                        retval = retval || DomeManager.Slewing;
+                        retval = retval || DomeManager.Service.Slewing;
 
                     msg += $"{retval}{_done}";
                 }
@@ -2695,7 +2695,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.Tracking;
+                    retval = TelescopeManager.Service.Tracking;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -2832,7 +2832,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = TelescopeManager.UTCDate;
+                    retval = TelescopeManager.Service.UTCDate;
                     msg += $"{retval:MM/dd/yy HH:mm:ss}{_done}";
                 }
                 catch (Exception ex)

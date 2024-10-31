@@ -28,7 +28,7 @@ namespace ASCOM.DeviceHub
 
         private ITelescopeService _service;
 
-        private ITelescopeService Service
+        public ITelescopeService Service
         {
             get
             {
@@ -39,7 +39,7 @@ namespace ASCOM.DeviceHub
 
                 return _service;
             }
-            set => _service = value;
+            private set => _service = value;
         }
 
         public void InitializeTelescopeService(string id)

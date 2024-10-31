@@ -23,7 +23,7 @@ namespace ASCOM.DeviceHub
 
         private IDomeService _service;
 
-        private IDomeService Service
+        public IDomeService Service
         {
             get
             {
@@ -34,7 +34,7 @@ namespace ASCOM.DeviceHub
 
                 return _service;
             }
-            set
+            private set
             {
                 _service = value;
             }

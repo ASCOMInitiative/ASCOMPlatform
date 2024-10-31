@@ -469,7 +469,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = DomeManager.Altitude;
+                    retval = DomeManager.Service.Altitude;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
                 catch (Exception ex)
@@ -498,7 +498,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = DomeManager.AtHome;
+                    retval = DomeManager.Service.AtHome;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -527,7 +527,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    atPark = DomeManager.AtPark;
+                    atPark = DomeManager.Service.AtPark;
                     msg += $"{atPark}{_done}";
                 }
                 catch (Exception ex)
@@ -556,7 +556,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = DomeManager.Azimuth;
+                    retval = DomeManager.Service.Azimuth;
                     msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
                 }
                 catch (Exception ex)
@@ -969,7 +969,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    retval = DomeManager.ShutterStatus;
+                    retval = DomeManager.Service.ShutterStatus;
                     msg += $"{retval}{_done}";
                 }
                 catch (Exception ex)
@@ -1137,7 +1137,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     // Get the dome slewing state
-                    retval = DomeManager.Slewing;
+                    retval = DomeManager.Service.Slewing;
 
                     // Create a composite slewing state if the dome is slaved and composite slewing is configured
                     if (Globals.IsDomeSlaved & Globals.UseCompositeSlewingFlag)
