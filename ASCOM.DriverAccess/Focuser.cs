@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Focuser drivers
     /// </summary>
-    public class Focuser : AscomDriver, IFocuserV2, IFocuserV3, IFocuserV4
+    public class Focuser : AscomDriver, IFocuserV4, IFocuserV3, IFocuserV2
     {
         private MemberFactory memberFactory;
 

@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to FilterWheel drivers
     /// </summary>
-    public class FilterWheel : AscomDriver, IFilterWheelV2, IFilterWheelV3
+    public class FilterWheel : AscomDriver, IFilterWheelV3, IFilterWheelV2
     {
         private MemberFactory memberFactory;
 

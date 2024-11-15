@@ -8,7 +8,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a camera class to access any registered ASCOM Camera
     /// </summary>
-    public class Camera : AscomDriver, ICameraV2, ICameraV3, ICameraV4
+    public class Camera : AscomDriver, ICameraV4, ICameraV3, ICameraV2
     {
         private readonly MemberFactory _memberFactory;
 

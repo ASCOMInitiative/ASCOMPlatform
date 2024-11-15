@@ -183,9 +183,9 @@ namespace ASCOM.Utilities
         /// Select ASCOM driver to use without pre-selecting in the dropdown list
         /// </summary>
         /// <returns>Driver ID of chosen driver</returns>
-        /// <remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
         /// <exception cref="Exceptions.InvalidValueException">Thrown if the Chooser.DeviceType property has not been set before Choose is called. 
         /// It must be set in order for Chooser to know which list of devices to display.</exception>
+        /// <remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
         /// <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
         /// with an empty string parameter to achieve this effect.</para>
         /// </remarks>

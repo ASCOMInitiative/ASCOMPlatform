@@ -35,7 +35,13 @@ namespace ASCOM.DeviceInterface
         /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
         /// hardware connection is still true.</para>
         /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+		/// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="ICoverCalibratorV2"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
+        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="ICoverCalibratorV2"/> or later devices.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ICoverCalibratorV2 or later devices.</revision>
+        /// </revisionHistory>
         bool Connected { get; set; }
 
         /// <summary>
@@ -48,6 +54,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
         /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         string Description { get; }
 
         /// <summary>
@@ -60,6 +69,9 @@ namespace ASCOM.DeviceInterface
         /// See the <see cref="Description" /> property for information on the device itself.
         /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         string DriverInfo { get; }
 
         /// <summary>
@@ -71,6 +83,9 @@ namespace ASCOM.DeviceInterface
         /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
         /// driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         string DriverVersion { get; }
 
         /// <summary>
@@ -82,6 +97,9 @@ namespace ASCOM.DeviceInterface
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         short InterfaceVersion { get; }
 
         /// <summary>
@@ -91,6 +109,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         string Name { get; }
 
         /// <summary>
@@ -101,6 +122,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         void SetupDialog();
 
         /// <summary>Invokes the specified device-specific custom action.</summary>
@@ -121,6 +145,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
         /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         string Action(string ActionName, string ActionParameters);
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -135,6 +162,9 @@ namespace ASCOM.DeviceInterface
         /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
         /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         ArrayList SupportedActions { get; }
 
         /// <summary>
@@ -156,6 +186,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         void CommandBlind(string Command, bool Raw = false);
 
         /// <summary>
@@ -180,6 +214,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         bool CommandBool(string Command, bool Raw = false);
 
         /// <summary>
@@ -204,6 +242,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         string CommandString(string Command, bool Raw = false);
 
         /// <summary>
@@ -211,7 +253,10 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-		void Dispose();
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
+        void Dispose();
 
         #endregion
 
@@ -232,6 +277,9 @@ namespace ASCOM.DeviceInterface
         /// <para>This property is intended to be available under all but the most disastrous driver conditions.If something has gone wrong, the CoverState must be <see cref="CoverStatus.Error"/>
         /// rather than throwing an exception.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         CoverStatus CoverState { get; }
 
         /// <summary>
@@ -245,6 +293,9 @@ namespace ASCOM.DeviceInterface
         /// <para>When the cover is open <see cref="CoverState"/> must return <see cref="CoverStatus.Open"/>.</para>
         /// <para>If an error condition arises while moving between states, <see cref="CoverState"/> must be set to <see cref="CoverStatus.Error"/> rather than <see cref="CoverStatus.Unknown"/>.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         void OpenCover();
 
         /// <summary>
@@ -258,6 +309,9 @@ namespace ASCOM.DeviceInterface
         /// <para>When the cover is closed <see cref="CoverState"/> must return <see cref="CoverStatus.Closed"/>.</para>
         /// <para>If an error condition arises while moving between states, <see cref="CoverState"/> must be set to <see cref="CoverStatus.Error"/> rather than <see cref="CoverStatus.Unknown"/>.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         void CloseCover();
 
         /// <summary>
@@ -271,6 +325,9 @@ namespace ASCOM.DeviceInterface
         /// or <see cref="CoverStatus.Unknown"/> as appropriate.</para>
         /// <para>If cover movement cannot be interrupted, a <see cref="MethodNotImplementedException"/> must be thrown.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         void HaltCover();
 
         /// <summary>
@@ -289,6 +346,9 @@ namespace ASCOM.DeviceInterface
         /// <para>This property is intended to be available under all but the most disastrous driver conditions.If something has gone wrong, the CoverState must be <see cref="CalibratorStatus.Error"/>
         /// rather than throwing an exception.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         CalibratorStatus CalibratorState { get; }
 
         /// <summary>
@@ -301,6 +361,9 @@ namespace ASCOM.DeviceInterface
         /// <para>This is a mandatory property that must always return a value for a calibrator device </para>
         /// <para>The brightness value must be 0 when the <see cref="CalibratorState"/> is <see cref="CalibratorStatus.Off"/></para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         int Brightness { get; }
 
         /// <summary>
@@ -315,6 +378,9 @@ namespace ASCOM.DeviceInterface
         /// <para>A value of 10 indicates that the calibrator has 10 discreet illumination levels in addition to "off".</para>
         /// <para>The value for this parameter should be determined by the driver author or device manufacturer based on the capabilities of the hardware used in the calibrator.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         int MaxBrightness { get; }
 
         /// <summary>
@@ -332,6 +398,9 @@ namespace ASCOM.DeviceInterface
         /// <para>For devices with both cover and calibrator capabilities, this method may change the <see cref="CoverState"/>, if required.</para>
         /// <para>If an error condition arises while turning on the calibrator, <see cref="CalibratorState"/> must be set to <see cref="CalibratorStatus.Error"/> rather than <see cref="CalibratorStatus.Unknown"/>.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         void CalibratorOn(int Brightness);
 
         /// <summary>
@@ -347,6 +416,9 @@ namespace ASCOM.DeviceInterface
         /// <para>For devices with both cover and calibrator capabilities, this method will return the <see cref="CoverState"/> to its status prior to calling <see cref="CalibratorOn(int)"/>.</para>
         /// <para>If an error condition arises while turning off the calibrator, <see cref="CalibratorState"/> must be set to <see cref="CalibratorStatus.Error"/> rather than <see cref="CalibratorStatus.Unknown"/>.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         void CalibratorOff();
 
         #endregion
@@ -357,14 +429,23 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         void Connect();
 
         /// <summary>
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         void Disconnect();
 
         /// <summary>
@@ -372,6 +453,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         bool Connecting { get; }
 
         /// <summary>
@@ -392,6 +476,9 @@ namespace ASCOM.DeviceInterface
         /// <para><b>Further Information</b></para>
         /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         IStateValueCollection DeviceState { get; }
 
         /// <summary>
@@ -408,6 +495,9 @@ namespace ASCOM.DeviceInterface
         /// This property must throw an exception ff an issue arises while changing calibrator brightness. The exception must continue to be thrown until a new <see cref="CalibratorOn(int)"/> or
         /// <see cref="CalibratorOff"/> command is received.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         bool CalibratorChanging { get; }
 
         /// <summary>
@@ -421,6 +511,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         bool CoverMoving { get; }
 
         #endregion

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
+
 
 #if NET35
 using ASCOM.Utilities;
@@ -44,7 +46,13 @@ namespace ASCOM.DeviceInterface
         /// <para>The Connected property is not implemented in Version 1 drivers; these use the <see cref="Link"></see>
         /// property and will raise a Not Implemented exception for this property. Version 2 drivers must implement both Connected and Link.
         /// Applications should check that InterfaceVersion returns 2 or more before using Connected.</para>
+        /// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="IFocuserV4"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
+        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="IFocuserV4"/> or later devices.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing IFocuserV4 or later devices.</revision>
+        /// </revisionHistory>
         bool Connected { get; set; }
 
         /// <summary>
@@ -57,6 +65,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
         /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string Description { get; }
 
         /// <summary>
@@ -69,6 +80,9 @@ namespace ASCOM.DeviceInterface
         /// See the <see cref="Description" /> property for information on the device itself.
         /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string DriverInfo { get; }
 
         /// <summary>
@@ -80,6 +94,9 @@ namespace ASCOM.DeviceInterface
         /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
         /// driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string DriverVersion { get; }
 
         /// <summary>
@@ -91,6 +108,9 @@ namespace ASCOM.DeviceInterface
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short InterfaceVersion { get; }
 
         /// <summary>
@@ -100,6 +120,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string Name { get; }
 
         /// <summary>
@@ -108,6 +131,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         void SetupDialog();
 
         /// <summary>Invokes the specified device-specific custom action.</summary>
@@ -127,6 +153,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
         /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string Action(string ActionName, string ActionParameters);
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -141,6 +170,9 @@ namespace ASCOM.DeviceInterface
         /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
         /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         ArrayList SupportedActions { get; }
 
         /// <summary>
@@ -162,6 +194,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         void CommandBlind(string Command, bool Raw = false);
 
         /// <summary>
@@ -186,6 +222,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         bool CommandBool(string Command, bool Raw = false);
 
         /// <summary>
@@ -210,6 +250,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         string CommandString(string Command, bool Raw = false);
 
         /// <summary>
@@ -217,6 +261,9 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
 		void Dispose();
 
         /// <summary>
@@ -227,6 +274,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         bool Absolute { get; }
 
         /// <summary>
@@ -241,6 +291,9 @@ namespace ASCOM.DeviceInterface
         /// <para><b>Recommendation:</b> Host software should call this method upon initialization and,
         /// if it fails, disable the Halt button in the user interface.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         void Halt();
 
         /// <summary>
@@ -251,6 +304,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         bool IsMoving { get; }
 
         /// <summary>
@@ -267,6 +323,10 @@ namespace ASCOM.DeviceInterface
         /// the recommended method to use to <i>"Connect"</i> to Focusers exposing the V2 and later interfaces.</para>
         /// <para>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// <revision visible="true" date="IFocuserV2" version="Platform 6.0">Member deprecated in favour of Connected, see above.</revision>
+        /// </revisionHistory>
         bool Link { get; set; }
 
         /// <summary>
@@ -279,6 +339,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// For most focusers this is the same as the <see cref="MaxStep" /> property. This is normally used to limit the Increment display in the host software.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         int MaxIncrement { get; }
 
         /// <summary>
@@ -290,6 +353,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// The focuser can step between 0 and <see cref="MaxStep" />. If an attempt is made to move the focuser beyond these limits, it will automatically stop at the limit.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         int MaxStep { get; }
 
         /// <summary>
@@ -300,15 +366,15 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>This is <see langword="and"/>asynchronous method and must return as soon as the focus change operation has been successfully started, with the <see cref="IsMoving"/> property = True.
-        /// After the requested position is successfully reached and motion stops, the <see cref="IsMoving"/> property becomes False.</para>
+        /// <para>This is <see langword="and"/>asynchronous method and must return as soon as the focus change operation has been successfully started, with the <see cref="IsMoving"/> property = <see langword="true"/>.
+        /// After the requested position is successfully reached and motion stops, the <see cref="IsMoving"/> property becomes <see langword="false"/>.</para>
         /// <para>If the <see cref="Absolute" /> property is True, then this is an absolute positioning focuser. The <see cref="Move">Move</see> command tells the focuser to move to an exact step position, and the Position parameter
         /// of the <see cref="Move">Move</see> method is an integer between 0 and <see cref="MaxStep" />.</para>
-        /// <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells the focuser to move in a relative direction, and the Position parameter
-        /// of the <see cref="Move">Move</see> method (in this case, step distance) is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
+        /// <para>If the <see cref="Absolute" /> property is <see langword="false"/>, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells the focuser to move in a relative direction,
+        /// and the Position parameter of the <see cref="Move">Move</see> method (in this case, step distance) is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
         /// <para><b>BEHAVIOURAL CHANGE - Platform 6.4</b></para>
-        /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser
-        /// was able to execute the move safely without disrupting temperature compensation.</para>
+        /// <para>Prior to Platform 6.4, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was <see langword="true"/>, 
+        /// even if the focuser was able to execute the move safely without disrupting temperature compensation.</para>
         /// <para>Following discussion on ASCOM-Talk in January 2018, the Focuser interface specification has been revised to IFocuserV3, removing the requirement to throw the InvalidOperationException exception. 
         /// IFocuserV3 and later compliant drivers are expected to execute Move requests when temperature compensation is active and to hide any specific actions required by the hardware from the client. 
         /// For example this could be achieved by disabling temperature compensation, moving the focuser and re-enabling
@@ -316,6 +382,10 @@ namespace ASCOM.DeviceInterface
         /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 and later drivers that throw InvalidOperationException exceptions, 
         /// in line with this revised specification.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// <revision visible="true" date="IFocuserV3" version="Platform 6.4">Move must not throw an exception when <see cref="TempComp"/> is <see langword="true"/>, see above.</revision>
+        /// </revisionHistory>
         void Move(int Position);
 
         /// <summary>
@@ -328,6 +398,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Can throw a not implemented exception</b></p> Valid only for absolute positioning focusers (see the <see cref="Absolute" /> property).
         /// A <see cref="PropertyNotImplementedException">PropertyNotImplementedException</see> exception must be thrown if this device is a relative positioning focuser rather than an absolute position focuser.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         int Position { get; }
 
         /// <summary>
@@ -339,6 +412,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Can throw a not implemented exception</b></p> Must throw an exception if the focuser does not intrinsically know what the step size is.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         double StepSize { get; }
 
         /// <summary>
@@ -363,6 +439,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Conform will continue to pass IFocuserV2 drivers that throw InvalidOperationException exceptions. However, Conform will now fail IFocuserV3 and later drivers 
         /// that throw InvalidOperationException exceptions, in line with this revised specification.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         bool TempComp { get; set; }
 
         /// <summary>
@@ -374,6 +453,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented</b></p>
         /// Will be True only if the focuser's temperature compensation can be turned on and off via the <see cref="TempComp" /> property.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         bool TempCompAvailable { get; }
 
         /// <summary>
@@ -389,6 +471,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Historically no units were specified for this property. Henceforth, if applications need to process the supplied temperature, they should proceed on the basis that the
         /// units are degrees Celsius for consistency with <see cref="IObservingConditionsV2.Temperature"/>. Conversion to other temperature units can be achieved through the <see cref="Util.ConvertUnits"/> utility method.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuser" version="Platform 2.0">Member added.</revision>
+        /// </revisionHistory>
         double Temperature { get; }
 
         #endregion
@@ -399,14 +484,22 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>
+        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         void Connect();
 
         /// <summary>
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         void Disconnect();
 
         /// <summary>
@@ -414,6 +507,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         bool Connecting { get; }
 
         /// <summary>
@@ -434,6 +530,9 @@ namespace ASCOM.DeviceInterface
         /// <para><b>Further Information</b></para>
         /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IFocuserV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         IStateValueCollection DeviceState { get; }
 
         #endregion

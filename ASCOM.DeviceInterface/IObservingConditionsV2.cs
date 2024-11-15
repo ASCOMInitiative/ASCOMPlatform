@@ -43,7 +43,13 @@ namespace ASCOM.DeviceInterface
         /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
         /// hardware connection is still true.</para>
         /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
+        /// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="IObservingConditionsV2"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
+        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="IObservingConditionsV2"/> or later devices.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// <revision visible="true" date="IObservingConditionsV2" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing IObservingConditionsV2 or later devices.</revision>
+        /// </revisionHistory>
         bool Connected { get; set; }
 
         /// <summary>
@@ -56,6 +62,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
         /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         string Description { get; }
 
         /// <summary>
@@ -68,6 +77,9 @@ namespace ASCOM.DeviceInterface
         /// See the <see cref="Description" /> property for information on the device itself.
         /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         string DriverInfo { get; }
 
         /// <summary>
@@ -78,6 +90,9 @@ namespace ASCOM.DeviceInterface
         /// It should not be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
         /// driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         string DriverVersion { get; }
 
         /// <summary>
@@ -87,6 +102,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented</b></p>This value will be incremented if the interface specification is extended in the future.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         short InterfaceVersion { get; }
 
         /// <summary>
@@ -94,6 +112,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         string Name { get; }
 
         /// <summary>
@@ -102,6 +123,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         void SetupDialog();
 
         /// <summary>Invokes the specified device-specific custom action.</summary>
@@ -121,6 +145,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
         /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         string Action(string ActionName, string ActionParameters);
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -135,6 +162,9 @@ namespace ASCOM.DeviceInterface
         /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
         /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         ArrayList SupportedActions { get; }
 
         /// <summary>
@@ -156,6 +186,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// <revision visible="true" date="IObservingConditionsV2" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         void CommandBlind(string Command, bool Raw = false);
 
         /// <summary>
@@ -180,6 +214,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// <revision visible="true" date="IObservingConditionsV2" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         bool CommandBool(string Command, bool Raw = false);
 
         /// <summary>
@@ -204,6 +242,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// <revision visible="true" date="IObservingConditionsV2" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         string CommandString(string Command, bool Raw = false);
 
         /// <summary>
@@ -211,7 +253,10 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-		void Dispose();
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
+        void Dispose();
 
         /// <summary>
         /// Gets And sets the time period over which observations will be averaged
@@ -227,6 +272,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Please resist the temptation to throw exceptions when clients query sensor properties when insufficient time has passed to get a true average reading.
         /// A best estimate of the average sensor value should be returned in these situations. </para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double AveragePeriod { get; set; }
 
         /// <summary>
@@ -240,6 +288,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// This property should return a value between 0.0 and 100.0 where 0.0 = clear sky and 100.0 = 100% cloud coverage
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double CloudCover { get; }
 
         /// <summary>
@@ -258,6 +309,9 @@ namespace ASCOM.DeviceInterface
         /// one to be implemented and the other to throw a PropertyNotImplementedException. The Utilities component contains methods (<see cref="Util.DewPoint2Humidity"/> and
         /// <see cref="Util.Humidity2DewPoint"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double DewPoint { get; }
 
         /// <summary>
@@ -275,6 +329,9 @@ namespace ASCOM.DeviceInterface
         /// <see cref="Util.Humidity2DewPoint"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
         /// <para>This property should return a value between 0.0 and 100.0 where 0.0 = 0% relative humidity and 100.0 = 100% relative humidity.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double Humidity { get; }
 
         /// <summary>
@@ -294,6 +351,9 @@ namespace ASCOM.DeviceInterface
         /// The <see cref="Util.ConvertPressure"/> method can be used to effect this adjustment.
         /// </para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double Pressure { get; }
 
         /// <summary>
@@ -316,6 +376,9 @@ namespace ASCOM.DeviceInterface
         /// <item><description>Violent rain — when the precipitation rate is &gt; 50 mm (2.0 in) per hour</description></item>
         /// </list>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double RainRate { get; }
 
         /// <summary>
@@ -347,6 +410,9 @@ namespace ASCOM.DeviceInterface
         /// <item><description>32000–100000 lux</description><description>Direct sunlight</description></item>
         /// </list>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double SkyBrightness { get; }
 
         /// <summary>
@@ -499,6 +565,9 @@ namespace ASCOM.DeviceInterface
         /// </table>
         /// </para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double SkyQuality { get; }
 
         /// <summary>
@@ -511,6 +580,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double StarFWHM { get; }
 
         /// <summary>
@@ -526,6 +598,9 @@ namespace ASCOM.DeviceInterface
         /// to convert these units to and from degrees Fahrenheit.</para>
         /// <para>This is expected to be returned by an infra-red sensor looking at the sky. The lower the temperature the more the sky is likely to be clear.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double SkyTemperature { get; }
 
         /// <summary>
@@ -541,6 +616,9 @@ namespace ASCOM.DeviceInterface
         /// to convert these units to and from degrees Fahrenheit.</para>
         /// <para>This is expected to be the ambient temperature at the observatory.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double Temperature { get; }
 
         /// <summary>
@@ -555,6 +633,9 @@ namespace ASCOM.DeviceInterface
         /// The returned value must be between 0.0 and 360.0, interpreted according to the meteorological standard, where a special value of 0.0 is returned when the wind speed is 0.0.
         /// Wind direction is measured clockwise from north, through east, where East=90.0, South=180.0, West=270.0 and North=360.0.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double WindDirection { get; }
 
         /// <summary>
@@ -569,6 +650,9 @@ namespace ASCOM.DeviceInterface
         /// The units of this property are metres per second. Driver and application authors can use the <see cref="Util.ConvertUnits"/> method
         /// to convert these units to and from miles per hour or knots.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double WindGust { get; }
 
         /// <summary>
@@ -583,6 +667,9 @@ namespace ASCOM.DeviceInterface
         /// The units of this property are metres per second. Driver and application authors can use the <see cref="Util.ConvertUnits"/> method
         /// to convert these units to and from miles per hour or knots.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double WindSpeed { get; }
 
         /// <summary>
@@ -600,6 +687,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Return a negative value to indicate that no valid value has ever been received from the hardware.</para>
         /// <para>If an empty string is supplied as the PropertyName, the driver must return the time since the most recent update of any sensor. A MethodNotImplementedException must not be thrown in this circumstance.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         double TimeSinceLastUpdate(string PropertyName);
 
         /// <summary>
@@ -618,6 +708,9 @@ namespace ASCOM.DeviceInterface
         /// <para>If the sensor is implemented, this must return a valid string, even if the driver is not connected, so that applications can use this to determine what sensors are available.</para>
         /// <para>If the sensor is not implemented, this must throw a MethodNotImplementedException.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
         string SensorDescription(string PropertyName);
 
         /// <summary>
@@ -629,9 +722,12 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Optional method, can throw a MethodNotImplementedException</b></p>
         /// <para>This must be a short-lived synchronous call that triggers a refresh. It must not wait for long running processes to complete. 
-		/// It is the client's responsibility to poll , <see cref="TimeSinceLastUpdate(string)"/> to determine whether / when the data has been refreshed.</para>
-		/// </remarks>
-		void Refresh();
+        /// It is the client's responsibility to poll , <see cref="TimeSinceLastUpdate(string)"/> to determine whether / when the data has been refreshed.</para>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 6.2">Member added.</revision>
+        /// </revisionHistory>
+        void Refresh();
 
         #endregion
 
@@ -642,13 +738,19 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         void Connect();
 
         /// <summary>
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         void Disconnect();
 
         /// <summary>
@@ -656,6 +758,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         bool Connecting { get; }
 
         /// <summary>
@@ -676,6 +781,9 @@ namespace ASCOM.DeviceInterface
         /// <para><b>Further Information</b></para>
         /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IObservingConditions" version="Platform 7.0">Member added.</revision>
+        /// </revisionHistory>
         IStateValueCollection DeviceState { get; }
 
         #endregion

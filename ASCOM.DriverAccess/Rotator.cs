@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Rotator drivers
     /// </summary>
-    public class Rotator : AscomDriver, IRotatorV2, IRotatorV3, IRotatorV4
+    public class Rotator : AscomDriver, IRotatorV4, IRotatorV3, IRotatorV2
     {
         private MemberFactory memberFactory;
 

@@ -25,12 +25,16 @@ namespace ASCOM.DeviceInterface
 		/// <remarks>
 		/// <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
 		/// <para>The Connected property sets and reports the state of connection to the device hardware.
-		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-		/// when all drivers have disconnected.  A second driver may find that Connected is already true and
-		/// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-		/// hardware connection is still true.</para>
+		/// For a hub this means that Connected will be true when the first driver connects and will only be set to false when all drivers have disconnected.  A second driver may find that Connected is 
+        /// already true and setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the hardware connection is still true.</para>
 		/// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-		/// </remarks>
+		/// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="ICameraV4"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
+        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="ICameraV4"/> or later devices.</para>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ICameraV4 or later devices.</revision>
+        /// </revisionHistory>
 		bool Connected { get; set; }
 
         /// <summary>
@@ -43,6 +47,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
         /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         string Description { get; }
 
         /// <summary>
@@ -55,6 +62,12 @@ namespace ASCOM.DeviceInterface
         /// See the <see cref="Description" /> property for information on the device itself.
         /// To get the driver version in a parse-able string, use the <see cref="DriverVersion" /> property.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string DriverInfo { get; }
 
         /// <summary>
@@ -66,6 +79,12 @@ namespace ASCOM.DeviceInterface
         /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
         /// driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string DriverVersion { get; }
 
         /// <summary>
@@ -76,6 +95,9 @@ namespace ASCOM.DeviceInterface
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short InterfaceVersion { get; }
 
         /// <summary>
@@ -83,6 +105,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string Name { get; }
 
         /// <summary>
@@ -91,6 +116,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p> </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         void SetupDialog();
 
         /// <summary>Invokes the specified device-specific custom action.</summary>
@@ -110,6 +138,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
         /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string Action(string ActionName, string ActionParameters);
 
         /// <summary>Returns the list of custom action names supported by this driver.</summary>
@@ -124,6 +155,9 @@ namespace ASCOM.DeviceInterface
         /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
         /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         ArrayList SupportedActions { get; }
 
         /// <summary>
@@ -145,6 +179,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         void CommandBlind(string Command, bool Raw = false);
 
         /// <summary>
@@ -169,6 +207,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         bool CommandBool(string Command, bool Raw = false);
 
         /// <summary>
@@ -193,6 +235,10 @@ namespace ASCOM.DeviceInterface
         /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
         /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Deprecated, see note above.</revision>
+        /// </revisionHistory>
         string CommandString(string Command, bool Raw = false);
 
         /// <summary>
@@ -200,6 +246,9 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         void Dispose();
 
         #endregion
@@ -222,6 +271,9 @@ namespace ASCOM.DeviceInterface
         /// <item><description>Must NOT throw an exception if the camera is already idle.</description></item>
         /// </list> </para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         void AbortExposure();
 
         /// <summary>
@@ -235,6 +287,9 @@ namespace ASCOM.DeviceInterface
         /// Should default to 1 when the camera connection is established.  Note:  driver does not check
         /// for compatible subframe values when this value is set; rather they are checked upon <see cref="StartExposure">StartExposure</see>.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         short BinX { get; set; }
 
         /// <summary>
@@ -248,6 +303,9 @@ namespace ASCOM.DeviceInterface
         /// Should default to 1 when the camera connection is established.  Note:  driver does not check
         /// for compatible subframe values when this value is set; rather they are checked upon <see cref="StartExposure">StartExposure</see>.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         short BinY { get; set; }
 
         /// <summary>
@@ -268,6 +326,9 @@ namespace ASCOM.DeviceInterface
         /// <item><description>5      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
         /// </list>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         CameraStates CameraState { get; }
 
         /// <summary>
@@ -276,6 +337,9 @@ namespace ASCOM.DeviceInterface
         /// <value>The size of the camera X.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int CameraXSize { get; }
 
         /// <summary>
@@ -284,6 +348,9 @@ namespace ASCOM.DeviceInterface
         /// <value>The size of the camera Y.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int CameraYSize { get; }
 
         /// <summary>
@@ -297,6 +364,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanAbortExposure { get; }
 
         /// <summary>
@@ -312,6 +382,9 @@ namespace ASCOM.DeviceInterface
         /// <para>If <c>true</c>, the camera can have different binning on the X and Y axes, as
         /// determined by <see cref="BinX" /> and <see cref="BinY" />. If <c>false</c>, the binning must be equal on the X and Y axes.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanAsymmetricBin { get; }
 
         /// <summary>
@@ -325,6 +398,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanGetCoolerPower { get; }
 
         /// <summary>
@@ -340,6 +416,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Returns <c>true</c> if the camera can send auto-guider pulses to the telescope mount; <c>false</c> if not.
         /// Note: this does not provide any indication of whether the auto-guider cable is actually connected.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanPulseGuide { get; }
 
         /// <summary>
@@ -356,6 +435,9 @@ namespace ASCOM.DeviceInterface
         /// either uses open-loop cooling or does not have the ability to adjust temperature
         /// from software, and setting the <see cref="SetCCDTemperature" /> property has no effect.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanSetCCDTemperature { get; }
 
         /// <summary>
@@ -372,6 +454,9 @@ namespace ASCOM.DeviceInterface
         /// before the exposure timer completes, but will still read out the image.  Returns
         /// <c>true</c> if <see cref="StopExposure" /> is available, <c>false</c> if not.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanStopExposure { get; }
 
         /// <summary>
@@ -382,6 +467,12 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Must throw exception if not supported.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double CCDTemperature { get; }
 
         /// <summary>
@@ -397,6 +488,9 @@ namespace ASCOM.DeviceInterface
         /// shock may lead to damage to the sensor or cooler stack.  Please consult the
         /// documentation supplied with the camera for further information.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool CoolerOn { get; set; }
 
         /// <summary>
@@ -409,6 +503,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// Returns zero if <see cref="CoolerOn" /> is <c>false</c>.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double CoolerPower { get; }
 
         /// <summary>
@@ -421,6 +518,9 @@ namespace ASCOM.DeviceInterface
         /// Some cameras have multiple gain modes; these should be selected via the  <see cref="SetupDialog" /> and thus are
         /// static during a session.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double ElectronsPerADU { get; }
 
         /// <summary>
@@ -429,6 +529,9 @@ namespace ASCOM.DeviceInterface
         /// <value>The full well capacity.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double FullWellCapacity { get; }
 
         /// <summary>
@@ -444,6 +547,9 @@ namespace ASCOM.DeviceInterface
         /// a shutter.  If there is no shutter, the  <see cref="StartExposure">StartExposure</see> command will ignore the
         /// Light parameter.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool HasShutter { get; }
 
         /// <summary>
@@ -455,6 +561,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// Only valid if <see cref="CanSetCCDTemperature" /> is <c>true</c>.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double HeatSinkTemperature { get; }
 
         /// <summary>
@@ -490,7 +599,10 @@ namespace ASCOM.DeviceInterface
         /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
         /// <para>Furthermore, for the avoidance of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
-    object ImageArray { get; }
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
+        object ImageArray { get; }
 
         /// <summary>
         /// Returns an array of COM-Variant of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
@@ -528,6 +640,9 @@ namespace ASCOM.DeviceInterface
         /// <para>We consider the <b>application</b> view to have primacy and thus consider the returned array to be column major in structure, regardless of the form in which it is stored in memory.</para>
         /// <para>Furthermore, for the avoidance of doubt, the pixel at coordinate 0,0 is the top left image pixel.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         object ImageArrayVariant { get; }
 
         /// <summary>
@@ -540,6 +655,9 @@ namespace ASCOM.DeviceInterface
         /// If <c>true</c>, there is an image from the camera available. If <c>false</c>, no image
         /// is available and attempts to use the <see cref="ImageArray" /> method will produce an exception
         /// </remarks>.
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool ImageReady { get; }
 
         /// <summary>
@@ -554,6 +672,9 @@ namespace ASCOM.DeviceInterface
         /// If <c>true</c>, pulse guiding is in progress. Required if the <see cref="PulseGuide">PulseGuide</see> method
         /// (which is non-blocking) is implemented. See the <see cref="PulseGuide">PulseGuide</see> method.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         bool IsPulseGuiding { get; }
 
         /// <summary>
@@ -567,6 +688,9 @@ namespace ASCOM.DeviceInterface
         /// <remarks>
         /// This may differ from the exposure time requested due to shutter latency, camera timing precision, etc.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double LastExposureDuration { get; }
 
         /// <summary>
@@ -578,6 +702,10 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If called before any exposure has been taken</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.3">Clarified that the value must be in UTC.</revision>
+        /// </revisionHistory>
         string LastExposureStartTime { get; }
 
         /// <summary>
@@ -586,6 +714,9 @@ namespace ASCOM.DeviceInterface
         /// <value>The maximum ADU.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int MaxADU { get; }
 
         /// <summary>
@@ -598,6 +729,9 @@ namespace ASCOM.DeviceInterface
         /// If <see cref="CanAsymmetricBin" /> = <c>false</c>, returns the maximum allowed binning factor. If
         /// <see cref="CanAsymmetricBin" /> = <c>true</c>, returns the maximum allowed binning factor for the X axis.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         short MaxBinX { get; }
 
         /// <summary>
@@ -610,6 +744,9 @@ namespace ASCOM.DeviceInterface
         /// If <see cref="CanAsymmetricBin" /> = <c>false</c>, equals <see cref="MaxBinX" />. If <see cref="CanAsymmetricBin" /> = <c>true</c>,
         /// returns the maximum allowed binning factor for the Y axis.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         short MaxBinY { get; }
 
         /// <summary>
@@ -622,6 +759,9 @@ namespace ASCOM.DeviceInterface
         /// If binning is active, value is in binned pixels.  No error check is performed when the value is set.
         /// Should default to <see cref="CameraXSize" />.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int NumX { get; set; }
 
         /// <summary>
@@ -635,6 +775,9 @@ namespace ASCOM.DeviceInterface
         /// value is in binned pixels.  No error check is performed when the value is set.
         /// Should default to <see cref="CameraYSize" />.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int NumY { get; set; }
 
         /// <summary>
@@ -643,6 +786,9 @@ namespace ASCOM.DeviceInterface
         /// <value>The pixel size X.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double PixelSizeX { get; }
 
         /// <summary>
@@ -651,6 +797,9 @@ namespace ASCOM.DeviceInterface
         /// <value>The pixel size Y.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double PixelSizeY { get; }
 
         /// <summary>
@@ -677,6 +826,9 @@ namespace ASCOM.DeviceInterface
         /// <see cref="GuideDirections.guideNorth" /> must be opposite <see cref="GuideDirections.guideSouth" />, and
         /// <see cref="GuideDirections.guideEast" /> must be opposite <see cref="GuideDirections.guideWest" />.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         void PulseGuide(GuideDirections Direction, int Duration);
 
         /// <summary>
@@ -695,6 +847,9 @@ namespace ASCOM.DeviceInterface
         /// <b>Note:</b>  Camera hardware and/or driver should perform cooler ramping, to prevent
         /// thermal shock and potential damage to the CCD array or cooler stack.
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         double SetCCDTemperature { get; set; }
 
         /// <summary>
@@ -715,6 +870,9 @@ namespace ASCOM.DeviceInterface
         /// support an exposure duration of zero then, for dark and bias frames, set it to the minimum that is possible.</para>
         /// <para>Some applications will set an exposure time of zero for bias frames so it's important that the driver allows this.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         void StartExposure(double Duration, bool Light);
 
         /// <summary>
@@ -727,6 +885,9 @@ namespace ASCOM.DeviceInterface
         /// <para>If binning is active, value is in binned pixels.</para>
         /// </remarks>
         /// <value>The start X.</value>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int StartX { get; set; }
 
         /// <summary>
@@ -739,6 +900,9 @@ namespace ASCOM.DeviceInterface
         /// <para>If binning is active, value is in binned pixels.</para>
         /// </remarks>
         /// <value>The start Y.</value>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         int StartY { get; set; }
 
         /// <summary>
@@ -752,6 +916,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Must be implemented asynchronously using <see cref="ImageReady"/> to determine if the exposure has been successfully completed and the image data is ready for access via <see cref="ImageArray"/>.</para>
         /// <para>If an exposure is in progress, the readout process is initiated.  Ignored if readout is already in process.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
+        /// </revisionHistory>
         void StopExposure();
 
         #endregion
@@ -775,6 +942,9 @@ namespace ASCOM.DeviceInterface
         /// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short BayerOffsetX { get; }
 
         /// <summary>
@@ -794,6 +964,9 @@ namespace ASCOM.DeviceInterface
         /// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short BayerOffsetY { get; }
 
         /// <summary>
@@ -808,80 +981,10 @@ namespace ASCOM.DeviceInterface
         /// ensure that the driver is aware of the capabilities of the specific camera model.
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         bool CanFastReadout { get; }
-
-        /// <summary>
-        /// Returns the maximum exposure time supported by <see cref="StartExposure">StartExposure</see>.
-        /// </summary>
-        /// <returns>The maximum exposure time, in seconds, that the camera supports</returns>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// It is recommended that this function be called only after
-        /// a <see cref="Connected">connection</see> is established with the camera hardware, to ensure that the driver is aware of the capabilities of the
-        /// specific camera model.
-        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
-        /// </remarks>
-        double ExposureMax { get; }
-
-        /// <summary>
-        /// Minimum exposure time
-        /// </summary>
-        /// <returns>The minimum exposure time, in seconds, that the camera supports through <see cref="StartExposure">StartExposure</see></returns>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// This must be a non-zero number representing the shortest possible exposure time supported by the camera model.
-        /// <para>Please note that for bias frame acquisition an even shorter exposure may be possible; please see <see cref="StartExposure">StartExposure</see>
-        /// for more information.</para>
-        /// <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure
-        /// that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
-        /// </remarks>
-        double ExposureMin { get; }
-
-        /// <summary>
-        /// Exposure resolution
-        /// </summary>
-        /// <returns>The smallest increment in exposure time supported by <see cref="StartExposure">StartExposure</see>.</returns>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-        /// This can be used, for example, to specify the resolution of a user interface "spin control" used to dial in the exposure time.
-        /// <para>Please note that the Duration provided to <see cref="StartExposure">StartExposure</see> does not have to be an exact multiple of this number;
-        /// the driver should choose the closest available value. Also in some cases the resolution may not be constant over the full range
-        /// of exposure times; in this case the smallest increment would be appropriate. A value of 0.0 shall indicate that there is no minimum resolution
-        /// except that imposed by the resolution of the double value itself.</para>
-        /// <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure
-        /// that the driver is aware of the capabilities of the specific camera model.</para>
-        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
-        /// </remarks>
-        double ExposureResolution { get; }
-
-        /// <summary>
-        /// Gets or sets Fast Readout Mode
-        /// </summary>
-        /// <value><c>true</c> for fast readout mode, <c>false</c> for normal mode</value>
-        /// <exception cref="PropertyNotImplementedException">Thrown if <see cref="CanFastReadout" /> is <c>false</c>.</exception>
-        /// <exception cref="NotConnectedException">If the device is not connected</exception>
-        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must throw a PropertyNotImplementedException if CanFastReadout is false or
-        /// return a boolean value if CanFastReadout is true.</b></p>
-        /// Must thrown an exception if no <see cref="Connected">connection</see> is established to the camera. Must throw
-        /// a <see cref="PropertyNotImplementedException" /> if <see cref="CanFastReadout" /> returns <c>false</c>.
-        /// <para>Many cameras have a "fast mode" intended for use in focusing. When set to <c>true</c>, the camera will operate in Fast mode; when
-        /// set <c>false</c>, the camera will operate normally. This property, if implemented, should default to <c>False</c>.</para>
-        /// <para>Please note that this function may in some cases interact with <see cref="ReadoutModes" />; for example, there may be modes where
-        /// the Fast/Normal switch is meaningless. In this case, it may be preferable to use the <see cref="ReadoutModes" /> function to control
-        /// fast/normal switching.</para>
-        /// <para>If this feature is not available, then <see cref="CanFastReadout" /> must return <c>false</c>.</para>
-        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
-        /// </remarks>
-        bool FastReadout { get; set; }
 
         /// <summary>
         /// The camera's gain (GAIN VALUE MODE) OR the index of the selected camera gain description in the <see cref="Gains" /> array (GAINS INDEX MODE)
@@ -920,6 +1023,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Please note that <see cref="ReadoutMode" /> may in some cases affect the gain of the camera; if so, the driver must be ensure that the two properties do not conflict if both are used.</para>
         /// <para>This is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short Gain { get; set; }
 
         /// <summary>
@@ -941,6 +1047,9 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This property is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short GainMax { get; }
 
         /// <summary>
@@ -962,6 +1071,9 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This property is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short GainMin { get; }
 
         /// <summary>
@@ -984,6 +1096,9 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available in Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         ArrayList Gains { get; }
 
         /// <summary>
@@ -1008,6 +1123,9 @@ namespace ASCOM.DeviceInterface
         /// information based on other information, such as time elapsed.</para>
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short PercentCompleted { get; }
 
         /// <summary>
@@ -1029,6 +1147,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Please see <see cref="ReadoutModes" /> for additional information.</para>
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         short ReadoutMode { get; set; }
 
         /// <summary>
@@ -1059,6 +1180,9 @@ namespace ASCOM.DeviceInterface
         /// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         ArrayList ReadoutModes { get; }
 
         /// <summary>
@@ -1092,6 +1216,9 @@ namespace ASCOM.DeviceInterface
         /// the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available for the Camera Interface Version 2 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         string SensorName { get; }
 
         /// <summary>
@@ -1773,11 +1900,99 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure that
         /// the driver is aware of the capabilities of the specific camera model.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
+        /// </revisionHistory>
         SensorType SensorType { get; }
 
         #endregion
 
         #region ICameraV3 members
+
+        /// <summary>
+        /// Returns the maximum exposure time supported by <see cref="StartExposure">StartExposure</see>.
+        /// </summary>
+        /// <returns>The maximum exposure time, in seconds, that the camera supports</returns>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+        /// It is recommended that this function be called only after
+        /// a <see cref="Connected">connection</see> is established with the camera hardware, to ensure that the driver is aware of the capabilities of the
+        /// specific camera model.
+        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
+        double ExposureMax { get; }
+
+        /// <summary>
+        /// Minimum exposure time
+        /// </summary>
+        /// <returns>The minimum exposure time, in seconds, that the camera supports through <see cref="StartExposure">StartExposure</see></returns>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+        /// This must be a non-zero number representing the shortest possible exposure time supported by the camera model.
+        /// <para>Please note that for bias frame acquisition an even shorter exposure may be possible; please see <see cref="StartExposure">StartExposure</see>
+        /// for more information.</para>
+        /// <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure
+        /// that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
+        double ExposureMin { get; }
+
+        /// <summary>
+        /// Exposure resolution
+        /// </summary>
+        /// <returns>The smallest increment in exposure time supported by <see cref="StartExposure">StartExposure</see>.</returns>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+        /// This can be used, for example, to specify the resolution of a user interface "spin control" used to dial in the exposure time.
+        /// <para>Please note that the Duration provided to <see cref="StartExposure">StartExposure</see> does not have to be an exact multiple of this number;
+        /// the driver should choose the closest available value. Also in some cases the resolution may not be constant over the full range
+        /// of exposure times; in this case the smallest increment would be appropriate. A value of 0.0 shall indicate that there is no minimum resolution
+        /// except that imposed by the resolution of the double value itself.</para>
+        /// <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure
+        /// that the driver is aware of the capabilities of the specific camera model.</para>
+        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
+        double ExposureResolution { get; }
+
+        /// <summary>
+        /// Gets or sets Fast Readout Mode
+        /// </summary>
+        /// <value><c>true</c> for fast readout mode, <c>false</c> for normal mode</value>
+        /// <exception cref="PropertyNotImplementedException">Thrown if <see cref="CanFastReadout" /> is <c>false</c>.</exception>
+        /// <exception cref="NotConnectedException">If the device is not connected</exception>
+        /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must throw a PropertyNotImplementedException if CanFastReadout is false or
+        /// return a boolean value if CanFastReadout is true.</b></p>
+        /// Must thrown an exception if no <see cref="Connected">connection</see> is established to the camera. Must throw
+        /// a <see cref="PropertyNotImplementedException" /> if <see cref="CanFastReadout" /> returns <c>false</c>.
+        /// <para>Many cameras have a "fast mode" intended for use in focusing. When set to <c>true</c>, the camera will operate in Fast mode; when
+        /// set <c>false</c>, the camera will operate normally. This property, if implemented, should default to <c>False</c>.</para>
+        /// <para>Please note that this function may in some cases interact with <see cref="ReadoutModes" />; for example, there may be modes where
+        /// the Fast/Normal switch is meaningless. In this case, it may be preferable to use the <see cref="ReadoutModes" /> function to control
+        /// fast/normal switching.</para>
+        /// <para>If this feature is not available, then <see cref="CanFastReadout" /> must return <c>false</c>.</para>
+        /// <para>This is only available for the Camera Interface Version 2 and later.</para>
+        /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
+        bool FastReadout { get; set; }
 
         /// <summary>
         /// The camera's offset (OFFSET VALUE MODE) OR the index of the selected camera offset description in the <see cref="Offsets" /> array (OFFSETS INDEX MODE)
@@ -1816,6 +2031,9 @@ namespace ASCOM.DeviceInterface
         /// <para>Please note that <see cref="ReadoutMode" /> may in some cases affect the offset of the camera; if so, the driver must be ensure that the two properties do not conflict if both are used.</para>
         /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         int Offset { get; set; }
 
         /// <summary>
@@ -1837,6 +2055,9 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This property is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         int OffsetMax { get; }
 
         /// <summary>
@@ -1858,6 +2079,9 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This property is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         int OffsetMin { get; }
 
         /// <summary>
@@ -1880,6 +2104,9 @@ namespace ASCOM.DeviceInterface
         /// <para>It is recommended that this function be called only after a connection is established with the camera hardware to ensure that the driver is aware of the capabilities of the specific camera model.</para>
         /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         ArrayList Offsets { get; }
 
         /// <summary>
@@ -1893,6 +2120,9 @@ namespace ASCOM.DeviceInterface
         /// <p style="color:red"><b>This is an optional property and can throw a PropertyNotImplementedException.</b></p>
         /// <para>This is only available in Camera Interface Version 3 and later.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
+        /// </revisionHistory>
         double SubExposureDuration { get; set; }
 
         #endregion
@@ -1903,7 +2133,10 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         void Connect();
 
         /// <summary>
@@ -1911,6 +2144,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
 		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         void Disconnect();
 
         /// <summary>
@@ -1918,6 +2154,9 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         bool Connecting { get; }
 
         /// <summary>
@@ -1938,6 +2177,9 @@ namespace ASCOM.DeviceInterface
         /// <para><b>Further Information</b></para>
         /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
         /// </remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
+        /// </revisionHistory>
         IStateValueCollection DeviceState { get; }
 
         #endregion
