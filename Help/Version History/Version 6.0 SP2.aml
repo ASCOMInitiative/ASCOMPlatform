@@ -48,11 +48,11 @@
 			      			<listItem>The Refresh method is no longer required, values are always refreshed before presenting to 
 			      			the calling application. The Refresh method is retained for backwards compatibility but its 
 			      			use is now deprecated.</listItem>
-			      			<ListItem>A new Transform.JulianDateTT method has been added to allow the ephemeris time to be explicitly 
+			      			<listItem>A new Transform.JulianDateTT method has been added to allow the ephemeris time to be explicitly 
 			      			specified. When this is done, Transform will no longer use the PC clock to calculate the Terrestrial Time, 
 			      			instead, the supplied Terrestrial Time Julian date will be used. Transform's default behaviour is to use 
 			      			the PC clock and this behaviour can be restored after JulianDateTT has been used by setting a JulianDateTT 
-			      			value of 0.0.</ListItem>
+			      			value of 0.0.</listItem>
 	  					</list>
 					</listItem>
 					<listItem>Astrometry - The DeltaT function has been augmented to predict values in line with earth observations to March 2013 and 
