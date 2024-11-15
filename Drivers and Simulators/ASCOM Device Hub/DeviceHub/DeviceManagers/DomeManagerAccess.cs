@@ -372,7 +372,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -439,7 +439,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -565,7 +565,7 @@ namespace ASCOM.DeviceHub
             try
             {
                 CheckDevice();
-                Status.Slewing = true;
+                DomeStatus.Slewing = true;
                 Service.FindHome();
                 msgEnd = Done;
             }
@@ -585,7 +585,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -617,7 +617,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -649,7 +649,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -720,7 +720,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -752,7 +752,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -784,7 +784,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 
@@ -822,7 +822,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
 
         }
@@ -855,7 +855,7 @@ namespace ASCOM.DeviceHub
                     LogActivityLine(msgType, $"{except}");
                 }
 
-                Status = new DevHubDomeStatus(this);
+                DomeStatus = new DevHubDomeStatus(this);
             }
         }
 

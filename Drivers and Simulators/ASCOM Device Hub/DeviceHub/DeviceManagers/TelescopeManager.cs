@@ -440,7 +440,7 @@ namespace ASCOM.DeviceHub
 
         public void BeginSlewToCoordinatesAsync(double ra, double dec)
         {
-            LogAppMessage($"Method entered", "BeginSlewToCoordinatesAsync");
+            LogAppMessage($"Method entered", "TelescopeManager.BeginSlewToCoordinatesAsync");
 
             if (!IsConnected || !Capabilities.CanSlewAsync || !IsValidRightAscension(ra) || !IsValidDeclination(dec))
             {
@@ -453,18 +453,18 @@ namespace ASCOM.DeviceHub
             {
                 // In case the dome is slaved to us, send it a message to start moving.
 
-                LogAppMessage($"Sending Slew Message", "BeginSlewToCoordinatesAsync");
+                LogAppMessage($"Sending Slew Message", "TelescopeManager.BeginSlewToCoordinatesAsync");
                 SendSlewMessage(ra, dec);
-                LogAppMessage($"Calling SlewToCoordinatesAsync", "BeginSlewToCoordinatesAsync");
+                LogAppMessage($"Calling SlewToCoordinatesAsync", "TelescopeManager.BeginSlewToCoordinatesAsync");
                 SlewToCoordinatesAsync(ra, dec);
-                LogAppMessage($"SlewToCoordinatesAsync returned OK", "BeginSlewToCoordinatesAsync");
+                LogAppMessage($"SlewToCoordinatesAsync returned OK", "TelescopeManager.BeginSlewToCoordinatesAsync");
                 slewed = true;
 
                 SetFastPolling();
             }
             catch (Exception xcp)
             {
-                LogAppMessage($"Exception: {xcp.Message}", "BeginSlewToCoordinatesAsync");
+                LogAppMessage($"Exception: {xcp.Message}", "TelescopeManager.BeginSlewToCoordinatesAsync");
                 throw xcp;
             }
             finally
@@ -474,8 +474,8 @@ namespace ASCOM.DeviceHub
                     throw new Exception("Unable to start the direct slew!!!");
                 }
             }
-            LogAppMessage($"Method exited", "BeginSlewToCoordinatesAsync");
-            LogAppMessage($"", "BeginSlewToCoordinatesAsync");
+            LogAppMessage($"Method exited", "TelescopeManager.BeginSlewToCoordinatesAsync");
+            LogAppMessage($"", "TelescopeManager.BeginSlewToCoordinatesAsync");
         }
 
         public void DoSlewToTarget(bool useSynchronousMethodCall = true)
@@ -831,6 +831,7 @@ namespace ASCOM.DeviceHub
 
                     if (PreviousSlewInProgressMessage.IsSlewInProgress && !Status.Slewing)
                     {
+                        LogActivityLine(ActivityMessageTypes.Status,$"PollScopeTask - Cancelling slew in progress state");
                         SlewInProgressMessage msg = new SlewInProgressMessage(false);
                         Messenger.Default.Send(msg);
                         PreviousSlewInProgressMessage = msg;

@@ -42,9 +42,9 @@ namespace ASCOM.DeviceHub
 
 				double previousAltitude = Double.NaN;
 
-				if ( mgr.Status != null )
+				if ( mgr.DomeStatus != null )
 				{
-					previousAltitude = mgr.Status.Altitude;
+					previousAltitude = mgr.DomeStatus.Altitude;
 				}
 
 				newAltitude = previousAltitude;

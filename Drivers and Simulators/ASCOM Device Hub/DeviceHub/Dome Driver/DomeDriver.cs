@@ -999,7 +999,7 @@ namespace ASCOM.DeviceHub
 
                 try
                 {
-                    Exception xcp = DomeManager.Status.GetException();
+                    Exception xcp = DomeManager.DomeStatus.GetException();
 
                     if (xcp != null)
                     {
