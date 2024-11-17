@@ -3,6 +3,9 @@
   <!-- Suppress compatibility analyser -->
   <Target Name="VsixCompatibilityAnalyzer">
   </Target>
+  <!-- Suppress deployment -->
+  <Target Name="DeployVsixExtensionFiles">
+  </Target>
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
