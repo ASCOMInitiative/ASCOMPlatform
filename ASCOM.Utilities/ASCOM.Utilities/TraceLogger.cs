@@ -743,7 +743,7 @@ namespace ASCOM.Utilities
                     case 10:
                     case 13:
                         if (respectCrLf)
-                            formattedMessage = formattedMessage + Strings.Mid(message, i, 1);
+                            formattedMessage = formattedMessage + message.Substring(i, 1);
                         else
                             formattedMessage = formattedMessage + "[" + Strings.Right("00" + Conversion.Hex(unicodeCodePoint), 2) + "]";
                         break;
@@ -759,15 +759,16 @@ namespace ASCOM.Utilities
 
                     // Handle higher Unicode code points when Unicode is enabled as printable characters
                     case int @asd when (@asd > 126) & UnicodeEnabled:
-                        formattedMessage = formattedMessage + Strings.Mid(message, i, 1);
+                        formattedMessage = formattedMessage + message.Substring(i, 1);
                         break;
 
                     // Handle everything else, which should be printable
                     default:
-                        formattedMessage = formattedMessage + Strings.Mid(message, i, 1);
+                        formattedMessage = formattedMessage + message.Substring(i, 1);
                         break;
                 }
             }
+
             return formattedMessage;
         }
 
