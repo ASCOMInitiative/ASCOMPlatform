@@ -85,6 +85,8 @@ namespace ASCOM.DeviceHub
             _driverDescription = GetDriverDescriptionFromAttribute();
 
             _logger = new TraceLogger("", "DeviceHubTelescope");
+            _logger.UnicodeEnabled = true; // Enable Unicode support
+
             ReadProfile(); // Read device configuration from the ASCOM Profile store
 
             LogMessage("Telescope", "Starting initialization");

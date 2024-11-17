@@ -83,6 +83,9 @@ namespace ASCOM.Utilities
 
             g_LogFilePath = g_DefaultLogFilePath; // Initialise the log file path to the default value
             mut = new System.Threading.Mutex(false, "TraceLoggerMutex");
+
+            // Set default behaviour for handling Unicode characters
+            UnicodeEnabled = false;
         }
 
         /// <summary>
@@ -616,6 +619,9 @@ namespace ASCOM.Utilities
             }
         }
 
+        /// <inheritdoc/>
+        public bool UnicodeEnabled { get; set; }
+
         #endregion
 
         #region TraceLogger Support
@@ -723,55 +729,46 @@ namespace ASCOM.Utilities
             }
         }
 
-        private string MakePrintable(string p_Msg, bool p_RespectCrLf)
+        private string MakePrintable(string message, bool respectCrLf)
         {
-            string l_Msg = "";
-            int i, CharNo;
-            // Present any unprintable characters in [0xHH] format
-            var loopTo = Strings.Len(p_Msg);
-            for (i = 1; i <= loopTo; i++)
-            {
-                CharNo = Strings.Asc(Strings.Mid(p_Msg, i, 1));
-                switch (CharNo)
-                {
-                    case 10:
-                    case 13: // Either translate or respect CRLf depending on the setting of the respect parameter
-                        {
-                            if (p_RespectCrLf)
-                            {
-                                l_Msg = l_Msg + Strings.Mid(p_Msg, i, 1);
-                            }
-                            else
-                            {
-                                l_Msg = l_Msg + "[" + Strings.Right("00" + Conversion.Hex(CharNo), 2) + "]";
-                            }
+            string formattedMessage = string.Empty;
 
-                            break;
-                        }
+            // Present any unprintable characters in [0xHH] format
+            for (int i = 0; i < message.Length; i++)
+            {
+                int unicodeCodePoint = Strings.AscW(message.Substring(i, 1));
+                switch (unicodeCodePoint)
+                {
+                    // Either translate or respect CRLf depending on the setting of the respect parameter
+                    case 10:
+                    case 13:
+                        if (respectCrLf)
+                            formattedMessage = formattedMessage + Strings.Mid(message, i, 1);
+                        else
+                            formattedMessage = formattedMessage + "[" + Strings.Right("00" + Conversion.Hex(unicodeCodePoint), 2) + "]";
+                        break;
+
+                    // All other non-printables should be converted to hex
                     case 0 - 9:
                     case 11:
                     case 12:
                     case 14 - 31:
-                    case var @case when @case > 126: // All other non-printables should be translated
-                        {
-                            l_Msg = l_Msg + "[" + Strings.Right("00" + Conversion.Hex(CharNo), 2) + "]"; // Everything else is printable and should be left as is
-                            break;
-                        }
+                    case int @asd when (@asd > 126) & !UnicodeEnabled: // Higher code points when Unicode support is disabled
+                        formattedMessage = formattedMessage + "[" + Strings.Right("00" + Conversion.Hex(unicodeCodePoint), 2) + "]";
+                        break;
 
+                    // Handle higher Unicode code points when Unicode is enabled as printable characters
+                    case int @asd when (@asd > 126) & UnicodeEnabled:
+                        formattedMessage = formattedMessage + Strings.Mid(message, i, 1);
+                        break;
+
+                    // Handle everything else, which should be printable
                     default:
-                        {
-                            l_Msg = l_Msg + Strings.Mid(p_Msg, i, 1);
-                            break;
-                        }
-                }
-                if (CharNo < 32 | CharNo > 126)
-                {
-                }
-                else
-                {
+                        formattedMessage = formattedMessage + Strings.Mid(message, i, 1);
+                        break;
                 }
             }
-            return l_Msg;
+            return formattedMessage;
         }
 
         private string MakeHex(string p_Msg)

@@ -514,6 +514,11 @@ namespace ASCOM.Utilities.Interfaces
         /// with HexDump set False to achieve this effect.</para>
         /// </remarks>
         void LogMessage(string Identifier, string Message);
+
+        /// <summary>
+        /// Controls whether non-ASCII Unicode characters are printed or displayed as hex
+        /// </summary>
+        bool UnicodeEnabled { get; set; }
     }
 
     /// <summary>
