@@ -3,14 +3,12 @@
   <!-- Suppress compatibility analyser -->
   <Target Name="VsixCompatibilityAnalyzer">
   </Target>
-  <!-- Suppress deployment -->
-  <Target Name="DeployVsixExtensionFiles">
-  </Target>
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <RunAnalyzers>false</RunAnalyzers>
-    <DeployVsixExtensionFiles>false</DeployVsixExtensionFiles>
+  <!-- Prevent deployment on build machine -->
+    <DeployExtension>false</DeployExtension>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
