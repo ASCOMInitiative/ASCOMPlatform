@@ -619,7 +619,9 @@ namespace ASCOM.Utilities
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Controls whether non-ASCII Unicode characters are printed or displayed as hex
+        /// </summary>
         public bool UnicodeEnabled { get; set; }
 
         #endregion
