@@ -40,7 +40,7 @@
             // BtnCancel
             // 
             this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.BtnCancel.Location = new System.Drawing.Point(481, 144);
+            this.BtnCancel.Location = new System.Drawing.Point(556, 144);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 0;
@@ -51,7 +51,7 @@
             // BtnOk
             // 
             this.BtnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.BtnOk.Location = new System.Drawing.Point(400, 144);
+            this.BtnOk.Location = new System.Drawing.Point(475, 144);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
             this.BtnOk.TabIndex = 1;
@@ -61,39 +61,46 @@
             // 
             // TxtDeviceDescription
             // 
-            this.TxtDeviceDescription.Location = new System.Drawing.Point(40, 94);
+            this.TxtDeviceDescription.Location = new System.Drawing.Point(71, 95);
             this.TxtDeviceDescription.Name = "TxtDeviceDescription";
             this.TxtDeviceDescription.Size = new System.Drawing.Size(488, 20);
             this.TxtDeviceDescription.TabIndex = 2;
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(173, 78);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(36, 56);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(238, 13);
+            this.label1.Size = new System.Drawing.Size(575, 17);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Driver description that will appear in the Chooser*";
+            this.label1.Text = "Enter the description of the device as you want it to appear in the Chooser and p" +
+    "ress OK*.";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label2.Location = new System.Drawing.Point(182, 28);
+            this.label2.Location = new System.Drawing.Point(138, 15);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(219, 20);
+            this.label2.Size = new System.Drawing.Size(367, 20);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Create New Alpaca  Driver";
+            this.label2.Text = "Manually create a driver for an Alpaca device";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(25, 149);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(36, 140);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(350, 13);
+            this.label3.Size = new System.Drawing.Size(368, 30);
             this.label3.TabIndex = 5;
-            this.label3.Text = "* All other settings are configured through the Chooser\'s properties button";
+            this.label3.Text = "* All other settings are configured through the Chooser\'s Properties\r\n  button af" +
+    "ter the driver is created.";
             // 
             // GetDeviceDescriptionForm
             // 
@@ -101,7 +108,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.BtnCancel;
-            this.ClientSize = new System.Drawing.Size(568, 179);
+            this.ClientSize = new System.Drawing.Size(643, 179);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -110,7 +117,7 @@
             this.Controls.Add(this.BtnCancel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GetDeviceDescriptionForm";
-            this.Text = "Create Alpaca Device";
+            this.Text = "Create Driver";
             this.ResumeLayout(false);
             this.PerformLayout();
 

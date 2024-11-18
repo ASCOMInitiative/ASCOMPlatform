@@ -1138,7 +1138,7 @@ namespace ASCOM.Utilities
                     else // A valid description was not returned
                     {
                         TL.LogMessage("CreateAlpacaClient", $"The description was null or empty, the device will not be created");
-                        MessageBox.Show($"Cannot create the device, the description cannot be an empty string.", "An error occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("The driver was not created because a description was not provided.", "Validation Issue", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
                 else // A description was not returned so don't create the device

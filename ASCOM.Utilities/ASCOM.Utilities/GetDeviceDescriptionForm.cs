@@ -24,7 +24,7 @@ namespace ASCOM.Utilities
             InitializeComponent();
 
             // Initialise to a default value that can be checked by the Chooser on return from the form
-            Descrption = null; 
+            Descrption = null;
         }
 
         /// <summary>
@@ -55,7 +55,6 @@ namespace ASCOM.Utilities
             else // There is no device description
             {
                 LogMessage($"The user pressed the OK button with an empty description.");
-                MessageBox.Show("The device description field must contain some text", "Validation Issue", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
