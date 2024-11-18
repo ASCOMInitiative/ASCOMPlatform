@@ -69,17 +69,14 @@ namespace ASCOM.DynamicRemoteClients
                 {
                     case "":
                     case "MANAGEDEVICES":
-
                         // Run the application in user interactive mode
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
                         TL.LogMessage("Main", "Starting device management form");
                         Application.Run(new ManageDevicesForm(TL));
-
                         break;
 
                     case "CREATEALPACACLIENT":
-
                         // Validate supplied parameters before passing to the execution method
                         if (args.Length < 5)
                         {
@@ -115,7 +112,6 @@ namespace ASCOM.DynamicRemoteClients
                         TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
 
                         // Run the create device form to obtain the device description and create the driver
-                        // CreateAlpacaClient(args[1], comDevicenumber, args[3], args[4], localServerPath); // Call the execution method with correctly cased device type and unique ID parameters
 
                         // Register the dynamic clients
                         string localServerExe = $"{localServerPath}{ALPACA_CLIENT_LOCAL_SERVER}";
@@ -123,52 +119,9 @@ namespace ASCOM.DynamicRemoteClients
                         RunLocalServer(localServerExe, "-regserver", TL);
                         break;
 
-                    case "CREATENAMEDCLIENT":
-
-                        // Validate supplied parameters before passing to the execution method
-                        if (args.Length < 4)
-                        {
-                            // Validate the number of parameters - must be 4: Command DeviceType COMDeviceNumber ProgID
-                            errMsg = $"The CreateAlpacaClient command requires 3 parameters: DeviceType COMDeviceNumber ProgID e.g. /CreateAlpacaClient Telescope 1 ASCOM.AlpacaDynamic1.Telescope";
-                            TL.LogMessage("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg, "ASCOM Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
-                        // Validate that the supplied device type is one that is supported for Alpaca
-                        if (!supportedDeviceTypes.Contains(args[1], StringComparer.OrdinalIgnoreCase))
-                        {
-                            errMsg = $"The supplied ASCOM device type '{args[1]}' is not supported: The command format is \"/CreateAlpacaClient ASCOMDeviceType AlpacaDeviceUniqueID\" e.g. /CreateAlpacaClient Telescope 84DC2495-CBCE-4A9C-A703-E342C0E1F651";
-                            TL.LogMessage("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg, "ASCOM Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
-                        // Validate that the supplied device number is an integer
-                        comDevicenunberIsInteger = int.TryParse(args[2], out comDevicenumber);
-                        if (!comDevicenunberIsInteger)
-                        {
-                            errMsg = $"The supplied COM device number is not an integer: {args[2]}";
-                            TL.LogMessage("CreateAlpacaClient", errMsg);
-                            MessageBox.Show(errMsg, "ASCOM Dynamic Client Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
-                        localServerPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + ALPACA_CLIENT_LOCAL_SERVER_PATH;
-                        TL.LogMessage("CreateAlpacaClient", $"Alpaca local server folder: {localServerPath}");
-
-                        // The supplied parameters pass validation so run the create device form to obtain the device description and create the driver
-                        Application.EnableVisualStyles();
-                        Application.SetCompatibleTextRenderingDefault(false);
-                        TL.LogMessage("Main", "Starting device creation form");
-                        Application.Run(new CreateDeviceForm(args[1], comDevicenumber, args[3], localServerPath, TL));
-
-                        break;
-
                     default: // Unrecognised parameter so flag this to the user
                         errMsg = $"Unrecognised command: '{commandParameter}', the valid command are:\r\n" +
                             $"/CreateAlpacaClient DeviceType COMDeviceNumber ProgID DeviceName\r\n" +
-                            $"CreateNamedClient DeviceType COMDeviceNumber ProgID\r\n" +
                             $"/ManageDevices";
                         TL.LogMessage("Main", errMsg);
                         MessageBox.Show(errMsg, "ASCOM Dynamic Clients", MessageBoxButtons.OK, MessageBoxIcon.Error);

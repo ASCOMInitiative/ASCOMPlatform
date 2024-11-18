@@ -155,7 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Common.Components">
-      <Version>2.0.5</Version>
+      <Version>2.0.7</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

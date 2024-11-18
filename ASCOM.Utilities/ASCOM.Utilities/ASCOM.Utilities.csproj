@@ -131,6 +131,12 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetDeviceDescriptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetDeviceDescriptionForm.Designer.cs">
+      <DependentUpon>GetDeviceDescriptionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices.cs" />
     <Compile Include="AscomDeviceTypes.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
@@ -225,6 +231,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChooserForm.resX">
       <DependentUpon>ChooserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetDeviceDescriptionForm.resx">
+      <DependentUpon>GetDeviceDescriptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <CustomToolNamespace>ASCOM.Utilities.My.Resources</CustomToolNamespace>

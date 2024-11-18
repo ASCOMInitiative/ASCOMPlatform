@@ -1,6 +1,6 @@
-﻿namespace ASCOM.DynamicRemoteClients
+﻿namespace ASCOM.Utilities
 {
-    partial class CreateDeviceForm
+    partial class GetDeviceDescriptionForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateDeviceForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GetDeviceDescriptionForm));
             this.BtnCancel = new System.Windows.Forms.Button();
             this.BtnOk = new System.Windows.Forms.Button();
             this.TxtDeviceDescription = new System.Windows.Forms.TextBox();
@@ -50,6 +50,7 @@
             // 
             // BtnOk
             // 
+            this.BtnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.BtnOk.Location = new System.Drawing.Point(400, 144);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(75, 23);
@@ -94,7 +95,7 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "* All other settings are configured through the Chooser\'s properties button";
             // 
-            // CreateDeviceForm
+            // GetDeviceDescriptionForm
             // 
             this.AcceptButton = this.BtnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -108,7 +109,7 @@
             this.Controls.Add(this.BtnOk);
             this.Controls.Add(this.BtnCancel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "CreateDeviceForm";
+            this.Name = "GetDeviceDescriptionForm";
             this.Text = "Create Alpaca Device";
             this.ResumeLayout(false);
             this.PerformLayout();

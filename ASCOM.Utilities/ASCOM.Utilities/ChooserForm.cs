@@ -30,8 +30,6 @@ namespace ASCOM.Utilities
         private const string ALERT_MESSAGEBOX_TITLE = "ASCOM Chooser";
         private const string DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE = "Driver Initialization Error";
         private const string SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE = "Driver Setup Dialog Error";
-        private const int PROPERTIES_TOOLTIP_DISPLAY_TIME = 5000; // Time to display the Properties tooltip (milliseconds)
-        private const int FORM_LOAD_WARNING_MESSAGE_DELAY_TIME = 250; // Delay time before any warning message is displayed on form load
         private const int ALPACA_STATUS_BLINK_TIME = 100; // Length of time the Alpaca status indicator spends in the on and off state (ms)
         private const string TOOLTIP_PROPERTIES_TITLE = "Driver Setup";
         private const string TOOLTIP_PROPERTIES_MESSAGE = "Check or change driver Properties (configuration)";
@@ -77,6 +75,10 @@ namespace ASCOM.Utilities
         private const string PROFILE_VALUE_NAME_PORT_NUMBER = "Port Number";
         private const string PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER = "Remote Device Number";
         private const string PROFILE_VALUE_NAME_COM_GUID = "COM Guid"; // This value must match the same named constant in the Dynamic Client Local Server project LocalServer.cs file
+
+        private const string NEW_ALAPCA_DEVICE_DEFAULT_IPADDRESS = "127.0.0.1";
+        private const string NEW_ALAPCA_DEVICE_DEFAULT_PORT = "12345";
+        private const string NEW_ALAPCA_DEVICE_DEFAULT_DEVICE_NUMBER = "0";
 
         #endregion
 
@@ -549,13 +551,12 @@ namespace ASCOM.Utilities
         {
             object oDrv = null; // The driver
             bool bConnected;
-            string sProgID;
             bool UseCreateObject = false;
 
             // Find ProgID corresponding to description
-            sProgID = ((ChooserItem)CmbDriverSelector.SelectedItem).ProgID;
+            string progID = ((ChooserItem)CmbDriverSelector.SelectedItem).ProgID;
 
-            TL.LogMessage("PropertiesClick", "ProgID:" + sProgID);
+            TL.LogMessage("PropertiesClick", "ProgID:" + progID);
             try
             {
                 // Mechanic to revert to Platform 5 behaviour in the event that Activator.CreateInstance has unforeseen consequences
@@ -567,37 +568,42 @@ namespace ASCOM.Utilities
                 {
                 }
 
-                ProgIdType = Type.GetTypeFromProgID(sProgID);
+                ProgIdType = Type.GetTypeFromProgID(progID);
 
                 if (UseCreateObject) // Platform 5 behaviour
                 {
-                    LogEvent("ChooserForm", "Using CreateObject for driver: \"" + sProgID + "\"", EventLogEntryType.Information, EventLogErrors.ChooserSetupFailed, "");
-                    oDrv = Interaction.CreateObject(sProgID); // Rob suggests that Activator.CreateInstance gives better error diagnostics
+                    LogEvent("ChooserForm", "Using CreateObject for driver: \"" + progID + "\"", EventLogEntryType.Information, EventLogErrors.ChooserSetupFailed, "");
+                    oDrv = Interaction.CreateObject(progID); // Rob suggests that Activator.CreateInstance gives better error diagnostics
                 }
                 else // New Platform 6 behaviour
                 {
                     oDrv = Activator.CreateInstance(ProgIdType);
                 }
+                TL.LogMessage("PropertiesClick", "Object created OK");
 
                 // Here we try to see if a device is already connected. If so, alert and just turn on the OK button.
                 bConnected = false;
-                try
-                {
-                    bConnected = (bool)ProgIdType.InvokeMember("Connected", BindingFlags.GetProperty, null, oDrv, new object[0]);
-                }
-                catch
+                if (!IsAlpacaDevice(progID))
                 {
                     try
                     {
-                        bConnected = (bool)ProgIdType.InvokeMember("Link", BindingFlags.GetProperty, null, oDrv, new object[0]);
+                        bConnected = (bool)ProgIdType.InvokeMember("Connected", BindingFlags.GetProperty, null, oDrv, new object[0]);
                     }
                     catch
                     {
+                        try
+                        {
+                            bConnected = (bool)ProgIdType.InvokeMember("Link", BindingFlags.GetProperty, null, oDrv, new object[0]);
+                        }
+                        catch
+                        {
+                        }
                     }
                 }
+                TL.LogMessage("PropertiesClick", $"Device is connected: {bConnected}");
 
                 // Check whether the device is connected and whether it is an Alpaca dynamic client
-                if (bConnected & !sProgID.StartsWith(DRIVER_PROGID_BASE, StringComparison.InvariantCultureIgnoreCase)) // Already connected and not an Alpaca Dynamic Client
+                if (bConnected & !progID.StartsWith(DRIVER_PROGID_BASE, StringComparison.InvariantCultureIgnoreCase)) // Already connected and not an Alpaca Dynamic Client
                 {
                     MessageBox.Show("The device is already connected. Just click OK.", ALERT_MESSAGEBOX_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -608,21 +614,34 @@ namespace ASCOM.Utilities
                         WarningTooltipClear(); // Clear warning tool tip before entering setup so that the dialogue doesn't interfere with or obscure the setup dialogue.
                         ProgIdType.InvokeMember("SetupDialog", BindingFlags.InvokeMethod, null, oDrv, new object[0]);
                     }
+                    catch (TargetInvocationException ex)
+                    {
+                        Interaction.MsgBox($"{ex.InnerException.GetType().Name} - {ex.InnerException.Message}\r\n\r\n" +
+                            $"The SetupDialog method of driver \"{progID}\" threw an exception when called.\r\n\r\n" +
+                            $"This means that the setup dialogue would not start properly.\r\n\r\n" + 
+                            $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.",
+                            MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE);
+                        LogEvent("ChooserForm", "Driver setup method failed for driver: \"" + progID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, $"{ex.InnerException.GetType().Name} - {ex.InnerException.Message}");
+                    }
                     catch (Exception ex) // Something went wrong in the SetupDialog method so display an error message.
                     {
-                        Interaction.MsgBox($"The SetupDialog method of driver \"{sProgID}\" threw an exception when called.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"This means that the setup dialogue would not start properly.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"{ex.GetType().Name} - {ex.Message}", MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE);
-                        LogEvent("ChooserForm", "Driver setup method failed for driver: \"" + sProgID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, $"{ex.GetType().Name} - {ex.Message}");
+                        Interaction.MsgBox($"{ex.GetType().Name} - {ex.Message}\r\n\r\n" +
+                            $"The SetupDialog method of driver \"{progID}\" threw an exception when called.\r\n\r\n" +
+                            $"This means that the setup dialogue would not start properly.\r\n\r\n" +
+                            $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.",
+                            MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE);
+                        LogEvent("ChooserForm", "Driver setup method failed for driver: \"" + progID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, $"{ex.GetType().Name} - {ex.Message}");
                     }
                 }
 
-                registryAccess.WriteProfile("Chooser", sProgID + " Init", "True"); // Remember it has been initialized
+                registryAccess.WriteProfile("Chooser", progID + " Init", "True"); // Remember it has been initialized
                 EnableOkButton(true);
                 WarningTooltipClear();
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox($"The driver \"{sProgID}\" threw an exception when loaded.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"This means that the driver would not start properly.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"{ex}", MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE);
-                LogEvent("ChooserForm", "Failed to load driver:  \"" + sProgID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString());
+                Interaction.MsgBox($"The driver \"{progID}\" threw an exception when loaded.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"This means that the driver would not start properly.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.{Microsoft.VisualBasic.Constants.vbCrLf}{Microsoft.VisualBasic.Constants.vbCrLf}" + $"{ex}", MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, DRIVER_INITIALISATION_ERROR_MESSAGEBOX_TITLE);
+                LogEvent("ChooserForm", "Failed to load driver:  \"" + progID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString());
             }
 
             // Clean up and release resources
@@ -640,7 +659,6 @@ namespace ASCOM.Utilities
             catch (Exception)
             {
             }
-
         }
 
         private void CmdCancel_Click(object eventSender, EventArgs eventArgs)
@@ -708,8 +726,8 @@ namespace ASCOM.Utilities
 
                         // Configure the IP address, port number and Alpaca device number in the newly registered driver
                         TL.LogMessage("OK Click", $"ProgID: {newProgId}");
-                        TL.LogMessage("OK Click", $"Display name: {selectedChooserItem.AscomName}");
-                        TL.LogMessage("OK Click", $"Display name: {selectedChooserItem.DisplayName}");
+                        TL.LogMessage("OK Click", $"Display name (AscomName): {selectedChooserItem.AscomName}");
+                        TL.LogMessage("OK Click", $"Display name (DisplayName): {selectedChooserItem.DisplayName}");
 
                         profile.DeviceType = deviceTypeValue;
                         profile.Register(newProgId, selectedChooserItem.AscomName);
@@ -723,7 +741,7 @@ namespace ASCOM.Utilities
                         profile.GetValue(newProgId, PROFILE_VALUE_NAME_COM_GUID, "", Guid.NewGuid().ToString());
 
                         // Create a new Alpaca driver of the current ASCOM device type
-                        newProgId = CreateNewAlpacaDriver(newProgId, deviceNumber, selectedChooserItem.AscomName);
+                        RunDynamicClientManager($@"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{selectedChooserItem.AscomName}""");
 
                         // Flag the driver as being already configured so that it can be used immediately
                         registryAccess.WriteProfile("Chooser", $"{newProgId} Init", "True");
@@ -741,7 +759,8 @@ namespace ASCOM.Utilities
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"{ex}");
+                        TL.LogMessage("OK Click", $"Exception: {ex.Message}\r\n{ex}");
+                        MessageBox.Show($"Exception: {ex.Message}\r\n{ex}");
                     }
                 }
 
@@ -1053,59 +1072,83 @@ namespace ASCOM.Utilities
         }
 
         /// <summary>
-        /// Creates a new Alpaca driver instance with the given descriptive name
+        /// Create an Alpaca device manually
         /// </summary>
-        /// <param name="newProgId">Driver ProgID</param>
-        /// <param name="deviceNumber">Device number</param>
-        /// <param name="deviceDescription">Device description</param>
-        /// <returns>The device ProgID</returns>
-        private string CreateNewAlpacaDriver(string newProgId, int deviceNumber, string deviceDescription)
-        {
-            // Create the new Alpaca Client appending the device description if required 
-            if (string.IsNullOrEmpty(deviceDescription))
-            {
-                RunDynamicClientManager($@"\CreateNamedClient {deviceTypeValue} {deviceNumber} {newProgId}");
-            }
-            else
-            {
-                RunDynamicClientManager($@"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescription}""");
-            }
-
-            return newProgId; // Return the new ProgID
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MnuCreateAlpacaDriver_Click(object sender, EventArgs e)
         {
-            string newProgId;
-
-            string tempProgId;
-            int deviceNumber;
-            Type typeFromProgId;
-
-            // Initialise to a starting value
-            deviceNumber = 0;
-
-            // Try successive ProgIDs until one is found that is not COM registered
-            do
+            try
             {
-                deviceNumber += 1; // Increment the device number
-                tempProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"; // Create the new ProgID to be tested
-                typeFromProgId = Type.GetTypeFromProgID(tempProgId); // Try to get the type with the new ProgID
-                TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {tempProgId} Type name: {typeFromProgId?.Name}");
+                // Create the form to get the device description that will be displayed in the Chooser
+                using GetDeviceDescriptionForm deviceDescriptionForm = new(TL);
+
+                // Wait for the form to close
+                DialogResult result = deviceDescriptionForm.ShowDialog();
+
+                // Check whether the user clicked the OK button
+                if (result == DialogResult.OK) // The OK button was clicked
+                {
+                    // Check that something was returned 
+                    if (!string.IsNullOrEmpty(deviceDescriptionForm.Descrption)) // A description was returned so create the Alpaca device
+                    {
+                        string newProgId;
+                        string tempProgId;
+                        int deviceNumber;
+                        Type typeFromProgId;
+
+                        // Find the next available number for the automatically created ProgID
+
+                        deviceNumber = 0; // Initialise to a starting value
+
+                        // Try successive ProgIDs until one is found that is not COM registered
+                        do
+                        {
+                            deviceNumber += 1; // Increment the device number
+                            tempProgId = $"{DRIVER_PROGID_BASE}{deviceNumber}.{deviceTypeValue}"; // Create the new ProgID to be tested
+                            typeFromProgId = Type.GetTypeFromProgID(tempProgId); // Try to get the type with the new ProgID
+                            TL.LogMessage("CreateAlpacaClient", $"Testing ProgID: {tempProgId} Type name: {typeFromProgId?.Name}");
+                        }
+                        while (typeFromProgId is not null); // Loop until the returned type is null indicating that this type is not COM registered
+                        newProgId = tempProgId;
+                        TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}");
+
+                        profile.DeviceType = deviceTypeValue;
+                        profile.Register(newProgId, deviceDescriptionForm.Descrption);
+                        profile.WriteValue(newProgId, PROFILE_VALUE_NAME_IP_ADDRESS, NEW_ALAPCA_DEVICE_DEFAULT_IPADDRESS);
+                        profile.WriteValue(newProgId, PROFILE_VALUE_NAME_PORT_NUMBER, NEW_ALAPCA_DEVICE_DEFAULT_PORT);
+                        profile.WriteValue(newProgId, PROFILE_VALUE_NAME_REMOTE_DEVICER_NUMBER, NEW_ALAPCA_DEVICE_DEFAULT_DEVICE_NUMBER);
+
+                        // Create a new COM GUID for this driver if one does not already exist.
+                        // At this point, we aren't interested in the returned value, only that a value exists. This is ensured by use of the default value: Guid.NewGuid().
+                        profile.GetValue(newProgId, PROFILE_VALUE_NAME_COM_GUID, "", Guid.NewGuid().ToString());
+
+                        // Create a new Alpaca driver of the current ASCOM device type
+                        RunDynamicClientManager($@"\CreateAlpacaClient {deviceTypeValue} {deviceNumber} {newProgId} ""{deviceDescriptionForm.Descrption}""");
+
+                        // Flag the driver as being already configured so that it can be used immediately
+                        registryAccess.WriteProfile("Chooser", $"{newProgId} Init", "True");
+
+                        // Select the new driver in the Chooser combo box list
+                        selectedProgIdValue = newProgId;
+                        InitialiseComboBox();
+
+                        TL.LogMessage("CreateAlpacaClient", $"Completed");
+                    }
+                    else // A valid description was not returned
+                    {
+                        TL.LogMessage("CreateAlpacaClient", $"The description was null or empty, the device will not be created");
+                        MessageBox.Show($"Cannot create the device, the description cannot be an empty string.", "An error occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else // A description was not returned so don't create the device
+                    TL.LogMessage("CreateAlpacaClient", $"User cancelled the description dialogue.");
             }
-            while (typeFromProgId is not null); // Loop until the returned type is null indicating that this type is not COM registered
-            newProgId = tempProgId;
-            TL.LogMessage("CreateAlpacaClient", $"Creating new ProgID: {newProgId}");
-
-            // Create a new Alpaca driver of the current ASCOM device type
-            newProgId = CreateNewAlpacaDriver(newProgId, deviceNumber, "");
-
-            // Select the new driver in the Chooser combo box list
-            selectedProgIdValue = newProgId;
-            InitialiseComboBox();
-
-            TL.LogMessage("OK Click", $"Returning ProgID: '{selectedProgIdValue}'");
-
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("CreateAlpacaClient", $"Exception: {ex.Message}\r\n{ex}");
+                MessageBox.Show($"An error occurred when creating the client: {ex.Message}\r\n{ex}", "An error occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion
@@ -1897,6 +1940,11 @@ namespace ASCOM.Utilities
         {
             BtnProperties.Enabled = state;
             currentPropertiesButtonEnabledState = state;
+        }
+
+        private bool IsAlpacaDevice(string progId)
+        {
+            return progId.StartsWith(DRIVER_PROGID_BASE, StringComparison.InvariantCultureIgnoreCase);
         }
 
         #endregion
