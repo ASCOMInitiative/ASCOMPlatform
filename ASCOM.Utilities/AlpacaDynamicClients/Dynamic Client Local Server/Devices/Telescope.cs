@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.Tools;
 using System.Threading;
+using System.Diagnostics;
 
 namespace ASCOM.DynamicClients
 {
@@ -36,10 +37,10 @@ namespace ASCOM.DynamicClients
         private bool newConnectedState; // The state to which connectedState will be set when an asynchronous Connect / Disconnect operation completes
 
         // Flags to hold the sate of the device's can slew properties - Used if we need to emulate synchronous slewing
-        private bool? canSlew;
-        private bool? canSlewAltAz;
-        private bool? canAsynchronousSlew;
-        private bool? canAsynchronousSlewAltAz;
+        private bool? canSynchronousSlew; // Synchronous equatorial slew
+        private bool? canSynchronousSlewAltAz; // Synchronous Alt/Az slew
+        private bool? canAsynchronousSlew; // Asynchronous equatorial slew
+        private bool? canAsynchronousSlewAltAz; // Asynchronous Alt/Az slew
 
         private const int ASYNC_SLEW_WAIT_TIME_MS = 500; // Time between polls of Slewing during an emulated synchronous slew (milliseconds)
 
@@ -1055,10 +1056,11 @@ namespace ASCOM.DynamicClients
         public void SlewToAltAz(double azimuth, double altitude)
         {
             // Check whether the device can slew synchronously
-            if (CanAsynchronousSlewAltAz()) // Device can slew synchronously
+            if (CanSynchronousSlewAltAz()) // Device can slew synchronously
             {
                 // Call the device's synchronous slew endpoint
                 client.SlewToAltAz(azimuth, altitude);
+                LogMessage("SlewToAltAz", "Synchronous slew completed OK");
             }
             else // Device cannot slew synchronously
             {
@@ -1069,26 +1071,22 @@ namespace ASCOM.DynamicClients
                     client.SlewToAltAzAsync(azimuth, altitude);
 
                     // Wait for the slew to complete
-                    do
-                    {
-                        Thread.Sleep(ASYNC_SLEW_WAIT_TIME_MS);
-                        Application.DoEvents();
-                    } while (client.Slewing);
+                    WaitForSlew();
+                    LogMessage("SlewToAltAz", "Emulated synchronous slew completed OK");
                 }
                 else // The device cannot slew asynchronously
                 {
                     // The device cannot slew synchronously or asynchronously so call the device's synchronous slew endpoint so that it can return an error
+                    LogMessage("SlewToAltAz", "Cannot slew synchronously or asynchronously, calling SlewToAltAz so that it can return an error");
                     client.SlewToAltAz(azimuth, altitude);
                 }
             }
-
-            LogMessage("SlewToAltAz", "Slew completed OK");
         }
 
         public void SlewToAltAzAsync(double azimuth, double altitude)
         {
             client.SlewToAltAzAsync(azimuth, altitude);
-            LogMessage("SlewToAltAzAsync", "Call completed OK");
+            LogMessage("SlewToAltAzAsync", "Asynchronous slew completed OK");
         }
 
         public void SlewToCoordinates(double rightAscension, double declination)
@@ -1098,6 +1096,7 @@ namespace ASCOM.DynamicClients
             {
                 // Call the device's synchronous slew endpoint
                 client.SlewToCoordinates(rightAscension, declination);
+                LogMessage("SlewToCoordinates", "Synchronous slew completed OK");
             }
             else // Device cannot slew synchronously
             {
@@ -1108,38 +1107,58 @@ namespace ASCOM.DynamicClients
                     client.SlewToCoordinatesAsync(rightAscension, declination);
 
                     // Wait for the slew to complete
-                    do
-                    {
-                        Thread.Sleep(ASYNC_SLEW_WAIT_TIME_MS);
-                        Application.DoEvents();
-                    } while (client.Slewing);
+                    WaitForSlew();
+                    LogMessage("SlewToCoordinates", "Emulated synchronous slew completed OK");
                 }
                 else // The device cannot slew asynchronously
                 {
                     // The device cannot slew synchronously or asynchronously so call the device's synchronous slew endpoint so that it can return an error
+                    LogMessage("SlewToCoordinates", "Cannot slew synchronously or asynchronously, calling SlewToCoordinates so that it can return an error");
                     client.SlewToCoordinates(rightAscension, declination);
                 }
             }
-
-            LogMessage("SlewToCoordinates", "Slew completed OK");
         }
 
         public void SlewToCoordinatesAsync(double rightAscension, double declination)
         {
             client.SlewToCoordinatesAsync(rightAscension, declination);
-            LogMessage("SlewToCoordinatesAsync", "Call completed OK");
+            LogMessage("SlewToCoordinatesAsync", "Asynchronous slew completed OK");
         }
 
         public void SlewToTarget()
         {
-            client.SlewToTarget();
-            LogMessage("SlewToTarget", "Slew completed OK");
+            // Check whether the device can slew synchronously
+            if (CanSynchronousSlew()) // Device can slew synchronously
+            {
+                // Call the device's synchronous slew endpoint
+                client.SlewToTarget();
+                LogMessage("SlewToTarget", "Synchronous slew completed OK");
+            }
+            else // Device cannot slew synchronously
+            {
+                // Check whether the device can slew asynchronously
+                if (CanAsynchronousSlew()) // The device can slew asynchronously
+                {
+                    // The device cannot slew synchronously but can slew asynchronously so emulate the synchronous slew using asynchronous methods
+                    client.SlewToTargetAsync();
+
+                    // Wait for the slew to complete
+                    WaitForSlew();
+                    LogMessage("SlewToTarget", "Emulated synchronous slew completed OK");
+                }
+                else // The device cannot slew asynchronously
+                {
+                    // The device cannot slew synchronously or asynchronously so call the device's synchronous slew endpoint so that it can return an error
+                    LogMessage("SlewToTarget", "Cannot slew synchronously or asynchronously, calling SlewToTarget so that it can return an error");
+                    client.SlewToTarget();
+                }
+            }
         }
 
         public void SlewToTargetAsync()
         {
             client.SlewToTargetAsync();
-            LogMessage("SlewToTargetAsync", "Call completed OK");
+            LogMessage("SlewToTargetAsync", "Asynchronous slew completed OK");
         }
 
         public bool Slewing
@@ -1304,10 +1323,10 @@ namespace ASCOM.DynamicClients
         /// <returns>True if the device can slew, otherwise false.</returns>
         private bool CanSynchronousSlew()
         {
-            if (!canSlew.HasValue)
-                canSlew = client.CanSlew;
+            if (!canSynchronousSlew.HasValue)
+                canSynchronousSlew = client.CanSlew;
 
-            return canSlew.Value;
+            return canSynchronousSlew.Value;
         }
 
         /// <summary>
@@ -1316,10 +1335,10 @@ namespace ASCOM.DynamicClients
         /// <returns>True if the device can slew in Alt/Az, otherwise false.</returns>
         private bool CanSynchronousSlewAltAz()
         {
-            if (!canSlewAltAz.HasValue)
-                canSlewAltAz = client.CanSlewAltAz;
+            if (!canSynchronousSlewAltAz.HasValue)
+                canSynchronousSlewAltAz = client.CanSlewAltAz;
 
-            return canSlewAltAz.Value;
+            return canSynchronousSlewAltAz.Value;
         }
 
         /// <summary>
@@ -1344,6 +1363,34 @@ namespace ASCOM.DynamicClients
                 canAsynchronousSlewAltAz = client.CanSlewAltAzAsync;
 
             return canAsynchronousSlewAltAz.Value;
+        }
+
+        /// <summary>
+        /// Wait for the slew to complete, polling Slewing every 500ms and calling DoEvents every 50ms to keep the UI alive
+        /// </summary>
+        private void WaitForSlew()
+        {
+            // Stopwatch to time the DoEvents UI refresh loop
+            Stopwatch sw = Stopwatch.StartNew();
+
+            // Loop until slewing becomes false then exit
+            do
+            {
+                // Reset the UI refresh timer
+                sw.Restart();
+
+                // Loop until the elapsed time exceeds the wait time for the next poll of the Slewing property.
+                do
+                {
+                    // Wait for a short time
+                    Thread.Sleep(50);
+
+                    // Allow Windows to process its events.
+                    Application.DoEvents();
+                }
+                while (sw.ElapsedMilliseconds < ASYNC_SLEW_WAIT_TIME_MS); // Exit the loop when elapsed time exceeds ASYNC_SLEW_WAIT_TIME_MS
+            }
+            while (client.Slewing); // Exit the loop when Slewing is false
         }
 
         #endregion
