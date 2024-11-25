@@ -3,7 +3,6 @@ Main Setup Dialogue
 Check Application Pre-Requisites
 Set Registry Keys
 Remove Previous Platform install if present
-Create shortcuts
 Remove 32bit components
 Maintenance Dialogue
 Clean up any remaining simulator COM entries
@@ -16,3 +15,8 @@ Post install activities - 64bit only
 Post install activities - 32bit only
 Validate installation
 Post install activities - 32bit and 64bit
+Start installation
+Remove Previous Platforms 4 and 5 if present
+Uninstall items installed by this installer
+Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
+Uninstall previous Platform
