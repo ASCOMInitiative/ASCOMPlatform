@@ -263,6 +263,7 @@ namespace ASCOM.Utilities
 
                 RefreshTraceItems(); // Get current values for the trace menu settings
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
+                DisplayUnicodeInTraceLoggerMenuItem.Checked= Utilities.Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT); // Get the TraceLogger display Unicode state
 
                 // Define the update checker task
                 LogInternal("Load", "About to define update task");
@@ -11497,6 +11498,17 @@ namespace ASCOM.Utilities
         #endregion
 
         #region Other menu event handlers
+
+        /// <summary>
+        /// Toggle display of Unicode characters in TraceLogger files vs displaying them as hex codes [XX].
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DisplayUnicodeInTraceLoggerMenuItem_Click(object sender, EventArgs e)
+        {
+            DisplayUnicodeInTraceLoggerMenuItem.Checked = !DisplayUnicodeInTraceLoggerMenuItem.Checked;
+            Utilities.Global.SetName(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, DisplayUnicodeInTraceLoggerMenuItem.Checked.ToString()); // Set the new value in the registry
+        }
 
         /// <summary>
         /// Refresh the trace menu items based on current values stored in the user's registry

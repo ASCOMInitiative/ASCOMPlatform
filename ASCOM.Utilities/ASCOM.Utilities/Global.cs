@@ -129,6 +129,7 @@ namespace ASCOM.Utilities
 
         // TraceLogger - Per user configuration value names
         internal const string TRACELOGGER_DEFAULT_FOLDER = "TraceLogger Default Folder";
+        internal const string OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER = "Display Unicode In TraceLogger Files"; internal const bool OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT = false;
 
         // Check for updates constants
         internal const string CHECK_FOR_RELEASE_UPDATES = "Check for Release Updates"; // Name of flag indicating whether or not to check for new releases

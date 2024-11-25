@@ -85,7 +85,7 @@ namespace ASCOM.Utilities
             mut = new System.Threading.Mutex(false, "TraceLoggerMutex");
 
             // Set default behaviour for handling Unicode characters
-            UnicodeEnabled = false;
+            UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
         }
 
         /// <summary>

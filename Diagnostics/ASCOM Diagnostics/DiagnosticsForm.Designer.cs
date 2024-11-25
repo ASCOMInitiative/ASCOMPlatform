@@ -85,6 +85,7 @@ namespace ASCOM.Utilities
             this.btnViewLastLog = new System.Windows.Forms.Button();
             this.SerialTraceFileName = new System.Windows.Forms.SaveFileDialog();
             this.BtnUpdateAvailable = new System.Windows.Forms.Button();
+            this.DisplayUnicodeInTraceLoggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -190,34 +191,34 @@ namespace ASCOM.Utilities
             this.ListAvailableCOMPortsToolStripMenuItem,
             this.EarthRotationDataUpdateToolStripMenuItem});
             this.mnuTools.Name = "mnuTools";
-            this.mnuTools.Size = new System.Drawing.Size(46, 20);
+            this.mnuTools.Size = new System.Drawing.Size(47, 20);
             this.mnuTools.Text = "Tools";
             // 
             // ChooserToolStripMenuItem1
             // 
             this.ChooserToolStripMenuItem1.Name = "ChooserToolStripMenuItem1";
-            this.ChooserToolStripMenuItem1.Size = new System.Drawing.Size(243, 22);
+            this.ChooserToolStripMenuItem1.Size = new System.Drawing.Size(244, 22);
             this.ChooserToolStripMenuItem1.Text = "Telescope Chooser (using COM)";
             this.ChooserToolStripMenuItem1.Click += new System.EventHandler(this.ChooserToolStripMenuItem1_Click);
             // 
             // ChooserNETToolStripMenuItem
             // 
             this.ChooserNETToolStripMenuItem.Name = "ChooserNETToolStripMenuItem";
-            this.ChooserNETToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.ChooserNETToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.ChooserNETToolStripMenuItem.Text = "Telescope Chooser (using .NET)";
             this.ChooserNETToolStripMenuItem.Click += new System.EventHandler(this.ChooserNETToolStripMenuItem_Click);
             // 
             // ListAvailableCOMPortsToolStripMenuItem
             // 
             this.ListAvailableCOMPortsToolStripMenuItem.Name = "ListAvailableCOMPortsToolStripMenuItem";
-            this.ListAvailableCOMPortsToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.ListAvailableCOMPortsToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.ListAvailableCOMPortsToolStripMenuItem.Text = "List Available COM Ports";
             this.ListAvailableCOMPortsToolStripMenuItem.Click += new System.EventHandler(this.ListAvailableCOMPortsToolStripMenuItem_Click);
             // 
             // EarthRotationDataUpdateToolStripMenuItem
             // 
             this.EarthRotationDataUpdateToolStripMenuItem.Name = "EarthRotationDataUpdateToolStripMenuItem";
-            this.EarthRotationDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.EarthRotationDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.EarthRotationDataUpdateToolStripMenuItem.Text = "Earth Rotation Data";
             this.EarthRotationDataUpdateToolStripMenuItem.Click += new System.EventHandler(this.EarthRotationDataUpdateToolStripMenuItem_Click);
             // 
@@ -245,130 +246,130 @@ namespace ASCOM.Utilities
             this.SerialWaitTypeToolStripMenuItem,
             this.MenuDiagnosticsTraceEnabled});
             this.mnuTrace.Name = "mnuTrace";
-            this.mnuTrace.Size = new System.Drawing.Size(46, 20);
+            this.mnuTrace.Size = new System.Drawing.Size(47, 20);
             this.mnuTrace.Text = "Trace";
             this.mnuTrace.DropDownOpening += new System.EventHandler(this.MnuTrace_DropDownOpening);
             // 
             // mnuLeaveUnset
             // 
             this.mnuLeaveUnset.Name = "mnuLeaveUnset";
-            this.mnuLeaveUnset.Size = new System.Drawing.Size(282, 22);
+            this.mnuLeaveUnset.Size = new System.Drawing.Size(283, 22);
             this.mnuLeaveUnset.Text = "Normally leave these options disabled";
             // 
             // ToolStripSeparator1
             // 
             this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-            this.ToolStripSeparator1.Size = new System.Drawing.Size(279, 6);
+            this.ToolStripSeparator1.Size = new System.Drawing.Size(280, 6);
             // 
             // MenuUseTraceAutoFilenames
             // 
             this.MenuUseTraceAutoFilenames.Name = "MenuUseTraceAutoFilenames";
-            this.MenuUseTraceAutoFilenames.Size = new System.Drawing.Size(282, 22);
+            this.MenuUseTraceAutoFilenames.Size = new System.Drawing.Size(283, 22);
             this.MenuUseTraceAutoFilenames.Text = "Use Automatic Serial Trace Filenames";
             this.MenuUseTraceAutoFilenames.Click += new System.EventHandler(this.MenuAutoTraceFilenames_Click);
             // 
             // MenuUseTraceManualFilename
             // 
             this.MenuUseTraceManualFilename.Name = "MenuUseTraceManualFilename";
-            this.MenuUseTraceManualFilename.Size = new System.Drawing.Size(282, 22);
+            this.MenuUseTraceManualFilename.Size = new System.Drawing.Size(283, 22);
             this.MenuUseTraceManualFilename.Text = "Use a Manual Serial Trace Filename";
             this.MenuUseTraceManualFilename.Click += new System.EventHandler(this.MenuUseTraceManualFilename_Click);
             // 
             // MenuSerialTraceEnabled
             // 
             this.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled";
-            this.MenuSerialTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuSerialTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuSerialTraceEnabled.Text = "Serial Trace Enabled";
             this.MenuSerialTraceEnabled.Click += new System.EventHandler(this.MenuSerialTraceEnabled_Click);
             // 
             // MenuIncludeSerialTraceDebugInformation
             // 
             this.MenuIncludeSerialTraceDebugInformation.Name = "MenuIncludeSerialTraceDebugInformation";
-            this.MenuIncludeSerialTraceDebugInformation.Size = new System.Drawing.Size(282, 22);
+            this.MenuIncludeSerialTraceDebugInformation.Size = new System.Drawing.Size(283, 22);
             this.MenuIncludeSerialTraceDebugInformation.Text = "Include Serial Trace Debug Information";
             this.MenuIncludeSerialTraceDebugInformation.Click += new System.EventHandler(this.MenuIncludeSerialTraceDebugInformation_Click);
             // 
             // MenuProfileTraceEnabled
             // 
             this.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled";
-            this.MenuProfileTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuProfileTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuProfileTraceEnabled.Text = "Profile Trace Enabled";
             this.MenuProfileTraceEnabled.Click += new System.EventHandler(this.MenuProfileTraceEnabled_Click_1);
             // 
             // MenuRegistryTraceEnabled
             // 
             this.MenuRegistryTraceEnabled.Name = "MenuRegistryTraceEnabled";
-            this.MenuRegistryTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuRegistryTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuRegistryTraceEnabled.Text = "Registry Trace Enabled";
             this.MenuRegistryTraceEnabled.Click += new System.EventHandler(this.MenuRegistryTraceEnabled_Click);
             // 
             // MenuUtilTraceEnabled
             // 
             this.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled";
-            this.MenuUtilTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuUtilTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuUtilTraceEnabled.Text = "Util Trace Enabled";
             this.MenuUtilTraceEnabled.Click += new System.EventHandler(this.MenuUtilTraceEnabled_Click_1);
             // 
             // MenuTimerTraceEnabled
             // 
             this.MenuTimerTraceEnabled.Name = "MenuTimerTraceEnabled";
-            this.MenuTimerTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuTimerTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuTimerTraceEnabled.Text = "Timer Timer Enabled";
             this.MenuTimerTraceEnabled.Click += new System.EventHandler(this.MenuTimerTraceEnabled_Click);
             // 
             // MenuSimulatorTraceEnabled
             // 
             this.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled";
-            this.MenuSimulatorTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuSimulatorTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled";
             this.MenuSimulatorTraceEnabled.Click += new System.EventHandler(this.MenuSimulatorTraceEnabled_Click);
             // 
             // MenuDriverAccessTraceEnabled
             // 
             this.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled";
-            this.MenuDriverAccessTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuDriverAccessTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled";
             this.MenuDriverAccessTraceEnabled.Click += new System.EventHandler(this.MenuDriverAccessTraceEnabled_Click);
             // 
             // MenuTransformTraceEnabled
             // 
             this.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled";
-            this.MenuTransformTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuTransformTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuTransformTraceEnabled.Text = "Transform Trace Enabled";
             this.MenuTransformTraceEnabled.Click += new System.EventHandler(this.MenuTransformTraceEnabled_Click);
             // 
             // MenuNovasTraceEnabled
             // 
             this.MenuNovasTraceEnabled.Name = "MenuNovasTraceEnabled";
-            this.MenuNovasTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuNovasTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuNovasTraceEnabled.Text = "NOVAS (Partial) Trace Enabled";
             this.MenuNovasTraceEnabled.Click += new System.EventHandler(this.MenuNovasTraceEnabled_Click);
             // 
             // MenuAstroUtilsTraceEnabled
             // 
             this.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled";
-            this.MenuAstroUtilsTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuAstroUtilsTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled";
             this.MenuAstroUtilsTraceEnabled.Click += new System.EventHandler(this.MenuAstroUtilsTraceEnabled_Click);
             // 
             // MenuCacheTraceEnabled
             // 
             this.MenuCacheTraceEnabled.Name = "MenuCacheTraceEnabled";
-            this.MenuCacheTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuCacheTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuCacheTraceEnabled.Text = "Cache Trace Enabled";
             this.MenuCacheTraceEnabled.Click += new System.EventHandler(this.MenuCacheTraceEnabled_Click);
             // 
             // MenuEarthRotationDataFormTraceEnabled
             // 
             this.MenuEarthRotationDataFormTraceEnabled.Name = "MenuEarthRotationDataFormTraceEnabled";
-            this.MenuEarthRotationDataFormTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuEarthRotationDataFormTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuEarthRotationDataFormTraceEnabled.Text = "Earth Rotation Data Form Trace Enabled";
             this.MenuEarthRotationDataFormTraceEnabled.Click += new System.EventHandler(this.MenuEarthRotationScheduledJobTraceEnabled_Click);
             // 
             // MenuThrowAbandonedMutexExceptions
             // 
             this.MenuThrowAbandonedMutexExceptions.Name = "MenuThrowAbandonedMutexExceptions";
-            this.MenuThrowAbandonedMutexExceptions.Size = new System.Drawing.Size(282, 22);
+            this.MenuThrowAbandonedMutexExceptions.Size = new System.Drawing.Size(283, 22);
             this.MenuThrowAbandonedMutexExceptions.Text = "Throw Abandoned Mutex Exceptions";
             this.MenuThrowAbandonedMutexExceptions.Visible = false;
             this.MenuThrowAbandonedMutexExceptions.Click += new System.EventHandler(this.MenuThrowAbandonedMutexExceptions_Click);
@@ -380,7 +381,7 @@ namespace ASCOM.Utilities
             this.MenuWaitTypeSleep,
             this.MenuWaitTypeWaitForSingleObject});
             this.SerialWaitTypeToolStripMenuItem.Name = "SerialWaitTypeToolStripMenuItem";
-            this.SerialWaitTypeToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.SerialWaitTypeToolStripMenuItem.Size = new System.Drawing.Size(283, 22);
             this.SerialWaitTypeToolStripMenuItem.Text = "Serial Wait Type";
             this.SerialWaitTypeToolStripMenuItem.Visible = false;
             // 
@@ -408,7 +409,7 @@ namespace ASCOM.Utilities
             // MenuDiagnosticsTraceEnabled
             // 
             this.MenuDiagnosticsTraceEnabled.Name = "MenuDiagnosticsTraceEnabled";
-            this.MenuDiagnosticsTraceEnabled.Size = new System.Drawing.Size(282, 22);
+            this.MenuDiagnosticsTraceEnabled.Size = new System.Drawing.Size(283, 22);
             this.MenuDiagnosticsTraceEnabled.Text = "Diagnostics Trace Enabled";
             this.MenuDiagnosticsTraceEnabled.Click += new System.EventHandler(this.MenuDiagnosticsTraceEnabled_Click);
             // 
@@ -419,7 +420,8 @@ namespace ASCOM.Utilities
             this.OptionsCheckForPlatformReleases,
             this.OptionsCheckForPlatformPreReleases,
             this.OptionsUseOmniSimulators,
-            this.SetLogFileLocationToolStripMenuItem1});
+            this.SetLogFileLocationToolStripMenuItem1,
+            this.DisplayUnicodeInTraceLoggerMenuItem});
             this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
             this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.OptionsToolStripMenuItem.Text = "Options";
@@ -427,35 +429,35 @@ namespace ASCOM.Utilities
             // MenuAutoViewLog
             // 
             this.MenuAutoViewLog.Name = "MenuAutoViewLog";
-            this.MenuAutoViewLog.Size = new System.Drawing.Size(308, 22);
+            this.MenuAutoViewLog.Size = new System.Drawing.Size(321, 22);
             this.MenuAutoViewLog.Text = "Automatically view log after run";
             this.MenuAutoViewLog.Click += new System.EventHandler(this.MenuAutoViewLog_Click);
             // 
             // OptionsCheckForPlatformReleases
             // 
             this.OptionsCheckForPlatformReleases.Name = "OptionsCheckForPlatformReleases";
-            this.OptionsCheckForPlatformReleases.Size = new System.Drawing.Size(308, 22);
+            this.OptionsCheckForPlatformReleases.Size = new System.Drawing.Size(321, 22);
             this.OptionsCheckForPlatformReleases.Text = "Check for Platform updates";
             this.OptionsCheckForPlatformReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformReleases_Click);
             // 
             // OptionsCheckForPlatformPreReleases
             // 
             this.OptionsCheckForPlatformPreReleases.Name = "OptionsCheckForPlatformPreReleases";
-            this.OptionsCheckForPlatformPreReleases.Size = new System.Drawing.Size(308, 22);
+            this.OptionsCheckForPlatformPreReleases.Size = new System.Drawing.Size(321, 22);
             this.OptionsCheckForPlatformPreReleases.Text = "Check for Platform pre-release updates";
             this.OptionsCheckForPlatformPreReleases.Click += new System.EventHandler(this.OptionsCheckForPlatformPreReleases_Click);
             // 
             // OptionsUseOmniSimulators
             // 
             this.OptionsUseOmniSimulators.Name = "OptionsUseOmniSimulators";
-            this.OptionsUseOmniSimulators.Size = new System.Drawing.Size(308, 22);
+            this.OptionsUseOmniSimulators.Size = new System.Drawing.Size(321, 22);
             this.OptionsUseOmniSimulators.Text = "Use Omni-Simulators as Platform simulators";
             this.OptionsUseOmniSimulators.Click += new System.EventHandler(this.OptionsUseOmniSimulators_Click);
             // 
             // SetLogFileLocationToolStripMenuItem1
             // 
             this.SetLogFileLocationToolStripMenuItem1.Name = "SetLogFileLocationToolStripMenuItem1";
-            this.SetLogFileLocationToolStripMenuItem1.Size = new System.Drawing.Size(308, 22);
+            this.SetLogFileLocationToolStripMenuItem1.Size = new System.Drawing.Size(321, 22);
             this.SetLogFileLocationToolStripMenuItem1.Text = "Set Log File Root Folder";
             this.SetLogFileLocationToolStripMenuItem1.Click += new System.EventHandler(this.SetLogFileLocationToolStripMenuItem_Click);
             // 
@@ -503,6 +505,13 @@ namespace ASCOM.Utilities
             this.BtnUpdateAvailable.UseVisualStyleBackColor = false;
             this.BtnUpdateAvailable.Visible = false;
             this.BtnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
+            // 
+            // DisplayUnicodeInTraceLoggerMenuItem
+            // 
+            this.DisplayUnicodeInTraceLoggerMenuItem.Name = "DisplayUnicodeInTraceLoggerMenuItem";
+            this.DisplayUnicodeInTraceLoggerMenuItem.Size = new System.Drawing.Size(321, 22);
+            this.DisplayUnicodeInTraceLoggerMenuItem.Text = "Display Unicode characters in TraceLogger files";
+            this.DisplayUnicodeInTraceLoggerMenuItem.Click += new System.EventHandler(this.DisplayUnicodeInTraceLoggerMenuItem_Click);
             // 
             // DiagnosticsForm
             // 
@@ -581,5 +590,6 @@ namespace ASCOM.Utilities
         private ToolStripMenuItem OptionsUseOmniSimulators;
         private ToolStripMenuItem MenuDiagnosticsTraceEnabled;
         private ToolStripMenuItem SetLogFileLocationToolStripMenuItem1;
+        private ToolStripMenuItem DisplayUnicodeInTraceLoggerMenuItem;
     }
 }
