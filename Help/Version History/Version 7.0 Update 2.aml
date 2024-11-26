@@ -14,7 +14,7 @@
 				<list class="bullet">
 					<listItem>ASCOM Remote - Added a non-standard behaviour option to omit the raw parameter on Telescope CommandXXX method calls.</listItem>
 					<listItem>
-						TraceLogger - Localised strings in log files created by the TraceLogger component can now display as expected, rather than containing hex dumps.
+						TraceLogger - Localised strings in log files created by the TraceLogger component can now display as expected rather than containing hex dumps.
 						This new behaviour is enabled through the Diagnostics Options menu.
 					</listItem>
 				</list>
@@ -26,11 +26,12 @@
 			<content>
 				<list class="bullet">
 					<listItem>Device Hub – Operational state properties now always query the device rather than the Device Hub cache, which could be 3 to 5 seconds out of date.</listItem>
-					<listItem>Dynamic Clients – Fixed an issue in Telescope.SlewToAltAz causing it to be called when it was not available, which resulted in a not implemented exception.</listItem>
+					<listItem>Dynamic Clients – Fixed an issue in Telescope.SlewToAltAz causing it to be called when it was not available resulting in a not implemented exception.</listItem>
 					<listItem>Chooser – Fixed an issue that prevented manual creation of Dynamic Clients.</listItem>
 					<listItem>Installer – Fixed an issue where the installer would not start if a previous install was interrupted.</listItem>
 					<listItem>Installer – Now shows a prompt if a reboot is required rather than immediately rebooting.</listItem>
-					<listItem>Device Hub - Fixed an issue that prevented the configuration from being changed when log activity to disk was disabled.</listItem>
+					<listItem>TraceLogger - Unicode characters above 255 are now displayed as four hex characters when hex display is enabled rather than being truncated to two characters.</listItem>
+					<listItem>Device Hub - Fixed an issue that prevented the configuration from being changed when "Log activity to disk" was disabled.</listItem>
 					<listItem>Chooser - Fixed an issue that prevented some drivers (e.g. the Gemini Telescope driver) from being selected.</listItem>
 					<listItem>
 						Omni-Simulators
