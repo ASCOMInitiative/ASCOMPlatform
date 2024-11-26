@@ -756,7 +756,7 @@ namespace ASCOM.Utilities
                     case 12:
                     case 14 - 31:
                     case int @asd when (@asd > 126) & !UnicodeEnabled: // Higher code points when Unicode support is disabled
-                        formattedMessage = formattedMessage + "[" + Strings.Right("00" + Conversion.Hex(unicodeCodePoint), 2) + "]";
+                        formattedMessage = formattedMessage + $"[{Strings.Right("0000" + Conversion.Hex(unicodeCodePoint), unicodeCodePoint > 255 ? 4 : 2)}]";
                         break;
 
                     // Handle higher Unicode code points when Unicode is enabled as printable characters
