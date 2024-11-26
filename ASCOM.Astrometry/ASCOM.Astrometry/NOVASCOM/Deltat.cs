@@ -44,10 +44,9 @@ namespace ASCOM.Astrometry
 
             // NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
 
-            // DATE RANGE 30th September 2025 onwards - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
-            if (YearFraction >= 2025.75d)
+            // DATE RANGE 23rd February 2026 onwards (90 day extrapolation) - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
+            if (YearFraction >= 2026.114d)
             {
-
                 // Create an EarthRotationParameters object and retrieve the current leap second value. If something goes wrong return the fall-back value
                 try
                 {
@@ -61,6 +60,18 @@ namespace ASCOM.Astrometry
                     // Ultimate fallback value if all else fails!
                     Retval = GlobalItems.LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + GlobalItems.TT_TAI_OFFSET;
                 }
+            }
+
+            // DATE RANGE 25th November 2024 Onwards - The analysis was performed on 26th November 2024 and creates values within 0.01 of a second of the projections to 25th November 2025.
+            else if (YearFraction >= 2024.9d)
+            {
+                Retval =
+                    +0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    +0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    +5.3388020304547700E-09d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    -0.000975357478647537d * ModifiedJulianDay * ModifiedJulianDay +
+                    +59.3963397096791 * ModifiedJulianDay +
+                    -1205609.09784585;
             }
 
             // DATE RANGE 1st July 2024 Onwards - The analysis was performed on 6th July 2024 and creates values within 0.01 of a second of the projections to 5th July 2025.
