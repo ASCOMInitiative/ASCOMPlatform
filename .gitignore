@@ -315,3 +315,4 @@ Help/Output
 /Installer/FinaliseInstall.exe.manifest
 /Drivers and Simulators/JustAHub/Setup/Builds
 /Drivers and Simulators/ASCOM Device Hub/Inno Setup/Builds
+/Installer/ASCOM.Exceptions.xml

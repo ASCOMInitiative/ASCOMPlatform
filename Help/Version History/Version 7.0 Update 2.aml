@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="971A47F0-3479-4D67-9E61-793C17A8AFF3" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction address="Intro70">
+			<para>
+				In line with previous Platform installers, Platform 7.0 Update 2 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs. The Platform
+				environment pre-requisites are listed here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform Prerequisites</link>.
+			</para>
+		</introduction>
+
+		<section address="Changes702">
+			<title>Changes in 7.0 Update 1 and 2 - For Everyone</title>
+			<content>
+				<list class="bullet">
+					<listItem>ASCOM Remote - Added a non-standard behaviour option to omit the raw parameter on Telescope CommandXXX method calls.</listItem>
+					<listItem>
+						TraceLogger - Localised strings in log files created by the TraceLogger component can now display as expected, rather than containing hex dumps.
+						This new behaviour is enabled through the Diagnostics Options menu.
+					</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="IssuesFixedPlatform702">
+			<title>Issues Fixed in 7.0 Update 1 and 2 - Platform</title>
+			<content>
+				<list class="bullet">
+					<listItem>Device Hub – Operational state properties now always query the device rather than the Device Hub cache, which could be 3 to 5 seconds out of date.</listItem>
+					<listItem>Dynamic Clients – Fixed an issue in Telescope.SlewToAltAz causing it to be called when it was not available, which resulted in a not implemented exception.</listItem>
+					<listItem>Chooser – Fixed an issue that prevented manual creation of Dynamic Clients.</listItem>
+					<listItem>Installer – Fixed an issue where the installer would not start if a previous install was interrupted.</listItem>
+					<listItem>Installer – Now shows a prompt if a reboot is required rather than immediately rebooting.</listItem>
+					<listItem>Device Hub - Fixed an issue that prevented the configuration from being changed when log activity to disk was disabled.</listItem>
+					<listItem>Chooser - Fixed an issue that prevented some drivers (e.g. the Gemini Telescope driver) from being selected.</listItem>
+					<listItem>
+						Omni-Simulators
+						<list class="bullet">
+							<listItem>When changing configuration using the Chooser's Properties button, the OmniSimulators now present a Setup dialogue with a browser link to the OmniSim UI rather than a message box.</listItem>
+							<listItem>Fixed issue that caused even number Switches to be invisible in the Switch UI</listItem>
+							<listItem>
+								Improved the camera simulator logic for mapping colours in the source image, read from a file, to the target image that is returned to the client.
+								The new approach maintains the same resolution and FOV with all sensor types.
+								Each pixel in the source image now corresponds to one pixel in the final image, but filtered through the color filter of the cell.
+							</listItem>
+							<listItem>The ObservingConditions DewPoint property calculation now uses any override values specified for temperature and relative humidity.</listItem>
+							<listItem>The units of the ObservingConditions DewPoint property are now shown as Celsius,</listItem>
+							<listItem>The units of the ObservingConditions WindGust and WindSpeed properties are now shown as "metres per second" rather than "miles per hour".</listItem>
+						</list>
+					</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="ChangesDeveloper702">
+			<title>Changes in 7.0 Update 2 - For Developers</title>
+			<content>
+				<list class="bullet">
+					<listItem>Help – Added interface histories to every member showing when they were introduced, revised or deprecated.</listItem>
+					<listItem>Documentation - Added an interface "change history" summary PDF showing the year and Platform in which every ASCOM interface member change was introduced.</listItem>
+					<listItem>TraceLogger – Now has an option to print Unicode characters above 127 rather than displaying them as hex codes.</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="IssuesFixedDeveloper702">
+			<title>Issues Fixed in 7.0 Update 2 - For Developers</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						DriverAccess – Added the Platform 6 interfaces to the list of implemented interfaces. This ensures that DriverAccess objects that are referred to as Platform 6 interface types rather than as
+						DriverAccess concrete classes, continue to work under Platform 7. For example, the Platform 7 DriverAccesss telescope component now reports that it implements both ITelescopeV3 and ITelescopeV4.
+					</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="BreakingChanges702">
+			<title>Breaking Changes (For Developers) in Platform 7.0 Update 2</title>
+			<content>
+				<list class="bullet">
+					<listItem>None.</listItem>
+				</list>
+			</content>
+		</section>
+
+		<section address="KnownIssuesDevelopment702">
+			<title>Known Limitations - Developers</title>
+			<content>
+				<list class="bullet">
+					<listItem>
+						The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully
+						accessible through COM from scripting languages because a number of parameters are passed by reference or use
+						structures that do not pass across the COM interface. Two work rounds are available:
+						<list class="ordered">
+							<listItem>Use the Transform component in the ASCOM.Astrometry.Transform namespace, it is fully COM compatible.</listItem>
+							<listItem>
+								Create your own COM presentation component that encapsulates the SOFA or NOVAS 3.1 functions that you require
+								and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your
+								scripting application.
+							</listItem>
+						</list>
+					</listItem>
+				</list>
+			</content>
+		</section>
+		<bibliography></bibliography>
+		<relatedTopics></relatedTopics>
+	</developerConceptualDocument>
+</topic>

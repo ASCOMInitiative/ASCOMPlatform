@@ -4,7 +4,8 @@
   <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" title="Introduction - ASCOM Platform 7  For Developers" tocTitle="Introduction - Developers" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
-  <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" title="Version History">
+  <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" title="Version History">
+    <Topic id="971A47F0-3479-4D67-9E61-793C17A8AFF3" visible="True" isSelected="true" title="Version 7.0 Update 1 and 2" />
     <Topic id="4eb05978-d9b4-4465-896b-e9ed09bff8c1" visible="True" />
     <Topic id="aa55983a-7030-4db2-a5b0-b24480703726" visible="True" />
     <Topic id="81df3663-6fff-439a-8c64-5ca3989126d8" visible="True" />
@@ -41,7 +42,7 @@
   </Topic>
   <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" isExpanded="true" title="Tools and Features">
     <Topic id="e3870a2f-582a-4ab4-b37f-e9b1c37a2030" visible="True" title="Alpaca through the Chooser" />
-    <Topic id="0254d2da-144b-49dd-8172-b03cd8048bec" visible="True" isSelected="true" title="ASCOM Remote Server" />
+    <Topic id="0254d2da-144b-49dd-8172-b03cd8048bec" visible="True" title="ASCOM Remote Server" />
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
     <Topic id="98976954-6a00-4864-a223-7b3b25ffaaf1" visible="True" />
     <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />

@@ -384,6 +384,7 @@
     <None Include="Examples\Serial.aml" />
     <None Include="Version History\Version 5.5.1.aml" />
     <None Include="Version History\Version 6.5.aml" />
+    <None Include="Version History\Version 7.0 Update 2.aml" />
     <None Include="Version History\Version 7.0.aml" />
     <None Include="Version History\Version Template.aml" />
     <None Include="Version History\Version Summary.aml" />
