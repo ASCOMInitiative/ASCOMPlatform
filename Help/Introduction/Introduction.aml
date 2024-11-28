@@ -3,10 +3,10 @@
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
 			<para>
-				Please see <link xlink:href="971A47F0-3479-4D67-9E61-793C17A8AFF3" >Platform 7.0 Update 2 Changes</link> for details of changes and fixes in this release.
+				Please see <link xlink:href="971A47F0-3479-4D67-9E61-793C17A8AFF3" >Changes in Platform 7.0 Update 2</link> for details of changes and fixes in this release.
 			</para>
 			<para>
-				Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" >Major Changes in Platform 7</link> for a complete list of changes and fixes in the initial Platform 7.0 release.
+				Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" >Major Changes in Platform 7.0</link> for a complete list of changes and fixes in the initial Platform 7.0 release.
 			</para>
 			<para>
 				Every ASCOM Platform release aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications,
@@ -14,7 +14,7 @@
 			</para>
 		</introduction>
 		<section address="Introduction-Users-Platform-7">
-			<title>Key changes in Platform 7 for Everyone</title>
+			<title>Key changes in the Platform 7 initial release for Everyone</title>
 			<content>
 				<list class="bullet">
 					<listItem>
@@ -22,9 +22,6 @@
 					</listItem>
 					<listItem>
 						The default log file location can be customised.
-					</listItem>
-					<listItem>
-						Focus on technical changes to improve performance and application usability.
 					</listItem>
 					<listItem>
 						Updated user guide that includes Alpaca.
@@ -39,19 +36,7 @@
 						The Platform now includes the "JustAHub" hub application to host 32bit in-process (DLL based) drivers and enable them to be used by 64bit applications.
 					</listItem>
 					<listItem>
-						Device Hub returns more accurate information about the state of hosted devices, enabling applications to respond more appropriately to device behaviour.
-					</listItem>
-					<listItem>
-						Device Hub activity log management has also been improved.
-					</listItem>
-					<listItem>
 						An alert will be generated when a new Platform version is released.
-					</listItem>
-					<listItem>
-						The Platform installer is more resilient and reliable.
-					</listItem>
-					<listItem>
-						The Dynamic Clients provide access to the Alpaca device's configuration pages when the Alpaca device is connected.
 					</listItem>
 				</list>
 				<para>
