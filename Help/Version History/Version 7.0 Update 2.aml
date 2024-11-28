@@ -21,6 +21,7 @@
 						OmniSimulators - When changing configuration using the Chooser's Properties button, the OmniSimulators now present a Setup dialogue
 						with a browser link to the OmniSimulator UI rather than a message box.
 					</listItem>
+					<listItem>Astrometry - The built-in DeltaT and DeltaUT predictions have been extended to February 2026.</listItem>
 				</list>
 			</content>
 		</section>
