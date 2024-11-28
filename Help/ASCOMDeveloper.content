@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" isSelected="true" title="Introduction - ASCOM Platform 7 - Update 2" tocTitle="Introduction" />
+  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" isSelected="true" title="ASCOM Platform 7 - Update 2" tocTitle="Introduction" />
   <Topic id="6cdc126a-3b1a-4a55-836f-aaf704740a33" visible="True" title="Introduction - ASCOM Platform 7  For Developers" tocTitle="Introduction - Developers" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
