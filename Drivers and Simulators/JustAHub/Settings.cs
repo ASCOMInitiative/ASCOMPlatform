@@ -19,7 +19,11 @@ namespace ASCOM.JustAHub
 
         private const string SAFETYMONITOR_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string SAFETYMONITOR_PROGID_DEFAULT = "ASCOM.Simulator.SafetyMonitor";
         private const string SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME = "Driver Logging"; internal const string SAFETYMONITOR_DRIVER_LOGGING_DEFAULT = "False";
-        private const string SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME = "Hardware Logging"; internal const string SAFETYMONITORL_HARDWARE_LOGGING_DEFAULT = "False";
+        private const string SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME = "Hardware Logging"; internal const string SAFETYMONITOR_HARDWARE_LOGGING_DEFAULT = "False";
+
+        private const string COVERCALIBRATOR_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string COVERCALIBRATOR_PROGID_DEFAULT = "ASCOM.Simulator.CoverCalibrator";
+        private const string COVERCALIBRATOR_DRIVER_LOGGING_PROFILE_NAME = "Driver Logging"; internal const string COVERCALIBRATOR_DRIVER_LOGGING_DEFAULT = "False";
+        private const string COVERCALIBRATOR_HARDWARE_LOGGING_PROFILE_NAME = "Hardware Logging"; internal const string COVERCALIBRATOR_HARDWARE_LOGGING_DEFAULT = "False";
 
         static Settings()
         {
@@ -44,6 +48,18 @@ namespace ASCOM.JustAHub
                     CameraDriverLogging = Convert.ToBoolean(profile.GetValue(Camera.ProgId, CAMERA_DRIVER_LOGGING_PROFILE_NAME, string.Empty, CAMERA_DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                     CameraHardwareLogging = Convert.ToBoolean(profile.GetValue(Camera.ProgId, CAMERA_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, CAMERA_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
+                    // Load settings stored in the cover calibrator profile
+                    profile.DeviceType = "CoverCalibrator";
+
+                    if (!profile.IsRegistered(CoverCalibrator.ProgId))
+                    {
+                        profile.Register(CoverCalibrator.ProgId, CoverCalibrator.ChooserDescription);
+                    }
+
+                    CoverCalibratorHostedProgId = profile.GetValue(CoverCalibrator.ProgId, COVERCALIBRATOR_PROGID_PROFILE_NAME, string.Empty, COVERCALIBRATOR_PROGID_DEFAULT);
+                    CoverCalibratorDriverLogging = Convert.ToBoolean(profile.GetValue(CoverCalibrator.ProgId, COVERCALIBRATOR_DRIVER_LOGGING_PROFILE_NAME, string.Empty, COVERCALIBRATOR_DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    CoverCalibratorHardwareLogging = Convert.ToBoolean(profile.GetValue(CoverCalibrator.ProgId, COVERCALIBRATOR_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, COVERCALIBRATOR_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
                     // Load settings stored in the filter wheel profile
                     profile.DeviceType = "FilterWheel";
 
@@ -66,7 +82,7 @@ namespace ASCOM.JustAHub
 
                     SafetyMonitorHostedProgId = profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_PROGID_PROFILE_NAME, string.Empty, SAFETYMONITOR_PROGID_DEFAULT);
                     SafetyMonitorDriverLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME, string.Empty, SAFETYMONITOR_DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
-                    SafetyMonitorHardwareLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, SAFETYMONITORL_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    SafetyMonitorHardwareLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, SAFETYMONITOR_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                 }
                 catch (Exception ex)
                 {
@@ -88,6 +104,12 @@ namespace ASCOM.JustAHub
                 profile.WriteValue(Camera.ProgId, CAMERA_PROGID_PROFILE_NAME, CameraHostedProgId);
                 profile.WriteValue(Camera.ProgId, CAMERA_DRIVER_LOGGING_PROFILE_NAME, CameraDriverLogging.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(Camera.ProgId, CAMERA_HARDWARE_LOGGING_PROFILE_NAME, CameraHardwareLogging.ToString(CultureInfo.InvariantCulture));
+
+                // Save cover calibrator specific values
+                profile.DeviceType = "CoverCalibrator";
+                profile.WriteValue(FilterWheel.ProgId, COVERCALIBRATOR_PROGID_PROFILE_NAME, CoverCalibratorHostedProgId);
+                profile.WriteValue(FilterWheel.ProgId, COVERCALIBRATOR_DRIVER_LOGGING_PROFILE_NAME, CoverCalibratorDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(FilterWheel.ProgId, COVERCALIBRATOR_HARDWARE_LOGGING_PROFILE_NAME, CoverCalibratorHardwareLogging.ToString(CultureInfo.InvariantCulture));
 
                 // Save filter wheel specific values
                 profile.DeviceType = "FilterWheel";
@@ -116,5 +138,9 @@ namespace ASCOM.JustAHub
         internal static string SafetyMonitorHostedProgId { get; set; }
         internal static bool SafetyMonitorDriverLogging { get; set; }
         internal static bool SafetyMonitorHardwareLogging { get; set; }
+
+        internal static string CoverCalibratorHostedProgId { get; set; }
+        internal static bool CoverCalibratorDriverLogging { get; set; }
+        internal static bool CoverCalibratorHardwareLogging { get; set; }
     }
 }

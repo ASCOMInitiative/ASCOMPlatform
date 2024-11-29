@@ -77,6 +77,8 @@
     <Compile Include="ClassFactory.cs" />
     <Compile Include="Camera Driver\CameraDriver.cs" />
     <Compile Include="Camera Driver\CameraHardware..cs" />
+    <Compile Include="CoverCalibratorDriver\CoverCalibratorDriver.cs" />
+    <Compile Include="CoverCalibratorDriver\CoverCalibratorHardware.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FilterWheel Driver\FilterWheelDriver.cs" />
     <Compile Include="FilterWheel Driver\FilterWheelHardware.cs" />

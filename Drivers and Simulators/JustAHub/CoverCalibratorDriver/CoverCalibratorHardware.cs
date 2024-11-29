@@ -9,15 +9,15 @@ using System.Windows.Forms;
 namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM JustAHub SafetyMonitor main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub CoverCalibrator main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
-    internal static class SafetyMonitorHardware
+    internal static class CoverCalibratorHardware
     {
 #if DEBUG
-        private static DriverAccess.SafetyMonitor safetyMonitorDevice; // SafetyMonitor device being hosted
+        private static DriverAccess.CoverCalibrator coverCalibratorDevice; // CoverCalibrator device being hosted
 #else
-        private static dynamic safetyMonitorDevice; // SafetyMonitor device being hosted
+        private static dynamic coverCalibratorDevice; // CoverCalibrator device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -31,15 +31,15 @@ namespace ASCOM.JustAHub
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
         /// </summary>
-        static SafetyMonitorHardware()
+        static CoverCalibratorHardware()
         {
             try
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.SafetyMonitor.Proxy")
+                TL = new TraceLogger("", "JustAHub.CoverCalibrator.Proxy")
                 {
-                    Enabled = Settings.SafetyMonitorHardwareLogging
+                    Enabled = Settings.CoverCalibratorHardwareLogging
                 };
 
                 LogMessage("JustAHub", $"Static initialiser completed.");
@@ -47,7 +47,7 @@ namespace ASCOM.JustAHub
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.CoverCalibrator", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -56,36 +56,36 @@ namespace ASCOM.JustAHub
         /// Place device initialisation code here
         /// </summary>
         /// <remarks>Called every time a new instance of the driver is created.</remarks>
-        internal static void InitialiseSafetyMonitor()
+        internal static void InitialiseCoverCalibrator()
         {
             // This method will be called every time a new ASCOM client loads your driver
-            LogMessage("InitialiseSafetyMonitor", $"Start.");
+            LogMessage("InitialiseCoverCalibrator", $"Start.");
 
             // Make sure that "one off" activities are only undertaken once
             if (!runOnce)
             {
-                LogMessage("InitialiseSafetyMonitor", $"Starting one-off initialisation.");
+                LogMessage("InitialiseCoverCalibrator", $"Starting one-off initialisation.");
 
-                if (string.IsNullOrEmpty(Settings.SafetyMonitorHostedProgId))
-                    throw new InvalidValueException("The configured safety monitor ProgID is null or empty");
+                if (string.IsNullOrEmpty(Settings.CoverCalibratorHostedProgId))
+                    throw new InvalidValueException("The configured cover calibrator ProgID is null or empty");
 
-                LogMessage("InitialiseSafetyMonitor", $"Hosted ProgID: {Settings.SafetyMonitorHostedProgId}");
+                LogMessage("InitialiseCoverCalibrator", $"Hosted ProgID: {Settings.CoverCalibratorHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
 
-                CreateSafetyMonitorInstance();
-                LogMessage("InitialiseSafetyMonitor", "Completed one-off initialisation");
+                CreateCoverCalibratorInstance();
+                LogMessage("InitialiseCoverCalibrator", "Completed one-off initialisation");
 
                 // Set the flag to ensure that this code is not run again
                 runOnce = true;
             }
             else
             {
-                LogMessage("InitialiseSafetyMonitor", "One-off initialisation has already run.");
+                LogMessage("InitialiseCoverCalibrator", "One-off initialisation has already run.");
             }
 
-            LogMessage("InitialiseSafetyMonitor", $"Complete.");
+            LogMessage("InitialiseCoverCalibrator", $"Complete.");
         }
 
         /// <summary>
@@ -110,21 +110,21 @@ namespace ASCOM.JustAHub
 
             // Driver instance not yet connected
 
-            // Test whether the SafetyMonitor is already connected
-            if (!safetyMonitorDevice.Connected) // SafetyMonitor hardware is not connected so connect
+            // Test whether the CoverCalibrator is already connected
+            if (!coverCalibratorDevice.Connected) // CoverCalibrator hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        safetyMonitorDevice.Connected = true;
-                        LogMessage("Connect", $"SafetyMonitor connected OK.");
+                        coverCalibratorDevice.Connected = true;
+                        LogMessage("Connect", $"CoverCalibrator connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        safetyMonitorDevice.Connect();
-                        LogMessage("Connect", $"Connect completed OK - Connecting: {safetyMonitorDevice.Connecting}.");
+                        coverCalibratorDevice.Connect();
+                        LogMessage("Connect", $"Connect completed OK - Connecting: {coverCalibratorDevice.Connecting}.");
                         break;
 
                     default:
@@ -171,20 +171,20 @@ namespace ASCOM.JustAHub
             LogMessage("Disconnect", $"Unique id {uniqueId} removed from the connection list.");
 
             // Test whether any instances are still connected
-            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the SafetyMonitor device
+            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the CoverCalibrator device
             {
                 LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
 
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        safetyMonitorDevice.Connected = false;
-                        LogMessage("Disconnect", $"SafetyMonitor disconnected OK.");
+                        coverCalibratorDevice.Connected = false;
+                        LogMessage("Disconnect", $"CoverCalibrator disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        safetyMonitorDevice.Disconnect();
-                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {safetyMonitorDevice.Connecting}.");
+                        coverCalibratorDevice.Disconnect();
+                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {coverCalibratorDevice.Connecting}.");
                         break;
 
                     default:
@@ -206,24 +206,24 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// ISafetyMonitorV4 and later Connecting property
+        /// ICoverCalibratorV4 and later Connecting property
         /// </summary>
         public static bool Connecting
         {
             get
             {
-                return safetyMonitorDevice.Connecting;
+                return coverCalibratorDevice.Connecting;
             }
         }
 
         /// <summary>
-        /// ISafetyMonitorV4 and later DeviceState property
+        /// ICoverCalibratorV4 and later DeviceState property
         /// </summary>
         public static IStateValueCollection DeviceState
         {
             get
             {
-                return safetyMonitorDevice.DeviceState;
+                return coverCalibratorDevice.DeviceState;
             }
         }
 
@@ -237,14 +237,14 @@ namespace ASCOM.JustAHub
             return uniqueIds.Contains(uniqueId);
         }
 
-        public static void CreateSafetyMonitorInstance()
+        public static void CreateCoverCalibratorInstance()
         {
             // Remove any current instance and replace with a new one
-            if (!(safetyMonitorDevice is null)) // There is an existing instance
+            if (!(coverCalibratorDevice is null)) // There is an existing instance
             {
-                try { safetyMonitorDevice.Connected = false; } catch { }
+                try { coverCalibratorDevice.Connected = false; } catch { }
 
-                try { safetyMonitorDevice.Dispose(); } catch { }
+                try { coverCalibratorDevice.Dispose(); } catch { }
 
                 try
                 {
@@ -252,41 +252,41 @@ namespace ASCOM.JustAHub
 
                     do
                     {
-                        remainingCount = Marshal.ReleaseComObject(safetyMonitorDevice);
-                        LogMessage("CreateSafetyMonitorInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
+                        remainingCount = Marshal.ReleaseComObject(coverCalibratorDevice);
+                        LogMessage("CreateCoverCalibratorInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
                     } while (remainingCount > 0);
                 }
                 catch { }
 
-                safetyMonitorDevice = null;
+                coverCalibratorDevice = null;
 
                 // Allow some time to dispose of the driver
                 System.Threading.Thread.Sleep(1000);
             }
             try
             {
-                // Create an instance of the SafetyMonitor
+                // Create an instance of the CoverCalibrator
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateSafetyMonitorInstance", $"Creating DriverAccess SafetyMonitor device.");
-                    safetyMonitorDevice = new DriverAccess.SafetyMonitor(Settings.SafetyMonitorHostedProgId);
+                    LogMessage("CreateCoverCalibratorInstance", $"Creating DriverAccess CoverCalibrator device.");
+                    coverCalibratorDevice = new DriverAccess.CoverCalibrator(Settings.CoverCalibratorHostedProgId);
 #else
                     // Get the Type of this ProgID
-                    Type SafetyMonitorType = Type.GetTypeFromProgID(Settings.SafetyMonitorHostedProgId);
-                    LogMessage("CreateSafetyMonitorInstance", $"Created Type for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
-                    safetyMonitorDevice = Activator.CreateInstance(SafetyMonitorType);
+                    Type CoverCalibratorType = Type.GetTypeFromProgID(Settings.CoverCalibratorHostedProgId);
+                    LogMessage("CreateCoverCalibratorInstance", $"Created Type for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
+                    CoverCalibratorDevice = Activator.CreateInstance(CoverCalibratorType);
 #endif
-                    LogMessage("CreateSafetyMonitorInstance", $"Created COM object for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
+                    LogMessage("CreateCoverCalibratorInstance", $"Created COM object for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the SafetyMonitor with ProgID {Settings.SafetyMonitorHostedProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the CoverCalibrator with ProgID {Settings.CoverCalibratorHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.SafetyMonitorHostedProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.CoverCalibratorHostedProgId}: {ex.Message}");
             }
         }
 
@@ -298,7 +298,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                ArrayList actions = safetyMonitorDevice.SupportedActions;
+                ArrayList actions = coverCalibratorDevice.SupportedActions;
                 LogMessage("SupportedActions Get", $"Returning ArrayList of length: {actions.Count}");
                 return actions;
             }
@@ -313,7 +313,7 @@ namespace ASCOM.JustAHub
         /// </returns>
         public static string Action(string actionName, string actionParameters)
         {
-            return safetyMonitorDevice.Action(actionName, actionParameters);
+            return coverCalibratorDevice.Action(actionName, actionParameters);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace ASCOM.JustAHub
         public static void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
-            safetyMonitorDevice.CommandBlind(command, raw);
+            coverCalibratorDevice.CommandBlind(command, raw);
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace ASCOM.JustAHub
         public static bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
-            return safetyMonitorDevice.CommandBool(command, raw);
+            return coverCalibratorDevice.CommandBool(command, raw);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace ASCOM.JustAHub
         public static string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
-            return safetyMonitorDevice.CommandString(command, raw);
+            return coverCalibratorDevice.CommandString(command, raw);
         }
 
         /// <summary>
@@ -388,16 +388,16 @@ namespace ASCOM.JustAHub
         {
             try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
-            if (!(safetyMonitorDevice is null))
+            if (!(coverCalibratorDevice is null))
             {
 #if DEBUG
-                try { safetyMonitorDevice.Dispose(); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess SafetyMonitor object."); } catch { }
-                try { safetyMonitorDevice = null; } catch (Exception) { }
+                try { coverCalibratorDevice.Dispose(); } catch (Exception) { }
+                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess CoverCalibrator object."); } catch { }
+                try { coverCalibratorDevice = null; } catch (Exception) { }
 #else
-                try { Marshal.ReleaseComObject(safetyMonitorDevice); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Released SafetyMonitor COM object."); } catch { }
-                try { safetyMonitorDevice = null; } catch (Exception) { }
+                try { Marshal.ReleaseComObject(CoverCalibratorDevice); } catch (Exception) { }
+                try { LogMessage("JustAHub.Dispose", $"Released CoverCalibrator COM object."); } catch { }
+                try { CoverCalibratorDevice = null; } catch (Exception) { }
 #endif
             }
 
@@ -427,7 +427,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string description = safetyMonitorDevice.Description;
+                string description = coverCalibratorDevice.Description;
                 LogMessage("Description Get", description);
                 return description;
             }
@@ -440,7 +440,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverInfo = safetyMonitorDevice.DriverInfo;
+                string driverInfo = coverCalibratorDevice.DriverInfo;
                 LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
@@ -453,7 +453,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverVersion = safetyMonitorDevice.DriverVersion;
+                string driverVersion = coverCalibratorDevice.DriverVersion;
                 LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
@@ -466,7 +466,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                short interfaceVersion = safetyMonitorDevice.InterfaceVersion;
+                short interfaceVersion = coverCalibratorDevice.InterfaceVersion;
                 LogMessage("InterfaceVersion Get", interfaceVersion.ToString());
                 return interfaceVersion;
             }
@@ -479,7 +479,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string name = safetyMonitorDevice.Name;
+                string name = coverCalibratorDevice.Name;
                 LogMessage("Name Get", name);
                 return name;
             }
@@ -487,16 +487,91 @@ namespace ASCOM.JustAHub
 
         #endregion
 
-        #region ISafetyMonitor Implementation
+        #region ICoverCalibrator Implementation
 
-        public static bool IsSafe
+        public static int Brightness
         {
             get
             {
-                bool isSafe = safetyMonitorDevice.IsSafe;
-                LogMessage("IsSafe Get", isSafe.ToString());
-                return isSafe;
+                int brightness = coverCalibratorDevice.Brightness;
+                LogMessage("Brightness Get", brightness.ToString());
+                return brightness;
             }
+        }
+
+        public static bool CalibratorChanging
+        {
+            get
+            {
+                bool calibratorChanging = coverCalibratorDevice.CalibratorChanging;
+                LogMessage("CalibratorChanging Get", calibratorChanging.ToString());
+                return calibratorChanging;
+            }
+        }
+
+        public static CalibratorStatus CalibratorState
+        {
+            get
+            {
+                CalibratorStatus calibratorState = coverCalibratorDevice.CalibratorState;
+                LogMessage("CalibratorState Get", calibratorState.ToString());
+                return calibratorState;
+            }
+        }
+
+        public static void CalibratorOff()
+        {
+            coverCalibratorDevice.CalibratorOff();
+        }
+
+        public static void CalibratorOn(int Brightness)
+        {
+            coverCalibratorDevice.CalibratorOn(Brightness);
+        }
+
+        public static void CloseCover()
+        {
+            coverCalibratorDevice.CloseCover();
+        }
+
+        public static bool CoverMoving
+        {
+            get
+            {
+                bool coverMoving = coverCalibratorDevice.CoverMoving;
+                LogMessage("CoverMoving Get", coverMoving.ToString());
+                return coverMoving;
+            }
+        }
+
+        public static CoverStatus CoverState
+        {
+            get
+            {
+                CoverStatus coverState = coverCalibratorDevice.CoverState;
+                LogMessage("CalibratorState Get", coverState.ToString());
+                return coverState;
+            }
+        }
+
+        public static void HaltCover()
+        {
+            coverCalibratorDevice.HaltCover();
+        }
+
+        public static int MaxBrightness
+        {
+            get
+            {
+                int maxBrightness = coverCalibratorDevice.MaxBrightness;
+                LogMessage("MaxBrightness Get", maxBrightness.ToString());
+                return maxBrightness;
+            }
+        }
+
+        public static void OpenCover()
+        {
+            coverCalibratorDevice.OpenCover();
         }
 
         #endregion
@@ -509,7 +584,7 @@ namespace ASCOM.JustAHub
         /// <param name="message"></param>
         private static void CheckConnected(string message)
         {
-            if (!safetyMonitorDevice.Connected)
+            if (!coverCalibratorDevice.Connected)
             {
                 throw new NotConnectedException(message);
             }
@@ -552,15 +627,15 @@ namespace ASCOM.JustAHub
             // We don't have the interface version so get it from the device but only store it if we are connected because it may change when connected
 
             // Get the interface version
-            int iVersion = safetyMonitorDevice.InterfaceVersion;
+            int iVersion = coverCalibratorDevice.InterfaceVersion;
 
             // Check whether the device is connected
-            if (safetyMonitorDevice.Connected) // SafetyMonitor is connected so save the value for future use
+            if (coverCalibratorDevice.Connected) // CoverCalibrator is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;
             }
-            else // SafetyMonitor is not connected so return the reported value but don't save it
+            else // CoverCalibrator is not connected so return the reported value but don't save it
             {
                 return iVersion;
             }
