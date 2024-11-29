@@ -39,7 +39,7 @@ namespace ASCOM.LocalServer
         private static int serverLockCount; // Keeps a lock count on this application.
         private static ArrayList driverTypes; // Served COM object types
         private static ArrayList classFactories; // Served COM object class factories
-        private static string localServerAppId = "{89ce45d9-d25a-4cf7-bc06-fb8adcbf4bdd}"; // Our AppId
+        private static readonly string localServerAppId = "{89ce45d9-d25a-4cf7-bc06-fb8adcbf4bdd}"; // Our AppId
         private static readonly Object lockObject = new object(); // Counter lock object
         internal static TraceLogger TL; // TraceLogger for the local server (not the served driver, which has its own) - primarily to help debug local server issues
         private static Task GCTask; // The garbage collection task

@@ -77,6 +77,7 @@
     <Compile Include="ClassFactory.cs" />
     <Compile Include="Camera Driver\CameraDriver.cs" />
     <Compile Include="Camera Driver\CameraHardware..cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="FilterWheel Driver\FilterWheelDriver.cs" />
     <Compile Include="FilterWheel Driver\FilterWheelHardware.cs" />
     <Compile Include="frmMain.cs">
@@ -88,6 +89,8 @@
     <Compile Include="GarbageCollection.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SafetyMonitor\SafetyMonitorDriver.cs" />
+    <Compile Include="SafetyMonitor\SafetyMonitorHardware.cs" />
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>

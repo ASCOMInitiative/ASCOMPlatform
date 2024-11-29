@@ -15,22 +15,13 @@ namespace ASCOM.JustAHub
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
     internal static class CameraHardware
     {
-        /// <summary>
-        /// Type of connection Connect/Disconnect or Connecting=
-        /// </summary>
-        internal enum ConnectType
-        {
-            Connect_Disconnect,
-            Connected
-        }
-
 #if DEBUG
         private static DriverAccess.Camera cameraDevice; // Camera device being hosted
 #else
         private static dynamic cameraDevice; // Camera device being hosted
 #endif
 
-        private static List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
+        private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
 
         private static bool runOnce = false; // Flag to enable "one-off" activities only to run once.
         internal static Util utilities; // ASCOM Utilities object for use as required
@@ -47,8 +38,10 @@ namespace ASCOM.JustAHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.Camera.Proxy");
-                TL.Enabled = Settings.CameraHardwareLogging;
+                TL = new TraceLogger("", "JustAHub.Camera.Proxy")
+                {
+                    Enabled = Settings.CameraHardwareLogging
+                };
 
                 LogMessage("JustAHub", $"Static initialiser completed.");
             }
@@ -70,26 +63,30 @@ namespace ASCOM.JustAHub
             LogMessage("InitialiseCamera", $"Start.");
 
             // Make sure that "one off" activities are only undertaken once
-            if (runOnce == false)
+            if (!runOnce)
             {
                 LogMessage("InitialiseCamera", $"Starting one-off initialisation.");
 
-                LogMessage("InitialiseCamera", $"ProgID: {Camera.ProgId}, Description: {Camera.ChooserDescription}");
+                if (string.IsNullOrEmpty(Settings.CameraHostedProgId))
+                    throw new InvalidValueException("The configured camera ProgID is null or empty");
 
-                utilities = new Util(); //Initialise ASCOM Utilities object
+                LogMessage("InitialiseCamera", $"Hosted ProgID: {Settings.CameraHostedProgId}");
 
-                LogMessage("InitialiseCamera", "Completed basic initialisation");
-
-                // Add your own "one off" device initialisation here e.g. validating existence of hardware and setting up communications
+                //Initialise ASCOM Utilities object
+                utilities = new Util();
 
                 CreateCameraInstance();
+                LogMessage("InitialiseCamera", "Completed one-off initialisation");
 
-                if (string.IsNullOrEmpty(Settings.CameraHostedProgId))
-                    throw new InvalidValueException("The camera ProgID is null or empty");
-
-                LogMessage("InitialiseCamera", $"One-off initialisation complete.");
-                runOnce = true; // Set the flag to ensure that this code is not run again
+                // Set the flag to ensure that this code is not run again
+                runOnce = true;
             }
+            else
+            {
+                LogMessage("InitialiseCamera", "One-off initialisation has already run.");
+            }
+
+            LogMessage("InitialiseCamera", $"Complete.");
         }
 
         /// <summary>
@@ -264,18 +261,17 @@ namespace ASCOM.JustAHub
 
                 cameraDevice = null;
 
-                // ALlow some time to dispose of the driver
+                // Allow some time to dispose of the driver
                 System.Threading.Thread.Sleep(1000);
             }
             try
             {
-
                 // Create an instance of the camera
                 try
                 {
 #if DEBUG
                     LogMessage("CreateCameraInstance", $"Creating DriverAccess Camera device.");
-                    cameraDevice = new DriverAccess.Camera(hostedCameraProgId);
+                    cameraDevice = new DriverAccess.Camera(Settings.CameraHostedProgId);
 #else
                     // Get the Type of this ProgID
                     Type cameraType = Type.GetTypeFromProgID(Settings.CameraHostedProgId);

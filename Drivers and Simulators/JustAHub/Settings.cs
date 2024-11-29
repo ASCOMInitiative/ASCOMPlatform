@@ -17,6 +17,10 @@ namespace ASCOM.JustAHub
         private const string FILTERWHEEL_DRIVER_LOGGING_PROFILE_NAME = "Driver Logging"; internal const string FILTERWHEEL_DRIVER_LOGGING_DEFAULT = "False";
         private const string FILTERWHEEL_HARDWARE_LOGGING_PROFILE_NAME = "Hardware Logging"; internal const string FILTERWHEEL_HARDWARE_LOGGING_DEFAULT = "False";
 
+        private const string SAFETYMONITOR_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string SAFETYMONITOR_PROGID_DEFAULT = "ASCOM.Simulator.SafetyMonitor";
+        private const string SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME = "Driver Logging"; internal const string SAFETYMONITOR_DRIVER_LOGGING_DEFAULT = "False";
+        private const string SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME = "Hardware Logging"; internal const string SAFETYMONITORL_HARDWARE_LOGGING_DEFAULT = "False";
+
         static Settings()
         {
             using (Profile profile = new Profile())
@@ -51,6 +55,18 @@ namespace ASCOM.JustAHub
                     FilterWheelHostedProgId = profile.GetValue(FilterWheel.ProgId, FILTERWHEEL_PROGID_PROFILE_NAME, string.Empty, FILTERWHEEL_PROGID_DEFAULT);
                     FilterWheelDriverLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, FILTERWHEEL_DRIVER_LOGGING_PROFILE_NAME, string.Empty, FILTERWHEEL_DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                     FilterWheelHardwareLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, FILTERWHEEL_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, FILTERWHEEL_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
+                    // Load settings stored in the safety monitor profile
+                    profile.DeviceType = "SafetyMonitor";
+
+                    if (!profile.IsRegistered(SafetyMonitor.ProgId))
+                    {
+                        profile.Register(SafetyMonitor.ProgId, SafetyMonitor.ChooserDescription);
+                    }
+
+                    SafetyMonitorHostedProgId = profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_PROGID_PROFILE_NAME, string.Empty, SAFETYMONITOR_PROGID_DEFAULT);
+                    SafetyMonitorDriverLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME, string.Empty, SAFETYMONITOR_DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    SafetyMonitorHardwareLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME, string.Empty, SAFETYMONITORL_HARDWARE_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                 }
                 catch (Exception ex)
                 {
@@ -78,10 +94,17 @@ namespace ASCOM.JustAHub
                 profile.WriteValue(FilterWheel.ProgId, FILTERWHEEL_PROGID_PROFILE_NAME, FilterWheelHostedProgId);
                 profile.WriteValue(FilterWheel.ProgId, FILTERWHEEL_DRIVER_LOGGING_PROFILE_NAME, FilterWheelDriverLogging.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(FilterWheel.ProgId, FILTERWHEEL_HARDWARE_LOGGING_PROFILE_NAME, FilterWheelHardwareLogging.ToString(CultureInfo.InvariantCulture));
+
+                // Save safety monitor specific values
+                profile.DeviceType = "SafetyMonitor";
+                profile.WriteValue(FilterWheel.ProgId, SAFETYMONITOR_PROGID_PROFILE_NAME, SafetyMonitorHostedProgId);
+                profile.WriteValue(FilterWheel.ProgId, SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME, SafetyMonitorDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(FilterWheel.ProgId, SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME, SafetyMonitorHardwareLogging.ToString(CultureInfo.InvariantCulture));
             }
         }
 
         internal static bool LocalServerLogging { get; set; }
+
         internal static string CameraHostedProgId { get; set; }
         internal static bool CameraDriverLogging { get; set; }
         internal static bool CameraHardwareLogging { get; set; }
@@ -90,5 +113,8 @@ namespace ASCOM.JustAHub
         internal static bool FilterWheelDriverLogging { get; set; }
         internal static bool FilterWheelHardwareLogging { get; set; }
 
+        internal static string SafetyMonitorHostedProgId { get; set; }
+        internal static bool SafetyMonitorDriverLogging { get; set; }
+        internal static bool SafetyMonitorHardwareLogging { get; set; }
     }
 }

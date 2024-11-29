@@ -12,7 +12,7 @@ namespace ASCOM.JustAHub
         readonly TraceLogger tl; // Holder for a reference to the driver's trace logger
         string newCameraProgId;
         string newFilterWheelProgId;
-        string callingDeviceType;
+        readonly string callingDeviceType;
 
         #region Initialisation and form load
 

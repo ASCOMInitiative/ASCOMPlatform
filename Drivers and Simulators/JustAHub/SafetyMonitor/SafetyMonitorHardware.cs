@@ -9,15 +9,15 @@ using System.Windows.Forms;
 namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM JustAHub filter wheel main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub SafetyMonitor main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
-    internal static class FilterWheelHardware
+    internal static class SafetyMonitorHardware
     {
 #if DEBUG
-        private static DriverAccess.FilterWheel filterWheelDevice; // Filter wheel device being hosted
+        private static DriverAccess.SafetyMonitor safetyMonitorDevice; // SafetyMonitor device being hosted
 #else
-        private static dynamic filterWheelDevice; // Filter wheel device being hosted
+        private static dynamic safetyMonitorDevice; // SafetyMonitor device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -31,24 +31,23 @@ namespace ASCOM.JustAHub
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
         /// </summary>
-        static FilterWheelHardware()
+        static SafetyMonitorHardware()
         {
             try
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.FilterWheel.Proxy");
-                bool logState = Settings.FilterWheelDriverLogging;
-                LogMessage("FilterWheelHardware", $"Hosted ProgID: {Settings.FilterWheelHostedProgId}.");
-                LogMessage("FilterWheelHardware", $"Log activity: {Settings.FilterWheelDriverLogging}.");
-                LogMessage("FilterWheelHardware", $"Debug Trace state: {Settings.FilterWheelHardwareLogging}.");
+                TL = new TraceLogger("", "JustAHub.SafetyMonitor.Proxy")
+                {
+                    Enabled = Settings.SafetyMonitorHardwareLogging
+                };
 
-                LogMessage("FilterWheelHardware", $"Static initialiser completed.");
+                LogMessage("JustAHub", $"Static initialiser completed.");
             }
             catch (Exception ex)
             {
-                try { LogMessage("FilterWheelHardware", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.FilterWheel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -57,36 +56,36 @@ namespace ASCOM.JustAHub
         /// Place device initialisation code here
         /// </summary>
         /// <remarks>Called every time a new instance of the driver is created.</remarks>
-        internal static void InitialiseFilterWheel()
+        internal static void InitialiseSafetyMonitor()
         {
             // This method will be called every time a new ASCOM client loads your driver
-            LogMessage("InitialiseFilterWheel", $"Start.");
+            LogMessage("InitialiseSafetyMonitor", $"Start.");
 
             // Make sure that "one off" activities are only undertaken once
             if (!runOnce)
             {
-                LogMessage("InitialiseFilterWheel", $"Starting one-off initialisation.");
+                LogMessage("InitialiseSafetyMonitor", $"Starting one-off initialisation.");
 
-                if (string.IsNullOrEmpty(Settings.FilterWheelHostedProgId))
-                    throw new InvalidValueException("The configured filter wheel ProgID is null or empty");
+                if (string.IsNullOrEmpty(Settings.SafetyMonitorHostedProgId))
+                    throw new InvalidValueException("The configured safety monitor ProgID is null or empty");
 
-                LogMessage("InitialiseFilterWheel", $"Hosted ProgID: {Settings.FilterWheelHostedProgId}");
+                LogMessage("InitialiseSafetyMonitor", $"Hosted ProgID: {Settings.SafetyMonitorHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
 
-                CreateFilterWheelInstance();
-                LogMessage("InitialiseFilterWheel", "Completed one-off initialisation");
+                CreateSafetyMonitorInstance();
+                LogMessage("InitialiseSafetyMonitor", "Completed one-off initialisation");
 
                 // Set the flag to ensure that this code is not run again
                 runOnce = true;
             }
             else
             {
-                LogMessage("InitialiseFilterWheel", "One-off initialisation has already run.");
+                LogMessage("InitialiseSafetyMonitor", "One-off initialisation has already run.");
             }
 
-            LogMessage("InitialiseFilterWheel", $"Complete.");
+            LogMessage("InitialiseSafetyMonitor", $"Complete.");
         }
 
         /// <summary>
@@ -111,21 +110,21 @@ namespace ASCOM.JustAHub
 
             // Driver instance not yet connected
 
-            // Test whether the filter wheel is already connected
-            if (!filterWheelDevice.Connected) // Filter wheel hardware is not connected so connect
+            // Test whether the SafetyMonitor is already connected
+            if (!safetyMonitorDevice.Connected) // SafetyMonitor hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        filterWheelDevice.Connected = true;
-                        LogMessage("Connect", $"Filter wheel connected OK.");
+                        safetyMonitorDevice.Connected = true;
+                        LogMessage("Connect", $"SafetyMonitor connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        filterWheelDevice.Connect();
-                        LogMessage("Connect", $"Connect completed OK - Connecting: {filterWheelDevice.Connecting}.");
+                        safetyMonitorDevice.Connect();
+                        LogMessage("Connect", $"Connect completed OK - Connecting: {safetyMonitorDevice.Connecting}.");
                         break;
 
                     default:
@@ -172,20 +171,20 @@ namespace ASCOM.JustAHub
             LogMessage("Disconnect", $"Unique id {uniqueId} removed from the connection list.");
 
             // Test whether any instances are still connected
-            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the filter wheel device
+            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the SafetyMonitor device
             {
                 LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
 
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        filterWheelDevice.Connected = false;
-                        LogMessage("Disconnect", $"Filter wheel disconnected OK.");
+                        safetyMonitorDevice.Connected = false;
+                        LogMessage("Disconnect", $"SafetyMonitor disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        filterWheelDevice.Disconnect();
-                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {filterWheelDevice.Connecting}.");
+                        safetyMonitorDevice.Disconnect();
+                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {safetyMonitorDevice.Connecting}.");
                         break;
 
                     default:
@@ -207,24 +206,24 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IFilterWheelV3 and later Connecting property
+        /// ISafetyMonitorV4 and later Connecting property
         /// </summary>
         public static bool Connecting
         {
             get
             {
-                return filterWheelDevice.Connecting;
+                return safetyMonitorDevice.Connecting;
             }
         }
 
         /// <summary>
-        /// IFilterWheelV3 and later DeviceState property
+        /// ISafetyMonitorV4 and later DeviceState property
         /// </summary>
         public static IStateValueCollection DeviceState
         {
             get
             {
-                return filterWheelDevice.DeviceState;
+                return safetyMonitorDevice.DeviceState;
             }
         }
 
@@ -238,14 +237,14 @@ namespace ASCOM.JustAHub
             return uniqueIds.Contains(uniqueId);
         }
 
-        public static void CreateFilterWheelInstance()
+        public static void CreateSafetyMonitorInstance()
         {
             // Remove any current instance and replace with a new one
-            if (!(filterWheelDevice is null)) // There is an existing instance
+            if (!(safetyMonitorDevice is null)) // There is an existing instance
             {
-                try { filterWheelDevice.Connected = false; } catch { }
+                try { safetyMonitorDevice.Connected = false; } catch { }
 
-                try { filterWheelDevice.Dispose(); } catch { }
+                try { safetyMonitorDevice.Dispose(); } catch { }
 
                 try
                 {
@@ -253,45 +252,43 @@ namespace ASCOM.JustAHub
 
                     do
                     {
-                        remainingCount = Marshal.ReleaseComObject(filterWheelDevice);
-                        LogMessage("CreateFilterWheelInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
+                        remainingCount = Marshal.ReleaseComObject(safetyMonitorDevice);
+                        LogMessage("CreateSafetyMonitorInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
                     } while (remainingCount > 0);
                 }
                 catch { }
 
-                filterWheelDevice = null;
+                safetyMonitorDevice = null;
 
                 // Allow some time to dispose of the driver
                 System.Threading.Thread.Sleep(1000);
             }
             try
             {
-                // Create an instance of the filter wheel
+                // Create an instance of the SafetyMonitor
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateFilterWheelInstance", $"Creating DriverAccess FilterWheel device.");
-                    filterWheelDevice = new DriverAccess.FilterWheel(Settings.FilterWheelHostedProgId);
+                    LogMessage("CreateSafetyMonitorInstance", $"Creating DriverAccess SafetyMonitor device.");
+                    safetyMonitorDevice = new DriverAccess.SafetyMonitor(Settings.SafetyMonitorHostedProgId);
 #else
                     // Get the Type of this ProgID
-                    Type filterWheelType = Type.GetTypeFromProgID(Settings.FilterWheelHostedProgId);
-                    LogMessage("CreateFilterWheelInstance", $"Created Type for ProgID: {Settings.FilterWheelHostedProgId} OK.");
-                    filterWheelDevice = Activator.CreateInstance(filterWheelType);
+                    Type SafetyMonitorType = Type.GetTypeFromProgID(Settings.SafetyMonitorHostedProgId);
+                    LogMessage("CreateSafetyMonitorInstance", $"Created Type for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
+                    SafetyMonitorDevice = Activator.CreateInstance(SafetyMonitorType);
 #endif
-                    LogMessage("CreateFilterWheelInstance", $"Created COM object for ProgID: {Settings.FilterWheelHostedProgId} OK.");
+                    LogMessage("CreateSafetyMonitorInstance", $"Created COM object for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the filter wheel with ProgID {Settings.FilterWheelHostedProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the SafetyMonitor with ProgID {Settings.SafetyMonitorHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.FilterWheelHostedProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.SafetyMonitorHostedProgId}: {ex.Message}");
             }
         }
-
-        // PUBLIC COM INTERFACE IMPLEMENTATION
 
         #region Common properties and methods.
 
@@ -301,7 +298,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                ArrayList actions = filterWheelDevice.SupportedActions;
+                ArrayList actions = safetyMonitorDevice.SupportedActions;
                 LogMessage("SupportedActions Get", $"Returning ArrayList of length: {actions.Count}");
                 return actions;
             }
@@ -316,7 +313,7 @@ namespace ASCOM.JustAHub
         /// </returns>
         public static string Action(string actionName, string actionParameters)
         {
-            return filterWheelDevice.Action(actionName, actionParameters);
+            return safetyMonitorDevice.Action(actionName, actionParameters);
         }
 
         /// <summary>
@@ -331,7 +328,7 @@ namespace ASCOM.JustAHub
         public static void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
-            filterWheelDevice.CommandBlind(command, raw);
+            safetyMonitorDevice.CommandBlind(command, raw);
         }
 
         /// <summary>
@@ -349,7 +346,7 @@ namespace ASCOM.JustAHub
         public static bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
-            return filterWheelDevice.CommandBool(command, raw);
+            return safetyMonitorDevice.CommandBool(command, raw);
         }
 
         /// <summary>
@@ -367,7 +364,7 @@ namespace ASCOM.JustAHub
         public static string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
-            return filterWheelDevice.CommandString(command, raw);
+            return safetyMonitorDevice.CommandString(command, raw);
         }
 
         /// <summary>
@@ -389,18 +386,18 @@ namespace ASCOM.JustAHub
         /// </remarks>
         public static void Dispose()
         {
-            try { LogMessage("FilterWheelHardware.Dispose", $"Disposing of assets and closing down."); } catch { }
+            try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
-            if (!(filterWheelDevice is null))
+            if (!(safetyMonitorDevice is null))
             {
 #if DEBUG
-                try { filterWheelDevice.Dispose(); } catch (Exception) { }
-                try { LogMessage("FilterWheelHardware.Dispose", $"Disposed DriverAccess filter wheel object."); } catch { }
-                try { filterWheelDevice = null; } catch (Exception) { }
+                try { safetyMonitorDevice.Dispose(); } catch (Exception) { }
+                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess SafetyMonitor object."); } catch { }
+                try { safetyMonitorDevice = null; } catch (Exception) { }
 #else
-                try { Marshal.ReleaseComObject(filterWheelDevice); } catch (Exception) { }
-                try { LogMessage("FilterWheelHardware.Dispose", $"Released filter wheel COM object."); } catch { }
-                try { filterWheelDevice = null; } catch (Exception) { }
+                try { Marshal.ReleaseComObject(SafetyMonitorDevice); } catch (Exception) { }
+                try { LogMessage("JustAHub.Dispose", $"Released SafetyMonitor COM object."); } catch { }
+                try { SafetyMonitorDevice = null; } catch (Exception) { }
 #endif
             }
 
@@ -430,7 +427,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string description = filterWheelDevice.Description;
+                string description = safetyMonitorDevice.Description;
                 LogMessage("Description Get", description);
                 return description;
             }
@@ -443,7 +440,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverInfo = filterWheelDevice.DriverInfo;
+                string driverInfo = safetyMonitorDevice.DriverInfo;
                 LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
@@ -456,7 +453,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverVersion = filterWheelDevice.DriverVersion;
+                string driverVersion = safetyMonitorDevice.DriverVersion;
                 LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
@@ -469,7 +466,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                short interfaceVersion = filterWheelDevice.InterfaceVersion;
+                short interfaceVersion = safetyMonitorDevice.InterfaceVersion;
                 LogMessage("InterfaceVersion Get", interfaceVersion.ToString());
                 return interfaceVersion;
             }
@@ -482,7 +479,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string name = filterWheelDevice.Name;
+                string name = safetyMonitorDevice.Name;
                 LogMessage("Name Get", name);
                 return name;
             }
@@ -490,57 +487,15 @@ namespace ASCOM.JustAHub
 
         #endregion
 
-        #region IFilterWheel implementation
+        #region ISafetyMonitor Implementation
 
-        public static int[] FocusOffsets
+        public static bool IsSafe
         {
             get
             {
-                int[] focusOffsets = filterWheelDevice.FocusOffsets;
-                if (focusOffsets == null)
-                {
-                    LogMessage("FocusOffsets Get", $"Received a null value.");
-                    return focusOffsets;
-                }
-                else
-                {
-                    LogMessage("FocusOffsets Get", $"Received {focusOffsets.Length} offsets.");
-                    return focusOffsets;
-                }
-            }
-        }
-
-        public static string[] Names
-        {
-            get
-            {
-                string[] names= filterWheelDevice.Names;
-                if (names == null)
-                {
-                    LogMessage("Names Get", $"Received a null value.");
-                    return names;
-                }
-                else
-                {
-                    LogMessage("Names Get", $"Received {names.Length} names.");
-                    return names;
-                }
-            }
-        }
-
-        public static short Position
-        {
-            get
-            {
-                short position = filterWheelDevice.Position;
-                LogMessage("Position Get", position.ToString());
-                return position;
-            }
-
-            set
-            {
-                filterWheelDevice.Position = value;
-                LogMessage("Position Set", value.ToString());
+                bool isSafe = safetyMonitorDevice.IsSafe;
+                LogMessage("IsSafe Get", isSafe.ToString());
+                return isSafe;
             }
         }
 
@@ -554,7 +509,7 @@ namespace ASCOM.JustAHub
         /// <param name="message"></param>
         private static void CheckConnected(string message)
         {
-            if (!filterWheelDevice.Connected)
+            if (!safetyMonitorDevice.Connected)
             {
                 throw new NotConnectedException(message);
             }
@@ -597,15 +552,15 @@ namespace ASCOM.JustAHub
             // We don't have the interface version so get it from the device but only store it if we are connected because it may change when connected
 
             // Get the interface version
-            int iVersion = filterWheelDevice.InterfaceVersion;
+            int iVersion = safetyMonitorDevice.InterfaceVersion;
 
             // Check whether the device is connected
-            if (filterWheelDevice.Connected) // Filter wheel is connected so save the value for future use
+            if (safetyMonitorDevice.Connected) // SafetyMonitor is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;
             }
-            else // Filter wheel is not connected so return the reported value but don't save it
+            else // SafetyMonitor is not connected so return the reported value but don't save it
             {
                 return iVersion;
             }
