@@ -12,7 +12,7 @@ namespace ASCOM.JustAHub
     /// ASCOM SafetyMonitor Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
-    [Guid("226F4E6B-3863-41DE-A464-72474A477313")]
+    [Guid("59DB989D-EA5C-4E34-996F-AA53322E6797")]
     [ProgId("ASCOM.JustAHub.SafetyMonitor")]
     [ServedClassName("ASCOM JustAHub Safety Monitor")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
