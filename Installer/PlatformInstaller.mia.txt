@@ -2182,6 +2182,17 @@ Comment: Proceed with post install activities if the MSI install was successful
 if Variable SUCCESS not Equals ERROR
    
   [DEFINE REGION: Post install activities - 32bit and 64bit]
+  Comment: Register VB6 support files
+  Set Variable PROGRESSTEXT to Registering VB6 support files
+  Register Library $WINSYSDIR$\comdlg32.ocx (get result into variable RC)
+  Set Variable ACTION to Register VB6 Common Dialogues OCX
+  Include Script: UpdateAscomError
+  Register Library $WINSYSDIR$\MSComm32.Ocx (get result into variable RC)
+  Set Variable ACTION to Register VB6 Communications Control OCX
+  Include Script: UpdateAscomError
+  Register Library $WINSYSDIR$\mscomctl.OCX (get result into variable RC)
+  Set Variable ACTION to Register VB6 Common Controls OCX
+  Include Script: UpdateAscomError
    
   Comment: Register Platform 5 components
   Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0

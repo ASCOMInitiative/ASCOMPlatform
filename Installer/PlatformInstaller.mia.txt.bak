@@ -1793,8 +1793,6 @@ Set Variable MYPROGRESS to 38
  
 Install Files ..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
-Comment: Install Files ..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
-Comment: Install Files ..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\How to make an ASCOM driver.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\Platform Evolution.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -1818,11 +1816,12 @@ Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $D
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $DEVELOPERTARGETDIR$\Sample Scripts
 Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $DEVELOPERTARGETDIR$\Sample Scripts
  
-Comment: Platform 6.1 Documentation
+Comment: Miscellaneous Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\InstallerContent\ASCOMInterfaceRevisions.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
  
 Comment: Inno - Driver installer creator
 Install Files ..\Doc\DriverInstallers.html to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -2158,21 +2157,15 @@ Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELO
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver installer Inno script generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create a local server  based driver to $DEVELOPERTARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create an ASCOM driver to $DEVELOPERTARGETDIR$\Developer Documentation\How to make an ASCOM driver.pdf
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Interface Revision History to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOMInterfaceRevisions.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Inno Installer Web Site to https://www.jrsoftware.org/isinfo.php
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Introduction to Developing ASCOM Drivers to $DEVELOPERTARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\NOVAS 3.1 Users Guide to $DEVELOPERTARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Pointing State and Side of Pier to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Settings Provider Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Visual Studio Templates Readme to $DEVELOPERTARGETDIR$\Developer Documentation\Templates.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Master Interface Definitions (Web) to https://ascom-standards.org/newdocs
  
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform Evolution to $DEVELOPERTARGETDIR$\Developer Documentation\Platform Evolution.pdf
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to create multiple versions of a driver to $DEVELOPERTARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Platform 6 Client-Driver Interaction V2 to $DEVELOPERTARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Video Driver Developer Documentation to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
-Comment: Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Stand Alone Chooser Help to $DEVELOPERTARGETDIR$\Developer Documentation\ChooserSA.chm
 Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
