@@ -275,7 +275,7 @@ namespace ASCOM.JustAHub
                     // Get the Type of this ProgID
                     Type CoverCalibratorType = Type.GetTypeFromProgID(Settings.CoverCalibratorHostedProgId);
                     LogMessage("CreateCoverCalibratorInstance", $"Created Type for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
-                    CoverCalibratorDevice = Activator.CreateInstance(CoverCalibratorType);
+                    coverCalibratorDevice = Activator.CreateInstance(CoverCalibratorType);
 #endif
                     LogMessage("CreateCoverCalibratorInstance", $"Created COM object for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
                 }
@@ -395,9 +395,9 @@ namespace ASCOM.JustAHub
                 try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess CoverCalibrator object."); } catch { }
                 try { coverCalibratorDevice = null; } catch (Exception) { }
 #else
-                try { Marshal.ReleaseComObject(CoverCalibratorDevice); } catch (Exception) { }
+                try { Marshal.ReleaseComObject(coverCalibratorDevice); } catch (Exception) { }
                 try { LogMessage("JustAHub.Dispose", $"Released CoverCalibrator COM object."); } catch { }
-                try { CoverCalibratorDevice = null; } catch (Exception) { }
+                try { coverCalibratorDevice = null; } catch (Exception) { }
 #endif
             }
 
