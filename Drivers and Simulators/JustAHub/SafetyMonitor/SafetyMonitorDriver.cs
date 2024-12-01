@@ -14,7 +14,7 @@ namespace ASCOM.JustAHub
     [ComVisible(true)]
     [Guid("59DB989D-EA5C-4E34-996F-AA53322E6797")]
     [ProgId("ASCOM.JustAHub.SafetyMonitor")]
-    [ServedClassName("ASCOM JustAHub Safety Monitor")] // Driver description that appears in the Chooser, customise as required
+    [ServedClassName("JustAHub Safety Monitor")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class SafetyMonitor : ReferenceCountedObjectBase, ISafetyMonitorV3, IDisposable
     {

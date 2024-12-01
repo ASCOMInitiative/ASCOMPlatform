@@ -14,7 +14,7 @@ namespace ASCOM.JustAHub
     [ComVisible(true)]
     [Guid("CDE29007-89B1-4163-9E63-F374264CD2EC")]
     [ProgId("ASCOM.JustAHub.FilterWheel")]
-    [ServedClassName("ASCOM JustAHub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
+    [ServedClassName("JustAHub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class FilterWheel : ReferenceCountedObjectBase, IFilterWheelV3, IDisposable
     {

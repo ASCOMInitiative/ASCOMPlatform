@@ -14,7 +14,7 @@ namespace ASCOM.JustAHub
     [ComVisible(true)]
     [Guid("559600B3-D579-440F-996C-6BB0748E8812")]
     [ProgId("ASCOM.JustAHub.Camera")]
-    [ServedClassName("ASCOM JustAHub Camera")] // Driver description that appears in the Chooser, customise as required
+    [ServedClassName("JustAHub Camera")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class Camera : ReferenceCountedObjectBase, ICameraV4, IDisposable
     {

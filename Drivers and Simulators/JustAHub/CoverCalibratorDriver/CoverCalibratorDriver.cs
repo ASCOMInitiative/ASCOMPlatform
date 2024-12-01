@@ -14,7 +14,7 @@ namespace ASCOM.JustAHub
     [ComVisible(true)]
     [Guid("226F4E6B-3863-41DE-A464-72474A477313")]
     [ProgId("ASCOM.JustAHub.CoverCalibrator")]
-    [ServedClassName("ASCOM JustAHub Safety Monitor")] // Driver description that appears in the Chooser, customise as required
+    [ServedClassName("JustAHub Cover Calibrator")] // Driver description that appears in the Chooser, customise as required
     [ClassInterface(ClassInterfaceType.None)]
     public class CoverCalibrator : ReferenceCountedObjectBase, ICoverCalibratorV2, IDisposable
     {
