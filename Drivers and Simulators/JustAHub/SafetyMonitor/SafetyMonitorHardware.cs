@@ -15,9 +15,9 @@ namespace ASCOM.JustAHub
     internal static class SafetyMonitorHardware
     {
 #if DEBUG
-        private static DriverAccess.SafetyMonitor safetyMonitorDevice; // SafetyMonitor device being hosted
+        private static DriverAccess.SafetyMonitor device; // SafetyMonitor device being hosted
 #else
-        private static dynamic safetyMonitorDevice; // SafetyMonitor device being hosted
+        private static dynamic device; // SafetyMonitor device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -47,7 +47,7 @@ namespace ASCOM.JustAHub
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", $"Exception creating {SafetyMonitor.ChooserDescription} ({Camera.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -56,36 +56,36 @@ namespace ASCOM.JustAHub
         /// Place device initialisation code here
         /// </summary>
         /// <remarks>Called every time a new instance of the driver is created.</remarks>
-        internal static void InitialiseSafetyMonitor()
+        internal static void Initialise()
         {
             // This method will be called every time a new ASCOM client loads your driver
-            LogMessage("InitialiseSafetyMonitor", $"Start.");
+            LogMessage("Initialise", $"Start.");
 
             // Make sure that "one off" activities are only undertaken once
             if (!runOnce)
             {
-                LogMessage("InitialiseSafetyMonitor", $"Starting one-off initialisation.");
+                LogMessage("Initialise", $"Starting one-off initialisation.");
 
                 if (string.IsNullOrEmpty(Settings.SafetyMonitorHostedProgId))
                     throw new InvalidValueException("The configured safety monitor ProgID is null or empty");
 
-                LogMessage("InitialiseSafetyMonitor", $"Hosted ProgID: {Settings.SafetyMonitorHostedProgId}");
+                LogMessage("Initialise", $"Hosted ProgID: {Settings.SafetyMonitorHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
 
-                CreateSafetyMonitorInstance();
-                LogMessage("InitialiseSafetyMonitor", "Completed one-off initialisation");
+                CreateInstance();
+                LogMessage("Initialise", "Completed one-off initialisation");
 
                 // Set the flag to ensure that this code is not run again
                 runOnce = true;
             }
             else
             {
-                LogMessage("InitialiseSafetyMonitor", "One-off initialisation has already run.");
+                LogMessage("Initialise", "One-off initialisation has already run.");
             }
 
-            LogMessage("InitialiseSafetyMonitor", $"Complete.");
+            LogMessage("Initialise", $"Complete.");
         }
 
         /// <summary>
@@ -111,20 +111,20 @@ namespace ASCOM.JustAHub
             // Driver instance not yet connected
 
             // Test whether the SafetyMonitor is already connected
-            if (!safetyMonitorDevice.Connected) // SafetyMonitor hardware is not connected so connect
+            if (!device.Connected) // SafetyMonitor hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        safetyMonitorDevice.Connected = true;
+                        device.Connected = true;
                         LogMessage("Connect", $"SafetyMonitor connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        safetyMonitorDevice.Connect();
-                        LogMessage("Connect", $"Connect completed OK - Connecting: {safetyMonitorDevice.Connecting}.");
+                        device.Connect();
+                        LogMessage("Connect", $"Connect completed OK - Connecting: {device.Connecting}.");
                         break;
 
                     default:
@@ -178,13 +178,13 @@ namespace ASCOM.JustAHub
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        safetyMonitorDevice.Connected = false;
+                        device.Connected = false;
                         LogMessage("Disconnect", $"SafetyMonitor disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        safetyMonitorDevice.Disconnect();
-                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {safetyMonitorDevice.Connecting}.");
+                        device.Disconnect();
+                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {device.Connecting}.");
                         break;
 
                     default:
@@ -212,7 +212,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                return safetyMonitorDevice.Connecting;
+                return device.Connecting;
             }
         }
 
@@ -223,7 +223,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                return safetyMonitorDevice.DeviceState;
+                return device.DeviceState;
             }
         }
 
@@ -237,14 +237,14 @@ namespace ASCOM.JustAHub
             return uniqueIds.Contains(uniqueId);
         }
 
-        public static void CreateSafetyMonitorInstance()
+        public static void CreateInstance()
         {
             // Remove any current instance and replace with a new one
-            if (!(safetyMonitorDevice is null)) // There is an existing instance
+            if (!(device is null)) // There is an existing instance
             {
-                try { safetyMonitorDevice.Connected = false; } catch { }
+                try { device.Connected = false; } catch { }
 
-                try { safetyMonitorDevice.Dispose(); } catch { }
+                try { device.Dispose(); } catch { }
 
                 try
                 {
@@ -252,13 +252,13 @@ namespace ASCOM.JustAHub
 
                     do
                     {
-                        remainingCount = Marshal.ReleaseComObject(safetyMonitorDevice);
-                        LogMessage("CreateSafetyMonitorInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
+                        remainingCount = Marshal.ReleaseComObject(device);
+                        LogMessage("CreateInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
                     } while (remainingCount > 0);
                 }
                 catch { }
 
-                safetyMonitorDevice = null;
+                device = null;
 
                 // Allow some time to dispose of the driver
                 System.Threading.Thread.Sleep(1000);
@@ -269,15 +269,15 @@ namespace ASCOM.JustAHub
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateSafetyMonitorInstance", $"Creating DriverAccess SafetyMonitor device.");
-                    safetyMonitorDevice = new DriverAccess.SafetyMonitor(Settings.SafetyMonitorHostedProgId);
+                    LogMessage("CreateInstance", $"Creating DriverAccess SafetyMonitor device.");
+                    device = new DriverAccess.SafetyMonitor(Settings.SafetyMonitorHostedProgId);
 #else
                     // Get the Type of this ProgID
                     Type SafetyMonitorType = Type.GetTypeFromProgID(Settings.SafetyMonitorHostedProgId);
-                    LogMessage("CreateSafetyMonitorInstance", $"Created Type for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
-                    safetyMonitorDevice = Activator.CreateInstance(SafetyMonitorType);
+                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
+                    device = Activator.CreateInstance(SafetyMonitorType);
 #endif
-                    LogMessage("CreateSafetyMonitorInstance", $"Created COM object for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
+                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.SafetyMonitorHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
@@ -298,7 +298,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                ArrayList actions = safetyMonitorDevice.SupportedActions;
+                ArrayList actions = device.SupportedActions;
                 LogMessage("SupportedActions Get", $"Returning ArrayList of length: {actions.Count}");
                 return actions;
             }
@@ -313,7 +313,7 @@ namespace ASCOM.JustAHub
         /// </returns>
         public static string Action(string actionName, string actionParameters)
         {
-            return safetyMonitorDevice.Action(actionName, actionParameters);
+            return device.Action(actionName, actionParameters);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace ASCOM.JustAHub
         public static void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
-            safetyMonitorDevice.CommandBlind(command, raw);
+            device.CommandBlind(command, raw);
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace ASCOM.JustAHub
         public static bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
-            return safetyMonitorDevice.CommandBool(command, raw);
+            return device.CommandBool(command, raw);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace ASCOM.JustAHub
         public static string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
-            return safetyMonitorDevice.CommandString(command, raw);
+            return device.CommandString(command, raw);
         }
 
         /// <summary>
@@ -388,16 +388,16 @@ namespace ASCOM.JustAHub
         {
             try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
-            if (!(safetyMonitorDevice is null))
+            if (!(device is null))
             {
 #if DEBUG
-                try { safetyMonitorDevice.Dispose(); } catch (Exception) { }
+                try { device.Dispose(); } catch (Exception) { }
                 try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess SafetyMonitor object."); } catch { }
-                try { safetyMonitorDevice = null; } catch (Exception) { }
+                try { device = null; } catch (Exception) { }
 #else
-                try { Marshal.ReleaseComObject(safetyMonitorDevice); } catch (Exception) { }
+                try { Marshal.ReleaseComObject(device); } catch (Exception) { }
                 try { LogMessage("JustAHub.Dispose", $"Released SafetyMonitor COM object."); } catch { }
-                try { safetyMonitorDevice = null; } catch (Exception) { }
+                try { device = null; } catch (Exception) { }
 #endif
             }
 
@@ -427,7 +427,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string description = safetyMonitorDevice.Description;
+                string description = device.Description;
                 LogMessage("Description Get", description);
                 return description;
             }
@@ -440,7 +440,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverInfo = safetyMonitorDevice.DriverInfo;
+                string driverInfo = device.DriverInfo;
                 LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
@@ -453,7 +453,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverVersion = safetyMonitorDevice.DriverVersion;
+                string driverVersion = device.DriverVersion;
                 LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
@@ -466,7 +466,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                short interfaceVersion = safetyMonitorDevice.InterfaceVersion;
+                short interfaceVersion = device.InterfaceVersion;
                 LogMessage("InterfaceVersion Get", interfaceVersion.ToString());
                 return interfaceVersion;
             }
@@ -479,7 +479,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string name = safetyMonitorDevice.Name;
+                string name = device.Name;
                 LogMessage("Name Get", name);
                 return name;
             }
@@ -493,7 +493,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                bool isSafe = safetyMonitorDevice.IsSafe;
+                bool isSafe = device.IsSafe;
                 LogMessage("IsSafe Get", isSafe.ToString());
                 return isSafe;
             }
@@ -509,7 +509,7 @@ namespace ASCOM.JustAHub
         /// <param name="message"></param>
         private static void CheckConnected(string message)
         {
-            if (!safetyMonitorDevice.Connected)
+            if (!device.Connected)
             {
                 throw new NotConnectedException(message);
             }
@@ -552,10 +552,10 @@ namespace ASCOM.JustAHub
             // We don't have the interface version so get it from the device but only store it if we are connected because it may change when connected
 
             // Get the interface version
-            int iVersion = safetyMonitorDevice.InterfaceVersion;
+            int iVersion = device.InterfaceVersion;
 
             // Check whether the device is connected
-            if (safetyMonitorDevice.Connected) // SafetyMonitor is connected so save the value for future use
+            if (device.Connected) // SafetyMonitor is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;

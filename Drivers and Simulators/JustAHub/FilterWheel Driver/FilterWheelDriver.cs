@@ -57,7 +57,7 @@ namespace ASCOM.JustAHub
                 };
 
                 // Initialise the hardware if required
-                FilterWheelHardware.InitialiseFilterWheel();
+                FilterWheelHardware.Initialise();
 
                 LogMessage("FilterWheel", "Starting driver initialisation");
                 LogMessage("FilterWheel", $"ProgID: {ProgId}, Description: {ChooserDescription}");

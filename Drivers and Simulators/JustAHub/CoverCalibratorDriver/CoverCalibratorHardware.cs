@@ -15,9 +15,9 @@ namespace ASCOM.JustAHub
     internal static class CoverCalibratorHardware
     {
 #if DEBUG
-        private static DriverAccess.CoverCalibrator coverCalibratorDevice; // CoverCalibrator device being hosted
+        private static DriverAccess.CoverCalibrator device; // CoverCalibrator device being hosted
 #else
-        private static dynamic coverCalibratorDevice; // CoverCalibrator device being hosted
+        private static dynamic device; // CoverCalibrator device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -47,7 +47,7 @@ namespace ASCOM.JustAHub
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.JustAHub.CoverCalibrator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", $"Exception creating {CoverCalibrator.ChooserDescription} ({Camera.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -56,36 +56,36 @@ namespace ASCOM.JustAHub
         /// Place device initialisation code here
         /// </summary>
         /// <remarks>Called every time a new instance of the driver is created.</remarks>
-        internal static void InitialiseCoverCalibrator()
+        internal static void Initialise()
         {
             // This method will be called every time a new ASCOM client loads your driver
-            LogMessage("InitialiseCoverCalibrator", $"Start.");
+            LogMessage("Initialise", $"Start.");
 
             // Make sure that "one off" activities are only undertaken once
             if (!runOnce)
             {
-                LogMessage("InitialiseCoverCalibrator", $"Starting one-off initialisation.");
+                LogMessage("Initialise", $"Starting one-off initialisation.");
 
                 if (string.IsNullOrEmpty(Settings.CoverCalibratorHostedProgId))
                     throw new InvalidValueException("The configured cover calibrator ProgID is null or empty");
 
-                LogMessage("InitialiseCoverCalibrator", $"Hosted ProgID: {Settings.CoverCalibratorHostedProgId}");
+                LogMessage("Initialise", $"Hosted ProgID: {Settings.CoverCalibratorHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
 
-                CreateCoverCalibratorInstance();
-                LogMessage("InitialiseCoverCalibrator", "Completed one-off initialisation");
+                CreateInstance();
+                LogMessage("Initialise", "Completed one-off initialisation");
 
                 // Set the flag to ensure that this code is not run again
                 runOnce = true;
             }
             else
             {
-                LogMessage("InitialiseCoverCalibrator", "One-off initialisation has already run.");
+                LogMessage("Initialise", "One-off initialisation has already run.");
             }
 
-            LogMessage("InitialiseCoverCalibrator", $"Complete.");
+            LogMessage("Initialise", $"Complete.");
         }
 
         /// <summary>
@@ -111,20 +111,20 @@ namespace ASCOM.JustAHub
             // Driver instance not yet connected
 
             // Test whether the CoverCalibrator is already connected
-            if (!coverCalibratorDevice.Connected) // CoverCalibrator hardware is not connected so connect
+            if (!device.Connected) // CoverCalibrator hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        coverCalibratorDevice.Connected = true;
+                        device.Connected = true;
                         LogMessage("Connect", $"CoverCalibrator connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        coverCalibratorDevice.Connect();
-                        LogMessage("Connect", $"Connect completed OK - Connecting: {coverCalibratorDevice.Connecting}.");
+                        device.Connect();
+                        LogMessage("Connect", $"Connect completed OK - Connecting: {device.Connecting}.");
                         break;
 
                     default:
@@ -178,13 +178,13 @@ namespace ASCOM.JustAHub
                 switch (connectType)
                 {
                     case ConnectType.Connected:
-                        coverCalibratorDevice.Connected = false;
+                        device.Connected = false;
                         LogMessage("Disconnect", $"CoverCalibrator disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
-                        coverCalibratorDevice.Disconnect();
-                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {coverCalibratorDevice.Connecting}.");
+                        device.Disconnect();
+                        LogMessage("Disconnect", $"Disconnect completed OK - Connecting: {device.Connecting}.");
                         break;
 
                     default:
@@ -212,7 +212,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                return coverCalibratorDevice.Connecting;
+                return device.Connecting;
             }
         }
 
@@ -223,7 +223,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                return coverCalibratorDevice.DeviceState;
+                return device.DeviceState;
             }
         }
 
@@ -237,14 +237,14 @@ namespace ASCOM.JustAHub
             return uniqueIds.Contains(uniqueId);
         }
 
-        public static void CreateCoverCalibratorInstance()
+        public static void CreateInstance()
         {
             // Remove any current instance and replace with a new one
-            if (!(coverCalibratorDevice is null)) // There is an existing instance
+            if (!(device is null)) // There is an existing instance
             {
-                try { coverCalibratorDevice.Connected = false; } catch { }
+                try { device.Connected = false; } catch { }
 
-                try { coverCalibratorDevice.Dispose(); } catch { }
+                try { device.Dispose(); } catch { }
 
                 try
                 {
@@ -252,13 +252,13 @@ namespace ASCOM.JustAHub
 
                     do
                     {
-                        remainingCount = Marshal.ReleaseComObject(coverCalibratorDevice);
-                        LogMessage("CreateCoverCalibratorInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
+                        remainingCount = Marshal.ReleaseComObject(device);
+                        LogMessage("CreateInstance", $"Released COM object wrapper, remaining count: {remainingCount}.");
                     } while (remainingCount > 0);
                 }
                 catch { }
 
-                coverCalibratorDevice = null;
+                device = null;
 
                 // Allow some time to dispose of the driver
                 System.Threading.Thread.Sleep(1000);
@@ -269,15 +269,15 @@ namespace ASCOM.JustAHub
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateCoverCalibratorInstance", $"Creating DriverAccess CoverCalibrator device.");
-                    coverCalibratorDevice = new DriverAccess.CoverCalibrator(Settings.CoverCalibratorHostedProgId);
+                    LogMessage("CreateInstance", $"Creating DriverAccess CoverCalibrator device.");
+                    device = new DriverAccess.CoverCalibrator(Settings.CoverCalibratorHostedProgId);
 #else
                     // Get the Type of this ProgID
                     Type CoverCalibratorType = Type.GetTypeFromProgID(Settings.CoverCalibratorHostedProgId);
-                    LogMessage("CreateCoverCalibratorInstance", $"Created Type for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
-                    coverCalibratorDevice = Activator.CreateInstance(CoverCalibratorType);
+                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
+                    device = Activator.CreateInstance(CoverCalibratorType);
 #endif
-                    LogMessage("CreateCoverCalibratorInstance", $"Created COM object for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
+                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.CoverCalibratorHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
@@ -298,7 +298,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                ArrayList actions = coverCalibratorDevice.SupportedActions;
+                ArrayList actions = device.SupportedActions;
                 LogMessage("SupportedActions Get", $"Returning ArrayList of length: {actions.Count}");
                 return actions;
             }
@@ -313,7 +313,7 @@ namespace ASCOM.JustAHub
         /// </returns>
         public static string Action(string actionName, string actionParameters)
         {
-            return coverCalibratorDevice.Action(actionName, actionParameters);
+            return device.Action(actionName, actionParameters);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace ASCOM.JustAHub
         public static void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
-            coverCalibratorDevice.CommandBlind(command, raw);
+            device.CommandBlind(command, raw);
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace ASCOM.JustAHub
         public static bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
-            return coverCalibratorDevice.CommandBool(command, raw);
+            return device.CommandBool(command, raw);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace ASCOM.JustAHub
         public static string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
-            return coverCalibratorDevice.CommandString(command, raw);
+            return device.CommandString(command, raw);
         }
 
         /// <summary>
@@ -388,16 +388,16 @@ namespace ASCOM.JustAHub
         {
             try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
-            if (!(coverCalibratorDevice is null))
+            if (!(device is null))
             {
 #if DEBUG
-                try { coverCalibratorDevice.Dispose(); } catch (Exception) { }
+                try { device.Dispose(); } catch (Exception) { }
                 try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess CoverCalibrator object."); } catch { }
-                try { coverCalibratorDevice = null; } catch (Exception) { }
+                try { device = null; } catch (Exception) { }
 #else
-                try { Marshal.ReleaseComObject(coverCalibratorDevice); } catch (Exception) { }
+                try { Marshal.ReleaseComObject(device); } catch (Exception) { }
                 try { LogMessage("JustAHub.Dispose", $"Released CoverCalibrator COM object."); } catch { }
-                try { coverCalibratorDevice = null; } catch (Exception) { }
+                try { device = null; } catch (Exception) { }
 #endif
             }
 
@@ -427,7 +427,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string description = coverCalibratorDevice.Description;
+                string description = device.Description;
                 LogMessage("Description Get", description);
                 return description;
             }
@@ -440,7 +440,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverInfo = coverCalibratorDevice.DriverInfo;
+                string driverInfo = device.DriverInfo;
                 LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
@@ -453,7 +453,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string driverVersion = coverCalibratorDevice.DriverVersion;
+                string driverVersion = device.DriverVersion;
                 LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
@@ -466,7 +466,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                short interfaceVersion = coverCalibratorDevice.InterfaceVersion;
+                short interfaceVersion = device.InterfaceVersion;
                 LogMessage("InterfaceVersion Get", interfaceVersion.ToString());
                 return interfaceVersion;
             }
@@ -479,7 +479,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string name = coverCalibratorDevice.Name;
+                string name = device.Name;
                 LogMessage("Name Get", name);
                 return name;
             }
@@ -493,7 +493,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                int brightness = coverCalibratorDevice.Brightness;
+                int brightness = device.Brightness;
                 LogMessage("Brightness Get", brightness.ToString());
                 return brightness;
             }
@@ -503,7 +503,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                bool calibratorChanging = coverCalibratorDevice.CalibratorChanging;
+                bool calibratorChanging = device.CalibratorChanging;
                 LogMessage("CalibratorChanging Get", calibratorChanging.ToString());
                 return calibratorChanging;
             }
@@ -513,7 +513,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CalibratorStatus calibratorState = coverCalibratorDevice.CalibratorState;
+                CalibratorStatus calibratorState = device.CalibratorState;
                 LogMessage("CalibratorState Get", calibratorState.ToString());
                 return calibratorState;
             }
@@ -521,24 +521,24 @@ namespace ASCOM.JustAHub
 
         public static void CalibratorOff()
         {
-            coverCalibratorDevice.CalibratorOff();
+            device.CalibratorOff();
         }
 
         public static void CalibratorOn(int Brightness)
         {
-            coverCalibratorDevice.CalibratorOn(Brightness);
+            device.CalibratorOn(Brightness);
         }
 
         public static void CloseCover()
         {
-            coverCalibratorDevice.CloseCover();
+            device.CloseCover();
         }
 
         public static bool CoverMoving
         {
             get
             {
-                bool coverMoving = coverCalibratorDevice.CoverMoving;
+                bool coverMoving = device.CoverMoving;
                 LogMessage("CoverMoving Get", coverMoving.ToString());
                 return coverMoving;
             }
@@ -548,7 +548,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CoverStatus coverState = coverCalibratorDevice.CoverState;
+                CoverStatus coverState = device.CoverState;
                 LogMessage("CalibratorState Get", coverState.ToString());
                 return coverState;
             }
@@ -556,14 +556,14 @@ namespace ASCOM.JustAHub
 
         public static void HaltCover()
         {
-            coverCalibratorDevice.HaltCover();
+            device.HaltCover();
         }
 
         public static int MaxBrightness
         {
             get
             {
-                int maxBrightness = coverCalibratorDevice.MaxBrightness;
+                int maxBrightness = device.MaxBrightness;
                 LogMessage("MaxBrightness Get", maxBrightness.ToString());
                 return maxBrightness;
             }
@@ -571,7 +571,7 @@ namespace ASCOM.JustAHub
 
         public static void OpenCover()
         {
-            coverCalibratorDevice.OpenCover();
+            device.OpenCover();
         }
 
         #endregion
@@ -584,7 +584,7 @@ namespace ASCOM.JustAHub
         /// <param name="message"></param>
         private static void CheckConnected(string message)
         {
-            if (!coverCalibratorDevice.Connected)
+            if (!device.Connected)
             {
                 throw new NotConnectedException(message);
             }
@@ -627,10 +627,10 @@ namespace ASCOM.JustAHub
             // We don't have the interface version so get it from the device but only store it if we are connected because it may change when connected
 
             // Get the interface version
-            int iVersion = coverCalibratorDevice.InterfaceVersion;
+            int iVersion = device.InterfaceVersion;
 
             // Check whether the device is connected
-            if (coverCalibratorDevice.Connected) // CoverCalibrator is connected so save the value for future use
+            if (device.Connected) // CoverCalibrator is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;

@@ -47,17 +47,13 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                // LOGGING CONFIGURATION
-                // By default all driver logging will appear in Hardware log file
-                // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
-
                 tl = new TraceLogger("", "JustAHub.Camera.Driver")
                 {
                     Enabled = Settings.CameraDriverLogging
                 };
 
                 // Initialise the hardware if required
-                CameraHardware.InitialiseCamera();
+                CameraHardware.Initialise();
 
                 LogMessage("Camera", "Starting driver initialisation");
                 LogMessage("Camera", $"ProgID: {ProgId}, Description: {ChooserDescription}");

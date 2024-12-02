@@ -47,17 +47,13 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                // LOGGING CONFIGURATION
-                // By default all driver logging will appear in Hardware log file
-                // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
-
                 tl = new TraceLogger("", "JustAHub.SafetyMonitor.Driver")
                 {
                     Enabled = Settings.SafetyMonitorDriverLogging
                 };
 
                 // Initialise the hardware if required
-                SafetyMonitorHardware.InitialiseSafetyMonitor();
+                SafetyMonitorHardware.Initialise();
 
                 LogMessage("SafetyMonitor", "Starting driver initialisation");
                 LogMessage("SafetyMonitor", $"ProgID: {ProgId}, Description: {ChooserDescription}");

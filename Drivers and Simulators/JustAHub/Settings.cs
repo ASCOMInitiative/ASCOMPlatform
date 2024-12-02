@@ -107,9 +107,9 @@ namespace ASCOM.JustAHub
 
                 // Save cover calibrator specific values
                 profile.DeviceType = "CoverCalibrator";
-                profile.WriteValue(FilterWheel.ProgId, COVERCALIBRATOR_PROGID_PROFILE_NAME, CoverCalibratorHostedProgId);
-                profile.WriteValue(FilterWheel.ProgId, COVERCALIBRATOR_DRIVER_LOGGING_PROFILE_NAME, CoverCalibratorDriverLogging.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(FilterWheel.ProgId, COVERCALIBRATOR_HARDWARE_LOGGING_PROFILE_NAME, CoverCalibratorHardwareLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(CoverCalibrator.ProgId, COVERCALIBRATOR_PROGID_PROFILE_NAME, CoverCalibratorHostedProgId);
+                profile.WriteValue(CoverCalibrator.ProgId, COVERCALIBRATOR_DRIVER_LOGGING_PROFILE_NAME, CoverCalibratorDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(CoverCalibrator.ProgId, COVERCALIBRATOR_HARDWARE_LOGGING_PROFILE_NAME, CoverCalibratorHardwareLogging.ToString(CultureInfo.InvariantCulture));
 
                 // Save filter wheel specific values
                 profile.DeviceType = "FilterWheel";
@@ -119,9 +119,9 @@ namespace ASCOM.JustAHub
 
                 // Save safety monitor specific values
                 profile.DeviceType = "SafetyMonitor";
-                profile.WriteValue(FilterWheel.ProgId, SAFETYMONITOR_PROGID_PROFILE_NAME, SafetyMonitorHostedProgId);
-                profile.WriteValue(FilterWheel.ProgId, SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME, SafetyMonitorDriverLogging.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(FilterWheel.ProgId, SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME, SafetyMonitorHardwareLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(SafetyMonitor.ProgId, SAFETYMONITOR_PROGID_PROFILE_NAME, SafetyMonitorHostedProgId);
+                profile.WriteValue(SafetyMonitor.ProgId, SAFETYMONITOR_DRIVER_LOGGING_PROFILE_NAME, SafetyMonitorDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(SafetyMonitor.ProgId, SAFETYMONITOR_HARDWARE_LOGGING_PROFILE_NAME, SafetyMonitorHardwareLogging.ToString(CultureInfo.InvariantCulture));
             }
         }
 

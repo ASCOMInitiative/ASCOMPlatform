@@ -57,7 +57,7 @@ namespace ASCOM.JustAHub
                 };
 
                 // Initialise the hardware if required
-                CoverCalibratorHardware.InitialiseCoverCalibrator();
+                CoverCalibratorHardware.Initialise();
 
                 LogMessage("CoverCalibrator", "Starting driver initialisation");
                 LogMessage("CoverCalibrator", $"ProgID: {ProgId}, Description: {ChooserDescription}");
