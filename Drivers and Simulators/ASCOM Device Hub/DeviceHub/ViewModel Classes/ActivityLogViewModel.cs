@@ -324,21 +324,25 @@ namespace ASCOM.DeviceHub
                     {
                         DataBuffer.Append(newText);
 
-                        // Write the message to the activity log file.
-                        // The incoming message is parsed to extract the core message and discard the time stamp and device type prefixes before being logged
+                        // Start a task to write the line to disk that will time out after 1 second so as not to build up a significant backlog of lines to be written if writes start to fail
+                        Task.Run(() =>
+                        {
+                            // Write the message to the activity log file.
+                            // The incoming message is parsed to extract the core message and discard the time stamp and device type prefixes before being logged
 
-                        // Locate the position of the '-' separator character
-                        int spacePosition = newText.IndexOf("-");
+                            // Locate the position of the '-' separator character
+                            int spacePosition = newText.IndexOf("-");
 
-                        // Create a string builder from the message having stripped any trailing carriage return and line feed characters
-                        StringBuilder textSubset = new StringBuilder(newText.TrimEnd('\r', '\n'));
+                            // Create a string builder from the message having stripped any trailing carriage return and line feed characters
+                            StringBuilder textSubset = new StringBuilder(newText.TrimEnd('\r', '\n'));
 
-                        // Discard everything before the '-' separator, the '-' separator itself, and the following space if these are present
-                        if ((spacePosition >= 0) & (spacePosition <= textSubset.Length - 3))
-                            textSubset = textSubset.Remove(0, spacePosition + 2);
+                            // Discard everything before the '-' separator, the '-' separator itself, and the following space if these are present
+                            if ((spacePosition >= 0) & (spacePosition <= textSubset.Length - 3))
+                                textSubset = textSubset.Remove(0, spacePosition + 2);
 
-                        // Write the message to the log file
-                        TL?.LogMessageCrLf($"{action.DeviceType}", textSubset.ToString());
+                            // Write the message to the log file
+                            TL?.LogMessageCrLf(action.DeviceType.ToString(), textSubset.ToString());
+                        }, new CancellationTokenSource(1000).Token);
                     }
                 }
             }
