@@ -96,8 +96,7 @@ namespace ASCOM.DeviceHub
 
             Messenger.Default.Register<ObjectCountMessage>(this, (action) => UpdateObjectsCount(action));
 
-            LogAppMessage("Application Initializaiton is complete.", caller);
-            Globals.CloseAppLogger();
+            LogAppMessage("Application Initialisation is complete.", caller);
         }
 
         #region Public Properties
