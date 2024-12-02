@@ -797,7 +797,7 @@ namespace ASCOM.DeviceHub
             double overhead = 0.0;
 
             TimeSpan fastPollExtension = new TimeSpan(0, 0, 3); //Wait 3 seconds after movement stops to return to normal polling.
-            bool previousMoveStatus = false;
+            bool previousSlewingStatus = false;
             DateTime returnToNormalPollingTime = DateTime.MinValue;
             int previousPollingPeriod;
 
@@ -829,7 +829,10 @@ namespace ASCOM.DeviceHub
                         }, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
                     }
 
-                    if (PreviousSlewInProgressMessage.IsSlewInProgress && !Status.Slewing)
+                    // Get the device's slewing state directly fro the device rather than relying on the cached value, which can lead to incorrect behaviour due to timing issues
+                    bool slewing = Service.Slewing;
+
+                    if (PreviousSlewInProgressMessage.IsSlewInProgress && !slewing)
                     {
                         LogActivityLine(ActivityMessageTypes.Status,$"PollScopeTask - Cancelling slew in progress state");
                         SlewInProgressMessage msg = new SlewInProgressMessage(false);
@@ -837,22 +840,22 @@ namespace ASCOM.DeviceHub
                         PreviousSlewInProgressMessage = msg;
                     }
 
-                    if (!Status.Slewing && PollingPeriod != POLLING_PERIOD_NORMAL)
+                    if (!slewing && PollingPeriod != POLLING_PERIOD_NORMAL)
                     {
                         LogActivityLine(ActivityMessageTypes.Commands, $"Returning to normal polling every {POLLING_PERIOD_NORMAL} ms.");
                     }
 
                     //PollingPeriod = ( Status.Slewing ) ? Convert.ToInt32( FastPollingPeriod * 1000.0 ) : POLLING_PERIOD_NORMAL;
 
-                    if (Status.Slewing)
+                    if (slewing)
                     {
-                        // We are moving, so use the fast polling rate.
+                        // We are slewing, so use the fast polling rate.
 
                         PollingPeriod = fastPollingMs;
                     }
-                    else if (previousMoveStatus)
+                    else if (previousSlewingStatus)
                     {
-                        // We stopped moving, so start the timer to return to normal polling.
+                        // We were slewing but are now stopped, so start the timer to return to normal polling.
 
                         returnToNormalPollingTime = DateTime.Now + fastPollExtension;
                         PollingPeriod = fastPollingMs;
@@ -872,7 +875,7 @@ namespace ASCOM.DeviceHub
 
                     // Remember our state for the next time through this loop.
 
-                    previousMoveStatus = Status.Slewing;
+                    previousSlewingStatus = slewing;
 
                     if (PollingPeriod == POLLING_PERIOD_NORMAL && previousPollingPeriod != POLLING_PERIOD_NORMAL)
                     {

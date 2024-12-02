@@ -467,10 +467,11 @@ namespace ASCOM.DeviceHub
                         }
                     }
 
+                    ShutterState shutterStatus=Service.ShutterStatus;
 
-                    bool isMoving = DomeStatus.Slewing
-                                || DomeStatus.ShutterStatus == ShutterState.shutterOpening
-                                || DomeStatus.ShutterStatus == ShutterState.shutterClosing;
+                    bool isMoving = Service.Slewing
+                                || shutterStatus == ShutterState.shutterOpening
+                                || shutterStatus == ShutterState.shutterClosing;
 
                     LogAppMessage($"SlavedSlewState.IsSlewInProgress: {TelescopeSlewState.IsSlewInProgress}, SlavedSlewState.RA: {TelescopeSlewState.RightAscension}, SlavedSlewState.Declination: {TelescopeSlewState.Declination}, isMoving: {isMoving}, Slewing: {DomeStatus.Slewing}, ShutterStatus{DomeStatus.ShutterStatus}", "PollDomeTask");
 
