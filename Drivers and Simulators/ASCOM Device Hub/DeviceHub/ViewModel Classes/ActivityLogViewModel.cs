@@ -325,8 +325,8 @@ namespace ASCOM.DeviceHub
                         DataBuffer.Append(newText);
 
                         // Start a task to write the line to disk that will time out after 1 second so as not to build up a significant backlog of lines to be written if writes start to fail
-                        Task.Run(() =>
-                        {
+                        //Task.Run(() =>
+                        //{
                             // Write the message to the activity log file.
                             // The incoming message is parsed to extract the core message and discard the time stamp and device type prefixes before being logged
 
@@ -342,7 +342,7 @@ namespace ASCOM.DeviceHub
 
                             // Write the message to the log file
                             TL?.LogMessageCrLf(action.DeviceType.ToString(), textSubset.ToString());
-                        }, new CancellationTokenSource(1000).Token);
+                        //}, new CancellationTokenSource(1000).Token);
                     }
                 }
             }
