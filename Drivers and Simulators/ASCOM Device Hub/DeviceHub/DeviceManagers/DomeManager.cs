@@ -468,10 +468,15 @@ namespace ASCOM.DeviceHub
                     }
 
                     ShutterState shutterStatus=Service.ShutterStatus;
+                    LogActivityLine(ActivityMessageTypes.Status, $"PollDomeTask - Got dome shutter status: {shutterStatus}");
 
-                    bool isMoving = Service.Slewing
+                    bool slewing = Service.Slewing;
+                    LogActivityLine(ActivityMessageTypes.Status, $"PollDomeTask - Got dome slewing status: {slewing}");
+
+                    bool isMoving = slewing
                                 || shutterStatus == ShutterState.shutterOpening
                                 || shutterStatus == ShutterState.shutterClosing;
+                    LogActivityLine(ActivityMessageTypes.Status, $"PollDomeTask - Dome is moving: {isMoving}");
 
                     LogAppMessage($"SlavedSlewState.IsSlewInProgress: {TelescopeSlewState.IsSlewInProgress}, SlavedSlewState.RA: {TelescopeSlewState.RightAscension}, SlavedSlewState.Declination: {TelescopeSlewState.Declination}, isMoving: {isMoving}, Slewing: {DomeStatus.Slewing}, ShutterStatus{DomeStatus.ShutterStatus}", "PollDomeTask");
 

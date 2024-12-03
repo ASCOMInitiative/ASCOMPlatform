@@ -831,6 +831,7 @@ namespace ASCOM.DeviceHub
 
                     // Get the device's slewing state directly fro the device rather than relying on the cached value, which can lead to incorrect behaviour due to timing issues
                     bool slewing = Service.Slewing;
+                    LogActivityLine(ActivityMessageTypes.Status, $"PollScopeTask - Telescope is slewing: {slewing}");
 
                     if (PreviousSlewInProgressMessage.IsSlewInProgress && !slewing)
                     {
