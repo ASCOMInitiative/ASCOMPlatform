@@ -1,17 +1,3 @@
-//
-// ASCOM.JustAHub Local COM Server
-//
-// This is the core of a managed COM Local Server, capable of serving
-// multiple instances of multiple interfaces, within a single
-// executable. This implements the equivalent functionality of VB6
-// which has been extensively used in ASCOM for drivers that provide
-// multiple interfaces to multiple clients (e.g. Meade Telescope
-// and Focuser) as well as hubs (e.g., POTH).
-//
-// Written by: Robert B. Denny (Version 1.0.1, 29-May-2007)
-// Modified by Chris Rowland and Peter Simpson to allow use with multiple devices of the same type March 2011
-//
-//
 using ASCOM.JustAHub;
 using ASCOM.Utilities;
 using Microsoft.Win32;

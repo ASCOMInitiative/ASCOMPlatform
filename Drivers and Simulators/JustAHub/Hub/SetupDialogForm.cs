@@ -12,6 +12,7 @@ namespace ASCOM.JustAHub
         readonly TraceLogger tl; // Holder for a reference to the driver's trace logger
         string newCameraProgId;
         string newFilterWheelProgId;
+        string newCoverCalibratorProgId;
         readonly string callingDeviceType;
 
         #region Initialisation and form load
@@ -39,30 +40,45 @@ namespace ASCOM.JustAHub
                 // Global values
                 ChkLocalServerDebugLog.Checked = Settings.LocalServerLogging;
 
-                // Set the hosted driver labels
+                // Camera values
                 LblCurrentCameraDevice.Text = $"{Settings.CameraHostedProgId}";
                 tl.LogMessage("SetForm_Load", $"Hosted camera device ProgID: {Settings.CameraHostedProgId}");
 
+                ChkDriverLoggingCamera.Checked = Settings.CameraDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.CameraDriverLogging}");
+
+                ChkHardwareLoggingCamera.Checked = Settings.CameraHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.CameraHardwareLogging}");
+
+                // Cover Calibrator values
+                LblCurrentCoverCalibratorDevice.Text = $"{Settings.CoverCalibratorHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted cover calibrator device ProgID: {Settings.CoverCalibratorHostedProgId}");
+
+                ChkDriverLoggingCoverCalibrator.Checked = Settings.CoverCalibratorDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.CoverCalibratorDriverLogging}");
+
+                ChkHardwareLoggingCoverCalibrator.Checked = Settings.CoverCalibratorHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.CoverCalibratorHardwareLogging}");
+
+                // Filter Wheel values
                 LblCurrentFilterWheelDevice.Text = $"{Settings.FilterWheelHostedProgId}";
                 tl.LogMessage("SetForm_Load", $"Hosted filter wheel device ProgID: {Settings.FilterWheelHostedProgId}");
 
-                // Set the trace checkboxes
-                ChkLogDriverCallsCamera.Checked = Settings.CameraDriverLogging;
-                tl.LogMessage("SetForm_Load", $"Log driver calls: {ChkLogDriverCallsCamera.Checked}");
+                ChkDriverLoggingFilterWheel.Checked = Settings.FilterWheelDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.FilterWheelDriverLogging}");
 
-                ChkDebugLoggingCamera.Checked = Settings.CameraHardwareLogging;
-                tl.LogMessage("SetForm_Load", $"Log hardware calls: {ChkLogDriverCallsCamera.Checked}");
+                ChkHardwareLoggingFilterWheel.Checked = Settings.FilterWheelHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.FilterWheelHardwareLogging}");
 
-                ChkLogDriverCallsFilterWheel.Checked = Settings.FilterWheelDriverLogging;
-                tl.LogMessage("SetForm_Load", $"Log driver calls: {ChkLogDriverCallsFilterWheel.Checked}");
-
-                ChkDebugLoggingFilterWheel.Checked = Settings.FilterWheelHardwareLogging;
-                tl.LogMessage("SetForm_Load", $"Log hardware calls: {ChkLogDriverCallsFilterWheel.Checked}");
-
+                // Select the appropriate tab
                 switch (callingDeviceType.ToUpperInvariant())
                 {
                     case "CAMERA":
                         TabDevices.SelectTab("Camera");
+                        break;
+
+                    case "COVERCALIBRATOR":
+                        TabDevices.SelectTab("CoverCalibrator");
                         break;
 
                     case "FILTERWHEEL":
@@ -92,28 +108,30 @@ namespace ASCOM.JustAHub
 
         #endregion
 
-        #region Event handlers
+        #region Common event handlers
 
         private void CmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
             // Save global values
-            Settings.LocalServerLogging=ChkLocalServerDebugLog.Checked;
+            Settings.LocalServerLogging = ChkLocalServerDebugLog.Checked;
 
             // Save camera settings
-            Settings.CameraDriverLogging= ChkLogDriverCallsCamera.Checked;
-            Settings.CameraHardwareLogging = ChkDebugLoggingCamera.Checked;
+            Settings.CameraDriverLogging = ChkDriverLoggingCamera.Checked;
+            Settings.CameraHardwareLogging = ChkHardwareLoggingCamera.Checked;
             if (!string.IsNullOrEmpty(newCameraProgId)) // Update the camera ProgID if a new one has been chosen.
-            {
                 Settings.CameraHostedProgId = newCameraProgId;
-            }
+
+            // Save cover calibrator settings
+            Settings.CoverCalibratorDriverLogging = ChkDriverLoggingCoverCalibrator.Checked;
+            Settings.CoverCalibratorHardwareLogging = ChkHardwareLoggingCoverCalibrator.Checked;
+            if (!string.IsNullOrEmpty(newCoverCalibratorProgId)) // Update the camera ProgID if a new one has been chosen.
+                Settings.CoverCalibratorHostedProgId = newCoverCalibratorProgId;
 
             // Save filter wheel settings
-            Settings.FilterWheelDriverLogging = ChkLogDriverCallsFilterWheel.Checked;
-            Settings.FilterWheelHardwareLogging = ChkDebugLoggingFilterWheel.Checked;
+            Settings.FilterWheelDriverLogging = ChkDriverLoggingFilterWheel.Checked;
+            Settings.FilterWheelHardwareLogging = ChkHardwareLoggingFilterWheel.Checked;
             if (!string.IsNullOrEmpty(newFilterWheelProgId)) // Update the camera ProgID if a new one has been chosen.
-            {
                 Settings.FilterWheelHostedProgId = newFilterWheelProgId;
-            }
         }
 
         private void CmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -138,42 +156,51 @@ namespace ASCOM.JustAHub
             }
         }
 
+        #endregion
+
+        #region Device event handlers
+
         private void BtnChooseCamera_Click(object sender, EventArgs e)
         {
-            using (Chooser chooser = new Chooser())
-            {
-                CameraHardware.LogMessage("BtnChooseCamera_Click", $"Entered");
-                chooser.DeviceType = "Camera";
-                CameraHardware.LogMessage("BtnChooseCamera_Click", $"Device type: {chooser.DeviceType}, Current ProgID: {Settings.CameraHostedProgId}");
-                newCameraProgId = chooser.Choose(Settings.CameraHostedProgId);
+            newCameraProgId = HandleChooserClick(CameraHardware.TL, "Camera", Settings.CameraHostedProgId, LblCurrentCameraDevice);
+        }
 
-                // Update the setup UI with the new ProgID
-                if (!string.IsNullOrEmpty(newCameraProgId))
-                    LblCurrentCameraDevice.Text = $"{newCameraProgId}";
 
-                CameraHardware.LogMessage("BtnChooseCamera_Click", $"Selection made: {newCameraProgId}");
-            }
-            CameraHardware.LogMessage("BtnChooseCamera_Click", $"Exited");
+        private void BtnChooseCoverCalibrator_Click(object sender, EventArgs e)
+        {
+            newCoverCalibratorProgId = HandleChooserClick(CoverCalibratorHardware.TL, "CoverCalibrator", Settings.CoverCalibratorHostedProgId, LblCurrentCoverCalibratorDevice);
+        }
+
+        private void BtnChooseFilterWheel_Click(object sender, EventArgs e)
+        {
+            newFilterWheelProgId = HandleChooserClick(FilterWheelHardware.TL, "FilterWheel", Settings.FilterWheelHostedProgId, LblCurrentFilterWheelDevice);
         }
 
         #endregion
 
-        private void BtnChooseFilterWheel_Click(object sender, EventArgs e)
+        #region Support code
+
+        private static string HandleChooserClick(TraceLogger TL, string deviceType, string currentProgId, Label label)
         {
+            string newProgId = null;
+
+            TL.LogMessage("HandleChooserClick", $"Device type: {deviceType}, Current ProgID: {currentProgId}");
+
             using (Chooser chooser = new Chooser())
             {
-                CameraHardware.LogMessage("BtnChooseFilterWheel_Click", $"Entered");
-                chooser.DeviceType = "FilterWheel";
-                CameraHardware.LogMessage("BtnChooseFilterWheel_Click", $"Device type: {chooser.DeviceType}, Current ProgID: {Settings.FilterWheelHostedProgId}");
-                newFilterWheelProgId = chooser.Choose(Settings.FilterWheelHostedProgId);
-
-                // Update the setup UI with the new ProgID
-                if (!string.IsNullOrEmpty(newFilterWheelProgId))
-                    LblCurrentFilterWheelDevice.Text = $"{newFilterWheelProgId}";
-
-                FilterWheelHardware.LogMessage("BtnChooseFilterWheel_Click", $"Selection made: {newFilterWheelProgId}");
+                chooser.DeviceType = deviceType;
+                newProgId = chooser.Choose(currentProgId);
             }
-            FilterWheelHardware.LogMessage("BtnChooseFilterWheel_Click", $"Exited");
+
+            // Update the setup UI with the new ProgID
+            if (!string.IsNullOrEmpty(newProgId))
+                label.Text = $"{newProgId}";
+
+            TL.LogMessage("HandleChooserClick", $"Selected ProgID: '{newProgId}'");
+
+            return newProgId;
         }
+
+        #endregion
     }
 }

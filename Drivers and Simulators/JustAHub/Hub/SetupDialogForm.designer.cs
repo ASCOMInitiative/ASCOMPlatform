@@ -32,7 +32,7 @@ namespace ASCOM.JustAHub
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.ChkLogDriverCallsCamera = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingCamera = new System.Windows.Forms.CheckBox();
             this.BtnChooseCamera = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,15 +42,25 @@ namespace ASCOM.JustAHub
             this.label6 = new System.Windows.Forms.Label();
             this.BtnChooseFilterWheel = new System.Windows.Forms.Button();
             this.TabDevices = new System.Windows.Forms.TabControl();
-            this.Camera = new System.Windows.Forms.TabPage();
-            this.FilterWheel = new System.Windows.Forms.TabPage();
-            this.ChkDebugLoggingCamera = new System.Windows.Forms.CheckBox();
-            this.ChkDebugLoggingFilterWheel = new System.Windows.Forms.CheckBox();
-            this.ChkLogDriverCallsFilterWheel = new System.Windows.Forms.CheckBox();
+            this.General = new System.Windows.Forms.TabPage();
             this.ChkLocalServerDebugLog = new System.Windows.Forms.CheckBox();
+            this.Camera = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingCamera = new System.Windows.Forms.CheckBox();
+            this.CoverCalibrator = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingCoverCalibrator = new System.Windows.Forms.CheckBox();
+            this.LblCurrentCoverCalibratorDevice = new System.Windows.Forms.Label();
+            this.BtnChooseCoverCalibrator = new System.Windows.Forms.Button();
+            this.ChkDriverLoggingCoverCalibrator = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.FilterWheel = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingFilterWheel = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingFilterWheel = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.TabDevices.SuspendLayout();
+            this.General.SuspendLayout();
             this.Camera.SuspendLayout();
+            this.CoverCalibrator.SuspendLayout();
             this.FilterWheel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,21 +102,21 @@ namespace ASCOM.JustAHub
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
-            // ChkLogDriverCallsCamera
+            // ChkDriverLoggingCamera
             // 
-            this.ChkLogDriverCallsCamera.AutoSize = true;
-            this.ChkLogDriverCallsCamera.Location = new System.Drawing.Point(61, 125);
-            this.ChkLogDriverCallsCamera.Name = "ChkLogDriverCallsCamera";
-            this.ChkLogDriverCallsCamera.Size = new System.Drawing.Size(97, 17);
-            this.ChkLogDriverCallsCamera.TabIndex = 6;
-            this.ChkLogDriverCallsCamera.Text = "Log driver calls";
-            this.ChkLogDriverCallsCamera.UseVisualStyleBackColor = true;
+            this.ChkDriverLoggingCamera.AutoSize = true;
+            this.ChkDriverLoggingCamera.Location = new System.Drawing.Point(61, 125);
+            this.ChkDriverLoggingCamera.Name = "ChkDriverLoggingCamera";
+            this.ChkDriverLoggingCamera.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingCamera.TabIndex = 6;
+            this.ChkDriverLoggingCamera.Text = "Log driver calls";
+            this.ChkDriverLoggingCamera.UseVisualStyleBackColor = true;
             // 
             // BtnChooseCamera
             // 
-            this.BtnChooseCamera.Location = new System.Drawing.Point(222, 79);
+            this.BtnChooseCamera.Location = new System.Drawing.Point(215, 79);
             this.BtnChooseCamera.Name = "BtnChooseCamera";
-            this.BtnChooseCamera.Size = new System.Drawing.Size(122, 23);
+            this.BtnChooseCamera.Size = new System.Drawing.Size(136, 23);
             this.BtnChooseCamera.TabIndex = 7;
             this.BtnChooseCamera.Text = "Choose Camera";
             this.BtnChooseCamera.UseVisualStyleBackColor = true;
@@ -114,7 +124,7 @@ namespace ASCOM.JustAHub
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(58, 81);
+            this.label2.Location = new System.Drawing.Point(51, 81);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(161, 19);
             this.label2.TabIndex = 8;
@@ -137,7 +147,7 @@ namespace ASCOM.JustAHub
             this.LblCurrentCameraDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LblCurrentCameraDevice.Location = new System.Drawing.Point(164, 43);
             this.LblCurrentCameraDevice.Name = "LblCurrentCameraDevice";
-            this.LblCurrentCameraDevice.Size = new System.Drawing.Size(171, 18);
+            this.LblCurrentCameraDevice.Size = new System.Drawing.Size(246, 18);
             this.LblCurrentCameraDevice.TabIndex = 10;
             this.LblCurrentCameraDevice.Text = "ASCOM.Simulator.Camera";
             this.LblCurrentCameraDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -147,7 +157,7 @@ namespace ASCOM.JustAHub
             this.LblCurrentFilterWheelDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LblCurrentFilterWheelDevice.Location = new System.Drawing.Point(164, 43);
             this.LblCurrentFilterWheelDevice.Name = "LblCurrentFilterWheelDevice";
-            this.LblCurrentFilterWheelDevice.Size = new System.Drawing.Size(197, 18);
+            this.LblCurrentFilterWheelDevice.Size = new System.Drawing.Size(246, 18);
             this.LblCurrentFilterWheelDevice.TabIndex = 14;
             this.LblCurrentFilterWheelDevice.Text = "ASCOM.Simulator.FilterWheel";
             this.LblCurrentFilterWheelDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -164,7 +174,7 @@ namespace ASCOM.JustAHub
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(55, 81);
+            this.label6.Location = new System.Drawing.Point(48, 81);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(161, 19);
             this.label6.TabIndex = 12;
@@ -173,9 +183,9 @@ namespace ASCOM.JustAHub
             // 
             // BtnChooseFilterWheel
             // 
-            this.BtnChooseFilterWheel.Location = new System.Drawing.Point(222, 79);
+            this.BtnChooseFilterWheel.Location = new System.Drawing.Point(215, 79);
             this.BtnChooseFilterWheel.Name = "BtnChooseFilterWheel";
-            this.BtnChooseFilterWheel.Size = new System.Drawing.Size(122, 23);
+            this.BtnChooseFilterWheel.Size = new System.Drawing.Size(136, 23);
             this.BtnChooseFilterWheel.TabIndex = 11;
             this.BtnChooseFilterWheel.Text = "Choose Filter Wheel";
             this.BtnChooseFilterWheel.UseVisualStyleBackColor = true;
@@ -183,7 +193,9 @@ namespace ASCOM.JustAHub
             // 
             // TabDevices
             // 
+            this.TabDevices.Controls.Add(this.General);
             this.TabDevices.Controls.Add(this.Camera);
+            this.TabDevices.Controls.Add(this.CoverCalibrator);
             this.TabDevices.Controls.Add(this.FilterWheel);
             this.TabDevices.Location = new System.Drawing.Point(12, 12);
             this.TabDevices.Name = "TabDevices";
@@ -191,15 +203,35 @@ namespace ASCOM.JustAHub
             this.TabDevices.Size = new System.Drawing.Size(426, 212);
             this.TabDevices.TabIndex = 15;
             // 
+            // General
+            // 
+            this.General.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.General.Controls.Add(this.ChkLocalServerDebugLog);
+            this.General.Location = new System.Drawing.Point(4, 22);
+            this.General.Name = "General";
+            this.General.Padding = new System.Windows.Forms.Padding(3);
+            this.General.Size = new System.Drawing.Size(418, 186);
+            this.General.TabIndex = 2;
+            this.General.Text = "General";
+            // 
+            // ChkLocalServerDebugLog
+            // 
+            this.ChkLocalServerDebugLog.AutoSize = true;
+            this.ChkLocalServerDebugLog.Location = new System.Drawing.Point(68, 85);
+            this.ChkLocalServerDebugLog.Name = "ChkLocalServerDebugLog";
+            this.ChkLocalServerDebugLog.Size = new System.Drawing.Size(283, 17);
+            this.ChkLocalServerDebugLog.TabIndex = 18;
+            this.ChkLocalServerDebugLog.Text = "Local server debug log (for all devices, requires restart)";
+            this.ChkLocalServerDebugLog.UseVisualStyleBackColor = true;
+            // 
             // Camera
             // 
             this.Camera.BackColor = System.Drawing.Color.LightSkyBlue;
             this.Camera.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Camera.Controls.Add(this.ChkLocalServerDebugLog);
-            this.Camera.Controls.Add(this.ChkDebugLoggingCamera);
+            this.Camera.Controls.Add(this.ChkHardwareLoggingCamera);
             this.Camera.Controls.Add(this.LblCurrentCameraDevice);
             this.Camera.Controls.Add(this.BtnChooseCamera);
-            this.Camera.Controls.Add(this.ChkLogDriverCallsCamera);
+            this.Camera.Controls.Add(this.ChkDriverLoggingCamera);
             this.Camera.Controls.Add(this.label3);
             this.Camera.Controls.Add(this.label2);
             this.Camera.Location = new System.Drawing.Point(4, 22);
@@ -209,12 +241,99 @@ namespace ASCOM.JustAHub
             this.Camera.TabIndex = 0;
             this.Camera.Text = "Camera";
             // 
+            // ChkHardwareLoggingCamera
+            // 
+            this.ChkHardwareLoggingCamera.AutoSize = true;
+            this.ChkHardwareLoggingCamera.Location = new System.Drawing.Point(222, 125);
+            this.ChkHardwareLoggingCamera.Name = "ChkHardwareLoggingCamera";
+            this.ChkHardwareLoggingCamera.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingCamera.TabIndex = 16;
+            this.ChkHardwareLoggingCamera.Text = "Debug log";
+            this.ChkHardwareLoggingCamera.UseVisualStyleBackColor = true;
+            // 
+            // CoverCalibrator
+            // 
+            this.CoverCalibrator.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.CoverCalibrator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CoverCalibrator.Controls.Add(this.ChkHardwareLoggingCoverCalibrator);
+            this.CoverCalibrator.Controls.Add(this.LblCurrentCoverCalibratorDevice);
+            this.CoverCalibrator.Controls.Add(this.BtnChooseCoverCalibrator);
+            this.CoverCalibrator.Controls.Add(this.ChkDriverLoggingCoverCalibrator);
+            this.CoverCalibrator.Controls.Add(this.label4);
+            this.CoverCalibrator.Controls.Add(this.label7);
+            this.CoverCalibrator.Location = new System.Drawing.Point(4, 22);
+            this.CoverCalibrator.Name = "CoverCalibrator";
+            this.CoverCalibrator.Padding = new System.Windows.Forms.Padding(3);
+            this.CoverCalibrator.Size = new System.Drawing.Size(418, 186);
+            this.CoverCalibrator.TabIndex = 3;
+            this.CoverCalibrator.Text = "Cover Calibrator";
+            // 
+            // ChkHardwareLoggingCoverCalibrator
+            // 
+            this.ChkHardwareLoggingCoverCalibrator.AutoSize = true;
+            this.ChkHardwareLoggingCoverCalibrator.Location = new System.Drawing.Point(222, 125);
+            this.ChkHardwareLoggingCoverCalibrator.Name = "ChkHardwareLoggingCoverCalibrator";
+            this.ChkHardwareLoggingCoverCalibrator.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingCoverCalibrator.TabIndex = 22;
+            this.ChkHardwareLoggingCoverCalibrator.Text = "Debug log";
+            this.ChkHardwareLoggingCoverCalibrator.UseVisualStyleBackColor = true;
+            // 
+            // LblCurrentCoverCalibratorDevice
+            // 
+            this.LblCurrentCoverCalibratorDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblCurrentCoverCalibratorDevice.Location = new System.Drawing.Point(164, 43);
+            this.LblCurrentCoverCalibratorDevice.Name = "LblCurrentCoverCalibratorDevice";
+            this.LblCurrentCoverCalibratorDevice.Size = new System.Drawing.Size(247, 18);
+            this.LblCurrentCoverCalibratorDevice.TabIndex = 21;
+            this.LblCurrentCoverCalibratorDevice.Text = "ASCOM.Simulator.Camera";
+            this.LblCurrentCoverCalibratorDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnChooseCoverCalibrator
+            // 
+            this.BtnChooseCoverCalibrator.Location = new System.Drawing.Point(215, 79);
+            this.BtnChooseCoverCalibrator.Name = "BtnChooseCoverCalibrator";
+            this.BtnChooseCoverCalibrator.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseCoverCalibrator.TabIndex = 18;
+            this.BtnChooseCoverCalibrator.Text = "Choose Cover Calibrator";
+            this.BtnChooseCoverCalibrator.UseVisualStyleBackColor = true;
+            this.BtnChooseCoverCalibrator.Click += new System.EventHandler(this.BtnChooseCoverCalibrator_Click);
+            // 
+            // ChkDriverLoggingCoverCalibrator
+            // 
+            this.ChkDriverLoggingCoverCalibrator.AutoSize = true;
+            this.ChkDriverLoggingCoverCalibrator.Location = new System.Drawing.Point(61, 125);
+            this.ChkDriverLoggingCoverCalibrator.Name = "ChkDriverLoggingCoverCalibrator";
+            this.ChkDriverLoggingCoverCalibrator.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingCoverCalibrator.TabIndex = 17;
+            this.ChkDriverLoggingCoverCalibrator.Text = "Log driver calls";
+            this.ChkDriverLoggingCoverCalibrator.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label4.Location = new System.Drawing.Point(66, 43);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(101, 18);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Hosted driver:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(51, 81);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(161, 19);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Select the driver to be hosted ";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // FilterWheel
             // 
             this.FilterWheel.BackColor = System.Drawing.Color.LightSkyBlue;
             this.FilterWheel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FilterWheel.Controls.Add(this.ChkDebugLoggingFilterWheel);
-            this.FilterWheel.Controls.Add(this.ChkLogDriverCallsFilterWheel);
+            this.FilterWheel.Controls.Add(this.ChkHardwareLoggingFilterWheel);
+            this.FilterWheel.Controls.Add(this.ChkDriverLoggingFilterWheel);
             this.FilterWheel.Controls.Add(this.LblCurrentFilterWheelDevice);
             this.FilterWheel.Controls.Add(this.BtnChooseFilterWheel);
             this.FilterWheel.Controls.Add(this.label5);
@@ -226,45 +345,25 @@ namespace ASCOM.JustAHub
             this.FilterWheel.TabIndex = 1;
             this.FilterWheel.Text = "Filter Wheel";
             // 
-            // ChkDebugLoggingCamera
+            // ChkHardwareLoggingFilterWheel
             // 
-            this.ChkDebugLoggingCamera.AutoSize = true;
-            this.ChkDebugLoggingCamera.Location = new System.Drawing.Point(222, 125);
-            this.ChkDebugLoggingCamera.Name = "ChkDebugLoggingCamera";
-            this.ChkDebugLoggingCamera.Size = new System.Drawing.Size(75, 17);
-            this.ChkDebugLoggingCamera.TabIndex = 16;
-            this.ChkDebugLoggingCamera.Text = "Debug log";
-            this.ChkDebugLoggingCamera.UseVisualStyleBackColor = true;
+            this.ChkHardwareLoggingFilterWheel.AutoSize = true;
+            this.ChkHardwareLoggingFilterWheel.Location = new System.Drawing.Point(222, 125);
+            this.ChkHardwareLoggingFilterWheel.Name = "ChkHardwareLoggingFilterWheel";
+            this.ChkHardwareLoggingFilterWheel.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingFilterWheel.TabIndex = 18;
+            this.ChkHardwareLoggingFilterWheel.Text = "Debug log";
+            this.ChkHardwareLoggingFilterWheel.UseVisualStyleBackColor = true;
             // 
-            // ChkDebugLoggingFilterWheel
+            // ChkDriverLoggingFilterWheel
             // 
-            this.ChkDebugLoggingFilterWheel.AutoSize = true;
-            this.ChkDebugLoggingFilterWheel.Location = new System.Drawing.Point(222, 125);
-            this.ChkDebugLoggingFilterWheel.Name = "ChkDebugLoggingFilterWheel";
-            this.ChkDebugLoggingFilterWheel.Size = new System.Drawing.Size(75, 17);
-            this.ChkDebugLoggingFilterWheel.TabIndex = 18;
-            this.ChkDebugLoggingFilterWheel.Text = "Debug log";
-            this.ChkDebugLoggingFilterWheel.UseVisualStyleBackColor = true;
-            // 
-            // ChkLogDriverCallsFilterWheel
-            // 
-            this.ChkLogDriverCallsFilterWheel.AutoSize = true;
-            this.ChkLogDriverCallsFilterWheel.Location = new System.Drawing.Point(61, 125);
-            this.ChkLogDriverCallsFilterWheel.Name = "ChkLogDriverCallsFilterWheel";
-            this.ChkLogDriverCallsFilterWheel.Size = new System.Drawing.Size(97, 17);
-            this.ChkLogDriverCallsFilterWheel.TabIndex = 17;
-            this.ChkLogDriverCallsFilterWheel.Text = "Log driver calls";
-            this.ChkLogDriverCallsFilterWheel.UseVisualStyleBackColor = true;
-            // 
-            // ChkLocalServerDebugLog
-            // 
-            this.ChkLocalServerDebugLog.AutoSize = true;
-            this.ChkLocalServerDebugLog.Location = new System.Drawing.Point(61, 148);
-            this.ChkLocalServerDebugLog.Name = "ChkLocalServerDebugLog";
-            this.ChkLocalServerDebugLog.Size = new System.Drawing.Size(283, 17);
-            this.ChkLocalServerDebugLog.TabIndex = 17;
-            this.ChkLocalServerDebugLog.Text = "Local server debug log (for all devices, requires restart)";
-            this.ChkLocalServerDebugLog.UseVisualStyleBackColor = true;
+            this.ChkDriverLoggingFilterWheel.AutoSize = true;
+            this.ChkDriverLoggingFilterWheel.Location = new System.Drawing.Point(61, 125);
+            this.ChkDriverLoggingFilterWheel.Name = "ChkDriverLoggingFilterWheel";
+            this.ChkDriverLoggingFilterWheel.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingFilterWheel.TabIndex = 17;
+            this.ChkDriverLoggingFilterWheel.Text = "Log driver calls";
+            this.ChkDriverLoggingFilterWheel.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
@@ -285,8 +384,12 @@ namespace ASCOM.JustAHub
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.TabDevices.ResumeLayout(false);
+            this.General.ResumeLayout(false);
+            this.General.PerformLayout();
             this.Camera.ResumeLayout(false);
             this.Camera.PerformLayout();
+            this.CoverCalibrator.ResumeLayout(false);
+            this.CoverCalibrator.PerformLayout();
             this.FilterWheel.ResumeLayout(false);
             this.FilterWheel.PerformLayout();
             this.ResumeLayout(false);
@@ -299,7 +402,7 @@ namespace ASCOM.JustAHub
         private System.Windows.Forms.Button cmdOK;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.PictureBox picASCOM;
-        private System.Windows.Forms.CheckBox ChkLogDriverCallsCamera;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingCamera;
         private System.Windows.Forms.Button BtnChooseCamera;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -311,9 +414,17 @@ namespace ASCOM.JustAHub
         private System.Windows.Forms.TabControl TabDevices;
         private System.Windows.Forms.TabPage Camera;
         private System.Windows.Forms.TabPage FilterWheel;
-        private System.Windows.Forms.CheckBox ChkDebugLoggingCamera;
-        private System.Windows.Forms.CheckBox ChkDebugLoggingFilterWheel;
-        private System.Windows.Forms.CheckBox ChkLogDriverCallsFilterWheel;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingCamera;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingFilterWheel;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingFilterWheel;
+        private System.Windows.Forms.TabPage General;
         private System.Windows.Forms.CheckBox ChkLocalServerDebugLog;
+        private System.Windows.Forms.TabPage CoverCalibrator;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingCoverCalibrator;
+        private System.Windows.Forms.Label LblCurrentCoverCalibratorDevice;
+        private System.Windows.Forms.Button BtnChooseCoverCalibrator;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingCoverCalibrator;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label7;
     }
 }
