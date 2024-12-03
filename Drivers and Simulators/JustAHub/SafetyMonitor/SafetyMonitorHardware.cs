@@ -47,7 +47,7 @@ namespace ASCOM.JustAHub
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", $"Exception creating {SafetyMonitor.ChooserDescription} ({Camera.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", $"Exception creating {SafetyMonitor.ChooserDescription} ({SafetyMonitor.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }

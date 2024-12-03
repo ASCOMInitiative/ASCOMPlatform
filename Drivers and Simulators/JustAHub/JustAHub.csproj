@@ -93,7 +93,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafetyMonitor\SafetyMonitorDriver.cs" />
     <Compile Include="SafetyMonitor\SafetyMonitorHardware.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Hub\Settings.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmMain.cs</DependentUpon>
