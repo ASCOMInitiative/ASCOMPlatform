@@ -467,16 +467,14 @@ namespace ASCOM.DeviceHub
                         }
                     }
 
-                    ShutterState shutterStatus=Service.ShutterStatus;
+                    ShutterState shutterStatus = Service.ShutterStatus;
                     LogActivityLine(ActivityMessageTypes.Status, $"Get ShutterStatus: {shutterStatus} (PollDomeTask)");
 
                     bool slewing = Service.Slewing;
-                    LogActivityLine(ActivityMessageTypes.Status, $"Get Slewing {slewing} (PollDomeTask)");
+                    LogActivityLine(ActivityMessageTypes.Status, $"Get Slewing: {slewing} (PollDomeTask)");
 
-                    bool isMoving = slewing
-                                || shutterStatus == ShutterState.shutterOpening
-                                || shutterStatus == ShutterState.shutterClosing;
-                    LogAppMessage($"SlavedSlewState.IsSlewInProgress: {TelescopeSlewState.IsSlewInProgress}, SlavedSlewState.RA: {TelescopeSlewState.RightAscension}, SlavedSlewState.Declination: {TelescopeSlewState.Declination}, isMoving: {isMoving}, Slewing: {DomeStatus.Slewing}, ShutterStatus{DomeStatus.ShutterStatus}", "PollDomeTask");
+                    bool isMoving = slewing || (shutterStatus == ShutterState.shutterOpening) || (shutterStatus == ShutterState.shutterClosing);
+                    LogActivityLine(ActivityMessageTypes.Other, $"PollDomeTask - Telescope slew in progress: {TelescopeSlewState.IsSlewInProgress}, Telescope target RA: {TelescopeSlewState.RightAscension}, Telescope target declination: {TelescopeSlewState.Declination}, Dome is moving: {isMoving}, Dome is slewing: {slewing}, Dome shutter status: {shutterStatus}");
 
                     if (isMoving)
                     {
@@ -717,8 +715,7 @@ namespace ASCOM.DeviceHub
             if (Double.IsNaN(targetAzimuth) || targetAzimuth < 0.0 || targetAzimuth > 360.0)
             {
                 targetsValid = false;
-                LogActivityLine(ActivityMessageTypes.Commands, "An invalid azimuth value ({0:f2}) was calculated...short circuiting the slew"
-                                , targetAzimuth);
+                LogActivityLine(ActivityMessageTypes.Commands, "An invalid azimuth value ({0:f2}) was calculated...short circuiting the slew", targetAzimuth);
             }
 
             // Validate the calculated altitude appears sane.
@@ -742,41 +739,32 @@ namespace ASCOM.DeviceHub
                 return;
             }
 
-            LogActivityLine(ActivityMessageTypes.Commands, "The calculated dome position is Az: {0:f2}, Alt: {1:f2}.", domeAltAz.X, domeAltAz.Y);
-
             bool moving = false;
 
-            if (IsInRange(targetAzimuth, DomeStatus.Azimuth, Globals.DomeLayout.AzimuthAccuracy))
+            // Change the dome azimuth if necessary
+            if (!IsInRange(targetAzimuth, DomeStatus.Azimuth, Globals.DomeLayout.AzimuthAccuracy)) // Change required
             {
-                LogActivityLine(ActivityMessageTypes.Commands, "The dome azimuth is close to the target azimuth...no slew is needed.");
-            }
-            else
-            {
-                LogActivityLine(ActivityMessageTypes.Commands, "Slaving dome to target azimuth of {0:f2} degrees.", targetAzimuth);
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth:f2} is away from the target azimuth {targetAzimuth:f2} - slaving dome to the telescope azimuth.");
 
-                //Task task = Task.Run( () =>
-                //{
-                //	SlewToAzimuth( targetAzimuth );
-                //	Status.Slewing = true;
-                //	SetFastPolling();
-                //}, CancellationToken.None );
                 SlewToAzimuth(targetAzimuth);
                 moving = true;
             }
+            else // No change required
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth:f2} is close to the target azimuth {targetAzimuth:f2} - no slew required.");
 
-            if (Capabilities.CanSetAltitude && DomeStatus.Altitude < targetAltitude)
+            // Change the dome altitude if necessary
+            if (Capabilities.CanSetAltitude && DomeStatus.Altitude < targetAltitude) // Change required
             {
-                LogActivityLine(ActivityMessageTypes.Commands, "Synchronizing dome to target altitude of {0:f2} degrees.", targetAltitude);
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome altitude {DomeStatus.Altitude:f2} is below the target altitude {targetAltitude:f2} - opening the shutter further.");
 
-                //Task task = Task.Run( () =>
-                //{
-                //	SlewToAltitude( targetAltitude );
-                //}, CancellationToken.None );
                 SlewToAltitude(targetAltitude);
                 moving = true;
             }
+            else // No change required
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome altitude {DomeStatus.Altitude:f2} is above the target altitude {targetAltitude:f2} - no movement required.");
 
-            if (moving)
+            // Update the dome status and set fast polling if the dome is changing azimuth or altitude 
+            if (moving) // Part of the dome is moving
             {
                 DomeStatus = new DevHubDomeStatus(this);
                 SetFastPolling();
