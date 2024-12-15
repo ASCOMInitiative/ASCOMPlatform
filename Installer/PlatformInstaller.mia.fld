@@ -19,3 +19,4 @@ Uninstall previous Platform
 Post install activities - 64bit only
 Post install activities - 32bit only
 Validate installation
+Set up log file and variables

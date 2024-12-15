@@ -341,6 +341,7 @@ namespace ASCOM.DeviceHub
         public void StartFixedSlew(int ndx, double distance)
         {
             MoveDirections direction = JogDirections[ndx].MoveDirection;
+            LogActivityLine(ActivityMessageTypes.Commands, $"StartFixedSlew - Index: {ndx}, Distance: {distance}, Move direction: {direction}, Rate sign: {JogDirections[ndx].RateSign}");
 
             if (IsRaDecSlew(direction))
             {
