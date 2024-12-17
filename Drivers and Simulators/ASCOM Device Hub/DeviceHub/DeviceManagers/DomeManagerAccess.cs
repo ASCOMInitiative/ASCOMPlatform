@@ -713,7 +713,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                LogActivityLine(msgType, $"SlewToAltitude ({altitude:f5}°): {msgEnd}");
+                LogActivityLine(msgType, $"SlewToAltitude ({altitude.ToDMS()}): {msgEnd}");
 
                 if (except != null)
                 {
@@ -745,7 +745,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                LogActivityLine(ActivityMessageTypes.Commands, $"SlewToAzimuth ({azimuth:f5}°): {msgEnd}");
+                LogActivityLine(ActivityMessageTypes.Commands, $"SlewToAzimuth ({azimuth.ToDMS()}): {msgEnd}");
 
                 if (except != null)
                 {

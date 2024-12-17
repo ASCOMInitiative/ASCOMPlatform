@@ -729,10 +729,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                RightAscensionConverter raConverter = new RightAscensionConverter((decimal)rightAscension);
-                DeclinationConverter decConverter = new DeclinationConverter((decimal)declination);
-
-                LogActivityLine(msgType, $"DestinationSideOfPier RA = {raConverter}, Dec = {decConverter}: {msgEnd}.");
+                LogActivityLine(msgType, $"DestinationSideOfPier RA = {rightAscension.ToHMS()}, Dec = {declination.ToDMS()}: {msgEnd}.");
 
                 if (except != null)
                 {
@@ -991,10 +988,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                AzimuthConverter azConverter = new AzimuthConverter((decimal)azimuth);
-                AltitudeConverter altConverter = new AltitudeConverter((decimal)altitude);
-
-                LogActivityLine(msgType, $"SlewToAltAzAsync - Az = {azConverter}, Alt = {altConverter}: {msgEnd}");
+                LogActivityLine(msgType, $"SlewToAltAzAsync - Az = {azimuth.ToDMS()}, Alt = {altitude.ToDMS()}: {msgEnd}");
 
                 if (except != null)
                 {
@@ -1027,10 +1021,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                RightAscensionConverter raConverter = new RightAscensionConverter((decimal)rightAscension);
-                DeclinationConverter decConverter = new DeclinationConverter((decimal)declination);
-
-                LogActivityLine(msgType, $"SlewToCoordinates - RA = {raConverter}, Dec = {decConverter}: {msgEnd}");
+                LogActivityLine(msgType, $"SlewToCoordinates - RA = {rightAscension.ToHMS()}, Dec = {declination.ToDMS()}: {msgEnd}");
 
                 if (except != null)
                 {
@@ -1062,10 +1053,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                RightAscensionConverter raConverter = new RightAscensionConverter((decimal)rightAscension);
-                DeclinationConverter decConverter = new DeclinationConverter((decimal)declination);
-
-                LogActivityLine(msgType, $"SlewToCoordinatesAsync - RA = {raConverter}, Dec {decConverter}: {msgEnd}");
+                LogActivityLine(msgType, $"SlewToCoordinatesAsync - RA = {rightAscension.ToHMS()}, Dec {declination.ToDMS()}: {msgEnd}");
 
                 if (except != null)
                 {
@@ -1113,7 +1101,7 @@ namespace ASCOM.DeviceHub
         {
             ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
             Exception except = null;
-            string msgEnd;
+            string msgEnd="";
             try
             {
                 CheckDevice();
@@ -1129,7 +1117,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                LogActivityLine(msgType, "SlewToTargetAsync: {msgEnd}");
+                LogActivityLine(msgType, $"SlewToTargetAsync: {msgEnd}");
 
                 if (except != null)
                 {
@@ -1193,10 +1181,7 @@ namespace ASCOM.DeviceHub
             }
             finally
             {
-                RightAscensionConverter raConverter = new RightAscensionConverter((decimal)rightAscension);
-                DeclinationConverter decConverter = new DeclinationConverter((decimal)declination);
-
-                LogActivityLine(msgType, $"SyncToCoordinates - RA = {raConverter}, Dec = {decConverter} {msgEnd}");
+                LogActivityLine(msgType, $"SyncToCoordinates - RA = {rightAscension.ToHMS()}, Dec = {declination.ToDMS()} {msgEnd}");
 
                 if (except != null)
                 {

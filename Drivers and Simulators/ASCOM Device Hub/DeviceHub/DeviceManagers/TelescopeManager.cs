@@ -10,6 +10,7 @@ using ASCOM.Astrometry.Transform;
 using ASCOM.DeviceInterface;
 
 using ASCOM.DeviceHub.MvvmMessenger;
+using System.Runtime.CompilerServices;
 
 namespace ASCOM.DeviceHub
 {
@@ -79,7 +80,7 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private SlewInProgressMessage PreviousSlewInProgressMessage { get; set; }
+        private SlewInProgressMessage LastSlewInProgressMessage { get; set; }
 
         #endregion Private Properties
 
@@ -102,7 +103,7 @@ namespace ASCOM.DeviceHub
             PollingPeriod = POLLING_PERIOD_NORMAL;
             PollingChange = new ManualResetEvent(false);
 
-            PreviousSlewInProgressMessage = new SlewInProgressMessage(false);
+            LastSlewInProgressMessage = new SlewInProgressMessage(false);
 
             LogAppMessage("Instance constructor initialization complete.", caller);
         }
@@ -441,10 +442,9 @@ namespace ASCOM.DeviceHub
 
         public void BeginSlewToCoordinatesAsync(double ra, double dec)
         {
-            LogAppMessage($"Method entered", "TelescopeManager.BeginSlewToCoordinatesAsync");
-
             if (!IsConnected || !Capabilities.CanSlewAsync || !IsValidRightAscension(ra) || !IsValidDeclination(dec))
             {
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToCoordinatesAsync - Cannot slew. Not connected or can't slew async or invalid RA or declination");
                 return;
             }
 
@@ -454,18 +454,18 @@ namespace ASCOM.DeviceHub
             {
                 // In case the dome is slaved to us, send it a message to start moving.
 
-                LogAppMessage($"Sending Slew Message", "TelescopeManager.BeginSlewToCoordinatesAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToCoordinatesAsync - Sending Slew Message");
                 SendSlewMessage(ra, dec);
-                LogAppMessage($"Calling SlewToCoordinatesAsync", "TelescopeManager.BeginSlewToCoordinatesAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToCoordinatesAsync - Calling SlewToCoordinatesAsync");
                 SlewToCoordinatesAsync(ra, dec);
-                LogAppMessage($"SlewToCoordinatesAsync returned OK", "TelescopeManager.BeginSlewToCoordinatesAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToCoordinatesAsync - SlewToCoordinatesAsync returned OK");
                 slewed = true;
 
                 SetFastPolling();
             }
             catch (Exception xcp)
             {
-                LogAppMessage($"Exception: {xcp.Message}", "TelescopeManager.BeginSlewToCoordinatesAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToCoordinatesAsync - Exception: {xcp.Message}");
                 throw xcp;
             }
             finally
@@ -475,8 +475,6 @@ namespace ASCOM.DeviceHub
                     throw new Exception("Unable to start the direct slew!!!");
                 }
             }
-            LogAppMessage($"Method exited", "TelescopeManager.BeginSlewToCoordinatesAsync");
-            LogAppMessage($"", "TelescopeManager.BeginSlewToCoordinatesAsync");
         }
 
         public void DoSlewToTarget(bool useSynchronousMethodCall = true)
@@ -528,10 +526,9 @@ namespace ASCOM.DeviceHub
 
         public void BeginSlewToTargetAsync()
         {
-            LogAppMessage($"Method entered", "BeginSlewToTargetAsync");
-
             if (!IsConnected || !Capabilities.CanSlewAsync)
             {
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToTargetAsync - Cannot slew. Not connected or can't slew async or invalid RA or declination");
                 return;
             }
 
@@ -541,18 +538,18 @@ namespace ASCOM.DeviceHub
             {
                 // In case the dome is slaved to us, send it a message to start moving.
 
-                LogAppMessage($"Sending Slew Message", "BeginSlewToTargetAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToTargetAsync - Sending Slew Message");
                 SendSlewMessage(TargetRightAscension, TargetDeclination);
-                LogAppMessage($"Calling SlewToTargetAsync", "BeginSlewToTargetAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToTargetAsync - Calling SlewToTargetAsync");
                 SlewToTargetAsync();
-                LogAppMessage($"SlewToTargetAsync returned OK", "BeginSlewToTargetAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToTargetAsync - SlewToTargetAsync returned OK");
                 slewed = true;
 
                 SetFastPolling();
             }
             catch (Exception xcp)
             {
-                LogAppMessage($"Exception: {xcp.Message}", "BeginSlewToTargetAsync");
+                LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToTargetAsync - Exception: {xcp.Message}");
                 throw xcp;
             }
             finally
@@ -562,8 +559,7 @@ namespace ASCOM.DeviceHub
                     throw new Exception("Unable to start the slew to target!!!");
                 }
             }
-            LogAppMessage($"Method exited", "BeginSlewToTargetAsync");
-            LogAppMessage($"", "BeginSlewToTargetAsync");
+            LogActivityLine(ActivityMessageTypes.Other, $"TelescopeManager.BeginSlewToTargetAsync - Method exited");
         }
 
         public void DoSlewToAltAz(double azimuth, double altitude, bool useSynchronousMethodCall = true)
@@ -685,8 +681,9 @@ namespace ASCOM.DeviceHub
                 SetFastPolling();
 
                 SlewInProgressMessage msg = new SlewInProgressMessage(true, ra, dec, newSide);
+                LogActivityLine(ActivityMessageTypes.Commands, $"StartMeridianFlip is sending a slew in progress message - RA: {msg.RightAscension.ToHMS()}, Declination: {msg.Declination.ToDMS()}, Side of pier: {msg.SideOfPier}, Is slew in progress: {msg.IsSlewInProgress}");
                 Messenger.Default.Send(msg);
-                PreviousSlewInProgressMessage = msg;
+                LastSlewInProgressMessage = msg;
             }
         }
 
@@ -830,16 +827,17 @@ namespace ASCOM.DeviceHub
                         }, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
                     }
 
-                    // Get the device's slewing state directly fro the device rather than relying on the cached value, which can lead to incorrect behaviour due to timing issues
+                    // Get the device's slewing state directly from the device rather than relying on the cached value, which can lead to incorrect behaviour due to timing issues
                     bool slewing = Service.Slewing;
                     LogActivityLine(ActivityMessageTypes.Status, $"Get Slewing: {slewing} (PollScopeTask)");
 
-                    if (PreviousSlewInProgressMessage.IsSlewInProgress && !slewing)
+                    if (LastSlewInProgressMessage.IsSlewInProgress && !slewing)
                     {
-                        LogActivityLine(ActivityMessageTypes.Status,$"PollScopeTask - Cancelling slew in progress state");
+                        LogActivityLine(ActivityMessageTypes.Status, $"PollScopeTask - Cancelling slew in progress state");
                         SlewInProgressMessage msg = new SlewInProgressMessage(false);
+                        LogActivityLine(ActivityMessageTypes.Commands, $"PollScopeTask is sending a slew in progress message - RA: {msg.RightAscension.ToHMS()}, Declination: {msg.Declination.ToDMS()}, Side of pier: {msg.SideOfPier}, Is slew in progress: {msg.IsSlewInProgress}");
                         Messenger.Default.Send(msg);
-                        PreviousSlewInProgressMessage = msg;
+                        LastSlewInProgressMessage = msg;
                     }
 
                     if (!slewing && PollingPeriod != POLLING_PERIOD_NORMAL)
@@ -1040,8 +1038,9 @@ namespace ASCOM.DeviceHub
                 PierSide sideOfPier = GetTargetSideOfPier(targetRA, targetDec);
 
                 SlewInProgressMessage msg = new SlewInProgressMessage(true, targetRA, targetDec, sideOfPier);
+                LogActivityLine(ActivityMessageTypes.Commands, $"SlewScopeToRaDec is sending a slew in progress message - RA: {msg.RightAscension.ToHMS()}, Declination: {msg.Declination.ToDMS()}, Side of pier: {msg.SideOfPier}, Is slew in progress: {msg.IsSlewInProgress}");
                 Messenger.Default.Send(msg);
-                PreviousSlewInProgressMessage = msg;
+                LastSlewInProgressMessage = msg;
             }
         }
 
@@ -1126,8 +1125,9 @@ namespace ASCOM.DeviceHub
 
                 PierSide sideOfPier = GetTargetSideOfPier(targetRA, targetDec);
                 SlewInProgressMessage msg = new SlewInProgressMessage(true, targetRA, targetDec, sideOfPier);
+                LogActivityLine(ActivityMessageTypes.Commands, $"StartFixedSlewRaDec is sending a slew in progress message - RA: {msg.RightAscension.ToHMS()}, Declination: {msg.Declination.ToDMS()}, Side of pier: {msg.SideOfPier}, Is slew in progress: {msg.IsSlewInProgress}");
                 Messenger.Default.Send(msg);
-                PreviousSlewInProgressMessage = msg;
+                LastSlewInProgressMessage = msg;
             }
         }
 
@@ -1486,12 +1486,13 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private void SendSlewMessage(double ra, double dec)
+        private void SendSlewMessage(double ra, double dec, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLineNumber = 0)
         {
             PierSide sideOfPier = GetTargetSideOfPier(ra, dec);
             SlewInProgressMessage msg = new SlewInProgressMessage(true, ra, dec, sideOfPier);
+            LogActivityLine(ActivityMessageTypes.Other, $"Sending a slew in progress message - RA: {msg.RightAscension.ToHMS()}, Declination: {msg.Declination.ToDMS()}, Side of pier: {msg.SideOfPier}, Is slew in progress: {msg.IsSlewInProgress} (from {callerName} line {callerLineNumber})");
             Messenger.Default.Send(msg);
-            PreviousSlewInProgressMessage = msg;
+            LastSlewInProgressMessage = msg;
         }
 
         private ObservableCollection<JogDirection> InitializeJogDirections()

@@ -470,7 +470,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     retval = DomeManager.Service.Altitude;
-                    msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
+                    msg += $"{retval.ToDMS()}{_done}";
                 }
                 catch (Exception ex)
                 {
@@ -557,7 +557,7 @@ namespace ASCOM.DeviceHub
                 try
                 {
                     retval = DomeManager.Service.Azimuth;
-                    msg += $"{Utilities.DegreesToDMS(retval)}{_done}";
+                    msg += $"{retval.ToDMS()}{_done}";
                 }
                 catch (Exception ex)
                 {

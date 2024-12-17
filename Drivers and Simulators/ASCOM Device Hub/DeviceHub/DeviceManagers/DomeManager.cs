@@ -9,6 +9,7 @@ using ASCOM.Astrometry.Transform;
 
 using ASCOM.DeviceHub.MvvmMessenger;
 using System.Diagnostics;
+using ASCOM.Astrometry;
 
 namespace ASCOM.DeviceHub
 {
@@ -54,6 +55,12 @@ namespace ASCOM.DeviceHub
 
         #endregion Static Constructor, Properties, Fields, and Methods
 
+        #region Fields
+
+        private bool ForceSlavedUpdate;
+
+        #endregion
+
         #region Private Properties
 
         private bool DeviceCreated => Service.DeviceCreated;
@@ -92,6 +99,7 @@ namespace ASCOM.DeviceHub
             TelescopeParameters = null;
             TelescopeStatus = null;
             TelescopeSlewState = new SlewInProgressMessage(false);
+            ForceSlavedUpdate = false;
 
             PollingPeriod = POLLING_INTERVAL_NORMAL;
             PollingChange = new ManualResetEvent(false);
@@ -443,23 +451,26 @@ namespace ASCOM.DeviceHub
             double overhead = 0.0;
 
             TimeSpan fastPollExtension = new TimeSpan(0, 0, 3); //Wait 3 seconds after movement stops to return to normal polling.
-            bool previousMoveStatus = false;
+            bool previousDomeMovingStatus = false;
             DateTime returnToNormalPollingTime = DateTime.MinValue;
             int previousPollingPeriod;
 
             while (!taskCancelled)
             {
                 DateTime wakeupTime = DateTime.Now;
-                //Debug.WriteLine( $"Awakened @ {wakeupTime:hh:mm:ss.fff}." );
+
                 previousPollingPeriod = PollingPeriod;
                 PollingPeriod = POLLING_INTERVAL_NORMAL;
-                int fastPollingMs = Convert.ToInt32(FastPollingPeriod * 1000.0);
+                int fastPollingMilliseconds = Convert.ToInt32(FastPollingPeriod * 1000.0);
 
                 if (Service.DeviceAvailable)
                 {
                     UpdateDomeStatusTask();
 
-                    if (!DomeStatus.Slewing)
+                    bool domeSlewing = Service.Slewing;
+                    LogActivityLine(ActivityMessageTypes.Status, $"Get Slewing: {domeSlewing} (PollDomeTask)");
+
+                    if (!domeSlewing | ForceSlavedUpdate)
                     {
                         if (SlewTheSlavedDome(ref nextSlaveAdjustmentTime))
                         {
@@ -470,30 +481,27 @@ namespace ASCOM.DeviceHub
                     ShutterState shutterStatus = Service.ShutterStatus;
                     LogActivityLine(ActivityMessageTypes.Status, $"Get ShutterStatus: {shutterStatus} (PollDomeTask)");
 
-                    bool slewing = Service.Slewing;
-                    LogActivityLine(ActivityMessageTypes.Status, $"Get Slewing: {slewing} (PollDomeTask)");
+                    bool domeIsMoving = domeSlewing || (shutterStatus == ShutterState.shutterOpening) || (shutterStatus == ShutterState.shutterClosing);
+                    LogActivityLine(ActivityMessageTypes.Other, $"PollDomeTask - Telescope slew in progress: {TelescopeSlewState.IsSlewInProgress}, Telescope target RA: {TelescopeSlewState.RightAscension.ToHMS()}, Telescope target declination: {TelescopeSlewState.Declination.ToDMS()}, Dome is moving: {domeIsMoving}, Dome is slewing: {domeSlewing}, Dome shutter status: {shutterStatus}");
 
-                    bool isMoving = slewing || (shutterStatus == ShutterState.shutterOpening) || (shutterStatus == ShutterState.shutterClosing);
-                    LogActivityLine(ActivityMessageTypes.Other, $"PollDomeTask - Telescope slew in progress: {TelescopeSlewState.IsSlewInProgress}, Telescope target RA: {TelescopeSlewState.RightAscension}, Telescope target declination: {TelescopeSlewState.Declination}, Dome is moving: {isMoving}, Dome is slewing: {slewing}, Dome shutter status: {shutterStatus}");
-
-                    if (isMoving)
+                    if (domeIsMoving)
                     {
                         // We are moving, so use the fast polling rate.
 
-                        PollingPeriod = fastPollingMs;
+                        PollingPeriod = fastPollingMilliseconds;
                     }
-                    else if (previousMoveStatus)
+                    else if (previousDomeMovingStatus)
                     {
                         // We stopped moving, so start the timer to return to normal polling.
 
                         returnToNormalPollingTime = DateTime.Now + fastPollExtension;
-                        PollingPeriod = fastPollingMs;
+                        PollingPeriod = fastPollingMilliseconds;
                     }
                     else if (DateTime.Now < returnToNormalPollingTime)
                     {
                         // Continue fast polling.
 
-                        PollingPeriod = fastPollingMs;
+                        PollingPeriod = fastPollingMilliseconds;
                     }
                     else
                     {
@@ -504,7 +512,7 @@ namespace ASCOM.DeviceHub
 
                     // Remember our state for the next time through this loop.
 
-                    previousMoveStatus = isMoving;
+                    previousDomeMovingStatus = domeIsMoving;
 
                     if (PollingPeriod == POLLING_INTERVAL_NORMAL && previousPollingPeriod != POLLING_INTERVAL_NORMAL)
                     {
@@ -563,6 +571,8 @@ namespace ASCOM.DeviceHub
             ActivityMessageTypes msgType = ActivityMessageTypes.Commands;
             DateTime returnTime = nextAdjustmentTime;
 
+            LogActivityLine(msgType, $"SlewTheSlavedDome - Is dome slaved: {Globals.IsDomeSlaved}");
+
             // Check whether the done is slaved to the telescope
             if (Globals.IsDomeSlaved) // Dome is slaved to the telescope
             {
@@ -572,15 +582,28 @@ namespace ASCOM.DeviceHub
 
                 SlewInProgressMessage telescopeSlewState = TelescopeSlewState;
 
+                LogActivityLine(msgType, $"SlewTheSlavedDome - telescopeSlewState {(telescopeSlewState is null?"is null":"has been set")}, Telescope slew in progress: {telescopeSlewState?.IsSlewInProgress}");
+
                 // Check whether the telescope is currently slewing
                 if (telescopeSlewState != null && telescopeSlewState.IsSlewInProgress) // The telescope is slewing
                 {
                     // Check whether the dome is slewing
-                    if (!DomeStatus.Slewing || Globals.UseCompositeSlewingFlag) // The dome is not slewing
+                    bool slewing = Slewing;
+                    LogActivityLine(ActivityMessageTypes.Status, $"Get Slewing: {slewing} (SlewTheSlavedDome)");
+
+                    LogActivityLine(msgType, $"SlewTheSlavedDome - ForceSlavedUpdate: {ForceSlavedUpdate}, Dome is slewing: {slewing}, Use composite slewing flag: {Globals.UseCompositeSlewingFlag}");
+                    if (ForceSlavedUpdate | !slewing | Globals.UseCompositeSlewingFlag) // The dome is not slewing or the telescope has just been slewed to new coordinates
                     {
                         // The telescope is slewing and we are slaved but not slewing, so calculate the current Alt/Az coordinates corresponding to the scope's target RA/Dec and slew the dome to the Alt/Az position if required.
 
-                        LogActivityLine(msgType, "Dome position recalculation due to telescope slew-in-progress.");
+                        LogActivityLine(msgType, $"Re-calculating Dome position due to telescope slew-in-progress. Forced update: {ForceSlavedUpdate}, Slewing: {slewing}, Composite slewing flag: {Globals.UseCompositeSlewingFlag}");
+
+                        // Clear the forced update flag if set
+                        if (ForceSlavedUpdate)
+                        {
+                            LogActivityLine(ActivityMessageTypes.Other, $"Resetting ForceSlavedUpdate to False");
+                            ForceSlavedUpdate = false;
+                        }
 
                         // Create a Transform object and set the site parameters
                         Transform xform = new Transform
@@ -610,19 +633,19 @@ namespace ASCOM.DeviceHub
                             Point scopeTargetPosition = new Point(xform.AzimuthTopocentric, xform.ElevationTopocentric);
 
                             // Get the hour angle of the telescope's destination position.
-                            double localHourAngle = TelescopeStatus.CalculateHourAngle(TelescopeSlewState.RightAscension);
+                            double localHourAngle = TelescopeStatus.CalculateHourAngle(telescopeSlewState.RightAscension);
 
                             // Slave the dome to the target Alt/Az. The dome may or may not actually move depending on how far the new dome Alt/Az is from the current dome Alt/Az
-                            SlaveDomePointing(scopeTargetPosition, localHourAngle, TelescopeSlewState.SideOfPier);
+                            SlaveDomePointing(scopeTargetPosition, localHourAngle, telescopeSlewState.SideOfPier);
                             retval = true;
                         }
                         catch (TransformUninitialisedException xcp)
                         {
                             LogActivityLine(msgType, "Attempting to calculate the slaved dome azimuth. Details follow:");
                             LogActivityLine(msgType, xcp.Message);
-                            LogActivityLine(msgType, $"Transform Error site location:     latitude = {xform.SiteLatitude:F5}, longitude = {xform.SiteLongitude:F5}, elevation = {xform.SiteElevation:F0}");
+                            LogActivityLine(msgType, $"Transform Error site location:     latitude = {xform.SiteLatitude.ToDMS()}, longitude = {xform.SiteLongitude.ToDMS()}, elevation = {xform.SiteElevation:F0}");
                             LogActivityLine(msgType, $"Transform Error coordinate system: coordinateType = {coordinateType}");
-                            LogActivityLine(msgType, $"Transform Error target position:   RA = {telescopeSlewState.RightAscension}, Dec = {telescopeSlewState.Declination}");
+                            LogActivityLine(msgType, $"Transform Error target position:   RA = {telescopeSlewState.RightAscension.ToHMS()}, Dec = {telescopeSlewState.Declination.ToDMS()}");
                         }
                         catch (Exception xcp)
                         {
@@ -689,7 +712,7 @@ namespace ASCOM.DeviceHub
 
                 sideOfPier = (localHourAngle < 0.0) ? PierSide.pierWest : PierSide.pierEast;
 
-                LogActivityLine(ActivityMessageTypes.Commands, "Dome Slaving calculated pier side as {0}", sideOfPier);
+                LogActivityLine(ActivityMessageTypes.Commands, $"Dome Slaving calculated pier side as {sideOfPier}");
             }
 
             if (sideOfPier == PierSide.pierUnknown)
@@ -699,7 +722,7 @@ namespace ASCOM.DeviceHub
                 return;
             }
 
-            LogActivityLine(ActivityMessageTypes.Commands, "Slaving the dome to telescope Az: {0:f2}, Alt: {1:f2}, HA: {2:f5}, SOP: {3}.", scopePosition.X, scopePosition.Y, localHourAngle, sideOfPier);
+            LogActivityLine(ActivityMessageTypes.Commands, $"Slaving the dome to telescope Az: {scopePosition.X.ToDMS()}, Alt: {scopePosition.Y.ToDMS()}, HA: {localHourAngle.ToHMS()}, SOP: {sideOfPier}.");
 
             Point domeAltAz = GetDomeCoord(scopePosition, localHourAngle, sideOfPier);
             double targetAzimuth = domeAltAz.X;
@@ -715,7 +738,7 @@ namespace ASCOM.DeviceHub
             if (Double.IsNaN(targetAzimuth) || targetAzimuth < 0.0 || targetAzimuth > 360.0)
             {
                 targetsValid = false;
-                LogActivityLine(ActivityMessageTypes.Commands, "An invalid azimuth value ({0:f2}) was calculated...short circuiting the slew", targetAzimuth);
+                LogActivityLine(ActivityMessageTypes.Commands, $"An invalid azimuth value ({targetAzimuth.ToDMS()}) was calculated...short circuiting the slew");
             }
 
             // Validate the calculated altitude appears sane.
@@ -728,7 +751,7 @@ namespace ASCOM.DeviceHub
                 if (Capabilities.CanSetAltitude)
                 {
                     targetsValid = false;
-                    LogActivityLine(ActivityMessageTypes.Commands, "An invalid altitude value ({0:f2}) was calculated...short circuiting the slew", targetAltitude);
+                    LogActivityLine(ActivityMessageTypes.Commands, $"An invalid altitude value ({targetAltitude.ToDMS()}) was calculated...short circuiting the slew");
                 }
             }
 
@@ -744,24 +767,24 @@ namespace ASCOM.DeviceHub
             // Change the dome azimuth if necessary
             if (!IsInRange(targetAzimuth, DomeStatus.Azimuth, Globals.DomeLayout.AzimuthAccuracy)) // Change required
             {
-                LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth:f2} is away from the target azimuth {targetAzimuth:f2} - slaving dome to the telescope azimuth.");
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth.ToDMS()} is away from the target azimuth {targetAzimuth.ToDMS()} - slaving dome to the telescope azimuth.");
 
                 SlewToAzimuth(targetAzimuth);
                 moving = true;
             }
             else // No change required
-                LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth:f2} is close to the target azimuth {targetAzimuth:f2} - no slew required.");
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth.ToDMS()} is close to the target azimuth {targetAzimuth.ToDMS()} - no slew required.");
 
             // Change the dome altitude if necessary
             if (Capabilities.CanSetAltitude && DomeStatus.Altitude < targetAltitude) // Change required
             {
-                LogActivityLine(ActivityMessageTypes.Commands, $"The dome altitude {DomeStatus.Altitude:f2} is below the target altitude {targetAltitude:f2} - opening the shutter further.");
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome altitude {DomeStatus.Altitude.ToDMS()} is below the target altitude {targetAltitude.ToDMS()} - opening the shutter further.");
 
                 SlewToAltitude(targetAltitude);
                 moving = true;
             }
             else // No change required
-                LogActivityLine(ActivityMessageTypes.Commands, $"The dome altitude {DomeStatus.Altitude:f2} is above the target altitude {targetAltitude:f2} - no movement required.");
+                LogActivityLine(ActivityMessageTypes.Commands, $"The dome altitude {DomeStatus.Altitude.ToDMS()} is above the target altitude {targetAltitude.ToDMS()} - no movement required.");
 
             // Update the dome status and set fast polling if the dome is changing azimuth or altitude 
             if (moving) // Part of the dome is moving
@@ -817,7 +840,6 @@ namespace ASCOM.DeviceHub
             }
             catch (Exception xcp)
             {
-                string msg = xcp.ToString();
                 except = xcp;
             }
 
@@ -935,13 +957,26 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        /// <summary>
+        /// Here we are notified when a telescope slew is initiated.
+        /// </summary>
+        /// <param name="action"></param>
         private void InitiateSlavedSlew(SlewInProgressMessage action)
         {
-            // Here we are notified when a telescope slew is initiated.
             // Save the message data and wake up the polling loop.
-
+            LogActivityLine(ActivityMessageTypes.Other, $"Received a telescope slew in progress message - RA: {action.RightAscension.ToHMS()}, Declination: {action.Declination.ToDMS()}, Side of pier: {action.SideOfPier}, Is slew in progress: {action.IsSlewInProgress}");
             TelescopeSlewState = action;
             SetFastPolling();
+
+            // Ensure that the next dome slaved update operates on the coordinates received from the telescope regardless of whether or not the dome is already moving
+            if (!(action is null))
+            {
+                if (Globals.IsDomeSlaved & action.IsSlewInProgress)
+                {
+                    LogActivityLine(ActivityMessageTypes.Other, $"Setting ForceSlavedUpdate to True");
+                    ForceSlavedUpdate = true;
+                }
+            }
         }
 
         #endregion Helper Methods

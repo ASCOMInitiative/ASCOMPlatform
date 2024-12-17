@@ -99,6 +99,7 @@
       <DependentUpon>DomeDriverSetupDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dome Driver\DomeDriverSetupDialogViewModel.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Focuser Driver\FocuserDriver.cs" />
     <Compile Include="Focuser Driver\FocuserDriverSetupDialogView.xaml.cs">
       <DependentUpon>FocuserDriverSetupDialogView.xaml</DependentUpon>
