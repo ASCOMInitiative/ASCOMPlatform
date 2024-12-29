@@ -228,8 +228,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.VsixWizard (VS2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMVsixTemplateInstaller (VS2022)", "DriverTemplates\VSIXInstaller\ASCOMVsixTemplateInstaller2022\ASCOMVsixTemplateInstaller (VS2022).csproj", "{2DF1D280-AC88-4A2D-883C-9B7A3F52F513}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host Hub", "Host Hub", "{E1D000FE-2312-4068-B7E0-04E1D713CA4C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solution Items", "{50BF53C3-616D-4A8B-AC3B-11C410601EC8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
