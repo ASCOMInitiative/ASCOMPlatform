@@ -9,7 +9,7 @@
 		<PackageProjectUrl>https://ascom-standards.org/</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>The ASCOM Initiative</Authors>
-		<Copyright>(c) ASCOM Initiative 2024</Copyright>
+		<Copyright>(c) ASCOM Initiative 2025</Copyright>
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
 		<PackageId>ASCOM.Exception.Library</PackageId>
 		<Description>Exception definitions common to both COM and Alpaca devices.</Description>

@@ -7,7 +7,7 @@
 // of the application settings xml file.
 
 [assembly: AssemblyCompany( "The ASCOM Initiative" )]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark( "" )]
 
 // Version information for an assembly consists of the following four values:

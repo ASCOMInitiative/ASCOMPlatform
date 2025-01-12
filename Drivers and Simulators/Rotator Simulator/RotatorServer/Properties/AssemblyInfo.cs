@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Rotator Simulator")]
 [assembly: AssemblyDescription("ASCOM multi-instance server for RotatorSim.Rotator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2007, Robert B. Denny Copyright © ASCOM Initiative 2024")]
+[assembly: AssemblyCopyright("Copyright © 2007, Robert B. Denny Copyright © ASCOM Initiative 2025")]
 
 [assembly: ComVisibleAttribute(false)]
 

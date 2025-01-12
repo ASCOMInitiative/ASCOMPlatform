@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Peter Simpson")]
 [assembly: AssemblyProduct("TestConsoleApp(CS)")]
-[assembly: AssemblyCopyright("Copyright © Peter Simpson 2024")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

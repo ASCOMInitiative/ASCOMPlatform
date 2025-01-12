@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM Profile Store Visualiser")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("Profile Explorer")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark("")]
 
 [assembly: ComVisible(false)]

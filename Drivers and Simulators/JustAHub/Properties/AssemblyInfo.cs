@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM JustAHub")]
-[assembly: AssemblyCopyright("Copyright © 2024 The ASCOM Initiative")]
+[assembly: AssemblyCopyright("Copyright © The ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

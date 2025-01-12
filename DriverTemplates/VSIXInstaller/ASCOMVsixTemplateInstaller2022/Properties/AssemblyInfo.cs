@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ASCOMVsixTemplateInstaller")]
-[assembly: AssemblyCopyright("2024 ASCOM Initiative")]
+[assembly: AssemblyCopyright("The ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Diagnostics tool for ASCOM Environment")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Diagnostics")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2024")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark("")]
 
 [assembly: ComVisible(false)]

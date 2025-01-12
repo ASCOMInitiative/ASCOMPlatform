@@ -14,7 +14,7 @@
 		<Company>ASCOM</Company>
 		<Product>ASCOM.DeviceInterfaces</Product>
 		<Description>ASCOM device interfaces for Platform 7</Description>
-		<Copyright>Copyright © ASCOM Initiative 2024</Copyright>
+		<Copyright>Copyright © ASCOM Initiative 2025</Copyright>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<RegisterForComInterop>false</RegisterForComInterop>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>

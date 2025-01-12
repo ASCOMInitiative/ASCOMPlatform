@@ -9,7 +9,7 @@
 		<PackageProjectUrl>https://ascom-standards.org/</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Tim Long, Peter Simpson</Authors>
-		<Copyright>(c) ASCOM Initiative 2024</Copyright>
+		<Copyright>(c) ASCOM Initiative 2025</Copyright>
 		<PackageIcon>ASCOMBoarderless.png</PackageIcon>
 		<PackageId>ASCOM7.BuildEnvironment.Support</PackageId>
 		<Description>This package contains ASCOM run-time executables that are normally installed by ASCOM Platform 7. Most ASCOM application and driver authors DO NOT need this package.

@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("Peter Simpson")>
 <Assembly: AssemblyProduct("DriverTemplate(VB)")>
-<Assembly: AssemblyCopyright("Copyright © Peter Simpson 2024")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

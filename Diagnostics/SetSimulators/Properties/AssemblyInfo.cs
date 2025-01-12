@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SetSimulators")]
-[assembly: AssemblyCopyright("Copyright © ASCOM 2024")]
+[assembly: AssemblyCopyright("Copyright © The ASCOM Initiative 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
