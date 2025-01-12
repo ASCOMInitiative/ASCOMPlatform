@@ -1,5 +1,4 @@
-﻿Check Application Requirements
-Main Setup Dialogue
+﻿Main Setup Dialogue
 Start installation
 Check Application Pre-Requisites
 Set Registry Keys
@@ -18,5 +17,9 @@ Set Profile ACL
 Uninstall previous Platform
 Post install activities - 64bit only
 Post install activities - 32bit only
-Validate installation
 Set up log file and variables
+Validate installation
+Install Platform files
+Create shortcuts
+Post install activities - 32bit and 64bit
+Install complete dialogue
