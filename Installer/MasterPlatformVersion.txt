@@ -1,7 +1,7 @@
 7
 0
 3
-3
+4
 
 The first line of this file must contain the major Platform version number
 The second line of this file must contain the minor Platform version number
@@ -26,7 +26,7 @@ And for the first release candidate for Platform 7.0 the first four lines would 
 7
 0
 0
--rc.1
+1
 ===========
 
 When version numbers are constructed by the installer the number of GIT commits is added as the fourth version number component
