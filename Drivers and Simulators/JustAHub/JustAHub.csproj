@@ -160,7 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Common.Components">
-      <Version>2.0.9-rc.5</Version>
+      <Version>2.0.9</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
