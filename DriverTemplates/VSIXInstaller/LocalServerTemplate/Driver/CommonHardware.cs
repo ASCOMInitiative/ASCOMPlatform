@@ -23,7 +23,12 @@ using ASCOM.DeviceInterface;
 namespace TEMPLATENAMESPACE
 {
     //
-    // TODO Replace the not implemented exceptions with code to implement the function or throw the appropriate ASCOM exception.
+    // TODO Customise the InitialiseHardware() method with code to set up a communication path to your hardware and validate that the hardware exists
+    //
+    // TODO Customise the SetConnected() method with code to connect to and disconnect from your hardware
+    // NOTE You should not need to customise the code in the Connecting, Connect() and Disconnect() members as these are already fully implemented and call SetConnected() when appropriate.
+    //
+    // TODO Replace the not implemented exceptions with code to implement the functions or throw the appropriate ASCOM exceptions.
     //
 
     /// <summary>
@@ -72,7 +77,7 @@ namespace TEMPLATENAMESPACE
             catch (Exception ex)
             {
                 try { LogMessage("TEMPLATEHARDWARECLASS", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", "Exception creating TEMPLATEDEVICEID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"TEMPLATEHARDWARECLASS - {ex.Message}\r\n{ex}", $"Exception creating {TEMPLATEDEVICECLASS.DriverProgId}", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -86,7 +91,9 @@ namespace TEMPLATENAMESPACE
             // This method will be called every time a new ASCOM client loads your driver
             LogMessage("InitialiseHardware", $"Start.");
 
-            // Make sure that "one off" activities are only undertaken once
+            // Add any code that you want to run every time a client connects to your driver here
+
+            // Add any code that you only want to run when the first client connects in the if (runOnce == false) block below
             if (runOnce == false)
             {
                 LogMessage("InitialiseHardware", $"Starting one-off initialisation.");
@@ -102,6 +109,7 @@ namespace TEMPLATENAMESPACE
                 LogMessage("InitialiseHardware", "Completed basic initialisation");
 
                 // Add your own "one off" device initialisation here e.g. validating existence of hardware and setting up communications
+                // If you are using a serial COM port you will find the COM port name selected by the user through the setup dialogue in the comPort variable.
 
                 LogMessage("InitialiseHardware", $"One-off initialisation complete.");
                 runOnce = true; // Set the flag to ensure that this code is not run again
