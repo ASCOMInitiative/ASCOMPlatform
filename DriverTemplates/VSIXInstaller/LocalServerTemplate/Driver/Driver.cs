@@ -440,9 +440,9 @@ namespace TEMPLATENAMESPACE
         {
             try
             {
-                if (connectedState)
+                if (!connectedState)
                 {
-                    LogMessage("Disconnect", "Device already connected, ignoring method");
+                    LogMessage("Disconnect", "Device already disconnected, ignoring method");
                     return;
                 }
 
