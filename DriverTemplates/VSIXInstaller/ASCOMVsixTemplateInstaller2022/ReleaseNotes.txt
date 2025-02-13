@@ -1,7 +1,2 @@
-﻿This Release
-The local server template name been changed from local server to ASCOM Driver
-
-Release 6.6.3713
-To conform with the ASCOM SafetyMonitor device specification the SafetyMonitor driver template now defaults IsSafe to False when the driver is not connected.
-Local server drivers are the most effective way to deliver drivers because they provide built-in "hub" functionality and isolate the driver from the application by running it in a separate process.
-The local server template is now much easier to use than in past templates and in consequence all in-process driver templates have been removed from this release.
+﻿1. Fixed a logic error in the HardwareClass.Disconnct method.
+2. Added further notes on how to customise the hardware class when implementing the driver.
