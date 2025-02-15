@@ -13,6 +13,7 @@ namespace ASCOM.JustAHub
         string newCameraProgId;
         string newFilterWheelProgId;
         string newCoverCalibratorProgId;
+        string newFocuserProgId;
         readonly string callingDeviceType;
 
         #region Initialisation and form load
@@ -70,6 +71,16 @@ namespace ASCOM.JustAHub
                 ChkHardwareLoggingFilterWheel.Checked = Settings.FilterWheelHardwareLogging;
                 tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.FilterWheelHardwareLogging}");
 
+                // Focuser values
+                LblCurrentFocuserDevice.Text = $"{Settings.FocuserHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted focuser ProgID: {Settings.FocuserHostedProgId}");
+
+                ChkDriverLoggingFocuser.Checked = Settings.FocuserDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.FocuserDriverLogging}");
+
+                ChkHardwareLogingFocuser.Checked = Settings.FocuserHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.FocuserHardwareLogging}");
+
                 // Select the appropriate tab
                 switch (callingDeviceType.ToUpperInvariant())
                 {
@@ -83,6 +94,10 @@ namespace ASCOM.JustAHub
 
                     case "FILTERWHEEL":
                         TabDevices.SelectTab("FilterWheel");
+                        break;
+
+                    case "FOCUSER":
+                        TabDevices.SelectTab("Focuser");
                         break;
 
                     default:
@@ -132,6 +147,12 @@ namespace ASCOM.JustAHub
             Settings.FilterWheelHardwareLogging = ChkHardwareLoggingFilterWheel.Checked;
             if (!string.IsNullOrEmpty(newFilterWheelProgId)) // Update the camera ProgID if a new one has been chosen.
                 Settings.FilterWheelHostedProgId = newFilterWheelProgId;
+
+            // Save focuser settings
+            Settings.FocuserDriverLogging = ChkDriverLoggingFocuser.Checked;
+            Settings.FocuserHardwareLogging = ChkHardwareLogingFocuser.Checked;
+            if (!string.IsNullOrEmpty(newFocuserProgId)) // Update the camera ProgID if a new one has been chosen.
+                Settings.FocuserHostedProgId = newFocuserProgId;
         }
 
         private void CmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -176,6 +197,11 @@ namespace ASCOM.JustAHub
             newFilterWheelProgId = HandleChooserClick(FilterWheelHardware.TL, "FilterWheel", Settings.FilterWheelHostedProgId, LblCurrentFilterWheelDevice);
         }
 
+        private void BtnChooseFocuser_Click(object sender, EventArgs e)
+        {
+            newFocuserProgId = HandleChooserClick(FocuserHardware.TL, "Focuser", Settings.FocuserHostedProgId, LblCurrentFocuserDevice);
+        }
+
         #endregion
 
         #region Support code
@@ -202,5 +228,6 @@ namespace ASCOM.JustAHub
         }
 
         #endregion
+
     }
 }

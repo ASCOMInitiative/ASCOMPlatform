@@ -16,7 +16,7 @@ namespace ASCOM.JustAHub
         private const string CAMERA_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
         private const string COVERCALIBRATOR_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string COVERCALIBRATOR_PROGID_DEFAULT = "ASCOM.Simulator.CoverCalibrator";
         private const string FILTERWHEEL_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string FILTERWHEEL_PROGID_DEFAULT = "ASCOM.Simulator.FilterWheel";
-        private const string FOCUSER_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string FOCUSER_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
+        private const string FOCUSER_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string FOCUSER_PROGID_DEFAULT = "ASCOM.Simulator.Focuser";
         private const string SAFETYMONITOR_PROGID_PROFILE_NAME = "Hosted ProgID"; internal const string SAFETYMONITOR_PROGID_DEFAULT = "ASCOM.Simulator.SafetyMonitor";
 
         static Settings()

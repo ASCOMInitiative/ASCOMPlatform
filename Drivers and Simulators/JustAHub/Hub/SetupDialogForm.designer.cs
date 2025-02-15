@@ -56,12 +56,20 @@ namespace ASCOM.JustAHub
             this.FilterWheel = new System.Windows.Forms.TabPage();
             this.ChkHardwareLoggingFilterWheel = new System.Windows.Forms.CheckBox();
             this.ChkDriverLoggingFilterWheel = new System.Windows.Forms.CheckBox();
+            this.Focuser = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLogingFocuser = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingFocuser = new System.Windows.Forms.CheckBox();
+            this.LblCurrentFocuserDevice = new System.Windows.Forms.Label();
+            this.BtnChooseFocuser = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.TabDevices.SuspendLayout();
             this.General.SuspendLayout();
             this.Camera.SuspendLayout();
             this.CoverCalibrator.SuspendLayout();
             this.FilterWheel.SuspendLayout();
+            this.Focuser.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -197,6 +205,7 @@ namespace ASCOM.JustAHub
             this.TabDevices.Controls.Add(this.Camera);
             this.TabDevices.Controls.Add(this.CoverCalibrator);
             this.TabDevices.Controls.Add(this.FilterWheel);
+            this.TabDevices.Controls.Add(this.Focuser);
             this.TabDevices.Location = new System.Drawing.Point(12, 12);
             this.TabDevices.Name = "TabDevices";
             this.TabDevices.SelectedIndex = 0;
@@ -365,6 +374,82 @@ namespace ASCOM.JustAHub
             this.ChkDriverLoggingFilterWheel.Text = "Log driver calls";
             this.ChkDriverLoggingFilterWheel.UseVisualStyleBackColor = true;
             // 
+            // Focuser
+            // 
+            this.Focuser.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.Focuser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Focuser.Controls.Add(this.ChkHardwareLogingFocuser);
+            this.Focuser.Controls.Add(this.ChkDriverLoggingFocuser);
+            this.Focuser.Controls.Add(this.LblCurrentFocuserDevice);
+            this.Focuser.Controls.Add(this.BtnChooseFocuser);
+            this.Focuser.Controls.Add(this.label8);
+            this.Focuser.Controls.Add(this.label9);
+            this.Focuser.Location = new System.Drawing.Point(4, 22);
+            this.Focuser.Name = "Focuser";
+            this.Focuser.Padding = new System.Windows.Forms.Padding(3);
+            this.Focuser.Size = new System.Drawing.Size(418, 186);
+            this.Focuser.TabIndex = 4;
+            this.Focuser.Text = "Focuser";
+            // 
+            // ChkHardwareLogingFocuser
+            // 
+            this.ChkHardwareLogingFocuser.AutoSize = true;
+            this.ChkHardwareLogingFocuser.Location = new System.Drawing.Point(222, 125);
+            this.ChkHardwareLogingFocuser.Name = "ChkHardwareLogingFocuser";
+            this.ChkHardwareLogingFocuser.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLogingFocuser.TabIndex = 24;
+            this.ChkHardwareLogingFocuser.Text = "Debug log";
+            this.ChkHardwareLogingFocuser.UseVisualStyleBackColor = true;
+            // 
+            // ChkDriverLoggingFocuser
+            // 
+            this.ChkDriverLoggingFocuser.AutoSize = true;
+            this.ChkDriverLoggingFocuser.Location = new System.Drawing.Point(61, 125);
+            this.ChkDriverLoggingFocuser.Name = "ChkDriverLoggingFocuser";
+            this.ChkDriverLoggingFocuser.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingFocuser.TabIndex = 23;
+            this.ChkDriverLoggingFocuser.Text = "Log driver calls";
+            this.ChkDriverLoggingFocuser.UseVisualStyleBackColor = true;
+            // 
+            // LblCurrentFocuserDevice
+            // 
+            this.LblCurrentFocuserDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblCurrentFocuserDevice.Location = new System.Drawing.Point(164, 43);
+            this.LblCurrentFocuserDevice.Name = "LblCurrentFocuserDevice";
+            this.LblCurrentFocuserDevice.Size = new System.Drawing.Size(246, 18);
+            this.LblCurrentFocuserDevice.TabIndex = 22;
+            this.LblCurrentFocuserDevice.Text = "ASCOM.Simulator.Focuser";
+            this.LblCurrentFocuserDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnChooseFocuser
+            // 
+            this.BtnChooseFocuser.Location = new System.Drawing.Point(215, 79);
+            this.BtnChooseFocuser.Name = "BtnChooseFocuser";
+            this.BtnChooseFocuser.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseFocuser.TabIndex = 19;
+            this.BtnChooseFocuser.Text = "Choose Focuser";
+            this.BtnChooseFocuser.UseVisualStyleBackColor = true;
+            this.BtnChooseFocuser.Click += new System.EventHandler(this.BtnChooseFocuser_Click);
+            // 
+            // label8
+            // 
+            this.label8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label8.Location = new System.Drawing.Point(66, 43);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(101, 18);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "Hosted driver:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(48, 81);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(161, 19);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Select the driver to be hosted";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -392,6 +477,8 @@ namespace ASCOM.JustAHub
             this.CoverCalibrator.PerformLayout();
             this.FilterWheel.ResumeLayout(false);
             this.FilterWheel.PerformLayout();
+            this.Focuser.ResumeLayout(false);
+            this.Focuser.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -426,5 +513,12 @@ namespace ASCOM.JustAHub
         private System.Windows.Forms.CheckBox ChkDriverLoggingCoverCalibrator;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TabPage Focuser;
+        private System.Windows.Forms.CheckBox ChkHardwareLogingFocuser;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingFocuser;
+        private System.Windows.Forms.Label LblCurrentFocuserDevice;
+        private System.Windows.Forms.Button BtnChooseFocuser;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
