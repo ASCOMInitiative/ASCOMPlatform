@@ -493,9 +493,9 @@ namespace ASCOM.JustAHub
             {
                 try
                 {
-                    CheckConnected("AbortExposure");
+                    CheckConnected("BayerOffsetX");
                     short bayerOffsetX = CameraHardware.BayerOffsetX;
-                    LogMessage("AbortExposure", bayerOffsetX.ToString());
+                    LogMessage("BayerOffsetX", bayerOffsetX.ToString());
                     return bayerOffsetX;
                 }
                 catch (Exception ex)
