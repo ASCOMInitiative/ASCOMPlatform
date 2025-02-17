@@ -469,8 +469,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.Absolute, LogMessage);
+                return GetValue(() => FocuserHardware.Absolute);
             }
         }
 
@@ -478,8 +477,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.IsMoving, LogMessage);
+                return GetValue(() => FocuserHardware.IsMoving);
             }
         }
 
@@ -499,8 +497,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.MaxIncrement, LogMessage);
+                return GetValue(() => FocuserHardware.MaxIncrement);
             }
         }
 
@@ -508,8 +505,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.MaxStep, LogMessage);
+                return GetValue(() => FocuserHardware.MaxStep);
             }
         }
 
@@ -517,8 +513,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.Position, LogMessage);
+                return GetValue(() => FocuserHardware.Position);
             }
         }
 
@@ -526,8 +521,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.StepSize, LogMessage);
+                return GetValue(() => FocuserHardware.StepSize);
             }
         }
 
@@ -535,14 +529,12 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.TempComp, LogMessage);
+                return GetValue(() => FocuserHardware.TempComp);
             }
             set
             {
-                CheckConnected();
                 LogMessage("TempComp", $"Requested state: {value}");
-                Hub.CallMember(() => FocuserHardware.TempComp = value, LogMessage);
+                CallMember(() => FocuserHardware.TempComp = value);
             }
         }
 
@@ -550,8 +542,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.TempCompAvailable, LogMessage);
+                return GetValue(() => FocuserHardware.TempCompAvailable);
             }
         }
 
@@ -559,22 +550,19 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                CheckConnected();
-                return Hub.GetValue(() => FocuserHardware.Temperature, LogMessage);
+                return GetValue(() => FocuserHardware.Temperature);
             }
         }
 
         public void Halt()
         {
-            CheckConnected();
-            Hub.CallMember(() => FocuserHardware.Halt(), LogMessage);
+            CallMember(() => FocuserHardware.Halt());
         }
 
         public void Move(int position)
         {
-            CheckConnected();
             LogMessage("Move", $"Requested position: {position}");
-            Hub.CallMember(() => FocuserHardware.Move(position), LogMessage);
+            CallMember(() => FocuserHardware.Move(position));
         }
 
         #endregion
@@ -585,7 +573,7 @@ namespace ASCOM.JustAHub
         /// Use this function to throw an exception if we aren't connected to the hardware
         /// </summary>
         /// <param name="message"></param>
-        private void CheckConnected([CallerMemberName] string memberName = "Unknown Member")
+        private void CheckConnected(string memberName)
         {
             if (!FocuserHardware.IsConnected(uniqueId))
             {
@@ -699,6 +687,58 @@ namespace ASCOM.JustAHub
 
         internal static string ProgId { get; private set; }
         internal static string ChooserDescription { get; private set; }
+
+        /// <summary>
+        /// Get a value from an interface member and log the result
+        /// </summary>
+        /// <typeparam name="T">The type of the return value</typeparam>
+        /// <param name="interfacemember">Function representing the function to be performed</param>
+        /// <param name="callerMemberName">The name of the member that called this function (determined automatically by the compiler)</param>
+        /// <returns>The member's value or an exception</returns>
+        internal T GetValue<T>(Func<T> interfacemember, [CallerMemberName] string callerMemberName = "UnknownCaller")
+        {
+            try
+            {
+                // Check whether the device is connected
+                CheckConnected(callerMemberName);
+
+                // Call the member and log the result
+                T result = interfacemember();
+                LogMessage(callerMemberName, result.ToString());
+
+                // Return the result
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogMessage(callerMemberName, $"Threw an exception: {ex.Message}\r\n{ex}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Call an interface member and log the result
+        /// </summary>
+        /// <param name="interfacemember">Function representing the function to be performed</param>
+        /// <param name="callerMemberName">The name of the member that called this function (determined automatically by the compiler)</param>
+        internal void CallMember(Action interfacemember, [CallerMemberName] string callerMemberName = "UnknownCaller")
+        {
+            try
+            {
+                // Check whether the device is connected
+                CheckConnected(callerMemberName);
+
+                // Call the member and log the result
+                LogMessage(callerMemberName, $"Calling {callerMemberName}...");
+                interfacemember();
+                LogMessage(callerMemberName, $"{callerMemberName} returned OK");
+            }
+            catch (Exception ex)
+            {
+                LogMessage(callerMemberName, $"Threw an exception:  {ex.Message}\r\n{ex}");
+                throw;
+            }
+        }
 
         #endregion
     }
