@@ -14,6 +14,8 @@ namespace ASCOM.JustAHub
         string newFilterWheelProgId;
         string newCoverCalibratorProgId;
         string newFocuserProgId;
+        string newObservingConditionsProgId;
+
         readonly string callingDeviceType;
 
         #region Initialisation and form load
@@ -46,40 +48,50 @@ namespace ASCOM.JustAHub
                 tl.LogMessage("SetForm_Load", $"Hosted camera device ProgID: {Settings.CameraHostedProgId}");
 
                 ChkDriverLoggingCamera.Checked = Settings.CameraDriverLogging;
-                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.CameraDriverLogging}");
+                tl.LogMessage("SetForm_Load", $"Log camera device driver calls: {Settings.CameraDriverLogging}");
 
                 ChkHardwareLoggingCamera.Checked = Settings.CameraHardwareLogging;
-                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.CameraHardwareLogging}");
+                tl.LogMessage("SetForm_Load", $"Log camera device hardware calls: {Settings.CameraHardwareLogging}");
 
                 // Cover Calibrator values
                 LblCurrentCoverCalibratorDevice.Text = $"{Settings.CoverCalibratorHostedProgId}";
                 tl.LogMessage("SetForm_Load", $"Hosted cover calibrator device ProgID: {Settings.CoverCalibratorHostedProgId}");
 
                 ChkDriverLoggingCoverCalibrator.Checked = Settings.CoverCalibratorDriverLogging;
-                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.CoverCalibratorDriverLogging}");
+                tl.LogMessage("SetForm_Load", $"Log cover calibrator driver calls: {Settings.CoverCalibratorDriverLogging}");
 
                 ChkHardwareLoggingCoverCalibrator.Checked = Settings.CoverCalibratorHardwareLogging;
-                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.CoverCalibratorHardwareLogging}");
+                tl.LogMessage("SetForm_Load", $"Log cover calibrator hardware calls: {Settings.CoverCalibratorHardwareLogging}");
 
                 // Filter Wheel values
                 LblCurrentFilterWheelDevice.Text = $"{Settings.FilterWheelHostedProgId}";
                 tl.LogMessage("SetForm_Load", $"Hosted filter wheel device ProgID: {Settings.FilterWheelHostedProgId}");
 
                 ChkDriverLoggingFilterWheel.Checked = Settings.FilterWheelDriverLogging;
-                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.FilterWheelDriverLogging}");
+                tl.LogMessage("SetForm_Load", $"Log filter wheel driver calls: {Settings.FilterWheelDriverLogging}");
 
                 ChkHardwareLoggingFilterWheel.Checked = Settings.FilterWheelHardwareLogging;
-                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.FilterWheelHardwareLogging}");
+                tl.LogMessage("SetForm_Load", $"Log filter wheel hardware calls: {Settings.FilterWheelHardwareLogging}");
 
                 // Focuser values
                 LblCurrentFocuserDevice.Text = $"{Settings.FocuserHostedProgId}";
-                tl.LogMessage("SetForm_Load", $"Hosted focuser ProgID: {Settings.FocuserHostedProgId}");
+                tl.LogMessage("SetForm_Load", $"Hosted focuser device ProgID: {Settings.FocuserHostedProgId}");
 
                 ChkDriverLoggingFocuser.Checked = Settings.FocuserDriverLogging;
-                tl.LogMessage("SetForm_Load", $"Log driver calls: {Settings.FocuserDriverLogging}");
+                tl.LogMessage("SetForm_Load", $"Log focuser driver calls: {Settings.FocuserDriverLogging}");
 
                 ChkHardwareLogingFocuser.Checked = Settings.FocuserHardwareLogging;
-                tl.LogMessage("SetForm_Load", $"Log hardware calls: {Settings.FocuserHardwareLogging}");
+                tl.LogMessage("SetForm_Load", $"Log focuser hardware calls: {Settings.FocuserHardwareLogging}");
+
+                // ObservingConditions values
+                LblCurrentObservingConditionsDevice.Text = $"{Settings.ObservingConditionsHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted observing conditions device ProgID: {Settings.ObservingConditionsHostedProgId}");
+
+                ChkDriverLoggingObservingConditions.Checked = Settings.ObservingConditionsDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log observing conditions driver calls: {Settings.ObservingConditionsDriverLogging}");
+
+                ChkHardwareLoggingobservingConditions.Checked = Settings.ObservingConditionsHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log observing conditions hardware calls: {Settings.ObservingConditionsHardwareLogging}");
 
                 // Select the appropriate tab
                 switch (callingDeviceType.ToUpperInvariant())
@@ -98,6 +110,10 @@ namespace ASCOM.JustAHub
 
                     case "FOCUSER":
                         TabDevices.SelectTab("Focuser");
+                        break;
+
+                    case "OBSERVINGCONDITIONS":
+                        TabDevices.SelectTab("ObservingConditions");
                         break;
 
                     default:
@@ -133,26 +149,32 @@ namespace ASCOM.JustAHub
             // Save camera settings
             Settings.CameraDriverLogging = ChkDriverLoggingCamera.Checked;
             Settings.CameraHardwareLogging = ChkHardwareLoggingCamera.Checked;
-            if (!string.IsNullOrEmpty(newCameraProgId)) // Update the camera ProgID if a new one has been chosen.
+            if (!string.IsNullOrEmpty(newCameraProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.CameraHostedProgId = newCameraProgId;
 
             // Save cover calibrator settings
             Settings.CoverCalibratorDriverLogging = ChkDriverLoggingCoverCalibrator.Checked;
             Settings.CoverCalibratorHardwareLogging = ChkHardwareLoggingCoverCalibrator.Checked;
-            if (!string.IsNullOrEmpty(newCoverCalibratorProgId)) // Update the camera ProgID if a new one has been chosen.
+            if (!string.IsNullOrEmpty(newCoverCalibratorProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.CoverCalibratorHostedProgId = newCoverCalibratorProgId;
 
             // Save filter wheel settings
             Settings.FilterWheelDriverLogging = ChkDriverLoggingFilterWheel.Checked;
             Settings.FilterWheelHardwareLogging = ChkHardwareLoggingFilterWheel.Checked;
-            if (!string.IsNullOrEmpty(newFilterWheelProgId)) // Update the camera ProgID if a new one has been chosen.
+            if (!string.IsNullOrEmpty(newFilterWheelProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.FilterWheelHostedProgId = newFilterWheelProgId;
 
             // Save focuser settings
             Settings.FocuserDriverLogging = ChkDriverLoggingFocuser.Checked;
             Settings.FocuserHardwareLogging = ChkHardwareLogingFocuser.Checked;
-            if (!string.IsNullOrEmpty(newFocuserProgId)) // Update the camera ProgID if a new one has been chosen.
+            if (!string.IsNullOrEmpty(newFocuserProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.FocuserHostedProgId = newFocuserProgId;
+
+            // Save observing conditions settings
+            Settings.ObservingConditionsDriverLogging = ChkDriverLoggingObservingConditions.Checked;
+            Settings.ObservingConditionsHardwareLogging = ChkHardwareLoggingobservingConditions.Checked;
+            if (!string.IsNullOrEmpty(newObservingConditionsProgId)) // Update the ProgID if a new one has been chosen.
+                Settings.ObservingConditionsHostedProgId = newObservingConditionsProgId;
         }
 
         private void CmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -200,6 +222,11 @@ namespace ASCOM.JustAHub
         private void BtnChooseFocuser_Click(object sender, EventArgs e)
         {
             newFocuserProgId = HandleChooserClick(FocuserHardware.TL, "Focuser", Settings.FocuserHostedProgId, LblCurrentFocuserDevice);
+        }
+
+        private void BtnChooseObservingConditions_Click(object sender, EventArgs e)
+        {
+            newObservingConditionsProgId = HandleChooserClick(ObservingConditionsHardware.TL, "ObservingConditions", Settings.ObservingConditionsHostedProgId, LblCurrentObservingConditionsDevice);
         }
 
         #endregion

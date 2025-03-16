@@ -92,6 +92,8 @@
     </Compile>
     <Compile Include="GarbageCollection.cs" />
     <Compile Include="LocalServer.cs" />
+    <Compile Include="ObservingConditions Driver\ObservingConditionsDriver.cs" />
+    <Compile Include="ObservingConditions Driver\ObservingConditionsHardware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafetyMonitor\SafetyMonitorDriver.cs" />
     <Compile Include="SafetyMonitor\SafetyMonitorHardware.cs" />
