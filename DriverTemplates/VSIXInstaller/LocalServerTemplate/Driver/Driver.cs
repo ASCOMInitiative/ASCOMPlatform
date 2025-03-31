@@ -17,6 +17,7 @@ using System.Collections;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TEMPLATENAMESPACE
 {
@@ -43,8 +44,11 @@ namespace TEMPLATENAMESPACE
         internal static string DriverProgId; // ASCOM DeviceID (COM ProgID) for this driver, the value is retrieved from the ServedClassName attribute in the class initialiser.
         internal static string DriverDescription; // The value is retrieved from the ServedClassName attribute in the class initialiser.
 
-        // connectedState holds the connection state from this driver instance's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
+        // connectedState and connectingState holds the states from this driver instance's perspective, as opposed to the local server's perspective, which may be different because of other client connections.
         internal bool connectedState; // The connected state from this driver's perspective)
+        internal bool connectingState; // The connecting state from this driver's perspective)
+        internal Exception connectionException = null; // Record any exception thrown if the driver encounters an error when connecting to the hardware using Connect() or Disconnect
+
         internal TraceLogger tl; // Trace logger object to hold diagnostic information just for this instance of the driver, as opposed to the local server's log, which includes activity from all driver instances.
         private bool disposedValue;
 
@@ -357,8 +361,31 @@ namespace TEMPLATENAMESPACE
                     return;
                 }
 
-                LogMessage("Connect", "Calling Connect");
-                TEMPLATEHARDWARECLASS.Connect(uniqueId);
+                // Initialise connection variables
+                connectionException = null; // Clear any previous exception
+                connectingState = true;
+
+                // Start a task to connect to the hardware and then set the connected state to true
+                _ = Task.Run(() =>
+                {
+                    try
+                    {
+                        LogMessage("Connect Task", "Starting connection");
+                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId, true);
+                        connectedState = true;
+                        LogMessage("Connect Task", "Connection completed");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Something went wrong so save the returned exception to return through Connecting and log the event.
+                        connectionException = ex;
+                        LogMessage("Connect Task", $"The connect task threw an exception: {ex.Message}\r\n{ex}");
+                    }
+                    finally
+                    {
+                        connectingState = false;
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -402,7 +429,7 @@ namespace TEMPLATENAMESPACE
                     if (value)
                     {
                         LogMessage("Connected Set", "Connecting to device...");
-                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId,true);
+                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId, true);
                         LogMessage("Connected Set", "Connected OK");
                         connectedState = true;
                     }
@@ -410,7 +437,7 @@ namespace TEMPLATENAMESPACE
                     {
                         connectedState = false;
                         LogMessage("Connected Set", "Disconnecting from device...");
-                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId,false);
+                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId, false);
                         LogMessage("Connected Set", "Disconnected OK");
                     }
                 }
@@ -429,7 +456,12 @@ namespace TEMPLATENAMESPACE
         {
             get
             {
-                return TEMPLATEHARDWARECLASS.Connecting;
+                // Return any exception returned by the Connect() or Disconnect() methods
+                if (!(connectionException is null))
+                    throw connectionException;
+
+                // Otherwise return the current connecting state
+                return connectingState;
             }
         }
 
@@ -446,15 +478,39 @@ namespace TEMPLATENAMESPACE
                     return;
                 }
 
-                LogMessage("Disconnect", "Calling Disconnect");
-                TEMPLATEHARDWARECLASS.Disconnect(uniqueId);
+                // Initialise connection variables
+                connectionException = null; // Clear any previous exception
+                connectingState = true;
+
+                // Start a task to connect to the hardware and then set the connected state to true
+                _ = Task.Run(() =>
+                {
+                    try
+                    {
+                        LogMessage("Disconnect Task", "Calling Connected");
+                        TEMPLATEHARDWARECLASS.SetConnected(uniqueId, false);
+                        connectedState = false;
+                        LogMessage("Disconnect Task", "Disconnection completed");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Something went wrong so save the returned exception to return through Connecting and log the event.
+                        connectionException = ex;
+                        LogMessage("Disconnect Task", $"The disconnect task threw an exception: {ex.Message}\r\n{ex}");
+                    }
+                    finally
+                    {
+                        connectingState = false;
+                    }
+                });
             }
             catch (Exception ex)
             {
-                LogMessage("Disconnect", $"Threw an exception: \r\n{ex}");
+                LogMessage("Disconnect", $"Threw an exception: {ex.Message}\r\n{ex}");
                 throw;
             }
-            LogMessage("Disconnect", $"Completed OK");
+
+            LogMessage("Disconnect", $"Disconnect completed OK");
         }
 
         /// <summary>

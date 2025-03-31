@@ -101,19 +101,9 @@
 		<Compile Include="Driver\HardwareTelescope.cs" />
 		<Compile Include="Driver\HardwareVideo.cs" />
 		<Compile Include="Driver\CommonHardware.cs" />
-		<Compile Include="frmMain.cs">
-			<SubType>Form</SubType>
-		</Compile>
-		<Compile Include="frmMain.Designer.cs">
-			<DependentUpon>frmMain.cs</DependentUpon>
-		</Compile>
 		<Compile Include="GarbageCollection.cs" />
 		<Compile Include="LocalServer.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
-		<EmbeddedResource Include="frmMain.resx">
-			<SubType>Designer</SubType>
-			<DependentUpon>frmMain.cs</DependentUpon>
-		</EmbeddedResource>
 		<Compile Include="ReferenceCountedObject.cs" />
 		<Compile Include="HardwareClassAttribute.cs" />
 		<Compile Include="Driver\SetupDialogForm.cs">

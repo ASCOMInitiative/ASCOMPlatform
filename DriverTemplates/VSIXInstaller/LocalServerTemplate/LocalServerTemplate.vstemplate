@@ -63,9 +63,6 @@
 				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
 			</Folder>
-			<ProjectItem ReplaceParameters="true" TargetFileName="frmMain.cs">frmMain.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="frmMain.Designer.cs">frmMain.Designer.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="frmMain.resx">frmMain.resx</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="GarbageCollection.cs">GarbageCollection.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="LocalServer.cs">LocalServer.cs</ProjectItem>
 

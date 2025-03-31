@@ -233,9 +233,13 @@
         </LI>
         <LI>
             <P>
-                You may want to add controls and/or status information to the main form frmMain of the local server. Please resist the temptation to turn the local server's main form into a graphical device control
-                panel. A better approach is to create a separate application that connects to the served driver(s).
+                If you want to control or report status information about devices hosted by the local server the best approach is to create a separate application that connects to the served driver(s).
             </P>
+        </LI>
+        <LI>
+            <p>
+                If you only want to display status information, a simpler option is to add a form to the local server that uses a timed loop to poll driver(s) and update the status information.
+            </p>
         </LI>
     </UL>
     <H3>
