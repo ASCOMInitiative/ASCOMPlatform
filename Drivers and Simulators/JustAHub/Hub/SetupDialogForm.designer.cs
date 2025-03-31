@@ -70,6 +70,13 @@ namespace ASCOM.JustAHub
             this.BtnChooseObservingConditions = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.SafetyMonitor = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingSafetyMonitor = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingSafetyMonitor = new System.Windows.Forms.CheckBox();
+            this.LblCurrentSafetyMonitorDevice = new System.Windows.Forms.Label();
+            this.BtnChooseSafetyMonitor = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.TabDevices.SuspendLayout();
             this.General.SuspendLayout();
@@ -78,13 +85,14 @@ namespace ASCOM.JustAHub
             this.FilterWheel.SuspendLayout();
             this.Focuser.SuspendLayout();
             this.ObservingConditions.SuspendLayout();
+            this.SafetyMonitor.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(464, 167);
+            this.cmdOK.Location = new System.Drawing.Point(440, 167);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -96,7 +104,7 @@ namespace ASCOM.JustAHub
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(464, 197);
+            this.cmdCancel.Location = new System.Drawing.Point(440, 197);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -109,7 +117,7 @@ namespace ASCOM.JustAHub
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = ((System.Drawing.Image)(resources.GetObject("picASCOM.Image")));
-            this.picASCOM.Location = new System.Drawing.Point(469, 12);
+            this.picASCOM.Location = new System.Drawing.Point(445, 12);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -130,9 +138,9 @@ namespace ASCOM.JustAHub
             // 
             // BtnChooseCamera
             // 
-            this.BtnChooseCamera.Location = new System.Drawing.Point(215, 79);
+            this.BtnChooseCamera.Location = new System.Drawing.Point(212, 80);
             this.BtnChooseCamera.Name = "BtnChooseCamera";
-            this.BtnChooseCamera.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseCamera.Size = new System.Drawing.Size(86, 23);
             this.BtnChooseCamera.TabIndex = 7;
             this.BtnChooseCamera.Text = "Choose";
             this.BtnChooseCamera.UseVisualStyleBackColor = true;
@@ -140,28 +148,28 @@ namespace ASCOM.JustAHub
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(51, 81);
+            this.label2.Location = new System.Drawing.Point(60, 82);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(161, 19);
             this.label2.TabIndex = 8;
             this.label2.Text = "Select the driver to be hosted ";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label3.Location = new System.Drawing.Point(66, 43);
+            this.label3.Location = new System.Drawing.Point(60, 44);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(101, 18);
             this.label3.TabIndex = 9;
             this.label3.Text = "Hosted driver:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LblCurrentCameraDevice
             // 
             this.LblCurrentCameraDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblCurrentCameraDevice.Location = new System.Drawing.Point(164, 43);
+            this.LblCurrentCameraDevice.Location = new System.Drawing.Point(130, 44);
             this.LblCurrentCameraDevice.Name = "LblCurrentCameraDevice";
             this.LblCurrentCameraDevice.Size = new System.Drawing.Size(246, 18);
             this.LblCurrentCameraDevice.TabIndex = 10;
@@ -171,7 +179,7 @@ namespace ASCOM.JustAHub
             // LblCurrentFilterWheelDevice
             // 
             this.LblCurrentFilterWheelDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblCurrentFilterWheelDevice.Location = new System.Drawing.Point(164, 43);
+            this.LblCurrentFilterWheelDevice.Location = new System.Drawing.Point(130, 44);
             this.LblCurrentFilterWheelDevice.Name = "LblCurrentFilterWheelDevice";
             this.LblCurrentFilterWheelDevice.Size = new System.Drawing.Size(246, 18);
             this.LblCurrentFilterWheelDevice.TabIndex = 14;
@@ -181,27 +189,27 @@ namespace ASCOM.JustAHub
             // label5
             // 
             this.label5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label5.Location = new System.Drawing.Point(66, 43);
+            this.label5.Location = new System.Drawing.Point(60, 44);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(101, 18);
             this.label5.TabIndex = 13;
             this.label5.Text = "Hosted driver:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(48, 81);
+            this.label6.Location = new System.Drawing.Point(60, 82);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(161, 19);
             this.label6.TabIndex = 12;
             this.label6.Text = "Select the driver to be hosted";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // BtnChooseFilterWheel
             // 
-            this.BtnChooseFilterWheel.Location = new System.Drawing.Point(215, 79);
+            this.BtnChooseFilterWheel.Location = new System.Drawing.Point(212, 80);
             this.BtnChooseFilterWheel.Name = "BtnChooseFilterWheel";
-            this.BtnChooseFilterWheel.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseFilterWheel.Size = new System.Drawing.Size(86, 23);
             this.BtnChooseFilterWheel.TabIndex = 11;
             this.BtnChooseFilterWheel.Text = "Choose";
             this.BtnChooseFilterWheel.UseVisualStyleBackColor = true;
@@ -215,21 +223,22 @@ namespace ASCOM.JustAHub
             this.TabDevices.Controls.Add(this.FilterWheel);
             this.TabDevices.Controls.Add(this.Focuser);
             this.TabDevices.Controls.Add(this.ObservingConditions);
+            this.TabDevices.Controls.Add(this.SafetyMonitor);
             this.TabDevices.Location = new System.Drawing.Point(12, 12);
             this.TabDevices.Multiline = true;
             this.TabDevices.Name = "TabDevices";
             this.TabDevices.SelectedIndex = 0;
-            this.TabDevices.Size = new System.Drawing.Size(445, 212);
+            this.TabDevices.Size = new System.Drawing.Size(417, 212);
             this.TabDevices.TabIndex = 15;
             // 
             // General
             // 
             this.General.BackColor = System.Drawing.Color.LightSkyBlue;
             this.General.Controls.Add(this.ChkLocalServerDebugLog);
-            this.General.Location = new System.Drawing.Point(4, 22);
+            this.General.Location = new System.Drawing.Point(4, 40);
             this.General.Name = "General";
             this.General.Padding = new System.Windows.Forms.Padding(3);
-            this.General.Size = new System.Drawing.Size(593, 186);
+            this.General.Size = new System.Drawing.Size(437, 168);
             this.General.TabIndex = 2;
             this.General.Text = "General";
             // 
@@ -253,10 +262,10 @@ namespace ASCOM.JustAHub
             this.Camera.Controls.Add(this.ChkDriverLoggingCamera);
             this.Camera.Controls.Add(this.label3);
             this.Camera.Controls.Add(this.label2);
-            this.Camera.Location = new System.Drawing.Point(4, 22);
+            this.Camera.Location = new System.Drawing.Point(4, 40);
             this.Camera.Name = "Camera";
             this.Camera.Padding = new System.Windows.Forms.Padding(3);
-            this.Camera.Size = new System.Drawing.Size(437, 186);
+            this.Camera.Size = new System.Drawing.Size(409, 168);
             this.Camera.TabIndex = 0;
             this.Camera.Text = "Camera";
             // 
@@ -280,10 +289,10 @@ namespace ASCOM.JustAHub
             this.CoverCalibrator.Controls.Add(this.ChkDriverLoggingCoverCalibrator);
             this.CoverCalibrator.Controls.Add(this.label4);
             this.CoverCalibrator.Controls.Add(this.label7);
-            this.CoverCalibrator.Location = new System.Drawing.Point(4, 22);
+            this.CoverCalibrator.Location = new System.Drawing.Point(4, 40);
             this.CoverCalibrator.Name = "CoverCalibrator";
             this.CoverCalibrator.Padding = new System.Windows.Forms.Padding(3);
-            this.CoverCalibrator.Size = new System.Drawing.Size(437, 186);
+            this.CoverCalibrator.Size = new System.Drawing.Size(437, 168);
             this.CoverCalibrator.TabIndex = 3;
             this.CoverCalibrator.Text = "Cover Calibrator";
             // 
@@ -300,7 +309,7 @@ namespace ASCOM.JustAHub
             // LblCurrentCoverCalibratorDevice
             // 
             this.LblCurrentCoverCalibratorDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblCurrentCoverCalibratorDevice.Location = new System.Drawing.Point(164, 43);
+            this.LblCurrentCoverCalibratorDevice.Location = new System.Drawing.Point(130, 44);
             this.LblCurrentCoverCalibratorDevice.Name = "LblCurrentCoverCalibratorDevice";
             this.LblCurrentCoverCalibratorDevice.Size = new System.Drawing.Size(247, 18);
             this.LblCurrentCoverCalibratorDevice.TabIndex = 21;
@@ -309,9 +318,9 @@ namespace ASCOM.JustAHub
             // 
             // BtnChooseCoverCalibrator
             // 
-            this.BtnChooseCoverCalibrator.Location = new System.Drawing.Point(215, 79);
+            this.BtnChooseCoverCalibrator.Location = new System.Drawing.Point(212, 80);
             this.BtnChooseCoverCalibrator.Name = "BtnChooseCoverCalibrator";
-            this.BtnChooseCoverCalibrator.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseCoverCalibrator.Size = new System.Drawing.Size(86, 23);
             this.BtnChooseCoverCalibrator.TabIndex = 18;
             this.BtnChooseCoverCalibrator.Text = "Choose";
             this.BtnChooseCoverCalibrator.UseVisualStyleBackColor = true;
@@ -331,21 +340,21 @@ namespace ASCOM.JustAHub
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label4.Location = new System.Drawing.Point(66, 43);
+            this.label4.Location = new System.Drawing.Point(60, 44);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(101, 18);
             this.label4.TabIndex = 20;
             this.label4.Text = "Hosted driver:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(51, 81);
+            this.label7.Location = new System.Drawing.Point(60, 82);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(161, 19);
             this.label7.TabIndex = 19;
             this.label7.Text = "Select the driver to be hosted ";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FilterWheel
             // 
@@ -357,10 +366,10 @@ namespace ASCOM.JustAHub
             this.FilterWheel.Controls.Add(this.BtnChooseFilterWheel);
             this.FilterWheel.Controls.Add(this.label5);
             this.FilterWheel.Controls.Add(this.label6);
-            this.FilterWheel.Location = new System.Drawing.Point(4, 22);
+            this.FilterWheel.Location = new System.Drawing.Point(4, 40);
             this.FilterWheel.Name = "FilterWheel";
             this.FilterWheel.Padding = new System.Windows.Forms.Padding(3);
-            this.FilterWheel.Size = new System.Drawing.Size(437, 186);
+            this.FilterWheel.Size = new System.Drawing.Size(437, 168);
             this.FilterWheel.TabIndex = 1;
             this.FilterWheel.Text = "Filter Wheel";
             // 
@@ -394,10 +403,10 @@ namespace ASCOM.JustAHub
             this.Focuser.Controls.Add(this.BtnChooseFocuser);
             this.Focuser.Controls.Add(this.label8);
             this.Focuser.Controls.Add(this.label9);
-            this.Focuser.Location = new System.Drawing.Point(4, 22);
+            this.Focuser.Location = new System.Drawing.Point(4, 40);
             this.Focuser.Name = "Focuser";
             this.Focuser.Padding = new System.Windows.Forms.Padding(3);
-            this.Focuser.Size = new System.Drawing.Size(437, 186);
+            this.Focuser.Size = new System.Drawing.Size(437, 168);
             this.Focuser.TabIndex = 4;
             this.Focuser.Text = "Focuser";
             // 
@@ -424,7 +433,7 @@ namespace ASCOM.JustAHub
             // LblCurrentFocuserDevice
             // 
             this.LblCurrentFocuserDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblCurrentFocuserDevice.Location = new System.Drawing.Point(164, 43);
+            this.LblCurrentFocuserDevice.Location = new System.Drawing.Point(130, 44);
             this.LblCurrentFocuserDevice.Name = "LblCurrentFocuserDevice";
             this.LblCurrentFocuserDevice.Size = new System.Drawing.Size(246, 18);
             this.LblCurrentFocuserDevice.TabIndex = 22;
@@ -433,9 +442,9 @@ namespace ASCOM.JustAHub
             // 
             // BtnChooseFocuser
             // 
-            this.BtnChooseFocuser.Location = new System.Drawing.Point(215, 79);
+            this.BtnChooseFocuser.Location = new System.Drawing.Point(212, 80);
             this.BtnChooseFocuser.Name = "BtnChooseFocuser";
-            this.BtnChooseFocuser.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseFocuser.Size = new System.Drawing.Size(86, 23);
             this.BtnChooseFocuser.TabIndex = 19;
             this.BtnChooseFocuser.Text = "Choose";
             this.BtnChooseFocuser.UseVisualStyleBackColor = true;
@@ -444,21 +453,21 @@ namespace ASCOM.JustAHub
             // label8
             // 
             this.label8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label8.Location = new System.Drawing.Point(66, 43);
+            this.label8.Location = new System.Drawing.Point(60, 44);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(101, 18);
             this.label8.TabIndex = 21;
             this.label8.Text = "Hosted driver:";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(48, 81);
+            this.label9.Location = new System.Drawing.Point(60, 82);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(161, 19);
             this.label9.TabIndex = 20;
             this.label9.Text = "Select the driver to be hosted";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ObservingConditions
             // 
@@ -469,10 +478,10 @@ namespace ASCOM.JustAHub
             this.ObservingConditions.Controls.Add(this.BtnChooseObservingConditions);
             this.ObservingConditions.Controls.Add(this.label10);
             this.ObservingConditions.Controls.Add(this.label11);
-            this.ObservingConditions.Location = new System.Drawing.Point(4, 22);
+            this.ObservingConditions.Location = new System.Drawing.Point(4, 40);
             this.ObservingConditions.Name = "ObservingConditions";
             this.ObservingConditions.Padding = new System.Windows.Forms.Padding(3);
-            this.ObservingConditions.Size = new System.Drawing.Size(437, 186);
+            this.ObservingConditions.Size = new System.Drawing.Size(437, 168);
             this.ObservingConditions.TabIndex = 5;
             this.ObservingConditions.Text = "ObservingConditions";
             // 
@@ -499,7 +508,7 @@ namespace ASCOM.JustAHub
             // LblCurrentObservingConditionsDevice
             // 
             this.LblCurrentObservingConditionsDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblCurrentObservingConditionsDevice.Location = new System.Drawing.Point(140, 44);
+            this.LblCurrentObservingConditionsDevice.Location = new System.Drawing.Point(131, 45);
             this.LblCurrentObservingConditionsDevice.Name = "LblCurrentObservingConditionsDevice";
             this.LblCurrentObservingConditionsDevice.Size = new System.Drawing.Size(246, 18);
             this.LblCurrentObservingConditionsDevice.TabIndex = 28;
@@ -508,9 +517,9 @@ namespace ASCOM.JustAHub
             // 
             // BtnChooseObservingConditions
             // 
-            this.BtnChooseObservingConditions.Location = new System.Drawing.Point(212, 80);
+            this.BtnChooseObservingConditions.Location = new System.Drawing.Point(213, 81);
             this.BtnChooseObservingConditions.Name = "BtnChooseObservingConditions";
-            this.BtnChooseObservingConditions.Size = new System.Drawing.Size(136, 23);
+            this.BtnChooseObservingConditions.Size = new System.Drawing.Size(86, 23);
             this.BtnChooseObservingConditions.TabIndex = 25;
             this.BtnChooseObservingConditions.Text = "Choose";
             this.BtnChooseObservingConditions.UseVisualStyleBackColor = true;
@@ -519,7 +528,7 @@ namespace ASCOM.JustAHub
             // label10
             // 
             this.label10.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label10.Location = new System.Drawing.Point(59, 44);
+            this.label10.Location = new System.Drawing.Point(61, 45);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(75, 18);
             this.label10.TabIndex = 27;
@@ -528,18 +537,93 @@ namespace ASCOM.JustAHub
             // 
             // label11
             // 
-            this.label11.Location = new System.Drawing.Point(59, 82);
+            this.label11.Location = new System.Drawing.Point(61, 83);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(147, 19);
             this.label11.TabIndex = 26;
             this.label11.Text = "Select the driver to be hosted";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // SafetyMonitor
+            // 
+            this.SafetyMonitor.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.SafetyMonitor.Controls.Add(this.ChkHardwareLoggingSafetyMonitor);
+            this.SafetyMonitor.Controls.Add(this.ChkDriverLoggingSafetyMonitor);
+            this.SafetyMonitor.Controls.Add(this.LblCurrentSafetyMonitorDevice);
+            this.SafetyMonitor.Controls.Add(this.BtnChooseSafetyMonitor);
+            this.SafetyMonitor.Controls.Add(this.label12);
+            this.SafetyMonitor.Controls.Add(this.label13);
+            this.SafetyMonitor.Location = new System.Drawing.Point(4, 40);
+            this.SafetyMonitor.Name = "SafetyMonitor";
+            this.SafetyMonitor.Padding = new System.Windows.Forms.Padding(3);
+            this.SafetyMonitor.Size = new System.Drawing.Size(409, 168);
+            this.SafetyMonitor.TabIndex = 6;
+            this.SafetyMonitor.Text = "Safety Monitor";
+            // 
+            // ChkHardwareLoggingSafetyMonitor
+            // 
+            this.ChkHardwareLoggingSafetyMonitor.AutoSize = true;
+            this.ChkHardwareLoggingSafetyMonitor.Location = new System.Drawing.Point(223, 126);
+            this.ChkHardwareLoggingSafetyMonitor.Name = "ChkHardwareLoggingSafetyMonitor";
+            this.ChkHardwareLoggingSafetyMonitor.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingSafetyMonitor.TabIndex = 30;
+            this.ChkHardwareLoggingSafetyMonitor.Text = "Debug log";
+            this.ChkHardwareLoggingSafetyMonitor.UseVisualStyleBackColor = true;
+            // 
+            // ChkDriverLoggingSafetyMonitor
+            // 
+            this.ChkDriverLoggingSafetyMonitor.AutoSize = true;
+            this.ChkDriverLoggingSafetyMonitor.Location = new System.Drawing.Point(62, 126);
+            this.ChkDriverLoggingSafetyMonitor.Name = "ChkDriverLoggingSafetyMonitor";
+            this.ChkDriverLoggingSafetyMonitor.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingSafetyMonitor.TabIndex = 29;
+            this.ChkDriverLoggingSafetyMonitor.Text = "Log driver calls";
+            this.ChkDriverLoggingSafetyMonitor.UseVisualStyleBackColor = true;
+            // 
+            // LblCurrentSafetyMonitorDevice
+            // 
+            this.LblCurrentSafetyMonitorDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblCurrentSafetyMonitorDevice.Location = new System.Drawing.Point(131, 45);
+            this.LblCurrentSafetyMonitorDevice.Name = "LblCurrentSafetyMonitorDevice";
+            this.LblCurrentSafetyMonitorDevice.Size = new System.Drawing.Size(246, 18);
+            this.LblCurrentSafetyMonitorDevice.TabIndex = 28;
+            this.LblCurrentSafetyMonitorDevice.Text = "ASCOM.Simulator.SafetyMonitor";
+            this.LblCurrentSafetyMonitorDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnChooseSafetyMonitor
+            // 
+            this.BtnChooseSafetyMonitor.Location = new System.Drawing.Point(213, 81);
+            this.BtnChooseSafetyMonitor.Name = "BtnChooseSafetyMonitor";
+            this.BtnChooseSafetyMonitor.Size = new System.Drawing.Size(86, 23);
+            this.BtnChooseSafetyMonitor.TabIndex = 25;
+            this.BtnChooseSafetyMonitor.Text = "Choose";
+            this.BtnChooseSafetyMonitor.UseVisualStyleBackColor = true;
+            this.BtnChooseSafetyMonitor.Click += new System.EventHandler(this.BtnChooseSafetyMonitor_Click);
+            // 
+            // label12
+            // 
+            this.label12.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label12.Location = new System.Drawing.Point(61, 45);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(101, 18);
+            this.label12.TabIndex = 27;
+            this.label12.Text = "Hosted driver:";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(61, 83);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(161, 19);
+            this.label13.TabIndex = 26;
+            this.label13.Text = "Select the driver to be hosted";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(535, 234);
+            this.ClientSize = new System.Drawing.Size(511, 234);
             this.Controls.Add(this.TabDevices);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.cmdCancel);
@@ -566,6 +650,8 @@ namespace ASCOM.JustAHub
             this.Focuser.PerformLayout();
             this.ObservingConditions.ResumeLayout(false);
             this.ObservingConditions.PerformLayout();
+            this.SafetyMonitor.ResumeLayout(false);
+            this.SafetyMonitor.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -614,5 +700,12 @@ namespace ASCOM.JustAHub
         private System.Windows.Forms.Button BtnChooseObservingConditions;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TabPage SafetyMonitor;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingSafetyMonitor;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingSafetyMonitor;
+        private System.Windows.Forms.Label LblCurrentSafetyMonitorDevice;
+        private System.Windows.Forms.Button BtnChooseSafetyMonitor;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
     }
 }

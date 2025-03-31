@@ -15,6 +15,7 @@ namespace ASCOM.JustAHub
         string newCoverCalibratorProgId;
         string newFocuserProgId;
         string newObservingConditionsProgId;
+        string newSafetyMonitorProgId;
 
         readonly string callingDeviceType;
 
@@ -33,7 +34,6 @@ namespace ASCOM.JustAHub
             {
                 MessageBox.Show($"JustAHub SetupDialogForm (calling device: {callingDeviceType}) exception: {ex.Message}\r\n{ex}");
             }
-
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
@@ -93,6 +93,16 @@ namespace ASCOM.JustAHub
                 ChkHardwareLoggingobservingConditions.Checked = Settings.ObservingConditionsHardwareLogging;
                 tl.LogMessage("SetForm_Load", $"Log observing conditions hardware calls: {Settings.ObservingConditionsHardwareLogging}");
 
+                // SafetyMonitor values
+                LblCurrentSafetyMonitorDevice.Text = $"{Settings.SafetyMonitorHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted safety monitor device ProgID: {Settings.SafetyMonitorHostedProgId}");
+
+                ChkDriverLoggingSafetyMonitor.Checked = Settings.SafetyMonitorDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log safety monitor driver calls: {Settings.SafetyMonitorDriverLogging}");
+
+                ChkHardwareLoggingSafetyMonitor.Checked = Settings.SafetyMonitorHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log safety monitor hardware calls: {Settings.SafetyMonitorHardwareLogging}");
+
                 // Select the appropriate tab
                 switch (callingDeviceType.ToUpperInvariant())
                 {
@@ -114,6 +124,10 @@ namespace ASCOM.JustAHub
 
                     case "OBSERVINGCONDITIONS":
                         TabDevices.SelectTab("ObservingConditions");
+                        break;
+
+                    case "SAFETYMONITOR":
+                        TabDevices.SelectTab("SafetyMonitor");
                         break;
 
                     default:
@@ -175,6 +189,12 @@ namespace ASCOM.JustAHub
             Settings.ObservingConditionsHardwareLogging = ChkHardwareLoggingobservingConditions.Checked;
             if (!string.IsNullOrEmpty(newObservingConditionsProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.ObservingConditionsHostedProgId = newObservingConditionsProgId;
+
+            // Save safety monitor settings
+            Settings.SafetyMonitorDriverLogging = ChkDriverLoggingSafetyMonitor.Checked;
+            Settings.SafetyMonitorHardwareLogging = ChkHardwareLoggingSafetyMonitor.Checked;
+            if (!string.IsNullOrEmpty(newSafetyMonitorProgId)) // Update the ProgID if a new one has been chosen.
+                Settings.SafetyMonitorHostedProgId = newSafetyMonitorProgId;
         }
 
         private void CmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -227,6 +247,11 @@ namespace ASCOM.JustAHub
         private void BtnChooseObservingConditions_Click(object sender, EventArgs e)
         {
             newObservingConditionsProgId = HandleChooserClick(ObservingConditionsHardware.TL, "ObservingConditions", Settings.ObservingConditionsHostedProgId, LblCurrentObservingConditionsDevice);
+        }
+
+        private void BtnChooseSafetyMonitor_Click(object sender, EventArgs e)
+        {
+            newSafetyMonitorProgId = HandleChooserClick(SafetyMonitorHardware.TL, "SafetyMonitor", Settings.SafetyMonitorHostedProgId, LblCurrentSafetyMonitorDevice);
         }
 
         #endregion
