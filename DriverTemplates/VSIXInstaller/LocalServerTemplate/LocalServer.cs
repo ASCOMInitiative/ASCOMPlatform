@@ -33,7 +33,6 @@ namespace ASCOM.LocalServer
 
         private static uint mainThreadId; // Stores the main thread's thread id.
         private static bool startedByCOM; // True if server started by COM (-embedding)
-        private static FrmMain localServerMainForm = null; // Reference to our main form.
         private static int driversInUseCount; // Keeps a count on the total number of objects alive.
         private static int serverLockCount; // Keeps a lock count on this application.
         private static ArrayList driverTypes; // Served COM object types
@@ -81,8 +80,6 @@ namespace ASCOM.LocalServer
             TL.LogMessage("Main", $"Creating host form");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            localServerMainForm = new FrmMain();
-            if (startedByCOM) localServerMainForm.WindowState = FormWindowState.Minimized;
 
             // Register the class factories of the served objects
             TL.LogMessage("Main", $"Registering class factories");
@@ -96,9 +93,9 @@ namespace ASCOM.LocalServer
             // Start the message loop to serialize incoming calls to the served driver COM objects.
             try
             {
-                TL.LogMessage("Main", $"Starting main form");
-                Application.Run(localServerMainForm);
-                TL.LogMessage("Main", $"Main form has ended");
+                TL.LogMessage("Main", $"Starting application");
+                Application.Run();
+                TL.LogMessage("Main", $"Application has ended");
             }
             finally
             {

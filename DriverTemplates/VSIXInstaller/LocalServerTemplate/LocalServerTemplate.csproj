@@ -77,12 +77,6 @@
     <Compile Include="Driver\SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMain.designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
     <Compile Include="GarbageCollection.cs" />
     <Compile Include="Driver\HardwareCamera.cs" />
     <Compile Include="Driver\HardwareSafetyMonitor.cs" />
@@ -104,9 +98,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Driver\SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TemplateProperties\Resources.resx" />
   </ItemGroup>
