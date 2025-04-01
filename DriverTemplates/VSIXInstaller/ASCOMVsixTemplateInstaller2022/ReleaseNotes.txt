@@ -1,2 +1,7 @@
-﻿1. Fixed a logic error in the HardwareClass.Disconnct method.
-2. Added further notes on how to customise the hardware class when implementing the driver.
+﻿Latest - 31st March 2025
+Removed frmMain from the local server because it adds no value. The recommended way to include monitoring / control features is by a separate application that uses the ASCOM API to communicate with the driver.
+Revised the new Platform 7 Connect(), Disconnect() and Connecting methods to integrate properly with the Connected property and pass Conform on an initial out of the box test.
+
+Previous
+Fixed a logic error in the HardwareClass.Disconnct method.
+Added further notes on how to customise the hardware class when implementing the driver.
