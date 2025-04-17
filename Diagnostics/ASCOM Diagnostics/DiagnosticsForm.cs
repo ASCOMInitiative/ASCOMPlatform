@@ -57,6 +57,7 @@ namespace ASCOM.Utilities
         private const bool TEST_SIMULATORS = true;
         private const bool TEST_UTILITIES = true;
         private const bool TEST_SCAN_DRIVES = true;
+        private const bool TEST_SEARCH_FOR_HELPERS = true;
         private const bool CREATE_DEBUG_COLSOLE = false;
 
         // Current number of leap seconds - Used to test NOVAS 3.1 DeltaT calculation - Needs to be updated when the number of leap seconds changes
@@ -263,7 +264,7 @@ namespace ASCOM.Utilities
 
                 RefreshTraceItems(); // Get current values for the trace menu settings
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
-                DisplayUnicodeInTraceLoggerMenuItem.Checked= Utilities.Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT); // Get the TraceLogger display Unicode state
+                DisplayUnicodeInTraceLoggerMenuItem.Checked = Utilities.Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT); // Get the TraceLogger display Unicode state
 
                 // Define the update checker task
                 LogInternal("Load", "About to define update task");
@@ -470,15 +471,6 @@ namespace ASCOM.Utilities
 
                         try
                         {
-                            ScanProgramFiles(); // Search for copies of Helper and Helper2.DLL in the wrong places
-                        }
-                        catch (Exception ex)
-                        {
-                            LogException("ScanProgramFiles", ex.ToString());
-                        }
-
-                        try
-                        {
                             ScanProfile();
                             Action(""); // Report profile information
                         }
@@ -513,6 +505,18 @@ namespace ASCOM.Utilities
                         catch (Exception ex)
                         {
                             LogException("ScanCOMRegistration", ex.ToString());
+                        }
+
+                    }
+                    if (TEST_SEARCH_FOR_HELPERS)
+                    {
+                        try
+                        {
+                            ScanProgramFiles(); // Search for copies of Helper and Helper2.DLL in the wrong places
+                        }
+                        catch (Exception ex)
+                        {
+                            LogException("ScanProgramFiles", ex.ToString());
                         }
 
                         try
@@ -9898,12 +9902,12 @@ namespace ASCOM.Utilities
                                             switch (Bitness)
                                             {
                                                 case Bitness.Bits32: // Run the 32bit Regedit
-                                                        SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEMX86, false); // Get the 32bit system directory
-                                                        break;
+                                                    SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEMX86, false); // Get the 32bit system directory
+                                                    break;
 
                                                 case Bitness.Bits64: // Run the 64bit Regedit
-                                                        SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, false); // Get the 64bit system directory
-                                                        break;
+                                                    SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, false); // Get the 64bit system directory
+                                                    break;
                                             }
                                         }
                                         else // We are running on a 32bit OS
@@ -10459,49 +10463,35 @@ namespace ASCOM.Utilities
                         ValueKind = p_Key.GetValueKind(ValueName);
                         switch (ValueName.ToUpperInvariant() ?? "")
                         {
-                            case var @case when @case == "":
-                                {
-                                    TL.LogMessage("KeyValue", Conversions.ToString(Operators.ConcatenateObject(Strings.Space(p_Depth * INDENT) + "*** Default *** = ", p_Key.GetValue(ValueName))));
-                                    break;
-                                }
+                            case "":
+                                TL.LogMessage("KeyValue", $"{Strings.Space(p_Depth * INDENT)}*** Default *** = {p_Key.GetValue(ValueName)}");
+                                break;
                             case "APPID":
-                                {
-                                    p_Container = "AppId";
-                                    TL.LogMessage("KeyValue", Conversions.ToString(Operators.ConcatenateObject(Strings.Space(p_Depth * INDENT) + ValueName.ToString() + " = ", p_Key.GetValue(ValueName))));
-                                    break;
-                                }
+                                p_Container = "AppId";
+                                TL.LogMessage("KeyValue", $"{Strings.Space(p_Depth * INDENT)}{ValueName} = {p_Key.GetValue(ValueName)}");
+                                break;
 
                             default:
+                                switch (ValueKind)
                                 {
-                                    switch (ValueKind)
-                                    {
-                                        case RegistryValueKind.String:
-                                        case RegistryValueKind.ExpandString:
-                                            {
-                                                TL.LogMessage("KeyValue", Conversions.ToString(Operators.ConcatenateObject(Strings.Space(p_Depth * INDENT) + ValueName.ToString() + " = ", p_Key.GetValue(ValueName))));
-                                                break;
-                                            }
-                                        case RegistryValueKind.MultiString:
-                                            {
-                                                TL.LogMessage("KeyValue", Conversions.ToString(Operators.ConcatenateObject(Strings.Space(p_Depth * INDENT) + ValueName.ToString() + " = ", p_Key.GetValue(ValueName, 0))));
-                                                break;
-                                            }
-                                        case RegistryValueKind.DWord:
-                                            {
-                                                TL.LogMessage("KeyValue", Strings.Space(p_Depth * INDENT) + ValueName.ToString() + " = " + p_Key.GetValue(ValueName).ToString());
-                                                break;
-                                            }
+                                    case RegistryValueKind.String:
+                                    case RegistryValueKind.ExpandString:
+                                    case RegistryValueKind.DWord:
+                                        TL.LogMessage("KeyValue", $"{Strings.Space(p_Depth * INDENT)}{ValueName} = {p_Key.GetValue(ValueName, "!!!!! Value could not be found !!!!!")}");
+                                        break;
 
-                                        default:
-                                            {
-                                                TL.LogMessage("KeyValue", Conversions.ToString(Operators.ConcatenateObject(Strings.Space(p_Depth * INDENT) + ValueName.ToString() + " = ", p_Key.GetValue(ValueName))));
-                                                break;
-                                            }
-                                    }
+                                    case RegistryValueKind.MultiString:
+                                        TL.LogMessage("KeyValue", $"{Strings.Space(p_Depth * INDENT)}{ValueName} = {((string[])p_Key.GetValue(ValueName, "!!!!! Value could not be found !!!!!"))[0]}");
+                                        break;
 
-                                    break;
+                                    default:
+                                        TL.LogMessage("KeyValue", $"{Strings.Space(p_Depth * INDENT)}{ValueName} = {p_Key.GetValue(ValueName)}");
+                                        break;
                                 }
+
+                                break;
                         }
+
                         if (ValueKind != RegistryValueKind.MultiString) // Don't try and process these, they don't lead anywhere anyway!
                         {
                             if (Strings.Left(Conversions.ToString(p_Key.GetValue(ValueName)), 1) == "{")
