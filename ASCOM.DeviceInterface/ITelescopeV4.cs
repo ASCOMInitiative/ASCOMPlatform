@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Reflection.Emit;
 
 namespace ASCOM.DeviceInterface
 {
@@ -1290,23 +1292,27 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>
+        /// <para>
         /// This method supports control of the mount about its mechanical axes.
         /// The telescope will start moving at the specified rate about the specified axis and continue indefinitely.
         /// This method can be called for each axis separately, and have them all operate concurrently at separate rates of motion.
         /// Set the rate for an axis to zero to restore the motion about that axis to the rate set by the <see cref="Tracking"/> property.
         /// Tracking motion (if enabled, see note below) is suspended during this mode of operation.
+        /// </para>
         /// <para>
         /// Raises an error if <see cref="AtPark" /> is true.
-        /// This must be implemented for the if the <see cref="CanMoveAxis" /> property returns True for the given axis.</para>
-        /// <para>This is only available for telescope Interface version 2 and later.
         /// </para>
         /// <para>
-        /// <see cref="MoveAxis" /> is best seen as an override to however the mount is configured for Tracking, including its enabled/disabled state and any 
-        /// current RightAscensionRate and DeclinationRate offsets. 
+        /// <see cref="MoveAxis" /> must be implemented if <see cref="CanMoveAxis" /> returns True for the given axis.
         /// </para>
         /// <para>
-        /// While MoveAxis is in effect, TrackingRate, RightAscensionRate and DeclinationRate should retain their current values and will become 
-        /// effective again when MoveAxis is set to zero for the relevant axis.
+        /// We see MoveAxis() as being in a different class to the higher level operations because it just says move this axis in this direction at this rate. 
+        /// Like the CommandXXX methods, the driver has no idea what objective the client is trying to achieve and must blindly follow the instructions it is given. 
+        /// In effect the client is now providing the high level functions of the driver / mount control system and is just commandeering the driver to communicate the desired axis movement rate to the mount.
+        /// </para>
+        /// <para>
+        /// For this reason it is our view that, when MoveAxis() is in effect on any axis, clients should not rely on the Tracking value reported by drivers.Since the client is providing high level 
+        /// control and directing use of MoveAxis(), only the client knows whether the mount is moving to its target coordinates at a fast rate or whether it is tracking a target at some arbitrary multi-axis rate.
         /// </para>
         /// <para>
         /// A <see cref="MoveAxis" /> call with Rate = 0 is required to stop motion and return to the previous tracking state of that axis.
