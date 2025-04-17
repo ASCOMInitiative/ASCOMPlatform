@@ -1413,7 +1413,14 @@ namespace ASCOM.Utilities
                                 // Open a 64bit view of the registry
                                 using (RegistryAccess registryAccess = new RegistryAccess(TL))
                                 {
-                                    RK = registryAccess.OpenSubKey3264(Registry.ClassesRoot, $"CLSID\\{clsId}", false, RegistryAccessRights.Wow64_64Key);
+                                    try
+                                    {
+                                        RK = registryAccess.OpenSubKey3264(Registry.ClassesRoot, $"CLSID\\{clsId}", false, RegistryAccessRights.Wow64_64Key);
+                                    }
+                                    catch (ProfilePersistenceException) // The key doesn't exist or can't be opened so ignore it
+                                    {
+                                        RK = null;
+                                    }
                                 }
 
                                 if (RK != null) // Found a CLSID entry
