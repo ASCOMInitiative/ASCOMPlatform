@@ -1309,15 +1309,8 @@ namespace ASCOM.DeviceInterface
         /// effective again when MoveAxis is set to zero for the relevant axis.
         /// </para>
         /// <para>
-        /// When <see cref="MoveAxis" /> is reset to zero for an axis, its previous state must be restored as shown below:
+        /// A <see cref="MoveAxis" /> call with Rate = 0 is required to stop motion and return to the previous tracking state of that axis.
         /// </para>
-        /// <list type="bullet">
-        /// <item><description><legacyBold>RA Axis with <see cref="Tracking"/> is Enabled</legacyBold>: The current <see cref="TrackingRate"/>, plus any <see cref="RightAscensionRate" /> 
-        /// ( the latter is valid only if <see cref="TrackingRate"/> is <see cref="DriveRates.driveSidereal"/> )</description></item>
-        /// <item><description><legacyBold>RA Axis with <see cref="Tracking"/> is Disabled</legacyBold>: 0</description></item>
-        /// <item><description><legacyBold>Dec Axis with <see cref="Tracking"/> is Enabled</legacyBold>: The <see cref="DeclinationRate" /> if non-zero or 0</description></item>
-        /// <item><description><legacyBold>Dec Axis with <see cref="Tracking"/> is Disabled</legacyBold>: 0</description></item>
-        /// </list>
         /// <b>NOTES:</b>
         /// <list type="bullet">
         /// <item><description>The Slewing property must remain <see langword="true"/> whenever <legacyBold>any</legacyBold> axis has a non-zero MoveAxis rate. E.g. Suppose
