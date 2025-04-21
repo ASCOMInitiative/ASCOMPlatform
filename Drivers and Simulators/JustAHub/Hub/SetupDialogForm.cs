@@ -15,6 +15,7 @@ namespace ASCOM.JustAHub
         string newCoverCalibratorProgId;
         string newFocuserProgId;
         string newObservingConditionsProgId;
+        string newRotatorProgId;
         string newSafetyMonitorProgId;
 
         readonly string callingDeviceType;
@@ -93,6 +94,16 @@ namespace ASCOM.JustAHub
                 ChkHardwareLoggingobservingConditions.Checked = Settings.ObservingConditionsHardwareLogging;
                 tl.LogMessage("SetForm_Load", $"Log observing conditions hardware calls: {Settings.ObservingConditionsHardwareLogging}");
 
+                // Rotator values
+                LblCurrentRotatorDevice.Text = $"{Settings.RotatorHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted rotator device ProgID: {Settings.RotatorHostedProgId}");
+
+                ChkDriverLoggingRotator.Checked = Settings.RotatorDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log rotator driver calls: {Settings.RotatorDriverLogging}");
+
+                ChkHardwareLoggingRotator.Checked = Settings.RotatorHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log rotator hardware calls: {Settings.RotatorHardwareLogging}");
+
                 // SafetyMonitor values
                 LblCurrentSafetyMonitorDevice.Text = $"{Settings.SafetyMonitorHostedProgId}";
                 tl.LogMessage("SetForm_Load", $"Hosted safety monitor device ProgID: {Settings.SafetyMonitorHostedProgId}");
@@ -124,6 +135,10 @@ namespace ASCOM.JustAHub
 
                     case "OBSERVINGCONDITIONS":
                         TabDevices.SelectTab("ObservingConditions");
+                        break;
+
+                    case "ROTATOR":
+                        TabDevices.SelectTab("Rotator");
                         break;
 
                     case "SAFETYMONITOR":
@@ -190,6 +205,12 @@ namespace ASCOM.JustAHub
             if (!string.IsNullOrEmpty(newObservingConditionsProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.ObservingConditionsHostedProgId = newObservingConditionsProgId;
 
+            // Save rotator settings
+            Settings.RotatorDriverLogging = ChkDriverLoggingRotator.Checked;
+            Settings.RotatorHardwareLogging = ChkHardwareLoggingRotator.Checked;
+            if (!string.IsNullOrEmpty(newRotatorProgId)) // Update the ProgID if a new one has been chosen.
+                Settings.RotatorHostedProgId = newRotatorProgId;
+
             // Save safety monitor settings
             Settings.SafetyMonitorDriverLogging = ChkDriverLoggingSafetyMonitor.Checked;
             Settings.SafetyMonitorHardwareLogging = ChkHardwareLoggingSafetyMonitor.Checked;
@@ -247,6 +268,11 @@ namespace ASCOM.JustAHub
         private void BtnChooseObservingConditions_Click(object sender, EventArgs e)
         {
             newObservingConditionsProgId = HandleChooserClick(ObservingConditionsHardware.TL, "ObservingConditions", Settings.ObservingConditionsHostedProgId, LblCurrentObservingConditionsDevice);
+        }
+
+        private void BtnChooseRotator_Click(object sender, EventArgs e)
+        {
+            newRotatorProgId = HandleChooserClick(RotatorHardware.TL, "Rotator", Settings.RotatorHostedProgId, LblCurrentRotatorDevice);
         }
 
         private void BtnChooseSafetyMonitor_Click(object sender, EventArgs e)

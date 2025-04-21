@@ -19,6 +19,7 @@ namespace ASCOM.JustAHub
         internal const string FILTERWHEEL_PROGID_DEFAULT = "ASCOM.Simulator.FilterWheel";
         internal const string FOCUSER_PROGID_DEFAULT = "ASCOM.Simulator.Focuser";
         internal const string OBSERVINGCONDITIONS_PROGID_DEFAULT = "ASCOM.Simulator.ObservingConditions";
+        internal const string ROTATOR_PROGID_DEFAULT = "ASCOM.Simulator.Rotator";
         internal const string SAFETYMONITOR_PROGID_DEFAULT = "ASCOM.Simulator.SafetyMonitor";
 
         static Settings()
@@ -92,6 +93,18 @@ namespace ASCOM.JustAHub
                     ObservingConditionsDriverLogging = Convert.ToBoolean(profile.GetValue(ObservingConditions.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                     ObservingConditionsHardwareLogging = Convert.ToBoolean(profile.GetValue(ObservingConditions.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
+                    // Load settings stored in the rotator profile
+                    profile.DeviceType = "Rotator";
+
+                    if (!profile.IsRegistered(Rotator.ProgId))
+                    {
+                        profile.Register(Rotator.ProgId, Rotator.ChooserDescription);
+                    }
+
+                    RotatorHostedProgId = profile.GetValue(Rotator.ProgId, PROGID_PROFILE_NAME, string.Empty, ROTATOR_PROGID_DEFAULT);
+                    RotatorDriverLogging = Convert.ToBoolean(profile.GetValue(Rotator.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    RotatorHardwareLogging = Convert.ToBoolean(profile.GetValue(Rotator.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
                     // Load settings stored in the safety monitor profile
                     profile.DeviceType = "SafetyMonitor";
 
@@ -149,6 +162,12 @@ namespace ASCOM.JustAHub
                 profile.WriteValue(ObservingConditions.ProgId, DRIVER_LOGGING_PROFILE_NAME, ObservingConditionsDriverLogging.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(ObservingConditions.ProgId, HARDWARE_LOGGING_PROFILE_NAME, ObservingConditionsHardwareLogging.ToString(CultureInfo.InvariantCulture));
 
+                // Save rotator specific values
+                profile.DeviceType = "Rotator";
+                profile.WriteValue(Rotator.ProgId, PROGID_PROFILE_NAME, RotatorHostedProgId);
+                profile.WriteValue(Rotator.ProgId, DRIVER_LOGGING_PROFILE_NAME, RotatorDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(Rotator.ProgId, HARDWARE_LOGGING_PROFILE_NAME, RotatorHardwareLogging.ToString(CultureInfo.InvariantCulture));
+
                 // Save safety monitor specific values
                 profile.DeviceType = "SafetyMonitor";
                 profile.WriteValue(SafetyMonitor.ProgId, PROGID_PROFILE_NAME, SafetyMonitorHostedProgId);
@@ -157,28 +176,40 @@ namespace ASCOM.JustAHub
             }
         }
 
+        // Common properties
         internal static bool LocalServerLogging { get; set; }
 
+        // Camera properties
         internal static string CameraHostedProgId { get; set; }
         internal static bool CameraDriverLogging { get; set; }
         internal static bool CameraHardwareLogging { get; set; }
 
+        // CoverCalibrator properties
         internal static string CoverCalibratorHostedProgId { get; set; }
         internal static bool CoverCalibratorDriverLogging { get; set; }
         internal static bool CoverCalibratorHardwareLogging { get; set; }
 
+        // FilterWheel properties
         internal static string FilterWheelHostedProgId { get; set; }
         internal static bool FilterWheelDriverLogging { get; set; }
         internal static bool FilterWheelHardwareLogging { get; set; }
 
+        // Focuser properties
         internal static string FocuserHostedProgId { get; set; }
         internal static bool FocuserDriverLogging { get; set; }
         internal static bool FocuserHardwareLogging { get; set; }
 
+        // ObservingConditions properties
         internal static string ObservingConditionsHostedProgId { get; set; }
         internal static bool ObservingConditionsDriverLogging { get; set; }
         internal static bool ObservingConditionsHardwareLogging { get; set; }
 
+        // Rotator properties
+        internal static string RotatorHostedProgId { get; set; }
+        internal static bool RotatorDriverLogging { get; set; }
+        internal static bool RotatorHardwareLogging { get; set; }
+
+        // SafetyMonitor properties
         internal static string SafetyMonitorHostedProgId { get; set; }
         internal static bool SafetyMonitorDriverLogging { get; set; }
         internal static bool SafetyMonitorHardwareLogging { get; set; }

@@ -95,8 +95,10 @@
     <Compile Include="ObservingConditions Driver\ObservingConditionsDriver.cs" />
     <Compile Include="ObservingConditions Driver\ObservingConditionsHardware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SafetyMonitor\SafetyMonitorDriver.cs" />
-    <Compile Include="SafetyMonitor\SafetyMonitorHardware.cs" />
+    <Compile Include="Rotator Driver\RotatorDriver.cs" />
+    <Compile Include="Rotator Driver\RotatorHardware.cs" />
+    <Compile Include="SafetyMonitor Driver\SafetyMonitorDriver.cs" />
+    <Compile Include="SafetyMonitor Driver\SafetyMonitorHardware.cs" />
     <Compile Include="Hub\Settings.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
