@@ -79,6 +79,8 @@
     <Compile Include="Camera Driver\CameraHardware..cs" />
     <Compile Include="CoverCalibratorDriver\CoverCalibratorDriver.cs" />
     <Compile Include="CoverCalibratorDriver\CoverCalibratorHardware.cs" />
+    <Compile Include="Dome Driver\DomeDriver.cs" />
+    <Compile Include="Dome Driver\DomeHardware.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FilterWheel Driver\FilterWheelDriver.cs" />
     <Compile Include="FilterWheel Driver\FilterWheelHardware.cs" />
@@ -100,6 +102,10 @@
     <Compile Include="SafetyMonitor Driver\SafetyMonitorDriver.cs" />
     <Compile Include="SafetyMonitor Driver\SafetyMonitorHardware.cs" />
     <Compile Include="Hub\Settings.cs" />
+    <Compile Include="Switch Driver\SwitchDriver.cs" />
+    <Compile Include="Switch Driver\SwitchHardware.cs" />
+    <Compile Include="Telescope Driver\TelescopeDriver.cs" />
+    <Compile Include="Telescope Driver\TelescopeHardware.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmMain.cs</DependentUpon>

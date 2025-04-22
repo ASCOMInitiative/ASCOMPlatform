@@ -12,15 +12,15 @@ using System.Windows.Forms;
 namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM JustAHub Rotator main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub Switch main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
-    internal static class RotatorHardware
+    internal static class SwitchHardware
     {
 #if DEBUG
-        private static DriverAccess.Rotator device; // Rotator device being hosted
+        private static DriverAccess.Switch device; // Switch device being hosted
 #else
-        private static dynamic device; // Rotator device being hosted
+        private static dynamic device; // Switch device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -34,21 +34,21 @@ namespace ASCOM.JustAHub
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
         /// </summary>
-        static RotatorHardware()
+        static SwitchHardware()
         {
             try
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.Rotator.Proxy")
+                TL = new TraceLogger("", "JustAHub.Switch.Proxy")
                 {
-                    Enabled = Settings.RotatorHardwareLogging
+                    Enabled = Settings.SwitchHardwareLogging
                 };
             }
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", $"Exception creating {Rotator.ChooserDescription} ({Rotator.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", $"Exception creating {Switch.ChooserDescription} ({Switch.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -67,10 +67,10 @@ namespace ASCOM.JustAHub
             {
                 LogMessage("Initialise", $"Starting one-off initialisation.");
 
-                if (string.IsNullOrEmpty(Settings.RotatorHostedProgId))
-                    throw new InvalidValueException("The configured Rotator ProgID in JustAHub is null or empty");
+                if (string.IsNullOrEmpty(Settings.SwitchHostedProgId))
+                    throw new InvalidValueException("The configured Switch ProgID in JustAHub is null or empty");
 
-                LogMessage("Initialise", $"Hosted ProgID: {Settings.RotatorHostedProgId}");
+                LogMessage("Initialise", $"Hosted ProgID: {Settings.SwitchHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
@@ -111,8 +111,8 @@ namespace ASCOM.JustAHub
 
             // Driver instance not yet connected
 
-            // Test whether the Rotator is already connected
-            if (!device.Connected) // Rotator hardware is not connected so connect
+            // Test whether the Switch is already connected
+            if (!device.Connected) // Switch hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
@@ -120,7 +120,7 @@ namespace ASCOM.JustAHub
                 {
                     case ConnectType.Connected:
                         device.Connected = true;
-                        LogMessage("Connect", $"Rotator connected OK.");
+                        LogMessage("Connect", $"Switch connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
@@ -172,7 +172,7 @@ namespace ASCOM.JustAHub
             LogMessage("Disconnect", $"Unique id {uniqueId} removed from the connection list.");
 
             // Test whether any instances are still connected
-            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the Rotator device
+            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the Switch device
             {
                 LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
 
@@ -180,7 +180,7 @@ namespace ASCOM.JustAHub
                 {
                     case ConnectType.Connected:
                         device.Connected = false;
-                        LogMessage("Disconnect", $"Rotator disconnected OK.");
+                        LogMessage("Disconnect", $"Switch disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
@@ -207,7 +207,7 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IRotatorV4 and later Connecting property
+        /// ISwitchV4 and later Connecting property
         /// </summary>
         public static bool Connecting
         {
@@ -218,7 +218,7 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IRotatorV4 and later DeviceState property
+        /// ISwitchV4 and later DeviceState property
         /// </summary>
         public static IStateValueCollection DeviceState
         {
@@ -266,28 +266,28 @@ namespace ASCOM.JustAHub
             }
             try
             {
-                // Create an instance of the Rotator
+                // Create an instance of the Switch
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateInstance", $"Creating DriverAccess Rotator device.");
-                    device = new DriverAccess.Rotator(Settings.RotatorHostedProgId);
+                    LogMessage("CreateInstance", $"Creating DriverAccess Switch device.");
+                    device = new DriverAccess.Switch(Settings.SwitchHostedProgId);
 #else
                     // Get the Type of this ProgID
-                    Type type = Type.GetTypeFromProgID(Settings.RotatorHostedProgId);
-                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.RotatorHostedProgId} OK.");
+                    Type type = Type.GetTypeFromProgID(Settings.SwitchHostedProgId);
+                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.SwitchHostedProgId} OK.");
                     device = Activator.CreateInstance(type);
 #endif
-                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.RotatorHostedProgId} OK.");
+                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.SwitchHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the Rotator with ProgID {Settings.RotatorHostedProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the Switch with ProgID {Settings.SwitchHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.RotatorHostedProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.SwitchHostedProgId}: {ex.Message}");
             }
         }
 
@@ -393,11 +393,11 @@ namespace ASCOM.JustAHub
 
 #if DEBUG
                 try { device.Dispose(); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Rotator object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Switch object."); } catch { }
                 try { device = null; } catch (Exception) { }
 #else
                 try { Marshal.ReleaseComObject(device); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Released Rotator COM object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Released Switch COM object."); } catch { }
                 try { device = null; } catch (Exception) { }
 #endif
             }
@@ -488,47 +488,89 @@ namespace ASCOM.JustAHub
 
         #endregion
 
-        #region IRotator Implementation
+        #region ISwitch Implementation
 
-        public static bool IsMoving => device.IsMoving;
+        public static short MaxSwitch => device.MaxSwitch;
 
-        public static float Position => device.Position;
-
-        public static bool Reverse { get => device.Reverse; set => device.Reverse = value; }
-
-        public static float StepSize => device.StepSize;
-
-        public static float TargetPosition => device.TargetPosition;
-
-        public static bool CanReverse => device.CanReverse;
-
-        public static float MechanicalPosition => device.MechanicalPosition;
-
-        public static void Halt()
+        public static string GetSwitchName(short id)
         {
-            device.Halt();
+            return device.GetSwitchName(id);
         }
 
-        public static void Move(float Position)
+        public static void SetSwitchName(short id, string name)
         {
-            device.Move(Position);
+            device.SetSwitchName(id, name);
         }
 
-        public static void MoveAbsolute(float Position)
+        public static bool GetSwitch(short id)
         {
-            device.MoveAbsolute(Position);
+            return device.GetSwitch(id);
         }
 
-        public static void MoveMechanical(float Position)
+        public static void SetSwitch(short id, bool state)
         {
-            device.MoveMechanical(Position);
+            device.SetSwitch(id, state);
         }
 
-        public static void Sync(float Position)
+        public static bool CanWrite(short id)
         {
-            device.Sync(Position);
+            return device.CanWrite(id);
         }
 
+        public static string GetSwitchDescription(short id)
+        {
+            return device.GetSwitchDescription(id);
+        }
+
+        public static double GetSwitchValue(short id)
+        {
+            return device.GetSwitchValue(id);
+        }
+
+        public static double MaxSwitchValue(short id)
+        {
+            return device.MaxSwitchValue(id);
+        }
+
+        public static double MinSwitchValue(short id)
+        {
+            return device.MinSwitchValue(id);
+        }
+
+        public static void SetSwitchValue(short id, double value)
+        {
+            device.SetSwitchValue(id, value);
+        }
+
+        public static double SwitchStep(short id)
+        {
+            return device.SwitchStep(id);
+        }
+
+        public static void SetAsync(short id, bool state)
+        {
+            device.SetAsync(id, state);
+        }
+
+        public static void SetAsyncValue(short id, double value)
+        {
+            device.SetAsyncValue(id, value);
+        }
+
+        public static bool CanAsync(short id)
+        {
+            return device.CanAsync(id);
+        }
+
+        public static bool StateChangeComplete(short id)
+        {
+            return device.StateChangeComplete(id);
+        }
+
+        public static void CancelAsync(short id)
+        {
+            device.CancelAsync(id);
+        }
         #endregion
 
         #region Private properties and methods
@@ -585,12 +627,12 @@ namespace ASCOM.JustAHub
             int iVersion = device.InterfaceVersion;
 
             // Check whether the device is connected
-            if (device.Connected) // Rotator is connected so save the value for future use
+            if (device.Connected) // Switch is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;
             }
-            else // Rotator is not connected so return the reported value but don't save it
+            else // Switch is not connected so return the reported value but don't save it
             {
                 return iVersion;
             }

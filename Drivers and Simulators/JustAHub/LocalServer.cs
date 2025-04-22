@@ -213,7 +213,9 @@ namespace ASCOM.LocalServer
         {
             using (SetupDialogForm F = new SetupDialogForm(TL, deviceType))
             {
-                var result = F.ShowDialog();
+                DialogResult result = F.ShowDialog();
+                TL.LogMessage("SetupDialog", $"Dialogue outcome: {result}.");
+
                 if (result == DialogResult.OK)
                 {
                     // Kill the current instance and create a new one for each hardware class  in case the configuration has changed
@@ -224,7 +226,7 @@ namespace ASCOM.LocalServer
                         Settings.SaveSettings();
                         TL.LogMessage("SetupDialog", $"Settings saved OK for {deviceType}.");
 
-                        TL.LogMessage("SetupDialog", $"Creating new device objects.");
+                        TL.LogMessage("SetupDialog", $"Creating new device object.");
 
                         // Get the hardware types in the local server assembly
                         List<Type> hardwareTypes = GetHardwareTypes();
@@ -232,27 +234,32 @@ namespace ASCOM.LocalServer
                         // Iterate over the types looking for hardware classes that need to be disposed
                         foreach (Type hardwareType in hardwareTypes)
                         {
-                            try
+                            TL.LogMessage("SetupDialog", $"Found hardware type: {hardwareType.Name}");
+                            if (hardwareType.Name == $"{deviceType}Hardware")
                             {
-                                MethodInfo createInstanceMethod = hardwareType.GetMethod("CreateInstance");
-
-                                // If the method is found call it
-                                if (createInstanceMethod != null) // a public Dispose() method was found
+                                TL.LogMessage("SetupDialog", $"Initialising hardware type: {hardwareType.Name}");
+                                try
                                 {
-                                    TL.LogMessage("SetupDialog", $"Calling method {createInstanceMethod.Name} in static class {hardwareType.Name}...");
+                                    MethodInfo createInstanceMethod = hardwareType.GetMethod("CreateInstance");
 
-                                    // Now call CreateInstance()
-                                    createInstanceMethod.Invoke(null, null);
-                                    TL.LogMessage("SetupDialog", $"{createInstanceMethod.Name} method called OK.");
+                                    // If the method is found call it
+                                    if (createInstanceMethod != null) // a public Dispose() method was found
+                                    {
+                                        TL.LogMessage("SetupDialog", $"Calling method {createInstanceMethod.Name} in static class {hardwareType.Name}...");
+
+                                        // Now call CreateInstance()
+                                        createInstanceMethod.Invoke(null, null);
+                                        TL.LogMessage("SetupDialog", $"{createInstanceMethod.Name} method called OK.");
+                                    }
+                                    else // No public CreateInstance method was found
+                                    {
+                                        TL.LogMessage("SetupDialog", $"The {createInstanceMethod.Name} method does not contain a public CreateInstance() method.");
+                                    }
                                 }
-                                else // No public CreateInstance method was found
+                                catch (Exception ex)
                                 {
-                                    TL.LogMessage("SetupDialog", $"The {createInstanceMethod.Name} method does not contain a public CreateInstance() method.");
+                                    TL.LogMessageCrLf("SetupDialog", $"Exception (inner) when creating new instance.\r\n{ex}");
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessageCrLf("SetupDialog", $"Exception (inner) when creating new instance.\r\n{ex}");
                             }
                         }
                     }

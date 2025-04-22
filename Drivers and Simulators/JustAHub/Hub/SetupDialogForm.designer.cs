@@ -84,6 +84,27 @@ namespace ASCOM.JustAHub
             this.BtnChooseSafetyMonitor = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
+            this.Switch = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingSwitch = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingSwitch = new System.Windows.Forms.CheckBox();
+            this.LblCurrentSwitchDevice = new System.Windows.Forms.Label();
+            this.BtnChooseSwitch = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.Telescope = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingTelescope = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingTelescope = new System.Windows.Forms.CheckBox();
+            this.LblCurrentTelescopeDevice = new System.Windows.Forms.Label();
+            this.BtnChooseTelescope = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.Dome = new System.Windows.Forms.TabPage();
+            this.ChkHardwareLoggingDome = new System.Windows.Forms.CheckBox();
+            this.ChkDriverLoggingDome = new System.Windows.Forms.CheckBox();
+            this.LblCurrentDomeDevice = new System.Windows.Forms.Label();
+            this.BtnChooseDome = new System.Windows.Forms.Button();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.TabDevices.SuspendLayout();
             this.General.SuspendLayout();
@@ -94,6 +115,9 @@ namespace ASCOM.JustAHub
             this.ObservingConditions.SuspendLayout();
             this.Rotator.SuspendLayout();
             this.SafetyMonitor.SuspendLayout();
+            this.Switch.SuspendLayout();
+            this.Telescope.SuspendLayout();
+            this.Dome.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -228,11 +252,14 @@ namespace ASCOM.JustAHub
             this.TabDevices.Controls.Add(this.General);
             this.TabDevices.Controls.Add(this.Camera);
             this.TabDevices.Controls.Add(this.CoverCalibrator);
+            this.TabDevices.Controls.Add(this.Dome);
             this.TabDevices.Controls.Add(this.FilterWheel);
             this.TabDevices.Controls.Add(this.Focuser);
             this.TabDevices.Controls.Add(this.ObservingConditions);
             this.TabDevices.Controls.Add(this.Rotator);
             this.TabDevices.Controls.Add(this.SafetyMonitor);
+            this.TabDevices.Controls.Add(this.Switch);
+            this.TabDevices.Controls.Add(this.Telescope);
             this.TabDevices.Location = new System.Drawing.Point(12, 12);
             this.TabDevices.Multiline = true;
             this.TabDevices.Name = "TabDevices";
@@ -271,10 +298,10 @@ namespace ASCOM.JustAHub
             this.Camera.Controls.Add(this.ChkDriverLoggingCamera);
             this.Camera.Controls.Add(this.label3);
             this.Camera.Controls.Add(this.label2);
-            this.Camera.Location = new System.Drawing.Point(4, 40);
+            this.Camera.Location = new System.Drawing.Point(4, 22);
             this.Camera.Name = "Camera";
             this.Camera.Padding = new System.Windows.Forms.Padding(3);
-            this.Camera.Size = new System.Drawing.Size(409, 168);
+            this.Camera.Size = new System.Drawing.Size(409, 186);
             this.Camera.TabIndex = 0;
             this.Camera.Text = "Camera";
             // 
@@ -703,6 +730,228 @@ namespace ASCOM.JustAHub
             this.label13.Text = "Select the driver to be hosted";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // Switch
+            // 
+            this.Switch.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.Switch.Controls.Add(this.ChkHardwareLoggingSwitch);
+            this.Switch.Controls.Add(this.ChkDriverLoggingSwitch);
+            this.Switch.Controls.Add(this.LblCurrentSwitchDevice);
+            this.Switch.Controls.Add(this.BtnChooseSwitch);
+            this.Switch.Controls.Add(this.label16);
+            this.Switch.Controls.Add(this.label17);
+            this.Switch.Location = new System.Drawing.Point(4, 40);
+            this.Switch.Name = "Switch";
+            this.Switch.Size = new System.Drawing.Size(409, 168);
+            this.Switch.TabIndex = 8;
+            this.Switch.Text = "Switch";
+            // 
+            // ChkHardwareLoggingSwitch
+            // 
+            this.ChkHardwareLoggingSwitch.AutoSize = true;
+            this.ChkHardwareLoggingSwitch.Location = new System.Drawing.Point(225, 116);
+            this.ChkHardwareLoggingSwitch.Name = "ChkHardwareLoggingSwitch";
+            this.ChkHardwareLoggingSwitch.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingSwitch.TabIndex = 36;
+            this.ChkHardwareLoggingSwitch.Text = "Debug log";
+            this.ChkHardwareLoggingSwitch.UseVisualStyleBackColor = true;
+            // 
+            // ChkDriverLoggingSwitch
+            // 
+            this.ChkDriverLoggingSwitch.AutoSize = true;
+            this.ChkDriverLoggingSwitch.Location = new System.Drawing.Point(64, 116);
+            this.ChkDriverLoggingSwitch.Name = "ChkDriverLoggingSwitch";
+            this.ChkDriverLoggingSwitch.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingSwitch.TabIndex = 35;
+            this.ChkDriverLoggingSwitch.Text = "Log driver calls";
+            this.ChkDriverLoggingSwitch.UseVisualStyleBackColor = true;
+            // 
+            // LblCurrentSwitchDevice
+            // 
+            this.LblCurrentSwitchDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblCurrentSwitchDevice.Location = new System.Drawing.Point(133, 35);
+            this.LblCurrentSwitchDevice.Name = "LblCurrentSwitchDevice";
+            this.LblCurrentSwitchDevice.Size = new System.Drawing.Size(246, 18);
+            this.LblCurrentSwitchDevice.TabIndex = 34;
+            this.LblCurrentSwitchDevice.Text = "ASCOM.Simulator.Switch";
+            this.LblCurrentSwitchDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnChooseSwitch
+            // 
+            this.BtnChooseSwitch.Location = new System.Drawing.Point(215, 71);
+            this.BtnChooseSwitch.Name = "BtnChooseSwitch";
+            this.BtnChooseSwitch.Size = new System.Drawing.Size(86, 23);
+            this.BtnChooseSwitch.TabIndex = 31;
+            this.BtnChooseSwitch.Text = "Choose";
+            this.BtnChooseSwitch.UseVisualStyleBackColor = true;
+            this.BtnChooseSwitch.Click += new System.EventHandler(this.BtnChooseSwitch_Click);
+            // 
+            // label16
+            // 
+            this.label16.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label16.Location = new System.Drawing.Point(63, 35);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(101, 18);
+            this.label16.TabIndex = 33;
+            this.label16.Text = "Hosted driver:";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(63, 73);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(161, 19);
+            this.label17.TabIndex = 32;
+            this.label17.Text = "Select the driver to be hosted";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Telescope
+            // 
+            this.Telescope.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.Telescope.Controls.Add(this.ChkHardwareLoggingTelescope);
+            this.Telescope.Controls.Add(this.ChkDriverLoggingTelescope);
+            this.Telescope.Controls.Add(this.LblCurrentTelescopeDevice);
+            this.Telescope.Controls.Add(this.BtnChooseTelescope);
+            this.Telescope.Controls.Add(this.label19);
+            this.Telescope.Controls.Add(this.label20);
+            this.Telescope.Location = new System.Drawing.Point(4, 40);
+            this.Telescope.Name = "Telescope";
+            this.Telescope.Size = new System.Drawing.Size(409, 168);
+            this.Telescope.TabIndex = 9;
+            this.Telescope.Text = "Telescope";
+            // 
+            // ChkHardwareLoggingTelescope
+            // 
+            this.ChkHardwareLoggingTelescope.AutoSize = true;
+            this.ChkHardwareLoggingTelescope.Location = new System.Drawing.Point(225, 116);
+            this.ChkHardwareLoggingTelescope.Name = "ChkHardwareLoggingTelescope";
+            this.ChkHardwareLoggingTelescope.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingTelescope.TabIndex = 36;
+            this.ChkHardwareLoggingTelescope.Text = "Debug log";
+            this.ChkHardwareLoggingTelescope.UseVisualStyleBackColor = true;
+            // 
+            // ChkDriverLoggingTelescope
+            // 
+            this.ChkDriverLoggingTelescope.AutoSize = true;
+            this.ChkDriverLoggingTelescope.Location = new System.Drawing.Point(64, 116);
+            this.ChkDriverLoggingTelescope.Name = "ChkDriverLoggingTelescope";
+            this.ChkDriverLoggingTelescope.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingTelescope.TabIndex = 35;
+            this.ChkDriverLoggingTelescope.Text = "Log driver calls";
+            this.ChkDriverLoggingTelescope.UseVisualStyleBackColor = true;
+            // 
+            // LblCurrentTelescopeDevice
+            // 
+            this.LblCurrentTelescopeDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblCurrentTelescopeDevice.Location = new System.Drawing.Point(133, 35);
+            this.LblCurrentTelescopeDevice.Name = "LblCurrentTelescopeDevice";
+            this.LblCurrentTelescopeDevice.Size = new System.Drawing.Size(246, 18);
+            this.LblCurrentTelescopeDevice.TabIndex = 34;
+            this.LblCurrentTelescopeDevice.Text = "ASCOM.Simulator.Telescope";
+            this.LblCurrentTelescopeDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnChooseTelescope
+            // 
+            this.BtnChooseTelescope.Location = new System.Drawing.Point(215, 71);
+            this.BtnChooseTelescope.Name = "BtnChooseTelescope";
+            this.BtnChooseTelescope.Size = new System.Drawing.Size(86, 23);
+            this.BtnChooseTelescope.TabIndex = 31;
+            this.BtnChooseTelescope.Text = "Choose";
+            this.BtnChooseTelescope.UseVisualStyleBackColor = true;
+            this.BtnChooseTelescope.Click += new System.EventHandler(this.BtnChooseTelescope_Click);
+            // 
+            // label19
+            // 
+            this.label19.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label19.Location = new System.Drawing.Point(63, 35);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(101, 18);
+            this.label19.TabIndex = 33;
+            this.label19.Text = "Hosted driver:";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(63, 73);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(161, 19);
+            this.label20.TabIndex = 32;
+            this.label20.Text = "Select the driver to be hosted";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Dome
+            // 
+            this.Dome.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.Dome.Controls.Add(this.ChkHardwareLoggingDome);
+            this.Dome.Controls.Add(this.ChkDriverLoggingDome);
+            this.Dome.Controls.Add(this.LblCurrentDomeDevice);
+            this.Dome.Controls.Add(this.BtnChooseDome);
+            this.Dome.Controls.Add(this.label18);
+            this.Dome.Controls.Add(this.label21);
+            this.Dome.Location = new System.Drawing.Point(4, 40);
+            this.Dome.Name = "Dome";
+            this.Dome.Size = new System.Drawing.Size(409, 168);
+            this.Dome.TabIndex = 10;
+            this.Dome.Text = "Dome";
+            // 
+            // ChkHardwareLoggingDome
+            // 
+            this.ChkHardwareLoggingDome.AutoSize = true;
+            this.ChkHardwareLoggingDome.Location = new System.Drawing.Point(225, 116);
+            this.ChkHardwareLoggingDome.Name = "ChkHardwareLoggingDome";
+            this.ChkHardwareLoggingDome.Size = new System.Drawing.Size(75, 17);
+            this.ChkHardwareLoggingDome.TabIndex = 30;
+            this.ChkHardwareLoggingDome.Text = "Debug log";
+            this.ChkHardwareLoggingDome.UseVisualStyleBackColor = true;
+            // 
+            // ChkDriverLoggingDome
+            // 
+            this.ChkDriverLoggingDome.AutoSize = true;
+            this.ChkDriverLoggingDome.Location = new System.Drawing.Point(64, 116);
+            this.ChkDriverLoggingDome.Name = "ChkDriverLoggingDome";
+            this.ChkDriverLoggingDome.Size = new System.Drawing.Size(97, 17);
+            this.ChkDriverLoggingDome.TabIndex = 29;
+            this.ChkDriverLoggingDome.Text = "Log driver calls";
+            this.ChkDriverLoggingDome.UseVisualStyleBackColor = true;
+            // 
+            // LblCurrentDomeDevice
+            // 
+            this.LblCurrentDomeDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblCurrentDomeDevice.Location = new System.Drawing.Point(133, 35);
+            this.LblCurrentDomeDevice.Name = "LblCurrentDomeDevice";
+            this.LblCurrentDomeDevice.Size = new System.Drawing.Size(246, 18);
+            this.LblCurrentDomeDevice.TabIndex = 28;
+            this.LblCurrentDomeDevice.Text = "ASCOM.Simulator.Dome";
+            this.LblCurrentDomeDevice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnChooseDome
+            // 
+            this.BtnChooseDome.Location = new System.Drawing.Point(215, 71);
+            this.BtnChooseDome.Name = "BtnChooseDome";
+            this.BtnChooseDome.Size = new System.Drawing.Size(86, 23);
+            this.BtnChooseDome.TabIndex = 25;
+            this.BtnChooseDome.Text = "Choose";
+            this.BtnChooseDome.UseVisualStyleBackColor = true;
+            this.BtnChooseDome.Click += new System.EventHandler(this.BtnChooseDome_Click);
+            // 
+            // label18
+            // 
+            this.label18.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label18.Location = new System.Drawing.Point(63, 35);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(101, 18);
+            this.label18.TabIndex = 27;
+            this.label18.Text = "Hosted driver:";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label21
+            // 
+            this.label21.Location = new System.Drawing.Point(63, 73);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(161, 19);
+            this.label21.TabIndex = 26;
+            this.label21.Text = "Select the driver to be hosted";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -738,6 +987,12 @@ namespace ASCOM.JustAHub
             this.Rotator.PerformLayout();
             this.SafetyMonitor.ResumeLayout(false);
             this.SafetyMonitor.PerformLayout();
+            this.Switch.ResumeLayout(false);
+            this.Switch.PerformLayout();
+            this.Telescope.ResumeLayout(false);
+            this.Telescope.PerformLayout();
+            this.Dome.ResumeLayout(false);
+            this.Dome.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -800,5 +1055,26 @@ namespace ASCOM.JustAHub
         private System.Windows.Forms.Button BtnChooseRotator;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TabPage Switch;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingSwitch;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingSwitch;
+        private System.Windows.Forms.Label LblCurrentSwitchDevice;
+        private System.Windows.Forms.Button BtnChooseSwitch;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TabPage Telescope;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingTelescope;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingTelescope;
+        private System.Windows.Forms.Label LblCurrentTelescopeDevice;
+        private System.Windows.Forms.Button BtnChooseTelescope;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TabPage Dome;
+        private System.Windows.Forms.CheckBox ChkHardwareLoggingDome;
+        private System.Windows.Forms.CheckBox ChkDriverLoggingDome;
+        private System.Windows.Forms.Label LblCurrentDomeDevice;
+        private System.Windows.Forms.Button BtnChooseDome;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label21;
     }
 }

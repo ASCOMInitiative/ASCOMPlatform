@@ -44,8 +44,6 @@ namespace ASCOM.JustAHub
                 {
                     Enabled = Settings.FocuserHardwareLogging
                 };
-
-                LogMessage("JustAHub", $"Static initialiser completed.");
             }
             catch (Exception ex)
             {
@@ -389,10 +387,10 @@ namespace ASCOM.JustAHub
         /// </remarks>
         public static void Dispose()
         {
-            try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
-
             if (!(device is null))
             {
+                try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
+
 #if DEBUG
                 try { device.Dispose(); } catch (Exception) { }
                 try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Focuser object."); } catch { }

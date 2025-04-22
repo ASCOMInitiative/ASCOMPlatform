@@ -11,12 +11,15 @@ namespace ASCOM.JustAHub
     {
         readonly TraceLogger tl; // Holder for a reference to the driver's trace logger
         string newCameraProgId;
-        string newFilterWheelProgId;
+        string newDomeProgId;
         string newCoverCalibratorProgId;
+        string newFilterWheelProgId;
         string newFocuserProgId;
         string newObservingConditionsProgId;
         string newRotatorProgId;
         string newSafetyMonitorProgId;
+        string newSwitchProgId;
+        string newTelescopeProgId;
 
         readonly string callingDeviceType;
 
@@ -63,6 +66,16 @@ namespace ASCOM.JustAHub
 
                 ChkHardwareLoggingCoverCalibrator.Checked = Settings.CoverCalibratorHardwareLogging;
                 tl.LogMessage("SetForm_Load", $"Log cover calibrator hardware calls: {Settings.CoverCalibratorHardwareLogging}");
+
+                // Dome values
+                LblCurrentDomeDevice.Text = $"{Settings.DomeHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted dome device ProgID: {Settings.DomeHostedProgId}");
+
+                ChkDriverLoggingDome.Checked = Settings.DomeDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log dome driver calls: {Settings.DomeDriverLogging}");
+
+                ChkHardwareLoggingDome.Checked = Settings.DomeHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log dome hardware calls: {Settings.DomeHardwareLogging}");
 
                 // Filter Wheel values
                 LblCurrentFilterWheelDevice.Text = $"{Settings.FilterWheelHostedProgId}";
@@ -114,6 +127,26 @@ namespace ASCOM.JustAHub
                 ChkHardwareLoggingSafetyMonitor.Checked = Settings.SafetyMonitorHardwareLogging;
                 tl.LogMessage("SetForm_Load", $"Log safety monitor hardware calls: {Settings.SafetyMonitorHardwareLogging}");
 
+                // Switch values
+                LblCurrentSwitchDevice.Text = $"{Settings.SwitchHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted switch device ProgID: {Settings.SwitchHostedProgId}");
+
+                ChkDriverLoggingSwitch.Checked = Settings.SwitchDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log switch driver calls: {Settings.SwitchDriverLogging}");
+
+                ChkHardwareLoggingSwitch.Checked = Settings.SwitchHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log switch hardware calls: {Settings.SwitchHardwareLogging}");
+
+                // Telescope values
+                LblCurrentTelescopeDevice.Text = $"{Settings.TelescopeHostedProgId}";
+                tl.LogMessage("SetForm_Load", $"Hosted telescope device ProgID: {Settings.TelescopeHostedProgId}");
+
+                ChkDriverLoggingTelescope.Checked = Settings.TelescopeDriverLogging;
+                tl.LogMessage("SetForm_Load", $"Log telescope driver calls: {Settings.TelescopeDriverLogging}");
+
+                ChkHardwareLoggingTelescope.Checked = Settings.TelescopeHardwareLogging;
+                tl.LogMessage("SetForm_Load", $"Log telescope hardware calls: {Settings.TelescopeHardwareLogging}");
+
                 // Select the appropriate tab
                 switch (callingDeviceType.ToUpperInvariant())
                 {
@@ -123,6 +156,10 @@ namespace ASCOM.JustAHub
 
                     case "COVERCALIBRATOR":
                         TabDevices.SelectTab("CoverCalibrator");
+                        break;
+
+                    case "DOME":
+                        TabDevices.SelectTab("Dome");
                         break;
 
                     case "FILTERWHEEL":
@@ -143,6 +180,16 @@ namespace ASCOM.JustAHub
 
                     case "SAFETYMONITOR":
                         TabDevices.SelectTab("SafetyMonitor");
+                        break;
+
+
+                    case "SWITCH":
+                        TabDevices.SelectTab("Switch");
+                        break;
+
+
+                    case "TELESCOPE":
+                        TabDevices.SelectTab("Telescope");
                         break;
 
                     default:
@@ -187,6 +234,12 @@ namespace ASCOM.JustAHub
             if (!string.IsNullOrEmpty(newCoverCalibratorProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.CoverCalibratorHostedProgId = newCoverCalibratorProgId;
 
+            // Save dome settings
+            Settings.DomeDriverLogging = ChkDriverLoggingDome.Checked;
+            Settings.DomeHardwareLogging = ChkHardwareLoggingDome.Checked;
+            if (!string.IsNullOrEmpty(newDomeProgId)) // Update the ProgID if a new one has been chosen.
+                Settings.DomeHostedProgId = newDomeProgId;
+
             // Save filter wheel settings
             Settings.FilterWheelDriverLogging = ChkDriverLoggingFilterWheel.Checked;
             Settings.FilterWheelHardwareLogging = ChkHardwareLoggingFilterWheel.Checked;
@@ -216,6 +269,18 @@ namespace ASCOM.JustAHub
             Settings.SafetyMonitorHardwareLogging = ChkHardwareLoggingSafetyMonitor.Checked;
             if (!string.IsNullOrEmpty(newSafetyMonitorProgId)) // Update the ProgID if a new one has been chosen.
                 Settings.SafetyMonitorHostedProgId = newSafetyMonitorProgId;
+
+            // Save switch settings
+            Settings.SwitchDriverLogging = ChkDriverLoggingSwitch.Checked;
+            Settings.SwitchHardwareLogging = ChkHardwareLoggingSwitch.Checked;
+            if (!string.IsNullOrEmpty(newSwitchProgId)) // Update the ProgID if a new one has been chosen.
+                Settings.SwitchHostedProgId = newSwitchProgId;
+
+            // Save telescope settings
+            Settings.TelescopeDriverLogging = ChkDriverLoggingTelescope.Checked;
+            Settings.TelescopeHardwareLogging = ChkHardwareLoggingTelescope.Checked;
+            if (!string.IsNullOrEmpty(newTelescopeProgId)) // Update the ProgID if a new one has been chosen.
+                Settings.TelescopeHostedProgId = newTelescopeProgId;
         }
 
         private void CmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -255,6 +320,11 @@ namespace ASCOM.JustAHub
             newCoverCalibratorProgId = HandleChooserClick(CoverCalibratorHardware.TL, "CoverCalibrator", Settings.CoverCalibratorHostedProgId, LblCurrentCoverCalibratorDevice);
         }
 
+        private void BtnChooseDome_Click(object sender, EventArgs e)
+        {
+            newDomeProgId = HandleChooserClick(DomeHardware.TL, "Dome", Settings.DomeHostedProgId, LblCurrentDomeDevice);
+        }
+
         private void BtnChooseFilterWheel_Click(object sender, EventArgs e)
         {
             newFilterWheelProgId = HandleChooserClick(FilterWheelHardware.TL, "FilterWheel", Settings.FilterWheelHostedProgId, LblCurrentFilterWheelDevice);
@@ -278,6 +348,16 @@ namespace ASCOM.JustAHub
         private void BtnChooseSafetyMonitor_Click(object sender, EventArgs e)
         {
             newSafetyMonitorProgId = HandleChooserClick(SafetyMonitorHardware.TL, "SafetyMonitor", Settings.SafetyMonitorHostedProgId, LblCurrentSafetyMonitorDevice);
+        }
+
+        private void BtnChooseSwitch_Click(object sender, EventArgs e)
+        {
+            newSwitchProgId = HandleChooserClick(SwitchHardware.TL, "Switch", Settings.SwitchHostedProgId, LblCurrentSwitchDevice);
+        }
+
+        private void BtnChooseTelescope_Click(object sender, EventArgs e)
+        {
+            newTelescopeProgId = HandleChooserClick(TelescopeHardware.TL, "Telescope", Settings.TelescopeHostedProgId, LblCurrentTelescopeDevice);
         }
 
         #endregion

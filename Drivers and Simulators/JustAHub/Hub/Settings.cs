@@ -14,13 +14,16 @@ namespace ASCOM.JustAHub
         private const string PROGID_PROFILE_NAME = "Hosted ProgID";
 
         // Per driver settings
-        internal const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
-        internal const string COVERCALIBRATOR_PROGID_DEFAULT = "ASCOM.Simulator.CoverCalibrator";
-        internal const string FILTERWHEEL_PROGID_DEFAULT = "ASCOM.Simulator.FilterWheel";
-        internal const string FOCUSER_PROGID_DEFAULT = "ASCOM.Simulator.Focuser";
-        internal const string OBSERVINGCONDITIONS_PROGID_DEFAULT = "ASCOM.Simulator.ObservingConditions";
-        internal const string ROTATOR_PROGID_DEFAULT = "ASCOM.Simulator.Rotator";
-        internal const string SAFETYMONITOR_PROGID_DEFAULT = "ASCOM.Simulator.SafetyMonitor";
+        private const string CAMERA_PROGID_DEFAULT = "ASCOM.Simulator.Camera";
+        private const string COVERCALIBRATOR_PROGID_DEFAULT = "ASCOM.Simulator.CoverCalibrator";
+        private const string DOME_PROGID_DEFAULT = "ASCOM.Simulator.Dome";
+        private const string FILTERWHEEL_PROGID_DEFAULT = "ASCOM.Simulator.FilterWheel";
+        private const string FOCUSER_PROGID_DEFAULT = "ASCOM.Simulator.Focuser";
+        private const string OBSERVINGCONDITIONS_PROGID_DEFAULT = "ASCOM.Simulator.ObservingConditions";
+        private const string ROTATOR_PROGID_DEFAULT = "ASCOM.Simulator.Rotator";
+        private const string SAFETYMONITOR_PROGID_DEFAULT = "ASCOM.Simulator.SafetyMonitor";
+        private const string SWITCH_PROGID_DEFAULT = "ASCOM.Simulator.Switch";
+        private const string TELESCOPE_PROGID_DEFAULT = "ASCOM.Simulator.Telescope";
 
         static Settings()
         {
@@ -57,6 +60,18 @@ namespace ASCOM.JustAHub
                     CoverCalibratorDriverLogging = Convert.ToBoolean(profile.GetValue(CoverCalibrator.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
                     CoverCalibratorHardwareLogging = Convert.ToBoolean(profile.GetValue(CoverCalibrator.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
+                    // Load settings stored in the dome profile
+                    profile.DeviceType = "Dome";
+
+                    if (!profile.IsRegistered(Dome.ProgId))
+                    {
+                        profile.Register(Dome.ProgId, Dome.ChooserDescription);
+                    }
+
+                    DomeHostedProgId = profile.GetValue(Dome.ProgId, PROGID_PROFILE_NAME, string.Empty, DOME_PROGID_DEFAULT);
+                    DomeDriverLogging = Convert.ToBoolean(profile.GetValue(Dome.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    DomeHardwareLogging = Convert.ToBoolean(profile.GetValue(Dome.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
                     // Load settings stored in the filter wheel profile
                     profile.DeviceType = "FilterWheel";
 
@@ -66,8 +81,8 @@ namespace ASCOM.JustAHub
                     }
 
                     FilterWheelHostedProgId = profile.GetValue(FilterWheel.ProgId, PROGID_PROFILE_NAME, string.Empty, FILTERWHEEL_PROGID_DEFAULT);
-                    FilterWheelDriverLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
-                    FilterWheelHardwareLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    FilterWheelDriverLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    FilterWheelHardwareLogging = Convert.ToBoolean(profile.GetValue(FilterWheel.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
                     // Load settings stored in the focuser profile
                     profile.DeviceType = "Focuser";
@@ -78,8 +93,8 @@ namespace ASCOM.JustAHub
                     }
 
                     FocuserHostedProgId = profile.GetValue(Focuser.ProgId, PROGID_PROFILE_NAME, string.Empty, FOCUSER_PROGID_DEFAULT);
-                    FocuserDriverLogging = Convert.ToBoolean(profile.GetValue(Focuser.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
-                    FocuserHardwareLogging = Convert.ToBoolean(profile.GetValue(Focuser.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    FocuserDriverLogging = Convert.ToBoolean(profile.GetValue(Focuser.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    FocuserHardwareLogging = Convert.ToBoolean(profile.GetValue(Focuser.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
                     // Load settings stored in the observing conditions profile
                     profile.DeviceType = "ObservingConditions";
@@ -90,8 +105,8 @@ namespace ASCOM.JustAHub
                     }
 
                     ObservingConditionsHostedProgId = profile.GetValue(ObservingConditions.ProgId, PROGID_PROFILE_NAME, string.Empty, OBSERVINGCONDITIONS_PROGID_DEFAULT);
-                    ObservingConditionsDriverLogging = Convert.ToBoolean(profile.GetValue(ObservingConditions.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
-                    ObservingConditionsHardwareLogging = Convert.ToBoolean(profile.GetValue(ObservingConditions.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    ObservingConditionsDriverLogging = Convert.ToBoolean(profile.GetValue(ObservingConditions.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    ObservingConditionsHardwareLogging = Convert.ToBoolean(profile.GetValue(ObservingConditions.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
                     // Load settings stored in the rotator profile
                     profile.DeviceType = "Rotator";
@@ -102,8 +117,8 @@ namespace ASCOM.JustAHub
                     }
 
                     RotatorHostedProgId = profile.GetValue(Rotator.ProgId, PROGID_PROFILE_NAME, string.Empty, ROTATOR_PROGID_DEFAULT);
-                    RotatorDriverLogging = Convert.ToBoolean(profile.GetValue(Rotator.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
-                    RotatorHardwareLogging = Convert.ToBoolean(profile.GetValue(Rotator.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    RotatorDriverLogging = Convert.ToBoolean(profile.GetValue(Rotator.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    RotatorHardwareLogging = Convert.ToBoolean(profile.GetValue(Rotator.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
 
                     // Load settings stored in the safety monitor profile
                     profile.DeviceType = "SafetyMonitor";
@@ -114,8 +129,33 @@ namespace ASCOM.JustAHub
                     }
 
                     SafetyMonitorHostedProgId = profile.GetValue(SafetyMonitor.ProgId, PROGID_PROFILE_NAME, string.Empty, SAFETYMONITOR_PROGID_DEFAULT);
-                    SafetyMonitorDriverLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
-                    SafetyMonitorHardwareLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, DRIVER_LOGGING_DEFAULT, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    SafetyMonitorDriverLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    SafetyMonitorHardwareLogging = Convert.ToBoolean(profile.GetValue(SafetyMonitor.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
+                    // Load settings stored in the switch profile
+                    profile.DeviceType = "Switch";
+
+                    if (!profile.IsRegistered(Switch.ProgId))
+                    {
+                        profile.Register(Switch.ProgId, Switch.ChooserDescription);
+                    }
+
+                    SwitchHostedProgId = profile.GetValue(Switch.ProgId, PROGID_PROFILE_NAME, string.Empty, SWITCH_PROGID_DEFAULT);
+                    SwitchDriverLogging = Convert.ToBoolean(profile.GetValue(Switch.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    SwitchHardwareLogging = Convert.ToBoolean(profile.GetValue(Switch.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
+                    // Load settings stored in the switch profile
+                    profile.DeviceType = "Telescope";
+
+                    if (!profile.IsRegistered(Telescope.ProgId))
+                    {
+                        profile.Register(Telescope.ProgId, Telescope.ChooserDescription);
+                    }
+
+                    TelescopeHostedProgId = profile.GetValue(Telescope.ProgId, PROGID_PROFILE_NAME, string.Empty, TELESCOPE_PROGID_DEFAULT);
+                    TelescopeDriverLogging = Convert.ToBoolean(profile.GetValue(Telescope.ProgId, DRIVER_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+                    TelescopeHardwareLogging = Convert.ToBoolean(profile.GetValue(Telescope.ProgId, HARDWARE_LOGGING_PROFILE_NAME, string.Empty, DRIVER_LOGGING_DEFAULT), CultureInfo.InvariantCulture);
+
                 }
                 catch (Exception ex)
                 {
@@ -144,6 +184,12 @@ namespace ASCOM.JustAHub
                 profile.WriteValue(CoverCalibrator.ProgId, DRIVER_LOGGING_PROFILE_NAME, CoverCalibratorDriverLogging.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(CoverCalibrator.ProgId, HARDWARE_LOGGING_PROFILE_NAME, CoverCalibratorHardwareLogging.ToString(CultureInfo.InvariantCulture));
 
+                // Save dome specific values
+                profile.DeviceType = "Dome";
+                profile.WriteValue(Dome.ProgId, PROGID_PROFILE_NAME, DomeHostedProgId);
+                profile.WriteValue(Dome.ProgId, DRIVER_LOGGING_PROFILE_NAME, DomeDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(Dome.ProgId, HARDWARE_LOGGING_PROFILE_NAME, DomeHardwareLogging.ToString(CultureInfo.InvariantCulture));
+
                 // Save filter wheel specific values
                 profile.DeviceType = "FilterWheel";
                 profile.WriteValue(FilterWheel.ProgId, PROGID_PROFILE_NAME, FilterWheelHostedProgId);
@@ -152,9 +198,9 @@ namespace ASCOM.JustAHub
 
                 // Save focuser specific values
                 profile.DeviceType = "Focuser";
-                profile.WriteValue(FilterWheel.ProgId, PROGID_PROFILE_NAME, FocuserHostedProgId);
-                profile.WriteValue(FilterWheel.ProgId, DRIVER_LOGGING_PROFILE_NAME, FocuserDriverLogging.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(FilterWheel.ProgId, HARDWARE_LOGGING_PROFILE_NAME, FocuserHardwareLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(Focuser.ProgId, PROGID_PROFILE_NAME, FocuserHostedProgId);
+                profile.WriteValue(Focuser.ProgId, DRIVER_LOGGING_PROFILE_NAME, FocuserDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(Focuser.ProgId, HARDWARE_LOGGING_PROFILE_NAME, FocuserHardwareLogging.ToString(CultureInfo.InvariantCulture));
 
                 // Save observing conditions specific values
                 profile.DeviceType = "ObservingConditions";
@@ -173,6 +219,18 @@ namespace ASCOM.JustAHub
                 profile.WriteValue(SafetyMonitor.ProgId, PROGID_PROFILE_NAME, SafetyMonitorHostedProgId);
                 profile.WriteValue(SafetyMonitor.ProgId, DRIVER_LOGGING_PROFILE_NAME, SafetyMonitorDriverLogging.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(SafetyMonitor.ProgId, HARDWARE_LOGGING_PROFILE_NAME, SafetyMonitorHardwareLogging.ToString(CultureInfo.InvariantCulture));
+
+                // Save switch specific values
+                profile.DeviceType = "Switch";
+                profile.WriteValue(Switch.ProgId, PROGID_PROFILE_NAME, SwitchHostedProgId);
+                profile.WriteValue(Switch.ProgId, DRIVER_LOGGING_PROFILE_NAME, SwitchDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(Switch.ProgId, HARDWARE_LOGGING_PROFILE_NAME, SwitchHardwareLogging.ToString(CultureInfo.InvariantCulture));
+
+                // Save telescope specific values
+                profile.DeviceType = "Telescope";
+                profile.WriteValue(Telescope.ProgId, PROGID_PROFILE_NAME, TelescopeHostedProgId);
+                profile.WriteValue(Telescope.ProgId, DRIVER_LOGGING_PROFILE_NAME, TelescopeDriverLogging.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(Telescope.ProgId, HARDWARE_LOGGING_PROFILE_NAME, TelescopeHardwareLogging.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -188,6 +246,11 @@ namespace ASCOM.JustAHub
         internal static string CoverCalibratorHostedProgId { get; set; }
         internal static bool CoverCalibratorDriverLogging { get; set; }
         internal static bool CoverCalibratorHardwareLogging { get; set; }
+
+        // Dome properties
+        internal static string DomeHostedProgId { get; set; }
+        internal static bool DomeDriverLogging { get; set; }
+        internal static bool DomeHardwareLogging { get; set; }
 
         // FilterWheel properties
         internal static string FilterWheelHostedProgId { get; set; }
@@ -213,5 +276,16 @@ namespace ASCOM.JustAHub
         internal static string SafetyMonitorHostedProgId { get; set; }
         internal static bool SafetyMonitorDriverLogging { get; set; }
         internal static bool SafetyMonitorHardwareLogging { get; set; }
+
+        // Switch properties
+        internal static string SwitchHostedProgId { get; set; }
+        internal static bool SwitchDriverLogging { get; set; }
+        internal static bool SwitchHardwareLogging { get; set; }
+
+        // Telescope properties
+        internal static string TelescopeHostedProgId { get; set; }
+        internal static bool TelescopeDriverLogging { get; set; }
+        internal static bool TelescopeHardwareLogging { get; set; }
+
     }
 }

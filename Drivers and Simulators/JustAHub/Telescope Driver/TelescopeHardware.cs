@@ -3,24 +3,21 @@ using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 
 namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM JustAHub Rotator main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub Telescope main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
-    internal static class RotatorHardware
+    internal static class TelescopeHardware
     {
 #if DEBUG
-        private static DriverAccess.Rotator device; // Rotator device being hosted
+        private static DriverAccess.Telescope device; // Telescope device being hosted
 #else
-        private static dynamic device; // Rotator device being hosted
+        private static dynamic device; // Telescope device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -34,21 +31,21 @@ namespace ASCOM.JustAHub
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
         /// </summary>
-        static RotatorHardware()
+        static TelescopeHardware()
         {
             try
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.Rotator.Proxy")
+                TL = new TraceLogger("", "JustAHub.Telescope.Proxy")
                 {
-                    Enabled = Settings.RotatorHardwareLogging
+                    Enabled = Settings.TelescopeHardwareLogging
                 };
             }
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", $"Exception creating {Rotator.ChooserDescription} ({Rotator.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", $"Exception creating {Telescope.ChooserDescription} ({Telescope.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -67,10 +64,10 @@ namespace ASCOM.JustAHub
             {
                 LogMessage("Initialise", $"Starting one-off initialisation.");
 
-                if (string.IsNullOrEmpty(Settings.RotatorHostedProgId))
-                    throw new InvalidValueException("The configured Rotator ProgID in JustAHub is null or empty");
+                if (string.IsNullOrEmpty(Settings.TelescopeHostedProgId))
+                    throw new InvalidValueException("The configured Telescope ProgID in JustAHub is null or empty");
 
-                LogMessage("Initialise", $"Hosted ProgID: {Settings.RotatorHostedProgId}");
+                LogMessage("Initialise", $"Hosted ProgID: {Settings.TelescopeHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
@@ -111,8 +108,8 @@ namespace ASCOM.JustAHub
 
             // Driver instance not yet connected
 
-            // Test whether the Rotator is already connected
-            if (!device.Connected) // Rotator hardware is not connected so connect
+            // Test whether the Telescope is already connected
+            if (!device.Connected) // Telescope hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
@@ -120,7 +117,7 @@ namespace ASCOM.JustAHub
                 {
                     case ConnectType.Connected:
                         device.Connected = true;
-                        LogMessage("Connect", $"Rotator connected OK.");
+                        LogMessage("Connect", $"Telescope connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
@@ -172,7 +169,7 @@ namespace ASCOM.JustAHub
             LogMessage("Disconnect", $"Unique id {uniqueId} removed from the connection list.");
 
             // Test whether any instances are still connected
-            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the Rotator device
+            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the Telescope device
             {
                 LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
 
@@ -180,7 +177,7 @@ namespace ASCOM.JustAHub
                 {
                     case ConnectType.Connected:
                         device.Connected = false;
-                        LogMessage("Disconnect", $"Rotator disconnected OK.");
+                        LogMessage("Disconnect", $"Telescope disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
@@ -207,7 +204,7 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IRotatorV4 and later Connecting property
+        /// ITelescopeV4 and later Connecting property
         /// </summary>
         public static bool Connecting
         {
@@ -218,7 +215,7 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IRotatorV4 and later DeviceState property
+        /// ITelescopeV4 and later DeviceState property
         /// </summary>
         public static IStateValueCollection DeviceState
         {
@@ -266,28 +263,28 @@ namespace ASCOM.JustAHub
             }
             try
             {
-                // Create an instance of the Rotator
+                // Create an instance of the Telescope
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateInstance", $"Creating DriverAccess Rotator device.");
-                    device = new DriverAccess.Rotator(Settings.RotatorHostedProgId);
+                    LogMessage("CreateInstance", $"Creating DriverAccess Telescope device.");
+                    device = new DriverAccess.Telescope(Settings.TelescopeHostedProgId);
 #else
                     // Get the Type of this ProgID
-                    Type type = Type.GetTypeFromProgID(Settings.RotatorHostedProgId);
-                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.RotatorHostedProgId} OK.");
+                    Type type = Type.GetTypeFromProgID(Settings.TelescopeHostedProgId);
+                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.TelescopeHostedProgId} OK.");
                     device = Activator.CreateInstance(type);
 #endif
-                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.RotatorHostedProgId} OK.");
+                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.TelescopeHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the Rotator with ProgID {Settings.RotatorHostedProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the Telescope with ProgID {Settings.TelescopeHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.RotatorHostedProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.TelescopeHostedProgId}: {ex.Message}");
             }
         }
 
@@ -389,15 +386,15 @@ namespace ASCOM.JustAHub
         {
             if (!(device is null))
             {
-                try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
+                try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 #if DEBUG
                 try { device.Dispose(); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Rotator object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Telescope object."); } catch { }
                 try { device = null; } catch (Exception) { }
 #else
                 try { Marshal.ReleaseComObject(device); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Released Rotator COM object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Released Telescope COM object."); } catch { }
                 try { device = null; } catch (Exception) { }
 #endif
             }
@@ -488,45 +485,184 @@ namespace ASCOM.JustAHub
 
         #endregion
 
-        #region IRotator Implementation
+        #region ITelescope Implementation
 
-        public static bool IsMoving => device.IsMoving;
+        public static AlignmentModes AlignmentMode => (AlignmentModes)(device.AlignmentMode);
 
-        public static float Position => device.Position;
+        public static double Altitude => device.Altitude;
 
-        public static bool Reverse { get => device.Reverse; set => device.Reverse = value; }
+        public static double ApertureDiameter => device.ApertureDiameter;
 
-        public static float StepSize => device.StepSize;
+        public static double Azimuth => device.Azimuth;
 
-        public static float TargetPosition => device.TargetPosition;
+        public static bool CanFindHome => device.CanFindHome;
 
-        public static bool CanReverse => device.CanReverse;
+        public static bool CanPark => device.CanPark;
 
-        public static float MechanicalPosition => device.MechanicalPosition;
+        public static bool CanPulseGuide => device.CanPulseGuide;
 
-        public static void Halt()
+        public static bool CanSetPark => device.CanSetPark;
+        public static bool CanSetTracking => device.CanSetTracking;
+
+        public static bool CanSlew => device.CanSlew;
+
+        public static bool CanSlewAsync => device.CanSlewAsync;
+
+        public static bool CanSync => device.CanSync;
+
+        public static bool CanUnpark => device.CanUnpark;
+
+        public static double Declination => device.Declination;
+
+        public static double DeclinationRate { get => device.DeclinationRate; set => device.DeclinationRate = value; }
+
+        public static double FocalLength => device.FocalLength;
+
+        public static double RightAscension => device.RightAscension;
+
+        public static double RightAscensionRate { get => device.RightAscensionRate; set => device.RightAscensionRate = value; }
+
+        public static double SiderealTime => device.SiderealTime;
+
+        public static double SiteElevation { get => device.SiteElevation; set => device.SiteElevation = value; }
+        public static double SiteLatitude { get => device.SiteLatitude; set => device.SiteLatitude = value; }
+        public static double SiteLongitude { get => device.SiteLongitude; set => device.SiteLongitude = value; }
+
+        public static bool Slewing => device.Slewing;
+
+        public static short SlewSettleTime { get => device.SlewSettleTime; set => device.SlewSettleTime = value; }
+        public static double TargetDeclination { get => device.TargetDeclination; set => device.TargetDeclination = value; }
+        public static double TargetRightAscension { get => device.TargetRightAscension; set => device.TargetRightAscension = value; }
+        public static bool Tracking { get => device.Tracking; set => device.Tracking = value; }
+        public static DateTime UTCDate { get => (DateTime)device.UTCDate; set => device.UTCDate = value; }
+
+        public static double ApertureArea => device.ApertureArea;
+
+        public static bool AtHome => device.AtHome;
+
+        public static bool AtPark => device.AtPark;
+
+        public static bool CanSetDeclinationRate => device.CanSetDeclinationRate;
+
+        public static bool CanSetGuideRates => device.CanSetGuideRates;
+
+        public static bool CanSetPierSide => device.CanSetPierSide;
+
+        public static bool CanSetRightAscensionRate => device.CanSetRightAscensionRate;
+
+        public static bool CanSlewAltAz => device.CanSlewAltAz;
+
+        public static bool CanSlewAltAzAsync => device.CanSlewAltAzAsync;
+
+        public static bool CanSyncAltAz => device.CanSyncAltAz;
+
+        public static bool DoesRefraction { get => device.DoesRefraction; set => device.DoesRefraction = value; }
+
+        public static EquatorialCoordinateType EquatorialSystem => (EquatorialCoordinateType)device.EquatorialSystem;
+
+        public static double GuideRateDeclination { get => device.GuideRateDeclination; set => device.GuideRateDeclination = value; }
+        public static double GuideRateRightAscension { get => device.GuideRateRightAscension; set => device.GuideRateRightAscension = value; }
+
+        public static bool IsPulseGuiding => device.IsPulseGuiding;
+
+        public static PierSide SideOfPier { get => (PierSide)device.SideOfPier; set => device.SideOfPier = value; }
+        public static DriveRates TrackingRate { get => (DriveRates)device.TrackingRate; set => device.TrackingRate = value; }
+
+        public static ITrackingRates TrackingRates => device.TrackingRates;
+
+        public static void AbortSlew()
         {
-            device.Halt();
+            device.AbortSlew();
         }
 
-        public static void Move(float Position)
+        public static void FindHome()
         {
-            device.Move(Position);
+            device.FindHome();
         }
 
-        public static void MoveAbsolute(float Position)
+        public static void Park()
         {
-            device.MoveAbsolute(Position);
+            device.Park();
         }
 
-        public static void MoveMechanical(float Position)
+        public static void PulseGuide(GuideDirections Direction, int Duration)
         {
-            device.MoveMechanical(Position);
+            device.PulseGuide(Direction, Duration);
         }
 
-        public static void Sync(float Position)
+        public static void SetPark()
         {
-            device.Sync(Position);
+            device.SetPark();
+        }
+
+        public static void SlewToCoordinates(double RightAscension, double Declination)
+        {
+            device.SlewToCoordinates(RightAscension, Declination);
+        }
+
+        public static void SlewToCoordinatesAsync(double RightAscension, double Declination)
+        {
+            device.SlewToCoordinatesAsync(RightAscension, Declination);
+        }
+
+        public static void SlewToTarget()
+        {
+            device.SlewToTarget();
+        }
+
+        public static void SlewToTargetAsync()
+        {
+            device.SlewToTargetAsync();
+        }
+
+        public static void SyncToCoordinates(double RightAscension, double Declination)
+        {
+            device.SyncToCoordinates(RightAscension, Declination);
+        }
+
+        public static void SyncToTarget()
+        {
+            device.SyncToTarget();
+        }
+
+        public static void Unpark()
+        {
+            device.Unpark();
+        }
+
+        public static IAxisRates AxisRates(TelescopeAxes Axis)
+        {
+            return device.AxisRates(Axis);
+        }
+
+        public static bool CanMoveAxis(TelescopeAxes Axis)
+        {
+            return device.CanMoveAxis(Axis);
+        }
+
+        public static PierSide DestinationSideOfPier(double RightAscension, double Declination)
+        {
+            return (PierSide)device.DestinationSideOfPier(RightAscension, Declination);
+        }
+
+        public static void MoveAxis(TelescopeAxes Axis, double Rate)
+        {
+            device.MoveAxis(Axis, Rate);
+        }
+
+        public static void SlewToAltAz(double Azimuth, double Altitude)
+        {
+            device.SlewToAltAz(Azimuth, Altitude);
+        }
+
+        public static void SlewToAltAzAsync(double Azimuth, double Altitude)
+        {
+            device.SlewToAltAzAsync(Azimuth, Altitude);
+        }
+
+        public static void SyncToAltAz(double Azimuth, double Altitude)
+        {
+            device.SyncToAltAz(Azimuth, Altitude);
         }
 
         #endregion
@@ -585,12 +721,12 @@ namespace ASCOM.JustAHub
             int iVersion = device.InterfaceVersion;
 
             // Check whether the device is connected
-            if (device.Connected) // Rotator is connected so save the value for future use
+            if (device.Connected) // Telescope is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;
             }
-            else // Rotator is not connected so return the reported value but don't save it
+            else // Telescope is not connected so return the reported value but don't save it
             {
                 return iVersion;
             }

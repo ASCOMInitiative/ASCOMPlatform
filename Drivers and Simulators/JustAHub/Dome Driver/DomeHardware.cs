@@ -3,24 +3,21 @@ using ASCOM.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 
 namespace ASCOM.JustAHub
 {
     /// <summary>
-    /// ASCOM JustAHub Rotator main functional class shared by all instances of the driver class.
+    /// ASCOM JustAHub Dome main functional class shared by all instances of the driver class.
     /// </summary>
     [HardwareClass()] // Attribute to flag this as a device hardware class that needs to be disposed by the local server when it exits.
-    internal static class RotatorHardware
+    internal static class DomeHardware
     {
 #if DEBUG
-        private static DriverAccess.Rotator device; // Rotator device being hosted
+        private static DriverAccess.Dome device; // Dome device being hosted
 #else
-        private static dynamic device; // Rotator device being hosted
+        private static dynamic device; // Dome device being hosted
 #endif
 
         private static readonly List<Guid> uniqueIds = new List<Guid>(); // List of driver instance unique IDs
@@ -34,21 +31,21 @@ namespace ASCOM.JustAHub
         /// <summary>
         /// Initializes a new instance of the device Hardware class.
         /// </summary>
-        static RotatorHardware()
+        static DomeHardware()
         {
             try
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.Rotator.Proxy")
+                TL = new TraceLogger("", "JustAHub.Dome.Proxy")
                 {
-                    Enabled = Settings.RotatorHardwareLogging
+                    Enabled = Settings.DomeHardwareLogging
                 };
             }
             catch (Exception ex)
             {
                 try { LogMessage("JustAHub", $"Initialisation exception: {ex}"); } catch { }
-                MessageBox.Show($"{ex.Message}", $"Exception creating {Rotator.ChooserDescription} ({Rotator.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", $"Exception creating {Dome.ChooserDescription} ({Dome.ProgId})", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
         }
@@ -67,10 +64,10 @@ namespace ASCOM.JustAHub
             {
                 LogMessage("Initialise", $"Starting one-off initialisation.");
 
-                if (string.IsNullOrEmpty(Settings.RotatorHostedProgId))
-                    throw new InvalidValueException("The configured Rotator ProgID in JustAHub is null or empty");
+                if (string.IsNullOrEmpty(Settings.DomeHostedProgId))
+                    throw new InvalidValueException("The configured Dome ProgID in JustAHub is null or empty");
 
-                LogMessage("Initialise", $"Hosted ProgID: {Settings.RotatorHostedProgId}");
+                LogMessage("Initialise", $"Hosted ProgID: {Settings.DomeHostedProgId}");
 
                 //Initialise ASCOM Utilities object
                 utilities = new Util();
@@ -111,8 +108,8 @@ namespace ASCOM.JustAHub
 
             // Driver instance not yet connected
 
-            // Test whether the Rotator is already connected
-            if (!device.Connected) // Rotator hardware is not connected so connect
+            // Test whether the Dome is already connected
+            if (!device.Connected) // Dome hardware is not connected so connect
             {
                 LogMessage("Connect", $"First connection request - Connecting to hardware...");
 
@@ -120,7 +117,7 @@ namespace ASCOM.JustAHub
                 {
                     case ConnectType.Connected:
                         device.Connected = true;
-                        LogMessage("Connect", $"Rotator connected OK.");
+                        LogMessage("Connect", $"Dome connected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
@@ -172,7 +169,7 @@ namespace ASCOM.JustAHub
             LogMessage("Disconnect", $"Unique id {uniqueId} removed from the connection list.");
 
             // Test whether any instances are still connected
-            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the Rotator device
+            if (uniqueIds.Count == 0) // No instances remain connected so disconnect the Dome device
             {
                 LogMessage("Disconnect", $"Last disconnection request - Disconnecting hardware...");
 
@@ -180,7 +177,7 @@ namespace ASCOM.JustAHub
                 {
                     case ConnectType.Connected:
                         device.Connected = false;
-                        LogMessage("Disconnect", $"Rotator disconnected OK.");
+                        LogMessage("Disconnect", $"Dome disconnected OK.");
                         break;
 
                     case ConnectType.Connect_Disconnect:
@@ -207,7 +204,7 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IRotatorV4 and later Connecting property
+        /// IDomeV4 and later Connecting property
         /// </summary>
         public static bool Connecting
         {
@@ -218,7 +215,7 @@ namespace ASCOM.JustAHub
         }
 
         /// <summary>
-        /// IRotatorV4 and later DeviceState property
+        /// IDomeV4 and later DeviceState property
         /// </summary>
         public static IStateValueCollection DeviceState
         {
@@ -266,28 +263,28 @@ namespace ASCOM.JustAHub
             }
             try
             {
-                // Create an instance of the Rotator
+                // Create an instance of the Dome
                 try
                 {
 #if DEBUG
-                    LogMessage("CreateInstance", $"Creating DriverAccess Rotator device.");
-                    device = new DriverAccess.Rotator(Settings.RotatorHostedProgId);
+                    LogMessage("CreateInstance", $"Creating DriverAccess Dome device.");
+                    device = new DriverAccess.Dome(Settings.DomeHostedProgId);
 #else
                     // Get the Type of this ProgID
-                    Type type = Type.GetTypeFromProgID(Settings.RotatorHostedProgId);
-                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.RotatorHostedProgId} OK.");
+                    Type type = Type.GetTypeFromProgID(Settings.DomeHostedProgId);
+                    LogMessage("CreateInstance", $"Created Type for ProgID: {Settings.DomeHostedProgId} OK.");
                     device = Activator.CreateInstance(type);
 #endif
-                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.RotatorHostedProgId} OK.");
+                    LogMessage("CreateInstance", $"Created COM object for ProgID: {Settings.DomeHostedProgId} OK.");
                 }
                 catch (Exception ex1)
                 {
-                    throw new InvalidOperationException($"Unable to create an instance of the Rotator with ProgID {Settings.RotatorHostedProgId}: {ex1.Message}");
+                    throw new InvalidOperationException($"Unable to create an instance of the Dome with ProgID {Settings.DomeHostedProgId}: {ex1.Message}");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.RotatorHostedProgId}: {ex.Message}");
+                throw new InvalidOperationException($"Unable to create Type for ProgID {Settings.DomeHostedProgId}: {ex.Message}");
             }
         }
 
@@ -389,15 +386,15 @@ namespace ASCOM.JustAHub
         {
             if (!(device is null))
             {
-                try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 
+                try { LogMessage("JustAHub.Dispose", $"Disposing of assets and closing down."); } catch { }
 #if DEBUG
                 try { device.Dispose(); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Rotator object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Disposed DriverAccess Dome object."); } catch { }
                 try { device = null; } catch (Exception) { }
 #else
                 try { Marshal.ReleaseComObject(device); } catch (Exception) { }
-                try { LogMessage("JustAHub.Dispose", $"Released Rotator COM object."); } catch { }
+                try { LogMessage("JustAHub.Dispose", $"Released Dome COM object."); } catch { }
                 try { device = null; } catch (Exception) { }
 #endif
             }
@@ -488,45 +485,81 @@ namespace ASCOM.JustAHub
 
         #endregion
 
-        #region IRotator Implementation
+        #region IDome Implementation
 
-        public static bool IsMoving => device.IsMoving;
+        public static double Altitude => device.Altitude;
 
-        public static float Position => device.Position;
+        public static bool AtHome => device.AtHome;
 
-        public static bool Reverse { get => device.Reverse; set => device.Reverse = value; }
+        public static bool AtPark => device.AtPark;
 
-        public static float StepSize => device.StepSize;
+        public static double Azimuth => device.Azimuth;
 
-        public static float TargetPosition => device.TargetPosition;
+        public static bool CanFindHome => device.CanFindHome;
 
-        public static bool CanReverse => device.CanReverse;
+        public static bool CanPark => device.CanPark;
 
-        public static float MechanicalPosition => device.MechanicalPosition;
+        public static bool CanSetAltitude => device.CanSetAltitude;
 
-        public static void Halt()
+        public static bool CanSetAzimuth => device.CanSetAzimuth;
+
+        public static bool CanSetPark => device.CanSetPark;
+
+        public static bool CanSetShutter => device.CanSetShutter;
+
+        public static bool CanSlave => device.CanSlave;
+
+        public static bool CanSyncAzimuth => device.CanSyncAzimuth;
+
+        public static ShutterState ShutterStatus => device.ShutterStatus;
+
+        public static bool Slaved { get => device.Slaved; set => device.Slaved = value; }
+
+        public static bool Slewing => device.Slewing;
+
+        public static void AbortSlew()
         {
-            device.Halt();
+            device.AbortSlew();
         }
 
-        public static void Move(float Position)
+        public static void CloseShutter()
         {
-            device.Move(Position);
+            device.CloseShutter();
         }
 
-        public static void MoveAbsolute(float Position)
+        public static void FindHome()
         {
-            device.MoveAbsolute(Position);
+            device.FindHome();
         }
 
-        public static void MoveMechanical(float Position)
+        public static void OpenShutter()
         {
-            device.MoveMechanical(Position);
+            device.OpenShutter();
         }
 
-        public static void Sync(float Position)
+        public static void Park()
         {
-            device.Sync(Position);
+            device.Park();
+        }
+
+        public static void SetPark()
+        {
+            device.SetPark();
+        }
+
+        public static void SlewToAltitude(double Altitude)
+        {
+            device.SlewToAltitude(Altitude);
+        }
+
+        public static void SlewToAzimuth(double Azimuth)
+        {
+          device.SlewToAzimuth(Azimuth);
+        }
+
+        public static void SyncToAzimuth(double Azimuth)
+        {
+            device.SyncToAzimuth(Azimuth);
         }
 
         #endregion
@@ -585,12 +618,12 @@ namespace ASCOM.JustAHub
             int iVersion = device.InterfaceVersion;
 
             // Check whether the device is connected
-            if (device.Connected) // Rotator is connected so save the value for future use
+            if (device.Connected) // Dome is connected so save the value for future use
             {
                 interfaceVersion = InterfaceVersion;
                 return interfaceVersion.Value;
             }
-            else // Rotator is not connected so return the reported value but don't save it
+            else // Dome is not connected so return the reported value but don't save it
             {
                 return iVersion;
             }

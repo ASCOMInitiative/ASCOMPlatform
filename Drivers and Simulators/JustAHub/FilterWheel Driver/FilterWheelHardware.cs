@@ -37,13 +37,10 @@ namespace ASCOM.JustAHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.FilterWheel.Proxy");
-                bool logState = Settings.FilterWheelDriverLogging;
-                LogMessage("FilterWheelHardware", $"Hosted ProgID: {Settings.FilterWheelHostedProgId}.");
-                LogMessage("FilterWheelHardware", $"Log activity: {Settings.FilterWheelDriverLogging}.");
-                LogMessage("FilterWheelHardware", $"Debug Trace state: {Settings.FilterWheelHardwareLogging}.");
-
-                LogMessage("FilterWheelHardware", $"Static initialiser completed.");
+                TL = new TraceLogger("", "JustAHub.FilterWheel.Proxy")
+                {
+                    Enabled = Settings.FilterWheelHardwareLogging
+                };
             }
             catch (Exception ex)
             {
@@ -389,10 +386,10 @@ namespace ASCOM.JustAHub
         /// </remarks>
         public static void Dispose()
         {
-            try { LogMessage("FilterWheelHardware.Dispose", $"Disposing of assets and closing down."); } catch { }
-
             if (!(device is null))
             {
+                try { LogMessage("FilterWheelHardware.Dispose", $"Disposing of assets and closing down."); } catch { }
+
 #if DEBUG
                 try { device.Dispose(); } catch (Exception) { }
                 try { LogMessage("FilterWheelHardware.Dispose", $"Disposed DriverAccess filter wheel object."); } catch { }
@@ -514,7 +511,7 @@ namespace ASCOM.JustAHub
         {
             get
             {
-                string[] names= device.Names;
+                string[] names = device.Names;
                 if (names == null)
                 {
                     LogMessage("Names Get", $"Received a null value.");
