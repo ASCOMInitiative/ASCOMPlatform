@@ -34,7 +34,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Exceptions\ASCOM.Exceptions.csproj" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2009-24, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2009-25, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry" isExposed="True">
         <Filter entryType="Class" fullName="ASCOM.Astrometry.EarthRotationParameters" filterName="EarthRotationParameters" isExposed="False" />
@@ -118,7 +118,7 @@
         </component>
       </ComponentConfig>
     </ComponentConfigurations>
-    <ProjectSummary>ASCOM Platform 6 Developer Documentation</ProjectSummary>
+    <ProjectSummary>ASCOM Platform 7 Developer Documentation</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
     </PlugInConfigurations>
