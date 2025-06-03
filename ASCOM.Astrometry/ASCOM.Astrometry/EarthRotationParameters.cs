@@ -643,7 +643,7 @@ namespace ASCOM.Astrometry
             switch (UpdateTypeValue ?? "")
             {
                 case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1:
-
+                case GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1:
                     // Approach: calculate DELTA_T as =  CURRENT_LEAP_SECONDS + TT_TAI_OFFSET - DUT1
                     // Determine whether a downloaded DeltaUT1 value exists for the given UTC Julian date then perform the calculation above
                     // if yes then 
