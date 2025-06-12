@@ -24,7 +24,7 @@ namespace ASCOM.DeviceHub
         /// <returns>Sexagesimal string of the input value</returns>
         internal static string ToDMS(this double value)
         {
-            return DoubleToSexagesimalSeconds(value, ":", ":", "", 0);
+            return DoubleToSexagesimalSeconds(value, ":", ":", "", 2);
         }
 
         #endregion

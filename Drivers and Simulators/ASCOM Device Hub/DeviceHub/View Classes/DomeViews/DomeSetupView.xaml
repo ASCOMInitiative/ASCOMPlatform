@@ -18,45 +18,45 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
         </Style>
-		<Style TargetType="{x:Type Hyperlink}">
-			<Style.Triggers>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Setter Property="Foreground" Value="#ffc02b2b" />
-				</Trigger>
-			</Style.Triggers>
-			<Setter Property="Foreground" Value="DarkCyan" />
-			<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
-		</Style>
-	</UserControl.Resources>
+        <Style TargetType="{x:Type Hyperlink}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#ffc02b2b" />
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Foreground" Value="DarkCyan" />
+            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="20" />
             <RowDefinition Height="Auto" MinHeight="20" />
             <RowDefinition Height="Auto" MinHeight="20" />
-		</Grid.RowDefinitions>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" MinWidth="20" />
         </Grid.ColumnDefinitions>
-		<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-			<Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" HorizontalAlignment="Left" Margin="20,8,20,0"/>
-			<GroupBox Header="Dome Device" Foreground="{DynamicResource NormalTextBrush}" HorizontalAlignment="Left" MinWidth="190">
-				<Grid Margin="6" HorizontalAlignment="Center">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" MinHeight="20" />
-						<RowDefinition Height="Auto" MinHeight="20" />
-					</Grid.RowDefinitions>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto" MinWidth="20" />
-					</Grid.ColumnDefinitions>
-					<Button Grid.Row="0" Grid.Column="0" Content="Choose" HorizontalAlignment="Center" 
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" HorizontalAlignment="Left" Margin="20,8,20,0"/>
+            <GroupBox Header="Dome Device" Foreground="{DynamicResource NormalTextBrush}" HorizontalAlignment="Left" MinWidth="190">
+                <Grid Margin="6" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="20" />
+                        <RowDefinition Height="Auto" MinHeight="20" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="20" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Row="0" Grid.Column="0" Content="Choose" HorizontalAlignment="Center" 
 						Style="{StaticResource CircleButton}" Height="66" Width="66"
 						Command="{Binding ChooseDomeCommand}" />
 
-					<Label Grid.Row="1" Grid.Column="0" Foreground="{DynamicResource NormalTextBrush}" 
+                    <Label Grid.Row="1" Grid.Column="0" Foreground="{DynamicResource NormalTextBrush}" 
 					   Content="{Binding DomeID, Converter={StaticResource DeviceIDConverter}, ConverterParameter=Dome, FallbackValue=(No Dome)}"/>
-				</Grid>
-			</GroupBox>
-		</StackPanel>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True" Margin="0">
             <GroupBox Header="Geometry"  Foreground="{DynamicResource NormalTextBrush}">
                 <Grid>
@@ -77,73 +77,88 @@
                         <LineBreak />
                         <Run Text="+E/-W (mm):" />
                     </TextBlock>
-					<TextBox Grid.Row="0" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="0" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding ScopeOffsetEWX, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditEastWestOffsetCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditEastWestOffsetCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
 
-					<TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right">
+                    <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right">
                         <Run Text="Scope Position" />
                         <LineBreak />
                         <Run Text="+N/-S (mm):" />
                     </TextBlock>
 
-					<TextBox Grid.Row="1" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="1" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding ScopeOffsetNSY, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditNorthSouthOffsetCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditNorthSouthOffsetCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
 
 
-					<TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource BlockStyle}" TextAlignment="Right" HorizontalAlignment="Stretch" >
+                    <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource BlockStyle}" TextAlignment="Right" HorizontalAlignment="Stretch" >
                         <Run Text="Scope Position" />
                         <LineBreak />
                         <Run Text="+U/-D (mm):" />
                     </TextBlock>
 
-					<TextBox Grid.Row="2" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="2" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding ScopeOffsetUDZ, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditUpDownOffsetCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditUpDownOffsetCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
 
 
-					<TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0"
+                    <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0"
                                 Text="Dome Radius (mm):" />
-					<TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding DomeRadius, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditDomeRadiusCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditDomeRadiusCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
 
 
-					<TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0">
-                        <Run Text="GEM Axis" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="111">
+                        <Run Text="GEM / Dec / Altitude" />
                         <LineBreak />
-                        <Run Text="Offset (mm):" />
+                        <Run Text="offset (mm):" />
                     </TextBlock>
-					<TextBox Grid.Row="1" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="1" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding GemAxisOffset, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditGemAxisOffsetCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
-				</Grid>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditGemAxisOffsetCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+
+                    <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="111">
+                        <Run Text="Optical Offset (mm)" />
+                        <LineBreak />
+                        <Run Text="Usually zero:" />
+                    </TextBlock>
+                    <TextBox Grid.Row="2" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
+							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
+							 Text="{Binding OpticalOffset, FallbackValue=No value}">
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditOpticalOffsetCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+
+                </Grid>
             </GroupBox>
             <GroupBox Header="Slave Control"  Foreground="{DynamicResource NormalTextBrush}">
                 <Grid>
@@ -162,41 +177,41 @@
                         <LineBreak />
                         <Run Text="(deg):" />
                     </TextBlock>
-					<TextBox Grid.Row="0" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="0" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding AzimuthAccuracy, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditAzimuthAccuracyCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditAzimuthAccuracyCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
 
 
-					<TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0">
+                    <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0">
                         <Run Text="Slave Frequency" />
                         <LineBreak />
                         <Run Text="(sec):" />
                     </TextBlock>
-					<TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
+                    <TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding SlaveInterval, FallbackValue=No value}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding EditSlaveIntervalCommand}" MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
-				</Grid>
+                        <TextBox.InputBindings>
+                            <MouseBinding Command="{Binding EditSlaveIntervalCommand}" MouseAction="LeftClick" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
             </GroupBox>
-			<GroupBox Grid.Row="2" Grid.Column="0" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Height="Auto" HorizontalAlignment="Stretch">
-				<StackPanel Orientation="Horizontal" Margin="6" Height="26">
-					<Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
-					<Slider Width="150" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
+            <GroupBox Grid.Row="2" Grid.Column="0" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Height="Auto" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" Margin="6" Height="26">
+                    <Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
+                    <Slider Width="150" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
 					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
 					Value="{Binding FastUpdatePeriod}" />
-					<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
+                    <TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
 					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
-				</StackPanel>
-			</GroupBox>
-		</StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </UserControl>

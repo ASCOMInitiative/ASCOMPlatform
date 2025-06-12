@@ -98,11 +98,26 @@ namespace ASCOM.DeviceHub
 			}
 		}
 
-		#endregion Change Notification Properties
+		private int _opticalOffset;
 
-		#region ICloneable Implementation
+		public int OpticalOffset
+		{
+			get { return _opticalOffset; }
+			set
+			{
+				if ( value != _opticalOffset )
+				{
+					_opticalOffset = value;
+					OnPropertyChanged();
+				}
+			}
+        }
 
-		object ICloneable.Clone()
+        #endregion Change Notification Properties
+
+        #region ICloneable Implementation
+
+        object ICloneable.Clone()
 		{
 			return new DomeLayoutSettings( this );
 		}

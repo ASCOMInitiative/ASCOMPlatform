@@ -4,614 +4,684 @@ using System.Windows.Media.Media3D;
 
 namespace ASCOM.DeviceHub
 {
-	public class DomeSetupViewModel : DeviceHubViewModelBase
+    public class DomeSetupViewModel : DeviceHubViewModelBase
     {
-		#region Constructor
+        #region Constructor
 
-		public DomeSetupViewModel()
-		{
-			_fastUpdateMinimum = Globals.DOME_FAST_UPDATE_MIN;
-			_fastUpdateMaximum = Globals.DOME_FAST_UPDATE_MAX;
-		}
+        public DomeSetupViewModel()
+        {
+            _fastUpdateMinimum = Globals.DOME_FAST_UPDATE_MIN;
+            _fastUpdateMaximum = Globals.DOME_FAST_UPDATE_MAX;
+        }
 
-		#endregion Constructor
+        #endregion Constructor
 
-		#region Public Properties
+        #region Public Properties
 
-		public string DomeName { get; private set; }
+        public string DomeName { get; private set; }
 
-		#endregion Public Properties
+        #endregion Public Properties
 
-		#region Public Methods
+        #region Public Methods
 
-		public void InitializeLayout( DomeLayoutSettings settings )
-		{
-			_domeRadius = settings.DomeRadius;
-			_gemAxisOffset = settings.GemAxisOffset;
-			_scopeOffsetEWX = (int)settings.DomeScopeOffset.X;
-			_scopeOffsetNSY = (int)settings.DomeScopeOffset.Y;
-			_scopeOffsetUDZ = (int)settings.DomeScopeOffset.Z;
-			_azimuthAccuracy = settings.AzimuthAccuracy;
-			_slaveInterval = settings.SlaveInterval;
-		}
+        public void InitializeLayout(DomeLayoutSettings settings)
+        {
+            _domeRadius = settings.DomeRadius;
+            _gemAxisOffset = settings.GemAxisOffset;
+            _scopeOffsetEWX = (int)settings.DomeScopeOffset.X;
+            _scopeOffsetNSY = (int)settings.DomeScopeOffset.Y;
+            _scopeOffsetUDZ = (int)settings.DomeScopeOffset.Z;
+            _azimuthAccuracy = settings.AzimuthAccuracy;
+            _slaveInterval = settings.SlaveInterval;
+            _opticalOffset = settings.OpticalOffset;
+        }
 
-		#endregion Public Methods
+        #endregion Public Methods
 
-		#region Change Notification Properties
+        #region Change Notification Properties
 
-		private string _domeID;
+        private string _domeID;
 
-		public string DomeID
-		{
-			get { return _domeID; }
-			set
-			{
-				if ( value != _domeID )
-				{
-					_domeID = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public string DomeID
+        {
+            get { return _domeID; }
+            set
+            {
+                if (value != _domeID)
+                {
+                    _domeID = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		// This property holds a measurement of the X-direction (east-west) offset from the center of the dome
-		// to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
-		// positive in the eastward direction.
+        // This property holds a measurement of the X-direction (east-west) offset from the center of the dome
+        // to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
+        // positive in the eastward direction.
 
-		private int _scopeOffsetEWX;
+        private int _scopeOffsetEWX;
 
-		public int ScopeOffsetEWX
-		{
-			get { return _scopeOffsetEWX; }
-			set
-			{
-				if ( value != _scopeOffsetEWX )
-				{
-					_scopeOffsetEWX = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int ScopeOffsetEWX
+        {
+            get { return _scopeOffsetEWX; }
+            set
+            {
+                if (value != _scopeOffsetEWX)
+                {
+                    _scopeOffsetEWX = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		// This property holds a measurement of the Y-direction (north-south) offset from the center of the dome
-		// to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
-		// positive in the northward direction.
+        // This property holds a measurement of the Y-direction (north-south) offset from the center of the dome
+        // to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
+        // positive in the northward direction.
 
-		private int _scopeOffsetNSY;
+        private int _scopeOffsetNSY;
 
-		public int ScopeOffsetNSY
-		{
-			get { return _scopeOffsetNSY; }
-			set
-			{
-				if ( value != _scopeOffsetNSY )
-				{
-					_scopeOffsetNSY = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int ScopeOffsetNSY
+        {
+            get { return _scopeOffsetNSY; }
+            set
+            {
+                if (value != _scopeOffsetNSY)
+                {
+                    _scopeOffsetNSY = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		// This property holds a measurement of the Z-direction (up-down) offset from the center of the dome
-		// to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
-		// positive in the upward direction.
+        // This property holds a measurement of the Z-direction (up-down) offset from the center of the dome
+        // to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
+        // positive in the upward direction.
 
-		private int _scopeOffsetUDZ;
+        private int _scopeOffsetUDZ;
 
-		public int ScopeOffsetUDZ
-		{
-			get { return _scopeOffsetUDZ; }
-			set
-			{
-				if ( value != _scopeOffsetUDZ )
-				{
-					_scopeOffsetUDZ = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int ScopeOffsetUDZ
+        {
+            get { return _scopeOffsetUDZ; }
+            set
+            {
+                if (value != _scopeOffsetUDZ)
+                {
+                    _scopeOffsetUDZ = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private int _domeRadius; // in millimeters
+        private int _domeRadius; // in millimeters
 
-		public int DomeRadius
-		{
-			get { return _domeRadius; }
-			set
-			{
-				if ( value != _domeRadius )
-				{
-					_domeRadius = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int DomeRadius
+        {
+            get { return _domeRadius; }
+            set
+            {
+                if (value != _domeRadius)
+                {
+                    _domeRadius = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		// This property holds a measurement of the distance from the intersection of the RA and Dec axes on the mount 
-		// to the centerline of the telescope. The units are millimeters.
+        // This property holds a measurement of the distance from the intersection of the RA and Dec axes on the mount 
+        // to the centerline of the telescope. The units are millimeters.
 
-		private int _gemAxisOffset;
+        private int _gemAxisOffset;
 
-		public int GemAxisOffset
-		{
-			get { return _gemAxisOffset; }
-			set
-			{
-				if ( value != _gemAxisOffset )
-				{
-					_gemAxisOffset = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int GemAxisOffset
+        {
+            get { return _gemAxisOffset; }
+            set
+            {
+                if (value != _gemAxisOffset)
+                {
+                    _gemAxisOffset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		// This is the allowed slop in the azimuth position, in degrees.
+        // This property holds a measurement of the offset distance of the optical axis from the declination / altitude axis 
+        // The units are millimeters.
 
-		private int _azimuthAccuracy;
+        private int _opticalOffset;
 
-		public int AzimuthAccuracy
-		{
-			get { return _azimuthAccuracy; }
-			set
-			{
-				if ( value != _azimuthAccuracy )
-				{
-					_azimuthAccuracy = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int OpticalOffset
+        {
+            get { return _opticalOffset; }
+            set
+            {
+                if (value != _opticalOffset)
+                {
+                    _opticalOffset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		// This is the time interval, in seconds, for checking and adjusting the azimuth position of the dome.
+        // This is the allowed slop in the azimuth position, in degrees.
 
-		private int _slaveInterval;
+        private int _azimuthAccuracy;
 
-		public int SlaveInterval
-		{
-			get { return _slaveInterval; }
-			set
-			{
-				if ( value != _slaveInterval )
-				{
-					_slaveInterval = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public int AzimuthAccuracy
+        {
+            get { return _azimuthAccuracy; }
+            set
+            {
+                if (value != _azimuthAccuracy)
+                {
+                    _azimuthAccuracy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private double _fastUpdatePeriod;
+        // This is the time interval, in seconds, for checking and adjusting the azimuth position of the dome.
 
-		public double FastUpdatePeriod
-		{
-			get { return _fastUpdatePeriod; }
-			set
-			{
-				if ( value != _fastUpdatePeriod )
-				{
-					_fastUpdatePeriod = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private int _slaveInterval;
 
-		private double _fastUpdateMinimum;
+        public int SlaveInterval
+        {
+            get { return _slaveInterval; }
+            set
+            {
+                if (value != _slaveInterval)
+                {
+                    _slaveInterval = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public double FastUpdateMinimum
-		{
-			get { return _fastUpdateMinimum; }
-			set
-			{
-				if ( value != _fastUpdateMinimum )
-				{
-					_fastUpdateMinimum = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private double _fastUpdatePeriod;
 
-		private double _fastUpdateMaximum;
+        public double FastUpdatePeriod
+        {
+            get { return _fastUpdatePeriod; }
+            set
+            {
+                if (value != _fastUpdatePeriod)
+                {
+                    _fastUpdatePeriod = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public double FastUpdateMaximum
-		{
-			get { return _fastUpdateMaximum; }
-			set
-			{
-				if ( value != _fastUpdateMaximum )
-				{
-					_fastUpdateMaximum = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private double _fastUpdateMinimum;
 
-		#endregion Change Notification Properties
+        public double FastUpdateMinimum
+        {
+            get { return _fastUpdateMinimum; }
+            set
+            {
+                if (value != _fastUpdateMinimum)
+                {
+                    _fastUpdateMinimum = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		#region Public Methods
+        private double _fastUpdateMaximum;
 
-		public DomeLayoutSettings GetLayout()
-		{
-			DomeLayoutSettings settings = new DomeLayoutSettings
-			{
-				DomeRadius = _domeRadius,
-				GemAxisOffset = _gemAxisOffset,
-				DomeScopeOffset = new Point3D( (double)_scopeOffsetEWX, (double)_scopeOffsetNSY, (double)_scopeOffsetUDZ ),
-				AzimuthAccuracy = _azimuthAccuracy,
-				SlaveInterval = _slaveInterval
-			};
+        public double FastUpdateMaximum
+        {
+            get { return _fastUpdateMaximum; }
+            set
+            {
+                if (value != _fastUpdateMaximum)
+                {
+                    _fastUpdateMaximum = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-			return settings;
-		}
+        #endregion Change Notification Properties
 
-		#endregion Public Methods
+        #region Public Methods
 
-		#region Helper Methods
+        public DomeLayoutSettings GetLayout()
+        {
+            DomeLayoutSettings settings = new DomeLayoutSettings
+            {
+                DomeRadius = _domeRadius,
+                GemAxisOffset = _gemAxisOffset,
+                DomeScopeOffset = new Point3D((double)_scopeOffsetEWX, (double)_scopeOffsetNSY, (double)_scopeOffsetUDZ),
+                AzimuthAccuracy = _azimuthAccuracy,
+                SlaveInterval = _slaveInterval,
+                OpticalOffset = _opticalOffset
+            };
 
-		private int EditTheOffset( int offset, string negativeText, string positiveText )
-		{
-			string directions = $"{positiveText}/{negativeText}";
+            return settings;
+        }
 
-			ScopeDomeOffsetViewModel vm = new ScopeDomeOffsetViewModel( directions )
-			{
-				NegativeText = negativeText,
-				PositiveText = positiveText
-			};
+        #endregion Public Methods
 
-			vm.InitializeValues( new int[1] { offset } );
+        #region Helper Methods
 
-			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
-			bool? result = svc.ShowDialog( vm );
+        private int EditTheOffset(int offset, string negativeText, string positiveText)
+        {
+            string directions = $"{positiveText}/{negativeText}";
 
-			if ( result.HasValue && result.Value )
-			{
-				int[] values = vm.GetValues();
+            ScopeDomeOffsetViewModel vm = new ScopeDomeOffsetViewModel(directions)
+            {
+                NegativeText = negativeText,
+                PositiveText = positiveText
+            };
 
-				offset = values[0];
-			}
+            vm.InitializeValues(new int[1] { offset });
 
-			vm.Dispose();
+            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
+            bool? result = svc.ShowDialog(vm);
+
+            if (result.HasValue && result.Value)
+            {
+                int[] values = vm.GetValues();
+
+                offset = values[0];
+            }
+
+            vm.Dispose();
             return offset;
-		}
+        }
 
-		protected override void DoDispose()
-		{
-			_chooseDomeCommand = null;
-			_editEastWestOffsetCommand = null;
-			_editNorthSouthOffsetCommand = null;
-			_editUpDownOffsetCommand = null;
-			_editGemAxisOffsetCommand = null;
-			_editDomeRadiusCommand = null;
-			_editAzimuthAccuracyCommand = null;
-			_editSlaveIntervalCommand = null;
-		}
+        protected override void DoDispose()
+        {
+            _chooseDomeCommand = null;
+            _editEastWestOffsetCommand = null;
+            _editNorthSouthOffsetCommand = null;
+            _editUpDownOffsetCommand = null;
+            _editGemAxisOffsetCommand = null;
+            _editDomeRadiusCommand = null;
+            _editAzimuthAccuracyCommand = null;
+            _editSlaveIntervalCommand = null;
+        }
 
-		#endregion Helper Methods
+        #endregion Helper Methods
 
-		#region Relay Commands
+        #region Relay Commands
 
-		#region ChooseDomeCommand
+        #region ChooseDomeCommand
 
-		private ICommand _chooseDomeCommand;
+        private ICommand _chooseDomeCommand;
 
-		public ICommand ChooseDomeCommand
-		{
-			get
-			{
-				if ( _chooseDomeCommand == null )
-				{
-					_chooseDomeCommand = new RelayCommand(
-						param => this.ChooseDome() );
-				}
+        public ICommand ChooseDomeCommand
+        {
+            get
+            {
+                if (_chooseDomeCommand == null)
+                {
+                    _chooseDomeCommand = new RelayCommand(
+                        param => this.ChooseDome());
+                }
 
-				return _chooseDomeCommand;
-			}
-		}
+                return _chooseDomeCommand;
+            }
+        }
 
-		private void ChooseDome()
-		{
-			string oldID = DomeID;
-			string newID;
+        private void ChooseDome()
+        {
+            string oldID = DomeID;
+            string newID;
 
-			try
-			{
-				newID = DomeManager.Choose( oldID );
-			}
-			catch ( Exception xcp )
-			{
-				string msg = "An error occurred when trying to launch the ASCOM Dome Chooser. "
-					+ $"Details follow:\r\n\r\n{xcp}";
-				ShowMessage( msg, "ASCOM Dome Chooser Error" );
+            try
+            {
+                newID = DomeManager.Choose(oldID);
+            }
+            catch (Exception xcp)
+            {
+                string msg = "An error occurred when trying to launch the ASCOM Dome Chooser. "
+                    + $"Details follow:\r\n\r\n{xcp}";
+                ShowMessage(msg, "ASCOM Dome Chooser Error");
 
-				return;
-			}
+                return;
+            }
 
-			if ( String.IsNullOrEmpty( newID ) )
-			{
-				return;
-			}
+            if (String.IsNullOrEmpty(newID))
+            {
+                return;
+            }
 
-			// Prevent us from choosing ourselves as our dome.
+            // Prevent us from choosing ourselves as our dome.
 
-			if ( newID == Globals.DevHubDomeID )
-			{
-				string msg = $"{Globals.DevHubDomeID} cannot be chosen as the dome!";
-				ShowMessage( msg, "Invalid Dome Selected" );
+            if (newID == Globals.DevHubDomeID)
+            {
+                string msg = $"{Globals.DevHubDomeID} cannot be chosen as the dome!";
+                ShowMessage(msg, "Invalid Dome Selected");
 
-				return;
-			}
+                return;
+            }
 
-			if ( newID != oldID )
-			{
-				DomeID = newID;
-			}
-		}
+            if (newID != oldID)
+            {
+                DomeID = newID;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region EditEastWestOffsetCommand
+        #region EditEastWestOffsetCommand
 
-		private ICommand _editEastWestOffsetCommand;
+        private ICommand _editEastWestOffsetCommand;
 
-		public ICommand EditEastWestOffsetCommand
-		{
-			get
-			{
-				if ( _editEastWestOffsetCommand == null )
-				{
-					_editEastWestOffsetCommand = new RelayCommand(
-						param => this.EditEastWestOffset() );
-				}
+        public ICommand EditEastWestOffsetCommand
+        {
+            get
+            {
+                if (_editEastWestOffsetCommand == null)
+                {
+                    _editEastWestOffsetCommand = new RelayCommand(
+                        param => this.EditEastWestOffset());
+                }
 
-				return _editEastWestOffsetCommand;
-			}
-		}
+                return _editEastWestOffsetCommand;
+            }
+        }
 
-		private void EditEastWestOffset()
-		{
-			int offset = ScopeOffsetEWX;
+        private void EditEastWestOffset()
+        {
+            int offset = ScopeOffsetEWX;
 
-			string negativeText = "West";
-			string positiveText = "East";
+            string negativeText = "West";
+            string positiveText = "East";
 
-			offset = EditTheOffset( offset, negativeText, positiveText );
+            offset = EditTheOffset(offset, negativeText, positiveText);
 
-			ScopeOffsetEWX = offset;
-		}
+            ScopeOffsetEWX = offset;
+        }
 
-		#endregion
+        #endregion
 
-		#region EditNorthSouthOffsetCommand
+        #region EditNorthSouthOffsetCommand
 
-		private ICommand _editNorthSouthOffsetCommand;
+        private ICommand _editNorthSouthOffsetCommand;
 
-		public ICommand EditNorthSouthOffsetCommand
-		{
-			get
-			{
-				if ( _editNorthSouthOffsetCommand == null )
-				{
-					_editNorthSouthOffsetCommand = new RelayCommand(
-						param => this.EditNorthSouthOffset() );
-				}
+        public ICommand EditNorthSouthOffsetCommand
+        {
+            get
+            {
+                if (_editNorthSouthOffsetCommand == null)
+                {
+                    _editNorthSouthOffsetCommand = new RelayCommand(
+                        param => this.EditNorthSouthOffset());
+                }
 
-				return _editNorthSouthOffsetCommand;
-			}
-		}
+                return _editNorthSouthOffsetCommand;
+            }
+        }
 
-		private void EditNorthSouthOffset()
-		{
-			int offset = ScopeOffsetNSY;
+        private void EditNorthSouthOffset()
+        {
+            int offset = ScopeOffsetNSY;
 
-			string negativeText = "South";
-			string positiveText = "North";
+            string negativeText = "South";
+            string positiveText = "North";
 
-			offset = EditTheOffset( offset, negativeText, positiveText );
+            offset = EditTheOffset(offset, negativeText, positiveText);
 
-			ScopeOffsetNSY = offset;
-		}
+            ScopeOffsetNSY = offset;
+        }
 
-		#endregion
+        #endregion
 
-		#region EditUpDownOffsetCommand
+        #region EditUpDownOffsetCommand
 
-		private ICommand _editUpDownOffsetCommand;
+        private ICommand _editUpDownOffsetCommand;
 
-		public ICommand EditUpDownOffsetCommand
-		{
-			get
-			{
-				if ( _editUpDownOffsetCommand == null )
-				{
-					_editUpDownOffsetCommand = new RelayCommand(
-						param => this.EditUpDownOffset() );
-				}
+        public ICommand EditUpDownOffsetCommand
+        {
+            get
+            {
+                if (_editUpDownOffsetCommand == null)
+                {
+                    _editUpDownOffsetCommand = new RelayCommand(
+                        param => this.EditUpDownOffset());
+                }
 
-				return _editUpDownOffsetCommand;
-			}
-		}
+                return _editUpDownOffsetCommand;
+            }
+        }
 
-		private void EditUpDownOffset()
-		{
-			int offset = ScopeOffsetUDZ;
-			string negativeText = "Down";
-			string positiveText = "Up";
+        private void EditUpDownOffset()
+        {
+            int offset = ScopeOffsetUDZ;
+            string negativeText = "Down";
+            string positiveText = "Up";
 
-			offset = EditTheOffset( offset, negativeText, positiveText );
+            offset = EditTheOffset(offset, negativeText, positiveText);
 
-			ScopeOffsetUDZ = offset;
-		}
+            ScopeOffsetUDZ = offset;
+        }
 
-		#endregion
+        #endregion
 
-		#region EditDomeRadiusCommand
+        #region EditDomeRadiusCommand
 
-		private ICommand _editDomeRadiusCommand;
+        private ICommand _editDomeRadiusCommand;
 
-		public ICommand EditDomeRadiusCommand
-		{
-			get
-			{
-				if ( _editDomeRadiusCommand == null )
-				{
-					_editDomeRadiusCommand = new RelayCommand(
-						param => this.EditDomeRadius() );
-				}
+        public ICommand EditDomeRadiusCommand
+        {
+            get
+            {
+                if (_editDomeRadiusCommand == null)
+                {
+                    _editDomeRadiusCommand = new RelayCommand(
+                        param => this.EditDomeRadius());
+                }
 
-				return _editDomeRadiusCommand;
-			}
-		}
+                return _editDomeRadiusCommand;
+            }
+        }
 
-		private void EditDomeRadius()
-		{
-			int radius = DomeRadius;
+        private void EditDomeRadius()
+        {
+            int radius = DomeRadius;
 
-			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "DomeRadius"
-				, "Enter the radius of the dome, in mm", 0, 20000, 0, 20000, ' ' );
-			vm.InitializeValues( new int[1] { radius } );
+            SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("DomeRadius"
+                , "Enter the radius of the dome, in mm", 0, 20000, 0, 20000, ' ');
+            vm.InitializeValues(new int[1] { radius });
 
-			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
-			bool? result = svc.ShowDialog( vm );
+            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
+            bool? result = svc.ShowDialog(vm);
 
-			if ( result.HasValue && result.Value )
-			{
-				int[] values = vm.GetValues();
+            if (result.HasValue && result.Value)
+            {
+                int[] values = vm.GetValues();
 
-				radius = values[0];
-			}
+                radius = values[0];
+            }
 
-			vm.Dispose();
+            vm.Dispose();
             DomeRadius = radius;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region EditGemAxisOffsetCommand
 
-		private ICommand _editGemAxisOffsetCommand;
 
-		public ICommand EditGemAxisOffsetCommand
-		{
-			get
-			{
-				if ( _editGemAxisOffsetCommand == null )
-				{
-					_editGemAxisOffsetCommand = new RelayCommand(
-						param => this.EditGemAxisOffset() );
-				}
 
-				return _editGemAxisOffsetCommand;
-			}
-		}
 
-		private void EditGemAxisOffset()
-		{
-			int offset = GemAxisOffset;
+        #region EditOpticalOffsetCommand
 
-			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "GemAxisOffset"
-				, "Enter the GEM axis offset distance, in mm", 0, 2000, 0, 2000, ' ' );
-			vm.InitializeValues( new int[1] { offset } );
+        private ICommand _editOpticalOffsetCommand;
 
-			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
-			bool? result = svc.ShowDialog( vm );
+        public ICommand EditOpticalOffsetCommand
+        {
+            get
+            {
+                if (_editOpticalOffsetCommand == null)
+                {
+                    _editOpticalOffsetCommand = new RelayCommand(
+                        param => this.EditOpticalOffset());
+                }
 
-			if ( result.HasValue && result.Value )
-			{
-				int[] values = vm.GetValues();
+                return _editOpticalOffsetCommand;
+            }
+        }
 
-				offset = values[0];
-			}
+        private void EditOpticalOffset()
+        {
+            int opticalOffset = OpticalOffset;
 
-			vm.Dispose();
+            SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("OpticalOffset"
+                , "Enter the Optical offset distance, in mm", 0, 2000, 0, 2000, ' ');
+            vm.InitializeValues(new int[1] { opticalOffset });
+
+            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
+            bool? result = svc.ShowDialog(vm);
+
+            if (result.HasValue && result.Value)
+            {
+                int[] values = vm.GetValues();
+
+                opticalOffset = values[0];
+            }
+
+            vm.Dispose();
+            OpticalOffset = opticalOffset;
+        }
+
+        #endregion
+
+
+
+
+
+        #region EditGemAxisOffsetCommand
+
+        private ICommand _editGemAxisOffsetCommand;
+
+        public ICommand EditGemAxisOffsetCommand
+        {
+            get
+            {
+                if (_editGemAxisOffsetCommand == null)
+                {
+                    _editGemAxisOffsetCommand = new RelayCommand(
+                        param => this.EditGemAxisOffset());
+                }
+
+                return _editGemAxisOffsetCommand;
+            }
+        }
+
+        private void EditGemAxisOffset()
+        {
+            int offset = GemAxisOffset;
+
+            SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("GemAxisOffset"
+                , "Enter the GEM axis offset distance, in mm", 0, 2000, 0, 2000, ' ');
+            vm.InitializeValues(new int[1] { offset });
+
+            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
+            bool? result = svc.ShowDialog(vm);
+
+            if (result.HasValue && result.Value)
+            {
+                int[] values = vm.GetValues();
+
+                offset = values[0];
+            }
+
+            vm.Dispose();
             GemAxisOffset = offset;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region EditAzimuthAccuracyCommand
+        #region EditAzimuthAccuracyCommand
 
-		private ICommand _editAzimuthAccuracyCommand;
+        private ICommand _editAzimuthAccuracyCommand;
 
-		public ICommand EditAzimuthAccuracyCommand
-		{
-			get
-			{
-				if ( _editAzimuthAccuracyCommand == null )
-				{
-					_editAzimuthAccuracyCommand = new RelayCommand(
-						param => this.EditAzimuthAccuracy() );
-				}
+        public ICommand EditAzimuthAccuracyCommand
+        {
+            get
+            {
+                if (_editAzimuthAccuracyCommand == null)
+                {
+                    _editAzimuthAccuracyCommand = new RelayCommand(
+                        param => this.EditAzimuthAccuracy());
+                }
 
-				return _editAzimuthAccuracyCommand;
-			}
-		}
+                return _editAzimuthAccuracyCommand;
+            }
+        }
 
-		private void EditAzimuthAccuracy()
-		{
-			int accuracy = AzimuthAccuracy;
+        private void EditAzimuthAccuracy()
+        {
+            int accuracy = AzimuthAccuracy;
 
-			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "AzimuthAccuracy"
-				, "Enter the allowed azimuth difference, in degrees", 0, 10, 0, 10, ' ' );
-			vm.InitializeValues( new int[1] { accuracy } );
+            SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("AzimuthAccuracy"
+                , "Enter the allowed azimuth difference, in degrees", 0, 10, 0, 10, ' ');
+            vm.InitializeValues(new int[1] { accuracy });
 
-			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
-			bool? result = svc.ShowDialog( vm );
+            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
+            bool? result = svc.ShowDialog(vm);
 
-			if ( result.HasValue && result.Value )
-			{
-				int[] values = vm.GetValues();
+            if (result.HasValue && result.Value)
+            {
+                int[] values = vm.GetValues();
 
-				accuracy = values[0];
-			}
+                accuracy = values[0];
+            }
 
-			vm.Dispose();
+            vm.Dispose();
             AzimuthAccuracy = accuracy;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region EditSlaveIntervalCommand
+        #region EditSlaveIntervalCommand
 
-		private ICommand _editSlaveIntervalCommand;
+        private ICommand _editSlaveIntervalCommand;
 
-		public ICommand EditSlaveIntervalCommand
-		{
-			get
-			{
-				if ( _editSlaveIntervalCommand == null )
-				{
-					_editSlaveIntervalCommand = new RelayCommand(
-						param => this.EditSlaveInterval() );
-				}
+        public ICommand EditSlaveIntervalCommand
+        {
+            get
+            {
+                if (_editSlaveIntervalCommand == null)
+                {
+                    _editSlaveIntervalCommand = new RelayCommand(
+                        param => this.EditSlaveInterval());
+                }
 
-				return _editSlaveIntervalCommand;
-			}
-		}
+                return _editSlaveIntervalCommand;
+            }
+        }
 
-		private void EditSlaveInterval()
-		{
-			int interval = SlaveInterval;
+        private void EditSlaveInterval()
+        {
+            int interval = SlaveInterval;
 
-			SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel( "SlaveInterval"
-				, "Enter the azimuth adjustment interval, in seconds", 0, 300, 5, 300, ' ' );
-			vm.InitializeValues( new int[1] { interval } );
+            SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("SlaveInterval"
+                , "Enter the azimuth adjustment interval, in seconds", 0, 300, 5, 300, ' ');
+            vm.InitializeValues(new int[1] { interval });
 
-			IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
-			bool? result = svc.ShowDialog( vm );
+            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
+            bool? result = svc.ShowDialog(vm);
 
-			if ( result.HasValue && result.Value )
-			{
-				int[] values = vm.GetValues();
+            if (result.HasValue && result.Value)
+            {
+                int[] values = vm.GetValues();
 
-				interval = values[0];
-			}
+                interval = values[0];
+            }
 
-			vm.Dispose();
+            vm.Dispose();
 
             // Don't allow a value less than 5 seconds.
 
-            SlaveInterval = Math.Max( interval, 5 );
-		}
+            SlaveInterval = Math.Max(interval, 5);
+        }
 
-		#endregion
+        #endregion
 
-		#endregion Relay Commands
-	}
+        #endregion Relay Commands
+    }
 }
