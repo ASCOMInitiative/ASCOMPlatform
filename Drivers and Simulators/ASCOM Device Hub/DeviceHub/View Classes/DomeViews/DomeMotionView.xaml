@@ -232,9 +232,11 @@
 					<RowDefinition Height="Auto" MinHeight="20"/>
 					<RowDefinition Height="Auto" MinHeight="20"/>
 				</Grid.RowDefinitions>
-				<CheckBox Grid.Row="0" Content="Use POTH Compatible Slaving Calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" 
-							  IsChecked="{Binding UsePOTHSlaveCalculation}"/>
-				<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6,0">
+
+                <CheckBox Grid.Row="0" Content="Use POTH Slaving Calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" IsChecked="{Binding UsePOTHSlaveCalculation}"/>
+                <CheckBox Grid.Row="0" Content="Use revised calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="200,4,0,0" IsChecked="{Binding UseRevisedSlaveCalculation}"/>
+                
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6,0">
 					<Label Content="Dome Azimuth Adjustment:" Style="{StaticResource StateLabel}" VerticalAlignment="Center" />
 					<Slider Width="100" Minimum="-20" Maximum="20" TickFrequency="0.5" IsSnapToTickEnabled="True"
 							Value="{Binding DomeAzimuthAdjustment}" />
@@ -244,6 +246,7 @@
                         </Label.Content>
                     </Label>
                 </StackPanel>
+                
 				<GroupBox Grid.Row="2" Header="Sync Azimuth" HorizontalAlignment="Left" Width="238" Margin="8,-2,0,0" Grid.ColumnSpan="2">
 					<StackPanel Grid.Row="1" Orientation="Horizontal">
 						<Label Content="Azimuth:" Style="{StaticResource StateLabel}" />
@@ -256,5 +259,8 @@
 				</GroupBox>
 			</Grid>
 		</Expander>
+
+
+
 	</Grid>
 </UserControl>

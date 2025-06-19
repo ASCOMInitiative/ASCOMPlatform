@@ -930,35 +930,66 @@ namespace ASCOM.DeviceHub
         /// <returns>Point struct containing the azimuth and altitude of the dome</returns>
         private Point GetDomeCoord(Point scopePosition, double hourAngle, PierSide sideOfPier)
         {
-            Point domePosition;
+            Point domePoth= new Point(0,0), domeHub = new Point(0, 0), domeRevised = new Point(0, 0), domePosition = new Point(0, 0);
 
-            if (Globals.UsePOTHDomeSlaveCalculation)
-            {
-                DomeControl dc = new DomeControl(Globals.DomeLayout, TelescopeParameters.SiteLatitude);
-                domePosition = dc.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
-            }
-            else
+            LogActivityLine(ActivityMessageTypes.Other, $"  Use POTH: {Globals.UsePOTHDomeSlaveCalculation}, Use Revised: {Globals.UseRevisedDomeSlaveCalculation}");
+            try
             {
                 // Calculate the dome position using the POTH method.
                 DomeControl dc = new DomeControl(Globals.DomeLayout, TelescopeParameters.SiteLatitude);
-                Point domePoth = dc.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
+                domePoth = dc.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
+            }
+            catch (Exception ex)
+            {
+                LogActivityLine(ActivityMessageTypes.Other, $"***** GetDomeCoord POTH Error - {ex.Message}");
+            }
 
+            try
+            {
                 // Calculate the dome position using the original Device Hub method.
                 DomeSynchronize dsync = new DomeSynchronize(Globals.DomeLayout, TelescopeParameters.SiteLatitude);
-                Point domeHub = dsync.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
-
-                // Calculate the dome position using the new Device Hub method.
-                domePosition = DomePosition(scopePosition, hourAngle, sideOfPier);
-
-                // Compare results from the three calculation methods
-                LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - POTH:  {domePoth.X.ToDMS()}, {domePoth.Y.ToDMS()} ({domePoth.X:0.0}, {domePoth.Y:0.0})");
-                LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Hub:    {domeHub.X.ToDMS()}, {domeHub.Y.ToDMS()} ({domeHub.X:0.0}, {domeHub.Y:0.0})");
-                LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Hub 2: {domePosition.X.ToDMS()}, {domePosition.Y.ToDMS()} ({(domeHub.X - domePosition.X).ToDMS()} {(domeHub.Y - domePosition.Y).ToDMS()}) ({domePosition.X:0.0}, {domePosition.Y:0.0})");
+                domeHub = dsync.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
             }
+            catch (Exception ex)
+            {
+                LogActivityLine(ActivityMessageTypes.Other, $"***** GetDomeCoord Hub Error - {ex.Message}");
+            }
+
+            try
+            {
+                // Calculate the dome position using the new Device Hub method.
+                domeRevised = DomePosition(scopePosition, hourAngle, sideOfPier);
+            }
+            catch (Exception ex)
+            {
+                LogActivityLine(ActivityMessageTypes.Other, $"***** GetDomeCoord Hub2 Error - {ex.Message}");
+            }
+
+            // Compare results from the three calculation methods
+            LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - POTH:  {domePoth.X.ToDMS()}, {domePoth.Y.ToDMS()} ({domePoth.X:0.0}, {domePoth.Y:0.0})");
+            LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Hub:    {domeHub.X.ToDMS()}, {domeHub.Y.ToDMS()} ({domeHub.X:0.0}, {domeHub.Y:0.0})");
+            LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Hub 2: {domeRevised.X.ToDMS()}, {domeRevised.Y.ToDMS()} ({(domeHub.X - domeRevised.X).ToDMS()} {(domeHub.Y - domeRevised.Y).ToDMS()}) ({domeRevised.X:0.0}, {domeRevised.Y:0.0})");
+
+            // Select the appropriate dome position based on the configuration setting
+            if (Globals.UseRevisedDomeSlaveCalculation) // Revised calculation
+            {
+                domePosition = domeRevised;
+            }
+            else if (Globals.UsePOTHDomeSlaveCalculation) // POTH calculation
+            {
+                domePosition = domePoth;
+            }
+            else // Original Device Hub calculation
+            {
+                domePosition = domeHub;
+            }
+
+            LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Using:  {domePosition.X.ToDMS()}, {domePosition.Y.ToDMS()} ({domePosition.X:0.0}, {domePosition.Y:0.0})");
 
             // Apply any configured azimuth correction and ensure the resulting value is between 0.0 and 359.999...
             domePosition.X += Globals.DomeAzimuthAdjustment;
             domePosition.X = Globals.Condition0To359(domePosition.X);
+
             return domePosition;
         }
 
@@ -987,11 +1018,9 @@ namespace ASCOM.DeviceHub
                 switch (TelescopeParameters.AlignmentMode)
                 {
                     case AlignmentModes.algAltAz: // Altitude/Azimuth alignment
-                                                  // Set the value of PHI depending on hemisphere
-                        if (TelescopeParameters.SiteLatitude >= 0.0) // Northern hemisphere
-                            PHI = 90.0;
-                        else // Southern hemisphere
-                            PHI = -90.0;
+
+                        // Set the value of PHI to 90 for Alt/Az
+                        PHI = 90.0;
 
                         // Determine the roll and pitch angles of the scope
                         scopeRollAngle = 180.0 - scopePosition.X; // Azimuth
@@ -1065,7 +1094,7 @@ namespace ASCOM.DeviceHub
             }
             catch (Exception ex)
             {
-                LogActivityLine(ActivityMessageTypes.Other, $"***** GetDomeCoord Error - {ex.Message}");
+                LogActivityLine(ActivityMessageTypes.Other, $"***** DomePosition Error - {ex.Message}");
                 domeCoordinates.X = 0.0;
                 domeCoordinates.Y = 0.0;
                 SendSyncErrorState(true);  // Set the sync error flag to true if we have an error calculating the dome position

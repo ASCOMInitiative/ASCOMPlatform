@@ -503,10 +503,6 @@ namespace ASCOM.DeviceHub
 
         #endregion
 
-
-
-
-
         #region EditOpticalOffsetCommand
 
         private ICommand _editOpticalOffsetCommand;
@@ -548,10 +544,6 @@ namespace ASCOM.DeviceHub
         }
 
         #endregion
-
-
-
-
 
         #region EditGemAxisOffsetCommand
 

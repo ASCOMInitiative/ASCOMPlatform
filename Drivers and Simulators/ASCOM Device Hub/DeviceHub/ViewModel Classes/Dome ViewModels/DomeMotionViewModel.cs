@@ -1,16 +1,19 @@
-﻿using System;
+﻿using ASCOM.DeviceHub.MvvmMessenger;
+using ASCOM.DeviceInterface;
+using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using ASCOM.DeviceInterface;
-
-using ASCOM.DeviceHub.MvvmMessenger;
 
 namespace ASCOM.DeviceHub
 {
     public class DomeMotionViewModel : DeviceHubViewModelBase
     {
+        private const string REGISTRY_PATH = @"SOFTWARE\ASCOM\DeviceHub";
+        private const string REGISTRY_PATH_POTH = @"UsePOTHSlaveCalculation";
+        private const string REGISTRY_PATH_REVISED = @"UseRevisedDomeSlaveCalculation";
+
         private readonly IDomeManager _domeManager;
         private IDomeManager DomeManager => _domeManager;
 
@@ -33,6 +36,10 @@ namespace ASCOM.DeviceHub
             Messenger.Default.Register<DomeSyncErrorStateMessage>(this, (action) => DomeSyncErrorStateUpdated(action));
 
             RegisterStatusUpdateMessage(true);
+
+            // Initialize the properties that can change
+            UsePOTHSlaveCalculation = GetRegistryValue(REGISTRY_PATH_POTH);
+            UseRevisedSlaveCalculation = GetRegistryValue(REGISTRY_PATH_REVISED);
 
             LogAppMessage("Initialization complete", caller);
         }
@@ -184,6 +191,54 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        public bool UseRevisedSlaveCalculation
+        {
+            get { return Globals.UseRevisedDomeSlaveCalculation; }
+            set
+            {
+                if (value != Globals.UseRevisedDomeSlaveCalculation)
+                {
+                    // Update the global Revised setting 
+                    LogAppMessage($"Setting UseRevisedDomeSlaveCalculation to {value}");
+                    Globals.UseRevisedDomeSlaveCalculation = value;
+
+                    // Save the value in the registry
+                    SetRegistryValue(REGISTRY_PATH_REVISED, value);
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool GetRegistryValue(string key)
+        {
+            using (var regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(REGISTRY_PATH))
+            {
+                if (regKey != null)
+                {
+                    object value = regKey.GetValue(key);
+                    if (value != null && value is int intValue)
+                    {
+                        return intValue == 1;
+                    }
+                }
+            }
+
+            SetRegistryValue(key, false); // Default to false if not found
+            return false;
+        }
+
+        private void SetRegistryValue(string key, bool value)
+        {
+            using (var regKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(REGISTRY_PATH))
+            {
+                if (regKey != null)
+                {
+                    regKey.SetValue(key, value ? 1 : 0, Microsoft.Win32.RegistryValueKind.DWord);
+                }
+            }
+        }
+
         public bool UsePOTHSlaveCalculation
         {
             get { return Globals.UsePOTHDomeSlaveCalculation; }
@@ -191,7 +246,12 @@ namespace ASCOM.DeviceHub
             {
                 if (value != Globals.UsePOTHDomeSlaveCalculation)
                 {
+                    LogAppMessage($"Setting UsePOTHSlaveCalculation to {value}");
                     Globals.UsePOTHDomeSlaveCalculation = value;
+
+                    // Save the value in the registry
+                    SetRegistryValue(REGISTRY_PATH_POTH, value);
+
                     OnPropertyChanged();
                 }
             }
