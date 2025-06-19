@@ -39,16 +39,16 @@
 			</Style.Triggers>
 		</Style>
 	</local:DeviceHubDialogView.Resources>
-	<Grid>
+    <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="562" />
 		</Grid.ColumnDefinitions>
 		<TabControl x:Name="_deviceTab" Grid.Row="0" Background="Transparent" Height="Auto" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True"
-					SelectionChanged="TabControl_SelectionChanged" VerticalAlignment="Top" Margin="10,10,10,0" Width="500">
+					SelectionChanged="TabControl_SelectionChanged" VerticalAlignment="Top" Margin="10,10,10,0" Width="auto">
 			<TabItem Header="Device Hub Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
 					 Tag="Application" >
 				<Grid>
@@ -75,22 +75,22 @@
 							<RadioButton Content="Custom" Foreground="{DynamicResource NormalTextBrush}" Margin="0"
 										 IsChecked="{Binding UseCustomTheme, ConverterParameter=True, Converter={StaticResource BoolBoolConverter}}" />
 						</StackPanel>
-						<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,6" Content="Suppress Activation Notification" Foreground="{DynamicResource NormalTextBrush}" 
+						<CheckBox Grid.Row="1" Grid.Column="0" Margin="100,50,0,6" Content="Suppress Activation Notification" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Read the user document for more information"
 							  IsChecked="{Binding SuppressTrayBubble}" />
-						<CheckBox Grid.Row="2" Grid.Column="0" Margin="10,6" Content="Use Expanded Screen Layout" Foreground="{DynamicResource NormalTextBrush}" 
+						<CheckBox Grid.Row="2" Grid.Column="0" Margin="100,6" Content="Use Expanded Screen Layout" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Display Dome and Focuser control in Expanders rather than Tabs"
 							  IsChecked="{Binding UseExpandedScreenLayout}" />
-						<CheckBox Grid.Row="3" Grid.Column="0" Margin="10,6" Content="Keep Device Hub Window On Top (requires restart)" Foreground="{DynamicResource NormalTextBrush}" 
+						<CheckBox Grid.Row="3" Grid.Column="0" Margin="100,6" Content="Keep Device Hub Window On Top (requires restart)" Foreground="{DynamicResource NormalTextBrush}" 
 							  ToolTip="Keep Device Hub main window on top of other main windows"
 							  IsChecked="{Binding KeepWindowOnTop}" />
-						<CheckBox Grid.Row="4" Grid.Column="0" Margin="10,6" Content="Report Composite Slewing When Dome Is Slaved" Foreground="{DynamicResource NormalTextBrush}" 								  
+						<CheckBox Grid.Row="4" Grid.Column="0" Margin="100,6" Content="Report Composite Slewing When Dome Is Slaved" Foreground="{DynamicResource NormalTextBrush}" 								  
 							  ToolTip="When the dome is slaved to the telescope, both devices report Slewing = True while either device is slewing."
 							  IsChecked="{Binding UseCompositeSlewingFlag}" />
-                        <CheckBox Grid.Row="5" Grid.Column="0" Margin="10,6" Content="Show Activity Log When Started" Foreground="{DynamicResource NormalTextBrush}" 								  
+                        <CheckBox Grid.Row="5" Grid.Column="0" Margin="100,6" Content="Show Activity Log When Started" Foreground="{DynamicResource NormalTextBrush}" 								  
 							  ToolTip="Displays the activity log immediately Device Hub is started."
 							  IsChecked="{Binding ShowActivityLogWhenStarted}" />
-                        <CheckBox Grid.Row="6" Grid.Column="0" Margin="10,6" Content="Write Activity Log to Disk" Foreground="{DynamicResource NormalTextBrush}" 								  
+                        <CheckBox Grid.Row="6" Grid.Column="0" Margin="100,6" Content="Write Activity Log to Disk" Foreground="{DynamicResource NormalTextBrush}" 								  
 							  ToolTip="Writes activity log entries to a log file as well as displaying them in the activity log window.&#x0a;The log file name format is: ASCOM.DeviceHub.Activity.HHmm.ssffff.txt"
 							  IsChecked="{Binding WriteActivityLogToDisk}" />
                     </Grid>

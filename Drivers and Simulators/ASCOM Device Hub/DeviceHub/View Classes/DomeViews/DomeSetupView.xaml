@@ -7,10 +7,14 @@
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
-             d:DesignHeight="400" d:DesignWidth="380"
+             d:DesignHeight="400" d:DesignWidth="587.5"
              Height="Auto" Width="Auto">
     <UserControl.Resources>
         <local:DeviceIDConverter x:Key="DeviceIDConverter" />
+
+        <Style TargetType="ToolTip">
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+        </Style>
 
         <Style x:Key="BlockStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="0" />
@@ -38,7 +42,7 @@
             <ColumnDefinition Width="Auto" MinWidth="20" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" HorizontalAlignment="Left" Margin="20,8,20,0"/>
+            <Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" HorizontalAlignment="Left" Margin="103,8,20,0"/>
             <GroupBox Header="Dome Device" Foreground="{DynamicResource NormalTextBrush}" HorizontalAlignment="Left" MinWidth="190">
                 <Grid Margin="6" HorizontalAlignment="Center">
                     <Grid.RowDefinitions>
@@ -129,12 +133,14 @@
                         </TextBox.InputBindings>
                     </TextBox>
 
-
-                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="111">
-                        <Run Text="GEM / Dec / Altitude" />
+                    <!-- GEM offset -->
+                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="Auto" 
+                               ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail.">
+                        <Run Text="Telescope offset from the axis intersection (mm):" />
                         <LineBreak />
-                        <Run Text="offset (mm):" />
+                        <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
+
                     <TextBox Grid.Row="1" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -144,10 +150,12 @@
                         </TextBox.InputBindings>
                     </TextBox>
 
-                    <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="111">
-                        <Run Text="Optical Offset (mm)" />
+                    <!-- Optical axis offset -->
+                    <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,0,0" Width="auto"
+                             ToolTip="Shortest distance between the declination / altitude axis and the telescope optical axis (mm).&#x0a;&#x0a;This will be zero when the declination / altitude axis passes through the telescope optical axis,&#x0a;otherwise non-zero.&#x0a;&#x0a;See the Device Hub manual for more detail.">
+                        <Run Text="Telescope offset from the dec / alt axis (mm):" />
                         <LineBreak />
-                        <Run Text="Usually zero:" />
+                        <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
                     <TextBox Grid.Row="2" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
@@ -205,7 +213,7 @@
             <GroupBox Grid.Row="2" Grid.Column="0" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Height="Auto" HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal" Margin="6" Height="26">
                     <Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
-                    <Slider Width="150" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
+                    <Slider Width="331" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
 					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
 					Value="{Binding FastUpdatePeriod}" />
                     <TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"

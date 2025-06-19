@@ -564,11 +564,23 @@ namespace ASCOM.DeviceHub
                 if (_editGemAxisOffsetCommand == null)
                 {
                     _editGemAxisOffsetCommand = new RelayCommand(
-                        param => this.EditGemAxisOffset());
+                        // param => this.EditGemAxisOffset());
+                        param => this.EditGemAxisOffset2());
                 }
 
                 return _editGemAxisOffsetCommand;
             }
+        }
+
+        private void EditGemAxisOffset2()
+        {
+            int offset = GemAxisOffset;
+            string negativeText = "Negative";
+            string positiveText = "Positive";
+
+            offset = EditTheOffset(offset, negativeText, positiveText);
+
+            GemAxisOffset = offset;
         }
 
         private void EditGemAxisOffset()
@@ -576,7 +588,7 @@ namespace ASCOM.DeviceHub
             int offset = GemAxisOffset;
 
             SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("GemAxisOffset"
-                , "Enter the GEM axis offset distance, in mm", 0, 2000, 0, 2000, ' ');
+                , "Telescope offset from the axis intersection (mm)", 0, 2000, -1000, 1000, ' ');
             vm.InitializeValues(new int[1] { offset });
 
             IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -658,9 +670,10 @@ namespace ASCOM.DeviceHub
         private void EditSlaveInterval()
         {
             int interval = SlaveInterval;
+            const int MINIMUM_INTERVAL = 5;
 
             SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("SlaveInterval"
-                , "Enter the azimuth adjustment interval, in seconds", 0, 300, 5, 300, ' ');
+                , "Enter the azimuth adjustment interval, in seconds", 0, 300, MINIMUM_INTERVAL, 300, ' ');
             vm.InitializeValues(new int[1] { interval });
 
             IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
@@ -675,9 +688,9 @@ namespace ASCOM.DeviceHub
 
             vm.Dispose();
 
-            // Don't allow a value less than 5 seconds.
+            // Don't allow a value less than MINIMUM_INTERVAL seconds.
 
-            SlaveInterval = Math.Max(interval, 5);
+            SlaveInterval = Math.Max(interval, MINIMUM_INTERVAL);
         }
 
         #endregion

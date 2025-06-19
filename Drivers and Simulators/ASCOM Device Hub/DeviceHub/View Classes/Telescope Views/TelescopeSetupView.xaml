@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
-             d:DesignHeight="406" d:DesignWidth="380"
+             d:DesignHeight="406" d:DesignWidth="587.5"
              Height="Auto">
 	<UserControl.Resources>
         <local:DeviceIDConverter x:Key="DeviceIDConverter" />
@@ -16,13 +16,13 @@
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" MinHeight="20" />
-			<RowDefinition Height="Auto" MinHeight="20" />
+			<RowDefinition Height="Auto" MinHeight="0" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" MinWidth="120" />
 		</Grid.ColumnDefinitions>
 		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-			<Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" HorizontalAlignment="Left" Margin="20,8,20,0"/>
+			<Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" HorizontalAlignment="Left" Margin="103,8,20,0"/>
 			<GroupBox Header="Telescope Device" Foreground="{DynamicResource NormalTextBrush}" MinWidth="190">
 				<Grid Margin="6" HorizontalAlignment="Center">
 					<Grid.RowDefinitions>
@@ -40,10 +40,10 @@
 				</Grid>
 			</GroupBox>
 		</StackPanel>
-		<GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" HorizontalAlignment="Stretch">
+		<GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0,0,0,220" HorizontalAlignment="Stretch">
 			<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6" Height="26">
 				<Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
-				<Slider Width="150" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
+				<Slider Width="340" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
 					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
 					Value="{Binding FastUpdatePeriod}" />
 				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"

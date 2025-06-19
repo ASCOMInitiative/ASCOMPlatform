@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
    	         Background="{DynamicResource WindowBackgroundBrush}"
-             d:DesignHeight="300" d:DesignWidth="340" MinWidth="428" MinHeight="530">
+             d:DesignHeight="300" d:DesignWidth="340" MinWidth="428" MinHeight="580">
 	<UserControl.Resources>
 		<local:ParkingStateVisibilityConverter x:Key="ParkingStateVisConverter" />
 		<local:HomingStateVisibilityConverter x:Key="HomingStateVisConverter" />
@@ -57,7 +57,22 @@
 			<ColumnDefinition Width="Auto" MinWidth="124" />
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
-		<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Label Grid.Row="0" Grid.Column="0" Content="Dome sync: Geometry error!" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="13"  Foreground="Red" VerticalAlignment="Center">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DomeSyncErrorState}" Value="true">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DomeSyncErrorState}" Value="false">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
 			<Button Height="60" Width="60" Margin="4,0" Style="{StaticResource CircleButton}"
 					Command="{Binding ToggleShutterStateCommand}">
 				<Button.Content>
@@ -128,14 +143,23 @@
 			</Button>
 		</Grid>
 		<GroupBox Grid.Row="1" Grid.Column="1" Header="Dome State" Margin="8,0,4,0" Padding="0" VerticalAlignment="Top" Height="Auto" Width="238" Foreground="{DynamicResource NormalTextBrush}">
-			<Grid Margin="0,4" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto">
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DomeSyncErrorState}" Value="true">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
+            <Grid Margin="0,4" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="18"/>
-				</Grid.RowDefinitions>
+                </Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" MinWidth="60" />
 					<ColumnDefinition Width="Auto" MinWidth="60" />
@@ -167,9 +191,10 @@
 									   Visibility="{Binding Status.HomingState, Converter={StaticResource HomingStateVisConverter}, ConverterParameter={x:Static local:HomingStateEnum.HomingInProgress}, FallbackValue=Hidden}" />
 
 				</StackPanel>
-			</Grid>
+            </Grid>
 		</GroupBox>
-		<Expander Name="_motionExpander" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Direct Motion" Foreground="{DynamicResource NormalTextBrush}" Margin="6,2"
+
+        <Expander Name="_motionExpander" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Direct Motion" Foreground="{DynamicResource NormalTextBrush}" Margin="6,2"
                       Template="{DynamicResource StretchyExpanderTemplate}" Expanded="Expander_Expanded">
 			<GroupBox Header="Go To Azimuth" HorizontalAlignment="Left" Margin="0" Height="Auto" Width="Auto">
 				<Grid>

@@ -6,157 +6,157 @@ namespace ASCOM.DeviceHub
 {
     public class DevHubDomeStatus : AscomDomeStatus, ICloneable
     {
-		public static DevHubDomeStatus GetEmptyStatus()
-		{
-			DevHubDomeStatus status = new DevHubDomeStatus();
-			status.Clean();
+        public static DevHubDomeStatus GetEmptyStatus()
+        {
+            DevHubDomeStatus status = new DevHubDomeStatus();
+            status.Clean();
 
-			return status;
-		}
+            return status;
+        }
 
-		public DevHubDomeStatus()
-			: base()
-		{}
+        public DevHubDomeStatus()
+            : base()
+        { }
 
-		public DevHubDomeStatus( DevHubDomeStatus other )
-			: base( other )
-		{
-			this.HomingState = other.HomingState;
-			this.ParkingState = other.ParkingState;
-			this.ShutterPosition = other.ShutterPosition;
-			this.LastUpdateTime = other.LastUpdateTime;
-		}
+        public DevHubDomeStatus(DevHubDomeStatus other)
+            : base(other)
+        {
+            this.HomingState = other.HomingState;
+            this.ParkingState = other.ParkingState;
+            this.ShutterPosition = other.ShutterPosition;
+            this.LastUpdateTime = other.LastUpdateTime;
+        }
 
-		public DevHubDomeStatus( DomeManager mgr )
-			: base( mgr )
-		{
-			if ( mgr.HomingState != HomingStateEnum.HomingInProgress || !Slewing )
-			{
-				HomingState = ( AtHome ) ? HomingStateEnum.IsAtHome : HomingStateEnum.NotAtHome;
-			}
+        public DevHubDomeStatus(DomeManager mgr)
+            : base(mgr)
+        {
+            if (mgr.HomingState != HomingStateEnum.HomingInProgress || !Slewing)
+            {
+                HomingState = (AtHome) ? HomingStateEnum.IsAtHome : HomingStateEnum.NotAtHome;
+            }
 
-			if ( mgr.ParkingState != ParkingStateEnum.ParkInProgress || !Slewing )
-			{
-				ParkingState = ( AtPark ) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
-			}
+            if (mgr.ParkingState != ParkingStateEnum.ParkInProgress || !Slewing)
+            {
+                ParkingState = (AtPark) ? ParkingStateEnum.IsAtPark : ParkingStateEnum.Unparked;
+            }
 
-			ShutterPosition = FormatShutterPosition( mgr );
+            ShutterPosition = FormatShutterPosition(mgr);
 
-			LastUpdateTime = DateTime.Now;
-		}
+            LastUpdateTime = DateTime.Now;
+        }
 
-		public DateTime LastUpdateTime { get; private set; }
+        public DateTime LastUpdateTime { get; private set; }
 
-		#region Change Notification Properties
+        #region Change Notification Properties
 
-		private ParkingStateEnum _parkingState;
+        private ParkingStateEnum _parkingState;
 
-		public ParkingStateEnum ParkingState
-		{
-			get { return _parkingState; }
-			set
-			{
-				if ( value != _parkingState )
-				{
-					_parkingState = value;
-					OnPropertyChanged();
-				}
-			}
-		}
-		
-		private HomingStateEnum _homingState;
+        public ParkingStateEnum ParkingState
+        {
+            get { return _parkingState; }
+            set
+            {
+                if (value != _parkingState)
+                {
+                    _parkingState = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public HomingStateEnum HomingState
-		{
-			get { return _homingState; }
-			set
-			{
-				if ( value != _homingState )
-				{
-					_homingState = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private HomingStateEnum _homingState;
 
-		private string _shutterPosition;
+        public HomingStateEnum HomingState
+        {
+            get { return _homingState; }
+            set
+            {
+                if (value != _homingState)
+                {
+                    _homingState = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public string ShutterPosition
-		{
-			get { return _shutterPosition; }
-			set
-			{
-				if ( value != _shutterPosition )
-				{
-					_shutterPosition = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        private string _shutterPosition;
 
-		#endregion Change Notification Properties
+        public string ShutterPosition
+        {
+            get { return _shutterPosition; }
+            set
+            {
+                if (value != _shutterPosition)
+                {
+                    _shutterPosition = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		#region Helper Methods
+        #endregion Change Notification Properties
 
-		private string FormatShutterPosition( DomeManager mgr )
-		{
-			string position = "Unknown";
-			ShutterState shutterStatus = this.ShutterStatus;
+        #region Helper Methods
 
-			double fractionOpen = ( mgr.Capabilities.CanSetAltitude ) ? this.Altitude / 90.0 : Double.NaN;
-			bool useFraction = ( !Double.IsNaN( fractionOpen ) );
+        private string FormatShutterPosition(DomeManager mgr)
+        {
+            string position = "Unknown";
+            ShutterState shutterStatus = this.ShutterStatus;
 
-			switch ( shutterStatus )
-			{
-				case ShutterState.shutterClosed:
-					position = "Closed";
-					break;
+            double fractionOpen = (mgr.Capabilities.CanSetAltitude) ? this.Altitude / 90.0 : Double.NaN;
+            bool useFraction = (!Double.IsNaN(fractionOpen));
 
-				case ShutterState.shutterClosing:
-					position = "Closing";
+            switch (shutterStatus)
+            {
+                case ShutterState.shutterClosed:
+                    position = "Closed";
+                    break;
 
-					break;
+                case ShutterState.shutterClosing:
+                    position = "Closing";
 
-				case ShutterState.shutterError:
-					position = "Unknown";
+                    break;
 
-					break;
+                case ShutterState.shutterError:
+                    position = "Unknown";
 
-				case ShutterState.shutterOpen:
-					position = "Open";
-					position += (useFraction) ? $" at {fractionOpen:P0}" : "";
+                    break;
 
-					break;
+                case ShutterState.shutterOpen:
+                    position = "Open";
+                    position += (useFraction) ? $" at {fractionOpen:P0}" : "";
 
-				case ShutterState.shutterOpening:
-					position = "Opening";
+                    break;
 
-					break;
-			}
+                case ShutterState.shutterOpening:
+                    position = "Opening";
 
-			return position;
-		}
+                    break;
+            }
 
-		protected override void Clean()
-		{
-			base.Clean();
+            return position;
+        }
 
-			ParkingState = ParkingStateEnum.Unparked;
-			HomingState = HomingStateEnum.NotAtHome;
+        protected override void Clean()
+        {
+            base.Clean();
 
-			LastUpdateTime = DateTime.Now;
-		}
+            ParkingState = ParkingStateEnum.Unparked;
+            HomingState = HomingStateEnum.NotAtHome;
 
-		object ICloneable.Clone()
-		{
-			return new DevHubDomeStatus( this );
-		}
+            LastUpdateTime = DateTime.Now;
+        }
 
-		public new DevHubDomeStatus Clone()
-		{
-			return new DevHubDomeStatus( this );
-		}
+        object ICloneable.Clone()
+        {
+            return new DevHubDomeStatus(this);
+        }
 
-		#endregion Helper Methods
-	}
+        public new DevHubDomeStatus Clone()
+        {
+            return new DevHubDomeStatus(this);
+        }
+
+        #endregion Helper Methods
+    }
 }

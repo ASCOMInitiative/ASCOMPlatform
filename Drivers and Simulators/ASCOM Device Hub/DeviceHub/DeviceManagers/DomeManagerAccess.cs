@@ -74,7 +74,7 @@ namespace ASCOM.DeviceHub
                     try
                     {
                         retval = Service.Connected;
-                        LogActivityLine(msgType, $"Get Connected flag - {retval}");
+                        // LogActivityLine(msgType, $"Get Connected flag - {retval}");
                     }
                     catch (Exception xcp)
                     {

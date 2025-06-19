@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
              mc:Ignorable="d" 
              Background="{DynamicResource WindowBackgroundBrush}"
-             d:DesignHeight="406" d:DesignWidth="380"
+             d:DesignHeight="406" d:DesignWidth="587.5"
              Height="Auto">
 	<UserControl.Resources>
 		<local:DeviceIDConverter x:Key="DeviceIDConverter" />
@@ -33,7 +33,7 @@
 			<ColumnDefinition Width="Auto" MinWidth="20" />
 		</Grid.ColumnDefinitions>
 		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-			<Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" Margin="20,8,20,0"/>
+			<Image Source="/ASCOM.DeviceHub;component/Images/ASCOM.ico" Height="80" Margin="103,8,20,0"/>
 			<GroupBox Header="Focuser Device" Foreground="{DynamicResource NormalTextBrush}" MinWidth="190" HorizontalAlignment="Left">
 				<Grid Margin="6" HorizontalAlignment="Center">
 					<Grid.RowDefinitions>
@@ -54,7 +54,7 @@
 		<GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Temperature Calibration" Foreground="{DynamicResource NormalTextBrush}" Margin="0" HorizontalAlignment="Stretch">
 			<StackPanel Orientation="Horizontal" Margin="6" Height="26">
 				<Label Content="Temperature Offset (°C):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Margin="0,-3,0,0" />
-				<Slider Width="120" Minimum="-10" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center" 
+				<Slider Width="318" Minimum="-10" Maximum="10" TickFrequency="0.5" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center" 
 						Value="{Binding TemperatureOffset}"/>
 				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
 					   Text="{Binding TemperatureOffset, StringFormat=F1, FallbackValue=0.0, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
@@ -64,10 +64,19 @@
 		<GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" HorizontalAlignment="Stretch">
 			<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6" Height="26">
 				<Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
-				<Slider Width="150" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
+				<Slider Width="340" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
 					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
-					Value="{Binding FastUpdatePeriod}" />
-				<TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
+					Value="{Binding FastUpdatePeriod}" RenderTransformOrigin="0.5,0.5" >
+                    <Slider.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleY="0"/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="0"/>
+                        </TransformGroup>
+                    </Slider.RenderTransform>
+                </Slider>
+                <TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
 					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
 			</StackPanel>
 		</GroupBox>

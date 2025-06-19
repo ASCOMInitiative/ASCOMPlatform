@@ -81,9 +81,10 @@
     <Compile Include="Business Object Classes\ASCOM Classes\GarbageCollection.cs" />
     <Compile Include="Business Object Classes\AssemblyGuidAttribute.cs" />
     <Compile Include="Business Object Classes\DisplayAttribute.cs" />
-    <Compile Include="Business Object Classes\Dome Classes\DomeSyncWallace.cs" />
+    <Compile Include="Business Object Classes\Dome Classes\DomeSynchromise2.cs" />
     <Compile Include="Business Object Classes\Message Types\ApplicationSettingsUpdatedMessage.cs" />
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
+    <Compile Include="Business Object Classes\Message Types\DomeSyncErrorStateMessage.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />
