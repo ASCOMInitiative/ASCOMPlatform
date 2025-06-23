@@ -551,8 +551,8 @@ namespace ASCOM.Setup
 
                 // Rename the Hardware file
                 TL.LogMessage("ProjectFinishedGenerating", $"About to rename hardware file - driver template exists: {!(hardwareFile is null)}.");
-                TL.LogMessage("ProjectFinishedGenerating", $"Renaming hardware: '{hardwareFile.Name}' to '{DeviceClass}Hardware.{Path.GetExtension(hardwareFile.Name)}'");
-                hardwareFile.Name = $"{DeviceClass}Hardware.{Path.GetExtension(hardwareFile.Name)}";
+                TL.LogMessage("ProjectFinishedGenerating", $"Renaming hardware: '{hardwareFile.Name}' to '{DeviceClass}Hardware{Path.GetExtension(hardwareFile.Name)}'");
+                hardwareFile.Name = $"{DeviceClass}Hardware{Path.GetExtension(hardwareFile.Name)}";
                 TL.LogMessage("ProjectFinishedGenerating", $"New hardware name: '{hardwareFile.Name}'");
 
                 // Rename the Driver folder
