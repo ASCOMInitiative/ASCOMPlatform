@@ -1083,7 +1083,7 @@ namespace ASCOM.DeviceHub
                     Globals.DomeLayout.GemAxisOffset,     // xt - Offset of the optical axis from the roll axis (right ascension or azimuth axis) (mm) 
                     0.0,                                  // yt - Offset of the pitch (dec/alt) axis from the roll (RA/az) axis. Usually zero in amateur mounts, can be non-zero in some horseshoe designs (mm)
                     Globals.DomeLayout.OpticalOffset,     // yo - Offset of the optical axis from the nearest point of approach of the declination / altitude axis (mm)
-                    scopeRollAngle,                       // roll axis angle (ra/az) (radians)
+                    scopeRollAngle,                       // roll axis angle (ha/az) (radians)
                     scopePitchAngle);                     // pitch axis angle (dec/alt) (radians)
 
                 SendSyncErrorState(false); // Set the sync error flag to false if the calculation is successful
