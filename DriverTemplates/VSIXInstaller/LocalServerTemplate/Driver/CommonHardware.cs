@@ -130,7 +130,10 @@ namespace TEMPLATENAMESPACE
         {
             // Don't permit the setup dialogue if already connected
             if (IsConnected)
+            {
                 MessageBox.Show("Already connected, just press OK");
+                return; // Exit the method if already connected
+            }
 
             using (SetupDialogForm F = new SetupDialogForm(tl))
             {
