@@ -2,9 +2,10 @@
 // <summary>Defines the Switch class.</summary>
 //-----------------------------------------------------------------------
 // 17-Sep-13  	cdr     6.0.0   Initial definition
-using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -50,6 +51,7 @@ namespace ASCOM.DriverAccess
             : base(switchId)
         {
             memberFactory = base.MemberFactory; //Get the member factory created by the base class
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Switch");
         }
 
         #region IDisposable Members

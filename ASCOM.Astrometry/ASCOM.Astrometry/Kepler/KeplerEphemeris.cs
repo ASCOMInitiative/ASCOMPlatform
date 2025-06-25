@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ASCOM.Utilities;
+using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace ASCOM.Astrometry.Kepler
@@ -137,6 +139,7 @@ namespace ASCOM.Astrometry.Kepler
             m_Type = default;
             m_e.ptable.lon_tbl = new double[] { 0.0d }; // Initialise orbit arrays
             m_e.ptable.lat_tbl = new double[] { 0.0d };
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "KeplerEphemeris");
         }
         /// <summary>
         /// Semi-major axis (AU)

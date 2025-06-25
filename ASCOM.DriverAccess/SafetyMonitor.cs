@@ -3,9 +3,10 @@
 //-----------------------------------------------------------------------
 // 25-Sept-10  	rem     6.0.0 - Initial draft of the class
 
-using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -26,6 +27,7 @@ namespace ASCOM.DriverAccess
             : base(safetyMonitorId)
         {
             _memberFactory = MemberFactory;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.SafetyMonitor");
         }
         #endregion
 

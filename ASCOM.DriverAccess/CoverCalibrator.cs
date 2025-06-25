@@ -1,6 +1,7 @@
-﻿using System;
-using ASCOM.DeviceInterface;
+﻿using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -21,6 +22,7 @@ namespace ASCOM.DriverAccess
             : base(coverCalibratorId)
         {
             memberFactory = base.MemberFactory;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.CoverCalibrator");
         }
         #endregion
 

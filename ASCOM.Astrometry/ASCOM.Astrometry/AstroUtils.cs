@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ASCOM.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using static ASCOM.Astrometry.GlobalItems;
-using ASCOM.Utilities;
 
 namespace ASCOM.Astrometry.AstroUtils
 {
@@ -57,6 +58,8 @@ namespace ASCOM.Astrometry.AstroUtils
 
         private void InitialiseAstroUtils()
         {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "AstroUtils");
+
             Utl = new Util();
             Nov31 = new NOVAS.NOVAS31();
             Sofa = new SOFA.SOFA();

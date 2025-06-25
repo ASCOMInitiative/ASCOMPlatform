@@ -8,6 +8,7 @@ using System.Text;
 using ASCOM.Utilities;
 using ASCOM.Utilities.Exceptions;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace ASCOM.Astrometry.SOFA
 {
@@ -132,6 +133,7 @@ namespace ASCOM.Astrometry.SOFA
             var ReturnedPath = new StringBuilder(260);
             int LastError, Count, NumberOfSOFALeapSecondValues;
             DateTime JulianDateUtc;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "SOFA");
 
             TL = new TraceLogger("", "SOFA");
             TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry
@@ -1692,10 +1694,10 @@ namespace ASCOM.Astrometry.SOFA
         private static extern short UpdateLeapSecondData32(LeapSecondDataStruct[] arr);
 
         [DllImport(SOFA32DLL, EntryPoint = "GetLeapSecondData")]
-        private static extern short GetLeapSecondData32([Out()]LeapSecondDataStruct[] arr, ref int HasUpdatedData);
+        private static extern short GetLeapSecondData32([Out()] LeapSecondDataStruct[] arr, ref int HasUpdatedData);
 
         [DllImport(SOFA32DLL, EntryPoint = "GetBuiltInLeapSecondData")]
-        private static extern short GetLeapSecondData32([Out()]LeapSecondDataStruct[] arr);
+        private static extern short GetLeapSecondData32([Out()] LeapSecondDataStruct[] arr);
 
         [DllImport(SOFA32DLL, EntryPoint = "UsingUpdatedData")]
         private static extern short UsingUpdatedData32();
@@ -1828,7 +1830,7 @@ namespace ASCOM.Astrometry.SOFA
         /// <returns>TRUE if successful; otherwise, FALSE.</returns>
         /// <remarks></remarks>
         [DllImport("shell32.dll")]
-        private static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, [Out()]StringBuilder lpszPath, int nFolder, bool fCreate);
+        private static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, [Out()] StringBuilder lpszPath, int nFolder, bool fCreate);
 
         /// <summary>
         /// Loads a library DLL

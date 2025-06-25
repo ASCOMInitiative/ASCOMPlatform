@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ASCOM.Utilities.Interfaces;
+using Microsoft.VisualBasic;
+using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using ASCOM.Utilities.Interfaces;
-using Microsoft.VisualBasic;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -125,6 +126,7 @@ namespace ASCOM.Utilities
         /// <remarks></remarks>
         public Timer()
         {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Timer");
             TL = new TraceLogger("", "Timer");
             TraceEnabled = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT);
             TL.Enabled = TraceEnabled;

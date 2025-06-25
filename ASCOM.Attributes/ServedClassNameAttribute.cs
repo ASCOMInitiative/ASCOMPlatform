@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM
 {
@@ -19,6 +21,7 @@ namespace ASCOM
         public ServedClassNameAttribute(string servedClassName)
         {
             DisplayName = servedClassName;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "ServedClassNameAttribute");
         }
 
         /// <summary>

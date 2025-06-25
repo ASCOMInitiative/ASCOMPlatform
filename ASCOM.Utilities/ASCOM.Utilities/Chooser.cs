@@ -1,9 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using ASCOM.Utilities.Exceptions;
+﻿using ASCOM.Utilities.Exceptions;
 using ASCOM.Utilities.Interfaces;
 using Microsoft.VisualBasic;
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -57,6 +58,7 @@ namespace ASCOM.Utilities
         {
 
             deviceTypeValue = "Telescope"; // Default to Telescope chooser
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Chooser");
         }
 
 

@@ -3,11 +3,11 @@
 //-----------------------------------------------------------------------
 // 29-Oct-13  	pwgs    6.1.0 - Created class.
 
-using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-
+using System;
 using System.Collections;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -28,6 +28,7 @@ namespace ASCOM.DriverAccess
             : base(videoId)
         {
             memberFactory = base.MemberFactory;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Video");
         }
         #endregion
 

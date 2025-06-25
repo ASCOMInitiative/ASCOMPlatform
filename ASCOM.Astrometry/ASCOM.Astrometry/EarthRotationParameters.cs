@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ASCOM.Utilities;
+using Microsoft.Win32.TaskScheduler;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Windows.Forms;
-using ASCOM.Utilities;
-using Microsoft.Win32.TaskScheduler;
 
 namespace ASCOM.Astrometry
 {
@@ -72,6 +73,7 @@ namespace ASCOM.Astrometry
         /// </summary>
         public EarthRotationParameters() : this(null) // Call the main initialisation routine with no trace logger reference
         {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "EarthRotationParameters");
         }
 
         /// <summary>
@@ -81,6 +83,7 @@ namespace ASCOM.Astrometry
         public EarthRotationParameters(TraceLogger SuppliedTraceLogger)
         {
             DateTime LeapSecondDate;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "EarthRotationParameters");
 
             TL = SuppliedTraceLogger; // Save the reference to the caller's trace logger so we can write to it
             profile = new RegistryAccess();

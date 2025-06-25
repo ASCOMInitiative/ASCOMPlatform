@@ -139,6 +139,7 @@
     </Compile>
     <Compile Include="Devices.cs" />
     <Compile Include="AscomDeviceTypes.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="AllUsersFileSystemProvider.cs" />
     <Compile Include="AlpacaSupport\Entity Classes\AlpacaDeviceDescription.cs" />

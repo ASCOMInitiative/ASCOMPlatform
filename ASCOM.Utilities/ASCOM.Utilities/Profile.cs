@@ -1,13 +1,14 @@
-﻿using System;
+﻿using ASCOM.Utilities.Interfaces;
+using Microsoft.VisualBasic;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml.Serialization;
-using ASCOM.Utilities.Interfaces;
-using Microsoft.VisualBasic;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -59,6 +60,7 @@ namespace ASCOM.Utilities
             // Profile trace logging disabled because it has not been required for many years
             TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT); // Get enabled / disabled state from the user registry
             TL.LogMessage("New", "Trace logger created OK");
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Profile");
         }
 
         /// <summary>

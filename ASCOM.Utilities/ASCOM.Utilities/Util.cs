@@ -1,13 +1,14 @@
-﻿using System;
+﻿using ASCOM.Utilities.Interfaces;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
+using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using ASCOM.Utilities.Interfaces;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -56,6 +57,7 @@ namespace ASCOM.Utilities
             TL = new TraceLogger("", "Util");
             TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT); // Get enabled / disabled state from the user registry
             TL.LogMessage("New", "Trace logger created OK");
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Util");
         }
 
         // IDisposable

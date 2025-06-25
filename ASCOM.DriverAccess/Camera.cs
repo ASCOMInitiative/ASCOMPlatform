@@ -1,7 +1,8 @@
-using System;
-using System.Collections;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using System.Collections;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -22,6 +23,8 @@ namespace ASCOM.DriverAccess
             : base(cameraId)
         {
             _memberFactory = base.MemberFactory;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Camera");
+
         }
         #endregion
 

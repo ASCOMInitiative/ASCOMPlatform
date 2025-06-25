@@ -35,6 +35,8 @@ namespace ASCOM.DriverAccess
         {
             memberFactory = base.MemberFactory;
 
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Telescope");
+
             // Set capabilities depending on returned interface version
             switch (DriverInterfaceVersion)
             {

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO.Ports;
-using System.Runtime.InteropServices;
-using System.Threading;
-using static System.Threading.Thread;
-using ASCOM.Utilities.Exceptions;
+﻿using ASCOM.Utilities.Exceptions;
 using ASCOM.Utilities.Interfaces;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.IO.Ports;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 using static ASCOM.Utilities.Global;
+using static System.Threading.Thread;
 
 namespace ASCOM.Utilities
 {
@@ -312,6 +313,7 @@ namespace ASCOM.Utilities
         {
             int WorkerThreads, CompletionThreads;
 
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Serial");
             SerSemaphore = new Semaphore(1, 1); // Create a new semaphore to control access to the serial port
 
             m_Connected = false; // Set inital values

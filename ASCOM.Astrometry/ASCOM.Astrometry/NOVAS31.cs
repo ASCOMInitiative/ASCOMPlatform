@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ASCOM.Utilities;
+using ASCOM.Utilities.Exceptions;
+using System;
 using System.Collections;
-using static System.Environment;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using ASCOM.Utilities;
-using ASCOM.Utilities.Exceptions;
+using static System.Environment;
 
 namespace ASCOM.Astrometry.NOVAS
 {
@@ -64,6 +65,7 @@ namespace ASCOM.Astrometry.NOVAS
             int LastError;
             Mutex Novas31Mutex;
             var gotMutex = default(bool); // Flag indicating whether the NOVAS initialisation mutex was successfully claimed
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS31");
 
             TL = new TraceLogger("", "NOVAS31");
             TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry

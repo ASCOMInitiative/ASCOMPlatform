@@ -51,13 +51,13 @@ namespace ASCOM.Utilities
 
         // Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
         private const bool TEST_ASTROMETRY = true;
-        private const bool TEST_CACHE = true;
-        private const bool TEST_LOGS_AND_APPLICATIONS = true;
-        private const bool TEST_REGISTRY = true;
-        private const bool TEST_SIMULATORS = true;
-        private const bool TEST_UTILITIES = true;
-        private const bool TEST_SCAN_DRIVES = true;
-        private const bool TEST_SEARCH_FOR_HELPERS = true;
+        private const bool TEST_CACHE = false;
+        private const bool TEST_LOGS_AND_APPLICATIONS = false;
+        private const bool TEST_REGISTRY = false;
+        private const bool TEST_SIMULATORS = false;
+        private const bool TEST_UTILITIES = false;
+        private const bool TEST_SCAN_DRIVES = false;
+        private const bool TEST_SEARCH_FOR_HELPERS = false;
         private const bool CREATE_DEBUG_COLSOLE = false;
 
         // Current number of leap seconds - Used to test NOVAS 3.1 DeltaT calculation - Needs to be updated when the number of leap seconds changes

@@ -4,9 +4,10 @@
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 //
-using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -75,6 +76,7 @@ namespace ASCOM.DriverAccess
             : base(domeId)
         {
             memberFactory = base.MemberFactory;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Dome");
         }
         #endregion
 

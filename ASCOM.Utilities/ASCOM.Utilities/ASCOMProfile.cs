@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using static ASCOM.Utilities.Global;
@@ -29,6 +30,7 @@ namespace ASCOM.Utilities
         public ASCOMProfile()
         {
             Subkey = new SortedList<string, SortedList<string, string>>();
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "ASCOMProfile");
         }
         #endregion
 

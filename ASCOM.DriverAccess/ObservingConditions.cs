@@ -1,6 +1,7 @@
-﻿using System;
-using ASCOM.DeviceInterface;
+﻿using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM.DriverAccess
 {
@@ -30,6 +31,7 @@ namespace ASCOM.DriverAccess
             : base(observingConditionsId)
         {
             _memberFactory = MemberFactory;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.ObservingConditions");
         }
         #endregion
 

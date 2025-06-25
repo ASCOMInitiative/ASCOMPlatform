@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ASCOM.Utilities;
+using System;
+using System.Reflection;
 
 namespace ASCOM
 {
@@ -61,6 +63,7 @@ namespace ASCOM
             // DeviceName defaults to be the same as the ID, unless the user changes it later. This ensures that there is
             // always *something* available for the Chooser to use as the display name, should the user neglect to set it.
             DeviceName = deviceId;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DeviceIdAttribute");
         }
 
         /// <summary>

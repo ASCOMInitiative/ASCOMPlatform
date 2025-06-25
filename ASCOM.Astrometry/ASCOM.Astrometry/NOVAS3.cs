@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections;
-using static System.Environment;
-using System.Runtime.InteropServices;
-using ASCOM.Utilities;
+﻿using ASCOM.Utilities;
 using ASCOM.Utilities.Exceptions;
+using System;
+using System.Collections;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using static System.Environment;
 
 namespace ASCOM.Astrometry.NOVAS
 {
@@ -55,6 +56,7 @@ namespace ASCOM.Astrometry.NOVAS
             string Novas3DllFile, RACIOFile, JPLEphFile;
             var ReturnedPath = new System.Text.StringBuilder(260);
             int LastError;
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS3");
 
             TL = new TraceLogger("", "NOVAS3");
             TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry

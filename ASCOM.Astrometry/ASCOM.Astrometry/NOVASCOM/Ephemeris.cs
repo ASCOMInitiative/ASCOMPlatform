@@ -1,13 +1,19 @@
-﻿using System;
-using static System.Math;
-using ASCOM.Astrometry.Kepler;
+﻿using ASCOM.Astrometry.Kepler;
+using System;
+using System.Reflection;
 using static ASCOM.Astrometry.NOVAS.NOVAS2;
+using static System.Math;
 
 namespace ASCOM.Astrometry
 {
 
     static class EphemerisCode
     {
+        static EphemerisCode()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.EphemerisCode");
+        }
+
 
         // Function patterned after get_earth() in the original NOVAS-C V2 package.
         // This function returns (via ref-params) the barycentric TDT and both
