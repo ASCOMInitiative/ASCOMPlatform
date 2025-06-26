@@ -17,7 +17,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Static initialiser called once per AppDomain to log the component name.
         /// </summary>
-        static Camera()
+        static CoverCalibrator()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.CoverCalibrator");
         }
