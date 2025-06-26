@@ -21,20 +21,22 @@ namespace ASCOM.DriverAccess
         #region FilterWheel constructors
 
         /// <summary>
-        /// Creates a FilterWheel object with the given Prog ID
+        /// Static initialiser called once per AppDomain to log the component name.
         /// </summary>
-        /// <param name="filterWheelId">ProgID of the filterwheel device to be accessed.</param>
-        public FilterWheel(string filterWheelId)
-            : base(filterWheelId)
+        static FilterWheel()
         {
-            //memberFactory = new MemberFactory(filterWheelID);
-            memberFactory = base.MemberFactory; //Get the member factory created by the base class
             Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.FilterWheel");
         }
 
-        #region IDisposable Members
-        // No member here, we are relying on Dispose in the base class
-        #endregion
+        /// <summary>
+        /// Creates a FilterWheel object with the given Prog ID
+        /// </summary>
+        /// <param name="filterWheelId">ProgID of the filter wheel device to be accessed.</param>
+        public FilterWheel(string filterWheelId) : base(filterWheelId)
+        {
+            //memberFactory = new MemberFactory(filterWheelID);
+            memberFactory = base.MemberFactory; //Get the member factory created by the base class
+        }
 
         #endregion
 

@@ -307,13 +307,20 @@ namespace ASCOM.Utilities
         #region New and IDisposable Support
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Serial()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Serial");
+        }
+
+        /// <summary>
         /// Serial class
         /// </summary>
         public Serial()
         {
             int WorkerThreads, CompletionThreads;
 
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Serial");
             SerSemaphore = new Semaphore(1, 1); // Create a new semaphore to control access to the serial port
 
             m_Connected = false; // Set inital values

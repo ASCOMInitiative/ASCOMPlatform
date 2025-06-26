@@ -9,11 +9,13 @@ namespace ASCOM.Astrometry
 
     static class EphemerisCode
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static EphemerisCode()
         {
             ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.EphemerisCode");
         }
-
 
         // Function patterned after get_earth() in the original NOVAS-C V2 package.
         // This function returns (via ref-params) the barycentric TDT and both

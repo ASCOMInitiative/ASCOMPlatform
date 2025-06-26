@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ASCOM.Internal;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Timers;
 using System.Windows.Forms;
-using ASCOM.Internal;
 using Timer = System.Timers.Timer;
 
 /*
@@ -41,6 +42,14 @@ namespace ASCOM.Controls
     [Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
     public sealed class CadenceManager
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static CadenceManager()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "CadenceManager");
+        }
+
         /// <summary>
         ///   The one and only instance of this class.
         /// </summary>

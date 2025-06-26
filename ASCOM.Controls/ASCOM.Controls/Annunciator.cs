@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ASCOM.Internal;
+using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
-using ASCOM.Internal;
 
 namespace ASCOM.Controls
 {
@@ -39,6 +40,14 @@ namespace ASCOM.Controls
     [Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
     public sealed class Annunciator : Label, ICadencedControl
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Annunciator()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "Annunciator");
+        }
+
         /// <summary>
         ///   A flag that records the anunciator's last known state.
         /// </summary>

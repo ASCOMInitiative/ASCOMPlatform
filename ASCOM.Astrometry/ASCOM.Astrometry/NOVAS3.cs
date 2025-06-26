@@ -44,6 +44,15 @@ namespace ASCOM.Astrometry.NOVAS
         private TraceLogger TL;
 
         #region New and IDisposable
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static NOVAS3()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS3");
+        }
+        
         /// <summary>
         /// Creates a new instance of the NOVAS3 component
         /// </summary>
@@ -56,7 +65,6 @@ namespace ASCOM.Astrometry.NOVAS
             string Novas3DllFile, RACIOFile, JPLEphFile;
             var ReturnedPath = new System.Text.StringBuilder(260);
             int LastError;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS3");
 
             TL = new TraceLogger("", "NOVAS3");
             TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry

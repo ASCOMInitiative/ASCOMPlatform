@@ -48,6 +48,7 @@ namespace ASCOM.Utilities
         private bool GotMutex;
 
         #region New and IDisposable Support
+
         private bool traceLoggerHasBeenDisposed = false;        // To detect redundant calls
 
         /// <summary>
@@ -56,9 +57,59 @@ namespace ASCOM.Utilities
         /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of 
         /// several logs contains the information of interest.
         /// <para>This call enables automatic logging and sets the file type to "Default".</para></remarks>
-        public TraceLogger() : base()
+        public TraceLogger()
         {
+            InitialiseTraceLogger();
+        }
 
+        /// <summary>
+        /// Creates a new TraceLogger instance and initialises filename and type
+        /// </summary>
+        /// <param name="LogFileName">Fully qualified trace file name or null string to use automatic file naming (recommended)</param>
+        /// <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
+        /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
+        public TraceLogger(string LogFileName, string LogFileType)
+        {
+            InitialiseTraceLogger(); // Initialise the TraceLogger instance
+            g_LogFileName = LogFileName; // Save parameters to use when the first call to write a record is made
+            g_LogFileType = LogFileType;
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "TraceLogger"); // Log use of the TraceLogger component.
+        }
+
+        /// <summary>
+        /// Create and enable a new TraceLogger instance with automatic naming based on the supplied log file type
+        /// </summary>
+        /// <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
+        /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
+        public TraceLogger(string LogFileType)
+        {
+            InitialiseTraceLogger(); // Initialise the TraceLogger instance
+            g_LogFileType = LogFileType;
+            g_Enabled = true; // Enable the log
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "TraceLogger"); // Log use of the TraceLogger component.
+        }
+
+        /// <summary>
+        /// Internal initialiser that avoids an infinite loop when called from the Log.Component method.  
+        /// </summary>
+        /// <param name="LogFileType">Log file type</param>
+        /// <param name="calledFromComponentLog">True if called from the Component.Log method</param>
+        internal TraceLogger(string LogFileType, bool calledFromComponentLog)
+        {
+            InitialiseTraceLogger(); // Initialise the TraceLogger instance
+            g_LogFileType = LogFileType;
+
+            // If this is called from the Log.Component method then we don't want to log our own use, this is to avoid an infinite loop!
+            if (calledFromComponentLog)
+            {
+                // Do nothing
+            }
+            else // Otherwise log use of the TraceLogger component
+                ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "TraceLogger"); // Log use of the TraceLogger component.
+        }
+
+        private void InitialiseTraceLogger()
+        {
             g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT;
             g_LogFileName = ""; // Set automatic filenames as default
             autoLogFilePath = true; // Set automatic filenames as default
@@ -88,28 +139,7 @@ namespace ASCOM.Utilities
             UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
         }
 
-        /// <summary>
-        /// Creates a new TraceLogger instance and initialises filename and type
-        /// </summary>
-        /// <param name="LogFileName">Fully qualified trace file name or null string to use automatic file naming (recommended)</param>
-        /// <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
-        /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
-        public TraceLogger(string LogFileName, string LogFileType) : this()
-        {
-            g_LogFileName = LogFileName; // Save parameters to use when the first call to write a record is made
-            g_LogFileType = LogFileType;
-        }
-
-        /// <summary>
-        /// Create and enable a new TraceLogger instance with automatic naming based on the supplied log file type
-        /// </summary>
-        /// <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
-        /// <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
-        public TraceLogger(string LogFileType) : this()
-        {
-            g_LogFileType = LogFileType;
-            g_Enabled = true; // Enable the log
-        }
+        #region IDisposable Support
 
         // IDisposable
         /// <summary>
@@ -164,6 +194,7 @@ namespace ASCOM.Utilities
                 }
             }
         }
+
         // This code added by Visual Basic to correctly implement the disposable pattern.
         /// <summary>
         /// Disposes of the TraceLogger object
@@ -185,6 +216,8 @@ namespace ASCOM.Utilities
             // Do not change this code.  Put clean-up code in Dispose(ByVal disposing As Boolean) above.
             Dispose(false);
         }
+
+        #endregion
 
         #endregion
 

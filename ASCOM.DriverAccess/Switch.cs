@@ -44,6 +44,14 @@ namespace ASCOM.DriverAccess
         #region Switch constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Switch()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Switch");
+        }
+
+        /// <summary>
         /// Creates a Switch object with the given Prog ID
         /// </summary>
         /// <param name="switchId">ProgID of the Switch device to be accessed.</param>
@@ -51,7 +59,6 @@ namespace ASCOM.DriverAccess
             : base(switchId)
         {
             memberFactory = base.MemberFactory; //Get the member factory created by the base class
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Switch");
         }
 
         #region IDisposable Members

@@ -43,6 +43,14 @@ namespace ASCOM
     public sealed class DeviceIdAttribute : Attribute
     {
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static DeviceIdAttribute()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DeviceIdAttribute");
+        }
+
+        /// <summary>
         ///   Initializes a new instance of the <see cref = "DeviceIdAttribute" /> class.
         /// </summary>
         /// <param name = "deviceId">The ASCOM device ID (aka COM ProgID) to be associated with the class.</param>
@@ -63,7 +71,6 @@ namespace ASCOM
             // DeviceName defaults to be the same as the ID, unless the user changes it later. This ensures that there is
             // always *something* available for the Chooser to use as the display name, should the user neglect to set it.
             DeviceName = deviceId;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DeviceIdAttribute");
         }
 
         /// <summary>

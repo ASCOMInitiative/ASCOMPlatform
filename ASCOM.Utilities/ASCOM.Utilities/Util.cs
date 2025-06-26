@@ -48,6 +48,14 @@ namespace ASCOM.Utilities
         private bool disposedValue = false;        // To detect redundant calls
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Util()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Util");
+        }
+
+        /// <summary>
         /// Create a Utility object
         /// </summary>
         public Util() : base()
@@ -57,7 +65,6 @@ namespace ASCOM.Utilities
             TL = new TraceLogger("", "Util");
             TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT); // Get enabled / disabled state from the user registry
             TL.LogMessage("New", "Trace logger created OK");
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Util");
         }
 
         // IDisposable

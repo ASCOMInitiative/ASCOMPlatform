@@ -120,13 +120,21 @@ namespace ASCOM.Utilities
         public event TickEventHandler Tick; // Implements ITimer.Tick ' Declare the tick event
 
         #region New and IDisposable Support
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Timer()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Timer");
+        }
+
         /// <summary>
         /// Create a new timer component
         /// </summary>
         /// <remarks></remarks>
         public Timer()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Timer");
             TL = new TraceLogger("", "Timer");
             TraceEnabled = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT);
             TL.Enabled = TraceEnabled;

@@ -21,6 +21,14 @@ namespace ASCOM
     public class SettingsProvider : System.Configuration.SettingsProvider
     {
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static SettingsProvider()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "SettingsProvider");
+        }
+
+        /// <summary>
         ///   A reference to an ASCOM profile provider. Normally, this will be the default implementation defined in
         ///   <see cref = "Profile" />, but unit tests can also use dependency injection to provide
         ///   a mock provider. This value will be initialized (once) in the constructor.

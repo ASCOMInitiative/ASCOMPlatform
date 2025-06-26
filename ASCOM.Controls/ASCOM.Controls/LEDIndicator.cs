@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ASCOM.Controls
@@ -111,6 +112,14 @@ namespace ASCOM.Controls
         #endregion
 
         #region Construction, Destruction and Disposal
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static LedIndicator()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "LedIndicator");
+        }
 
         /// <summary>
         ///   Default constructor for a new LEDIndicator object. Performs the default processing required

@@ -46,9 +46,9 @@ namespace ASCOM.Astrometry.NOVAS
     public class NOVAS2COM : INOVAS2
     {
         /// <summary>
-        /// 
+        /// Static initialiser called once per AppDomain to log the component name.
         /// </summary>
-        public NOVAS2COM()
+        static NOVAS2COM()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS2COM");
         }

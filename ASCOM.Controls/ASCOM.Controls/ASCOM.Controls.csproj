@@ -243,6 +243,10 @@
       <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>
       <Name>ASCOM.Internal.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj">
+      <Project>{7b9b8be0-9517-0548-11d2-27b6261ab180}</Project>
+      <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

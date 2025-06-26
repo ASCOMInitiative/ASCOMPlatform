@@ -21,6 +21,14 @@ namespace ASCOM.DriverAccess
         #region Rotator constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Rotator()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Rotator");
+        }
+
+        /// <summary>
         /// Creates a rotator object with the given ProgID
         /// </summary>
         /// <param name="rotatorId">ProgID of the rotator to be accessed.</param>
@@ -28,8 +36,8 @@ namespace ASCOM.DriverAccess
             : base(rotatorId)
         {
             memberFactory = base.MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Rotator");
         }
+
         #endregion
 
         #region Convenience Members

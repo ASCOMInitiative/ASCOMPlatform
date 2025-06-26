@@ -21,6 +21,14 @@ namespace ASCOM.DriverAccess
         #region Focuser constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Focuser()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Focuser");
+        }
+
+        /// <summary>
         /// Creates a focuser object with the given Prog ID
         /// </summary>
         /// <param name="focuserId">ProgID of the focuser device to be accessed.</param>
@@ -28,7 +36,6 @@ namespace ASCOM.DriverAccess
             : base(focuserId)
         {
             memberFactory = base.MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Focuser");
         }
         #endregion
 

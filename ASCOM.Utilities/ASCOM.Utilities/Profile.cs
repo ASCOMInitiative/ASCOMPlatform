@@ -49,6 +49,14 @@ namespace ASCOM.Utilities
         private bool disposedValue = false;        // To detect redundant calls
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Profile()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Profile");
+        }
+
+        /// <summary>
         /// Create a new Profile object
         /// </summary>
         /// <remarks></remarks>
@@ -60,7 +68,6 @@ namespace ASCOM.Utilities
             // Profile trace logging disabled because it has not been required for many years
             TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT); // Get enabled / disabled state from the user registry
             TL.LogMessage("New", "Trace logger created OK");
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Profile");
         }
 
         /// <summary>

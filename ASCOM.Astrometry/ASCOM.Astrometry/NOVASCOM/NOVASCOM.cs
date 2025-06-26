@@ -2,6 +2,7 @@
 
 using ASCOM.Astrometry.Kepler;
 using ASCOM.Astrometry.NOVAS;
+using ASCOM.Utilities;
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -38,7 +39,16 @@ namespace ASCOM.Astrometry.NOVASCOM
         private double m_BaryTime, m_MeanOb, m_EquOfEqu, m_NutLong, m_NutObl, m_TrueOb;
         private IEphemeris m_EarthEph;
         private bool m_Valid; // Object has valid values
-        // Private TL As TraceLogger
+                              // Private TL As TraceLogger
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Earth()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Earth");
+        }
+
         /// <summary>
         /// Create a new instance of the Earth object
         /// </summary>
@@ -54,7 +64,6 @@ namespace ASCOM.Astrometry.NOVASCOM
             m_EarthEph.Name = "Earth";
             m_Valid = false; // Object is invalid
                              // TL.LogMessage("New", "Initialised")
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.Earth");
         }
 
         /// <summary>
@@ -326,6 +335,14 @@ namespace ASCOM.Astrometry.NOVASCOM
         // Private TL As TraceLogger, Utl As Util
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Planet()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Planet");
+        }
+
+        /// <summary>
         /// Create a new instance of the Plant class
         /// </summary>
         /// <remarks>This assigns default Kepler instances for the Earth and Planet objects so it is
@@ -347,8 +364,6 @@ namespace ASCOM.Astrometry.NOVASCOM
             // Utl = New Util
 
             Nov31 = new NOVAS31(); // Create a NOVAS31 object for handling sun and moon calculations
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.Planet");
-
         }
         /// <summary>
         /// Planet delta-T
@@ -1156,6 +1171,14 @@ namespace ASCOM.Astrometry.NOVASCOM
         private NOVAS31 Nov31 = new();
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static PositionVector()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.PositionVector");
+        }
+
+        /// <summary>
         /// Create a new, uninitialised position vector
         /// </summary>
         /// <remarks></remarks>
@@ -1166,7 +1189,6 @@ namespace ASCOM.Astrometry.NOVASCOM
             zOk = false;
             RADecOk = false;
             AzElOk = false;
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.PositionVector");
         }
 
         /// <summary>
@@ -1752,6 +1774,14 @@ namespace ASCOM.Astrometry.NOVASCOM
         private bool HeightValid, LatitudeValid, LongitudeValid, PressureValid, TemperatureValid;
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Site()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Site");
+        }
+
+        /// <summary>
         /// Initialises a new site object
         /// </summary>
         /// <remarks></remarks>
@@ -1762,7 +1792,6 @@ namespace ASCOM.Astrometry.NOVASCOM
             LongitudeValid = false;
             PressureValid = false;
             TemperatureValid = false;
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.Site");
         }
 
         /// <summary>
@@ -1917,6 +1946,14 @@ namespace ASCOM.Astrometry.NOVASCOM
         private NOVAS31 Nov31 = new();
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Star()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Star");
+        }
+
+        /// <summary>
         /// Initialise a new instance of the star class
         /// </summary>
         /// <remarks></remarks>
@@ -1939,7 +1976,6 @@ namespace ASCOM.Astrometry.NOVASCOM
             m_earth.Number = Body.Earth;
             m_earth.Name = "Earth";
             m_earth.Type = BodyType.MajorPlanet;
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.Star");
         }
 
         /// <summary>
@@ -2720,6 +2756,14 @@ namespace ASCOM.Astrometry.NOVASCOM
         private NOVAS31 Nov31 = new();
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static VelocityVector()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.VelocityVector");
+        }
+
+        /// <summary>
         /// Creates a new velocity vector object
         /// </summary>
         /// <remarks> </remarks>
@@ -2729,7 +2773,6 @@ namespace ASCOM.Astrometry.NOVASCOM
             m_yv = false;
             m_zv = false;
             m_cv = false; // Coordinate velocities not valid
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.VelocityVector");
         }
         /// <summary>
         /// Linear velocity along the declination direction (AU/day)

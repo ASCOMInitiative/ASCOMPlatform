@@ -51,17 +51,21 @@ namespace ASCOM.Utilities
         private bool disposedValue = false;        // To detect redundant calls
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Chooser()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "Chooser");
+        }
+
+        /// <summary>
         /// Creates a new Chooser object
         /// </summary>
         /// <remarks></remarks>
         public Chooser() : base()
         {
-
             deviceTypeValue = "Telescope"; // Default to Telescope chooser
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Chooser");
         }
-
-
 
         // IDisposable
         /// <summary>

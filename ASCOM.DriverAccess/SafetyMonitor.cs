@@ -20,6 +20,14 @@ namespace ASCOM.DriverAccess
         #region SafetyMonitor constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static SafetyMonitor()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.SafetyMonitor");
+        }
+
+        /// <summary>
         /// Creates a SafetyMonitor object with the given Prog ID
         /// </summary>
         /// <param name="safetyMonitorId">ProgID of the device to be accessed.</param>
@@ -27,11 +35,12 @@ namespace ASCOM.DriverAccess
             : base(safetyMonitorId)
         {
             _memberFactory = MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.SafetyMonitor");
         }
+
         #endregion
 
         #region Convenience Members
+
         /// <summary>
         /// Brings up the ASCOM Chooser Dialogue to choose a SafetyMonitor
         /// </summary>

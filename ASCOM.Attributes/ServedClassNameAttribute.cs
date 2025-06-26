@@ -15,13 +15,20 @@ namespace ASCOM
     public sealed class ServedClassNameAttribute : Attribute
     {
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static ServedClassNameAttribute()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "ServedClassNameAttribute");
+        }
+
+        /// <summary>
         ///   Initializes a new instance of the <see cref = "ServedClassNameAttribute" /> class.
         /// </summary>
         /// <param name = "servedClassName">The 'friendly name' of the served class.</param>
         public ServedClassNameAttribute(string servedClassName)
         {
             DisplayName = servedClassName;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "ServedClassNameAttribute");
         }
 
         /// <summary>

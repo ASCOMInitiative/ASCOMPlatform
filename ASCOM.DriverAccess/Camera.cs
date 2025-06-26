@@ -16,6 +16,14 @@ namespace ASCOM.DriverAccess
         #region Camera constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Camera()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Camera");
+        }
+
+        /// <summary>
         /// Creates an instance of the camera class.
         /// </summary>
         /// <param name="cameraId">The ProgID for the camera</param>
@@ -23,8 +31,6 @@ namespace ASCOM.DriverAccess
             : base(cameraId)
         {
             _memberFactory = base.MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Camera");
-
         }
         #endregion
 

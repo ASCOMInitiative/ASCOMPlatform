@@ -50,6 +50,15 @@ namespace ASCOM.Astrometry.NOVAS
         private EarthRotationParameters Parameters;
 
         #region New and IDisposable
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static NOVAS31()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS31");
+        }
+
         /// <summary>
         /// Creates a new instance of the NOVAS31 component
         /// </summary>
@@ -65,7 +74,6 @@ namespace ASCOM.Astrometry.NOVAS
             int LastError;
             Mutex Novas31Mutex;
             var gotMutex = default(bool); // Flag indicating whether the NOVAS initialisation mutex was successfully claimed
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS31");
 
             TL = new TraceLogger("", "NOVAS31");
             TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry

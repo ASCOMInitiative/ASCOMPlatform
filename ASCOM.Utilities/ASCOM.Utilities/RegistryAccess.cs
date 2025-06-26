@@ -134,7 +134,7 @@ namespace ASCOM.Utilities
         {
             string PlatformVersion;
 
-            TL = new TraceLogger("", "RegistryAccess"); // Create a new trace logger
+            TL = new TraceLogger("RegistryAccess",true); // Create a new trace logger
             TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT); // Get enabled / disabled state from the user registry
 
             //RunningVersions(TL); // Include version information

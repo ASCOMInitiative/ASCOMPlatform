@@ -20,6 +20,9 @@ namespace ASCOM.Astrometry.Exceptions
     // Exception for Helper.NET component exceptions
     public class TransformUninitialisedException : HelperException
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static TransformUninitialisedException()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
@@ -69,7 +72,9 @@ namespace ASCOM.Astrometry.Exceptions
     // Exception for Helper.NET component exceptions
     public class CompatibilityException : HelperException
     {
-
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static CompatibilityException()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
@@ -117,11 +122,13 @@ namespace ASCOM.Astrometry.Exceptions
     // Exception for Helper.NET component exceptions
     public class ValueNotSetException : HelperException
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static ValueNotSetException()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
         }
-
 
         /// <summary>
         /// Create a new exception with message 
@@ -165,11 +172,13 @@ namespace ASCOM.Astrometry.Exceptions
     // Exception for Helper.NET component exceptions
     public class ValueNotAvailableException : HelperException
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static ValueNotAvailableException()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
         }
-
 
         /// <summary>
         /// Create a new exception with message 
@@ -213,11 +222,13 @@ namespace ASCOM.Astrometry.Exceptions
     // Exception for Helper.NET component exceptions
     public class NOVASFunctionException : HelperException
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static NOVASFunctionException()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
         }
-
 
         /// <summary>
         /// Create a new exception with message, function name and error code
@@ -263,11 +274,13 @@ namespace ASCOM.Astrometry.Exceptions
     // Exception for Transform iteration convergence failure exceptions
     public class ConvergenceFailureException : HelperException
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static ConvergenceFailureException()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
         }
-
 
         /// <summary>
         /// Create a new exception with the message

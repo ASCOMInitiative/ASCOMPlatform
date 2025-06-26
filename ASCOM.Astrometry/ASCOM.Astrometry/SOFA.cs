@@ -83,6 +83,8 @@ namespace ASCOM.Astrometry.SOFA
             bool rc;
             int LastError;
 
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "SOFA");
+
             /* TODO ERROR: Skipped IfDirectiveTrivia
             #If DEBUG Then
             *//* TODO ERROR: Skipped DisabledTextTrivia
@@ -107,17 +109,13 @@ namespace ASCOM.Astrometry.SOFA
             /* TODO ERROR: Skipped EndIfDirectiveTrivia
             #End If
             */
+
             SofaDllHandle = LoadLibrary(SofaDllFile);
             LastError = Marshal.GetLastWin32Error();
 
-            if (SofaDllHandle != IntPtr.Zero) // Loaded successfully
-            {
-            }
-
-            else // Did not load 
-            {
-                throw new HelperException(string.Format("Error code {0} returned from LoadLibrary when loading SOFA library: {1}  ", LastError.ToString("X8"), SofaDllFile));
-            }
+            // Check if the SOFA DLL loaded successfully
+            if (SofaDllHandle == IntPtr.Zero) // Failed to load successfully
+                throw new HelperException($"Error code {LastError:X8} returned from LoadLibrary when loading SOFA library: {SofaDllFile}");
 
         }
 
@@ -133,7 +131,6 @@ namespace ASCOM.Astrometry.SOFA
             var ReturnedPath = new StringBuilder(260);
             int LastError, Count, NumberOfSOFALeapSecondValues;
             DateTime JulianDateUtc;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "SOFA");
 
             TL = new TraceLogger("", "SOFA");
             TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry

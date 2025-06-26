@@ -7,10 +7,14 @@ namespace ASCOM.Astrometry
 
     static class DeltatCode
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
         static DeltatCode()
         {
             ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.DeltaTCode");
         }
+
         /// <summary>
         /// Calculates the value of DeltaT over a wide range of historic and future Julian dates
         /// </summary>

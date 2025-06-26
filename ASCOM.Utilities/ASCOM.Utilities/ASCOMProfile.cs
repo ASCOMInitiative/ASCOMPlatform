@@ -25,13 +25,20 @@ namespace ASCOM.Utilities
         #region New and IDisposable
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static ASCOMProfile()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "ASCOMProfile");
+        }
+
         ///  Create an ASCOM Profile class
         /// </summary>
         public ASCOMProfile()
         {
             Subkey = new SortedList<string, SortedList<string, string>>();
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "ASCOMProfile");
         }
+
         #endregion
 
         /// <summary>

@@ -24,6 +24,14 @@ namespace ASCOM.DriverAccess
         #region ObservingConditions constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static ObservingConditions()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.ObservingConditions");
+        }
+
+        /// <summary>
         /// Creates an ObservingConditions object with the given Prog ID
         /// </summary>
         /// <param name="observingConditionsId">ProgID of the device to be accessed.</param>
@@ -31,8 +39,8 @@ namespace ASCOM.DriverAccess
             : base(observingConditionsId)
         {
             _memberFactory = MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.ObservingConditions");
         }
+
         #endregion
 
         #region Convenience Members

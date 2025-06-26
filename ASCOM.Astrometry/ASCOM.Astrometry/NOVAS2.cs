@@ -55,13 +55,12 @@ namespace ASCOM.Astrometry.NOVAS
         private const string NOVAS_DLL_LOCATION = @"\ASCOM\Astrometry"; // This is appended to the Common Files path
 
         /// <summary>
-        /// 
+        /// Static initialiser called once per AppDomain to log the component name.
         /// </summary>
-        public NOVAS2()
+        static NOVAS2()
         {
             Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS2");
         }
-
 
         #region Private Structures
         // Version of marshaling required by the DLLs

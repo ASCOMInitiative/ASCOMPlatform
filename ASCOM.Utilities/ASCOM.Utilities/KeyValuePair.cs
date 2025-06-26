@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Utilities.Interfaces;
 
@@ -19,6 +20,13 @@ namespace ASCOM.Utilities
     [ComVisible(true)]
     public class KeyValuePair : IKeyValuePair
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static KeyValuePair()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "KeyValuePair");
+        }
 
         private string m_Key;
         private string m_Value;

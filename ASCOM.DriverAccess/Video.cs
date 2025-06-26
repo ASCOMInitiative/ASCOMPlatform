@@ -21,6 +21,14 @@ namespace ASCOM.DriverAccess
         #region Video constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Video()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Video");
+        }
+
+        /// <summary>
         /// Creates a Video object with the given Prog ID
         /// </summary>
         /// <param name="videoId">ProgID of the Video to be accessed.</param>
@@ -28,8 +36,8 @@ namespace ASCOM.DriverAccess
             : base(videoId)
         {
             memberFactory = base.MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Video");
         }
+
         #endregion
 
         #region Convenience Members

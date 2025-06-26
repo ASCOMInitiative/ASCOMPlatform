@@ -69,6 +69,14 @@ namespace ASCOM.DriverAccess
         #region Dome constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Dome()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Dome");
+        }
+
+        /// <summary>
         /// Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.
         /// </summary>
         /// <param name="domeId">The progID of the dome to be instantiated</param>
@@ -76,8 +84,8 @@ namespace ASCOM.DriverAccess
             : base(domeId)
         {
             memberFactory = base.MemberFactory;
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Dome");
         }
+
         #endregion
 
         #region Convenience Members

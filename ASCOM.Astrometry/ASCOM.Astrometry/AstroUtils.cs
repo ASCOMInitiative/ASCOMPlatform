@@ -38,6 +38,15 @@ namespace ASCOM.Astrometry.AstroUtils
         }
 
         #region New and IDisposable Support
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static AstroUtils()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "AstroUtils");
+        }
+
         /// <summary>
         /// AstroUtils initiator
         /// </summary>
@@ -58,8 +67,6 @@ namespace ASCOM.Astrometry.AstroUtils
 
         private void InitialiseAstroUtils()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "AstroUtils");
-
             Utl = new Util();
             Nov31 = new NOVAS.NOVAS31();
             Sofa = new SOFA.SOFA();

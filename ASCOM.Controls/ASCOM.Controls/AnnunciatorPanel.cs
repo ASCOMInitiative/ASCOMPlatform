@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ASCOM.Controls
@@ -12,10 +13,18 @@ namespace ASCOM.Controls
 	[Obsolete("An improved version of this class is available as a NuGet package at https://www.nuget.org/packages/TA.WinForms.Controls/")]
 	public sealed class AnnunciatorPanel : FlowLayoutPanel
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "AnnunciatorPanel" /> class.
-		/// </summary>
-		public AnnunciatorPanel()
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static AnnunciatorPanel()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "AnnunciatorPanel");
+        }
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "AnnunciatorPanel" /> class.
+        /// </summary>
+        public AnnunciatorPanel()
 		{
 			BackColor = Color.FromArgb(64, 0, 0);
 		}

@@ -125,6 +125,15 @@ namespace ASCOM.Astrometry.Kepler
         private double[,] ss = new double[19, 32], cc = new double[19, 32];
         private double[] Args = new double[19];
 
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Ephemeris()
+        {
+            Log.Component(Assembly.GetExecutingAssembly().FullName, "KeplerEphemeris");
+        }
+
         /// <summary>
         /// Create a new Ephemeris component and initialise it
         /// </summary>
@@ -139,7 +148,6 @@ namespace ASCOM.Astrometry.Kepler
             m_Type = default;
             m_e.ptable.lon_tbl = new double[] { 0.0d }; // Initialise orbit arrays
             m_e.ptable.lat_tbl = new double[] { 0.0d };
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "KeplerEphemeris");
         }
         /// <summary>
         /// Semi-major axis (AU)
