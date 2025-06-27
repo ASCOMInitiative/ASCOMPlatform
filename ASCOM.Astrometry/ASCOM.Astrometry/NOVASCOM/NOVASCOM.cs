@@ -46,7 +46,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </summary>
         static Earth()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Earth");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVASCOM.Earth");
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </summary>
         static Planet()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Planet");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVASCOM.Planet");
         }
 
         /// <summary>
@@ -1175,7 +1175,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </summary>
         static PositionVector()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.PositionVector");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVASCOM.PositionVector");
         }
 
         /// <summary>
@@ -1778,7 +1778,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </summary>
         static Site()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Site");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVASCOM.Site");
         }
 
         /// <summary>
@@ -1950,7 +1950,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </summary>
         static Star()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.Star");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVASCOM.Star");
         }
 
         /// <summary>
@@ -2760,7 +2760,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         /// </summary>
         static VelocityVector()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVASCOM.VelocityVector");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVASCOM.VelocityVector");
         }
 
         /// <summary>

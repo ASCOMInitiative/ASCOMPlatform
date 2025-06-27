@@ -59,7 +59,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         static NOVAS2()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS2");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVAS2");
         }
 
         #region Private Structures

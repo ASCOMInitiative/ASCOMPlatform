@@ -25,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Focuser()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Focuser");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Focuser");
         }
 
         /// <summary>

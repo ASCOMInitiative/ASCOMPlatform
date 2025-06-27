@@ -144,6 +144,9 @@ namespace ASCOM.Utilities
         internal const string TRACE_LOGGER_FILE_NAME_DATE_FORMAT = "yyyy-MM-dd";
         internal const string TRACE_LOGGER_SYSTEM_PATH = @"\ASCOM\SystemLogs"; // Location where "System" user logs will be placed
 
+        // .NET 3.5 compatibility constants
+        internal const string NET35_REGISTRY_BASE = ".NET35";
+
         internal enum EventLogErrors : int
         {
             EventLogCreated = 0,

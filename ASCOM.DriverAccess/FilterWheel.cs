@@ -25,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static FilterWheel()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.FilterWheel");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.FilterWheel");
         }
 
         /// <summary>

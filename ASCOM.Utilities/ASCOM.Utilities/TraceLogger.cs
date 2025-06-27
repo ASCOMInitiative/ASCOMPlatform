@@ -60,6 +60,7 @@ namespace ASCOM.Utilities
         public TraceLogger()
         {
             InitialiseTraceLogger();
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "TraceLogger"); // Log use of the TraceLogger component.
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace ASCOM.Utilities
             InitialiseTraceLogger(); // Initialise the TraceLogger instance
             g_LogFileName = LogFileName; // Save parameters to use when the first call to write a record is made
             g_LogFileType = LogFileType;
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "TraceLogger"); // Log use of the TraceLogger component.
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "TraceLogger"); // Log use of the TraceLogger component.
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace ASCOM.Utilities
             InitialiseTraceLogger(); // Initialise the TraceLogger instance
             g_LogFileType = LogFileType;
             g_Enabled = true; // Enable the log
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "TraceLogger"); // Log use of the TraceLogger component.
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "TraceLogger"); // Log use of the TraceLogger component.
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace ASCOM.Utilities
                 // Do nothing
             }
             else // Otherwise log use of the TraceLogger component
-                ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "TraceLogger"); // Log use of the TraceLogger component.
+                ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "TraceLogger"); // Log use of the TraceLogger component.
         }
 
         private void InitialiseTraceLogger()

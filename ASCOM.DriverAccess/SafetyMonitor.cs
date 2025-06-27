@@ -24,7 +24,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static SafetyMonitor()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.SafetyMonitor");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.SafetyMonitor");
         }
 
         /// <summary>

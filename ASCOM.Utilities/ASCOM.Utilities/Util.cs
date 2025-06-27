@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -52,7 +53,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static Util()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Util");
+            Log.Component(  Assembly.GetExecutingAssembly(), "Util");
         }
 
         /// <summary>

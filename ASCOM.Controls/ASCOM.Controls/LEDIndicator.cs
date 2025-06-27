@@ -118,7 +118,7 @@ namespace ASCOM.Controls
         /// </summary>
         static LedIndicator()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "LedIndicator");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "LedIndicator");
         }
 
         /// <summary>

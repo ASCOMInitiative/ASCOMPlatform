@@ -18,7 +18,7 @@ namespace ASCOM.Controls
         /// </summary>
         static AnnunciatorPanel()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "AnnunciatorPanel");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "AnnunciatorPanel");
         }
 
         /// <summary>

@@ -73,7 +73,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Dome()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Dome");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Dome");
         }
 
         /// <summary>

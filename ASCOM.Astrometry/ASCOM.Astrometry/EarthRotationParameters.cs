@@ -74,7 +74,7 @@ namespace ASCOM.Astrometry
         /// </summary>
         static EarthRotationParameters()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "EarthRotationParameters");
+            Log.Component(Assembly.GetExecutingAssembly(), "EarthRotationParameters");
         }
 
         /// <summary>

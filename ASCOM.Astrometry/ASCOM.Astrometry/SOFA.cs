@@ -83,7 +83,7 @@ namespace ASCOM.Astrometry.SOFA
             bool rc;
             int LastError;
 
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "SOFA");
+            Log.Component(Assembly.GetExecutingAssembly(), "SOFA");
 
             /* TODO ERROR: Skipped IfDirectiveTrivia
             #If DEBUG Then

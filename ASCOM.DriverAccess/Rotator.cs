@@ -25,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Rotator()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Rotator");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Rotator");
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace ASCOM
         /// </summary>
         static ServedClassNameAttribute()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "ServedClassNameAttribute");
+            Log.Component(Assembly.GetExecutingAssembly(), "ServedClassNameAttribute");
         }
 
         /// <summary>

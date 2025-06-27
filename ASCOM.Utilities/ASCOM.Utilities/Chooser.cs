@@ -55,7 +55,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static Chooser()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Chooser");
+            Log.Component(Assembly.GetExecutingAssembly(), "Chooser");
         }
 
         /// <summary>

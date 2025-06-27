@@ -25,7 +25,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static KeyValuePair()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "KeyValuePair");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "KeyValuePair");
         }
 
         private string m_Key;

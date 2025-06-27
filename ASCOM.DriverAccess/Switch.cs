@@ -48,7 +48,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Switch()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Switch");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Switch");
         }
 
         /// <summary>

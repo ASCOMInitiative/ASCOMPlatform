@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ASCOM.Utilities
@@ -21,9 +23,9 @@ namespace ASCOM.Utilities
         /// </summary>
         /// <remarks>The log entry includes the component name. Ensure that the <paramref name="componentName"/> parameter is meaningful to help identify the
         /// source of the log.</remarks>
-        /// <param name="fullAssemblyName">The component's assembly.</param>
+        /// <param name="assembly">The calling assembly</param>
         /// <param name="componentName">The name of the component to include in the log entry. Cannot be null or empty.</param>
-        public static void Component(string fullAssemblyName, string componentName)
+        public static void Component(Assembly assembly, string componentName)
         {
             // Check whether logging is enabled or disabled
             switch (_enabled)
@@ -38,7 +40,7 @@ namespace ASCOM.Utilities
                         if (!_enabled.Value)
                             return;
 
-                        //Logging is enabled so create a new TraceLogger instance
+                        //Logging is enabled so create a new TraceLogger instance using an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
                         TL = new TraceLogger("Net35use", true);
                         TL.Enabled = true;
                     }
@@ -53,6 +55,8 @@ namespace ASCOM.Utilities
 
             try
             {
+                string fullAssemblyName = assembly.FullName;
+
                 // Validate input parameters
                 if (string.IsNullOrEmpty(fullAssemblyName))
                 {
@@ -64,6 +68,15 @@ namespace ASCOM.Utilities
                 {
                     TL.LogMessage("Component", $"Component name cannot be null or empty - {componentName}");
                     return;
+                }
+
+                StackFrame[] frames = new StackTrace().GetFrames();
+                TL.LogMessage("Component", $"Number of frames: {frames.Length}");
+
+                foreach (StackFrame frame in frames)
+                {
+                    frame.GetType();
+                    TL.LogMessage("Component", $"Calling Type: {frame.GetType().FullName}, Declaring type full name: {frame.GetMethod().DeclaringType.FullName} method: {frame.GetMethod().Name}");
                 }
 
                 // Split the assembly name and extract version information, removing extraneous spaces and "Version=" prefix
@@ -83,12 +96,13 @@ namespace ASCOM.Utilities
                 TL.LogMessage("Component", $"Process name: {System.Diagnostics.Process.GetCurrentProcess().ProcessName}");
                 TL.LogMessage("Component", $"File name: {System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName}");
 
-                string keyName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/");
+                //string keyName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/");
+                string keyName = assembly.Location.Replace(@"\", "/");
 
                 // Write the log entry to the registry
                 using (RegistryAccess ra = new())
                 {
-                    ra.WriteProfile(@$".NET35\{keyName}\{assemblyNameElements[0]}\{assemblyNameElements[1]}", componentName, componentName);
+                    ra.WriteProfile(@$"{Global.NET35_REGISTRY_BASE}\{keyName}\{assemblyNameElements[0]}\{assemblyNameElements[1]}", componentName, componentName);
                 }
             }
             catch (Exception ex)

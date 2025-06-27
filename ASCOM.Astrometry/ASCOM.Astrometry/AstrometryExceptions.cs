@@ -25,7 +25,7 @@ namespace ASCOM.Astrometry.Exceptions
         /// </summary>
         static TransformUninitialisedException()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
+            Log.Component(Assembly.GetExecutingAssembly(), "TransformUninitialisedException");
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace ASCOM.Astrometry.Exceptions
         /// </summary>
         static CompatibilityException()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
+            Log.Component(Assembly.GetExecutingAssembly(), "TransformUninitialisedException");
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace ASCOM.Astrometry.Exceptions
         /// </summary>
         static ValueNotSetException()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
+            Log.Component(Assembly.GetExecutingAssembly(), "TransformUninitialisedException");
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace ASCOM.Astrometry.Exceptions
         /// </summary>
         static ValueNotAvailableException()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
+            Log.Component(Assembly.GetExecutingAssembly(), "TransformUninitialisedException");
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace ASCOM.Astrometry.Exceptions
         /// </summary>
         static NOVASFunctionException()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
+            Log.Component(Assembly.GetExecutingAssembly(), "TransformUninitialisedException");
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace ASCOM.Astrometry.Exceptions
         /// </summary>
         static ConvergenceFailureException()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "TransformUninitialisedException");
+            Log.Component(Assembly.GetExecutingAssembly(), "TransformUninitialisedException");
         }
 
         /// <summary>

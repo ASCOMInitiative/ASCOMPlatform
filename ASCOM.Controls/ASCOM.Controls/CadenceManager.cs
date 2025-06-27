@@ -47,7 +47,7 @@ namespace ASCOM.Controls
         /// </summary>
         static CadenceManager()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "CadenceManager");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "CadenceManager");
         }
 
         /// <summary>

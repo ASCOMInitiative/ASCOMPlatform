@@ -25,7 +25,7 @@ namespace ASCOM
         /// </summary>
         static SettingsProvider()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "SettingsProvider");
+            Log.Component(Assembly.GetExecutingAssembly(), "SettingsProvider");
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Telescope()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Telescope");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Telescope");
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using static ASCOM.Astrometry.GlobalItems;
 
 namespace ASCOM.Astrometry.AstroUtils
@@ -44,7 +45,16 @@ namespace ASCOM.Astrometry.AstroUtils
         /// </summary>
         static AstroUtils()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "AstroUtils");
+            try
+            {
+            Log.Component(Assembly.GetExecutingAssembly(), "AstroUtils");
+                MessageBox.Show("AstroUtils static init done");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         /// <summary>

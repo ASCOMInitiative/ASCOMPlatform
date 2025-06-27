@@ -25,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Video()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Video");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Video");
         }
 
         /// <summary>

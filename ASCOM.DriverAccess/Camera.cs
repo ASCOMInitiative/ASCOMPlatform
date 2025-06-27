@@ -20,7 +20,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static Camera()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.Camera");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Camera");
         }
 
         /// <summary>

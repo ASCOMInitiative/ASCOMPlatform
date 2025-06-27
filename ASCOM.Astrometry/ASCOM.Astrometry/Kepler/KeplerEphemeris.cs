@@ -131,7 +131,7 @@ namespace ASCOM.Astrometry.Kepler
         /// </summary>
         static Ephemeris()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "KeplerEphemeris");
+            Log.Component(Assembly.GetExecutingAssembly(), "KeplerEphemeris");
         }
 
         /// <summary>

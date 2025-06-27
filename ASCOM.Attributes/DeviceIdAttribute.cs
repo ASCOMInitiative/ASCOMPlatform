@@ -47,7 +47,7 @@ namespace ASCOM
         /// </summary>
         static DeviceIdAttribute()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DeviceIdAttribute");
+            Log.Component(Assembly.GetExecutingAssembly(), "DeviceIdAttribute");
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static ObservingConditions()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.ObservingConditions");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.ObservingConditions");
         }
 
         /// <summary>

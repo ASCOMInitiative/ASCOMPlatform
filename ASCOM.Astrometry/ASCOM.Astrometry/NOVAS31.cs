@@ -56,7 +56,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         static NOVAS31()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS31");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVAS31");
         }
 
         /// <summary>

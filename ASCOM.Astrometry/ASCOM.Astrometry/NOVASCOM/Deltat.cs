@@ -12,7 +12,7 @@ namespace ASCOM.Astrometry
         /// </summary>
         static DeltatCode()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.DeltaTCode");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "NovasCom.DeltaTCode");
         }
 
         /// <summary>

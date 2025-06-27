@@ -311,7 +311,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static Serial()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Serial");
+            Log.Component(Assembly.GetExecutingAssembly(), "Serial");
         }
 
         /// <summary>

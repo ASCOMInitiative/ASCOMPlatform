@@ -126,7 +126,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static Timer()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Timer");
+            Log.Component(Assembly.GetExecutingAssembly(), "Timer");
         }
 
         /// <summary>

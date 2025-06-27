@@ -864,6 +864,7 @@ namespace ASCOM.Utilities
             catch (Exception ex1)
             {
                 lblResult.Text = "Can't create log: " + ex1.Message;
+                MessageBox.Show(ex1.ToString(), "Diagnostics Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             btnExit.Enabled = true; // Enable buttons during run
             btnRunDiagnostics.Enabled = true;
@@ -11488,6 +11489,17 @@ namespace ASCOM.Utilities
         #endregion
 
         #region Other menu event handlers
+
+        /// <summary>
+        /// Show the .NET 3.5 component use dialogue.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ReportNET35ComponentUseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Net35CompopnentUseForm Net35Form=new();
+            Net35Form.ShowDialog(); // Show the dialogue
+        }
 
         /// <summary>
         /// Toggle display of Unicode characters in TraceLogger files vs displaying them as hex codes [XX].

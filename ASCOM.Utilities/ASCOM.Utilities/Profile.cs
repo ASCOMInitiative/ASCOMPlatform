@@ -53,7 +53,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static Profile()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "Profile");
+            Log.Component(Assembly.GetExecutingAssembly(), "Profile");
         }
 
         /// <summary>

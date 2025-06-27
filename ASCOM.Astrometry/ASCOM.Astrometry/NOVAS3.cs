@@ -50,7 +50,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         static NOVAS3()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS3");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVAS3");
         }
         
         /// <summary>

@@ -14,7 +14,7 @@ namespace ASCOM.Astrometry
         /// </summary>
         static EphemerisCode()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "NovasCom.EphemerisCode");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "NovasCom.EphemerisCode");
         }
 
         // Function patterned after get_earth() in the original NOVAS-C V2 package.

@@ -50,7 +50,7 @@ namespace ASCOM.Astrometry.NOVAS
         /// </summary>
         static NOVAS2COM()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "NOVAS2COM");
+            Log.Component(Assembly.GetExecutingAssembly(), "NOVAS2COM");
         }
         
         #region NOVAS Members

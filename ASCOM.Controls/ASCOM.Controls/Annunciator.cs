@@ -45,7 +45,7 @@ namespace ASCOM.Controls
         /// </summary>
         static Annunciator()
         {
-            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly().FullName, "Annunciator");
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "Annunciator");
         }
 
         /// <summary>

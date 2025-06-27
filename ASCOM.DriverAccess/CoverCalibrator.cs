@@ -19,7 +19,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         static CoverCalibrator()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "DriverAccess.CoverCalibrator");
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.CoverCalibrator");
         }
 
         /// <summary>

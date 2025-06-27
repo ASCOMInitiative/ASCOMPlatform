@@ -29,7 +29,7 @@ namespace ASCOM.Utilities
         /// </summary>
         static ASCOMProfile()
         {
-            Log.Component(Assembly.GetExecutingAssembly().FullName, "ASCOMProfile");
+            Log.Component(Assembly.GetExecutingAssembly(), "ASCOMProfile");
         }
 
         ///  Create an ASCOM Profile class
