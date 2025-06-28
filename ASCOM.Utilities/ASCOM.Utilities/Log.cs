@@ -70,15 +70,6 @@ namespace ASCOM.Utilities
                     return;
                 }
 
-                StackFrame[] frames = new StackTrace().GetFrames();
-                TL.LogMessage("Component", $"Number of frames: {frames.Length}");
-
-                foreach (StackFrame frame in frames)
-                {
-                    frame.GetType();
-                    TL.LogMessage("Component", $"Calling Type: {frame.GetType().FullName}, Declaring type full name: {frame.GetMethod().DeclaringType.FullName} method: {frame.GetMethod().Name}");
-                }
-
                 // Split the assembly name and extract version information, removing extraneous spaces and "Version=" prefix
                 string[] assemblyNameElements = fullAssemblyName.Split(',').Select(part => part.Trim()).Select(part2 => part2.Replace("Version=", "")).ToArray();
                 if (assemblyNameElements.Length < 2)
@@ -103,6 +94,15 @@ namespace ASCOM.Utilities
                 using (RegistryAccess ra = new())
                 {
                     ra.WriteProfile(@$"{Global.NET35_REGISTRY_BASE}\{keyName}\{assemblyNameElements[0]}\{assemblyNameElements[1]}", componentName, componentName);
+                }
+
+                StackFrame[] frames = new StackTrace().GetFrames();
+                TL.LogMessage("Component", $"Number of frames: {frames.Length}");
+
+                foreach (StackFrame frame in frames)
+                {
+                    frame.GetType();
+                    TL.LogMessage("Component", $"Calling Type: {frame.GetType().FullName}, Declaring type full name: {frame.GetMethod().DeclaringType.FullName} method: {frame.GetMethod().Name}");
                 }
             }
             catch (Exception ex)
