@@ -398,26 +398,85 @@ Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 [DEFINE REGION: Check Application Requirements]
  
+Comment: Check that we have admin rights
 Get System Setting Administrator Rights into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
   MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
   Terminate Installation
 end
  
-Comment: .NET Framework 4.8 - Check that we are on 8.1 if we are running Windows 8
-Comment: Get Exact OS Level into CHECKSYSTEM
-Comment: if Variable CHECKSYSTEM Equals METRO
-Comment: Comment: We are running on Windows 8.0 so cannot proceed because Framework 4.8 is only supported on Win 8.1
-Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Found Windows 8.0, terminating installation (at end of file)
-Comment: MessageBox: $TITLE$ Setup Issue, The ASCOM Platform requires .NET 4.8, which is only available on Windows 7.1 SP1, Windows 8.1, Windows 10 Anniversary Edition (1607) and later.$NEWLINE$$NEWLINE$Please update to Windows 8 if you wish to install $TITLE$.$NEWLINE$$NEWLINE$The installer cannot continue and will now close.
-Comment: Terminate Installation
-Comment: end
- 
-Comment: Check that we are not running on an OS earlier than Windows 10 1809 October 2018 Update
+Comment: Check that we are running on Windows 10 1809 October 2018 Update or later
 Get System Setting Windows 10 October 2018 Update into CHECKSYSTEM
 if Variable CHECKSYSTEM not Equals TRUE
-  Write into Text File $SETUPLOG$ from Value $TIME$ Found a Windows version earlier than 10 1809 October 2018 Update, terminating installation. (at end of file)
-  MessageBox: $TITLE$ - OS Requirement, ASCOM Platform is not compatible with this operating system and only runs correctly on Windows 10 1809 (October 2018) and later operating systems.$NEWLINE$$NEWLINE$ASCOM Platform 6.6 SP2 is the latest version that is compatible with Windows 7.$NEWLINE$$NEWLINE$ASCOM Platform 6.4 SP1 is the latest version that is compatible with Windows XP.$NEWLINE$$NEWLINE$The installer will now close.
+  Comment: We are running on an unsupported OS - Get a long form description of the OS name.
+  Set Variable OSVERSION to 
+  Get Exact OS Level into OSVERSION
+   
+  Comment: Initialise the OS description in case all checks below fail.
+  Set Variable OSDESCRIPTION to Unknown (Version: $OSVERSION$)
+   
+  Comment: Check for each OS version in turn.
+  if Variable OSVERSION Equals XP
+    Set Variable OSDESCRIPTION to Windows XP
+  end
+  if Variable OSVERSION Equals 2003
+    Set Variable OSDESCRIPTION to Windows Server 2003
+  end
+  if Variable OSVERSION Equals VISTA
+    Set Variable OSDESCRIPTION to Windows Vista
+  end
+  if Variable OSVERSION Equals 2008
+    Set Variable OSDESCRIPTION to Windows Server 2008
+  end
+  if Variable OSVERSION Equals SEVEN
+    Set Variable OSDESCRIPTION to Windows 7
+  end
+  if Variable OSVERSION Equals 2008R2
+    Set Variable OSDESCRIPTION to Windows Server 2008 Release 2
+  end
+  if Variable OSVERSION Equals METRO
+    Set Variable OSDESCRIPTION to Windows 8
+  end
+  if Variable OSVERSION Equals SERVER8
+    Set Variable OSDESCRIPTION to Windows Server 2012
+  end
+  if Variable OSVERSION Equals METROR2
+    Set Variable OSDESCRIPTION to Windows 8.1
+  end
+  if Variable OSVERSION Equals SERVER8R2
+    Set Variable OSDESCRIPTION to Windows Server 2012 Release 2
+  end
+  if Variable OSVERSION Equals METROR2U1
+    Set Variable OSDESCRIPTION to Windows 8.1 Update 1
+  end
+  if Variable OSVERSION Equals SERVER8R2U1
+    Set Variable OSDESCRIPTION to Windows Server 2012 Release 2 Update 1
+  end
+  if Variable OSVERSION Equals TEN
+    Set Variable OSDESCRIPTION to Windows 10 Initial Release (Threshold July 2015)
+  end
+  if Variable OSVERSION Equals SERVERTEN
+    Set Variable OSDESCRIPTION to Windows Server 2016
+  end
+  if Variable OSVERSION Equals TENTWO
+    Set Variable OSDESCRIPTION to Windows 10 (Threshold 2 November 2015)
+  end
+  if Variable OSVERSION Equals TENTHREE
+    Set Variable OSDESCRIPTION to Windows 10 (Redstone August 2016)
+  end
+  if Variable OSVERSION Equals TENFOUR
+    Set Variable OSDESCRIPTION to Windows 10 (Redstone 2 April 2017)
+  end
+  if Variable OSVERSION Equals TENFIVE
+    Set Variable OSDESCRIPTION to Windows 10 (Redstone 3 October 2017)
+  end
+  if Variable OSVERSION Equals TENSIX
+    Set Variable OSDESCRIPTION to Windows 10 (Redstone 4 April 2018)
+  end
+   
+  Comment: Log the error message, display to user and terminate the install
+  Write into Text File $SETUPLOG$ from Value $TIME$ Found a Windows version earlier than 10 1809 October 2018 Update, terminating installation: $OSDESCRIPTION$. (at end of file)
+  MessageBox: $TITLE$ - OS Requirement, ASCOM Platform is not compatible with this operating system: $OSDESCRIPTION$.$NEWLINE$$NEWLINE$The Platform only runs correctly on Windows 10 1809 (October 2018) and later operating systems.$NEWLINE$$NEWLINE$ASCOM Platform 6.6 SP2 is the latest version that is compatible with Windows 7.$NEWLINE$$NEWLINE$ASCOM Platform 6.4 SP1 is the latest version that is compatible with Windows XP.$NEWLINE$$NEWLINE$The installer will now close.
   Terminate Installation
 end
  

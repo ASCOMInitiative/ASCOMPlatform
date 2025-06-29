@@ -2532,9 +2532,15 @@ if Variable SUCCESS not Equals ERROR
   Include Script: UpdateAscomError
    
   Comment: Create a scheduled task to run the update checker once a week
-  Set Variable MYPROGRESS to 74
+  Set Variable MYPROGRESS to 73
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
   Set Variable ACTION to Update checker scheduled task
+  Include Script: UpdateAscomError
+   
+  Comment: Register any Dynamic Drivers that were created under Platform 6
+  Set Variable MYPROGRESS to 74
+  Run Program $COMMONFILES$\ASCOM\AlpacaDynamicClients\DynamicClientServer.exe /RegServer (WAIT, get result into variable RC)
+  Set Variable ACTION to Register Platform 7 Dynamic Drivers
   Include Script: UpdateAscomError
    
   [END REGION]
