@@ -32,6 +32,7 @@ namespace ASCOM.Utilities
             Log.Component(Assembly.GetExecutingAssembly(), "ASCOMProfile");
         }
 
+        /// <summary>
         ///  Create an ASCOM Profile class
         /// </summary>
         public ASCOMProfile()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -87,22 +88,66 @@ namespace ASCOM.Utilities
                 TL.LogMessage("Component", $"Process name: {System.Diagnostics.Process.GetCurrentProcess().ProcessName}");
                 TL.LogMessage("Component", $"File name: {System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName}");
 
-                //string keyName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/");
-                string keyName = assembly.Location.Replace(@"\", "/");
-
-                // Write the log entry to the registry
-                using (RegistryAccess ra = new())
-                {
-                    ra.WriteProfile(@$"{Global.NET35_REGISTRY_BASE}\{keyName}\{assemblyNameElements[0]}\{assemblyNameElements[1]}", componentName, componentName);
-                }
+                string processName = @$"Applications\{System.Diagnostics.Process.GetCurrentProcess().ProcessName} - {System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/")}";
+                //string keyName = assembly.Location.Replace(@"\", "/");
+                string keyName = assembly.GetName().Name;  //Location.Replace(@"\", "/");
 
                 StackFrame[] frames = new StackTrace().GetFrames();
                 TL.LogMessage("Component", $"Number of frames: {frames.Length}");
 
+                string declaringMethodName = "";
+                string methodName = "";
+                string lastDeclaringMethodName = "";
                 foreach (StackFrame frame in frames)
                 {
                     frame.GetType();
-                    TL.LogMessage("Component", $"Calling Type: {frame.GetType().FullName}, Declaring type full name: {frame.GetMethod().DeclaringType.FullName} method: {frame.GetMethod().Name}");
+                    declaringMethodName = frame.GetMethod().DeclaringType.FullName;
+                    methodName = frame.GetMethod().Name;
+                    TL.LogMessage("StackTrace", $"Declaring type full name: {declaringMethodName} method: {methodName}");
+
+                    if (methodName == "CreateInstance")
+                    {
+                        processName = lastDeclaringMethodName;
+                        try
+                        {
+                            Type type = Type.GetTypeFromProgID(lastDeclaringMethodName);
+                            if (type != null)
+                            {
+                                TL.LogMessage("StackTrace", $"Type from ProgID: {type.FullName}");
+                                string location = Assembly.GetAssembly(type).Location;
+
+                                if (location != null)
+                                {
+                                    if (location.ToLowerInvariant().Contains(@"mscorlib"))
+                                    {
+                                        location = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                                    }
+                                    processName = @$"Drivers\{processName} - {location.Replace(@"\", "/")}";
+                                }
+                            }
+                            else
+                            {
+                                TL.LogMessage("StackTrace", $"Type from ProgID not found: {lastDeclaringMethodName}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            TL.LogMessage("StackTrace", $"Exception while getting type from ProgID: {lastDeclaringMethodName} - {ex.Message}");
+                        }
+
+                        TL.LogMessage("StackTrace", $"Setting process name to: {lastDeclaringMethodName}");
+                        break;
+                    }
+                    lastDeclaringMethodName = declaringMethodName;
+                }
+
+                // Write the log entry to the registry
+                using (RegistryAccess ra = new())
+                {
+                    // string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{keyName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
+                    string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
+                    TL.LogMessage("Component", $"Writing to registry key: {key}");
+                    ra.WriteProfile(key, componentName, componentName);
                 }
             }
             catch (Exception ex)
