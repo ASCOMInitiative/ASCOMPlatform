@@ -24,22 +24,24 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>false</Optimize>
     <DebugType>embedded</DebugType>
-  </PropertyGroup>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64'" >
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
     <AssemblyName>ASCOM.JustAHub64</AssemblyName>
-  </PropertyGroup>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
     <AssemblyName>ASCOM.JustAHub64</AssemblyName>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
