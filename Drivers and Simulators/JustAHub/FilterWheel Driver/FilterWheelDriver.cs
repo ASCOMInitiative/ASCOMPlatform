@@ -12,10 +12,18 @@ namespace ASCOM.JustAHub
     /// ASCOM FilterWheel driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("5D4FAA31-F3FA-41C7-B6ED-02072377F259")]
+    [ProgId("ASCOM.JustAHub64.FilterWheel")]
+    [ServedClassName("JustAHub Filter wheel (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("CDE29007-89B1-4163-9E63-F374264CD2EC")]
     [ProgId("ASCOM.JustAHub.FilterWheel")]
-    [ServedClassName("JustAHub Filter Wheel")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Filter Wheel (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class FilterWheel : ReferenceCountedObjectBase, IFilterWheelV3, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -51,7 +59,7 @@ namespace ASCOM.JustAHub
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "JustAHub.FilterWheel.Driver")
+                tl = new TraceLogger("", $"JustAHub.FilterWheel{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.FilterWheelDriverLogging
                 };

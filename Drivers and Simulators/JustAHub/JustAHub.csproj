@@ -13,19 +13,31 @@
     <Copyright>Copyright © The ASCOM Initiative 2025</Copyright>
     <AssemblyVersion>7.0.0.0</AssemblyVersion>
     <FileVersion>7.0.0.0</FileVersion>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>
     <Prefer32Bit>true</Prefer32Bit>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>LocalServer.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>ASCOM.ico</ApplicationIcon>
     <StartupObject>ASCOM.LocalServer.Server</StartupObject>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Optimize>false</Optimize>
     <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64'" >
+    <DebugType>embedded</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>BUILD64</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DebugType>embedded</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>BUILD64</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

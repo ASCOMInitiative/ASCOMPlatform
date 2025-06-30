@@ -38,7 +38,7 @@ namespace ASCOM.JustAHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.Camera.Proxy")
+                TL = new TraceLogger("", $"JustAHub.Camera{(Environment.Is64BitProcess ? "64" : "")}.Proxy")
                 {
                     Enabled = Settings.CameraHardwareLogging
                 };

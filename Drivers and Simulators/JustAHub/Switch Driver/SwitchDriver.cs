@@ -13,10 +13,18 @@ namespace ASCOM.JustAHub
     /// ASCOM Switch Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("A6A1891D-BE8E-4CDB-99B7-69202F241C80")]
+    [ProgId("ASCOM.JustAHub64.Switch")]
+    [ServedClassName("JustAHub Switch (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("4BE51F71-5592-40C2-A1F8-309577D2BD3D")]
     [ProgId("ASCOM.JustAHub.Switch")]
-    [ServedClassName("JustAHub Switch")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Switch (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class Switch : ReferenceCountedObjectBase, ISwitchV3, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -48,7 +56,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.Switch.Driver")
+                tl = new TraceLogger("", $"JustAHub.Switch{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.SwitchDriverLogging
                 };

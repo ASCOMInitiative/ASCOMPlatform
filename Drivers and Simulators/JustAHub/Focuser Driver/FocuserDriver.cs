@@ -13,10 +13,18 @@ namespace ASCOM.JustAHub
     /// ASCOM Focuser Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("5B6032EE-A1B3-4F15-8038-CDA6D3D684A0")]
+    [ProgId("ASCOM.JustAHub64.Focuser")]
+    [ServedClassName("JustAHub Focuser (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("7203D360-5BED-4F55-91CA-42F70F008E83")]
     [ProgId("ASCOM.JustAHub.Focuser")]
-    [ServedClassName("JustAHub Focuser")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Focuser (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class Focuser : ReferenceCountedObjectBase, IFocuserV4, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -48,7 +56,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.Focuser.Driver")
+                tl = new TraceLogger("", $"JustAHub.Focuser{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.FocuserDriverLogging
                 };

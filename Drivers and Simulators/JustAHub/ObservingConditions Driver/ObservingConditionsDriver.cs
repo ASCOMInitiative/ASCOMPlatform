@@ -13,10 +13,18 @@ namespace ASCOM.JustAHub
     /// ASCOM ObservingConditions Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("1FE8C026-35C7-4164-AEC8-D2227034AFFD")]
+    [ProgId("ASCOM.JustAHub64.ObservingConditions")]
+    [ServedClassName("JustAHub ObservingConditions (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("C6DF8709-736D-451C-BC7B-AFE026BBD909")]
     [ProgId("ASCOM.JustAHub.ObservingConditions")]
-    [ServedClassName("JustAHub ObservingConditions")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub ObservingConditions (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class ObservingConditions : ReferenceCountedObjectBase, IObservingConditionsV2, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -48,7 +56,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.ObservingConditions.Driver")
+                tl = new TraceLogger("", $"JustAHub.ObservingConditions{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.ObservingConditionsDriverLogging
                 };

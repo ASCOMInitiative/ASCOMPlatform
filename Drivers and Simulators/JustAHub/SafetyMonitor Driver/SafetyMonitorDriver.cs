@@ -12,10 +12,18 @@ namespace ASCOM.JustAHub
     /// ASCOM SafetyMonitor Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("C8C85C7B-5614-4854-B5DF-FB42727ED593")]
+    [ProgId("ASCOM.JustAHub64.SafetyMonitor")]
+    [ServedClassName("JustAHub  Safety Monitor (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("59DB989D-EA5C-4E34-996F-AA53322E6797")]
     [ProgId("ASCOM.JustAHub.SafetyMonitor")]
-    [ServedClassName("JustAHub Safety Monitor")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub  Safety Monitor (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class SafetyMonitor : ReferenceCountedObjectBase, ISafetyMonitorV3, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -47,7 +55,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.SafetyMonitor.Driver")
+                tl = new TraceLogger("", $"JustAHub.SafetyMonitor{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.SafetyMonitorDriverLogging
                 };

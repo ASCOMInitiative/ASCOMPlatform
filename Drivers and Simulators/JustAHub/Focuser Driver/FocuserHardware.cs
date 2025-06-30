@@ -40,7 +40,7 @@ namespace ASCOM.JustAHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.Focuser.Proxy")
+                TL = new TraceLogger("", $"JustAHub.Focuser{(Environment.Is64BitProcess ? "64" : "")}.Proxy")
                 {
                     Enabled = Settings.FocuserHardwareLogging
                 };

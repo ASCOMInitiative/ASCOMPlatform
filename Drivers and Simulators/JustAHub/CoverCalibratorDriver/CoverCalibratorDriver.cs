@@ -12,10 +12,18 @@ namespace ASCOM.JustAHub
     /// ASCOM CoverCalibrator Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("FA1C8DF6-AF9B-4885-9EBC-9B829AAD0343")]
+    [ProgId("ASCOM.JustAHub64.CoverCalibrator")]
+    [ServedClassName("JustAHub Cover Calibrator (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("226F4E6B-3863-41DE-A464-72474A477313")]
     [ProgId("ASCOM.JustAHub.CoverCalibrator")]
-    [ServedClassName("JustAHub Cover Calibrator")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Cover Calibrator (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class CoverCalibrator : ReferenceCountedObjectBase, ICoverCalibratorV2, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -51,7 +59,7 @@ namespace ASCOM.JustAHub
                 // By default all driver logging will appear in Hardware log file
                 // If you would like each instance of the driver to have its own log file as well, uncomment the lines below
 
-                tl = new TraceLogger("", "JustAHub.CoverCalibrator.Driver")
+                tl = new TraceLogger("", $"JustAHub.CoverCalibrator{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.CoverCalibratorDriverLogging
                 };

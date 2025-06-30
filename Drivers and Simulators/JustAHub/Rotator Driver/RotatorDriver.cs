@@ -13,10 +13,18 @@ namespace ASCOM.JustAHub
     /// ASCOM Rotator Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("EF10DA88-9DCB-470B-90FF-8F96D7127910")]
+    [ProgId("ASCOM.JustAHub64.Rotator")]
+    [ServedClassName("JustAHub Rotator (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("93C76B35-E561-4425-91A8-3977D7FD7DDA")]
     [ProgId("ASCOM.JustAHub.Rotator")]
-    [ServedClassName("JustAHub Rotator")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Rotator (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class Rotator : ReferenceCountedObjectBase, IRotatorV4, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -48,7 +56,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.Rotator.Driver")
+                tl = new TraceLogger("", $"JustAHub.Rotator{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.RotatorDriverLogging
                 };

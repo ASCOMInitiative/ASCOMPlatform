@@ -13,10 +13,18 @@ namespace ASCOM.JustAHub
     /// ASCOM Telescope Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("5796DA4D-5176-433E-A181-82539267ED3F")]
+    [ProgId("ASCOM.JustAHub64.Telescope")]
+    [ServedClassName("JustAHub Telescope (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("E22DB8A8-B31E-4C12-8CBB-1E4EA2960CEA")]
     [ProgId("ASCOM.JustAHub.Telescope")]
-    [ServedClassName("JustAHub Telescope")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Telescope (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class Telescope : ReferenceCountedObjectBase, ITelescopeV4, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -48,7 +56,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.Telescope.Driver")
+                tl = new TraceLogger("", $"JustAHub.Telescope{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.TelescopeDriverLogging
                 };

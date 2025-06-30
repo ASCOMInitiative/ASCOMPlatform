@@ -37,7 +37,7 @@ namespace ASCOM.JustAHub
             {
                 // Create the hardware trace logger in the static initialiser.
                 // All other initialisation should go in the InitialiseHardware method.
-                TL = new TraceLogger("", "JustAHub.CoverCalibrator.Proxy")
+                TL = new TraceLogger("", $"JustAHub.CoverCalibrator{(Environment.Is64BitProcess ? "64" : "")}.Proxy")
                 {
                     Enabled = Settings.CoverCalibratorHardwareLogging
                 };

@@ -13,10 +13,18 @@ namespace ASCOM.JustAHub
     /// ASCOM Dome Driver for JustAHub.
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+#if BUILD64
+    // This is the 64bit version of the driver, so use a unique ProgID and GUID
+    [Guid("0717C051-8FB7-4535-9225-4F9EAEC88F4A")]
+    [ProgId("ASCOM.JustAHub64.Dome")]
+    [ServedClassName("JustAHub Dome (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#else
+    // This is the 32bit version of the driver, so use a unique ProgID and GUID
     [Guid("20417A61-A964-4D52-937A-69C7AA112291")]
     [ProgId("ASCOM.JustAHub.Dome")]
-    [ServedClassName("JustAHub Dome")] // Driver description that appears in the Chooser, customise as required
-    [ClassInterface(ClassInterfaceType.None)]
+    [ServedClassName("JustAHub Dome (for 32bit drivers)")] // Driver description that appears in the Chooser, customise as required
+#endif
     public class Dome : ReferenceCountedObjectBase, IDomeV3, IDisposable
     {
         private Guid uniqueId; // A unique ID for this instance of the driver
@@ -48,7 +56,7 @@ namespace ASCOM.JustAHub
         {
             try
             {
-                tl = new TraceLogger("", "JustAHub.Dome.Driver")
+                tl = new TraceLogger("", $"JustAHub.Dome{(Environment.Is64BitProcess ? "64" : "")}.Driver")
                 {
                     Enabled = Settings.DomeDriverLogging
                 };
