@@ -29,6 +29,7 @@
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
+    <AssemblyName>ASCOM.JustAHub64</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
@@ -38,6 +39,7 @@
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
+    <AssemblyName>ASCOM.JustAHub64</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
