@@ -6,6 +6,7 @@
     <RootNamespace>ASCOM.LocalServer.Server</RootNamespace>
     <AssemblyName>ASCOM.JustAHub</AssemblyName>
     <TargetFramework>net48</TargetFramework>
+    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <AssemblyTitle>ASCOM JustAHub</AssemblyTitle>
     <Company>The ASCOM Initiative</Company>
     <Product>ASCOM JustAHub</Product>
@@ -24,24 +25,22 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>false</Optimize>
     <DebugType>embedded</DebugType>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>  </PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64'" >
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
     <AssemblyName>ASCOM.JustAHub64</AssemblyName>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>  </PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
     <AssemblyName>ASCOM.JustAHub64</AssemblyName>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
