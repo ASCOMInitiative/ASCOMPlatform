@@ -15,6 +15,6 @@ if Variable RC not Equals 0
   if Variable RC not Equals COMPLETE
     Comment: Return code is not zero or COMPLETE so this is an error: report it.
     MessageBalloon: Platform Install Error, $ACTION$ error - Return code: $RC$
-    Set Variable ASCOMERROR to $NEWLINE$$ACTION$ returned error code $RC$
+    Set Variable ASCOMERROR to $ASCOMERROR$$NEWLINE$$ACTION$ returned error code $RC$
   end
 end
