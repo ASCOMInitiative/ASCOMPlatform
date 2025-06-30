@@ -15,7 +15,7 @@ namespace ASCOM.JustAHub
     [ClassInterface(ClassInterfaceType.None)]
 #if BUILD64
     // This is the 64bit version of the driver, so use a unique ProgID and GUID
-    [Guid("5D4FAA31-F3FA-41C7-B6ED-02072377F259")]
+    [Guid("382CF241-97D7-4B81-AE76-64AEFE66D160")]
     [ProgId("ASCOM.JustAHub64.Camera")]
     [ServedClassName("JustAHub Camera (for 64bit drivers)")] // Driver description that appears in the Chooser, customise as required
 #else
