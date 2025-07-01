@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 
 namespace ASCOM.LocalServer
@@ -12,6 +13,7 @@ namespace ASCOM.LocalServer
             this.ShowInTaskbar = false;
             this.Visible = false;
             this.WindowState= FormWindowState.Minimized;
+            this.Text = $"ASCOM JustAHub ({(Environment.Is64BitProcess?"64":"32")}bit)";
         }
 
     }

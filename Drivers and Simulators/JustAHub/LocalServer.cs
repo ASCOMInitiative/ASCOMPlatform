@@ -50,6 +50,8 @@ namespace ASCOM.LocalServer
             };
 
             TL.LogMessage("Main", $"Server started - OS is {(Environment.Is64BitOperatingSystem ? "64bit" : "32bit")}, Application is {(Environment.Is64BitProcess ? "64bit" : "32bit")}");
+            TL.LogMessage("Main", $"Process name: {Process.GetCurrentProcess().ProcessName}, MainModule: {Process.GetCurrentProcess().MainModule}, ModuleName: {Process.GetCurrentProcess().MainModule.ModuleName}");
+            TL.LogMessage("Main", $"ProductName: {Process.GetCurrentProcess().MainModule.FileVersionInfo.ProductName}, FileDescription: {Process.GetCurrentProcess().MainModule.FileVersionInfo.FileDescription}, InternalName: {Process.GetCurrentProcess().MainModule.FileVersionInfo.InternalName}");
 
             // Load driver COM assemblies and get types, ending the program if something goes wrong.
             TL.LogMessage("Main", $"Loading drivers");

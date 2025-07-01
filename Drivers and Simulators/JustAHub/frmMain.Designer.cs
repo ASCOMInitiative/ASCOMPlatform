@@ -51,8 +51,7 @@ namespace ASCOM.LocalServer
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
-            this.ShowInTaskbar = false;
-            this.Text = "B";
+            this.Text = "JustAHub";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.ResumeLayout(false);
 
