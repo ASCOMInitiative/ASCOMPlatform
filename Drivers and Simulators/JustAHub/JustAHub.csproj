@@ -31,6 +31,9 @@
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
     <AssemblyName>ASCOM.JustAHub64</AssemblyName>
+    <AssemblyTitle>ASCOM JustAHub 64</AssemblyTitle>
+    <Product>ASCOM JustAHub 64</Product>
+    <Description>ASCOM Local Server for JustAHub 64</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
@@ -41,6 +44,9 @@
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
     <AssemblyName>ASCOM.JustAHub64</AssemblyName>
+    <AssemblyTitle>ASCOM JustAHub 64</AssemblyTitle>
+    <Product>ASCOM JustAHub 64</Product>
+    <Description>ASCOM Local Server for JustAHub 64</Description>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
