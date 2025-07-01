@@ -18,7 +18,7 @@ namespace ASCOM.Utilities
     {
         static TraceLogger TL;
         static bool? _enabled = null;
-
+        const bool ENABLE_LOGGING = false;
         /// <summary>
         /// Logs the specified component name.
         /// </summary>
@@ -43,7 +43,7 @@ namespace ASCOM.Utilities
 
                         //Logging is enabled so create a new TraceLogger instance using an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
                         TL = new TraceLogger("Net35use", true);
-                        TL.Enabled = true;
+                        TL.Enabled = ENABLE_LOGGING;
                     }
                     break;
 
