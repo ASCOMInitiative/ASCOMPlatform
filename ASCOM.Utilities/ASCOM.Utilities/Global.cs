@@ -62,6 +62,7 @@ namespace ASCOM.Utilities
         internal const bool SUPPRESS_ALPACA_DRIVER_ADMIN_DIALOGUE_DEFAULT = false;
         internal const string PROFILE_MUTEX_NAME = "ASCOMProfileMutex"; // Name and time-out value for the Profile mutex than ensures only one profile action happens at a time
         internal const int PROFILE_MUTEX_TIMEOUT = 5000;
+        internal const string DOTNET35_COMPONENT_USE_LOGGING = "DotNet35 Component Logging"; internal const bool DOTNET35_COMPONENT_USE_LOGGING_DEFAULT = false;
 
         // Trace settings values, these are used to persist trace values on a per user basis
         internal const string TRACE_TRANSFORM = "Trace Transform";

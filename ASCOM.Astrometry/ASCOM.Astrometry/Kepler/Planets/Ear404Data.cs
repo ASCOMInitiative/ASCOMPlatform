@@ -1,8 +1,20 @@
 ﻿
+using ASCOM.Utilities;
+using System.Reflection;
+
 namespace ASCOM.Astrometry
 {
     static class Ear404Data
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Ear404Data()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "Ear404Data");
+
+        }
+
         // /* heliocentric earth-moon barycenter
         // polar coordinates re fixed J2000 mean equinox and ecliptic
         // S. L. Moshier

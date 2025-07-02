@@ -1,8 +1,19 @@
 ﻿
+using ASCOM.Utilities;
+using System.Reflection;
+
 namespace ASCOM.Astrometry
 {
     static class Mlr404Data
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Mlr404Data()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "Mlr404Data");
+        }
+
         // /* geocentric moon
         // polar coordinates re mean equinox and ecliptic of date
         // For latitude coefficients, see mlat404.c.

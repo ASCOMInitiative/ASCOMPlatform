@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="ChooserCustomToolStripRenderer.cs" />
     <Compile Include="ChooserItem.cs" />
+    <Compile Include="Net35Use.cs" />
     <Compile Include="Units.cs" />
     <Compile Include="My Project\AssemblyInfo.cs" />
     <Compile Include="..\..\AssemblyVersionInfo.cs">

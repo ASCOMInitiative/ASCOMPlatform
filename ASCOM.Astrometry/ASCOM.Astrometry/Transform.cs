@@ -61,6 +61,15 @@ namespace ASCOM.Astrometry.Transform
         }
 
         #region New and IDisposable
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Transform()
+        {
+            ASCOM.Utilities.Log.Component(Assembly.GetExecutingAssembly(), "Transform");
+        }
+
         /// <summary>
         /// Transform initialiser
         /// </summary>

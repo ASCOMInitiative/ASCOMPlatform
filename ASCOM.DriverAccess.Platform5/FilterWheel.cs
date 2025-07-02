@@ -4,9 +4,10 @@
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
-using System;
 using ASCOM.Interface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DriverAccess
@@ -23,6 +24,14 @@ namespace ASCOM.DriverAccess
         #region FilterWheel constructors
 
         private readonly MemberFactory _memberFactory;
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static FilterWheel()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Platform 5.FilterWheel");
+        }
 
         /// <summary>
         /// Creates a FilterWheel object with the given Prog ID

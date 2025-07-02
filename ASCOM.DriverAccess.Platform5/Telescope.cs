@@ -29,6 +29,14 @@ namespace ASCOM.DriverAccess
         #region ITelescope constructors
 
         /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Telescope()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Platform 5.Telescope");
+        }
+
+        /// <summary>
         /// Creates an instance of the telescope class.
         /// </summary>
         /// <param name="telescopeId">The ProgID for the telescope</param>

@@ -117,4 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label1.Text" xml:space="preserve">
+    <value>1) To determine .NET 3.5 component use:
+       a) Enable component logging using the checkbox above.
+       b) Run your applications and drivers to excercise all compoenents.
+       c) View the results in Regedit or create a report. 
+2) In-process (DLL) drivers will show as running in the client application from which they are called.
+3) Where possible, driver COM ProgIDs are reported to make it clear which driver is using the component.
+4) Component logging data is stored under the .NET35 key in the ASCOM Profile
+5) The report includes component use ordered by component and component use ordered by application.
+</value>
+  </data>
 </root>

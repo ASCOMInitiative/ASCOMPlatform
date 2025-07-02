@@ -1,8 +1,19 @@
 ﻿
+using ASCOM.Utilities;
+using System.Reflection;
+
 namespace ASCOM.Astrometry
 {
     static class Plu404Data
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Plu404Data()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "Plu404Data");
+        }
+
         // /*
         // First date in file = 625296.50
         // Number of records = 16731.0

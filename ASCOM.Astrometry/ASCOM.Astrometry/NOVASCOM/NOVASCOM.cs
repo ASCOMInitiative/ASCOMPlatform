@@ -3149,6 +3149,7 @@ namespace ASCOM.Astrometry.NOVASCOM
         #endregion
 
     }
+
     #endregion
 
     #region Private Utiity code

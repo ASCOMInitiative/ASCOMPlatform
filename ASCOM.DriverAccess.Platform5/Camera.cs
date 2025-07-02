@@ -4,9 +4,10 @@
 // 01-Jan-10  	cdr     1.0.6 - Add Camera V2 properties as late bound properties.
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
-using System;
 using ASCOM.Interface;
 using ASCOM.Utilities;
+using System;
+using System.Reflection;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.DriverAccess
@@ -20,10 +21,19 @@ namespace ASCOM.DriverAccess
     public class Camera : ICamera, IDisposable
     {
         private TraceLogger TL;
+
         #region ICamera constructors
 
         private readonly short _driverInterfaceVersion;
         private readonly MemberFactory _memberFactory;
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Camera()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "DriverAccess.Platform 5.Camera");
+        }
 
         /// <summary>
         /// Creates an instance of the camera class.

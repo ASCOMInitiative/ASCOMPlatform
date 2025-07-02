@@ -1,8 +1,19 @@
 ﻿
+using ASCOM.Utilities;
+using System.Reflection;
+
 namespace ASCOM.Astrometry
 {
     static class Mar404Data
     {
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static Mar404Data()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "Mar404Data");
+        }
+
         // /*
         // First date in file = 1228000.50
         // Number of records = 397276.0

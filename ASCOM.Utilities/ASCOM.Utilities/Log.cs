@@ -18,7 +18,6 @@ namespace ASCOM.Utilities
     {
         static TraceLogger TL;
         static bool? _enabled = null;
-        const bool ENABLE_LOGGING = false;
         /// <summary>
         /// Logs the specified component name.
         /// </summary>
@@ -43,7 +42,7 @@ namespace ASCOM.Utilities
 
                         //Logging is enabled so create a new TraceLogger instance using an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
                         TL = new TraceLogger("Net35use", true);
-                        TL.Enabled = ENABLE_LOGGING;
+                        TL.Enabled = Global.GetBool(Global.DOTNET35_COMPONENT_USE_LOGGING, Global.DOTNET35_COMPONENT_USE_LOGGING_DEFAULT);
                     }
                     break;
 
@@ -107,7 +106,7 @@ namespace ASCOM.Utilities
 
                     if (methodName == "CreateInstance")
                     {
-                        processName = lastDeclaringMethodName;
+                        //processName = lastDeclaringMethodName;
                         try
                         {
                             Type type = Type.GetTypeFromProgID(lastDeclaringMethodName);
@@ -122,7 +121,7 @@ namespace ASCOM.Utilities
                                     {
                                         location = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
                                     }
-                                    processName = @$"Drivers\{processName} - {location.Replace(@"\", "/")}";
+                                    processName = @$"Drivers\{lastDeclaringMethodName} - {location.Replace(@"\", "/")}";
                                 }
                             }
                             else
@@ -135,18 +134,19 @@ namespace ASCOM.Utilities
                             TL.LogMessage("StackTrace", $"Exception while getting type from ProgID: {lastDeclaringMethodName} - {ex.Message}");
                         }
 
-                        TL.LogMessage("StackTrace", $"Setting process name to: {lastDeclaringMethodName}");
                         break;
                     }
+
                     lastDeclaringMethodName = declaringMethodName;
                 }
+                TL.LogMessage("StackTrace", $"Process name is: {processName}");
 
                 // Write the log entry to the registry
                 using (RegistryAccess ra = new())
                 {
                     // string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{keyName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
                     string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
-                    TL.LogMessage("Component", $"Writing to registry key: {key}");
+                    TL.LogMessage("Registry", $"Writing to registry key: {key}");
                     ra.WriteProfile(key, componentName, componentName);
                 }
             }
