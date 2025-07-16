@@ -119,8 +119,12 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Business Object Classes\Value Converters\AltitudeValueConverter.cs" />
+    <Compile Include="View Classes\DomeViews\DomeOffsetsView.xaml.cs">
+      <DependentUpon>DomeOffsetsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel Classes\AboutViewModel.cs" />
     <Compile Include="Business Object Classes\PropertyExceptions.cs" />
+    <Compile Include="ViewModel Classes\Dome ViewModels\DomeOffsetsViewModel.cs" />
     <Compile Include="ViewModel Classes\DomeAzimuthOffsetViewModel.cs" />
     <Compile Include="ViewModel Classes\AltitudeValuesEntryViewModel.cs" />
     <Compile Include="ViewModel Classes\AzimuthValuesEntryViewModel.cs" />
@@ -347,6 +351,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\DevHubMono.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View Classes\DomeViews\DomeOffsetsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

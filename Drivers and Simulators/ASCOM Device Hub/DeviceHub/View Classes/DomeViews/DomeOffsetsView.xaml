@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="ASCOM.DeviceHub.DomeOffsetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	         xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"   
+             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             mc:Ignorable="d" 
+			 Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="400" d:DesignWidth="587.5"
+             Height="Auto" Width="Auto">
+    <Grid>
+            
+    </Grid>
+</UserControl>

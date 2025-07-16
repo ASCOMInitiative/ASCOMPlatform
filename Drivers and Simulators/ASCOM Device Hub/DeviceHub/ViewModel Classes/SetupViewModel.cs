@@ -4,30 +4,30 @@ using System.Windows.Input;
 
 namespace ASCOM.DeviceHub
 {
-	public class SetupViewModel : DeviceHubDialogViewModelBase
-	{
-		private string TelescopeID { get; set; }
-		private string DomeID { get; set; }
-		private string FocuserID { get; set; }
+    public class SetupViewModel : DeviceHubDialogViewModelBase
+    {
+        private string TelescopeID { get; set; }
+        private string DomeID { get; set; }
+        private string FocuserID { get; set; }
 
-		public SetupViewModel()
-			: base( "Device Hub Setup")
-		{
-			SuppressTrayBubble = Globals.SuppressTrayBubble;
-			UseCustomTheme = Globals.UseCustomTheme;
-			UseExpandedScreenLayout = Globals.UseExpandedScreenLayout;
-			KeepWindowOnTop = Globals.AlwaysOnTop;
-			UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag;
-			ShowActivityLogWhenStarted = Globals.ShowActivityLogWhenStarted;
-			WriteActivityLogToDisk=Globals.WriteLogActivityToDisk;
-			TelescopeSetupVm = new TelescopeSetupViewModel();
-			DomeSetupVm = new DomeSetupViewModel();
-			FocuserSetupVm = new FocuserSetupViewModel();
-		}
+        public SetupViewModel()
+            : base("Device Hub Setup")
+        {
+            SuppressTrayBubble = Globals.SuppressTrayBubble;
+            UseCustomTheme = Globals.UseCustomTheme;
+            UseExpandedScreenLayout = Globals.UseExpandedScreenLayout;
+            KeepWindowOnTop = Globals.AlwaysOnTop;
+            UseCompositeSlewingFlag = Globals.UseCompositeSlewingFlag;
+            ShowActivityLogWhenStarted = Globals.ShowActivityLogWhenStarted;
+            WriteActivityLogToDisk = Globals.WriteLogActivityToDisk;
+            TelescopeSetupVm = new TelescopeSetupViewModel();
+            DomeSetupVm = new DomeSetupViewModel();
+            FocuserSetupVm = new FocuserSetupViewModel();
+        }
 
-		public TelescopeSetupViewModel TelescopeSetupVm { get; set; }
-		public DomeSetupViewModel DomeSetupVm { get; set; }
-		public FocuserSetupViewModel FocuserSetupVm { get; set; }
+        public TelescopeSetupViewModel TelescopeSetupVm { get; set; }
+        public DomeSetupViewModel DomeSetupVm { get; set; }
+        public FocuserSetupViewModel FocuserSetupVm { get; set; }
 
         private bool _showActivityLogWhenStarted;
 
@@ -61,327 +61,329 @@ namespace ASCOM.DeviceHub
 
         private bool _suppressTrayBubble;
 
-		public bool SuppressTrayBubble
-		{
-			get { return _suppressTrayBubble; }
-			set
-			{
-				if ( value != _suppressTrayBubble )
-				{
-					_suppressTrayBubble = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool SuppressTrayBubble
+        {
+            get { return _suppressTrayBubble; }
+            set
+            {
+                if (value != _suppressTrayBubble)
+                {
+                    _suppressTrayBubble = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _useCustomTheme;
+        private bool _useCustomTheme;
 
-		public bool UseCustomTheme
-		{
-			get { return _useCustomTheme; }
-			set
-			{
-				if ( value != _useCustomTheme )
-				{
-					_useCustomTheme = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool UseCustomTheme
+        {
+            get { return _useCustomTheme; }
+            set
+            {
+                if (value != _useCustomTheme)
+                {
+                    _useCustomTheme = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _useExpandedScreenLayout;
+        private bool _useExpandedScreenLayout;
 
-		public bool UseExpandedScreenLayout
-		{
-			get { return _useExpandedScreenLayout; }
-			set
-			{
-				if ( value != _useExpandedScreenLayout )
-				{
-					_useExpandedScreenLayout = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool UseExpandedScreenLayout
+        {
+            get { return _useExpandedScreenLayout; }
+            set
+            {
+                if (value != _useExpandedScreenLayout)
+                {
+                    _useExpandedScreenLayout = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _keepWindowOnTop;
+        private bool _keepWindowOnTop;
 
-		public bool KeepWindowOnTop
-		{
-			get { return _keepWindowOnTop; }
-			set
-			{
-				if ( value != _keepWindowOnTop )
-				{
-					_keepWindowOnTop = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool KeepWindowOnTop
+        {
+            get { return _keepWindowOnTop; }
+            set
+            {
+                if (value != _keepWindowOnTop)
+                {
+                    _keepWindowOnTop = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _useCompositeSlewingFlag;
+        private bool _useCompositeSlewingFlag;
 
-		public bool UseCompositeSlewingFlag
-		{
-			get { return _useCompositeSlewingFlag; }
-			set
-			{
-				if ( value != _useCompositeSlewingFlag )
-				{
-					_useCompositeSlewingFlag = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool UseCompositeSlewingFlag
+        {
+            get { return _useCompositeSlewingFlag; }
+            set
+            {
+                if (value != _useCompositeSlewingFlag)
+                {
+                    _useCompositeSlewingFlag = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _isTelescopeActive;
+        private bool _isTelescopeActive;
 
-		public bool IsTelescopeActive
-		{
-			get { return _isTelescopeActive; }
-			set
-			{
-				if ( value != _isTelescopeActive )
-				{
-					_isTelescopeActive = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool IsTelescopeActive
+        {
+            get { return _isTelescopeActive; }
+            set
+            {
+                if (value != _isTelescopeActive)
+                {
+                    _isTelescopeActive = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _isDomeActive;
+        private bool _isDomeActive;
 
-		public bool IsDomeActive
-		{
-			get { return _isDomeActive; }
-			set
-			{
-				if ( value != _isDomeActive )
-				{
-					_isDomeActive = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool IsDomeActive
+        {
+            get { return _isDomeActive; }
+            set
+            {
+                if (value != _isDomeActive)
+                {
+                    _isDomeActive = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		private bool _isFocuserActive;
+        private bool _isFocuserActive;
 
-		public bool IsFocuserActive
-		{
-			get { return _isFocuserActive; }
-			set
-			{
-				if ( value != _isFocuserActive )
-				{
-					_isFocuserActive = value;
-					OnPropertyChanged();
-				}
-			}
-		}
+        public bool IsFocuserActive
+        {
+            get { return _isFocuserActive; }
+            set
+            {
+                if (value != _isFocuserActive)
+                {
+                    _isFocuserActive = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-		public void ChangeActiveFunction( string functionName )
-		{
-			// Called from code-behind when the active tab item is changed.
+        public void ChangeActiveFunction(string functionName)
+        {
+            // Called from code-behind when the active tab item is changed.
 
-			if ( functionName == "Device Hub Setup" )
-			{}
-			else if ( functionName == "Telescope Setup" )
-			{}
-			else if ( functionName == "Dome Setup" )
-			{}
-			else if ( functionName == "Focuser Setup" )
-			{}
-			else
-			{
-				string msg = $"SetupViewModel.ChangeActiveFunction called with invalid function Name - {functionName}.";
-				throw new ArgumentException( msg );
-			}
-		}
+            if (functionName == "Device Hub Setup")
+            { }
+            else if (functionName == "Telescope Setup")
+            { }
+            else if (functionName == "Dome Setup")
+            { }
+            else if (functionName == "Dome Offsets")
+            { }
+            else if (functionName == "Focuser Setup")
+            { }
+            else
+            {
+                string msg = $"SetupViewModel.ChangeActiveFunction called with invalid function Name - {functionName}.";
+                throw new ArgumentException(msg);
+            }
+        }
 
-		public void InitializeCurrentTelescope( string telescopeID, double fastPollingPeriod )
-		{
-			TelescopeID = telescopeID;
-			TelescopeSetupVm.TelescopeID = telescopeID;
-			TelescopeSetupVm.FastUpdatePeriod = fastPollingPeriod;
-			IsTelescopeActive = TelescopeManager.Instance.IsConnected;
-		}
+        public void InitializeCurrentTelescope(string telescopeID, double fastPollingPeriod)
+        {
+            TelescopeID = telescopeID;
+            TelescopeSetupVm.TelescopeID = telescopeID;
+            TelescopeSetupVm.FastUpdatePeriod = fastPollingPeriod;
+            IsTelescopeActive = TelescopeManager.Instance.IsConnected;
+        }
 
-		public void InitializeCurrentDome( string domeID, double fastUpdatePeriod )
-		{
-			DomeID = domeID;
-			DomeSetupVm.DomeID = domeID;
-			DomeSetupVm.InitializeLayout( Globals.DomeLayout );
-			DomeSetupVm.FastUpdatePeriod = fastUpdatePeriod;
-			IsDomeActive = DomeManager.Instance.IsConnected;
-		}
+        public void InitializeCurrentDome(string domeID, double fastUpdatePeriod)
+        {
+            DomeID = domeID;
+            DomeSetupVm.DomeID = domeID;
+            DomeSetupVm.InitializeLayout(Globals.DomeLayout);
+            DomeSetupVm.FastUpdatePeriod = fastUpdatePeriod;
+            IsDomeActive = DomeManager.Instance.IsConnected;
+        }
 
-		public void InitializeCurrentFocuser( string focuserID, double fastUpdatePeriod )
-		{
-			FocuserID = focuserID;
-			FocuserSetupVm.FocuserID = focuserID;
-			FocuserSetupVm.Initialize( Globals.FocuserTemperatureOffset );
-			FocuserSetupVm.FastUpdatePeriod = fastUpdatePeriod;
-			IsFocuserActive = FocuserManager.Instance.IsConnected;
-		}
+        public void InitializeCurrentFocuser(string focuserID, double fastUpdatePeriod)
+        {
+            FocuserID = focuserID;
+            FocuserSetupVm.FocuserID = focuserID;
+            FocuserSetupVm.Initialize(Globals.FocuserTemperatureOffset);
+            FocuserSetupVm.FastUpdatePeriod = fastUpdatePeriod;
+            IsFocuserActive = FocuserManager.Instance.IsConnected;
+        }
 
-		protected override void DoDispose()
-		{
-			_setupOKCommand = null;
-			_setupCancelCommand = null;
+        protected override void DoDispose()
+        {
+            _setupOKCommand = null;
+            _setupCancelCommand = null;
 
-			TelescopeSetupVm.Dispose();
-			TelescopeSetupVm = null;
-			DomeSetupVm.Dispose();
-			DomeSetupVm = null;
-			FocuserSetupVm.Dispose();
-			FocuserSetupVm = null;
-		}
+            TelescopeSetupVm.Dispose();
+            TelescopeSetupVm = null;
+            DomeSetupVm.Dispose();
+            DomeSetupVm = null;
+            FocuserSetupVm.Dispose();
+            FocuserSetupVm = null;
+        }
 
-		private void SaveSettings()
-		{
-			SaveApplicationSettings();
-			SaveTelescopeSettings();
-			SaveDomeSettings();
-			SaveFocuserSettings();
-		}
+        private void SaveSettings()
+        {
+            SaveApplicationSettings();
+            SaveTelescopeSettings();
+            SaveDomeSettings();
+            SaveFocuserSettings();
+        }
 
-		private void SaveApplicationSettings()
-		{
-			Globals.SuppressTrayBubble = SuppressTrayBubble;
-			Globals.UseCustomTheme = UseCustomTheme;
-			Globals.AlwaysOnTop = KeepWindowOnTop;
-			Globals.UseCompositeSlewingFlag = UseCompositeSlewingFlag;
-			Globals.ShowActivityLogWhenStarted = ShowActivityLogWhenStarted;
-			Globals.WriteLogActivityToDisk=WriteActivityLogToDisk;
-			AppSettingsManager.SaveAppSettings();
+        private void SaveApplicationSettings()
+        {
+            Globals.SuppressTrayBubble = SuppressTrayBubble;
+            Globals.UseCustomTheme = UseCustomTheme;
+            Globals.AlwaysOnTop = KeepWindowOnTop;
+            Globals.UseCompositeSlewingFlag = UseCompositeSlewingFlag;
+            Globals.ShowActivityLogWhenStarted = ShowActivityLogWhenStarted;
+            Globals.WriteLogActivityToDisk = WriteActivityLogToDisk;
+            AppSettingsManager.SaveAppSettings();
             Messenger.Default.Send(new ApplicationSettingsUpdatedMessage());
         }
 
         private void SaveTelescopeSettings()
-		{
-			// Read the current settings and update them with the changes
-			// to preserve the logging flag.
+        {
+            // Read the current settings and update them with the changes
+            // to preserve the logging flag.
 
-			TelescopeSettings settings = TelescopeSettings.FromProfile();
-			settings.TelescopeID = TelescopeManager.TelescopeID;
-			settings.FastUpdatePeriod = TelescopeManager.Instance.FastPollingPeriod;
-			settings.ToProfile();
-		}
+            TelescopeSettings settings = TelescopeSettings.FromProfile();
+            settings.TelescopeID = TelescopeManager.TelescopeID;
+            settings.FastUpdatePeriod = TelescopeManager.Instance.FastPollingPeriod;
+            settings.ToProfile();
+        }
 
-		private void SaveDomeSettings()
-		{
-			// Read the current settings and update them with the changes
-			// to preserve the logging flag.
+        private void SaveDomeSettings()
+        {
+            // Read the current settings and update them with the changes
+            // to preserve the logging flag.
 
-			DomeSettings settings = DomeSettings.FromProfile();
-			settings.DomeID = DomeManager.DomeID;
-			settings.DomeLayout = Globals.DomeLayout;
-			settings.FastUpdatePeriod = DomeManager.Instance.FastPollingPeriod;
-			settings.ToProfile();
-		}
+            DomeSettings settings = DomeSettings.FromProfile();
+            settings.DomeID = DomeManager.DomeID;
+            settings.DomeLayout = Globals.DomeLayout;
+            settings.FastUpdatePeriod = DomeManager.Instance.FastPollingPeriod;
+            settings.ToProfile();
+        }
 
-		private void SaveFocuserSettings()
-		{
-			FocuserSettings settings = FocuserSettings.FromProfile();
-			settings.FocuserID = FocuserManager.FocuserID;
-			settings.TemperatureOffset = Globals.FocuserTemperatureOffset;
-			settings.FastUpdatePeriod = FocuserManager.Instance.FastPollingPeriod;
-			settings.ToProfile();
-		}
+        private void SaveFocuserSettings()
+        {
+            FocuserSettings settings = FocuserSettings.FromProfile();
+            settings.FocuserID = FocuserManager.FocuserID;
+            settings.TemperatureOffset = Globals.FocuserTemperatureOffset;
+            settings.FastUpdatePeriod = FocuserManager.Instance.FastPollingPeriod;
+            settings.ToProfile();
+        }
 
-		#region Relay Commands
+        #region Relay Commands
 
-		#region SetupOKCommand
+        #region SetupOKCommand
 
-		private ICommand _setupOKCommand;
+        private ICommand _setupOKCommand;
 
-		public ICommand SetupOKCommand
-		{
-			get
-			{
-				if ( _setupOKCommand == null )
-				{
-					_setupOKCommand = new RelayCommand(
-						param => this.SetupOK() );
-				}
+        public ICommand SetupOKCommand
+        {
+            get
+            {
+                if (_setupOKCommand == null)
+                {
+                    _setupOKCommand = new RelayCommand(
+                        param => this.SetupOK());
+                }
 
-				return _setupOKCommand;
-			}
-		}
+                return _setupOKCommand;
+            }
+        }
 
-		private void SetupOK()
-		{
-			if ( !IsTelescopeActive )
-			{
-				if ( TelescopeID != TelescopeSetupVm.TelescopeID )
-				{
-					TelescopeID = TelescopeSetupVm.TelescopeID;
-					TelescopeManager.SetTelescopeID( TelescopeID );
-				}
+        private void SetupOK()
+        {
+            if (!IsTelescopeActive)
+            {
+                if (TelescopeID != TelescopeSetupVm.TelescopeID)
+                {
+                    TelescopeID = TelescopeSetupVm.TelescopeID;
+                    TelescopeManager.SetTelescopeID(TelescopeID);
+                }
 
-				TelescopeManager.Instance.SetFastUpdatePeriod( TelescopeSetupVm.FastUpdatePeriod );
-			}
+                TelescopeManager.Instance.SetFastUpdatePeriod(TelescopeSetupVm.FastUpdatePeriod);
+            }
 
-			if ( !IsDomeActive )
-			{
-				if ( DomeID != DomeSetupVm.DomeID )
-				{
-					DomeID = DomeSetupVm.DomeID;
-					DomeManager.SetDomeID( DomeID );
-				}
+            if (!IsDomeActive)
+            {
+                if (DomeID != DomeSetupVm.DomeID)
+                {
+                    DomeID = DomeSetupVm.DomeID;
+                    DomeManager.SetDomeID(DomeID);
+                }
 
-				DomeManager.Instance.SetFastUpdatePeriod( DomeSetupVm.FastUpdatePeriod );
-				Globals.DomeLayout = DomeSetupVm.GetLayout();
-			}
+                DomeManager.Instance.SetFastUpdatePeriod(DomeSetupVm.FastUpdatePeriod);
+                Globals.DomeLayout = DomeSetupVm.GetLayout();
+            }
 
-			if ( !IsFocuserActive )
-			{
-				if ( FocuserID != FocuserSetupVm.FocuserID )
-				{
-					FocuserID = FocuserSetupVm.FocuserID;
-					FocuserManager.SetFocuserID( FocuserID );
-				}
+            if (!IsFocuserActive)
+            {
+                if (FocuserID != FocuserSetupVm.FocuserID)
+                {
+                    FocuserID = FocuserSetupVm.FocuserID;
+                    FocuserManager.SetFocuserID(FocuserID);
+                }
 
-				FocuserManager.Instance.SetFastUpdatePeriod( FocuserSetupVm.FastUpdatePeriod );
-			}
-			
+                FocuserManager.Instance.SetFastUpdatePeriod(FocuserSetupVm.FastUpdatePeriod);
+            }
 
-			Globals.SuppressTrayBubble = SuppressTrayBubble;
-			Globals.UseCustomTheme = UseCustomTheme;
-			Globals.FocuserTemperatureOffset = FocuserSetupVm.TemperatureOffset;
 
-			SaveSettings();
+            Globals.SuppressTrayBubble = SuppressTrayBubble;
+            Globals.UseCustomTheme = UseCustomTheme;
+            Globals.FocuserTemperatureOffset = FocuserSetupVm.TemperatureOffset;
 
-			OnRequestClose( true );
-		}
+            SaveSettings();
 
-		#endregion SetupOKCommand
+            OnRequestClose(true);
+        }
 
-		#region SetupCancelCommand
+        #endregion SetupOKCommand
 
-		private ICommand _setupCancelCommand;
+        #region SetupCancelCommand
 
-		public ICommand SetupCancelCommand
-		{
-			get
-			{
-				if ( _setupCancelCommand == null )
-				{
-					_setupCancelCommand = new RelayCommand(
-						param => this.SetupCancel() );
-				}
+        private ICommand _setupCancelCommand;
 
-				return _setupCancelCommand;
-			}
-		}
+        public ICommand SetupCancelCommand
+        {
+            get
+            {
+                if (_setupCancelCommand == null)
+                {
+                    _setupCancelCommand = new RelayCommand(
+                        param => this.SetupCancel());
+                }
 
-		private void SetupCancel()
-		{
-			OnRequestClose( false );
-		}
+                return _setupCancelCommand;
+            }
+        }
 
-		#endregion SetupCancelCommand
+        private void SetupCancel()
+        {
+            OnRequestClose(false);
+        }
 
-		#endregion Relay Commands
-	}
+        #endregion SetupCancelCommand
+
+        #endregion Relay Commands
+    }
 }
