@@ -85,6 +85,7 @@
     <Compile Include="Business Object Classes\Message Types\ApplicationSettingsUpdatedMessage.cs" />
     <Compile Include="Business Object Classes\Message Types\DomeSlavedChangedMessage.cs" />
     <Compile Include="Business Object Classes\Message Types\DomeSyncErrorStateMessage.cs" />
+    <Compile Include="Business Object Classes\Validators\NumberPositveNegative.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanOnOffConverter.cs" />
     <Compile Include="Business Object Classes\Telescope Classes\TelescopeRates.cs" />
     <Compile Include="Business Object Classes\Value Converters\BooleanToConnectStringConverter.cs" />

@@ -125,8 +125,8 @@
             </TabItem>
 
             <TabItem Header="Dome Offsets" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
-					 Tag="Dome"
-					 ToolTip="Dome Setup is disabled when a dome is connected."
+					 Tag="DomeOffsets"
+					 ToolTip="Dome Offset Setup is disabled when a dome is connected."
                      IsEnabled="{Binding IsDomeActive, ConverterParameter=False, Converter={StaticResource BoolBoolConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -135,6 +135,7 @@
                     <ContentControl Content="{Binding DomeOffsetsVm}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Height="Auto" Width="Auto" />
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Focuser Setup" Template="{DynamicResource DeviceHubTabItemTemplate}" HeaderTemplate="{DynamicResource headerText}" 
 					 Tag="Focuser"
 					 ToolTip="Focuser Setup is disabled when a focuser is connected."

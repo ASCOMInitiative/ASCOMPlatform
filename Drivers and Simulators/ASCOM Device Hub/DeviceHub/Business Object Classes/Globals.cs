@@ -54,7 +54,7 @@ namespace ASCOM.DeviceHub
         public static bool IsDomeExpanded { get; set; }
         public static bool IsFocuserExpanded { get; set; }
 
-        public static DomeLayoutSettings DomeLayout { get; set; }
+        public static DomeLayoutSettings DomeLayoutSettings { get; set; }
         public static bool IsDomeSlaved { get; set; }
         public static bool DomeSyncError { get; set; }
 

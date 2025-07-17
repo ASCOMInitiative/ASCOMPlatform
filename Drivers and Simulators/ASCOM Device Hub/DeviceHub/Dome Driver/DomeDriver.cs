@@ -142,7 +142,7 @@ namespace ASCOM.DeviceHub
                     _logger.Enabled = vm.IsLoggingEnabled;
                     DomeManager.DomeID = vm.DomeSetupVm.DomeID;
                     DomeManager.Instance.SetFastUpdatePeriod(vm.DomeSetupVm.FastUpdatePeriod);
-                    Globals.DomeLayout = vm.DomeSetupVm.GetLayout();
+                    Globals.DomeLayoutSettings = vm.DomeSetupVm.GetDomeLayoutSettings();
 
                     SaveProfile();
                     UpdateAppProfile(DomeManager.DomeID);
@@ -1384,7 +1384,7 @@ namespace ASCOM.DeviceHub
             DomeSettings settings = new DomeSettings
             {
                 DomeID = DomeManager.DomeID,
-                DomeLayout = Globals.DomeLayout,
+                DomeLayoutSettings = Globals.DomeLayoutSettings,
                 AzimuthAdjustment = Globals.DomeAzimuthAdjustment,
                 IsLoggingEnabled = _logger.Enabled,
                 FastUpdatePeriod = DomeManager.FastPollingPeriod

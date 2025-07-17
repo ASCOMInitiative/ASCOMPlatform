@@ -4,12 +4,170 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	         xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"   
-             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub" xmlns:system="clr-namespace:System;assembly=mscorlib" d:DataContext="{d:DesignInstance Type=local:DomeOffsetsViewModel}"
              mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
              d:DesignHeight="400" d:DesignWidth="587.5"
              Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <local:DeviceIDConverter x:Key="DeviceIDConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <system:Int32 x:Key="Telescope1">1</system:Int32>
+        <system:Int32 x:Key="Telescope2">2</system:Int32>
+        <system:Int32 x:Key="Telescope3">3</system:Int32>
+        <system:Int32 x:Key="Telescope4">4</system:Int32>
+        <system:Int32 x:Key="Telescope5">5</system:Int32>
+
+        <Style TargetType="ToolTip">
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Style the dialogue title -->
+        <Style x:Key="TitleStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
+        <!-- Style for notes at the bottom of the dialogue -->
+        <Style x:Key="NoteStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="Visibility" Value="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" />
+        </Style>
+
+        <!-- Style for column titles -->
+        <Style x:Key="ColumnTitleStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource NormalTextBrush}" />
+            <Setter Property="Visibility" Value="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" />
+        </Style>
+
+        <!-- Style for telescope names -->
+        <Style x:Key="NameStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush }" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Foreground" Value="CornflowerBlue" />
+            <Setter Property="MinWidth" Value="160" />
+            <Setter Property="Padding" Value="5,0,0,0" />
+            <Setter Property="Visibility" Value="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" />
+        </Style>
+
+        <!-- Style for numeric values -->
+        <Style x:Key="ValueStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush }" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Foreground" Value="DarkCyan" />
+            <Setter Property="MinWidth" Value="160" />
+            <Setter Property="Padding" Value="0,0,5,0" />
+            <Setter Property="Visibility" Value="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" MinHeight="20" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="20" />
+            <ColumnDefinition Width="Auto" MinWidth="20" />
+            <ColumnDefinition Width="Auto" MinWidth="20" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource TitleStyle}" Text="Dome Synchronisation Offset Values for Multiple Telescopes" />
+
+        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+                  IsChecked="{Binding SupportMultipleTelescopes, Mode=TwoWay}" 
+                  Content="Enable multiple telescope support" 
+                  Foreground="{DynamicResource NormalTextBrush}"
+                  Margin="10,0,0,0"
+            ToolTip="Check this box to enable the GEM axis offsets for the telescopes." />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource ColumnTitleStyle}" Text="Telescope Name" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Offset from Axis Intersection" />
+        <TextBlock Grid.Row="4" Grid.Column="2" Style="{StaticResource ColumnTitleStyle}" Text="Offset from Dec/Alt Axis" />
+
+        <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding TelescopeName1, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GemAxisOffset1, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditGemOffsetCommand}" CommandParameter="{StaticResource Telescope1}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding OpticalOffset1, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditOpticalOffsetCommand}" CommandParameter="{StaticResource Telescope1}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding TelescopeName2, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
+        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GemAxisOffset2, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditGemOffsetCommand}" CommandParameter="{StaticResource Telescope2}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding OpticalOffset2, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditOpticalOffsetCommand}" CommandParameter="{StaticResource Telescope2}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <TextBox Grid.Row="7" Grid.Column="0" Text="{Binding TelescopeName3, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding GemAxisOffset3, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditGemOffsetCommand}" CommandParameter="{StaticResource Telescope3}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding OpticalOffset3, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditOpticalOffsetCommand}" CommandParameter="{StaticResource Telescope3}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <TextBox Grid.Row="8" Grid.Column="0" Text="{Binding TelescopeName4, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
+        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding GemAxisOffset4, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditGemOffsetCommand}" CommandParameter="{StaticResource Telescope4}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding OpticalOffset4, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditOpticalOffsetCommand}" CommandParameter="{StaticResource Telescope4}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <TextBox Grid.Row="9" Grid.Column="0" Text="{Binding TelescopeName5, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding GemAxisOffset5, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditGemOffsetCommand}" CommandParameter="{StaticResource Telescope5}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding OpticalOffset5, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
+            <TextBox.InputBindings>
+                <MouseBinding Command="{Binding EditOpticalOffsetCommand}" CommandParameter="{StaticResource Telescope5}"  MouseAction="LeftClick" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="3"  Style="{StaticResource NoteStyle}" Text="Leave the telescope name blank to exclude the entry from the list of available telescopes." />
+
     </Grid>
 </UserControl>

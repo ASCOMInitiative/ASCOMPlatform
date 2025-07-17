@@ -50,7 +50,7 @@ namespace ASCOM.DeviceHub
 		{
 			DomeSetupVm.DomeID = domeID;
 			DomeSetupVm.FastUpdatePeriod = fastUpdatePeriod;
-			DomeSetupVm.InitializeLayout( Globals.DomeLayout );
+			DomeSetupVm.InitializeLayout( Globals.DomeLayoutSettings );
 		}
 
 		#endregion Public Methods

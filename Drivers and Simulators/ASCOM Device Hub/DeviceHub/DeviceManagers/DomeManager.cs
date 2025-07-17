@@ -682,7 +682,7 @@ namespace ASCOM.DeviceHub
                             }
                         }
 
-                        TimeSpan syncSpan = new TimeSpan(0, 0, Globals.DomeLayout.SlaveInterval);
+                        TimeSpan syncSpan = new TimeSpan(0, 0, Globals.DomeLayoutSettings.SlaveInterval);
                         returnTime = DateTime.Now + syncSpan;
                     }
                 }
@@ -776,7 +776,7 @@ namespace ASCOM.DeviceHub
             bool moving = false;
 
             // Change the dome azimuth if necessary
-            if (!IsInRange(targetAzimuth, DomeStatus.Azimuth, Globals.DomeLayout.AzimuthAccuracy)) // Change required
+            if (!IsInRange(targetAzimuth, DomeStatus.Azimuth, Globals.DomeLayoutSettings.AzimuthAccuracy)) // Change required
             {
                 LogActivityLine(ActivityMessageTypes.Commands, $"The dome azimuth {DomeStatus.Azimuth.ToDMS()} is away from the target azimuth {targetAzimuth.ToDMS()} - slaving dome to the telescope azimuth.");
 
@@ -936,7 +936,7 @@ namespace ASCOM.DeviceHub
             try
             {
                 // Calculate the dome position using the POTH method.
-                DomeControl dc = new DomeControl(Globals.DomeLayout, TelescopeParameters.SiteLatitude);
+                DomeControl dc = new DomeControl(Globals.DomeLayoutSettings, TelescopeParameters.SiteLatitude);
                 domePoth = dc.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
             }
             catch (Exception ex)
@@ -947,7 +947,7 @@ namespace ASCOM.DeviceHub
             try
             {
                 // Calculate the dome position using the original Device Hub method.
-                DomeSynchronize dsync = new DomeSynchronize(Globals.DomeLayout, TelescopeParameters.SiteLatitude);
+                DomeSynchronize dsync = new DomeSynchronize(Globals.DomeLayoutSettings, TelescopeParameters.SiteLatitude);
                 domeHub = dsync.DomePosition(scopePosition, hourAngle * Globals.HRS_TO_DEG, sideOfPier == PierSide.pierWest);
             }
             catch (Exception ex)
@@ -1076,21 +1076,21 @@ namespace ASCOM.DeviceHub
                 // Calculate the dome position using the DomeSyncWallace class
                 domeCoordinates = DomeSynchromise2.DomePosition(
                     PHI * Globals.DegRad, // PHI - Site latitude for all equatorial mount types, 90 degrees for alt/az mounts
-                    Globals.DomeLayout.DomeRadius, // Dome radius (mm)
-                    Globals.DomeLayout.DomeScopeOffset.X, // xm - East /west offset of the axis intersection from the dome centre (mm)
-                    Globals.DomeLayout.DomeScopeOffset.Y, // ym - North/south offset of the axis intersection from the dome centre (mm)
-                    Globals.DomeLayout.DomeScopeOffset.Z, // zm - Up / down offset of the axis intersection from the dome centre (mm)
-                    Globals.DomeLayout.GemAxisOffset,     // xt - Offset of the optical axis from the roll axis (right ascension or azimuth axis) (mm) 
+                    Globals.DomeLayoutSettings.DomeRadius, // Dome radius (mm)
+                    Globals.DomeLayoutSettings.DomeScopeOffset.X, // xm - East /west offset of the axis intersection from the dome centre (mm)
+                    Globals.DomeLayoutSettings.DomeScopeOffset.Y, // ym - North/south offset of the axis intersection from the dome centre (mm)
+                    Globals.DomeLayoutSettings.DomeScopeOffset.Z, // zm - Up / down offset of the axis intersection from the dome centre (mm)
+                    Globals.DomeLayoutSettings.GemAxisOffset,     // xt - Offset of the optical axis from the roll axis (right ascension or azimuth axis) (mm) 
                     0.0,                                  // yt - Offset of the pitch (dec/alt) axis from the roll (RA/az) axis. Usually zero in amateur mounts, can be non-zero in some horseshoe designs (mm)
-                    Globals.DomeLayout.OpticalOffset,     // yo - Offset of the optical axis from the nearest point of approach of the declination / altitude axis (mm)
+                    Globals.DomeLayoutSettings.OpticalOffset,     // yo - Offset of the optical axis from the nearest point of approach of the declination / altitude axis (mm)
                     scopeRollAngle,                       // roll axis angle (ha/az) (radians)
                     scopePitchAngle);                     // pitch axis angle (dec/alt) (radians)
 
                 SendSyncErrorState(false); // Set the sync error flag to false if the calculation is successful
 
-                LogActivityLine(ActivityMessageTypes.Other, $"  PHI: {PHI}, Dome radius: {Globals.DomeLayout.DomeRadius}");
-                LogActivityLine(ActivityMessageTypes.Other, $"  X offset: {Globals.DomeLayout.DomeScopeOffset.X}, Y offset: {Globals.DomeLayout.DomeScopeOffset.Y}, Z offset: {Globals.DomeLayout.DomeScopeOffset.Z}");
-                LogActivityLine(ActivityMessageTypes.Other, $"  GEM axis offset: {Globals.DomeLayout.GemAxisOffset}, Optical offset: {Globals.DomeLayout.OpticalOffset}");
+                LogActivityLine(ActivityMessageTypes.Other, $"  PHI: {PHI}, Dome radius: {Globals.DomeLayoutSettings.DomeRadius}");
+                LogActivityLine(ActivityMessageTypes.Other, $"  X offset: {Globals.DomeLayoutSettings.DomeScopeOffset.X}, Y offset: {Globals.DomeLayoutSettings.DomeScopeOffset.Y}, Z offset: {Globals.DomeLayoutSettings.DomeScopeOffset.Z}");
+                LogActivityLine(ActivityMessageTypes.Other, $"  GEM axis offset: {Globals.DomeLayoutSettings.GemAxisOffset}, Optical offset: {Globals.DomeLayoutSettings.OpticalOffset}");
             }
             catch (Exception ex)
             {

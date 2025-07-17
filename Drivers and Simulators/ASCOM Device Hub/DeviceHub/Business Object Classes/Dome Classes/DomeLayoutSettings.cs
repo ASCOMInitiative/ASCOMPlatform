@@ -5,6 +5,38 @@ namespace ASCOM.DeviceHub
 {
     public class DomeLayoutSettings : DevicePropertiesBase, ICloneable
     {
+        #region Variables
+
+        private Point3D _domeScopeOffset;
+        private int _domeRadius;
+        private int _slaveInterval;
+        private int _azimuthAccuracy;
+
+        private bool _supportMultipleTelescopes;
+
+        private int _gemAxisOffset;
+        private int _gemAxisOffset1;
+        private int _gemAxisOffset2;
+        private int _gemAxisOffset3;
+        private int _gemAxisOffset4;
+        private int _gemAxisOffset5;
+
+        private int _opticalOffset;
+        private int _opticalOffset1;
+        private int _opticalOffset2;
+        private int _opticalOffset3;
+        private int _opticalOffset4;
+        private int _opticalOffset5;
+
+        private string _telescopeName;
+        private string _telescopeName1;
+        private string _telescopeName2;
+        private string _telescopeName3;
+        private string _telescopeName4;
+        private string _telescopeName5;
+
+        #endregion
+
         #region Constructors
 
         public DomeLayoutSettings()
@@ -17,8 +49,12 @@ namespace ASCOM.DeviceHub
             this._azimuthAccuracy = other._azimuthAccuracy;
             this._slaveInterval = other._slaveInterval;
 
+            // Copy the multiple telescope supported flag
+            this._supportMultipleTelescopes = other._supportMultipleTelescopes;
+
             // Copy the offsets for the GEM axis
             this._gemAxisOffset = other._gemAxisOffset;
+            this._gemAxisOffset1 = other._gemAxisOffset1;
             this._gemAxisOffset2 = other._gemAxisOffset2;
             this._gemAxisOffset3 = other._gemAxisOffset3;
             this._gemAxisOffset4 = other._gemAxisOffset4;
@@ -26,6 +62,7 @@ namespace ASCOM.DeviceHub
 
             // Copy the optical offsets
             this._opticalOffset = other._opticalOffset;
+            this._opticalOffset1 = other._opticalOffset1;
             this._opticalOffset2 = other._opticalOffset2;
             this._opticalOffset3 = other._opticalOffset3;
             this._opticalOffset4 = other._opticalOffset4;
@@ -33,6 +70,7 @@ namespace ASCOM.DeviceHub
 
             // Copy the telescope names
             this._telescopeName = other._telescopeName;
+            this._telescopeName1 = other._telescopeName1;
             this._telescopeName2 = other._telescopeName2;
             this._telescopeName3 = other._telescopeName3;
             this._telescopeName4 = other._telescopeName4;
@@ -42,29 +80,6 @@ namespace ASCOM.DeviceHub
         #endregion Constructors
 
         #region Change Notification Properties
-
-        private Point3D _domeScopeOffset;
-        private int _domeRadius;
-        private int _slaveInterval;
-        private int _azimuthAccuracy;
-
-        private int _gemAxisOffset;
-        private int _gemAxisOffset2;
-        private int _gemAxisOffset3;
-        private int _gemAxisOffset4;
-        private int _gemAxisOffset5;
-
-        private int _opticalOffset;
-        private int _opticalOffset2;
-        private int _opticalOffset3;
-        private int _opticalOffset4;
-        private int _opticalOffset5;
-
-        private string _telescopeName;
-        private string _telescopeName2;
-        private string _telescopeName3;
-        private string _telescopeName4;
-        private string _telescopeName5;
 
         public Point3D DomeScopeOffset
         {
@@ -100,6 +115,32 @@ namespace ASCOM.DeviceHub
                 if (value != _gemAxisOffset)
                 {
                     _gemAxisOffset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool SupportMultipleTelescopes
+        {
+            get { return _supportMultipleTelescopes; }
+            set
+            {
+                if (value != _supportMultipleTelescopes)
+                {
+                    _supportMultipleTelescopes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int GemAxisOffset1
+        {
+            get { return _gemAxisOffset1; }
+            set
+            {
+                if (value != _gemAxisOffset1)
+                {
+                    _gemAxisOffset1 = value;
                     OnPropertyChanged();
                 }
             }
@@ -196,6 +237,18 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        public int OpticalOffset1
+        {
+            get { return _opticalOffset1; }
+            set
+            {
+                if (value != _opticalOffset1)
+                {
+                    _opticalOffset1 = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public int OpticalOffset2
         {
             get { return _opticalOffset2; }
@@ -261,6 +314,18 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        public string TelescopeName1
+        {
+            get { return _telescopeName1; }
+            set
+            {
+                if (value != _telescopeName1)
+                {
+                    _telescopeName1 = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public string TelescopeName2
         {
             get { return _telescopeName2; }

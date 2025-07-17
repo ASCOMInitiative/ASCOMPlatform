@@ -246,7 +246,7 @@ namespace ASCOM.DeviceHub
 
         #region Public Methods
 
-        public DomeLayoutSettings GetLayout()
+        public DomeLayoutSettings GetDomeLayoutSettings()
         {
             DomeLayoutSettings settings = new DomeLayoutSettings
             {
@@ -513,8 +513,7 @@ namespace ASCOM.DeviceHub
             {
                 if (_editOpticalOffsetCommand == null)
                 {
-                    _editOpticalOffsetCommand = new RelayCommand(
-                        param => this.EditOpticalOffset());
+                    _editOpticalOffsetCommand = new RelayCommand(param => this.EditOpticalOffset());
                 }
 
                 return _editOpticalOffsetCommand;
@@ -523,24 +522,13 @@ namespace ASCOM.DeviceHub
 
         private void EditOpticalOffset()
         {
-            int opticalOffset = OpticalOffset;
+            int offset = OpticalOffset;
+            string negativeText = "Negative";
+            string positiveText = "Positive";
 
-            SimpleValueEntryViewModel vm = new SimpleValueEntryViewModel("OpticalOffset"
-                , "Enter the Optical offset distance, in mm", 0, 2000, 0, 2000, ' ');
-            vm.InitializeValues(new int[1] { opticalOffset });
+            offset = EditTheOffset(offset, negativeText, positiveText);
 
-            IDialogService svc = ServiceContainer.Instance.GetService<IDialogService>();
-            bool? result = svc.ShowDialog(vm);
-
-            if (result.HasValue && result.Value)
-            {
-                int[] values = vm.GetValues();
-
-                opticalOffset = values[0];
-            }
-
-            vm.Dispose();
-            OpticalOffset = opticalOffset;
+            OpticalOffset = offset;
         }
 
         #endregion

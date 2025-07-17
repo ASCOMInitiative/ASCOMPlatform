@@ -22,11 +22,13 @@ namespace ASCOM.DeviceHub
             WriteActivityLogToDisk = Globals.WriteLogActivityToDisk;
             TelescopeSetupVm = new TelescopeSetupViewModel();
             DomeSetupVm = new DomeSetupViewModel();
+            DomeOffsetsVm = new DomeOffsetsViewModel();
             FocuserSetupVm = new FocuserSetupViewModel();
         }
 
         public TelescopeSetupViewModel TelescopeSetupVm { get; set; }
         public DomeSetupViewModel DomeSetupVm { get; set; }
+        public DomeOffsetsViewModel DomeOffsetsVm { get; set; }
         public FocuserSetupViewModel FocuserSetupVm { get; set; }
 
         private bool _showActivityLogWhenStarted;
@@ -212,9 +214,11 @@ namespace ASCOM.DeviceHub
         {
             DomeID = domeID;
             DomeSetupVm.DomeID = domeID;
-            DomeSetupVm.InitializeLayout(Globals.DomeLayout);
+            DomeSetupVm.InitializeLayout(Globals.DomeLayoutSettings);
             DomeSetupVm.FastUpdatePeriod = fastUpdatePeriod;
             IsDomeActive = DomeManager.Instance.IsConnected;
+
+            DomeOffsetsVm.InitializeLayout(Globals.DomeLayoutSettings);
         }
 
         public void InitializeCurrentFocuser(string focuserID, double fastUpdatePeriod)
@@ -235,6 +239,8 @@ namespace ASCOM.DeviceHub
             TelescopeSetupVm = null;
             DomeSetupVm.Dispose();
             DomeSetupVm = null;
+            DomeOffsetsVm.Dispose();
+            DomeOffsetsVm = null;
             FocuserSetupVm.Dispose();
             FocuserSetupVm = null;
         }
@@ -277,7 +283,7 @@ namespace ASCOM.DeviceHub
 
             DomeSettings settings = DomeSettings.FromProfile();
             settings.DomeID = DomeManager.DomeID;
-            settings.DomeLayout = Globals.DomeLayout;
+            settings.DomeLayoutSettings = Globals.DomeLayoutSettings;
             settings.FastUpdatePeriod = DomeManager.Instance.FastPollingPeriod;
             settings.ToProfile();
         }
@@ -333,7 +339,37 @@ namespace ASCOM.DeviceHub
                 }
 
                 DomeManager.Instance.SetFastUpdatePeriod(DomeSetupVm.FastUpdatePeriod);
-                Globals.DomeLayout = DomeSetupVm.GetLayout();
+
+                // Get the current dome layout settings from the dome setup tab.
+                DomeLayoutSettings domeLayoutSettings = DomeSetupVm.GetDomeLayoutSettings();
+
+                // Get the current dome offsets from the offsets tab.
+                DomeLayoutSettings domeOffsets=DomeOffsetsVm.GetDomeOffsets();
+
+                // Update the offsets in the dome layout settings.
+                domeLayoutSettings.SupportMultipleTelescopes = domeOffsets.SupportMultipleTelescopes;
+
+                domeLayoutSettings.GemAxisOffset1 = domeOffsets.GemAxisOffset1;
+                domeLayoutSettings.GemAxisOffset2 = domeOffsets.GemAxisOffset2;
+                domeLayoutSettings.GemAxisOffset3 = domeOffsets.GemAxisOffset3;
+                domeLayoutSettings.GemAxisOffset4 = domeOffsets.GemAxisOffset4;
+                domeLayoutSettings.GemAxisOffset5 = domeOffsets.GemAxisOffset5;
+
+                domeLayoutSettings.OpticalOffset1 = domeOffsets.OpticalOffset1;
+                domeLayoutSettings.OpticalOffset2 = domeOffsets.OpticalOffset2;
+                domeLayoutSettings.OpticalOffset3 = domeOffsets.OpticalOffset3;
+                domeLayoutSettings.OpticalOffset4 = domeOffsets.OpticalOffset4;
+                domeLayoutSettings.OpticalOffset5 = domeOffsets.OpticalOffset5;
+
+                domeLayoutSettings.TelescopeName = domeOffsets.TelescopeName; // Must include this because it is mastered on the dome offsets dialogue
+                domeLayoutSettings.TelescopeName1 = domeOffsets.TelescopeName1;
+                domeLayoutSettings.TelescopeName2 = domeOffsets.TelescopeName2;
+                domeLayoutSettings.TelescopeName3 = domeOffsets.TelescopeName3;
+                domeLayoutSettings.TelescopeName4 = domeOffsets.TelescopeName4;
+                domeLayoutSettings.TelescopeName5 = domeOffsets.TelescopeName5;
+
+                // Save the composite dome layout settings.
+                Globals.DomeLayoutSettings = domeLayoutSettings;
             }
 
             if (!IsFocuserActive)
