@@ -1,5 +1,6 @@
 ﻿using ASCOM.DeviceHub.MvvmMessenger;
 using System;
+using System.Security.Cryptography;
 using System.Windows.Input;
 
 namespace ASCOM.DeviceHub
@@ -370,6 +371,9 @@ namespace ASCOM.DeviceHub
 
                 // Save the composite dome layout settings.
                 Globals.DomeLayoutSettings = domeLayoutSettings;
+
+                // Notify the main UI that the dome layout settings have changed.
+                Messenger.Default.Send(new DomeLayoutSettingsChangedMessage(domeLayoutSettings.Clone()));
             }
 
             if (!IsFocuserActive)

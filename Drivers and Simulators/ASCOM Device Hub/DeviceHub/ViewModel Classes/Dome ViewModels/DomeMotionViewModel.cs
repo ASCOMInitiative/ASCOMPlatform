@@ -1,9 +1,14 @@
 ﻿using ASCOM.DeviceHub.MvvmMessenger;
 using ASCOM.DeviceInterface;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ASCOM.DeviceHub
@@ -16,6 +21,9 @@ namespace ASCOM.DeviceHub
 
         private readonly IDomeManager _domeManager;
         private IDomeManager DomeManager => _domeManager;
+
+        private bool _supportMultipleTelescopes;
+        private ObservableCollection<string> _telescopeNames;
 
         public DomeMotionViewModel(IDomeManager domeManager)
         {
@@ -34,6 +42,7 @@ namespace ASCOM.DeviceHub
             Messenger.Default.Register<DeviceDisconnectedMessage>(this, (action) => InvalidateDeviceData(action));
             Messenger.Default.Register<DomeSlavedChangedMessage>(this, (action) => ChangeSlavedState(action));
             Messenger.Default.Register<DomeSyncErrorStateMessage>(this, (action) => DomeSyncErrorStateUpdated(action));
+            Messenger.Default.Register<DomeLayoutSettingsChangedMessage>(this, (action) => DomeLayoutSettingsChanged(action));
 
             RegisterStatusUpdateMessage(true);
 
@@ -41,7 +50,20 @@ namespace ASCOM.DeviceHub
             UsePOTHSlaveCalculation = GetRegistryValue(REGISTRY_PATH_POTH);
             UseRevisedSlaveCalculation = GetRegistryValue(REGISTRY_PATH_REVISED);
 
+            // Update the current layout settings
+            DomeSettings domeSettings = DomeSettings.FromProfile();
+            _supportMultipleTelescopes = domeSettings.DomeLayoutSettings.SupportMultipleTelescopes;
+            _selectedtelescope = domeSettings.DomeLayoutSettings.TelescopeName;
+            _telescopeNames = GetMultipleTelescopeNames(domeSettings.DomeLayoutSettings);
             LogAppMessage("Initialization complete", caller);
+        }
+
+        private void DomeLayoutSettingsChanged(DomeLayoutSettingsChangedMessage action)
+        {
+            // Make sure that we update the Capabilities on the U/I thread.
+            Task.Factory.StartNew(() => SupportMultipleTelescopes = action.Settings.SupportMultipleTelescopes, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            Task.Factory.StartNew(() => SelectedTelescope = action.Settings.TelescopeName, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            Task.Factory.StartNew(() => TelescopeNames = GetMultipleTelescopeNames(DomeSettings.FromProfile().DomeLayoutSettings), CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
         }
 
         private void DomeSyncErrorStateUpdated(DomeSyncErrorStateMessage action)
@@ -51,6 +73,79 @@ namespace ASCOM.DeviceHub
         }
 
         #region Change Notification Properties
+
+        public bool SupportMultipleTelescopes
+        {
+            //get { return Globals.DomeLayoutSettings.SupportMultipleTelescopes; }
+            get { return _supportMultipleTelescopes; }
+            set
+            {
+                if (value != _supportMultipleTelescopes)
+                {
+                    _supportMultipleTelescopes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private object _selectedtelescopeIndex;
+        public object SelectedTelescopeIndex
+        {
+            get { return _selectedtelescopeIndex; }
+            set
+            {
+                if (value != _selectedtelescopeIndex)
+                {
+                    _selectedtelescopeIndex = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private object _selectedtelescope;
+        public object SelectedTelescope
+        {
+            get { return _selectedtelescope; }
+            set
+            {
+                if (value != _selectedtelescope)
+                {
+                    _selectedtelescope = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<string> TelescopeNames
+        {
+            get { return _telescopeNames; }
+            set
+            {
+                if (value != _telescopeNames)
+                {
+                    _telescopeNames = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private static ObservableCollection<string> GetMultipleTelescopeNames(DomeLayoutSettings domeLayoutSettings)
+        {
+            ObservableCollection<string> telescopeNames = new ObservableCollection<string>();
+
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName1.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName1);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName2.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName2);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName3.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName3);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName4.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName4);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName5.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName5);
+
+            return telescopeNames;
+        }
 
         private bool _domeSyncErrorState;
 
@@ -934,6 +1029,83 @@ namespace ASCOM.DeviceHub
             }
 
             return retval;
+        }
+
+        #endregion
+
+        #region TelescopeSelectionChangedCommand
+
+        private ICommand _telescopeSelectionChangedCommand;
+
+        public ICommand TelescopeSelectionChangedCommand
+        {
+            get
+            {
+                if (_telescopeSelectionChangedCommand == null)
+                {
+                    _telescopeSelectionChangedCommand = new RelayCommand(
+                        param => this.TelescopeSelectionChanged((ComboBoxSelectionChangedEvent)param));
+                }
+
+                return _telescopeSelectionChangedCommand;
+            }
+        }
+
+        private struct TelescopeOffsets
+        {
+            public TelescopeOffsets(string name, int offsetFromAxisIntersection, int offsetFromDecAltAxis)
+            {
+                TelescopeName = name;
+                OffsetFromAxisIntersection = offsetFromAxisIntersection;
+                OffsetFromDecAltAxis = offsetFromDecAltAxis;
+            }
+
+            public string TelescopeName;
+            public int OffsetFromAxisIntersection;
+            public int OffsetFromDecAltAxis;
+        }
+
+        private void TelescopeSelectionChanged(ComboBoxSelectionChangedEvent comboBoxSelection)
+        {
+            // MessageBox.Show($"Telescope selection changed.Added: {args.AddedItems.Count} {(args.AddedItems.Count > 0 ? args.AddedItems[0] : "None")}, Removed: {args.RemovedItems.Count} {(args.RemovedItems.Count > 0 ? args.RemovedItems[0] : "None")}", "Telescope Selection", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Get the newly selected telescope name from the first added item
+            if (comboBoxSelection.SelectionChangedEventArgs.AddedItems.Count > 0 && comboBoxSelection.SelectionChangedEventArgs.AddedItems[0] is string selectedTelescope)
+            {
+                SelectedTelescope = selectedTelescope;
+                LogAppMessage($"Selected telescope changed to: {selectedTelescope}");
+                List<TelescopeOffsets> offsets = new List<TelescopeOffsets>();
+                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName1, Globals.DomeLayoutSettings.GemAxisOffset1, Globals.DomeLayoutSettings.OpticalOffset1));
+                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName2, Globals.DomeLayoutSettings.GemAxisOffset2, Globals.DomeLayoutSettings.OpticalOffset2));
+                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName3, Globals.DomeLayoutSettings.GemAxisOffset3, Globals.DomeLayoutSettings.OpticalOffset3));
+                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName4, Globals.DomeLayoutSettings.GemAxisOffset4, Globals.DomeLayoutSettings.OpticalOffset4));
+                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName5, Globals.DomeLayoutSettings.GemAxisOffset5, Globals.DomeLayoutSettings.OpticalOffset5));
+
+                TelescopeOffsets selectedOffset = offsets.FirstOrDefault(t => t.TelescopeName == selectedTelescope);
+                //MessageBox.Show($"Telescope selection changed.Added {selectedOffset.OffsetFromAxisIntersection} {selectedOffset.OffsetFromDecAltAxis}: {args.AddedItems.Count} {(args.AddedItems.Count > 0 ? args.AddedItems[0] : "None")}, Removed: {args.RemovedItems.Count} {(args.RemovedItems.Count > 0 ? args.RemovedItems[0] : "None")}", "Telescope Selection", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                //MessageBox.Show($"Drop-down open: {comboBoxSelection.ComboBox.IsDropDownOpen}");
+                if (comboBoxSelection.ComboBox.IsDropDownOpen) // User is changing the selected item in the list
+                {
+                    Globals.DomeLayoutSettings.TelescopeName = selectedTelescope;
+                    Globals.DomeLayoutSettings.GemAxisOffset = selectedOffset.OffsetFromAxisIntersection;
+                    Globals.DomeLayoutSettings.OpticalOffset = selectedOffset.OffsetFromDecAltAxis;
+
+                    // Write the newly selected values to the profile
+                    DomeSettings domeSettings = new DomeSettings();
+                    domeSettings.DomeLayoutSettings = Globals.DomeLayoutSettings;
+                    domeSettings.ToProfile();
+                }
+                else // Drop-down not changed by user
+                {
+                    SelectedTelescopeIndex = offsets.IndexOf(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName, Globals.DomeLayoutSettings.GemAxisOffset, Globals.DomeLayoutSettings.OpticalOffset));
+                }
+            }
+            else
+            {
+                LogAppMessage("No valid telescope selected.");
+            }
+
         }
 
         #endregion

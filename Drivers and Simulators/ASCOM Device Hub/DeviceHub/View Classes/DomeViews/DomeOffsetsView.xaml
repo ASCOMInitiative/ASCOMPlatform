@@ -56,7 +56,8 @@
             <Setter Property="FontSize" Value="16" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Foreground" Value="CornflowerBlue" />
-            <Setter Property="MinWidth" Value="160" />
+            <Setter Property="MinWidth" Value="260" />
+            <Setter Property="MaxWidth" Value="260" />
             <Setter Property="Padding" Value="5,0,0,0" />
             <Setter Property="Visibility" Value="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" />
         </Style>
@@ -67,7 +68,7 @@
             <Setter Property="FontSize" Value="16" />
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="Foreground" Value="DarkCyan" />
-            <Setter Property="MinWidth" Value="160" />
+            <Setter Property="MinWidth" Value="120" />
             <Setter Property="Padding" Value="0,0,5,0" />
             <Setter Property="Visibility" Value="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" />
         </Style>
@@ -103,8 +104,8 @@
             ToolTip="Check this box to enable the GEM axis offsets for the telescopes." />
 
         <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource ColumnTitleStyle}" Text="Telescope Name" />
-        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Offset from Axis Intersection" />
-        <TextBlock Grid.Row="4" Grid.Column="2" Style="{StaticResource ColumnTitleStyle}" Text="Offset from Dec/Alt Axis" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Axis Intersection Offset" />
+        <TextBlock Grid.Row="4" Grid.Column="2" Style="{StaticResource ColumnTitleStyle}" Text="Dec/Alt Axis Offset" />
 
         <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding TelescopeName1, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GemAxisOffset1, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >

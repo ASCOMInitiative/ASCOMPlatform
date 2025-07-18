@@ -1,8 +1,8 @@
 ﻿namespace ASCOM.DeviceHub
 {
-	public class DomeLayoutSettingsMessage
+	public class DomeLayoutSettingsChangedMessage
     {
-		public DomeLayoutSettingsMessage( DomeLayoutSettings settings )
+		public DomeLayoutSettingsChangedMessage( DomeLayoutSettings settings )
 		{
 			Settings = settings;
 		}
