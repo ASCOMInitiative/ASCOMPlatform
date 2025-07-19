@@ -11,6 +11,9 @@ namespace ASCOM.DeviceHub
 {
     public class DomeOffsetsViewModel : DeviceHubViewModelBase
     {
+
+        #region Variables
+
         private bool _supportMultipleTelescopes;
         private int _profileIndex;
 
@@ -34,6 +37,10 @@ namespace ASCOM.DeviceHub
         private string _telescopeName4;
         private string _telescopeName5;
 
+        #endregion Variables
+
+        #region Properties
+
         public bool SupportMultipleTelescopes
         {
             get { return _supportMultipleTelescopes; }
@@ -42,6 +49,7 @@ namespace ASCOM.DeviceHub
                 if (value != _supportMultipleTelescopes)
                 {
                     _supportMultipleTelescopes = value;
+                    Globals.LatestSupportMultipleTelescopesState = value; // Save the current state so that it can be used to mange control visibility on the Dome Setup dialog.
                     OnPropertyChanged();
                 }
             }
@@ -281,9 +289,7 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        public DomeOffsetsViewModel()
-        {
-        }
+        public DomeOffsetsViewModel() { }
 
         public void InitializeLayout(DomeLayoutSettings settings)
         {
@@ -341,6 +347,8 @@ namespace ASCOM.DeviceHub
 
             return settings;
         }
+
+        #endregion Properties
 
         #region EditGemOffsetCommand
 
@@ -416,7 +424,6 @@ namespace ASCOM.DeviceHub
 
         #endregion
 
-
         #region EditOpticalOffsetCommand
 
         private ICommand _editOpticalOffsetCommand;
@@ -491,6 +498,7 @@ namespace ASCOM.DeviceHub
 
         #endregion
 
+        #region Helpers 
 
         private int EditTheOffset(int offset, string negativeText, string positiveText)
         {
@@ -518,10 +526,7 @@ namespace ASCOM.DeviceHub
             return offset;
         }
 
-
-
-
-
+        #endregion Helpers
 
     }
 }

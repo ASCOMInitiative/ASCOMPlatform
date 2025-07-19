@@ -23,7 +23,6 @@ namespace ASCOM.DeviceHub
 		private void DeviceHubDialogView_Loaded( object sender, RoutedEventArgs e )
 		{
 			this.DisableButtons();
-
 			SelectActiveTab();
 		}
 
@@ -38,7 +37,9 @@ namespace ASCOM.DeviceHub
 
 				SetupViewModel vm = GetViewModel();
 				vm.ChangeActiveFunction( header );
-			}
+
+				vm.DomeSetupVm.RefreshDialogue();
+            }
 		}
 
 		private void SelectActiveTab()
@@ -52,31 +53,21 @@ namespace ASCOM.DeviceHub
 			{
 				case "Telescope":
 					if ( TelescopeManager.Instance.IsConnected )
-					{
 						canBeActive = false;
-					}
-
 					break;
 
 				case "Dome":
 					if ( DomeManager.Instance.IsConnected )
-					{
 						canBeActive = false;
-					}
-
 					break;
 
 				case "Focuser":
 					if ( FocuserManager.Instance.IsConnected )
-					{
 						canBeActive = false;
-					}
-
 					break;
 			}
 
 			// This only works if all of the tab items have a defined Tag property.
-
 			if ( canBeActive )
 			{
 				TabItem item = _deviceTab.Items.OfType<TabItem>().SingleOrDefault( i => i.Tag.ToString() == devName );

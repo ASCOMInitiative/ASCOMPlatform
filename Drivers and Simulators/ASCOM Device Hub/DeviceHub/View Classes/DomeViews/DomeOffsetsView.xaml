@@ -101,11 +101,12 @@
                   Content="Enable multiple telescope support" 
                   Foreground="{DynamicResource NormalTextBrush}"
                   Margin="10,0,0,0"
-            ToolTip="Check this box to enable the GEM axis offsets for the telescopes." />
+            ToolTip="Check this box to enable multiple telescope offset support." />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource ColumnTitleStyle}" Text="Telescope Name" />
-        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Axis Intersection Offset" />
-        <TextBlock Grid.Row="4" Grid.Column="2" Style="{StaticResource ColumnTitleStyle}" Text="Dec/Alt Axis Offset" />
+        <!-- Column titles -->
+        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource ColumnTitleStyle}" Text="Telescope Name" ToolTip="A descriptive name for the observing telescope."/>
+        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Axis Intersection Offset" ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail." />
+        <TextBlock Grid.Row="4" Grid.Column="2" Style="{StaticResource ColumnTitleStyle}" Text="Dec/Alt Axis Offset" ToolTip="Shortest distance between the declination / altitude axis and the telescope optical axis (mm).&#x0a;&#x0a;This will be zero when the declination / altitude axis passes through the telescope optical axis,&#x0a;otherwise non-zero.&#x0a;&#x0a;See the Device Hub manual for more detail." />
 
         <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding TelescopeName1, FallbackValue=No value}" Style="{StaticResource NameStyle}" />
         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GemAxisOffset1, FallbackValue=No value}" Style="{StaticResource ValueStyle}" >
@@ -168,7 +169,12 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="3"  Style="{StaticResource NoteStyle}" Text="Leave the telescope name blank to exclude the entry from the list of available telescopes." />
+        <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="3"  Style="{StaticResource NoteStyle}" >
+             Leave the telescope name blank to exclude the entry from the list of available telescopes.
+            <LineBreak/>
+            <LineBreak/>
+            Hover over the column titles for further information.
+        </TextBlock>
 
     </Grid>
 </UserControl>

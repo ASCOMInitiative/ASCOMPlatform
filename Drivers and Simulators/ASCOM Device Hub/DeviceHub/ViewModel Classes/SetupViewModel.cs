@@ -8,9 +8,27 @@ namespace ASCOM.DeviceHub
 {
     public class SetupViewModel : DeviceHubDialogViewModelBase
     {
+
+        #region variables
+
         private string TelescopeID { get; set; }
         private string DomeID { get; set; }
         private string FocuserID { get; set; }
+
+        private bool _showActivityLogWhenStarted;
+        private bool _writeActivityLogToDisk;
+        private bool _suppressTrayBubble;
+        private bool _useCustomTheme;
+        private bool _useExpandedScreenLayout;
+        private bool _keepWindowOnTop;
+        private bool _useCompositeSlewingFlag;
+        private bool _isTelescopeActive;
+        private bool _isDomeActive;
+        private bool _isFocuserActive;
+
+        #endregion variables
+
+        #region Constructor and Dispose
 
         public SetupViewModel()
             : base("Device Hub Setup")
@@ -28,12 +46,32 @@ namespace ASCOM.DeviceHub
             FocuserSetupVm = new FocuserSetupViewModel();
         }
 
-        public TelescopeSetupViewModel TelescopeSetupVm { get; set; }
-        public DomeSetupViewModel DomeSetupVm { get; set; }
-        public DomeOffsetsViewModel DomeOffsetsVm { get; set; }
-        public FocuserSetupViewModel FocuserSetupVm { get; set; }
+        protected override void DoDispose()
+        {
+            _setupOKCommand = null;
+            _setupCancelCommand = null;
 
-        private bool _showActivityLogWhenStarted;
+            TelescopeSetupVm.Dispose();
+            TelescopeSetupVm = null;
+            DomeSetupVm.Dispose();
+            DomeSetupVm = null;
+            DomeOffsetsVm.Dispose();
+            DomeOffsetsVm = null;
+            FocuserSetupVm.Dispose();
+            FocuserSetupVm = null;
+        }
+
+        #endregion Constructor and Dispose
+
+        #region Public  Properties
+
+        public TelescopeSetupViewModel TelescopeSetupVm { get; set; }
+
+        public DomeSetupViewModel DomeSetupVm { get; set; }
+
+        public DomeOffsetsViewModel DomeOffsetsVm { get; set; }
+
+        public FocuserSetupViewModel FocuserSetupVm { get; set; }
 
         public bool ShowActivityLogWhenStarted
         {
@@ -48,8 +86,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private bool _writeActivityLogToDisk;
-
         public bool WriteActivityLogToDisk
         {
             get { return _writeActivityLogToDisk; }
@@ -62,8 +98,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private bool _suppressTrayBubble;
 
         public bool SuppressTrayBubble
         {
@@ -78,8 +112,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private bool _useCustomTheme;
-
         public bool UseCustomTheme
         {
             get { return _useCustomTheme; }
@@ -92,8 +124,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private bool _useExpandedScreenLayout;
 
         public bool UseExpandedScreenLayout
         {
@@ -108,8 +138,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private bool _keepWindowOnTop;
-
         public bool KeepWindowOnTop
         {
             get { return _keepWindowOnTop; }
@@ -122,8 +150,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private bool _useCompositeSlewingFlag;
 
         public bool UseCompositeSlewingFlag
         {
@@ -138,8 +164,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private bool _isTelescopeActive;
-
         public bool IsTelescopeActive
         {
             get { return _isTelescopeActive; }
@@ -152,8 +176,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private bool _isDomeActive;
 
         public bool IsDomeActive
         {
@@ -168,8 +190,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private bool _isFocuserActive;
-
         public bool IsFocuserActive
         {
             get { return _isFocuserActive; }
@@ -183,20 +203,19 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        #endregion Public Properties
+
+        #region Public Methods
+
         public void ChangeActiveFunction(string functionName)
         {
             // Called from code-behind when the active tab item is changed.
 
-            if (functionName == "Device Hub Setup")
-            { }
-            else if (functionName == "Telescope Setup")
-            { }
-            else if (functionName == "Dome Setup")
-            { }
-            else if (functionName == "Dome Offsets")
-            { }
-            else if (functionName == "Focuser Setup")
-            { }
+            if (functionName == "Device Hub Setup") { }
+            else if (functionName == "Telescope Setup") { }
+            else if (functionName == "Dome Setup") { }
+            else if (functionName == "Dome Offsets") { }
+            else if (functionName == "Focuser Setup") { }
             else
             {
                 string msg = $"SetupViewModel.ChangeActiveFunction called with invalid function Name - {functionName}.";
@@ -232,20 +251,9 @@ namespace ASCOM.DeviceHub
             IsFocuserActive = FocuserManager.Instance.IsConnected;
         }
 
-        protected override void DoDispose()
-        {
-            _setupOKCommand = null;
-            _setupCancelCommand = null;
+        #endregion Public Methods
 
-            TelescopeSetupVm.Dispose();
-            TelescopeSetupVm = null;
-            DomeSetupVm.Dispose();
-            DomeSetupVm = null;
-            DomeOffsetsVm.Dispose();
-            DomeOffsetsVm = null;
-            FocuserSetupVm.Dispose();
-            FocuserSetupVm = null;
-        }
+        #region Helper Methods
 
         private void SaveSettings()
         {
@@ -298,6 +306,8 @@ namespace ASCOM.DeviceHub
             settings.FastUpdatePeriod = FocuserManager.Instance.FastPollingPeriod;
             settings.ToProfile();
         }
+
+        #endregion Helper Methods
 
         #region Relay Commands
 
@@ -439,5 +449,6 @@ namespace ASCOM.DeviceHub
         #endregion SetupCancelCommand
 
         #endregion Relay Commands
+
     }
 }

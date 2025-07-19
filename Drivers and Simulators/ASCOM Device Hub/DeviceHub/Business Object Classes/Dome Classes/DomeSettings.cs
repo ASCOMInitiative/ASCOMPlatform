@@ -191,8 +191,7 @@ namespace ASCOM.DeviceHub
             return settings;
         }
 
-        public DomeSettings()
-        { }
+        public DomeSettings() { }
 
         public string DomeID { get; set; }
         public DomeLayoutSettings DomeLayoutSettings { get; set; }

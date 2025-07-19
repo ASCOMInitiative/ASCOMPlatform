@@ -11,6 +11,7 @@
              Height="Auto" Width="Auto">
     <UserControl.Resources>
         <local:DeviceIDConverter x:Key="DeviceIDConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
         <Style TargetType="ToolTip">
             <Setter Property="TextBlock.TextAlignment" Value="Left"/>
@@ -76,6 +77,7 @@
                         <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="80"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- East-West Offset -->
                     <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right">
                         <Run Text="Scope Position" />
                         <LineBreak />
@@ -90,12 +92,12 @@
                         </TextBox.InputBindings>
                     </TextBox>
 
+                    <!-- North-South Offset -->
                     <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right">
                         <Run Text="Scope Position" />
                         <LineBreak />
                         <Run Text="+N/-S (mm):" />
                     </TextBlock>
-
                     <TextBox Grid.Row="1" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -105,13 +107,12 @@
                         </TextBox.InputBindings>
                     </TextBox>
 
-
+                    <!-- Up-Down Offset -->
                     <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource BlockStyle}" TextAlignment="Right" HorizontalAlignment="Stretch" >
                         <Run Text="Scope Position" />
                         <LineBreak />
                         <Run Text="+U/-D (mm):" />
                     </TextBlock>
-
                     <TextBox Grid.Row="2" Grid.Column="1" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
@@ -121,8 +122,8 @@
                         </TextBox.InputBindings>
                     </TextBox>
 
-
-                    <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="12,0,0,0"
+                    <!-- Dome Radius -->
+                    <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="160,0,0,0"
                                 Text="Dome Radius (mm):" />
                     <TextBox Grid.Row="0" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
 							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
@@ -133,8 +134,15 @@
                         </TextBox.InputBindings>
                     </TextBox>
 
+                    <!-- Multiple telescope support enabled message -->
+                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" Grid.ColumnSpan="2" Grid.RowSpan="2" TextAlignment="Left" Margin="46,-9,0,0" Width="Auto" Visibility="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" >
+                        <Run Text="Multiple telescope support is enabled." />
+                        <LineBreak />
+                        <Run Text="Optical axis offsets are set on the Dome Offsets tab."  Foreground="Yellow"/>
+                    </TextBlock>
+
                     <!-- GEM offset -->
-                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="Auto" 
+                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="Auto" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
                                ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail.">
                         <Run Text="Telescope offset from the axis intersection (mm):" />
                         <LineBreak />
@@ -142,7 +150,7 @@
                     </TextBlock>
 
                     <TextBox Grid.Row="1" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
-							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
+							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding GemAxisOffset, FallbackValue=No value}">
                         <TextBox.InputBindings>
@@ -151,14 +159,14 @@
                     </TextBox>
 
                     <!-- Optical axis offset -->
-                    <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,0,0" Width="auto"
+                    <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,0,0" Width="auto" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
                              ToolTip="Shortest distance between the declination / altitude axis and the telescope optical axis (mm).&#x0a;&#x0a;This will be zero when the declination / altitude axis passes through the telescope optical axis,&#x0a;otherwise non-zero.&#x0a;&#x0a;See the Device Hub manual for more detail.">
                         <Run Text="Telescope offset from the dec / alt axis (mm):" />
                         <LineBreak />
                         <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
                     <TextBox Grid.Row="2" Grid.Column="3" Height="24" Width="74" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0" FontSize="16"
-							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True"
+							 VerticalContentAlignment="Top" Padding="0,-2,0,0" IsReadOnly="True" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
 							 Background="{DynamicResource WindowBackgroundBrush}" Foreground="DarkCyan" ToolTip="Click the value to edit"
 							 Text="{Binding OpticalOffset, FallbackValue=No value}">
                         <TextBox.InputBindings>

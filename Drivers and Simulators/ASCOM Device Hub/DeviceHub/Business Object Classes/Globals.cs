@@ -39,6 +39,31 @@ namespace ASCOM.DeviceHub
         public const int GARBAGE_COLLECT_TIME_BETWEEN_ATTEMPTS = 100; // Time (milliseconds) between quick garbage collections when processing the Disconnect() method
         public const int GARBAGE_COLLECT_ATTEMPTS = 20; // Number of attempts to collect garbage when processing the Disconnect() method. 20 attempts allows 2 seconds of trying with a 100ms wait between attempts
 
+        private static bool? _latestSupportMultipleTelescopesState;
+
+        /// <summary>
+        /// Return the latest state of the SupportMultipleTelescopes flag. (This may not have been persisted yet if user is in the setup dialogue)
+        /// </summary>
+        public static bool LatestSupportMultipleTelescopesState
+        {
+            get
+            {
+                if (!_latestSupportMultipleTelescopesState.HasValue)
+                {
+                    // Default to value in Profile if the value is not already known
+
+                    DomeSettings domeSettings = DomeSettings.FromProfile();
+                    _latestSupportMultipleTelescopesState = domeSettings.DomeLayoutSettings.SupportMultipleTelescopes;
+                }
+
+                return _latestSupportMultipleTelescopesState.Value;
+            }
+            set
+            {
+                _latestSupportMultipleTelescopesState = value;
+            }
+        }
+
         public static double RegistryVersion { get; set; }
 
         public static DeviceTypeEnum ActiveDevice { get; set; }
@@ -136,7 +161,7 @@ namespace ASCOM.DeviceHub
         /// <returns>Angle in the range 0 to 359.999...</returns>
         public static double Condition0To359(double angle)
         {
-            return Range(angle,0.0,true,360.0,false);
+            return Range(angle, 0.0, true, 360.0, false);
         }
 
         /// <summary>

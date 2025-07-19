@@ -3,27 +3,47 @@ using ASCOM.DeviceInterface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ASCOM.DeviceHub
 {
     public class DomeMotionViewModel : DeviceHubViewModelBase
     {
+        #region Constants
+
         private const string REGISTRY_PATH = @"SOFTWARE\ASCOM\DeviceHub";
         private const string REGISTRY_PATH_POTH = @"UsePOTHSlaveCalculation";
         private const string REGISTRY_PATH_REVISED = @"UseRevisedDomeSlaveCalculation";
 
+        #endregion Constants
+
+        #region Variables
+
         private readonly IDomeManager _domeManager;
         private IDomeManager DomeManager => _domeManager;
 
+        // Backing fields for properties
         private bool _supportMultipleTelescopes;
+        private object _selectedtelescopeIndex;
+        private object _selectedtelescope;
+        private bool _domeSyncErrorState;
+        private DomeSlewAmounts _slewAmounts;
+        private JogAmount _selectedSlewAmount;
+        private DevHubDomeStatus _status;
+        private bool _isSlewing;
+        private double _directTargetAzimuth;
+        private double _syncTargetAzimuth;
+        private string _shutterCommandAction;
+        private DomeCapabilities _capabilities;
+        private DomeParameters _parameters;
+
         private ObservableCollection<string> _telescopeNames;
+
+        #endregion Variables
+
+        #region Constructor and Dispose
 
         public DomeMotionViewModel(IDomeManager domeManager)
         {
@@ -58,19 +78,24 @@ namespace ASCOM.DeviceHub
             LogAppMessage("Initialization complete", caller);
         }
 
-        private void DomeLayoutSettingsChanged(DomeLayoutSettingsChangedMessage action)
+        protected override void DoDispose()
         {
-            // Make sure that we update the Capabilities on the U/I thread.
-            Task.Factory.StartNew(() => SupportMultipleTelescopes = action.Settings.SupportMultipleTelescopes, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
-            Task.Factory.StartNew(() => SelectedTelescope = action.Settings.ProfileIndex, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
-            Task.Factory.StartNew(() => TelescopeNames = GetMultipleTelescopeNames(DomeSettings.FromProfile().DomeLayoutSettings), CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            Messenger.Default.Unregister<DomeCapabilitiesUpdatedMessage>(this);
+            Messenger.Default.Unregister<DomeParametersUpdatedMessage>(this);
+            Messenger.Default.Unregister<DeviceDisconnectedMessage>(this);
+            RegisterStatusUpdateMessage(false);
+
+            _toggleShutterStateCommand = null;
+            _parkDomeCommand = null;
+            _jogAltitudeCommand = null;
+            _jogAzimuthCommand = null;
+            _stopMotionCommand = null;
+            _gotoDirectAzimuthCommand = null;
+            _syncAzimuthCommand = null;
+            _findHomeCommand = null;
         }
 
-        private void DomeSyncErrorStateUpdated(DomeSyncErrorStateMessage action)
-        {
-            LogAppMessage($"Received DomeSyncErrorStateMessage: {action.State}");
-            DomeSyncErrorState = action.State;
-        }
+        #endregion Constructor
 
         #region Change Notification Properties
 
@@ -88,7 +113,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private object _selectedtelescopeIndex;
         public object SelectedTelescopeIndex
         {
             get { return _selectedtelescopeIndex; }
@@ -102,7 +126,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private object _selectedtelescope;
         public object SelectedTelescope
         {
             get { return _selectedtelescope; }
@@ -129,26 +152,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private static ObservableCollection<string> GetMultipleTelescopeNames(DomeLayoutSettings domeLayoutSettings)
-        {
-            ObservableCollection<string> telescopeNames = new ObservableCollection<string>();
-
-            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName1.Trim()))
-                telescopeNames.Add(domeLayoutSettings.TelescopeName1);
-            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName2.Trim()))
-                telescopeNames.Add(domeLayoutSettings.TelescopeName2);
-            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName3.Trim()))
-                telescopeNames.Add(domeLayoutSettings.TelescopeName3);
-            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName4.Trim()))
-                telescopeNames.Add(domeLayoutSettings.TelescopeName4);
-            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName5.Trim()))
-                telescopeNames.Add(domeLayoutSettings.TelescopeName5);
-
-            return telescopeNames;
-        }
-
-        private bool _domeSyncErrorState;
-
         public bool DomeSyncErrorState
         {
             get { return _domeSyncErrorState; }
@@ -161,8 +164,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private string _shutterCommandAction;
 
         public string ShutterCommandAction
         {
@@ -177,8 +178,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private DomeSlewAmounts _slewAmounts;
-
         public DomeSlewAmounts SlewAmounts
         {
             get { return _slewAmounts; }
@@ -191,8 +190,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private JogAmount _selectedSlewAmount;
 
         public JogAmount SelectedSlewAmount
         {
@@ -224,8 +221,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private DevHubDomeStatus _status;
-
         public DevHubDomeStatus Status
         {
             get { return _status; }
@@ -240,9 +235,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-
-        private bool _isSlewing;
-
         public bool IsSlewing
         {
             get { return _isSlewing; }
@@ -256,8 +248,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private double _directTargetAzimuth;
-
         public double DirectTargetAzimuth
         {
             get { return _directTargetAzimuth; }
@@ -270,8 +260,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private double _syncTargetAzimuth;
 
         public double SyncTargetAzimuth
         {
@@ -301,35 +289,6 @@ namespace ASCOM.DeviceHub
                     SetRegistryValue(REGISTRY_PATH_REVISED, value);
 
                     OnPropertyChanged();
-                }
-            }
-        }
-
-        private bool GetRegistryValue(string key)
-        {
-            using (var regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(REGISTRY_PATH))
-            {
-                if (regKey != null)
-                {
-                    object value = regKey.GetValue(key);
-                    if (value != null && value is int intValue)
-                    {
-                        return intValue == 1;
-                    }
-                }
-            }
-
-            SetRegistryValue(key, false); // Default to false if not found
-            return false;
-        }
-
-        private void SetRegistryValue(string key, bool value)
-        {
-            using (var regKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(REGISTRY_PATH))
-            {
-                if (regKey != null)
-                {
-                    regKey.SetValue(key, value ? 1 : 0, Microsoft.Win32.RegistryValueKind.DWord);
                 }
             }
         }
@@ -365,10 +324,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        #region Capabilities Properties
-
-        private DomeCapabilities _capabilities;
-
         public DomeCapabilities Capabilities
         {
             get { return _capabilities; }
@@ -381,12 +336,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        #endregion Capabilities Properties
-
-        #region Parameters Properties
-
-        private DomeParameters _parameters;
 
         public DomeParameters Parameters
         {
@@ -401,24 +350,55 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        #endregion Parameters Properties
-
         #endregion Change Notification Properties
 
         #region Helper Methods
 
-        private void InvalidateDeviceData(DeviceDisconnectedMessage action)
+        private bool GetRegistryValue(string key)
         {
-            if (action.DeviceType == DeviceTypeEnum.Dome)
+            using (var regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(REGISTRY_PATH))
             {
-                Task.Factory.StartNew(() =>
+                if (regKey != null)
                 {
-                    Status = null;
-                    Capabilities = null;
-                    Parameters = null;
-                    IsSlaved = false;
-                }, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+                    object value = regKey.GetValue(key);
+                    if (value != null && value is int intValue)
+                    {
+                        return intValue == 1;
+                    }
+                }
             }
+
+            SetRegistryValue(key, false); // Default to false if not found
+            return false;
+        }
+
+        private void SetRegistryValue(string key, bool value)
+        {
+            using (var regKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(REGISTRY_PATH))
+            {
+                if (regKey != null)
+                {
+                    regKey.SetValue(key, value ? 1 : 0, Microsoft.Win32.RegistryValueKind.DWord);
+                }
+            }
+        }
+
+        private static ObservableCollection<string> GetMultipleTelescopeNames(DomeLayoutSettings domeLayoutSettings)
+        {
+            ObservableCollection<string> telescopeNames = new ObservableCollection<string>();
+
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName1.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName1);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName2.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName2);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName3.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName3);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName4.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName4);
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName5.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName5);
+
+            return telescopeNames;
         }
 
         private void RegisterStatusUpdateMessage(bool regUnreg)
@@ -432,6 +412,10 @@ namespace ASCOM.DeviceHub
                 Messenger.Default.Unregister<DomeStatusUpdatedMessage>(this);
             }
         }
+
+        #endregion Helper Methods
+
+        #region Event Handlers
 
         private void UpdateStatus(DomeStatusUpdatedMessage action)
         {
@@ -462,6 +446,20 @@ namespace ASCOM.DeviceHub
             }, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
         }
 
+        private void InvalidateDeviceData(DeviceDisconnectedMessage action)
+        {
+            if (action.DeviceType == DeviceTypeEnum.Dome)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    Status = null;
+                    Capabilities = null;
+                    Parameters = null;
+                    IsSlaved = false;
+                }, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            }
+        }
+
         private void DomeParametersUpdated(DomeParametersUpdatedMessage action)
         {
             // Make sure that we update the Parameters on the U/I thread.
@@ -483,7 +481,21 @@ namespace ASCOM.DeviceHub
             Task.Factory.StartNew(() => IsSlaved = action.State, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
         }
 
-        #endregion Helper Methods
+        private void DomeLayoutSettingsChanged(DomeLayoutSettingsChangedMessage action)
+        {
+            // Make sure that we update the Capabilities on the U/I thread.
+            Task.Factory.StartNew(() => SupportMultipleTelescopes = action.Settings.SupportMultipleTelescopes, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            Task.Factory.StartNew(() => SelectedTelescope = action.Settings.ProfileIndex, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            Task.Factory.StartNew(() => TelescopeNames = GetMultipleTelescopeNames(DomeSettings.FromProfile().DomeLayoutSettings), CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+        }
+
+        private void DomeSyncErrorStateUpdated(DomeSyncErrorStateMessage action)
+        {
+            LogAppMessage($"Received DomeSyncErrorStateMessage: {action.State}");
+            DomeSyncErrorState = action.State;
+        }
+
+        #endregion Event Handlers
 
         #region Relay Commands
 
@@ -990,7 +1002,6 @@ namespace ASCOM.DeviceHub
 
         #endregion
 
-
         #region SlaveToScopeCommand
 
         private ICommand _slaveToScopeCommand;
@@ -1097,21 +1108,5 @@ namespace ASCOM.DeviceHub
 
         #endregion Relay Commands
 
-        protected override void DoDispose()
-        {
-            Messenger.Default.Unregister<DomeCapabilitiesUpdatedMessage>(this);
-            Messenger.Default.Unregister<DomeParametersUpdatedMessage>(this);
-            Messenger.Default.Unregister<DeviceDisconnectedMessage>(this);
-            RegisterStatusUpdateMessage(false);
-
-            _toggleShutterStateCommand = null;
-            _parkDomeCommand = null;
-            _jogAltitudeCommand = null;
-            _jogAzimuthCommand = null;
-            _stopMotionCommand = null;
-            _gotoDirectAzimuthCommand = null;
-            _syncAzimuthCommand = null;
-            _findHomeCommand = null;
-        }
     }
 }

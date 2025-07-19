@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 
@@ -15,6 +17,24 @@ namespace ASCOM.DeviceHub
         }
 
         #endregion Constructor
+
+        #region Backing fields for Public Properties
+
+        private bool _supportMultipleTelescopes;
+        private string _domeID;
+        private int _scopeOffsetEWX;
+        private int _scopeOffsetNSY;
+        private int _scopeOffsetUDZ;
+        private int _domeRadius; // in millimeters
+        private int _gemAxisOffset;
+        private int _opticalOffset;
+        private int _azimuthAccuracy;
+        private int _slaveInterval;
+        private double _fastUpdatePeriod;
+        private double _fastUpdateMinimum;
+        private double _fastUpdateMaximum;
+
+        #endregion Backing fields for Public Properties
 
         #region Public Properties
 
@@ -37,26 +57,25 @@ namespace ASCOM.DeviceHub
             _supportMultipleTelescopes = settings.SupportMultipleTelescopes;
         }
 
+        public void RefreshDialogue()
+        {
+            OnPropertyChanged(nameof(SupportSingleTelescope));
+            OnPropertyChanged(nameof(SupportMultipleTelescopes));
+        }
+
         #endregion Public Methods
 
         #region Change Notification Properties
 
-        private bool _supportMultipleTelescopes;
+        public bool SupportSingleTelescope
+        {
+            get { return !Globals.LatestSupportMultipleTelescopesState; }
+        }
 
         public bool SupportMultipleTelescopes
         {
-            get { return _supportMultipleTelescopes; }
-            set
-            {
-                if (value != _supportMultipleTelescopes)
-                {
-                    _supportMultipleTelescopes = value;
-                    OnPropertyChanged();
-                }
-            }
+            get { return Globals.LatestSupportMultipleTelescopesState; }
         }
-
-        private string _domeID;
 
         public string DomeID
         {
@@ -75,8 +94,6 @@ namespace ASCOM.DeviceHub
         // to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
         // positive in the eastward direction.
 
-        private int _scopeOffsetEWX;
-
         public int ScopeOffsetEWX
         {
             get { return _scopeOffsetEWX; }
@@ -93,8 +110,6 @@ namespace ASCOM.DeviceHub
         // This property holds a measurement of the Y-direction (north-south) offset from the center of the dome
         // to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
         // positive in the northward direction.
-
-        private int _scopeOffsetNSY;
 
         public int ScopeOffsetNSY
         {
@@ -113,8 +128,6 @@ namespace ASCOM.DeviceHub
         // to the intersection of the RA and Dec axes on the mount. The units are millimeters and the sign is 
         // positive in the upward direction.
 
-        private int _scopeOffsetUDZ;
-
         public int ScopeOffsetUDZ
         {
             get { return _scopeOffsetUDZ; }
@@ -127,8 +140,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private int _domeRadius; // in millimeters
 
         public int DomeRadius
         {
@@ -146,8 +157,6 @@ namespace ASCOM.DeviceHub
         // This property holds a measurement of the distance from the intersection of the RA and Dec axes on the mount 
         // to the centerline of the telescope. The units are millimeters.
 
-        private int _gemAxisOffset;
-
         public int GemAxisOffset
         {
             get { return _gemAxisOffset; }
@@ -164,8 +173,6 @@ namespace ASCOM.DeviceHub
         // This property holds a measurement of the offset distance of the optical axis from the declination / altitude axis 
         // The units are millimeters.
 
-        private int _opticalOffset;
-
         public int OpticalOffset
         {
             get { return _opticalOffset; }
@@ -180,9 +187,6 @@ namespace ASCOM.DeviceHub
         }
 
         // This is the allowed slop in the azimuth position, in degrees.
-
-        private int _azimuthAccuracy;
-
         public int AzimuthAccuracy
         {
             get { return _azimuthAccuracy; }
@@ -197,9 +201,6 @@ namespace ASCOM.DeviceHub
         }
 
         // This is the time interval, in seconds, for checking and adjusting the azimuth position of the dome.
-
-        private int _slaveInterval;
-
         public int SlaveInterval
         {
             get { return _slaveInterval; }
@@ -212,8 +213,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private double _fastUpdatePeriod;
 
         public double FastUpdatePeriod
         {
@@ -228,8 +227,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private double _fastUpdateMinimum;
-
         public double FastUpdateMinimum
         {
             get { return _fastUpdateMinimum; }
@@ -242,8 +239,6 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
-
-        private double _fastUpdateMaximum;
 
         public double FastUpdateMaximum
         {
