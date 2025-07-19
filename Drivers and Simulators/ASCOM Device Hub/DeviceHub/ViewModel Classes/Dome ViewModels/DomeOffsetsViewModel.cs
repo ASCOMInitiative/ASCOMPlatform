@@ -296,25 +296,25 @@ namespace ASCOM.DeviceHub
             SupportMultipleTelescopes = settings.SupportMultipleTelescopes;
 
             GemAxisOffset = settings.GemAxisOffset;
-            GemAxisOffset1 = settings.GemAxisOffset1;
-            GemAxisOffset2 = settings.GemAxisOffset2;
-            GemAxisOffset3 = settings.GemAxisOffset3;
-            GemAxisOffset4 = settings.GemAxisOffset4;
-            GemAxisOffset5 = settings.GemAxisOffset5;
+            GemAxisOffset1 = settings.GemAxisOffset0;
+            GemAxisOffset2 = settings.GemAxisOffset1;
+            GemAxisOffset3 = settings.GemAxisOffset2;
+            GemAxisOffset4 = settings.GemAxisOffset3;
+            GemAxisOffset5 = settings.GemAxisOffset4;
 
             OpticalOffset = settings.OpticalOffset;
-            OpticalOffset1 = settings.OpticalOffset1;
-            OpticalOffset2 = settings.OpticalOffset2;
-            OpticalOffset3 = settings.OpticalOffset3;
-            OpticalOffset4 = settings.OpticalOffset4;
-            OpticalOffset5 = settings.OpticalOffset5;
+            OpticalOffset1 = settings.OpticalOffset0;
+            OpticalOffset2 = settings.OpticalOffset1;
+            OpticalOffset3 = settings.OpticalOffset2;
+            OpticalOffset4 = settings.OpticalOffset3;
+            OpticalOffset5 = settings.OpticalOffset4;
 
             ProfileIndex = settings.ProfileIndex;
-            TelescopeName1 = settings.TelescopeName1;
-            TelescopeName2 = settings.TelescopeName2;
-            TelescopeName3 = settings.TelescopeName3;
-            TelescopeName4 = settings.TelescopeName4;
-            TelescopeName5 = settings.TelescopeName5;
+            TelescopeName1 = settings.TelescopeName0;
+            TelescopeName2 = settings.TelescopeName1;
+            TelescopeName3 = settings.TelescopeName2;
+            TelescopeName4 = settings.TelescopeName3;
+            TelescopeName5 = settings.TelescopeName4;
         }
 
         public DomeLayoutSettings GetDomeOffsets()
@@ -324,25 +324,25 @@ namespace ASCOM.DeviceHub
                 SupportMultipleTelescopes = _supportMultipleTelescopes,
 
                 GemAxisOffset = _gemAxisOffset,
-                GemAxisOffset1 = _gemAxisOffset1,
-                GemAxisOffset2 = _gemAxisOffset2,
-                GemAxisOffset3 = _gemAxisOffset3,
-                GemAxisOffset4 = _gemAxisOffset4,
-                GemAxisOffset5 = _gemAxisOffset5,
+                GemAxisOffset0 = _gemAxisOffset1,
+                GemAxisOffset1 = _gemAxisOffset2,
+                GemAxisOffset2 = _gemAxisOffset3,
+                GemAxisOffset3 = _gemAxisOffset4,
+                GemAxisOffset4 = _gemAxisOffset5,
 
                 OpticalOffset = _opticalOffset,
-                OpticalOffset1 = _opticalOffset1,
-                OpticalOffset2 = _opticalOffset2,
-                OpticalOffset3 = _opticalOffset3,
-                OpticalOffset4 = _opticalOffset4,
-                OpticalOffset5 = _opticalOffset5,
+                OpticalOffset0 = _opticalOffset1,
+                OpticalOffset1 = _opticalOffset2,
+                OpticalOffset2 = _opticalOffset3,
+                OpticalOffset3 = _opticalOffset4,
+                OpticalOffset4 = _opticalOffset5,
 
                 ProfileIndex = _profileIndex,
-                TelescopeName1 = _telescopeName1,
-                TelescopeName2 = _telescopeName2,
-                TelescopeName3 = _telescopeName3,
-                TelescopeName4 = _telescopeName4,
-                TelescopeName5 = _telescopeName5,
+                TelescopeName0 = _telescopeName1,
+                TelescopeName1 = _telescopeName2,
+                TelescopeName2 = _telescopeName3,
+                TelescopeName3 = _telescopeName4,
+                TelescopeName4 = _telescopeName5,
             };
 
             return settings;

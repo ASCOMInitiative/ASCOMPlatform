@@ -387,6 +387,8 @@ namespace ASCOM.DeviceHub
         {
             ObservableCollection<string> telescopeNames = new ObservableCollection<string>();
 
+            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName0.Trim()))
+                telescopeNames.Add(domeLayoutSettings.TelescopeName0);
             if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName1.Trim()))
                 telescopeNames.Add(domeLayoutSettings.TelescopeName1);
             if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName2.Trim()))
@@ -395,8 +397,6 @@ namespace ASCOM.DeviceHub
                 telescopeNames.Add(domeLayoutSettings.TelescopeName3);
             if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName4.Trim()))
                 telescopeNames.Add(domeLayoutSettings.TelescopeName4);
-            if (!string.IsNullOrEmpty(domeLayoutSettings.TelescopeName5.Trim()))
-                telescopeNames.Add(domeLayoutSettings.TelescopeName5);
 
             return telescopeNames;
         }
@@ -1071,11 +1071,11 @@ namespace ASCOM.DeviceHub
                 LogAppMessage($"Selected telescope changed to: {selectedTelescope}");
                 List<TelescopeOffsets> offsets = new List<TelescopeOffsets>
                 {
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName0, Globals.DomeLayoutSettings.GemAxisOffset0, Globals.DomeLayoutSettings.OpticalOffset0),
                     new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName1, Globals.DomeLayoutSettings.GemAxisOffset1, Globals.DomeLayoutSettings.OpticalOffset1),
                     new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName2, Globals.DomeLayoutSettings.GemAxisOffset2, Globals.DomeLayoutSettings.OpticalOffset2),
                     new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName3, Globals.DomeLayoutSettings.GemAxisOffset3, Globals.DomeLayoutSettings.OpticalOffset3),
-                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName4, Globals.DomeLayoutSettings.GemAxisOffset4, Globals.DomeLayoutSettings.OpticalOffset4),
-                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName5, Globals.DomeLayoutSettings.GemAxisOffset5, Globals.DomeLayoutSettings.OpticalOffset5)
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName4, Globals.DomeLayoutSettings.GemAxisOffset4, Globals.DomeLayoutSettings.OpticalOffset4)
                 };
 
                 // Check whether the user operated the combo box or whether the change was generated programmatically.
