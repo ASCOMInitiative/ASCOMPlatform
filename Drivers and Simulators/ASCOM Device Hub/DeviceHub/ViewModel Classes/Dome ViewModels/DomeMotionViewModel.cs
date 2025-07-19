@@ -53,7 +53,7 @@ namespace ASCOM.DeviceHub
             // Update the current layout settings
             DomeSettings domeSettings = DomeSettings.FromProfile();
             _supportMultipleTelescopes = domeSettings.DomeLayoutSettings.SupportMultipleTelescopes;
-            _selectedtelescope = domeSettings.DomeLayoutSettings.TelescopeName;
+            _selectedtelescope = domeSettings.DomeLayoutSettings.ProfileIndex;
             _telescopeNames = GetMultipleTelescopeNames(domeSettings.DomeLayoutSettings);
             LogAppMessage("Initialization complete", caller);
         }
@@ -62,7 +62,7 @@ namespace ASCOM.DeviceHub
         {
             // Make sure that we update the Capabilities on the U/I thread.
             Task.Factory.StartNew(() => SupportMultipleTelescopes = action.Settings.SupportMultipleTelescopes, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
-            Task.Factory.StartNew(() => SelectedTelescope = action.Settings.TelescopeName, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
+            Task.Factory.StartNew(() => SelectedTelescope = action.Settings.ProfileIndex, CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
             Task.Factory.StartNew(() => TelescopeNames = GetMultipleTelescopeNames(DomeSettings.FromProfile().DomeLayoutSettings), CancellationToken.None, TaskCreationOptions.None, Globals.UISyncContext);
         }
 
@@ -1051,54 +1051,39 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        private struct TelescopeOffsets
-        {
-            public TelescopeOffsets(string name, int offsetFromAxisIntersection, int offsetFromDecAltAxis)
-            {
-                TelescopeName = name;
-                OffsetFromAxisIntersection = offsetFromAxisIntersection;
-                OffsetFromDecAltAxis = offsetFromDecAltAxis;
-            }
-
-            public string TelescopeName;
-            public int OffsetFromAxisIntersection;
-            public int OffsetFromDecAltAxis;
-        }
-
         private void TelescopeSelectionChanged(ComboBoxSelectionChangedEvent comboBoxSelection)
         {
-            // MessageBox.Show($"Telescope selection changed.Added: {args.AddedItems.Count} {(args.AddedItems.Count > 0 ? args.AddedItems[0] : "None")}, Removed: {args.RemovedItems.Count} {(args.RemovedItems.Count > 0 ? args.RemovedItems[0] : "None")}", "Telescope Selection", MessageBoxButton.OK, MessageBoxImage.Information);
-
             // Get the newly selected telescope name from the first added item
             if (comboBoxSelection.SelectionChangedEventArgs.AddedItems.Count > 0 && comboBoxSelection.SelectionChangedEventArgs.AddedItems[0] is string selectedTelescope)
             {
                 SelectedTelescope = selectedTelescope;
                 LogAppMessage($"Selected telescope changed to: {selectedTelescope}");
-                List<TelescopeOffsets> offsets = new List<TelescopeOffsets>();
-                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName1, Globals.DomeLayoutSettings.GemAxisOffset1, Globals.DomeLayoutSettings.OpticalOffset1));
-                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName2, Globals.DomeLayoutSettings.GemAxisOffset2, Globals.DomeLayoutSettings.OpticalOffset2));
-                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName3, Globals.DomeLayoutSettings.GemAxisOffset3, Globals.DomeLayoutSettings.OpticalOffset3));
-                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName4, Globals.DomeLayoutSettings.GemAxisOffset4, Globals.DomeLayoutSettings.OpticalOffset4));
-                offsets.Add(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName5, Globals.DomeLayoutSettings.GemAxisOffset5, Globals.DomeLayoutSettings.OpticalOffset5));
-
-                TelescopeOffsets selectedOffset = offsets.FirstOrDefault(t => t.TelescopeName == selectedTelescope);
-                //MessageBox.Show($"Telescope selection changed.Added {selectedOffset.OffsetFromAxisIntersection} {selectedOffset.OffsetFromDecAltAxis}: {args.AddedItems.Count} {(args.AddedItems.Count > 0 ? args.AddedItems[0] : "None")}, Removed: {args.RemovedItems.Count} {(args.RemovedItems.Count > 0 ? args.RemovedItems[0] : "None")}", "Telescope Selection", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                //MessageBox.Show($"Drop-down open: {comboBoxSelection.ComboBox.IsDropDownOpen}");
-                if (comboBoxSelection.ComboBox.IsDropDownOpen) // User is changing the selected item in the list
+                List<TelescopeOffsets> offsets = new List<TelescopeOffsets>
                 {
-                    Globals.DomeLayoutSettings.TelescopeName = selectedTelescope;
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName1, Globals.DomeLayoutSettings.GemAxisOffset1, Globals.DomeLayoutSettings.OpticalOffset1),
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName2, Globals.DomeLayoutSettings.GemAxisOffset2, Globals.DomeLayoutSettings.OpticalOffset2),
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName3, Globals.DomeLayoutSettings.GemAxisOffset3, Globals.DomeLayoutSettings.OpticalOffset3),
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName4, Globals.DomeLayoutSettings.GemAxisOffset4, Globals.DomeLayoutSettings.OpticalOffset4),
+                    new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName5, Globals.DomeLayoutSettings.GemAxisOffset5, Globals.DomeLayoutSettings.OpticalOffset5)
+                };
+
+                // Check whether the user operated the combo box or whether the change was generated programmatically.
+                if (comboBoxSelection.ComboBox.IsDropDownOpen) // User changed the selected item in the list
+                {
+                    TelescopeOffsets selectedOffset = offsets[comboBoxSelection.ComboBox.SelectedIndex];
+
+                    Globals.DomeLayoutSettings.ProfileIndex = comboBoxSelection.ComboBox.SelectedIndex;
                     Globals.DomeLayoutSettings.GemAxisOffset = selectedOffset.OffsetFromAxisIntersection;
                     Globals.DomeLayoutSettings.OpticalOffset = selectedOffset.OffsetFromDecAltAxis;
 
                     // Write the newly selected values to the profile
-                    DomeSettings domeSettings = new DomeSettings();
+                    DomeSettings domeSettings = DomeSettings.FromProfile();
                     domeSettings.DomeLayoutSettings = Globals.DomeLayoutSettings;
                     domeSettings.ToProfile();
                 }
-                else // Drop-down not changed by user
+                else // Drop-down change was programmatic
                 {
-                    SelectedTelescopeIndex = offsets.IndexOf(new TelescopeOffsets(Globals.DomeLayoutSettings.TelescopeName, Globals.DomeLayoutSettings.GemAxisOffset, Globals.DomeLayoutSettings.OpticalOffset));
+                    SelectedTelescopeIndex = Globals.DomeLayoutSettings.ProfileIndex;
                 }
             }
             else

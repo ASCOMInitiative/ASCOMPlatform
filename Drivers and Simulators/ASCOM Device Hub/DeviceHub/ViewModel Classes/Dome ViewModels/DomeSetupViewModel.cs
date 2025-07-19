@@ -34,11 +34,27 @@ namespace ASCOM.DeviceHub
             _azimuthAccuracy = settings.AzimuthAccuracy;
             _slaveInterval = settings.SlaveInterval;
             _opticalOffset = settings.OpticalOffset;
+            _supportMultipleTelescopes = settings.SupportMultipleTelescopes;
         }
 
         #endregion Public Methods
 
         #region Change Notification Properties
+
+        private bool _supportMultipleTelescopes;
+
+        public bool SupportMultipleTelescopes
+        {
+            get { return _supportMultipleTelescopes; }
+            set
+            {
+                if (value != _supportMultipleTelescopes)
+                {
+                    _supportMultipleTelescopes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private string _domeID;
 

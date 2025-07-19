@@ -20,6 +20,9 @@ namespace ASCOM.DeviceHub
         private const string _supportMultipleTelescopesProfileName = "Support Multiple Telescopes";
         private const bool _supportMultipleTelescopesDefault = false;
 
+        private const string _profileIndexProfileName = "Profile Index";
+        private const string _profileIndexDefault = "0";
+
         private const string _gemAxisOffsetProfileName = "GEM Axis Offset";
         private const string _gemAxisOffset1ProfileName = "GEM Axis Offset 1";
         private const string _gemAxisOffset2ProfileName = "GEM Axis Offset 2";
@@ -36,7 +39,6 @@ namespace ASCOM.DeviceHub
         private const string _opticalOffset5ProfileName = "Optical Offset 5";
         private const string _opticalOffsetDefault = "0";
 
-        private const string _telescopeNameProfileName = "Telescope Name";
         private const string _telescopeName1ProfileName = "Telescope Name 1";
         private const string _telescopeName2ProfileName = "Telescope Name 2";
         private const string _telescopeName3ProfileName = "Telescope Name 3";
@@ -83,7 +85,7 @@ namespace ASCOM.DeviceHub
             int opticalOffset4;
             int opticalOffset5;
 
-            string telescopeName;
+            int profileIndex;
             string telescopeName1;
             string telescopeName2;
             string telescopeName3;
@@ -117,6 +119,8 @@ namespace ASCOM.DeviceHub
 
                 supportMultipleTelescopes = Convert.ToBoolean(profile.GetValue(DriverID, _supportMultipleTelescopesProfileName, String.Empty, _supportMultipleTelescopesDefault.ToString(CultureInfo.InvariantCulture)));
 
+                profileIndex = Convert.ToInt32(profile.GetValue(DriverID, _profileIndexProfileName, String.Empty, _profileIndexDefault));
+
                 gemAxisOffset = Convert.ToInt32(profile.GetValue(DriverID, _gemAxisOffsetProfileName, String.Empty, _gemAxisOffsetDefault));
                 gemAxisOffset1 = Convert.ToInt32(profile.GetValue(DriverID, _gemAxisOffset1ProfileName, String.Empty, _gemAxisOffsetDefault));
                 gemAxisOffset2 = Convert.ToInt32(profile.GetValue(DriverID, _gemAxisOffset2ProfileName, String.Empty, _gemAxisOffsetDefault));
@@ -131,7 +135,6 @@ namespace ASCOM.DeviceHub
                 opticalOffset4 = Convert.ToInt32(profile.GetValue(DriverID, _opticalOffset4ProfileName, String.Empty, _opticalOffsetDefault));
                 opticalOffset5 = Convert.ToInt32(profile.GetValue(DriverID, _opticalOffset5ProfileName, String.Empty, _opticalOffsetDefault));
 
-                telescopeName = profile.GetValue(DriverID, _telescopeNameProfileName, String.Empty, _telescope1NameDefault);
                 telescopeName1 = profile.GetValue(DriverID, _telescopeName1ProfileName, String.Empty, _telescope1NameDefault);
                 telescopeName2 = profile.GetValue(DriverID, _telescopeName2ProfileName, String.Empty, _telescopeNameDefault);
                 telescopeName3 = profile.GetValue(DriverID, _telescopeName3ProfileName, String.Empty, _telescopeNameDefault);
@@ -166,7 +169,7 @@ namespace ASCOM.DeviceHub
                 OpticalOffset4 = opticalOffset4,
                 OpticalOffset5 = opticalOffset5,
 
-                TelescopeName = telescopeName,
+                ProfileIndex = profileIndex,
                 TelescopeName1 = telescopeName1,
                 TelescopeName2 = telescopeName2,
                 TelescopeName3 = telescopeName3,
@@ -219,6 +222,8 @@ namespace ASCOM.DeviceHub
 
                 profile.WriteValue(DriverID, _supportMultipleTelescopesProfileName, DomeLayoutSettings.SupportMultipleTelescopes.ToString(CultureInfo.InvariantCulture));
 
+                profile.WriteValue(DriverID, _profileIndexProfileName, DomeLayoutSettings.ProfileIndex.ToString());
+
                 profile.WriteValue(DriverID, _gemAxisOffsetProfileName, DomeLayoutSettings.GemAxisOffset.ToString());
                 profile.WriteValue(DriverID, _gemAxisOffset1ProfileName, DomeLayoutSettings.GemAxisOffset1.ToString());
                 profile.WriteValue(DriverID, _gemAxisOffset2ProfileName, DomeLayoutSettings.GemAxisOffset2.ToString());
@@ -233,7 +238,6 @@ namespace ASCOM.DeviceHub
                 profile.WriteValue(DriverID, _opticalOffset4ProfileName, DomeLayoutSettings.OpticalOffset4.ToString());
                 profile.WriteValue(DriverID, _opticalOffset5ProfileName, DomeLayoutSettings.OpticalOffset5.ToString());
 
-                profile.WriteValue(DriverID, _telescopeNameProfileName, DomeLayoutSettings.TelescopeName);
                 profile.WriteValue(DriverID, _telescopeName1ProfileName, DomeLayoutSettings.TelescopeName1);
                 profile.WriteValue(DriverID, _telescopeName2ProfileName, DomeLayoutSettings.TelescopeName2);
                 profile.WriteValue(DriverID, _telescopeName3ProfileName, DomeLayoutSettings.TelescopeName3);

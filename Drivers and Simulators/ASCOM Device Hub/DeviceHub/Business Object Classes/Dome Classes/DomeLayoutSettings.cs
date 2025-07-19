@@ -14,6 +14,8 @@ namespace ASCOM.DeviceHub
 
         private bool _supportMultipleTelescopes;
 
+        private int _profileIndex;
+
         private int _gemAxisOffset;
         private int _gemAxisOffset1;
         private int _gemAxisOffset2;
@@ -28,7 +30,6 @@ namespace ASCOM.DeviceHub
         private int _opticalOffset4;
         private int _opticalOffset5;
 
-        private string _telescopeName;
         private string _telescopeName1;
         private string _telescopeName2;
         private string _telescopeName3;
@@ -52,6 +53,8 @@ namespace ASCOM.DeviceHub
             // Copy the multiple telescope supported flag
             this._supportMultipleTelescopes = other._supportMultipleTelescopes;
 
+            this._profileIndex = other._profileIndex;
+
             // Copy the offsets for the GEM axis
             this._gemAxisOffset = other._gemAxisOffset;
             this._gemAxisOffset1 = other._gemAxisOffset1;
@@ -69,7 +72,6 @@ namespace ASCOM.DeviceHub
             this._opticalOffset5 = other._opticalOffset5;
 
             // Copy the telescope names
-            this._telescopeName = other._telescopeName;
             this._telescopeName1 = other._telescopeName1;
             this._telescopeName2 = other._telescopeName2;
             this._telescopeName3 = other._telescopeName3;
@@ -120,6 +122,19 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        public int OpticalOffset
+        {
+            get { return _opticalOffset; }
+            set
+            {
+                if (value != _opticalOffset)
+                {
+                    _opticalOffset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool SupportMultipleTelescopes
         {
             get { return _supportMultipleTelescopes; }
@@ -128,6 +143,19 @@ namespace ASCOM.DeviceHub
                 if (value != _supportMultipleTelescopes)
                 {
                     _supportMultipleTelescopes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int ProfileIndex
+        {
+            get { return _profileIndex; }
+            set
+            {
+                if (value != _profileIndex)
+                {
+                    _profileIndex = value;
                     OnPropertyChanged();
                 }
             }
@@ -224,19 +252,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        public int OpticalOffset
-        {
-            get { return _opticalOffset; }
-            set
-            {
-                if (value != _opticalOffset)
-                {
-                    _opticalOffset = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public int OpticalOffset1
         {
             get { return _opticalOffset1; }
@@ -249,6 +264,7 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
+
         public int OpticalOffset2
         {
             get { return _opticalOffset2; }
@@ -301,19 +317,6 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        public string TelescopeName
-        {
-            get { return _telescopeName; }
-            set
-            {
-                if (value != _telescopeName)
-                {
-                    _telescopeName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public string TelescopeName1
         {
             get { return _telescopeName1; }
@@ -326,6 +329,7 @@ namespace ASCOM.DeviceHub
                 }
             }
         }
+
         public string TelescopeName2
         {
             get { return _telescopeName2; }

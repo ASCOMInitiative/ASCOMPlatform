@@ -12,6 +12,7 @@ namespace ASCOM.DeviceHub
     public class DomeOffsetsViewModel : DeviceHubViewModelBase
     {
         private bool _supportMultipleTelescopes;
+        private int _profileIndex;
 
         private int _gemAxisOffset;
         private int _gemAxisOffset1;
@@ -27,7 +28,6 @@ namespace ASCOM.DeviceHub
         private int _opticalOffset4;
         private int _opticalOffset5;
 
-        private string _telescopeName;
         private string _telescopeName1;
         private string _telescopeName2;
         private string _telescopeName3;
@@ -203,14 +203,14 @@ namespace ASCOM.DeviceHub
             }
         }
 
-        public string TelescopeName
+        public int ProfileIndex
         {
-            get { return _telescopeName; }
+            get { return _profileIndex; }
             set
             {
-                if (value != _telescopeName)
+                if (value != _profileIndex)
                 {
-                    _telescopeName = value;
+                    _profileIndex = value;
                     OnPropertyChanged();
                 }
             }
@@ -303,7 +303,7 @@ namespace ASCOM.DeviceHub
             OpticalOffset4 = settings.OpticalOffset4;
             OpticalOffset5 = settings.OpticalOffset5;
 
-            TelescopeName = settings.TelescopeName;
+            ProfileIndex = settings.ProfileIndex;
             TelescopeName1 = settings.TelescopeName1;
             TelescopeName2 = settings.TelescopeName2;
             TelescopeName3 = settings.TelescopeName3;
@@ -331,7 +331,7 @@ namespace ASCOM.DeviceHub
                 OpticalOffset4 = _opticalOffset4,
                 OpticalOffset5 = _opticalOffset5,
 
-                TelescopeName = _telescopeName,
+                ProfileIndex = _profileIndex,
                 TelescopeName1 = _telescopeName1,
                 TelescopeName2 = _telescopeName2,
                 TelescopeName3 = _telescopeName3,

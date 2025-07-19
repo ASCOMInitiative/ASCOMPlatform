@@ -1,5 +1,6 @@
 ﻿using ASCOM.DeviceHub.MvvmMessenger;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Windows.Input;
 
@@ -345,10 +346,11 @@ namespace ASCOM.DeviceHub
                 DomeLayoutSettings domeLayoutSettings = DomeSetupVm.GetDomeLayoutSettings();
 
                 // Get the current dome offsets from the offsets tab.
-                DomeLayoutSettings domeOffsets=DomeOffsetsVm.GetDomeOffsets();
+                DomeLayoutSettings domeOffsets = DomeOffsetsVm.GetDomeOffsets();
 
                 // Update the offsets in the dome layout settings.
                 domeLayoutSettings.SupportMultipleTelescopes = domeOffsets.SupportMultipleTelescopes;
+                domeLayoutSettings.ProfileIndex = domeOffsets.ProfileIndex; // Must include this because it is mastered on the dome offsets dialogue
 
                 domeLayoutSettings.GemAxisOffset1 = domeOffsets.GemAxisOffset1;
                 domeLayoutSettings.GemAxisOffset2 = domeOffsets.GemAxisOffset2;
@@ -362,12 +364,25 @@ namespace ASCOM.DeviceHub
                 domeLayoutSettings.OpticalOffset4 = domeOffsets.OpticalOffset4;
                 domeLayoutSettings.OpticalOffset5 = domeOffsets.OpticalOffset5;
 
-                domeLayoutSettings.TelescopeName = domeOffsets.TelescopeName; // Must include this because it is mastered on the dome offsets dialogue
                 domeLayoutSettings.TelescopeName1 = domeOffsets.TelescopeName1;
                 domeLayoutSettings.TelescopeName2 = domeOffsets.TelescopeName2;
                 domeLayoutSettings.TelescopeName3 = domeOffsets.TelescopeName3;
                 domeLayoutSettings.TelescopeName4 = domeOffsets.TelescopeName4;
                 domeLayoutSettings.TelescopeName5 = domeOffsets.TelescopeName5;
+
+                // Create a list of TelescopeOffsets based on the latest settings from the setup dialogue.
+                List<TelescopeOffsets> offsets = new List<TelescopeOffsets>
+                {
+                    new TelescopeOffsets(domeLayoutSettings.TelescopeName1, domeLayoutSettings.GemAxisOffset1, domeLayoutSettings.OpticalOffset1),
+                    new TelescopeOffsets(domeLayoutSettings.TelescopeName2, domeLayoutSettings.GemAxisOffset2, domeLayoutSettings.OpticalOffset2),
+                    new TelescopeOffsets(domeLayoutSettings.TelescopeName3, domeLayoutSettings.GemAxisOffset3, domeLayoutSettings.OpticalOffset3),
+                    new TelescopeOffsets(domeLayoutSettings.TelescopeName4, domeLayoutSettings.GemAxisOffset4, domeLayoutSettings.OpticalOffset4),
+                    new TelescopeOffsets(domeLayoutSettings.TelescopeName5, domeLayoutSettings.GemAxisOffset5, domeLayoutSettings.OpticalOffset5)
+                };
+
+                // Update the current offset settings in case the user changed the values in the setup dialogue.
+                domeLayoutSettings.GemAxisOffset = offsets[domeLayoutSettings.ProfileIndex].OffsetFromAxisIntersection;
+                domeLayoutSettings.OpticalOffset = offsets[domeLayoutSettings.ProfileIndex].OffsetFromDecAltAxis;
 
                 // Save the composite dome layout settings.
                 Globals.DomeLayoutSettings = domeLayoutSettings;
@@ -386,7 +401,6 @@ namespace ASCOM.DeviceHub
 
                 FocuserManager.Instance.SetFastUpdatePeriod(FocuserSetupVm.FastUpdatePeriod);
             }
-
 
             Globals.SuppressTrayBubble = SuppressTrayBubble;
             Globals.UseCustomTheme = UseCustomTheme;
