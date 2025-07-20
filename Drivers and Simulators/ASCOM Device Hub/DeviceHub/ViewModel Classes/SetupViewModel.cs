@@ -380,19 +380,23 @@ namespace ASCOM.DeviceHub
                 domeLayoutSettings.TelescopeName3 = domeOffsets.TelescopeName3;
                 domeLayoutSettings.TelescopeName4 = domeOffsets.TelescopeName4;
 
-                // Create a list of TelescopeOffsets based on the latest settings from the setup dialogue.
-                List<TelescopeOffsets> offsets = new List<TelescopeOffsets>
+                // Update current offsets if multiple telescopes are supported
+                if (domeOffsets.SupportMultipleTelescopes) // Multiple telescope support is enabled
                 {
-                    new TelescopeOffsets(domeLayoutSettings.TelescopeName0, domeLayoutSettings.GemAxisOffset0, domeLayoutSettings.OpticalOffset0),
-                    new TelescopeOffsets(domeLayoutSettings.TelescopeName1, domeLayoutSettings.GemAxisOffset1, domeLayoutSettings.OpticalOffset1),
-                    new TelescopeOffsets(domeLayoutSettings.TelescopeName2, domeLayoutSettings.GemAxisOffset2, domeLayoutSettings.OpticalOffset2),
-                    new TelescopeOffsets(domeLayoutSettings.TelescopeName3, domeLayoutSettings.GemAxisOffset3, domeLayoutSettings.OpticalOffset3),
-                    new TelescopeOffsets(domeLayoutSettings.TelescopeName4, domeLayoutSettings.GemAxisOffset4, domeLayoutSettings.OpticalOffset4)
-                };
+                    // Create a list of TelescopeOffsets based on the latest settings from the setup dialogue.
+                    List<TelescopeOffsets> offsets = new List<TelescopeOffsets>
+                    {
+                        new TelescopeOffsets(domeLayoutSettings.TelescopeName0, domeLayoutSettings.GemAxisOffset0, domeLayoutSettings.OpticalOffset0),
+                        new TelescopeOffsets(domeLayoutSettings.TelescopeName1, domeLayoutSettings.GemAxisOffset1, domeLayoutSettings.OpticalOffset1),
+                        new TelescopeOffsets(domeLayoutSettings.TelescopeName2, domeLayoutSettings.GemAxisOffset2, domeLayoutSettings.OpticalOffset2),
+                        new TelescopeOffsets(domeLayoutSettings.TelescopeName3, domeLayoutSettings.GemAxisOffset3, domeLayoutSettings.OpticalOffset3),
+                        new TelescopeOffsets(domeLayoutSettings.TelescopeName4, domeLayoutSettings.GemAxisOffset4, domeLayoutSettings.OpticalOffset4)
+                    };
 
-                // Update the current offset settings in case the user changed the values in the setup dialogue.
-                domeLayoutSettings.GemAxisOffset = offsets[domeLayoutSettings.ProfileIndex].OffsetFromAxisIntersection;
-                domeLayoutSettings.OpticalOffset = offsets[domeLayoutSettings.ProfileIndex].OffsetFromDecAltAxis;
+                    // Update the current offset settings in case the user changed the values in the setup dialogue.
+                    domeLayoutSettings.GemAxisOffset = offsets[domeLayoutSettings.ProfileIndex].OffsetFromAxisIntersection;
+                    domeLayoutSettings.OpticalOffset = offsets[domeLayoutSettings.ProfileIndex].OffsetFromDecAltAxis;
+                }
 
                 // Save the composite dome layout settings.
                 Globals.DomeLayoutSettings = domeLayoutSettings;
