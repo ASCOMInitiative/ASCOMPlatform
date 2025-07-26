@@ -1673,12 +1673,17 @@ Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.pdb to 
 Install Files ..\PlatformUpdateChecker\bin\Release\Semver.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
 Install Files ..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
  
-Comment: Install the updater checker application
-Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.JustAHub.exe to $COMMONFILES$\ASCOM\JustAHub
-Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.JustAHub.exe.config to $COMMONFILES$\ASCOM\JustAHub
-Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.JustAHub.pdb to $COMMONFILES$\ASCOM\JustAHub
-Install Files ..\Drivers and Simulators\JustAHub\bin\Release\ASCOM.Common.dll to $COMMONFILES$\ASCOM\JustAHub
+Comment: Install JustAHub (32 bit)
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\AnyCPU\net48\ASCOM.JustAHub.exe to $COMMONFILES$\ASCOM\JustAHub
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\AnyCPU\net48\ASCOM.JustAHub.exe.config to $COMMONFILES$\ASCOM\JustAHub
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\AnyCPU\net48\ASCOM.Common.dll to $COMMONFILES$\ASCOM\JustAHub
  
+Comment: Install JustAHub (64 bit)
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\X64\net48\ASCOM.JustAHub64.exe to $COMMONFILES$\ASCOM\JustAHub64
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\X64\net48\ASCOM.JustAHub64.exe.config to $COMMONFILES$\ASCOM\JustAHub64
+Install Files ..\Drivers and Simulators\JustAHub\bin\Release\X64\net48\ASCOM.Common.dll to $COMMONFILES$\ASCOM\JustAHub64
+ 
+Comment: Install the use simulators application to choose which simulators to use.
 Comment: Install the use simulators application to choose which simulators to use.
 Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe to $TARGETDIR$\Tools\SetSimulators
 Install Files ..\Diagnostics\SetSimulators\bin\Release\SetSimulators.pdb to $TARGETDIR$\Tools\SetSimulators
@@ -2519,10 +2524,15 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to Initialise earth rotation data
   Include Script: UpdateAscomError
    
-  Set Variable PROGRESSTEXT to Registering JustAHub
+  Set Variable PROGRESSTEXT to Registering JustAHub (32 bit)
   Set Variable MYPROGRESS to 71
   Run Program $COMMONFILES$\ASCOM\JustAHub\ASCOM.JustAHub.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register JustAHub
+  Set Variable ACTION to Register JustAHub (32 bit)
+  Include Script: UpdateAscomError
+   
+  Set Variable ABORT to Registering JustAHub (64 bit)
+  Run Program $COMMONFILES$\ASCOM\JustAHub64\ASCOM.JustAHub64.exe /regserver (WAIT, get result into variable RC)
+  Set Variable ACTION to Register JustAHub (64 bit)
   Include Script: UpdateAscomError
    
   Comment: Tidy up COM registration (add AppID for DCOM etc.) 

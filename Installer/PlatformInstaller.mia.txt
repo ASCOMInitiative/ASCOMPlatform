@@ -2216,17 +2216,17 @@ else
 end
  
 Comment: Device Hub
-Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
-Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Device Hub to $COMMONFILES$\ASCOM\DeviceHub\ASCOM.DeviceHub.exe
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Device Hub Help to $COMMONFILES$\ASCOM\DeviceHub\ASCOM Device Hub User and Technical Information.pdf
  
 Comment: Connection Testers
 if Variable WIN64MODE Equals FALSE
   Comment: 32bit OS
-  Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Connection Tester to $TARGETDIR$\Tools\DriverConnect32\ASCOM.DriverConnect.exe
+  Create Shortcut $SHORTCUTFOLDER$\Connection Tester to $TARGETDIR$\Tools\DriverConnect32\ASCOM.DriverConnect.exe
 else
   Comment: 64bit OS
-  Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Connection Tester (32bit) to $TARGETDIR$\Tools\DriverConnect32\ASCOM.DriverConnect.exe
-  Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Connection Tester (64bit) to $TARGETDIR$\Tools\DriverConnect64\ASCOM.DriverConnect.exe
+  Create Shortcut $SHORTCUTFOLDER$\Connection Tester (32bit) to $TARGETDIR$\Tools\DriverConnect32\ASCOM.DriverConnect.exe
+  Create Shortcut $SHORTCUTFOLDER$\Connection Tester (64bit) to $TARGETDIR$\Tools\DriverConnect64\ASCOM.DriverConnect.exe
 end
  
 Comment: Developer shortcuts
