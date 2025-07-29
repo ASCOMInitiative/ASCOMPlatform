@@ -159,6 +159,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.BtnCreateReport);
             this.Controls.Add(this.BtnClose);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Net35CompopnentUseForm";
             this.Text = "Manage .Net 3.5 Compopnent Use Logging";
             this.Load += new System.EventHandler(this.Net35CompopnentUseForm_Load);
