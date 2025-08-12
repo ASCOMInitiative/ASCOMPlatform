@@ -1,19 +1,9 @@
-﻿Main Setup Dialogue
-Start installation
-Install complete dialogue
-Check Application Pre-Requisites
-Set Registry Keys
+﻿Check Application Requirements
 Remove Previous Platform install if present
-Uninstall items installed by this installer
 Remove Previous Platforms 4 and 5 if present
-Remove 32bit components
-Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
+Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
-Set Profile ACL
-Post install activities - 64bit only
-Post install activities - 32bit only
-Validate installation

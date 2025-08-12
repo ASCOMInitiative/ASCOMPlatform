@@ -19,7 +19,9 @@ namespace ASCOM
         /// </summary>
         static ServedClassNameAttribute()
         {
-            Log.Component(Assembly.GetExecutingAssembly(), "ServedClassNameAttribute");
+#if NET35
+            Log.Component(Assembly.GetExecutingAssembly(), "ServedClassNameAttribute"); // This is only required when the .NET 3.5 build of the component is used (Assembly version 6.0.0.0).
+#endif
         }
 
         /// <summary>

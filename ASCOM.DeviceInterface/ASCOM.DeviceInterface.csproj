@@ -4,7 +4,7 @@
 		<RootNamespace>ASCOM.DeviceInterface</RootNamespace>
 		<AssemblyName>ASCOM.DeviceInterfaces</AssemblyName>
 		<MyType>Windows</MyType>
-		<TargetFrameworks>net35;net472;netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net35;net472;net481;netstandard2.0</TargetFrameworks>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\ASCOM.snk</AssemblyOriginatorKeyFile>
 		<FileUpgradeFlags />
@@ -48,8 +48,11 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net472' And '$(IncludeReference)'=='true'">
 		<ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
 	</ItemGroup>
-	
-	<ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481' And '$(IncludeReference)'=='true'">
+    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
 		<None Include="..\ASCOM Art\Bug 300 Borderless.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

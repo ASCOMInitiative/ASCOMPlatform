@@ -141,7 +141,7 @@ namespace ASCOM.Simulator
         public static int CountObject()
         {
             // Increment the global count of objects.
-			OCSimulator.TL.LogMessage("CountObject", "Incrementing object count to: " + (objsInUse + 1));
+            OCSimulator.TL.LogMessage("CountObject", "Incrementing object count to: " + (objsInUse + 1));
             return Interlocked.Increment(ref objsInUse);
         }
 
@@ -264,13 +264,12 @@ namespace ASCOM.Simulator
                 }
                 catch (ReflectionTypeLoadException e)
                 {
-                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.ToString(),
-                        "ObservingConditions Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show($"Failed to load served COM class assembly {fi.Name}: {e.Message}\r\n{e}", "ObservingConditions Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    
                     Exception[] exs = e.LoaderExceptions;
                     foreach (Exception ex in exs)
                     {
-                        MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + ex.ToString(),
-                            "ObservingConditions Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show($"{fi.Name} Loader exception: {ex.Message}\r\n{ex}", "ObservingConditions Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     }
 
                     return false;

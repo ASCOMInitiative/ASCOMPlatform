@@ -5,7 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ASCOM.Attributes")]
+#if NET35
+[assembly: AssemblyTitle("ASCOM.Attributes (.NET 2.0 / 3.5)")]
+#else
+[assembly: AssemblyTitle("ASCOM.Attributes (.NET 4.x)")]
+#endif
 [assembly: AssemblyDescription("Attributes that can be applied to ASCOM objects.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("This source code may be freely used for any purpose whatsoever on condition that no liability shall be attached to any of the authors.")]
@@ -20,4 +24,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("979908fa-6eec-4aec-b59a-e6b01e22e51a")]
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
+#if NET35
 [assembly: AssemblyVersion("6.0.0.0")]
+#else 
+[assembly: AssemblyVersion("7.0.0.0")]
+#endif

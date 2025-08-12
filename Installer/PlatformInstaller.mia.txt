@@ -44,6 +44,7 @@ Set Variable UNINSTALLER to
 Set Variable ACTION to 
 Set Variable CLEARCACHE to 
 Set Variable DEVICEHUB_DOME_RADIUS to 
+Set Variable CONFIGURATION_DIRECTORY to 
  
 Comment: Set a variable indicating whether the installer was started from a stand alone exe or from the control panel
 Set Variable STARTEDFROMCONTROLPANEL to FALSE
@@ -161,9 +162,10 @@ Set Variable VC64_REBOOT_REQUIRED to
 Set Variable DEVICEHUB_DOME_RADIUS to 
  
 Comment: Component installed state variables
-Set Variable INSTALL_PLATFORM to 
+Comment: Set Variable INSTALL_PLATFORM to 
 Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
 Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
+Set Variable OPTIMISE_ASSEMBLIES to FALSE
 Set Variable DISPLAY_USER_GUIDE to 
 Set Variable INSTALL_HUBS to 
 Set Variable INSTALL_POTH to 
@@ -243,15 +245,16 @@ Set Variable FRAMEWORK to $FRAMEWORK4$
  
 Comment: Define components
 Define Component: ASCOM Platform Options
-Define Component: Out of date hubs replaced by Device Hub\Pipe
-Define Component: Out of date hubs replaced by Device Hub\Dome Control Hub
-Define Component: Out of date hubs replaced by Device Hub\POTH
-Define Component: Out of date hubs replaced by Device Hub\Hub
-Define Component: Out of date hubs replaced by Device Hub
 Define Component: ASCOM Platform Options\Install Diagnostics shortcut on desktop
 Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on desktop
 Define Component: ASCOM Platform Options\Display user guide when installation is complete
 Define Component: ASCOM Platform Options\Include simulator Start menu shortcuts
+Comment: Define Component: Optimise Install
+Define Component: Out of date hubs replaced by Device Hub
+Define Component: Out of date hubs replaced by Device Hub\Pipe
+Define Component: Out of date hubs replaced by Device Hub\Dome Control Hub
+Define Component: Out of date hubs replaced by Device Hub\POTH
+Define Component: Out of date hubs replaced by Device Hub\Hub
  
 Comment: Force the user guide not to be displayed because Adobe reader locks up when started from the installer.
 Deselect Component: ASCOM Platform Options\Display user guide when installation is complete
@@ -334,6 +337,7 @@ end
  
 Comment: Set the installation cache location
 Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
+Set Variable CONFIGURATION_DIRECTORY to $PROGRAMDATA$$PRODUCTCODE$
  
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TIME$ Product code: $PRODUCTCODE$ (at end of file)
@@ -389,6 +393,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end o
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Target Directory: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Documents Directory: $MYDOCUMENTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Configuration directory: $CONFIGURATION_DIRECTORY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Acrobat key: $ACROBATKEY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
@@ -681,43 +686,7 @@ GoTo Label: Modify Maintenance
 [DEFINE REGION: Start installation]
  
 label: Main Install
- 
-Comment: Get the state of the installable components
-Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATFORM
-Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
-Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
-Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable INSTALL_SIMULATOR_SHORTCUTS
-Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
-Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
-Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
-Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
-Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
-Get Component Out of date hubs replaced by Device Hub Selection State into Variable INSTALL_HUBS
- 
-Comment: Handle the top level installed / uninstalled twistie value
-if Variable INSTALL_HUBS not Equals TRUE
-  Comment: All hubs are not to be installed
-  Write into Text File $SETUPLOG$ from Value $TIME$ No hubs are being installed - $INSTALL_HUBS$ (at end of file)
-  Set Variable INSTALL_POTH to FALSE
-  Set Variable INSTALL_DOMECONTROLHUB to FALSE
-  Set Variable INSTALL_PIPE to FALSE
-  Set Variable INSTALL_HUB to FALSE
-else
-  Comment: Individual hubs may or may not be installed
-  Write into Text File $SETUPLOG$ from Value $TIME$ Some hubs are being installed - $INSTALL_HUBS$ (at end of file)
-end
- 
-Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Start menu shortcuts - $INSTALL_SIMULATOR_SHORTCUTS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
-Write into Text File $SETUPLOG$ from Value   (at end of file)
+Comment: Save Feature Selections into file j:\features.txt
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
@@ -988,33 +957,36 @@ if Variable REMOVE Equals TRUE
   Comment: Remove 64bit native images and 64bit component COM registration if necessary
   if Variable WIN64MODE Equals TRUE
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
-    Comment: Remove 64bit native images
-    Set Variable MYPROGRESS to 40
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Utilities.Video 6.1.0.0 (at end of file)
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.DriverAccess - v6.0.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.DriverAccess 6.0.0.0 (at end of file)
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Astrometry - v5.5.6.0
-    Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - Astrometry 5.5.6.0 (at end of file)
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Astrometry - v6.0.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - Astrometry 6.0.0.0 (at end of file)
-    Set Variable MYPROGRESS to 45
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities - v6.0.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Utilities 6.0.0.0 (at end of file)
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.DeviceInterfaces 6.0.0.0 (at end of file)
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Exceptions- v 6.0.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Exceptions 6.0.0.0 (at end of file)
-    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Cache - v6.0.0.0
-    Run Program $NGEN64$ uninstall "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Cache 6.0.0.0 (at end of file)
+    Comment: Remove 64bit native images if configured to do so.
+    if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Utilities.Video 6.1.0.0 (at end of file)
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.DriverAccess - v6.0.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.DriverAccess 6.0.0.0 (at end of file)
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Astrometry - v5.5.6.0
+      Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - Astrometry 5.5.6.0 (at end of file)
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Astrometry - v6.0.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - Astrometry 6.0.0.0 (at end of file)
+      Set Variable MYPROGRESS to 45
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities - v6.0.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Utilities 6.0.0.0 (at end of file)
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.DeviceInterfaces 6.0.0.0 (at end of file)
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Exceptions- v 6.0.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Exceptions 6.0.0.0 (at end of file)
+      Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Cache - v6.0.0.0
+      Run Program $NGEN64$ uninstall "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Cache 6.0.0.0 (at end of file)
+    else
+      Write into Text File $SETUPLOG$ from Value $TIME$ Native assemblies are not installed, skipping 64bit NGEN uninstall (at end of file)
+    end
     Set Variable MYPROGRESS to 50
      
     Comment: Unregister 64bit components
@@ -1048,43 +1020,49 @@ if Variable REMOVE Equals TRUE
    
   Comment: Remove 32bit components
   Set Variable MYPROGRESS to 55
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.DeviceInterfaces 6.0.0.0 (at end of file)
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Helper - v1.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM Helper 1.0.0.0 (at end of file)
-  Set Variable MYPROGRESS to 60
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Utilities - v6.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Utilities 6.0.0.0 (at end of file)
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - VideoUtils 6.1 (at end of file)
-  Set Variable MYPROGRESS to 65
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Astrometry - v5.5.6.0
-  Run Program $NGEN32$ uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Astrometry 5.5.6.0 (at end of file)
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Astrometry - v6.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Astrometry 6.0.0.0 (at end of file)
-  Set Variable MYPROGRESS to 70
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DriverAccess - v6.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.DriverAccess 6.0.0.0 (at end of file)
-  Set Variable MYPROGRESS to 75
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Helper2 - v1.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Helper2 1.0.0.0 (at end of file)
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Exceptions - v6.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Exceptions 6.0.0.0 (at end of file)
-  Set Variable PROGRESSTEXT to Removing 32bit native images - DirectShowLib-2005 - v2.1.0.15637
-  Run Program $NGEN32$ uninstall "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - DirectShowLib 2.1.0.15637 (at end of file)
-  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Cache - v6.0.0.0
-  Run Program $NGEN32$ uninstall "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Cache 6.0.0.0 (at end of file)
+  Comment: Remove 32bit native images if configured to do so.
+  if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.DeviceInterfaces 6.0.0.0 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Helper - v1.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM Helper 1.0.0.0 (at end of file)
+    Set Variable MYPROGRESS to 60
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Utilities - v6.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Utilities 6.0.0.0 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - VideoUtils 6.1 (at end of file)
+    Set Variable MYPROGRESS to 65
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Astrometry - v5.5.6.0
+    Run Program $NGEN32$ uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Astrometry 5.5.6.0 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Astrometry - v6.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Astrometry 6.0.0.0 (at end of file)
+    Set Variable MYPROGRESS to 70
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DriverAccess - v6.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.DriverAccess 6.0.0.0 (at end of file)
+    Set Variable MYPROGRESS to 75
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Helper2 - v1.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Helper2 1.0.0.0 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Exceptions - v6.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Exceptions 6.0.0.0 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 32bit native images - DirectShowLib-2005 - v2.1.0.15637
+    Run Program $NGEN32$ uninstall "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - DirectShowLib 2.1.0.15637 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Cache - v6.0.0.0
+    Run Program $NGEN32$ uninstall "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+     
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.Cache 6.0.0.0 (at end of file)
+  else
+    Write into Text File $SETUPLOG$ from Value $TIME$ Native assemblies are not installed, skipping 32bit NGEN uninstall (at end of file)
+  end
    
   Set Variable PROGRESSTEXT to Removing ASCOM.Exceptions 1.0 policy
   Run Program $COMMONFILES$\ASCOM\Platform\Internal\GACInstall.exe /u policy.1.0.ASCOM.Exceptions", startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
@@ -1342,6 +1320,45 @@ Set Variable NATIVE_ENGINE to FALSE
 Comment: ***** Start of Platform Installation Activities *****
 Set Variable MYPROGRESS to 25
  
+Comment: Get the state of the installable components
+Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
+Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
+Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable INSTALL_SIMULATOR_SHORTCUTS
+Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
+Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATFORM
+Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
+Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
+Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
+Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
+Get Component Out of date hubs replaced by Device Hub Selection State into Variable INSTALL_HUBS
+ 
+Comment: Handle the top level installed / uninstalled twistie value
+if Variable INSTALL_HUBS not Equals TRUE
+  Comment: All hubs are not to be installed
+  Write into Text File $SETUPLOG$ from Value $TIME$ No hubs are being installed - $INSTALL_HUBS$ (at end of file)
+  Set Variable INSTALL_POTH to FALSE
+  Set Variable INSTALL_DOMECONTROLHUB to FALSE
+  Set Variable INSTALL_PIPE to FALSE
+  Set Variable INSTALL_HUB to FALSE
+else
+  Comment: Individual hubs may or may not be installed
+  Write into Text File $SETUPLOG$ from Value $TIME$ Some hubs are being installed - $INSTALL_HUBS$ (at end of file)
+end
+ 
+Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Native Assemblies - $OPTIMISE_ASSEMBLIES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Start menu shortcuts - $INSTALL_SIMULATOR_SHORTCUTS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
+ 
 [DEFINE REGION: Set Profile ACL]
  
 Comment: Ensure that the corrrect Profile registry ACL is set on every run to repair broken installations
@@ -1451,6 +1468,9 @@ Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 d
 Install Assembly ..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
  
+Comment: Platform 7.1 core components
+Comment: Install Assembly ..\ASCOM.DeviceInterface\bin\Release\net481\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+ 
 Comment: Platform 6 core components
 Install Assembly ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
@@ -1468,8 +1488,9 @@ Install Assembly ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
 Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll to Global Assembly Cache
+Install Files ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll to Global Assembly Cache
  
 Comment: Platform 6 Astrometry
 Install Assembly ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
@@ -1609,8 +1630,8 @@ Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\R
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
 Install Files ..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Driver\bin\Release\ASCOM.Simulator.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Driver\bin\Release\ASCOM.Simulator.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
 Install Files ..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
@@ -1766,6 +1787,10 @@ Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
  
 Comment: Visual Studio assembly references for current Platform version
  
+Comment: Platform 7.1 references
+Install Files ..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform7
+Install Files ..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform7
+ 
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $VSREFERENCEFILES$\Platform
@@ -1776,7 +1801,7 @@ Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to 
 Comment: Platform 6 references
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$\Platform
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform
+Install Files ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$\Platform
@@ -1809,7 +1834,7 @@ Comment: Platform 5 references
 Install Files ..\InstallerContent\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform5
 Install Files ..\InstallerContent\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform5
  
-Comment: Visual Studio assembly references for Platform 6 backward compatibility because Platform 7 references are in a different place
+Comment: Visual Studio assembly references for Platform 6 because they are in a different place in Platform 7
  
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEPLATFORM6$\Platform6
@@ -1821,7 +1846,7 @@ Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to 
 Comment: Platform 6 references
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEPLATFORM6$\Platform6
-Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEPLATFORM6$\Platform6
@@ -2091,9 +2116,11 @@ Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, S
 Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
  
 Comment: Visual Studio reference pointers to ASCOM assemblies
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 7\, $VSREFERENCEFILES$\Platform7
 Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform\, $VSREFERENCEFILES$\Platform
 Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $VSREFERENCEFILES$\Platform55
 Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $VSREFERENCEFILES$\Platform5
+Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 7\, $VSREFERENCEFILES$\Platform7
 Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform\, $VSREFERENCEFILES$\Platform
 Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5.5\, $VSREFERENCEFILES$\Platform55
 Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5\, $VSREFERENCEFILES$\Platform5
@@ -2405,6 +2432,8 @@ if Variable SUCCESS not Equals ERROR
    
   Comment: Register Platform components
   Set Variable MYPROGRESS to 61
+   
+  Comment: Register Platform 6 components
   Set Variable PROGRESSTEXT to Registering ASCOM.Astrometry 6.0.0.0
   Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Registering ASCOM.Exceptions 6.0.0.0
@@ -2467,56 +2496,60 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to Register - Device Hub
   Include Script: UpdateAscomError
    
-  Comment: Install 32bit native images
   Set Variable MYPROGRESS to 65
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - DeviceInterfaces
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
-  Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - ASCOM Helper
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 66
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Utilities
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
-  Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - VideoUtils
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
-  Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Astrometry 5.5.6
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 67
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Astrometry 6.0
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - DriverAccess 6
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
-  Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Helper2 1.0
-  Include Script: UpdateAscomError
-  Set Variable MYPROGRESS to 68
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - Exceptions 6
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
-  Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - DirectShowLib 2.1
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
-  Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-  Set Variable ACTION to NGen32 Install - ASCOM Cache
-  Include Script: UpdateAscomError
-  Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
+  Comment: Install 32bit native images if configured to do so
+  if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
+    Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - DeviceInterfaces
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper - v1.0.0.0
+    Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - ASCOM Helper
+    Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 66
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities - v6.0.0.0
+    Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - Utilities
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video - v6.1.0.0
+    Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - VideoUtils
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v5.5.6.0
+    Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - Astrometry 5.5.6
+    Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 67
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry - v6.0.0.0
+    Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - Astrometry 6.0
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess - v6.0.0.0
+    Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - DriverAccess 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2 - v1.0.0.0
+    Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - Helper2 1.0
+    Include Script: UpdateAscomError
+    Set Variable MYPROGRESS to 68
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions - v6.0.0.0
+    Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - Exceptions 6
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005 - v2.1.0.15637
+    Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - DirectShowLib 2.1
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache - v6.0.0.0
+    Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Set Variable ACTION to NGen32 Install - ASCOM Cache
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Support.Utilities - v6.0.0.0
+  else
+    Write into Text File $SETUPLOG$ from Value $TIME$       Omitting 32bit NGEN (at end of file)
+  end
    
   Set Variable MYPROGRESS to 70
   Set Variable PROGRESSTEXT to Initialising earth rotation data
@@ -2600,9 +2633,9 @@ if Variable SUCCESS not Equals ERROR
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
     Set Variable ACTION to Register ASCOM.Utilities - 64bit
     Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM
+    Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Deviceinterfaces.dll for COM (CLR2)
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Deviceinterfaces.dll" (WAIT, get result into variable RC)
-    Set Variable ACTION to Register ASCOM.Deviceinterfaces - 64bit
+    Set Variable ACTION to Register ASCOM.Deviceinterfaces - 64bit (CLR2)
     Include Script: UpdateAscomError
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Utilities.Video.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
@@ -2645,47 +2678,51 @@ if Variable SUCCESS not Equals ERROR
      
     Comment: Create 64bit native images
     Set Variable MYPROGRESS to 89
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - DeviceInterfaces 6
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - DriverAccess 6
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - Exceptions 6
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - Utilities 6
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
-    Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - Video Utilities 6
-    Include Script: UpdateAscomError
-    Set Variable MYPROGRESS to 92
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
-    Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - Astrometry 5.5.6
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - Astrometry 6
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
-    Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - DirectShowLib
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
-    Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Set Variable ACTION to NGen64 Install - ASCOM Cache
-    Include Script: UpdateAscomError
-    Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
+    Comment: Install 64bit native images if configured to do so
+    if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0 (CLR2)
+      Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - DeviceInterfaces 6 (CLR2)
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess - v6.0.0.0
+      Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - DriverAccess 6
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions - v6.0.0.0
+      Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - Exceptions 6
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities - v6.0.0.0
+      Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - Utilities 6
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
+      Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - Video Utilities 6
+      Include Script: UpdateAscomError
+      Set Variable MYPROGRESS to 92
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v5.5.6.0
+      Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - Astrometry 5.5.6
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - v6.0.0.0
+      Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - Astrometry 6
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005 - v2.1.0.15637
+      Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - DirectShowLib
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache - v6.0.0.0
+      Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Set Variable ACTION to NGen64 Install - ASCOM Cache
+      Include Script: UpdateAscomError
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Support.Utilities - v6.0.0.0
+    else
+      Write into Text File $SETUPLOG$ from Value $TIME$       Omitting 64bit NGEN (at end of file)
+    end
      
     Comment: Set the default Platform COM simulators
-    Set Variable MYPROGRESS to 72
     Set Variable PROGRESSTEXT to Setting default Platform simulators
     Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
     Set Variable ACTION to Set COM simulators to use OmniSimulators

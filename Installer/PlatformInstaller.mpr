@@ -1440,6 +1440,23 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -2253,7 +2270,37 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3048,6 +3095,7 @@ $
 COMMONFILES
 COMMONFILES64
 COMMONFILES32
+COMPONENTS
 $
 1
 6
@@ -3063,7 +3111,7 @@ ASCOMPlatformName
 ASCOMPlatformName
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{DE1E75BC-CD56-4443-AEB8-9A5EF1F1C418}
+{4D6B85C1-89A5-4E89-9480-C93428A31775}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help

@@ -1440,6 +1440,24 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -2253,7 +2271,43 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3042,6 +3096,7 @@ $
 COMMONFILES
 COMMONFILES64
 COMMONFILES32
+COMPONENTS
 $
 1
 6
@@ -3057,7 +3112,7 @@ ASCOMPlatformName
 ASCOMPlatformName
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{A862F116-F5A5-4321-9E79-2EEDF1E504C5}
+{C193757C-2D9B-424B-B95A-B0D600923430}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -3066,7 +3121,7 @@ Copyright © 1998-2024, The ASCOM Initiative. All rights reserved.
 FALSE
 AscomPlatformInstaller
 TRUE
-TRUE
+FALSE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer
