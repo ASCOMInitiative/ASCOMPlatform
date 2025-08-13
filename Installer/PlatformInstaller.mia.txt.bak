@@ -165,7 +165,7 @@ Comment: Component installed state variables
 Comment: Set Variable INSTALL_PLATFORM to 
 Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
 Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
-Set Variable OPTIMISE_ASSEMBLIES to 
+Set Variable OPTIMISE_ASSEMBLIES to FALSE
 Set Variable DISPLAY_USER_GUIDE to 
 Set Variable INSTALL_HUBS to 
 Set Variable INSTALL_POTH to 
@@ -338,7 +338,6 @@ end
 Comment: Set the installation cache location
 Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
 Set Variable CONFIGURATION_DIRECTORY to $PROGRAMDATA$$PRODUCTCODE$
-Run Program CMD.EXE /c MKDIR "$CONFIGURATION_DIRECTORY$" (WAIT)
  
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TIME$ Product code: $PRODUCTCODE$ (at end of file)
