@@ -10202,7 +10202,7 @@ FALSE
 FALSE
 FALSE
 {EAE2E045-3243-456D-ADF2-1889EB62AAF2}
-..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb
+..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\net481\ASCOM.Simulator.Camera.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE
@@ -10215,7 +10215,7 @@ FALSE
 FALSE
 FALSE
 {91B5B5E8-DC66-4722-AFC5-8E2D1005E153}
-..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll
+..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\net481\ASCOM.Simulator.Camera.dll
 FALSE|
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE

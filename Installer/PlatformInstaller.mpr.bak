@@ -1457,7 +1457,6 @@ $
 
 
 
-
 B
 
 
@@ -3106,13 +3105,13 @@ ASCOM Initiative
 ASCOMPlatformName
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
-7.0.9999.9999
+7.1.9999.9999
 English
 ASCOMPlatformName
 ASCOMPlatformName
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{C193757C-2D9B-424B-B95A-B0D600923430}
+{4D6B85C1-89A5-4E89-9480-C93428A31775}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -3121,7 +3120,7 @@ Copyright © 1998-2024, The ASCOM Initiative. All rights reserved.
 FALSE
 AscomPlatformInstaller
 TRUE
-FALSE
+TRUE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer

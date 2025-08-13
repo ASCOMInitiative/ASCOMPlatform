@@ -8080,7 +8080,8 @@ namespace ASCOM.Utilities
                 Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString(), "True");
                 Compare("UtilTests", "IsMinimumRequiredVersion 6.6", Utl.IsMinimumRequiredVersion(6, 6).ToString(), "True");
                 Compare("UtilTests", "IsMinimumRequiredVersion 7.0", Utl.IsMinimumRequiredVersion(7, 0).ToString(), "True");
-                Compare("UtilTests", "IsMinimumRequiredVersion 7.1", Utl.IsMinimumRequiredVersion(7, 1).ToString(), "False");
+                Compare("UtilTests", "IsMinimumRequiredVersion 7.1", Utl.IsMinimumRequiredVersion(7, 1).ToString(), "True");
+                Compare("UtilTests", "IsMinimumRequiredVersion 7.1", Utl.IsMinimumRequiredVersion(7, 2).ToString(), "False");
 
                 // Check that the platform version properties return the correct values
                 FileVersionInfo FV;

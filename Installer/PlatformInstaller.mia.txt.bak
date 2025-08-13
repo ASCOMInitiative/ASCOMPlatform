@@ -1546,8 +1546,8 @@ Install Files ..\Profile Explorer\bin\x86\Release\ProfileExplorer.pdb to $TARGET
 Comment: Platform Simulators
  
 Comment: Camera simulator
-Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
-Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\net481\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\net481\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 Install Files ..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
  
