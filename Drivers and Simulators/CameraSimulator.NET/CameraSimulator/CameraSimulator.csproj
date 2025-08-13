@@ -105,6 +105,6 @@
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.1.0-rc.3" />
+    <PackageReference Include="ASCOM.DeviceInterfaces" Version="7.*" />
   </ItemGroup>
 </Project>
