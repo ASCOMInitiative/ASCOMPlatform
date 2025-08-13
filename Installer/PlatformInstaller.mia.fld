@@ -1,17 +1,10 @@
 ﻿Check Application Requirements
-Remove Previous Platform install if present
 Remove Previous Platforms 4 and 5 if present
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
-Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
-Check Application Pre-Requisites
-Main Setup Dialogue
-Maintenance Dialogue
-Start installation
-Uninstall items installed by this installer
-Uninstall previous Platform
 Set Profile ACL
 Install Platform files
+Check Application Pre-Requisites

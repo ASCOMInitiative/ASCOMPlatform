@@ -165,7 +165,7 @@ Comment: Component installed state variables
 Comment: Set Variable INSTALL_PLATFORM to 
 Set Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP to 
 Set Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP to 
-Set Variable OPTIMISE_ASSEMBLIES to FALSE
+Set Variable GENERATE_NATIVE_ASSEMBLIES to FALSE
 Set Variable DISPLAY_USER_GUIDE to 
 Set Variable INSTALL_HUBS to 
 Set Variable INSTALL_POTH to 
@@ -244,17 +244,17 @@ Set Variable FRAMEWORK4 to v4.0.30319
 Set Variable FRAMEWORK to $FRAMEWORK4$
  
 Comment: Define components
-Define Component: ASCOM Platform Options
 Define Component: ASCOM Platform Options\Install Diagnostics shortcut on desktop
 Define Component: ASCOM Platform Options\Install Profile Explorer shortcut on desktop
 Define Component: ASCOM Platform Options\Display user guide when installation is complete
 Define Component: ASCOM Platform Options\Include simulator Start menu shortcuts
-Comment: Define Component: Optimise Install
-Define Component: Out of date hubs replaced by Device Hub
+Define Component: ASCOM Platform Options\Generate Native Assemblies
+Define Component: ASCOM Platform Options
 Define Component: Out of date hubs replaced by Device Hub\Pipe
 Define Component: Out of date hubs replaced by Device Hub\Dome Control Hub
 Define Component: Out of date hubs replaced by Device Hub\POTH
 Define Component: Out of date hubs replaced by Device Hub\Hub
+Define Component: Out of date hubs replaced by Device Hub
  
 Comment: Force the user guide not to be displayed because Adobe reader locks up when started from the installer.
 Deselect Component: ASCOM Platform Options\Display user guide when installation is complete
@@ -337,7 +337,8 @@ end
  
 Comment: Set the installation cache location
 Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
-Set Variable CONFIGURATION_DIRECTORY to $PROGRAMDATA$$PRODUCTCODE$
+Set Variable CONFIGURATION_FOLDER to $PROGRAMDATA$$PRODUCTCODE$
+Set Variable CONFIGURATION_FILE to $CONFIGURATION_FOLDER$\OptionSelection.txt
  
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TIME$ Product code: $PRODUCTCODE$ (at end of file)
@@ -393,7 +394,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end o
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Target Directory: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Documents Directory: $MYDOCUMENTS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install cache directory: $INSTALLCACHEDIRECTORY$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Configuration directory: $CONFIGURATION_DIRECTORY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Configuration file: $CONFIGURATION_FILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Acrobat key: $ACROBATKEY$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
@@ -561,6 +562,9 @@ end
 [END REGION]
  
 [DEFINE REGION: Main Setup Dialogue]
+Comment: Create the configuration file folder if necessary and load the configuraiton file if it exists.
+Run Program CMD.EXE /c MKDIR "$CONFIGURATION_FOLDER$" (WAIT)
+Load Feature Selections from file $CONFIGURATION_FILE$
  
 if Variable MAINTENANCE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Mode: Maintenance (at end of file)
@@ -958,7 +962,7 @@ if Variable REMOVE Equals TRUE
   if Variable WIN64MODE Equals TRUE
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
     Comment: Remove 64bit native images if configured to do so.
-    if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+    if Variable GENERATE_NATIVE_ASSEMBLIES Equals TRUE
       Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities.Video - v6.1.0.0
       Run Program $NGEN64$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Uninstall - ASCOM.Utilities.Video 6.1.0.0 (at end of file)
@@ -1021,7 +1025,7 @@ if Variable REMOVE Equals TRUE
   Comment: Remove 32bit components
   Set Variable MYPROGRESS to 55
   Comment: Remove 32bit native images if configured to do so.
-  if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+  if Variable GENERATE_NATIVE_ASSEMBLIES Equals TRUE
     Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
     Run Program $NGEN32$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Uninstall - ASCOM.DeviceInterfaces 6.0.0.0 (at end of file)
@@ -1319,12 +1323,14 @@ Set Variable NATIVE_ENGINE to FALSE
  
 Comment: ***** Start of Platform Installation Activities *****
 Set Variable MYPROGRESS to 25
+Save Feature Selections into file $CONFIGURATION_FILE$
  
 Comment: Get the state of the installable components
 Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
 Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable INSTALL_SIMULATOR_SHORTCUTS
 Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
+Get Component ASCOM Platform Options\Generate Native Assemblies Selection State into Variable GENERATE_NATIVE_ASSEMBLIES
 Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATFORM
 Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
 Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
@@ -1345,19 +1351,23 @@ else
   Write into Text File $SETUPLOG$ from Value $TIME$ Some hubs are being installed - $INSTALL_HUBS$ (at end of file)
 end
  
-Comment: Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Native Assemblies - $OPTIMISE_ASSEMBLIES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Start menu shortcuts - $INSTALL_SIMULATOR_SHORTCUTS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Generate Native Assemblies - $GENERATE_NATIVE_ASSEMBLIES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
+Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 [DEFINE REGION: Set Profile ACL]
  
@@ -2498,7 +2508,7 @@ if Variable SUCCESS not Equals ERROR
    
   Set Variable MYPROGRESS to 65
   Comment: Install 32bit native images if configured to do so
-  if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+  if Variable GENERATE_NATIVE_ASSEMBLIES Equals TRUE
     Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces - v6.0.0.0
     Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Set Variable ACTION to NGen32 Install - DeviceInterfaces
@@ -2679,7 +2689,7 @@ if Variable SUCCESS not Equals ERROR
     Comment: Create 64bit native images
     Set Variable MYPROGRESS to 89
     Comment: Install 64bit native images if configured to do so
-    if Variable OPTIMISE_ASSEMBLIES Equals TRUE
+    if Variable GENERATE_NATIVE_ASSEMBLIES Equals TRUE
       Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces - v6.0.0.0 (CLR2)
       Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
       Set Variable ACTION to NGen64 Install - DeviceInterfaces 6 (CLR2)

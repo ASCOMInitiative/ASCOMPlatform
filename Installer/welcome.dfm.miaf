@@ -5,3 +5,5 @@ IF (ClearCache.Checked = False)  THEN  Next.Caption := &Install;
 IF (ClearCache.Checked = True)  THEN  Next.Caption := &Clear Cache;
 IF (ClearCache.Checked = True)  THEN  ClearCacheText.Visible := True;
 IF (ClearCache.Checked = False)  THEN  ClearCacheText.Visible := False;
+IF (ClearCache.Checked = False)  THEN  Description.Visible := True;
+IF (ClearCache.Checked = True)  THEN  Description.Visible := False;
