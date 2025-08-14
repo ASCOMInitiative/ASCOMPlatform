@@ -7,4 +7,5 @@ Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
 Install Platform files
+Set up log file and variables
 Check Application Pre-Requisites

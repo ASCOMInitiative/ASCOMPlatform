@@ -937,6 +937,53 @@ end
 [DEFINE REGION: Uninstall items installed by this installer]
  
 if Variable REMOVE Equals TRUE
+  Comment: Create the configuration file folder if necessary and load the configuraiton file if it exists.
+  Run Program CMD.EXE /c MKDIR "$CONFIGURATION_FOLDER$" (WAIT)
+  Load Feature Selections from file $CONFIGURATION_FILE$
+   
+  Comment: Get the state of the installable components
+  Get Component ASCOM Platform Options\Install Diagnostics shortcut on desktop Selection State into Variable INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP
+  Get Component ASCOM Platform Options\Install Profile Explorer shortcut on desktop Selection State into Variable INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP
+  Get Component ASCOM Platform Options\Include simulator Start menu shortcuts Selection State into Variable INSTALL_SIMULATOR_SHORTCUTS
+  Get Component ASCOM Platform Options\Display user guide when installation is complete Selection State into Variable DISPLAY_USER_GUIDE
+  Get Component ASCOM Platform Options\Generate Native Assemblies Selection State into Variable GENERATE_NATIVE_ASSEMBLIES
+  Get Component ASCOM Platform Options Selection State into Variable INSTALL_PLATFORM
+  Get Component Out of date hubs replaced by Device Hub\Dome Control Hub Selection State into Variable INSTALL_DOMECONTROLHUB
+  Get Component Out of date hubs replaced by Device Hub\Hub Selection State into Variable INSTALL_HUB
+  Get Component Out of date hubs replaced by Device Hub\Pipe Selection State into Variable INSTALL_PIPE
+  Get Component Out of date hubs replaced by Device Hub\POTH Selection State into Variable INSTALL_POTH
+  Get Component Out of date hubs replaced by Device Hub Selection State into Variable INSTALL_HUBS
+   
+  Comment: Handle the top level installed / uninstalled twistie value
+  if Variable INSTALL_HUBS not Equals TRUE
+    Comment: All hubs are not to be installed
+    Write into Text File $SETUPLOG$ from Value $TIME$ No hubs are being installed - $INSTALL_HUBS$ (at end of file)
+    Set Variable INSTALL_POTH to FALSE
+    Set Variable INSTALL_DOMECONTROLHUB to FALSE
+    Set Variable INSTALL_PIPE to FALSE
+    Set Variable INSTALL_HUB to FALSE
+  else
+    Comment: Individual hubs may or may not be installed
+    Write into Text File $SETUPLOG$ from Value $TIME$ Some hubs are being installed - $INSTALL_HUBS$ (at end of file)
+  end
+   
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options - $INSTALL_PLATFORM$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Start menu shortcuts - $INSTALL_SIMULATOR_SHORTCUTS$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Generate Native Assemblies - $GENERATE_NATIVE_ASSEMBLIES$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+   
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
+   
+  Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value   (at end of file)
    
   [DEFINE REGION: Remove Platform update checker scheduled task]
    
@@ -1356,6 +1403,7 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Platform Installation Options 
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Desktop Diagnostics Shortcut - $INSTALL_DIAGNOSTICS_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Profile Explorer Shortcut - $INSTALL_PROFILE_EXPLORER_SHORTCUT_ON_DESKTOP$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Start menu shortcuts - $INSTALL_SIMULATOR_SHORTCUTS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Generate Native Assemblies - $GENERATE_NATIVE_ASSEMBLIES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Hubs - $INSTALL_HUBS$ (at end of file)
@@ -1363,7 +1411,6 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Install Pipe - $INSTALL_PIPE$ 
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Dome Control Hub - $INSTALL_DOMECONTROLHUB$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install POTH - $INSTALL_POTH$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Install Hub - $INSTALL_HUB$ (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Generate Native Assemblies - $GENERATE_NATIVE_ASSEMBLIES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 Write into Text File $SETUPLOG$ from Value $TIME$ Display User Guide - $DISPLAY_USER_GUIDE$ (at end of file)

@@ -498,8 +498,6 @@ Include Script
 Include Script
 Include Script
 Comment
-Write to Text File
-Comment
 Comment
 If
 If
@@ -3502,8 +3500,6 @@ $
 {E278210B-27E3-433F-BF0D-4E7CE221DB08}
 {31DC43E5-600A-4241-A08E-686ED1D9BE06}
 {7E359690-29ED-4D41-B2C3-EFAB7FFD60BA}
-{B03FAFB3-D112-47CD-967E-D9A73CEA8900}
-{6CBBC38C-C1CE-4858-9136-A4CB6AE3E1D7}
 {86518335-05FC-4D4C-8D20-FFECDDEE86EB}
 {0FEAC762-9EFC-4F88-A624-6E69463F3AD8}
 {8D709C9A-EE6F-46B8-AE87-472FA825C9FD}
@@ -6018,8 +6014,6 @@ Display maintenance dialogue
 
 {86518335-05FC-4D4C-8D20-FFECDDEE86EB}
 Install setup pre-requisites
-{6CBBC38C-C1CE-4858-9136-A4CB6AE3E1D7}
-
 {D6CA6ED2-E881-4666-A1FE-093A04D0B089}
 Check setup pre-requisites
 {7E914B07-3670-4489-8E8A-F2EB97E0E06D}
@@ -7427,7 +7421,7 @@ Handle the top level installed / uninstalled twistie value
 {EF8F5F96-E0F5-4E66-B58C-3CED0721B349}
 Get the state of the installable components
 {BD13E733-F60C-4D5F-AA5F-B34E9FBE7EBA}
-Create the configuration file folder if necessary and load the configuraiton file if it exists.
+Create the selected options configuration file folder if necessary and load the configuraiton file if it exists.
 {366A1B22-291B-464F-912C-F9AF186F6215}
 
 {915CE537-47EB-4BB2-89C3-82603CA71794}
@@ -17935,11 +17929,6 @@ $SETUPLOG$
 $TIME$ Cleaning simulator 32bit COM entries
 FALSE
 TRUE
-{B03FAFB3-D112-47CD-967E-D9A73CEA8900}
-$SETUPLOG$
-
-FALSE
-TRUE
 {427B0685-2005-4FC4-87B3-8595857DFDEE}
 $SETUPLOG$
 
@@ -20200,8 +20189,6 @@ C
 
 
 
-
-
 C
 
 
@@ -22514,8 +22501,6 @@ C
 
 
 $
-
-
 
 
 
