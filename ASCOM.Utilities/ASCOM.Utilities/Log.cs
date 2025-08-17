@@ -18,6 +18,23 @@ namespace ASCOM.Utilities
     {
         static TraceLogger TL;
         static bool? _enabled = null;
+        static string _netVersion = "Unknown";
+
+        /// <summary>
+        /// Initializes static members of the <see cref="Log"/> class.
+        /// </summary>
+        /// <remarks>This static constructor retrieves the .NET runtime version from the environment and
+        /// assigns it to an internal field. If an error occurs during initialization, the exception is ignored.</remarks>
+        static Log()
+        {
+            try
+            {
+                // Retrieve the .NET runtime version from the environment
+                _netVersion = System.Environment.Version.ToString();
+            }
+            catch { }
+        }
+
         /// <summary>
         /// Logs the specified component name.
         /// </summary>
@@ -133,7 +150,6 @@ namespace ASCOM.Utilities
                         {
                             TL.LogMessage("StackTrace", $"Exception while getting type from ProgID: {lastDeclaringMethodName} - {ex.Message}");
                         }
-
                         break;
                     }
 
@@ -148,6 +164,11 @@ namespace ASCOM.Utilities
                     string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
                     TL.LogMessage("Registry", $"Writing to registry key: {key}");
                     ra.WriteProfile(key, componentName, componentName);
+
+                    // Add the currently running Framework CLR version
+                    string frameworkKey = @$"{Global.NET35_REGISTRY_BASE}\{processName}";
+                    TL.LogMessage("Registry", $"Writing CLR version to registry key: {frameworkKey}");
+                    ra.WriteProfile(frameworkKey, "Framework", _netVersion);
                 }
             }
             catch (Exception ex)
