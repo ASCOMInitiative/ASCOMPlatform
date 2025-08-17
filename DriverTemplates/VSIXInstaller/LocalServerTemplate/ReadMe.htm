@@ -78,6 +78,24 @@
         This project creates an ASCOM local server executable and a driver class that will support multiple clients. It can also be extended to serve multiple ASCOM devices such
         as a Telescope and a Focuser or multiple devices of the same type such as two focusers.
     </P>
+    <p>
+        <b style="color:blue">BEFORE CONTINUING - Please consider creating a cross-platform Alpaca device instead of a COM local server driver.</b>
+    </p>
+    <p>
+        To ensure longevity of your device, ASCOM now recommends building Alpaca devices rather than COM drivers.
+    </p>
+    <p>
+        An Alpaca device's RESTful web API can be used
+        by any desktop or mobile application that can make HTTP requests, running on any operating system. This makes it much more flexible than a local server, whose use is limited
+        to COM clients that run on Windows.
+    </p>
+    <p>
+        You loose nothing by developing an Alpaca device! Many client applications have native Alpaca support while the Platform's built-in Dynamic Clients enable traditional
+        COM clients to use Alpaca devices.
+    </p>
+    <p>
+        You can find more information about Alpaca here: <a href="https://ascom-standards.org/AlpacaDeveloper/Index.htm">ASCOM Alpaca</a>.
+    </p>
     <P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
         <STRONG>
             <SPAN STYLE="background: #ffee88">NOTE:</SPAN>
