@@ -128,131 +128,150 @@ namespace ASCOM.Utilities
         /// </summary>
         private void BtnCreateReport_Click(object sender, EventArgs e)
         {
-            List<Net35Use> net35UseList = new();
-
-            ASCOM.Tools.TraceLogger TL = new("Net35CompopnentUseReport", true);
-
-            using RegistryKey profileKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@$"{Global.REGISTRY_ROOT_KEY_NAME}\{Global.NET35_REGISTRY_BASE}");
+            try
             {
-                LogMessage("Initialise", "Created registry key", TL);
+                List<Net35Use> net35UseList = new();
 
-                if (profileKey != null)
+                ASCOM.Tools.TraceLogger TL = new("Net35CompopnentUseReport", true);
+
+                using RegistryKey profileKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@$"{Global.REGISTRY_ROOT_KEY_NAME}\{Global.NET35_REGISTRY_BASE}");
                 {
-                    LogMessage("Initialise", "Registry key found", TL);
-                    string[] categoryList = profileKey.GetSubKeyNames();
-                    LogMessage("Initialise", $"Found {categoryList.Length} categories", TL);
-                    foreach (var category in categoryList)
+                    LogMessage("Initialise", "Created registry key", TL);
+
+                    if (profileKey != null)
                     {
-                        LogMessage("Category", category, TL);
-                        string[] names = profileKey.OpenSubKey(category).GetSubKeyNames();
-                        LogMessage("Names", $"Found {names.Length} names", TL);
-
-                        foreach (string name in names)
+                        LogMessage("Initialise", "Registry key found", TL);
+                        string[] categoryList = profileKey.GetSubKeyNames();
+                        LogMessage("Initialise", $"Found {categoryList.Length} categories", TL);
+                        foreach (var category in categoryList)
                         {
-                            LogMessage("Name", $"Found name {name}", TL);
-                            using RegistryKey nameKey = profileKey.OpenSubKey(category).OpenSubKey(name);
-                            if (nameKey != null)
-                            {
-                                string[] assemblies = profileKey.OpenSubKey(category).OpenSubKey(name).GetSubKeyNames();
-                                LogMessage("Assemblies", $"Found {assemblies.Length} assemblies", TL);
+                            LogMessage("Category", category, TL);
+                            string[] executables = profileKey.OpenSubKey(category).GetSubKeyNames();
+                            LogMessage("Executables", $"Found {executables.Length} executables", TL);
 
-                                foreach (string assembly in assemblies)
+                            foreach (string executable in executables)
+                            {
+                                LogMessage("Name", $"Found name {executable}", TL);
+                                using RegistryKey executableKey = profileKey.OpenSubKey(category).OpenSubKey(executable);
+                                if (executableKey != null)
                                 {
-                                    LogMessage("Assembly", $"Found assembly {assembly}", TL);
-                                    using RegistryKey assemblyKey = profileKey.OpenSubKey(category).OpenSubKey(name).OpenSubKey(assembly);
-                                    if (assemblyKey != null)
+                                    // Get the .NET version from the Framework key
+                                    string dotNetVersion = executableKey.GetValue("Framework")?.ToString() ?? "Unknown";
+
+                                    // Get the consumed assemblies for this executable
+                                    string[] assemblies = profileKey.OpenSubKey(category).OpenSubKey(executable).GetSubKeyNames();
+                                    LogMessage("Assemblies", $"Found {assemblies.Length} assemblies", TL);
+
+                                    foreach (string assembly in assemblies)
                                     {
-                                        string[] components = profileKey.OpenSubKey(category).OpenSubKey(name).OpenSubKey(assembly).GetValueNames();
-                                        LogMessage("Components", $"Found {components.Length} components", TL);
-                                        foreach (string component in components)
+                                        LogMessage("Assembly", $"Found assembly {assembly}", TL);
+                                        using RegistryKey assemblyKey = profileKey.OpenSubKey(category).OpenSubKey(executable).OpenSubKey(assembly);
+                                        if (assemblyKey != null)
                                         {
-                                            string value = assemblyKey.GetValue(component)?.ToString() ?? "No Value";
-                                            LogMessage("Value", $"Component {component} has value: {value}", TL);
-                                            net35UseList.Add(new Net35Use
+
+                                            string[] components = profileKey.OpenSubKey(category).OpenSubKey(executable).OpenSubKey(assembly).GetValueNames();
+                                            LogMessage("Components", $"Found {components.Length} components", TL);
+                                            foreach (string component in components)
                                             {
-                                                Category = category,
-                                                Name = name,
-                                                Assembly = assembly,
-                                                Component = component
-                                            });
+                                                string value = assemblyKey.GetValue(component)?.ToString() ?? "No Value";
+                                                LogMessage("Value", $"Component {component} has value: {value}", TL);
+                                                net35UseList.Add(new Net35Use
+                                                {
+                                                    Category = category,
+                                                    Name = executable,
+                                                    Assembly = assembly,
+                                                    Component = component,
+                                                    DotNetVersion = dotNetVersion
+                                                });
+                                            }
+                                        }
+                                        else
+                                        {
+                                            LogMessage("Assemblies", $"No data found for {assemblyKey}", TL);
                                         }
                                     }
-                                    else
-                                    {
-                                        LogMessage("Assemblies", $"No data found for {assemblyKey}", TL);
-                                    }
+                                }
+                                else
+                                {
+                                    LogMessage("Names", $"No data found for {executable}", TL);
                                 }
                             }
-                            else
-                            {
-                                LogMessage("Names", $"No data found for {name}", TL);
-                            }
                         }
+                    }
+                    else
+                    {
+                        LogMessage("Initialise", "No registry key found for .NET 3.5 components", TL);
+                    }
+                }
+
+                // List<Net35Use> sortedList = net35UseList.OrderBy(n => n.Category).ThenBy(n => n.Name).ThenBy(n => n.Assembly).ThenBy(n => n.Component).ToList();
+                TL.LogMessage(".NET 3.5 Component Use Ordered by Component", "");
+                TL.LogMessage("===========================================", "");
+                TL.LogMessage("", "");
+
+                List<Net35Use> sortedList = net35UseList.OrderBy(n => n.Component).ToList();
+                var grouplist = sortedList.GroupBy(n => n.Component);
+                foreach (var group in grouplist)
+                {
+                    TL.LogMessage("Component", $"{group.Key} is used by the following executables:");
+                    foreach (var item in group)
+                    {
+                        TL.LogMessage("Executable", $"  {item.Name}");
+                    }
+                    TL.LogMessage("", "");
+                }
+                TL.LogMessage("", "");
+
+                List<Net35Use> sortedListClrVersion = net35UseList.OrderBy(n => n.DotNetVersion).ToList();
+                var grouplistClrVersion = sortedListClrVersion.GroupBy(n => n.DotNetVersion);
+                foreach (var groupClrVersion in grouplistClrVersion)
+                {
+                    string message = $".NET 3.5 Component Use Ordered by Application/Driver - Running under .NET '{groupClrVersion.Key}'";
+                    TL.LogMessage(message, "");
+                    TL.LogMessage(new string('=', message.Length), "");
+                    TL.LogMessage("", "");
+
+                    sortedList = groupClrVersion.OrderBy(n => n.Name).ToList();
+                    grouplist = sortedList.GroupBy(n => n.Name);
+                    foreach (var group in grouplist)
+                    {
+                        TL.LogMessage("Executable", $"{group.Key} uses the following components:");
+                        foreach (var item in group)
+                        {
+                            TL.LogMessage("Component", $"  {item.Component}");
+                        }
+                        TL.LogMessage("", "");
+                    }
+                }
+                // Save the report log file name so it can be displayed
+                string logFileName = Path.Combine(TL.LogFilePath, TL.LogFileName);
+
+                if (!string.IsNullOrEmpty(logFileName))
+                {
+                    try
+                    {
+                        new Process
+                        {
+                            StartInfo = new ProcessStartInfo(logFileName)
+                            {
+                                UseShellExecute = true
+                            }
+                        }.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error opening report: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    LogMessage("Initialise", "No registry key found for .NET 3.5 components", TL);
+                    MessageBox.Show("No report file available. Please create a report first.", "No Report", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+
             }
-
-            // List<Net35Use> sortedList = net35UseList.OrderBy(n => n.Category).ThenBy(n => n.Name).ThenBy(n => n.Assembly).ThenBy(n => n.Component).ToList();
-            TL.LogMessage(".NET 3.5 Component Use Ordered by Component", "");
-            TL.LogMessage("===========================================", "");
-            TL.LogMessage("", "");
-
-            List<Net35Use> sortedList = net35UseList.OrderBy(n => n.Component).ToList();
-            var grouplist = sortedList.GroupBy(n => n.Component);
-            foreach (var group in grouplist)
+            catch (Exception ex)
             {
-                TL.LogMessage("Component", $"{group.Key} is used by the following executables:");
-                foreach (var item in group)
-                {
-                    TL.LogMessage("Executable", $"  {item.Name}");
-                }
-                TL.LogMessage("", "");
-            }
-            TL.LogMessage("", "");
-
-            TL.LogMessage(".NET 3.5 Component Use Ordered by Application / Driver", "");
-            TL.LogMessage("======================================================", "");
-            TL.LogMessage("", "");
-
-            sortedList = net35UseList.OrderBy(n => n.Category).ToList();
-            grouplist = sortedList.GroupBy(n => n.Name);
-            foreach (var group in grouplist)
-            {
-                TL.LogMessage("Executable", $"{group.Key} uses the following components:");
-                foreach (var item in group)
-                {
-                    TL.LogMessage("Component", $"  {item.Component}");
-                }
-                TL.LogMessage("", "");
-            }
-
-            // Save the report log file name so it can be displayed
-            string logFileName = Path.Combine(TL.LogFilePath, TL.LogFileName);
-
-            if (!string.IsNullOrEmpty(logFileName))
-            {
-                try
-                {
-                    new Process
-                    {
-                        StartInfo = new ProcessStartInfo(logFileName)
-                        {
-                            UseShellExecute = true
-                        }
-                    }.Start();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error opening report: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No report file available. Please create a report first.", "No Report", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"{ex.Message}\r\n{ex}", "Diagnostics report exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

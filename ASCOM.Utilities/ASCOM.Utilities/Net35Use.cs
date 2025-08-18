@@ -14,11 +14,14 @@ namespace ASCOM.Utilities
             Name = "Not set";
             Assembly = "Not set";
             Component = "Not set";
+            DotNetVersion = "Not set";
         }
         internal string Category { get; set; }
         internal string Name { get; set; }
         internal string Assembly { get; set; }
         internal string Component { get; set; }
+
+        internal string DotNetVersion { get; set; }
 
         internal new string ToString()
         {
@@ -26,6 +29,7 @@ namespace ASCOM.Utilities
             sb.Append($"Category: {Category}, ");
             sb.Append($"Name: {Name}, ");
             sb.Append($"Assembly: {Assembly}, ");
+            sb.Append($"DotNetVersion: {DotNetVersion}, "); 
             sb.Append($"Component: {Component}.");
             return sb.ToString();
         }
