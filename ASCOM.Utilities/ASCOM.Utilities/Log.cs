@@ -27,10 +27,19 @@ namespace ASCOM.Utilities
         /// assigns it to an internal field. If an error occurs during initialization, the exception is ignored.</remarks>
         static Log()
         {
+            // Attempt to get the .NET runtime version from the environment
             try
             {
                 // Retrieve the .NET runtime version from the environment
                 _netVersion = System.Environment.Version.ToString();
+
+            }
+            catch { }
+
+            // Attempt to get the .NET runtime version of the primary process from the entry assembly
+            try
+            {
+                _netVersion = Assembly.GetEntryAssembly().ImageRuntimeVersion;
             }
             catch { }
         }
