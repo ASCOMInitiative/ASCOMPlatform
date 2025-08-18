@@ -31,17 +31,19 @@ namespace ASCOM.Utilities
             try
             {
                 // Retrieve the .NET runtime version from the environment
-                _netVersion = System.Environment.Version.ToString();
-
+                _netVersion = $"{System.Environment.Version.ToString()} (Environment)";
             }
             catch { }
 
             // Attempt to get the .NET runtime version of the primary process from the entry assembly
             try
             {
-                _netVersion = Assembly.GetEntryAssembly().ImageRuntimeVersion;
+                _netVersion = $"{Assembly.GetEntryAssembly().ImageRuntimeVersion} (ImageRuntimeVersion)";
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _netVersion = ex.Message;
+            }
         }
 
         /// <summary>
@@ -176,7 +178,7 @@ namespace ASCOM.Utilities
 
                     // Add the currently running Framework CLR version
                     string frameworkKey = @$"{Global.NET35_REGISTRY_BASE}\{processName}";
-                    TL.LogMessage("Registry", $"Writing CLR version to registry key: {frameworkKey}");
+                    TL.LogMessage("Registry", $"Writing CLR version {_netVersion} to registry key: {frameworkKey}");
                     ra.WriteProfile(frameworkKey, "Framework", _netVersion);
                 }
             }
