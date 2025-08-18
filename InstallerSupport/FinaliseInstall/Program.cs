@@ -121,6 +121,7 @@ namespace FinaliseInstall
                 }; // Create a trace logger so we can log what happens
 
                 LogMessage("FinaliseInstall", "Starting finalise process");
+                LogMessage("FinaliseInstall", $"Running as a .NET {Environment.Version} application.");
 
                 try
                 {
