@@ -1738,16 +1738,11 @@ Install Files ..\InstallerContent\Supported Devices (web).url to $TARGETDIR$\Doc
 Install Files ..\InstallerContent\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
  
 Comment: Install the updater checker application
-Install Files ..\PlatformUpdateChecker\bin\Release\ascom.jpg to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Microsoft.Win32.TaskScheduler.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Octokit.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
 Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe to $TARGETDIR$\Tools\PlatformUpdateChecker
 Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe.config to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\Semver.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
-Install Files ..\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\ascom.jpg to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\*.dll to $TARGETDIR$\Tools\PlatformUpdateChecker
+Install Files ..\PlatformUpdateChecker\bin\Release\*.pdb to $TARGETDIR$\Tools\PlatformUpdateChecker
  
 Comment: Install JustAHub (32 bit)
 Install Files ..\Drivers and Simulators\JustAHub\bin\Release\AnyCPU\net48\ASCOM.JustAHub.exe to $COMMONFILES$\ASCOM\JustAHub

@@ -987,7 +987,7 @@ if Variable REMOVE Equals TRUE
    
   Comment: Remove the scheduled task to check for Platform updates.
   Write into Text File $SETUPLOG$ from Value $TIME$ About to remove the Platform Update Checker Task... (at end of file)
-  Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /RemoveTask (WAIT, get result into variable RC)
+  Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /RemoveTaskQuiet (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ Update Checker Task removed OK (at end of file)
    
   [END REGION]

@@ -14,6 +14,7 @@ using ASCOM.Utilities;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
+using Windows.Services.Store;
 
 namespace PlatformUpdateChecker
 {
@@ -119,6 +120,11 @@ namespace PlatformUpdateChecker
                         RemoveScheduledTask();
                         break;
 
+                    // Uninstall the scheduled update check task with no UI messages
+                    case "/REMOVETASKQUIET":
+                        RemoveScheduledTask(true);
+                        break;
+
                     // List the current Platform version
                     case "/VERSION":
                         ReportVersion();
@@ -137,7 +143,7 @@ namespace PlatformUpdateChecker
                     // No argument supplied or unknown argument so check to see if there are any updates and create a toast notification if required
                     default:
                         // Add a short delay before checking for updates
-                        LogMessage("DelayedUpdateCheck", $"Starting {TASK_DELAY_MILLISECONDS/1000:0.0} second delay...");
+                        LogMessage("DelayedUpdateCheck", $"Starting {TASK_DELAY_MILLISECONDS / 1000:0.0} second delay...");
                         Thread.Sleep(TASK_DELAY_MILLISECONDS);
                         LogMessage("DelayedUpdateCheck", $"Completed delay, checking for updates.");
 
@@ -343,12 +349,15 @@ namespace PlatformUpdateChecker
         /// <summary>
         /// Handler for RemoveTask command line command - Removes the update checker task from the Windows scheduler.
         /// </summary>
-        private static void RemoveScheduledTask()
+        private static void RemoveScheduledTask(bool quiet = false)
         {
             try
             {
+                LogMessage("RemoveScheduledTask", $"Removing task quietly: {quiet}");
+
                 // Remove any remaining toast notifications that haven't yet fired, ignoring any errors (This fails and throws an exception on Windows 7 SP1)
-                try { ToastNotificationManagerCompat.Uninstall(); } catch { };
+                try { ToastNotificationManagerCompat.Uninstall(); } catch { }
+                ;
 
                 LogMessage("RemoveScheduledTask", "Testing whether scheduler is running");
 
@@ -384,7 +393,8 @@ namespace PlatformUpdateChecker
                     {
                         string message = $"The ASCOM Platform update check scheduled task cannot be created / updated because your PC's task scheduler is in the: {serviceController.Status} state. Please ensure that this service is running correctly, then repair the ASCOM installation.";
                         LogMessage("RemoveScheduledTask", message);
-                        MessageBox.Show(message);
+                        if (!quiet)
+                            MessageBox.Show(message);
                     }
                 }
             }
@@ -398,7 +408,8 @@ namespace PlatformUpdateChecker
 
                 try
                 {
-                    MessageBox.Show(@"Something went wrong with the update, please report this on the ASCOM Talk Groups.IO forum, including a zip of your entire Documents\ASCOM folder and sub-folders." + "\r\n" + ex.ToString());
+                    if (!quiet)
+                        MessageBox.Show(@"Something went wrong with the update, please report this on the ASCOM Talk Groups.IO forum, including a zip of your entire Documents\ASCOM folder and sub-folders." + "\r\n" + ex.ToString());
                 }
                 catch (Exception) { }
 
