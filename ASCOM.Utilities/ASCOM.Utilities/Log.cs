@@ -38,6 +38,19 @@ namespace ASCOM.Utilities
             // Attempt to get the .NET runtime version of the primary process from the entry assembly
             try
             {
+                Assembly entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly is null)
+                {
+                    _netVersion = "Entry assembly is null";
+                    return;
+                }
+                // Retrieve the .NET runtime version from the entry assembly
+                object imageRunTimeversion=Assembly.GetEntryAssembly().ImageRuntimeVersion;
+                if (imageRunTimeversion is null)
+                {
+                    _netVersion = "ImageRuntimeVersion is null";
+                    return;
+                }
                 _netVersion = $"{Assembly.GetEntryAssembly().ImageRuntimeVersion} (ImageRuntimeVersion)";
             }
             catch (Exception ex)
