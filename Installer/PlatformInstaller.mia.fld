@@ -1,11 +1,8 @@
 ﻿Check Application Requirements
+Check Application Pre-Requisites
 Remove Previous Platforms 4 and 5 if present
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
-Remove Platform update checker scheduled task
-Remove the earth rotation update scheduled job.
 Set Profile ACL
-Install Platform files
 Set up log file and variables
-Check Application Pre-Requisites

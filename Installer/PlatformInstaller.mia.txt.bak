@@ -498,8 +498,6 @@ Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
  
-Write into Text File $SETUPLOG$ from Value  (at end of file)
- 
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
   if Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) Equals FALSE
@@ -562,7 +560,7 @@ end
 [END REGION]
  
 [DEFINE REGION: Main Setup Dialogue]
-Comment: Create the configuration file folder if necessary and load the configuraiton file if it exists.
+Comment: Create the selected options configuration file folder if necessary and load the configuraiton file if it exists.
 Run Program CMD.EXE /c MKDIR "$CONFIGURATION_FOLDER$" (WAIT)
 Load Feature Selections from file $CONFIGURATION_FILE$
  
