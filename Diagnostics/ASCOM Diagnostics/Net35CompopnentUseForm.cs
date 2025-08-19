@@ -204,7 +204,31 @@ namespace ASCOM.Utilities
                     }
                 }
 
-                // List<Net35Use> sortedList = net35UseList.OrderBy(n => n.Category).ThenBy(n => n.Name).ThenBy(n => n.Assembly).ThenBy(n => n.Component).ToList();
+                // Report by application and CLR version
+                List<Net35Use> sortedListClrVersion = net35UseList.OrderBy(n => n.DotNetVersion).ToList();
+                var grouplistClrVersion = sortedListClrVersion.GroupBy(n => n.DotNetVersion);
+                foreach (var groupClrVersion in grouplistClrVersion)
+                {
+                    string message = $".NET 3.5 Component Use Ordered by Application/Driver - Running under .NET {groupClrVersion.Key}";
+                    TL.LogMessage(message, "");
+                    TL.LogMessage(new string('=', message.Length), "");
+                    TL.LogMessage("", "");
+
+                    var sortedClrList = groupClrVersion.OrderBy(n => n.Name).ToList();
+                    var groupClrlist = sortedClrList.GroupBy(n => n.Name);
+                    foreach (var group in groupClrlist)
+                    {
+                        TL.LogMessage("Executable", $"{group.Key} uses the following components:");
+                        foreach (var item in group)
+                        {
+                            TL.LogMessage("Component", $"  {item.Component}");
+                        }
+                        TL.LogMessage("", "");
+                    }
+                }
+                TL.LogMessage("", "");
+
+                // Report by component
                 TL.LogMessage(".NET 3.5 Component Use Ordered by Component", "");
                 TL.LogMessage("===========================================", "");
                 TL.LogMessage("", "");
@@ -220,29 +244,7 @@ namespace ASCOM.Utilities
                     }
                     TL.LogMessage("", "");
                 }
-                TL.LogMessage("", "");
 
-                List<Net35Use> sortedListClrVersion = net35UseList.OrderBy(n => n.DotNetVersion).ToList();
-                var grouplistClrVersion = sortedListClrVersion.GroupBy(n => n.DotNetVersion);
-                foreach (var groupClrVersion in grouplistClrVersion)
-                {
-                    string message = $".NET 3.5 Component Use Ordered by Application/Driver - Running under .NET '{groupClrVersion.Key}'";
-                    TL.LogMessage(message, "");
-                    TL.LogMessage(new string('=', message.Length), "");
-                    TL.LogMessage("", "");
-
-                    sortedList = groupClrVersion.OrderBy(n => n.Name).ToList();
-                    grouplist = sortedList.GroupBy(n => n.Name);
-                    foreach (var group in grouplist)
-                    {
-                        TL.LogMessage("Executable", $"{group.Key} uses the following components:");
-                        foreach (var item in group)
-                        {
-                            TL.LogMessage("Component", $"  {item.Component}");
-                        }
-                        TL.LogMessage("", "");
-                    }
-                }
                 // Save the report log file name so it can be displayed
                 string logFileName = Path.Combine(TL.LogFilePath, TL.LogFileName);
 

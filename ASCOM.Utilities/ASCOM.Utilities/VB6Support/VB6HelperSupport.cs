@@ -1,11 +1,12 @@
 ﻿// The purpose of these classes is to match the standards used in the .Utilities components to the
 // standards expected by the VB6 COM  Helper componentsthus allowing allowing the two worlds to be different.
 
+using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the main ASCOM.Utilities namespace
@@ -252,6 +253,14 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         private bool LastResult; // Cache values to improve IsRegistered performance
 
         #region New and IDisposable Support
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static ProfileAccess()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "VB6HelperSupport.ProfileAccess");
+        }
 
         /// <summary>
         /// Create a new ProfileAccess instance
@@ -507,6 +516,14 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         private bool DebugTrace;
 
         #region New and IDisposable Support
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static SerialSupport()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "VB6HelperSupport.SerialSupport");
+        }
 
         /// <summary>
         /// Create a new instance
@@ -960,6 +977,14 @@ namespace ASCOM.Utilities.VB6HelperSupport // Tuck this out of the way of the ma
         private bool disposedValue = false;        // To detect redundant calls
 
         #region New, IDisposable and Finalize
+
+        /// <summary>
+        /// Static initialiser called once per AppDomain to log the component name.
+        /// </summary>
+        static ChooserSupport()
+        {
+            Log.Component(Assembly.GetExecutingAssembly(), "VB6HelperSupport.ChooserSupport");
+        }
 
         /// <summary>
         /// Create a new instance and instantiate the XMLAccess object to do all the hard work

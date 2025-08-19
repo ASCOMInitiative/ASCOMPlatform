@@ -1,11 +1,11 @@
 @echo off
 rem Batch command to copy 'content' files to the installer project folder (these could be executables)
 rem This command is intended to be used in post compilation build events
-@echo NEW VERSION DELAY 5
+@echo COPYING FILES TO INSTALLER SUPPORT FOLDER
 @echo Incoming Solution folder: %1
  rem There must be no spaces after the set command below
 set solutionFolder=%~1
-echo Solution folder: %solutionFolder%
+echo Expanded solution folder: %solutionFolder%
 
 rem Clean the incoming solutiuon folder of hash and backslash characters
 for /l %%a in (1,1,3) do (
@@ -28,9 +28,9 @@ echo Cleaned source files: %sourceFiles%
 
 rem Set the installer project folder releative to the solution folder
 set installerFolder="%solutionFolder%\Installer"
-echo Installer folder: %installerFolder%
+echo Installer destination folder: %installerFolder%
 
 rem Copy the source files to the installer folder
-echo xcopy /y /q "%sourceFiles%" "%installerFolder%"
+echo Copying files from source to destination using: xcopy /y /q "%sourceFiles%" "%installerFolder%"
 
 start /B xcopy /y /q "%sourceFiles%" %installerFolder%

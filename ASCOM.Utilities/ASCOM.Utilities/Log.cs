@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace ASCOM.Utilities
 {
@@ -31,32 +33,16 @@ namespace ASCOM.Utilities
             try
             {
                 // Retrieve the .NET runtime version from the environment
-                _netVersion = $"{System.Environment.Version.ToString()} (Environment)";
+                _netVersion = $"{System.Environment.Version.ToString(3)}";
             }
             catch { }
 
             // Attempt to get the .NET runtime version of the primary process from the entry assembly
             try
             {
-                Assembly entryAssembly = Assembly.GetEntryAssembly();
-                if (entryAssembly is null)
-                {
-                    _netVersion = "Entry assembly is null";
-                    return;
-                }
-                // Retrieve the .NET runtime version from the entry assembly
-                object imageRunTimeversion=Assembly.GetEntryAssembly().ImageRuntimeVersion;
-                if (imageRunTimeversion is null)
-                {
-                    _netVersion = "ImageRuntimeVersion is null";
-                    return;
-                }
-                _netVersion = $"{Assembly.GetEntryAssembly().ImageRuntimeVersion} (ImageRuntimeVersion)";
+                _netVersion = $"{Assembly.GetEntryAssembly().ImageRuntimeVersion.Trim('v')}";
             }
-            catch (Exception ex)
-            {
-                _netVersion = ex.Message;
-            }
+            catch { }
         }
 
         /// <summary>
@@ -75,15 +61,16 @@ namespace ASCOM.Utilities
                     lock (typeof(Log))
                     {
                         // Get the logging enabled/disabled state from the registry
-                        _enabled = true;
+                        _enabled = Global.GetBool(Global.DOTNET35_COMPONENT_USE_LOGGING, Global.DOTNET35_COMPONENT_USE_LOGGING_DEFAULT);
 
                         // Exit if logging is disabled
                         if (!_enabled.Value)
                             return;
 
-                        //Logging is enabled so create a new TraceLogger instance using an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
+                        // Logging is enabled so create a new TraceLogger instance if Utilities logging is enabled
+                        // Use an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
                         TL = new TraceLogger("Net35use", true);
-                        TL.Enabled = Global.GetBool(Global.DOTNET35_COMPONENT_USE_LOGGING, Global.DOTNET35_COMPONENT_USE_LOGGING_DEFAULT);
+                        TL.Enabled = Global.GetBool(Global.TRACE_UTIL, Global.TRACE_UTIL_DEFAULT);
                     }
                     break;
 
@@ -96,6 +83,13 @@ namespace ASCOM.Utilities
 
             try
             {
+                // SPECIAL HANDLING FOR FINALISEINSTALL
+                // For some unknown reason this reports as CLR2 even though it is actually CLR4 so fix that here...
+                if (string.Equals(Process.GetCurrentProcess().ProcessName, "FinaliseInstall", StringComparison.OrdinalIgnoreCase))
+                {
+                    _netVersion = "4.0.30319";
+                }
+
                 string fullAssemblyName = assembly.FullName;
 
                 // Validate input parameters
@@ -124,13 +118,12 @@ namespace ASCOM.Utilities
                 string assemblyVersion = assemblyNameElements[1] is not null ? assemblyNameElements[1] : "Unknown Version";
 
                 TL.LogMessage("Component", $"Assembly: {assemblyName}, Version: {assemblyVersion} - {componentName}");
-                TL.LogMessage("Component", $"Friendly name: {System.AppDomain.CurrentDomain.FriendlyName}");
-                TL.LogMessage("Component", $"Process name: {System.Diagnostics.Process.GetCurrentProcess().ProcessName}");
-                TL.LogMessage("Component", $"File name: {System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName}");
+                TL.LogMessage("Component", $"Friendly name: {AppDomain.CurrentDomain.FriendlyName}");
+                TL.LogMessage("Component", $"Process name: {Process.GetCurrentProcess().ProcessName}");
+                TL.LogMessage("Component", $"File name: {Process.GetCurrentProcess().MainModule.FileName}");
 
-                string processName = @$"Applications\{System.Diagnostics.Process.GetCurrentProcess().ProcessName} - {System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/")}";
-                //string keyName = assembly.Location.Replace(@"\", "/");
-                string keyName = assembly.GetName().Name;  //Location.Replace(@"\", "/");
+                string processName = @$"Applications\{Process.GetCurrentProcess().ProcessName} - {Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/")}";
+                string keyName = assembly.GetName().Name;
 
                 StackFrame[] frames = new StackTrace().GetFrames();
                 TL.LogMessage("Component", $"Number of frames: {frames.Length}");
@@ -194,6 +187,36 @@ namespace ASCOM.Utilities
                     TL.LogMessage("Registry", $"Writing CLR version {_netVersion} to registry key: {frameworkKey}");
                     ra.WriteProfile(frameworkKey, "Framework", _netVersion);
                 }
+
+
+                // Attempt to get the .NET runtime version of the primary process from the entry assembly
+                try
+                {
+                    TL.LogMessage("Information", $"{System.Environment.Version.ToString()} (Environment)");
+
+                    Assembly entryAssembly = Assembly.GetEntryAssembly();
+                    if (entryAssembly is null)
+                        TL.LogMessage("Information", "Entry assembly is null");
+                    else
+                    {
+                        TL.LogMessage("Information", $"Entry assembly: {entryAssembly.FullName}");
+                        TL.LogMessage("Information", $"Entry assembly location: {entryAssembly.Location}");
+                        TL.LogMessage("Information", $"Entry assembly code base: {entryAssembly.CodeBase}");
+
+                        // Retrieve the .NET runtime version from the entry assembly
+                        object imageRunTimeversion = Assembly.GetEntryAssembly().ImageRuntimeVersion;
+                        if (imageRunTimeversion is null)
+                            TL.LogMessage("Information", "ImageRuntimeVersion is null");
+                        else
+                            TL.LogMessage("Information", $"{Assembly.GetEntryAssembly().ImageRuntimeVersion} (ImageRuntimeVersion)");
+                    }
+                    TL.LogMessage("Information", $"System version: {RuntimeEnvironment.GetSystemVersion()}");
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessage("Information", ex.Message);
+                }
+                TL.LogMessage("", "");
             }
             catch (Exception ex)
             {
