@@ -26,7 +26,7 @@
     <Optimize>false</Optimize>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64'" >
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>BUILD64</DefineConstants>
@@ -89,6 +89,6 @@
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ASCOM.Common.Components" Version="2.0.9" />
+    <PackageReference Include="ASCOM.Common.Components" Version="2.2.0-rc.8" />
   </ItemGroup>
 </Project>

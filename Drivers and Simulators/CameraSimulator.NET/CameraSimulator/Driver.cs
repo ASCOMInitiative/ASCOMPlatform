@@ -1314,6 +1314,9 @@ namespace ASCOM.Simulator
                     //        imageArray[i, j] = i + j;
                     //    }
                     //}
+                    Log.LogMessage("ReadImageFile", $"Image data Red rectangle RGGB - {imageArray[500, 20]:000} {imageArray[501, 20]:000} {imageArray[500, 21]:000} {imageArray[501, 21]:000}");
+                    Log.LogMessage("ReadImageFile", $"Image data Blue rectangle RGGB - {imageArray[600, 20]:000} {imageArray[601, 20]:000} {imageArray[600, 21]:000} {imageArray[601, 21]:000}");
+
                     return imageArray;
                 }
             }
@@ -3308,14 +3311,18 @@ namespace ASCOM.Simulator
                     default:
                         break;
                 }
+
+                Log.LogMessage("ReadImageFile", $"Using Bayer offset X: {bayerOffsetX}, Bayer offset Y: {bayerOffsetY}");
                 x0 = bayerOffsetX;
                 x1 = (x0 + 1) & (stepX - 1);
                 x2 = (x0 + 2) & (stepX - 1);
                 x3 = (x0 + 3) & (stepX - 1);
+
                 y0 = bayerOffsetY;
                 y1 = (y0 + 1) & (stepY - 1);
                 y2 = (y0 + 2) & (stepY - 1);
                 y3 = (y0 + 3) & (stepY - 1);
+                Log.LogMessage("ReadImageFile", $"x0: {x0}, x1: {x1}, y0: {y0}, y1: {y1}");
 
                 int w = Math.Min(cameraXSize, bmp.Width * stepX);
                 int h = Math.Min(cameraYSize, bmp.Height * stepY);
@@ -3326,10 +3333,12 @@ namespace ASCOM.Simulator
                         getData(x, y);
                     }
                 }
+                Log.LogMessage("ReadImageFile", $"Image data - 00: {imageData[0, 0, 0]}, 10: {imageData[1, 0, 0]}, 01: {imageData[0, 1, 0]}, 11: {imageData[1, 1, 0]}");
 
             }
-            catch
+            catch (Exception ex)
             {
+                Log.LogMessage("ReadImageFile", $"Error reading image file: {ex.Message}\r\n{ex}");
             }
         }
 

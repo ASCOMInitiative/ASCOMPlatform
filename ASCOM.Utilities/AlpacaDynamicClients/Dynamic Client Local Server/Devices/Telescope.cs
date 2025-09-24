@@ -207,10 +207,22 @@ namespace ASCOM.DynamicClients
         /// </returns>
         public string Action(string actionName, string actionParameters)
         {
+            const int MAX_PARAM_LOG_LENGTH = 80; // Set the maximum length that the parameters string will show in the log file
             try
             {
-                CheckConnected($"Action {actionName} - {actionParameters}");
-                LogMessage("", $"Calling Action: {actionName} with parameters: {actionParameters}");
+                // Create a truncated set of the parameters for logging
+                string truncatedParameters;
+                if (actionParameters.Length > MAX_PARAM_LOG_LENGTH)
+                {
+                    truncatedParameters = $"{actionParameters.Substring(0, MAX_PARAM_LOG_LENGTH)}..., Action parameters length: {actionParameters.Length}";
+                }
+                else
+                {
+                    truncatedParameters = actionParameters;
+                }
+
+                CheckConnected($"Action {actionName} - {truncatedParameters}");
+                LogMessage("", $"Calling Action: {actionName} with parameters: {truncatedParameters}");
                 string actionResponse = client.Action(actionName, actionParameters);
                 LogMessage("Action", $"Completed.");
                 return actionResponse;
