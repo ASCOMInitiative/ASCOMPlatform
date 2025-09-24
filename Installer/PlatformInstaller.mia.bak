@@ -14399,7 +14399,7 @@ RC
 {0AEA1550-FA20-458B-B04C-C13616D585CC}
 $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe
 TRUE
-/RemoveTask
+/RemoveTaskQuiet
 TRUE
 RC
 {7EF7D483-1821-4454-9FC7-88440CD6186C}
