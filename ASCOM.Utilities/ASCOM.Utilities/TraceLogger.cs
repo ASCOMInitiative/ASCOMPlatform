@@ -1,13 +1,14 @@
-﻿using System;
+﻿using ASCOM.Utilities.Exceptions;
+using ASCOM.Utilities.Interfaces;
+using Microsoft.VisualBasic;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using ASCOM.Utilities.Exceptions;
-using ASCOM.Utilities.Interfaces;
-using Microsoft.VisualBasic;
 using static ASCOM.Utilities.Global;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ASCOM.Utilities
 {
@@ -824,6 +825,12 @@ namespace ASCOM.Utilities
 
         private void LogMsgFormatter(string p_Test, string p_Msg, bool p_NewLine, bool p_RespectCrLf)
         {
+            if (p_Test is null)
+                p_Test = "";
+
+            if (p_Msg is null)
+                p_Msg = "";
+
             try
             {
                 p_Test = Strings.Left(p_Test + Strings.StrDup(g_IdentifierWidth, " "), g_IdentifierWidth);

@@ -306,6 +306,12 @@ namespace Utilities
 
         private void LogMsgFormatter(string test, string message, bool newLine, bool respectCrLf)
         {
+            if (test is null)
+                test = "";
+
+            if (message is null)
+                message = "";
+
             try
             {
                 test = (test + "                              ").Substring(0, 25);
