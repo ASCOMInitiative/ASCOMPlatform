@@ -32,6 +32,7 @@
           <listItem>The 32bit version of JustaHub now supports all ASCOM device types including SafetyMonitor, CoverCalibrator, Focuser, ObservingConditions, Rotator and Switch</listItem>
           <listItem>Diagnostics has a new feature to log and report use of .NET 3.5 based components by clients and drivers. This is enabled through the Diagnostics / Tools menu.</listItem>
           <listItem>Links to both 32bit and 64bit connection testers have been added to the Start/ASCOM Platform menu.</listItem>
+          <listItem>Installation speed has been improved by omitting NGEN optimisation by default. This can be enabled through the installer UI if required by older, less performant, PCs.</listItem>
         </list>
       </content>
     </section>
@@ -46,6 +47,8 @@
               <listItem>The VB6 support DLLs are now registered by the installer as well as being installed.</listItem>
               <listItem>The error message when installing on a non-supported OS has been improved.</listItem>
               <listItem>An issue that listed only the last error encountered rather than all errors encountered has been fixed.</listItem>
+              <listItem>Ensure that all required PlatformUpdateChecker DLL files are installed.</listItem>
+              <listItem>An unnecessary message box has been removed when uninstalling the Platform update checker.</listItem>
             </list>
           </listItem>
           <listItem>
@@ -61,6 +64,7 @@
             <list class="bullet">
               <listItem>Fixed an issue where multiple ? characters were sent in GET calls that have parameters.</listItem>
               <listItem>Fixed an issue where Dynamic Drivers created under Platform 6 fail after update to Platform 7.</listItem>
+              <listItem>The Action method once again supports strings in excess of 65,535 characters as it does in Platform 6.</listItem>
             </list>
           </listItem>
           <listItem>Chooser - Devices that are not registered correctly, and that have missing CLSID values, are now handled cleanly.</listItem>
@@ -81,6 +85,7 @@
               <listItem>The main form has been removed because it was not adding any value and appeared as a minimised Window.</listItem>
             </list>
           </listItem>
+          <listItem>TraceLogger.LogMessage now accepts null strings for the test name and message fields. These are now treated empty strings rather than throwing exceptions.</listItem>
         </list>
       </content>
     </section>
