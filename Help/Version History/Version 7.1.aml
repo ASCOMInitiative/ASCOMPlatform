@@ -85,7 +85,7 @@
               <listItem>The main form has been removed because it was not adding any value and appeared as a minimised Window.</listItem>
             </list>
           </listItem>
-          <listItem>TraceLogger.LogMessage now accepts null strings for the test name and message fields. These are now treated empty strings rather than throwing exceptions.</listItem>
+          <listItem>TraceLogger.LogMessage now accepts null strings for the test name and message fields, which are now treated empty strings rather than throwing exceptions.</listItem>
         </list>
       </content>
     </section>
