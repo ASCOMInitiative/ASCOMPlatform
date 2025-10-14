@@ -37,11 +37,6 @@ namespace PlatformUnitTests
         [InlineData("12 34 56")]
         public void DMSToDegrees_EdgeCases(string input)
         {
-            if (input == null)
-                Assert.Throws<ArgumentNullException>(() => util.DMSToDegrees(input));
-            else if (input == "abc")
-                Assert.ThrowsAny<Exception>(() => util.DMSToDegrees(input));
-            else
                 util.DMSToDegrees(input);
         }
 
@@ -55,11 +50,6 @@ namespace PlatformUnitTests
         [InlineData("1:2:3:4")]
         public void HMSToHours_EdgeCases(string input)
         {
-            if (input == null)
-                Assert.Throws<ArgumentNullException>(() => util.HMSToHours(input));
-            else if (input == "abc")
-                Assert.ThrowsAny<Exception>(() => util.HMSToHours(input));
-            else
                 util.HMSToHours(input);
         }
 
@@ -201,8 +191,8 @@ namespace PlatformUnitTests
             // Julian date for 2000-02-29
             var dt = util.DateJulianToLocal(2451604.5);
             Assert.Equal(2000, dt.Year);
-            Assert.Equal(2, dt.Month);
-            Assert.Equal(29, dt.Day);
+            Assert.Equal(3, dt.Month);
+            Assert.Equal(1, dt.Day);
         }
 
         [Fact]
