@@ -21,7 +21,7 @@ namespace ASCOM.Astrometry
         /// <param name="JulianDateUTC">Julian Date of interest</param>
         /// <returns>DelatT value at the given Julian date</returns>
         /// <remarks>
-        /// Post 2011, calculation is effected through a 2nd order polynomial best fit to real DeltaT data from: http://maia.usno.navy.mil/ser7/deltat.data 
+        /// Post 2011, calculation is effected through a polynomial best fit to real DeltaT data from: http://maia.usno.navy.mil/ser7/deltat.data 
         /// together with projections of DeltaT from: http://maia.usno.navy.mil/ser7/deltat.preds
         /// The analysis spreadsheets for DeltaT values at dates post 2011 are stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
         /// 
@@ -54,7 +54,7 @@ namespace ASCOM.Astrometry
             // NOTE: Starting April 2018 - Please note the use of modified Julian date in the formula rather than year fraction as in previous formulae
 
             // DATE RANGE 23rd February 2026 onwards (90 day extrapolation) - This is beyond the sensible extrapolation range of the most recent data analysis so revert to the basic formula: DeltaT = LeapSeconds + 32.184
-            if (YearFraction >= 2026.114d)
+            if (YearFraction >= 2027.016438d)
             {
                 // Create an EarthRotationParameters object and retrieve the current leap second value. If something goes wrong return the fall-back value
                 try
@@ -69,6 +69,18 @@ namespace ASCOM.Astrometry
                     // Ultimate fallback value if all else fails!
                     Retval = GlobalItems.LEAP_SECOND_ULTIMATE_FALLBACK_VALUE + GlobalItems.TT_TAI_OFFSET;
                 }
+            }
+
+            // DATE RANGE 10th October 2025 Onwards - The analysis was performed on 15th October 2025 and creates values within 0.01 of a second of the projections to 7th January 2027 (including a 90 day extrapolation from 10th October 2026).
+            else if (YearFraction >= 2025.772603d)
+            {
+                Retval =
+                    +0.0d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    +6.6695676068030800E-11d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    -1.6318123934451100E-05d * ModifiedJulianDay * ModifiedJulianDay * ModifiedJulianDay +
+                    1.4971760056277600E+00d * ModifiedJulianDay * ModifiedJulianDay +
+                    -6.1050860207632100E+04 * ModifiedJulianDay +
+                    +9.3355698735113000E+08;
             }
 
             // DATE RANGE 25th November 2024 Onwards - The analysis was performed on 26th November 2024 and creates values within 0.01 of a second of the projections to 25th November 2025.
