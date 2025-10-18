@@ -33,6 +33,7 @@
           <listItem>Diagnostics has a new feature to log and report use of .NET 3.5 based components by clients and drivers. This is enabled through the Diagnostics / Tools menu.</listItem>
           <listItem>Links to both 32bit and 64bit connection testers have been added to the Start/ASCOM Platform menu.</listItem>
           <listItem>Installation speed has been improved by omitting NGEN optimisation by default. This can be enabled through the installer UI if required by older, less performant, PCs.</listItem>
+          <listItem>The built-in Delta UT predictions have been updated to January 2027.</listItem>
         </list>
       </content>
     </section>
