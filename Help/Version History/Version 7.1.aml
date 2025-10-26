@@ -27,6 +27,9 @@
                 A wider range of telescope axis movement rates in the Direct Slew tab drop-down including: the minimum available rate, the maximum available rate, minimum + 25% of range,
                 minimum + 50% of range and minimum + 75% of range.
               </listItem>
+              <listItem>
+                The user guide has been expanded to include full instructions on setting up dome synchronisation for multiple mount types and telescope configurations.
+              </listItem>
             </list>
           </listItem>
           <listItem>The 32bit version of JustaHub now supports all ASCOM device types including SafetyMonitor, CoverCalibrator, Focuser, ObservingConditions, Rotator and Switch</listItem>
