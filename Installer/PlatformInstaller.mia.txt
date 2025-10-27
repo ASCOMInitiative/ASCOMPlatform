@@ -2649,7 +2649,7 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ACTION to Register Omni-Simulators
     Include Script: UpdateAscomError
     Set Variable PROGRESSTEXT to Registering Omni-Simulators COM Proxy (32bit)
-    Run Program $PROGRAMFILES$ASCOM\OmniSimulator\COM\OmniSimCOMProxy.exe /regserver (WAIT, get result into variable RC)
+    Run Program $PROGRAMFILES$ASCOM\OmniSimulator\COM\OmniSim.COMProxy.exe /regserver (WAIT, get result into variable RC)
     Set Variable ACTION to Register Omni-Simulators COM Proxy - 32bit
     Include Script: UpdateAscomError
      
@@ -2677,7 +2677,7 @@ if Variable SUCCESS not Equals ERROR
     Set Variable ACTION to Register Omni-Simulators - 64bit
     Include Script: UpdateAscomError
     Set Variable PROGRESSTEXT to Registering Omni-Simulators COM Proxy (64bit)
-    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\COM\OmniSimCOMProxy.exe /regserver (WAIT, get result into variable RC)
+    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\COM\OmniSim.COMProxy.exe /regserver (WAIT, get result into variable RC)
     Set Variable ACTION to Register Omni-Simulators COM Proxy - 64bit
     Include Script: UpdateAscomError
      
