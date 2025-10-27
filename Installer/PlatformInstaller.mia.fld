@@ -6,3 +6,9 @@ Install MSI support if required
 Remove any items left from previous instals
 Set Profile ACL
 Set up log file and variables
+Remove 32bit components
+Main Setup Dialogue
+Maintenance Dialogue
+Remove Previous Platform install if present
+Uninstall items installed by this installer
+Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
