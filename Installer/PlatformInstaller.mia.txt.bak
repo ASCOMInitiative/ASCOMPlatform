@@ -2626,12 +2626,14 @@ if Variable SUCCESS not Equals ERROR
    
   Comment: Create a scheduled task to run the update checker once a week
   Set Variable MYPROGRESS to 73
+  Set Variable PROGRESSTEXT to Creatig update checker scheduled task
   Run Program $TARGETDIR$\Tools\PlatformUpdateChecker\PlatformUpdateChecker.exe /InstallTask (WAIT, get result into variable RC)
   Set Variable ACTION to Update checker scheduled task
   Include Script: UpdateAscomError
    
   Comment: Register any Dynamic Drivers that were created under Platform 6
   Set Variable MYPROGRESS to 74
+  Set Variable PROGRESSTEXT to Registering Dynamic Drivers
   Run Program $COMMONFILES$\ASCOM\AlpacaDynamicClients\DynamicClientServer.exe /RegServer (WAIT, get result into variable RC)
   Set Variable ACTION to Register Platform 7 Dynamic Drivers
   Include Script: UpdateAscomError
@@ -2642,8 +2644,13 @@ if Variable SUCCESS not Equals ERROR
    
   if Variable WIN64MODE not Equals TRUE
     Comment: Register the Omni-Simulators
+    Set Variable PROGRESSTEXT to Registering Omni-Simulators (32bit)
     Run Program $PROGRAMFILES$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
     Set Variable ACTION to Register Omni-Simulators
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Omni-Simulators COM Proxy (32bit)
+    Run Program $PROGRAMFILES$ASCOM\OmniSimulator\COM\OmniSimCOMProxy.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Omni-Simulators COM Proxy - 32bit
     Include Script: UpdateAscomError
      
     Comment: Set the default Platform COM simulators
@@ -2665,8 +2672,13 @@ if Variable SUCCESS not Equals ERROR
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
      
     Comment: Register 64bit Omni-Simulators
+    Set Variable PROGRESSTEXT to Registering Omni-Simulators (64bit)
     Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
     Set Variable ACTION to Register Omni-Simulators - 64bit
+    Include Script: UpdateAscomError
+    Set Variable PROGRESSTEXT to Registering Omni-Simulators COM Proxy (64bit)
+    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\COM\OmniSimCOMProxy.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Omni-Simulators COM Proxy - 64bit
     Include Script: UpdateAscomError
      
     Comment: Register core components
