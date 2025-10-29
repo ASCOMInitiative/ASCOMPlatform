@@ -58,7 +58,7 @@ setup.bmp
 Sleep.exe
 SuppressWinErrors.exe
 SuppressWinErrors.pdb
-swoosh.avi
+swoosh1.avi
 translations.English
 translations.Map
 translations.Original
@@ -3148,7 +3148,7 @@ COMMONFILES32
 COMPONENTS
 $
 1
-2
+6
 TRUE
 
 ASCOM Initiative
