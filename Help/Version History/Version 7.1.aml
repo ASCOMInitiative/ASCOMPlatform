@@ -42,7 +42,8 @@
             The Omni-Simulators have the following new features:
             <list class="bullet">
               <listItem>A tray icon is now provided to enable the console to be shown or hidden and the web UI to be launched.</listItem>
-              <listItem>The generated swagger documentation has been greatly improved.</listItem>
+              <listItem>The generated ASCOM API swagger documentation has been greatly improved.</listItem>
+              <listItem>Individual device configuration can be changed programmatically through a new JSON API to support test requirements. Further information is provided in the developer changes section.</listItem>
               <listItem>
                 The Dome, FilterWheel, Focuser, Rotator, and Safety Monitor devices have been completely rewritten (the remaining device types will be updated in a future release). This provides several new features:
                 <list class="bullet">
@@ -106,9 +107,9 @@
         <list class="bullet">
           <listItem>
             Each Omni-Simulator device configuration can be changed programmatically through a new JSON API that enables the simulators to be configured to support a variety of client testing requirements.
-            This Omni-Simulator specific API can be explored by clicking the "View Swagger docs and interactive queries" link on the main page of the Omni-Simulator browser interface.
-            Once on the Swagger page, select the "OmniSim only endpoints" definition from the drop-down selector at the top of the page.
-            Please note that the API may be refined in future and some capabilities could change.
+            This Omni-Simulator specific API can be explored by clicking the "View Swagger docs and interactive queries" link on the main page of the Omni-Simulator browser interface and
+            selecting the "OmniSim only endpoints" definition from the drop-down selector at the top of the page.
+            Please note that the API may be refined in future and that some implementations and capabilities could change.
           </listItem>
           <listItem>
             Driver Templates
