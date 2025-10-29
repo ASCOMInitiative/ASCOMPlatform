@@ -48,10 +48,7 @@
                 <list class="bullet">
                   <listItem>Each device type now supports multiple instances.</listItem>
                   <listItem>The interface version can be set so that each device can simulate behavior for different ASCOM interface versions.</listItem>
-                  <listItem>
-                    Each device's configuration can be changed programmatically through a new JSON API that enables the simulators to support specific client testing requirements.
-                    This Omni-Simulator specific API is documented on the Omni-Simulator Swagger page that can be viewed through the Omni-Simulator browser interface. Please note that the API may be refined in future and some capabilities could change.
-                  </listItem>
+                  <listItem>Each device's configuration can be changed through a new JSON API, see developer changes for more information.</listItem>
                   <listItem>Each device instance now creates its own log file whose log level can be set independently.</listItem>
                   <listItem>Asynchronous connects now take a short time to complete enabling asynchronous connect code to be tested more effectively.</listItem>
                 </list>
@@ -107,6 +104,12 @@
       <title>Changes in 7.1 For Developers</title>
       <content>
         <list class="bullet">
+          <listItem>
+            Each Omni-Simulator device configuration can be changed programmatically through a new JSON API that enables the simulators to be configured to support a variety of client testing requirements.
+            This Omni-Simulator specific API can be explored by clicking the "View Swagger docs and interactive queries" link on the main page of the Omni-Simulator browser interface.
+            Once on the Swagger page, select the "OmniSim only endpoints" definition from the drop-down selector at the top of the page.
+            Please note that the API may be refined in future and some capabilities could change.
+          </listItem>
           <listItem>
             Driver Templates
             <list class="bullet">
