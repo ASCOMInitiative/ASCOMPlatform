@@ -39,7 +39,7 @@
         <Filter entryType="Interface" fullName="ASCOM.DeviceInterface.IVideo" filterName="IVideo" isExposed="False" />
       </Filter>
     </ApiFilter>
-    <PresentationStyle>VS2013</PresentationStyle>
+    <PresentationStyle>Default2022</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <CleanIntermediates>True</CleanIntermediates>
@@ -73,7 +73,7 @@
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
-    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <HelpFileFormat>Website</HelpFileFormat>
     <CollectionTocStyle>Flat</CollectionTocStyle>
     <MaximumGroupParts>2</MaximumGroupParts>
     <NamespaceGrouping>True</NamespaceGrouping>
