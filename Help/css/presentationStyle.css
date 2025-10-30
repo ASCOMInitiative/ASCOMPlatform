@@ -377,13 +377,29 @@ sup.citation a:link a:visited a:active {
 .toc-menu {
     line-height: 2em;
 }
-/* ASCOM Change by Peter Simpson - Colour changed from 4f4f4f to 485fc7 */
+
+/* START OF ASCOM Change by Peter Simpson */
+/* Colour changed from 4f4f4f to 485fc7 to separate and improve table of contents legibility*/
     .toc-menu a {
         border-radius: 2px;
         color: #485fc7; 
         display: block;
         padding-left: 0.75em;
         }
+
+/* Increase ToC and body font sizes and change body font colour to black when screen width exceeds 600px. This is to impreove legibility on larger screens */
+@media only screen and (min-width: 600px) {
+    .toc-menu {
+      font-size: 17px;
+    }
+
+    body {
+      font-size: 17px;
+      color: #000000; 
+    }
+}
+
+/* END OF ASCOM Change by Peter Simpson*/
 
     .toc-menu a:hover {
         background-color: whitesmoke;
