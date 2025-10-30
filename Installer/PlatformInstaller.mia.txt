@@ -2674,24 +2674,6 @@ if Variable SUCCESS not Equals ERROR
     Comment: Set 64bit mode
     Set x64 - Native 64 bit Windows, AMD64, EM64T, and ARM64 Architectures - installation mode
      
-    Comment: Register 64bit Omni-Simulators
-    Set Variable PROGRESSTEXT to Registering Omni-Simulators (64bit)
-    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
-    Set Variable ACTION to Register Omni-Simulators - 64bit
-    Include Script: UpdateAscomError
-     
-    Comment: Register the Omni-Simulators COM proxy
-    Set Variable PROGRESSTEXT to Registering Omni-Simulators COM Proxy (64bit)
-    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\COM\OmniSim.COMProxy.exe /regserver (WAIT, get result into variable RC)
-    Set Variable ACTION to Register Omni-Simulators COM Proxy - 64bit
-    Include Script: UpdateAscomError
-     
-    Comment: Set the default Platform COM simulators
-    Set Variable PROGRESSTEXT to Setting default Platform simulators (64bit)
-    Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
-    Set Variable ACTION to Set COM simulators to use OmniSimulators (64bit)
-    Include Script: UpdateAscomError
-     
     Comment: Register core components
     Set Variable PROGRESSTEXT to Registering 64bit ASCOM.Astrometry.dll for COM
     Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
@@ -2794,6 +2776,24 @@ if Variable SUCCESS not Equals ERROR
     else
       Write into Text File $SETUPLOG$ from Value $TIME$       Omitting 64bit NGEN (at end of file)
     end
+     
+    Comment: Register 64bit Omni-Simulators
+    Set Variable PROGRESSTEXT to Registering Omni-Simulators (64bit)
+    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\ascom.alpaca.simulators.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Omni-Simulators - 64bit
+    Include Script: UpdateAscomError
+     
+    Comment: Register the Omni-Simulators COM proxy
+    Set Variable PROGRESSTEXT to Registering Omni-Simulators COM Proxy (64bit)
+    Run Program $PROGRAMFILES64$ASCOM\OmniSimulator\COM\OmniSim.COMProxy.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register Omni-Simulators COM Proxy - 64bit
+    Include Script: UpdateAscomError
+     
+    Comment: Set the default Platform COM simulators
+    Set Variable PROGRESSTEXT to Setting default Platform simulators (64bit)
+    Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
+    Set Variable ACTION to Set COM simulators to use OmniSimulators (64bit)
+    Include Script: UpdateAscomError
      
     Comment: Restore 32bit install mode
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
