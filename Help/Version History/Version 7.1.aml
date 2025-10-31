@@ -107,9 +107,13 @@
         <list class="bullet">
           <listItem>
             Each Omni-Simulator device configuration can be changed programmatically through a new JSON API that enables the simulators to be configured to support a variety of client testing requirements.
-            This Omni-Simulator specific API can be explored by clicking the "View Swagger docs and interactive queries" link on the main page of the Omni-Simulator browser interface and
-            selecting the "OmniSim only endpoints" definition from the drop-down selector at the top of the page.
-            Please note that the API may be refined in future and that some implementations and capabilities could change.
+            <list class="bullet">
+              <listItem>
+                This Omni-Simulator specific API can be explored by clicking the "View Swagger docs and interactive queries" link on the main page of the Omni-Simulator browser interface and
+                selecting the "OmniSim only endpoints" definition from the drop-down selector at the top of the page.
+              </listItem>
+              <listItem>Please note that the API may be refined in future and that some implementations and capabilities could change.</listItem>
+            </list>
           </listItem>
           <listItem>
             Driver Templates
