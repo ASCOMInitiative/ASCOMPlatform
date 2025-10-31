@@ -379,7 +379,13 @@ sup.citation a:link a:visited a:active {
 }
 
 /* START OF ASCOM Change by Peter Simpson */
-/* Colour changed from 4f4f4f to 485fc7 to separate and improve table of contents legibility*/
+
+/* Make the body colour black instead of dark grey to improve legibility */
+body {
+    color: #000000;
+}
+
+/* Table of contents menu colour changed from 4f4f4f to 485fc7 to separate and improve table of contents legibility*/
     .toc-menu a {
         border-radius: 2px;
         color: #485fc7; 
@@ -387,8 +393,8 @@ sup.citation a:link a:visited a:active {
         padding-left: 0.75em;
         }
 
-/* Increase ToC and body font sizes and change body font colour to black when screen width exceeds 600px. This is to impreove legibility on larger screens */
-@media only screen and (min-width: 600px) {
+/* Increase ToC and body font sizes when screen width equals or exceeds 2560px. This is to improve legibility on larger screens (2K and above) */
+@media only screen and (min-width: 2560px) {
     .toc-menu {
       font-size: 17px;
     }
