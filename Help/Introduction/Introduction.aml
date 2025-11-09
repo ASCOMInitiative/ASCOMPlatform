@@ -3,7 +3,8 @@
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
 			<para>
-				Please see <link xlink:href="1cff238c-4522-4730-ae94-a82f9666654e" >Changes in Platform 7.1</link> for details of changes and fixes in this release.
+        The <link xlink:href="1d9c9d1e-1980-45a6-b7f9-4f4bcb752b80" > Platform 7.1 Update 1</link> release has the same changes and fixes as the 
+        <link xlink:href="1cff238c-4522-4730-ae94-a82f9666654e" >Platform 7.1</link>  release, but additionally contains a critical fix for dome synchronisation in Device Hub.
 			</para>
 			<para>
 				Please see <link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" >Major Changes in Platform 7.0</link> for a complete list of changes and fixes in the initial Platform 7.0 release.

@@ -479,13 +479,13 @@ namespace ASCOM.DeviceHub
                             }
                         }
 
+                        // Determine whether the dome is moving, allowing for the possibility that the property is not implemented. In this case report an error state to indicate that the shutter is not moving.
                         ShutterState shutterStatus = ShutterState.shutterError;
                         try
                         {
                             shutterStatus = Service.ShutterStatus;
                         }
                         catch { }
-                        // LogActivityLine(ActivityMessageTypes.Status, $"* Get ShutterStatus: {shutterStatus} (PollDomeTask)");
 
                         bool domeIsMoving = domeSlewing || (shutterStatus == ShutterState.shutterOpening) || (shutterStatus == ShutterState.shutterClosing);
                         LogActivityLine(ActivityMessageTypes.Commands, $"* PollDomeTask - Slewing: {TelescopeSlewState.IsSlewInProgress}, DomeIsMoving: {domeIsMoving}, DomeIsSlewing: {domeSlewing}, Shutter: {shutterStatus}, Target RA: {TelescopeSlewState.RightAscension.ToHMS()}, Declination: {TelescopeSlewState.Declination.ToDMS()}");
