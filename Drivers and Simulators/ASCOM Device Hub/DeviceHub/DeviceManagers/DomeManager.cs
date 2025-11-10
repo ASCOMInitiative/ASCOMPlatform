@@ -944,7 +944,7 @@ namespace ASCOM.DeviceHub
         {
             Point domePoth = new Point(0, 0), domeHub = new Point(0, 0), domeRevised = new Point(0, 0), domePosition = new Point(0, 0);
 
-            LogActivityLine(ActivityMessageTypes.Other, $"  Use POTH: {Globals.UsePOTHDomeSlaveCalculation}, Use Revised: {Globals.UseRevisedDomeSlaveCalculation}");
+            LogActivityLine(ActivityMessageTypes.Other, $"  Use POTH: {Globals.UsePOTHDomeSlaveCalculation}, Use one-axis model: {Globals.UseOneAxisDomeSlaveCalculation}");
             try
             {
                 // Calculate the dome position using the POTH method.
@@ -983,17 +983,17 @@ namespace ASCOM.DeviceHub
             LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Hub 2: {domeRevised.X.ToDMS()}, {domeRevised.Y.ToDMS()} ({(domeHub.X - domeRevised.X).ToDMS()} {(domeHub.Y - domeRevised.Y).ToDMS()}) ({domeRevised.X:0.0}, {domeRevised.Y:0.0})");
 
             // Select the appropriate dome position based on the configuration setting
-            if (Globals.UseRevisedDomeSlaveCalculation) // Revised calculation
+            if (Globals.UseOneAxisDomeSlaveCalculation) // Original Device Hub calculation
             {
-                domePosition = domeRevised;
+                domePosition = domeHub;
             }
             else if (Globals.UsePOTHDomeSlaveCalculation) // POTH calculation
             {
                 domePosition = domePoth;
             }
-            else // Original Device Hub calculation
+            else // Use the new 2-axis offset model 
             {
-                domePosition = domeHub;
+                domePosition = domeRevised;
             }
 
             LogActivityLine(ActivityMessageTypes.Other, $"  Dome Position - Using:  {domePosition.X.ToDMS()}, {domePosition.Y.ToDMS()} ({domePosition.X:0.0}, {domePosition.Y:0.0})");

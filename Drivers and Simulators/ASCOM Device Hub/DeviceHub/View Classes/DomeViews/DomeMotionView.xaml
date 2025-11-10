@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             d:DataContext="{d:DesignInstance Type=local:DomeMotionViewModel}"
              mc:Ignorable="d" 
    	         Background="{DynamicResource WindowBackgroundBrush}"
              d:DesignHeight="300" d:DesignWidth="340" MinWidth="428" MinHeight="580">
@@ -243,8 +244,8 @@
                     <RowDefinition Height="Auto" MinHeight="20"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox Grid.Row="0" Content="Use POTH Slaving Calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" IsChecked="{Binding UsePOTHSlaveCalculation}"/>
-                <CheckBox Grid.Row="0" Content="Use revised calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="200,4,0,0" IsChecked="{Binding UseRevisedSlaveCalculation}"/>
+                <CheckBox Grid.Row="0" Content="Use POTH slaving calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" IsChecked="{Binding UsePOTHSlaveCalculation}"/>
+                <CheckBox Grid.Row="0" Content="Use one-axis offset slaving calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="190,4,0,0" IsChecked="{Binding UseOneAxisSlaveCalculation}"/>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6,0">
                     <Label Content="Dome Azimuth Adjustment:" Style="{StaticResource StateLabel}" VerticalAlignment="Center" />

@@ -87,7 +87,7 @@ namespace ASCOM.DeviceHub
         public static bool UseCustomTheme { get; set; }
         public static double FocuserTemperatureOffset { get; set; }
         public static bool UsePOTHDomeSlaveCalculation { get; set; }
-        public static bool UseRevisedDomeSlaveCalculation { get; set; }
+        public static bool UseOneAxisDomeSlaveCalculation { get; set; }
         public static bool UseExpandedScreenLayout { get; set; }
         public static double DomeAzimuthAdjustment { get; set; }
         public static bool UseCompositeSlewingFlag { get; set; }

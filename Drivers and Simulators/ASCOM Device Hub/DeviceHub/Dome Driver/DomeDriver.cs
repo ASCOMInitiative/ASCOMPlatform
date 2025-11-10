@@ -1372,7 +1372,7 @@ namespace ASCOM.DeviceHub
             DomeSettings settings = DomeSettings.FromProfile();
             Globals.DomeAzimuthAdjustment = settings.AzimuthAdjustment;
             Globals.UsePOTHDomeSlaveCalculation = settings.UsePOTHDomeSlaveCalculation;
-            Globals.UseRevisedDomeSlaveCalculation=settings.UseRevisedDomeSlaveCalculation;
+            Globals.UseOneAxisDomeSlaveCalculation = settings.UseOneAxisDomeSlaveCalculation;
             _logger.Enabled = settings.IsLoggingEnabled;
         }
 

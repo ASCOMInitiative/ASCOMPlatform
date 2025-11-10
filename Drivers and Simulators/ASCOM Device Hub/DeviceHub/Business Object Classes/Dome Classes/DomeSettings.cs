@@ -185,7 +185,7 @@ namespace ASCOM.DeviceHub
                 DomeLayoutSettings = layoutSettings,
                 AzimuthAdjustment = azimuthAdjustment,
                 UsePOTHDomeSlaveCalculation = usePOTHCalculation,
-                UseRevisedDomeSlaveCalculation = useRevisedCalculation,
+                UseOneAxisDomeSlaveCalculation = useRevisedCalculation,
                 IsLoggingEnabled = loggerEnabled,
                 FastUpdatePeriod = fastUpdatePeriod
             };
@@ -200,7 +200,7 @@ namespace ASCOM.DeviceHub
         public bool IsLoggingEnabled { get; set; }
         public double AzimuthAdjustment { get; set; }
         public bool UsePOTHDomeSlaveCalculation { get; set; }
-        public bool UseRevisedDomeSlaveCalculation { get; set; }
+        public bool UseOneAxisDomeSlaveCalculation { get; set; }
         public double FastUpdatePeriod { get; set; }
 
         public void ToProfile()
@@ -218,7 +218,7 @@ namespace ASCOM.DeviceHub
                 profile.WriteValue(DriverID, _slaveIntervalProfileName, DomeLayoutSettings.SlaveInterval.ToString());
                 profile.WriteValue(DriverID, _traceStateProfileName, IsLoggingEnabled.ToString());
                 profile.WriteValue(DriverID, _usePOTHSlavingCalculationProfileName, UsePOTHDomeSlaveCalculation.ToString());
-                profile.WriteValue(DriverID, _useRevisedSlavingCalculationProfileName, UseRevisedDomeSlaveCalculation.ToString());
+                profile.WriteValue(DriverID, _useRevisedSlavingCalculationProfileName, UseOneAxisDomeSlaveCalculation.ToString());
                 profile.WriteValue(DriverID, _fastUpdateProfileName, FastUpdatePeriod.ToString(CultureInfo.InvariantCulture));
 
                 profile.WriteValue(DriverID, _supportMultipleTelescopesProfileName, DomeLayoutSettings.SupportMultipleTelescopes.ToString(CultureInfo.InvariantCulture));
