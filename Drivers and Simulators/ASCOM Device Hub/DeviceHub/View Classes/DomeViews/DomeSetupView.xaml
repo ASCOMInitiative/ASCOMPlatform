@@ -139,13 +139,13 @@
                     <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" Grid.ColumnSpan="2" Grid.RowSpan="2" TextAlignment="Left" Margin="46,-9,0,0" Width="Auto" Visibility="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" >
                         <Run Text="Multiple telescope support is enabled." />
                         <LineBreak />
-                        <Run Text="Optical axis offsets are set on the Dome Offsets tab."  Foreground="Yellow"/>
+                        <Run Text="The optical axis offsets are set in the Dome Offsets tab."  Foreground="Yellow"/>
                     </TextBlock>
 
                     <!-- GEM offset -->
                     <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="Auto" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
-                               ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail.">
-                        <Run Text="Telescope offset from the axis intersection (mm):" />
+                               ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail." HorizontalAlignment="Right">
+                        <Run Text="Axes intersection offset (mm):" />
                         <LineBreak />
                         <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
@@ -162,7 +162,7 @@
                     <!-- Optical axis offset -->
                     <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,0,0" Width="auto" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
                              ToolTip="Shortest distance between the declination / altitude axis and the telescope optical axis (mm).&#x0a;&#x0a;This will be zero when the declination / altitude axis passes through the telescope optical axis,&#x0a;otherwise non-zero.&#x0a;&#x0a;See the Device Hub manual for more detail.">
-                        <Run Text="Telescope offset from the dec / alt axis (mm):" />
+                        <Run Text="Dec / alt axis offset (mm):" />
                         <LineBreak />
                         <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
