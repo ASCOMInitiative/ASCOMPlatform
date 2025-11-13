@@ -2422,6 +2422,7 @@ Global
 		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}.Release|x64.ActiveCfg = Release|Any CPU
+		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}.Release|x64.Build.0 = Release|Any CPU
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
 		{350A73BD-60D1-03E4-2EDC-A617D2D79CE3}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
