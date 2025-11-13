@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="ASCOMPlatform7Templates2022" Version="2.0.0" Language="en-US" Publisher="Peter Simpson" />
-        <DisplayName>ASCOM Platform 7 Project Templates (VS2022)</DisplayName>
+        <DisplayName>ASCOM Platform 7 Project Templates (VS2022/26)</DisplayName>
         <Description xml:space="preserve">Requires Platform 7. Templates to create and test an ASCOM driver project. Compatible with Visual Studio 2022.</Description>
         <MoreInfo>https://ascom-standards.org</MoreInfo>
         <License>License.txt</License>
@@ -12,14 +12,23 @@
         <Tags>ASCOM;project;template</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)">
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
-        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+        <InstallationTarget Version="[17.0,19.0)" Id="Microsoft.VisualStudio.Pro">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
-        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
+        <InstallationTarget Version="[17.0,19.0)" Id="Microsoft.VisualStudio.Enterprise">
             <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,19.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,19.0)" Id="Microsoft.VisualStudio.Pro">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.019.0,)" Id="Microsoft.VisualStudio.Enterprise">
+            <ProductArchitecture>arm64</ProductArchitecture>
         </InstallationTarget>
     </Installation>
     <Dependencies>
@@ -32,6 +41,6 @@
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="TestFormsApp(CS)" d:TargetPath="|TestFormsApp(CS);TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,19.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>

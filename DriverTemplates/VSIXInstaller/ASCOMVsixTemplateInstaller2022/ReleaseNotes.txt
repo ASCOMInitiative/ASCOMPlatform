@@ -1,4 +1,8 @@
-﻿Latest - 31st March 2025
+﻿13th November 2025
+Added support for Visual Studio 2026
+Added support for installation on ARM64 platforms
+
+31st March 2025
 Removed frmMain from the local server because it adds no value. The recommended way to include monitoring / control features is by a separate application that uses the ASCOM API to communicate with the driver.
 Revised the new Platform 7 Connect(), Disconnect() and Connecting methods to integrate properly with the Connected property and pass Conform on an initial out of the box test.
 
