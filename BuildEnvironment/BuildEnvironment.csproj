@@ -44,9 +44,7 @@ THE EXECUTABLES IN THIS PACKAGE SHOULD NEVER BE DISTRIBUTED AS PART OF A DRIVER 
 
 	<ItemGroup>
 		<ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.csproj" PrivateAssets="All" />
-		<ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" PrivateAssets="All" />
-		<ProjectReference Include="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\ASCOM.Exceptions\ASCOM.Exceptions.csproj" />
 		<ProjectReference Include="..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj" PrivateAssets="All" />

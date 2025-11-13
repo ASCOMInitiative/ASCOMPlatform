@@ -134,7 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
-      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
+      <Project>{2c40fad9-de75-4360-a0ad-911c4d24d98c}</Project>
       <Name>ASCOM.Attributes</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
