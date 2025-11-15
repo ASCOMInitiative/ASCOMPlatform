@@ -13,7 +13,7 @@
       <content>
         <list class="bullet">
           <listItem>
-            None.
+            Device Hub - Added a dome safety feature to ensure that a configurable minimum time period passes between a slew completing, and the next slew starting. This is to prevent sudden changes in rotation direction.
           </listItem>
         </list>
       </content>
