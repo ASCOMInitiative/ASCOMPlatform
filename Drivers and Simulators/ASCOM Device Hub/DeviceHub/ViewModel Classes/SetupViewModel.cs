@@ -238,7 +238,6 @@ namespace ASCOM.DeviceHub
             DomeSetupVm.InitializeLayout(Globals.DomeLayoutSettings);
             DomeSetupVm.FastUpdatePeriod = fastUpdatePeriod;
             IsDomeActive = DomeManager.Instance.IsConnected;
-
             DomeOffsetsVm.InitializeLayout(Globals.DomeLayoutSettings);
         }
 
@@ -358,8 +357,10 @@ namespace ASCOM.DeviceHub
                 // Get the current dome offsets from the offsets tab.
                 DomeLayoutSettings domeOffsets = DomeOffsetsVm.GetDomeOffsets();
 
-                // Update the offsets in the dome layout settings.
+                // Update with current values
                 domeLayoutSettings.SupportMultipleTelescopes = domeOffsets.SupportMultipleTelescopes;
+
+                // Update the offsets in the dome layout settings.
                 domeLayoutSettings.ProfileIndex = domeOffsets.ProfileIndex; // Must include this because it is mastered on the dome offsets dialogue
 
                 domeLayoutSettings.GemAxisOffset0 = domeOffsets.GemAxisOffset0;

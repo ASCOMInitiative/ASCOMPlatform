@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASCOM.DeviceHub.MvvmMessenger;
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -14,6 +15,8 @@ namespace ASCOM.DeviceHub
         {
             _fastUpdateMinimum = Globals.DOME_FAST_UPDATE_MIN;
             _fastUpdateMaximum = Globals.DOME_FAST_UPDATE_MAX;
+            _slewDelayMinimum = Globals.DOME_SLEW_DELAY_MIN;
+            _slewDelayMaximum = Globals.DOME_SLEW_DELAY_MAX;
         }
 
         #endregion Constructor
@@ -33,12 +36,19 @@ namespace ASCOM.DeviceHub
         private double _fastUpdatePeriod;
         private double _fastUpdateMinimum;
         private double _fastUpdateMaximum;
+        private int _slewDelay;
+        private int _slewDelayMinimum;
+        private int _slewDelayMaximum;
 
         #endregion Backing fields for Public Properties
 
         #region Public Properties
 
         public string DomeName { get; private set; }
+
+        public string FastUpdateTooltip { get => Globals.DOME_FAST_UPDATE_TOOLTIP; }
+
+        public string SlewDelayTooltip { get => Globals.DOME_SLEW_DELAY_TOOLTIP; }
 
         #endregion Public Properties
 
@@ -55,6 +65,7 @@ namespace ASCOM.DeviceHub
             _slaveInterval = settings.SlaveInterval;
             _opticalOffset = settings.OpticalOffset;
             _supportMultipleTelescopes = settings.SupportMultipleTelescopes;
+            _slewDelay = settings.SlewDelay;
         }
 
         public void RefreshDialogue()
@@ -155,7 +166,7 @@ namespace ASCOM.DeviceHub
         }
 
         // This property holds a measurement of the distance from the intersection of the RA and Dec axes on the mount 
-        // to the centerline of the telescope. The units are millimeters.
+        // to the center-line of the telescope. The units are millimeters.
 
         public int GemAxisOffset
         {
@@ -253,6 +264,46 @@ namespace ASCOM.DeviceHub
             }
         }
 
+        public int SlewDelay
+        {
+            get { return _slewDelay; }
+            set
+            {
+                if (value != _slewDelay)
+                {
+                    _slewDelay = value;
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int SlewDelayMinimum
+        {
+            get { return _slewDelayMinimum; }
+            set
+            {
+                if (value != _slewDelayMinimum)
+                {
+                    _slewDelayMinimum = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int SlewDelayMaximum
+        {
+            get { return _slewDelayMaximum; }
+            set
+            {
+                if (value != _slewDelayMaximum)
+                {
+                    _slewDelayMaximum = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         #endregion Change Notification Properties
 
         #region Public Methods
@@ -266,7 +317,8 @@ namespace ASCOM.DeviceHub
                 DomeScopeOffset = new Point3D((double)_scopeOffsetEWX, (double)_scopeOffsetNSY, (double)_scopeOffsetUDZ),
                 AzimuthAccuracy = _azimuthAccuracy,
                 SlaveInterval = _slaveInterval,
-                OpticalOffset = _opticalOffset
+                OpticalOffset = _opticalOffset,
+                SlewDelay = _slewDelay
             };
 
             return settings;

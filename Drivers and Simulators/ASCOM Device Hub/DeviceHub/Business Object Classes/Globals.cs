@@ -22,16 +22,22 @@ namespace ASCOM.DeviceHub
         public const double UTC_SECS_PER_SIDEREAL_SEC = 0.997269566334879;
 
         public const double DEG_TO_RAD = (2.0 * Math.PI) / 360.0;     // 0.017453 radians per degree
-        public const double RAD_TO_DEG = 1.0 / DEG_TO_RAD;              // 57.29578 degrees per radian
+        public const double RAD_TO_DEG = 1.0 / DEG_TO_RAD;            // 57.29578 degrees per radian
         public const double HRS_TO_RAD = (2.0 * Math.PI) / 24.0;      // 0.26180 radians per hour
-        public const double RAD_TO_HRS = 1.0 / HRS_TO_RAD;              // 3.81972 hours per radian
-        public const double HRS_TO_DEG = 15.0;                          // 15 degrees per hour
+        public const double RAD_TO_HRS = 1.0 / HRS_TO_RAD;            // 3.81972 hours per radian
+        public const double HRS_TO_DEG = 15.0;                        // 15 degrees per hour
 
         public const double SCOPE_FAST_UPDATE_MIN = 0.5;
         public const double SCOPE_FAST_UPDATE_MAX = 1.5;
 
         public const double DOME_FAST_UPDATE_MIN = 1.0;
         public const double DOME_FAST_UPDATE_MAX = 3.0;
+        public const string DOME_FAST_UPDATE_TOOLTIP = "This sets the status polling period while the dome is slewing.\r\n\r\nLower values result in more frequent polls.";
+
+        public const int DOME_SLEW_DELAY_MIN = 0;
+        public const int DOME_SLEW_DELAY_MAX = 20;
+        public const string DOME_SLEW_DELAY_TOOLTIP = "This sets the minimum period that must pass, after an azimuth slew completes, before a new slew can be started.\r\n\r\n" +
+                                                      "Its purpose is to reduce dome stress due to sudden reversing of dome rotational direction.";
 
         public const double FOCUSER_FAST_UPDATE_MIN = 0.5;
         public const double FOCUSER_FAST_UPDATE_MAX = 5.0;
@@ -40,6 +46,11 @@ namespace ASCOM.DeviceHub
         public const int GARBAGE_COLLECT_ATTEMPTS = 20; // Number of attempts to collect garbage when processing the Disconnect() method. 20 attempts allows 2 seconds of trying with a 100ms wait between attempts
 
         private static bool? _latestSupportMultipleTelescopesState;
+
+        /// <summary>
+        /// Current value of the slew delay setting
+        /// </summary>
+        public static int SlewDelay { get; set; }
 
         /// <summary>
         /// Return the latest state of the SupportMultipleTelescopes flag. (This may not have been persisted yet if user is in the setup dialogue)
