@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using ASCOM.Astrometry.NOVAS;
+using System.ComponentModel.Design.Serialization;
 
 namespace ValidatePlatform
 {
@@ -17,6 +18,29 @@ namespace ValidatePlatform
 
         static int Main(string[] args)
         {
+            // Set up assembly load and resolve event handlers
+            try
+            {
+                AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
+                {
+                    LogMessage("Main", $"Loaded assembly: {e.LoadedAssembly.FullName}");
+                };
+                AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
+                {
+                    LogMessage("Main", $"Failed to resolve assembly: {e.Name}, Called from: {e.RequestingAssembly.FullName}");
+                    return null;
+                };
+
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                {
+                    LogError("Main", "Unhandled exception occurred.", e.ExceptionObject as Exception);
+                    SetReturnCode(2);
+                };
+            }
+            catch (Exception ex)
+            {
+                LogError("Main", "Issue creating event handlers.", ex);
+            }
 
             // Basic tests for NOVAS and SOFA to ensure that they work OK
             try
@@ -38,6 +62,7 @@ namespace ValidatePlatform
                 {
                     LogError("Main", $"Unable to create trace logger.", ex);
                 }
+
 
                 // Create a Utilities component
                 try
@@ -231,12 +256,12 @@ namespace ValidatePlatform
             // Make sure none of these failing stops the overall migration process
             try
             {
-                Console.WriteLine(logMessage);
+                Console.WriteLine($"{section} - {logMessage}");
             }
             catch { }
             try
             {
-                TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+                TL?.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
             }
             catch { }
         }
