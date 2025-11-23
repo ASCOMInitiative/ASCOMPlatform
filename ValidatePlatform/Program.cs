@@ -15,6 +15,7 @@ namespace ValidatePlatform
     internal class Program
     {
         const string SOFA_CLSID = @"{DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E}";
+        const string ASTROMETRY_CLSID= @"{7F3582E3-9AA8-42CA-845C-2E6B13F362C1}";
 
         static int returnCode = 0;
         static TraceLogger TL;
@@ -106,6 +107,24 @@ namespace ValidatePlatform
 
                 ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\ProgId");
                 ValidateSofaValue($@"CLSID\{SOFA_CLSID}\ProgId", "", "ASCOM.Astrometry.SOFA.SOFA");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0");
+                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0", "", "ASCOM Astrometry");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32");
+                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32", "", @"ASCOM.Astrometry\6.0.0.0__565de7938946fba7\ASCOM.Astrometry.tlb");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS");
+                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS", "", @"0");
             }
             catch (Exception ex)
             {
@@ -332,6 +351,18 @@ namespace ValidatePlatform
             }
         }
 
+        /// <summary>
+        /// Validates that the value of a specified registry key contains an expected value.
+        /// </summary>
+        /// <remarks>This method checks if the specified registry key and value exist, and if the actual
+        /// value matches the expected value.  If the key or value does not exist, or if the actual value does not match
+        /// the expected value, an error is logged. If the validation succeeds, a success message is logged.</remarks>
+        /// <param name="keyName">The name of the registry key to validate. This must be a valid key under <see
+        /// cref="Microsoft.Win32.Registry.ClassesRoot"/>.</param>
+        /// <param name="valueName">The name of the value within the registry key to validate. This must match an existing value name in the
+        /// key.</param>
+        /// <param name="expectedValue">The expected value to compare against the actual value of the registry key. The comparison is
+        /// case-insensitive and checks if the actual value contains the expected value.</param>
         private static void ValidateSofaValue(string keyName, string valueName, string expectedValue)
         {
             try
@@ -357,9 +388,9 @@ namespace ValidatePlatform
                             {
                                 //LogMessage("ValidateSofaValue", $"The {keyName} key '{valueName}' value is: ");
                                 // Confirm that the value is correct
-                                if (actualValue.Equals(expectedValue, StringComparison.OrdinalIgnoreCase)) // Actual value matches expected value
+                                if (actualValue.ToUpper().Contains(expectedValue.ToUpper())) // Actual value contains the expected value
                                 {
-                                    LogMessage("ValidateSofaValue", $"OK    The {keyName} key '{valueName}' value ('{actualValue}') is correct!");
+                                    LogMessage("ValidateSofaValue", $"OK    The {keyName} key '{valueName}' value ('{actualValue}') is correct! ({expectedValue})");
                                 }
                                 else // Actual value is different to expected value
                                 {
