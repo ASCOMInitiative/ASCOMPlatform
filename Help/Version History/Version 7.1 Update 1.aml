@@ -26,6 +26,13 @@
           <listItem>
             Device Hub - Fixed issue where dome synchronisation failed when the controlled dome did not support opening / closing the dome aperture.
           </listItem>
+          <listItem>
+            Device Hub - Fixed an issue where the "two axis offsets" dome slaving calculation was not selected as the default calculation mechanic.
+          </listItem>
+          <listItem>
+            Device Hub - The user guide has been updated with consistent language for optical offset names and other terms.
+          </listItem>
+
         </list>
       </content>
     </section>
