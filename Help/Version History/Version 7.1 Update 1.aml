@@ -24,6 +24,9 @@
       <content>
         <list class="bullet">
           <listItem>
+            Installer - Fixed an issue that occasionally prevented the OmniSim COM proxy drivers from registering.
+          </listItem>
+          <listItem>
             Device Hub - Fixed issue where dome synchronisation failed when the controlled dome did not support opening / closing the dome aperture.
           </listItem>
           <listItem>
