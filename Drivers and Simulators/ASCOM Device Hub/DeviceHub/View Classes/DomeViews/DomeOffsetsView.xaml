@@ -105,7 +105,7 @@
 
         <!-- Column titles -->
         <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource ColumnTitleStyle}" Text="Telescope Name" ToolTip="A descriptive name for the observing telescope."/>
-        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Axis Intersection Offset" ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail." />
+        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource ColumnTitleStyle}" Text="Axes Intersection Offset" ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail." />
         <TextBlock Grid.Row="4" Grid.Column="2" Style="{StaticResource ColumnTitleStyle}" Text="Dec/Alt Axis Offset" ToolTip="Shortest distance between the declination / altitude axis and the telescope optical axis (mm).&#x0a;&#x0a;This will be zero when the declination / altitude axis passes through the telescope optical axis,&#x0a;otherwise non-zero.&#x0a;&#x0a;See the Device Hub manual for more detail." />
 
         <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding TelescopeName1, FallbackValue=No value}" Style="{StaticResource NameStyle}" />

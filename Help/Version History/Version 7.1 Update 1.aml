@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1d9c9d1e-1980-45a6-b7f9-4f4bcb752b80" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction address="Intro711">
+      <para>
+        In line with previous Platform installers, Platform 7.1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs. The Platform
+        environment pre-requisites are listed here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform Prerequisites</link>.
+      </para>
+    </introduction>
+
+    <section address="Changes711">
+      <title>Changes in 7.1 Update 1 - For Everyone</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            Device Hub - Added a dome safety feature to ensure that a configurable minimum time period passes between a slew completing, and the next slew starting. This is to prevent sudden changes in rotation direction.
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="IssuesFixedPlatform711">
+      <title>Issues Fixed in 7.1 Update 1 - For Everyone</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            Device Hub - Fixed issue where dome synchronisation failed when the controlled dome did not support opening / closing the dome aperture.
+          </listItem>
+          <listItem>
+            Device Hub - Fixed an issue where the "two axis offsets" dome slaving calculation was not selected as the default calculation mechanic.
+          </listItem>
+          <listItem>
+            Device Hub - The user guide has been updated with consistent language for optical offset names and other terms.
+          </listItem>
+
+        </list>
+      </content>
+    </section>
+
+    <section address="ChangesDeveloper711">
+      <title>Changes in 7.1 Update 1 - For Developers</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            None.
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="IssuesFixedDeveloper711">
+      <title>Issues Fixed in 7.1 Update 1 - For Developers</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            None.
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="BreakingChanges711">
+      <title>Breaking Changes (For Developers) in Platform 7.1 Update 1</title>
+      <content>
+        <list class="bullet">
+          <listItem>None.</listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="KnownIssuesDevelopment711">
+      <title>Known Limitations - Developers</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully
+            accessible through COM from scripting languages because a number of parameters are passed by reference or use
+            structures that do not pass across the COM interface. Two work rounds are available:
+            <list class="ordered">
+              <listItem>Use the Transform component in the ASCOM.Astrometry.Transform namespace, it is fully COM compatible.</listItem>
+              <listItem>
+                Create your own COM presentation component that encapsulates the SOFA or NOVAS 3.1 functions that you require
+                and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your
+                scripting application.
+              </listItem>
+            </list>
+          </listItem>
+        </list>
+      </content>
+    </section>
+    <bibliography></bibliography>
+    <relatedTopics></relatedTopics>
+  </developerConceptualDocument>
+
+</topic>

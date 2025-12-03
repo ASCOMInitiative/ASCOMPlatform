@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             d:DataContext="{d:DesignInstance Type=local:DomeMotionViewModel}"
              mc:Ignorable="d" 
    	         Background="{DynamicResource WindowBackgroundBrush}"
              d:DesignHeight="300" d:DesignWidth="340" MinWidth="428" MinHeight="580">
@@ -30,7 +31,7 @@
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
-        
+
         <Style x:Key="ObservingScope" TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="8,0,0,0" />
             <Setter Property="Padding" Value="0" />
@@ -152,7 +153,7 @@
                 </Button.Content>
             </Button>
         </Grid>
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="Dome State" Margin="8,0,4,0" Padding="0" VerticalAlignment="Top" Height="Auto" Width="238" Foreground="{DynamicResource NormalTextBrush}">
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Dome State" Margin="16,0,4,0" Padding="0" VerticalAlignment="Top" Height="Auto" Width="238" Foreground="{DynamicResource NormalTextBrush}">
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
                     <Style.Triggers>
@@ -230,7 +231,7 @@
                 </Grid>
             </GroupBox>
         </Expander>
-		<Expander Name="_otherActionsExpander" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="Other Actions" Foreground="{DynamicResource NormalTextBrush}" Margin="6,0"                      
+        <Expander Name="_otherActionsExpander" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="Other Actions" Foreground="{DynamicResource NormalTextBrush}" Margin="6,0"                      
 				 Template="{DynamicResource StretchyExpanderTemplate}" Expanded="Expander_Expanded">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -243,8 +244,8 @@
                     <RowDefinition Height="Auto" MinHeight="20"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox Grid.Row="0" Content="Use POTH Slaving Calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" IsChecked="{Binding UsePOTHSlaveCalculation}"/>
-                <CheckBox Grid.Row="0" Content="Use revised calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="200,4,0,0" IsChecked="{Binding UseRevisedSlaveCalculation}"/>
+                <CheckBox Grid.Row="0" Content="Use POTH slaving calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="4,4,0,0" IsChecked="{Binding UsePOTHSlaveCalculation}" ToolTip="Uses the POTH calculation which can be unreliable near poles and zenith.&#x0a;&#x0a;Not recommended, the default calculation is considered the most accurate."/>
+                <CheckBox Grid.Row="0" Content="Single offset slaving calculation" Foreground="{DynamicResource NormalTextBrush}" Margin="190,4,0,0" IsChecked="{Binding UseOneAxisSlaveCalculation}" ToolTip="Only uses the Axis intersection offset value and ignores the Dec/alt offset value.&#x0a;&#x0a;Not recommended, the default calculation is considered the most accurate."/>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="6,0">
                     <Label Content="Dome Azimuth Adjustment:" Style="{StaticResource StateLabel}" VerticalAlignment="Center" />
@@ -269,14 +270,14 @@
                 </GroupBox>
             </Grid>
         </Expander>
-        <TextBlock Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Style="{StaticResource ObservingScope}" Visibility="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}">
+        <TextBlock Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,0,0,0" TextAlignment="Right" Style="{StaticResource ObservingScope}" Visibility="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}">
             Observing
             <LineBreak />
             Telescope
         </TextBlock>
 
         <ComboBox Name="CmbTelescopes" SelectionChanged="CmbTelescopes_SelectionChanged" 
-                  Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="70,6,0,0" Height="22" Width="180" VerticalAlignment="Top"  HorizontalAlignment="Left"
+                  Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="60,6,0,0" Height="22" Width="220" VerticalAlignment="Top"  HorizontalAlignment="Left"
 		          IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding TelescopeNames}" SelectedItem="{Binding SelectedTelescope, Mode=TwoWay}" SelectedIndex="{Binding SelectedTelescopeIndex, Mode=TwoWay}"
                   Visibility="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" >
         </ComboBox>

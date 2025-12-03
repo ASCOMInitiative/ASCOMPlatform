@@ -233,6 +233,7 @@
       <AlternateText>Remote Setup Ip</AlternateText>
     </Image>
     <None Include="Introduction\Introduction - Developer.aml" />
+    <None Include="Version History\Version 7.1 Update 1.aml" />
     <None Include="Version History\Version 7.0 Update 2.aml" />
     <None Include="Tools and Features\OmniSimulators.aml" />
     <None Include="Tools and Features\ASCOMRemote.aml" />

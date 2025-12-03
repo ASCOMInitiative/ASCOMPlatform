@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	         xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"   
-             xmlns:local="clr-namespace:ASCOM.DeviceHub"
+             xmlns:local="clr-namespace:ASCOM.DeviceHub" 
+             d:DataContext="{d:DesignInstance Type=local:DomeSetupViewModel}"
              mc:Ignorable="d" 
 			 Background="{DynamicResource WindowBackgroundBrush}"
              d:DesignHeight="400" d:DesignWidth="587.5"
@@ -138,13 +139,13 @@
                     <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" Grid.ColumnSpan="2" Grid.RowSpan="2" TextAlignment="Left" Margin="46,-9,0,0" Width="Auto" Visibility="{Binding SupportMultipleTelescopes, Converter={StaticResource BoolToVis}}" >
                         <Run Text="Multiple telescope support is enabled." />
                         <LineBreak />
-                        <Run Text="Optical axis offsets are set on the Dome Offsets tab."  Foreground="Yellow"/>
+                        <Run Text="The optical axis offsets are set in the Dome Offsets tab."  Foreground="Yellow"/>
                     </TextBlock>
 
                     <!-- GEM offset -->
                     <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource BlockStyle}" TextAlignment="Right" Margin="5,0,0,0" Width="Auto" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
-                               ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail.">
-                        <Run Text="Telescope offset from the axis intersection (mm):" />
+                               ToolTip="Distance along the declination / altitude axis from the intersection of the two rotational&#x0a;axes to the point closest to the telescope optical axis (mm).&#x0a;&#x0a;In German equatorial mounts this is known as the GEM offset.&#x0a;&#x0a;See the Device Hub manual for more detail." HorizontalAlignment="Right">
+                        <Run Text="Axes intersection offset (mm):" />
                         <LineBreak />
                         <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
@@ -161,7 +162,7 @@
                     <!-- Optical axis offset -->
                     <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,0,0" Width="auto" Visibility="{Binding SupportSingleTelescope, Converter={StaticResource BoolToVis}}"
                              ToolTip="Shortest distance between the declination / altitude axis and the telescope optical axis (mm).&#x0a;&#x0a;This will be zero when the declination / altitude axis passes through the telescope optical axis,&#x0a;otherwise non-zero.&#x0a;&#x0a;See the Device Hub manual for more detail.">
-                        <Run Text="Telescope offset from the dec / alt axis (mm):" />
+                        <Run Text="Dec / alt axis offset (mm):" />
                         <LineBreak />
                         <Run Text="Hover mouse here for more information."  Foreground="Yellow"/>
                     </TextBlock>
@@ -218,15 +219,38 @@
                     </TextBox>
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="2" Grid.Column="0" Header="Driver Polling Interval" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Height="Auto" HorizontalAlignment="Stretch">
-                <StackPanel Orientation="Horizontal" Margin="6" Height="26">
-                    <Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" />
-                    <Slider Width="331" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center"
-					Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
-					Value="{Binding FastUpdatePeriod}" />
-                    <TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0"
-					   Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
-                </StackPanel>
+            <GroupBox Grid.Row="2" Grid.Column="0" Header="Driver Management" Foreground="{DynamicResource NormalTextBrush}" Margin="0" Height="Auto" HorizontalAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="38" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel  Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="6" Height="26">
+                        <Label Content="Fast Polling Rate (sec):" Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" Width="Auto" 
+                               ToolTip="{Binding FastUpdateTooltip}" />
+                        <Slider Width="100" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center" Minimum="{Binding FastUpdateMinimum}" Maximum="{Binding FastUpdateMaximum}" 
+                               Value="{Binding FastUpdatePeriod}" ToolTip="{Binding FastUpdateTooltip}"/>
+                        <TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="0,-3,0,0" 
+                               Text="{Binding FastUpdatePeriod, StringFormat=F2, FallbackValue=XXXX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" ToolTip="{Binding FastUpdateTooltip}"/>
+                    </StackPanel>
+
+                    <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="6" Height="26">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource BlockStyle}" HorizontalAlignment="Right" TextAlignment="Right" ToolTip="{Binding SlewDelayTooltip}">
+                            <Run Text="Post Slew" />
+                            <LineBreak />
+                            <Run Text="Delay (sec):" />
+                        </TextBlock>
+                        <Slider Width="150" IsSnapToTickEnabled="True" Margin="4,0" VerticalAlignment="Center" Minimum="{Binding SlewDelayMinimum}" Maximum="{Binding SlewDelayMaximum}" 
+                                Value="{Binding SlewDelay}" ToolTip="{Binding SlewDelayTooltip}" />
+                        <TextBlock Foreground="{DynamicResource NormalTextBrush}" VerticalAlignment="Center" Padding="0" Margin="-5,-3,0,0" TextAlignment="Right" Width="15"
+                                Text="{Binding SlewDelay, FallbackValue=XX, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" ToolTip="{Binding SlewDelayTooltip}"/>
+                    </StackPanel>
+
+                </Grid>
             </GroupBox>
         </StackPanel>
     </Grid>

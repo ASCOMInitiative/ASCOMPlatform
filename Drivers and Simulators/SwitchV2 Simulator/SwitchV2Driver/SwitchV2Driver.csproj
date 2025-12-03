@@ -142,9 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
-      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
+      <Project>{2c40fad9-de75-4360-a0ad-911c4d24d98c}</Project>
       <Name>ASCOM.Attributes</Name>
-      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj">
       <Project>{350a73bd-60d1-03e4-2edc-a617d2d79ce3}</Project>

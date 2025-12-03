@@ -1,7 +1,11 @@
-﻿using ASCOM.Utilities;
+﻿using ASCOM.Astrometry.NOVAS;
+using ASCOM.Utilities;
+using Microsoft.Win32;
 using System;
+using System.ComponentModel.Design.Serialization;
+using System.Reflection;
+using System.Security.Claims;
 using System.Windows.Forms;
-using ASCOM.Astrometry.NOVAS;
 
 namespace ValidatePlatform
 {
@@ -10,6 +14,9 @@ namespace ValidatePlatform
     /// </summary>
     internal class Program
     {
+        const string SOFA_CLSID = @"{DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E}";
+        const string ASTROMETRY_CLSID= @"{7F3582E3-9AA8-42CA-845C-2E6B13F362C1}";
+
         static int returnCode = 0;
         static TraceLogger TL;
         static Util util;
@@ -17,27 +24,132 @@ namespace ValidatePlatform
 
         static int Main(string[] args)
         {
+            // Set up assembly load and resolve event handlers
+            try
+            {
+                AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
+                {
+                    LogMessage("AssemblyLoad", $"Loaded assembly: {e.LoadedAssembly.FullName}");
+                };
+                AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
+                {
+                    LogMessage("AssemblyResolve", $"Failed to resolve assembly: {e.Name}, Called from: {e.RequestingAssembly.FullName}");
+                    return null;
+                };
+
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                {
+                    LogError("UnhandledException", "Unhandled exception occurred.", e.ExceptionObject as Exception);
+                    SetReturnCode(2);
+                };
+            }
+            catch (Exception ex)
+            {
+                LogError("Main", "Issue creating event handlers.", ex);
+            }
+
+            // Create a TraceLogger component
+            try
+            {
+                string osMode = Environment.Is64BitProcess ? "64" : "86";
+
+                TL = new TraceLogger("", $"ValidatePlatform{osMode}")
+                {
+                    Enabled = true
+                };
+                LogMessage("Main", $"Successfully created TraceLogger.");
+                LogMessage("Main", $"Operating in X{osMode} mode.");
+                LogBlankLine();
+            }
+            catch (Exception ex)
+            {
+                LogError("Main", $"Unable to create trace logger.", ex);
+            }
+
+            // Report on the SOFA ProgID COM registration
+            try
+            {
+                ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA");
+                ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA\CLSID");
+                ValidateSofaValue(@"ASCOM.Astrometry.SOFA.SOFA\CLSID", "", SOFA_CLSID);
+            }
+            catch (Exception ex)
+            {
+                LogError("SOFA", $"SOFA COM registration exception", ex);
+            }
+            LogBlankLine();
+
+            // Report on the SOFA CLSID COM registration
+            try
+            {
+                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}", "", "ASCOM.Astrometry.SOFA.SOFA");
+                LogBlankLine();
+
+                // Validate that expected sub-keys exist with the correct values
+                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories");
+                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "", "mscoree.dll");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Class", "ASCOM.Astrometry.SOFA.SOFA");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "RuntimeVersion", "v2.0.50727");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "ThreadingModel", "Both");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Class", "ASCOM.Astrometry.SOFA.SOFA");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "RuntimeVersion", "v2.0.50727");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\ProgId");
+                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\ProgId", "", "ASCOM.Astrometry.SOFA.SOFA");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0");
+                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0", "", "ASCOM Astrometry");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32");
+                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32", "", @"ASCOM.Astrometry\6.0.0.0__565de7938946fba7\ASCOM.Astrometry.tlb");
+                LogBlankLine();
+
+                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS");
+                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS", "", @"0");
+            }
+            catch (Exception ex)
+            {
+                LogError("SOFA", $"CLSID COM registration exception", ex);
+            }
+            LogBlankLine();
+
+            try
+            {
+                Assembly astrometry = Assembly.Load("ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                if (astrometry == null)
+                    LogError("Main", "Unable to load ASCOM.Astrometry.SOFA assembly by name", null);
+                else
+                    LogMessage("Main", "Successfully loaded ASCOM.Astrometry.SOFA assembly by name");
+            }
+            catch (Exception ex)
+            {
+                LogError("SOFA", $"Assembly load exception", ex);
+            }
+            LogBlankLine();
 
             // Basic tests for NOVAS and SOFA to ensure that they work OK
             try
             {
-                // Create a TraceLogger component
-                try
-                {
-                    string osMode = Environment.Is64BitProcess ? "64" : "86";
 
-                    TL = new TraceLogger("", $"ValidatePlatform{osMode}")
-                    {
-                        Enabled = true
-                    };
-                    LogMessage("Main", $"Successfully created TraceLogger.");
-                    LogMessage("Main", $"Operating in X{osMode} mode.");
-                    LogBlankLine();
-                }
-                catch (Exception ex)
-                {
-                    LogError("Main", $"Unable to create trace logger.", ex);
-                }
 
                 // Create a Utilities component
                 try
@@ -217,6 +329,96 @@ namespace ValidatePlatform
             return returnCode;
         }
 
+        private static void ValidateSofaSubKey(string keyName)
+        {
+            try
+            {
+                using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(keyName, false))
+                {
+                    if (!(key is null)) // Key exists
+                    {
+                        LogMessage("ValidateSofaSubKey", $@"OK    The {keyName} sub-key exists.");
+                    }
+                    else
+                    {
+                        LogError("ValidateSofaSubKey", $@"Error The {keyName} sub-key does not exist.", null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("ValidateSofaSubKey", $"Exception while validating sub-key: {keyName}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Validates that the value of a specified registry key contains an expected value.
+        /// </summary>
+        /// <remarks>This method checks if the specified registry key and value exist, and if the actual
+        /// value matches the expected value.  If the key or value does not exist, or if the actual value does not match
+        /// the expected value, an error is logged. If the validation succeeds, a success message is logged.</remarks>
+        /// <param name="keyName">The name of the registry key to validate. This must be a valid key under <see
+        /// cref="Microsoft.Win32.Registry.ClassesRoot"/>.</param>
+        /// <param name="valueName">The name of the value within the registry key to validate. This must match an existing value name in the
+        /// key.</param>
+        /// <param name="expectedValue">The expected value to compare against the actual value of the registry key. The comparison is
+        /// case-insensitive and checks if the actual value contains the expected value.</param>
+        private static void ValidateSofaValue(string keyName, string valueName, string expectedValue)
+        {
+            try
+            {
+                // Open the key
+                using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(keyName, false))
+                {
+                    // Check the key exists
+                    if (!(key is null)) // Key exists
+                    {
+                        // Get all the value names in this key
+                        string[] subKeyNames = key.GetValueNames();
+
+                        // Check the specified value exists
+                        if (Array.Exists(subKeyNames, element => element.Equals(valueName, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            //LogMessage("ValidateSofaValue", $"The {keyName} key '{valueName}' value exists.");
+
+                            // Get the value 
+
+                            //Check the value exists
+                            if (key?.GetValue(valueName) is string actualValue) // Value exists
+                            {
+                                //LogMessage("ValidateSofaValue", $"The {keyName} key '{valueName}' value is: ");
+                                // Confirm that the value is correct
+                                if (actualValue.ToUpper().Contains(expectedValue.ToUpper())) // Actual value contains the expected value
+                                {
+                                    LogMessage("ValidateSofaValue", $"OK    The {keyName} key '{valueName}' value ('{actualValue}') is correct! ({expectedValue})");
+                                }
+                                else // Actual value is different to expected value
+                                {
+                                    LogError("ValidateSofaValue", $"ERROR The {keyName} key '{valueName}' value ('{actualValue}') is INCORRECT.", null);
+                                }
+                            }
+                            else
+                            {
+                                LogError("ValidateSofaValue", $"ERROR Unable to read {keyName} key '{valueName}' value.", null);
+                            }
+                        }
+                        else // Specified name does not exist
+                        {
+                            LogError("ValidateSofaValue", $"ERROR The {keyName} key '{valueName}' value does not exist.", null);
+                        }
+                    }
+                    else // Specified key does not exist
+                    {
+                        LogError("ValidateSofaValue", $"ERROR The registry key {keyName} does not exist, cannot validate {valueName} value.", null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("ValidateSofaValue", $"Exception while validating key: {keyName}, value name: {valueName}", ex);
+            }
+        }
+
         //
         // Set the return code to the first error that occurs
         //
@@ -231,12 +433,12 @@ namespace ValidatePlatform
             // Make sure none of these failing stops the overall migration process
             try
             {
-                Console.WriteLine(logMessage);
+                Console.WriteLine($"{section} - {logMessage}");
             }
             catch { }
             try
             {
-                TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+                TL?.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
             }
             catch { }
         }

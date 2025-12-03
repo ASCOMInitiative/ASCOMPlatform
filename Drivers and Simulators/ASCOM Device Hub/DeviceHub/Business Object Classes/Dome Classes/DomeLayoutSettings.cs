@@ -13,7 +13,7 @@ namespace ASCOM.DeviceHub
         private int _azimuthAccuracy;
 
         private bool _supportMultipleTelescopes;
-
+        private int _slewDelay;
         private int _profileIndex;
 
         private int _gemAxisOffset;
@@ -49,8 +49,12 @@ namespace ASCOM.DeviceHub
             this._azimuthAccuracy = other._azimuthAccuracy;
             this._slaveInterval = other._slaveInterval;
 
+
             // Copy the multiple telescope supported flag
             this._supportMultipleTelescopes = other._supportMultipleTelescopes;
+
+            // Copy the slew delay value
+            this._slewDelay = other._slewDelay;
 
             this._profileIndex = other._profileIndex;
 
@@ -142,6 +146,19 @@ namespace ASCOM.DeviceHub
                 if (value != _supportMultipleTelescopes)
                 {
                     _supportMultipleTelescopes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int SlewDelay
+        {
+            get { return _slewDelay; }
+            set
+            {
+                if (value != _slewDelay)
+                {
+                    _slewDelay= value;
                     OnPropertyChanged();
                 }
             }

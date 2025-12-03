@@ -77,30 +77,43 @@ namespace ASCOM.Astrometry.SOFA
         /// </summary>
         static SOFA()
         {
-
-            var ReturnedPath = new StringBuilder(260);
-            string SofaDllFile;
-            bool rc;
-            int LastError;
-
-            Log.Component(Assembly.GetExecutingAssembly(), "SOFA");
-
-            if (Is64Bit()) // 64bit application so find the 32bit folder location
+            try
             {
-                rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, false);
-                SofaDllFile = ReturnedPath.ToString() + SOFA_DLL_LOCATION + SOFA64DLL;
+                var ReturnedPath = new StringBuilder(260);
+                string SofaDllFile;
+                bool rc;
+                int LastError;
+
+                Log.Component(Assembly.GetExecutingAssembly(), "SOFA");
+
+                if (Is64Bit()) // 64bit application so find the 32bit folder location
+                {
+                    rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, false);
+                    SofaDllFile = ReturnedPath.ToString() + SOFA_DLL_LOCATION + SOFA64DLL;
+                }
+                else // 32bit application so just go with the .NET returned value
+                {
+                    SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) + SOFA_DLL_LOCATION + SOFA32DLL;
+                }
+
+                SofaDllHandle = LoadLibrary(SofaDllFile);
+                LastError = Marshal.GetLastWin32Error();
+
+                // Check if the SOFA DLL loaded successfully
+                if (SofaDllHandle == IntPtr.Zero) // Failed to load successfully
+                    throw new HelperException($"Error code {LastError:X8} returned from LoadLibrary when loading SOFA library: {SofaDllFile}");
             }
-            else // 32bit application so just go with the .NET returned value
+            catch (Exception ex)
             {
-                SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) + SOFA_DLL_LOCATION + SOFA32DLL;
+                // Something went wrong in the static constructor so log the exception
+                using (TraceLogger logger = new("SOFAStaticInit"))
+                {
+                    logger.Enabled = true;
+                    logger.LogMessageCrLf("StaticConstructor", $"Exception: {ex.Message}\r\n{ex}");
+                    logger.Enabled = false;
+                }
+                throw;
             }
-
-            SofaDllHandle = LoadLibrary(SofaDllFile);
-            LastError = Marshal.GetLastWin32Error();
-
-            // Check if the SOFA DLL loaded successfully
-            if (SofaDllHandle == IntPtr.Zero) // Failed to load successfully
-                throw new HelperException($"Error code {LastError:X8} returned from LoadLibrary when loading SOFA library: {SofaDllFile}");
         }
 
         /// <summary>
@@ -110,207 +123,221 @@ namespace ASCOM.Astrometry.SOFA
         /// <remarks></remarks>
         public SOFA()
         {
-            bool rc;
-            string SofaDllFile;
-            var ReturnedPath = new StringBuilder(260);
-            int LastError, Count, NumberOfSOFALeapSecondValues;
-            DateTime JulianDateUtc;
-
-            TL = new TraceLogger("", "SOFA");
-            TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry
-
-            Utl = new Util();
-
-            var LeapSecondArray = new LeapSecondDataStruct[101];
-            int RecordCount;
-            var HasBeenUpdated = default(bool);
-            DateTime UTCNow;
-
-            if (Is64Bit()) // 64bit application so find the 32bit folder location
+            try
             {
-                rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, false);
-                SofaDllFile = ReturnedPath.ToString() + SOFA_DLL_LOCATION + SOFA64DLL;
-            }
-            else // 32bit application so just go with the .NET returned value
-            {
-                SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) + SOFA_DLL_LOCATION + SOFA32DLL;
-            }
-            TL.LogMessage("New", "PRODUCTION build");
- 
-            if (!File.Exists(SofaDllFile))
-            {
-                TL.LogMessage("New", $"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}");
-                throw new HelperException($"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}");
-            }
-            else
-            {
-                TL.LogMessage("New", $"Found SOFA library DLL: {SofaDllFile}");
-            }
+                bool rc;
+                string SofaDllFile;
+                var ReturnedPath = new StringBuilder(260);
+                int LastError, Count, NumberOfSOFALeapSecondValues;
+                DateTime JulianDateUtc;
 
-            TL.LogMessage("New", "Loading SOFA library DLL: " + SofaDllFile);
+                TL = new TraceLogger("", "SOFA");
+                TL.Enabled = Utilities.Global.GetBool(Utilities.Global.NOVAS_TRACE, Utilities.Global.NOVAS_TRACE_DEFAULT); // Get enabled / disabled state from the user registry
 
-            SofaDllHandle = LoadLibrary(SofaDllFile);
-            LastError = Marshal.GetLastWin32Error();
+                Utl = new Util();
 
-            if (SofaDllHandle != IntPtr.Zero) // Loaded successfully
-            {
-                TL.LogMessage("New", "Loaded SOFA library OK");
+                var LeapSecondArray = new LeapSecondDataStruct[101];
+                int RecordCount;
+                var HasBeenUpdated = default(bool);
+                DateTime UTCNow;
 
-                // Update the SOFA DLL leap second data with any updated values downloaded from the web
-                try
+                if (Is64Bit()) // 64bit application so find the 32bit folder location
                 {
+                    rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, false);
+                    SofaDllFile = ReturnedPath.ToString() + SOFA_DLL_LOCATION + SOFA64DLL;
+                }
+                else // 32bit application so just go with the .NET returned value
+                {
+                    SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) + SOFA_DLL_LOCATION + SOFA32DLL;
+                }
+                TL.LogMessage("New", "PRODUCTION build");
 
-                    var InBuiltLeapSeconds = new LeapSecondDataStruct[101];
+                if (!File.Exists(SofaDllFile))
+                {
+                    TL.LogMessage("New", $"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}");
+                    throw new HelperException($"SOFA Initialise - Unable to locate SOFA library DLL: {SofaDllFile}");
+                }
+                else
+                {
+                    TL.LogMessage("New", $"Found SOFA library DLL: {SofaDllFile}");
+                }
 
-                    TL.LogMessage("New", string.Format("HasUpdatedData: {0}", UsingUpdatedData().ToString()));
+                TL.LogMessage("New", "Loading SOFA library DLL: " + SofaDllFile);
 
-                    Count = 0; // Counter for the number of leap second values found
-                    using (var Parameters = new EarthRotationParameters()) // Get the data from the EarthRotationParameters class
+                SofaDllHandle = LoadLibrary(SofaDllFile);
+                LastError = Marshal.GetLastWin32Error();
+
+                if (SofaDllHandle != IntPtr.Zero) // Loaded successfully
+                {
+                    TL.LogMessage("New", "Loaded SOFA library OK");
+
+                    // Update the SOFA DLL leap second data with any updated values downloaded from the web
+                    try
                     {
 
-                        NumberOfSOFALeapSecondValues = NumberOfBuiltInLeapSecondValues();
+                        var InBuiltLeapSeconds = new LeapSecondDataStruct[101];
 
-                        switch (Parameters.UpdateType ?? "")
+                        TL.LogMessage("New", string.Format("HasUpdatedData: {0}", UsingUpdatedData().ToString()));
+
+                        Count = 0; // Counter for the number of leap second values found
+                        using (var Parameters = new EarthRotationParameters()) // Get the data from the EarthRotationParameters class
                         {
-                            case GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                                {
-                                    TL.LogMessage("New-BuiltIn", "No leap second values available so use SOFA's built-in defaults");
-                                    break;
-                                }
 
-                            case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                            case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1:
-                                {
-                                    TL.LogMessage("New-Manual", "No leap second values available so use SOFA's built-in defaults. UpdateType: " + Parameters.UpdateType);
+                            NumberOfSOFALeapSecondValues = NumberOfBuiltInLeapSecondValues();
 
-                                    if (!UsingUpdatedData()) // First time round so add the manual value at the end of the list
+                            switch (Parameters.UpdateType ?? "")
+                            {
+                                case GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1:
                                     {
-                                        RecordCount = GetLeapSecondData(LeapSecondArray, ref HasBeenUpdated);
-                                        UTCNow = DateTime.UtcNow; // Save the UTC time so that the year month and day values are consistent if SOFA is run across a day/month/year change point
-
-                                        // Add today's month to the end of the list with the configured number of leap seconds. This will force SOFA to use the configured value for today's calculations
-                                        LeapSecondArray[RecordCount].Year = UTCNow.Year;
-                                        LeapSecondArray[RecordCount].Month = UTCNow.Month;
-                                        LeapSecondArray[RecordCount].DelAt = Parameters.ManualLeapSeconds;
-
-                                        LastError = UpdateLeapSecondData(LeapSecondArray); // Send the revised data to the SOFA DLL
-                                        if (LastError == 0) // First time initialisation of the DLL data
-                                        {
-                                            TL.LogMessage("New-Manual", "SOFA leap second data initialised. Return code: " + LastError);
-                                        }
-                                        else if (LastError == 1)
-                                        {
-                                            TL.LogMessage("New-Manual", "SOFA leap second data already initialised - no action taken. Return code: " + LastError);
-                                        }
-                                        else if (LastError == 2)
-                                        {
-                                            TL.LogMessage("New-Manual", "SOFA leap second data rejected because 100 or more records were supplied. Using built-in leap second values. Return code: " + LastError);
-                                        }
-                                        else // Initialisation has already been made for this instance oif the DLL - no need to do it again
-                                        {
-                                            TL.LogMessage("New-Manual", "Unknown return code: " + LastError);
-                                        }
-
+                                        TL.LogMessage("New-BuiltIn", "No leap second values available so use SOFA's built-in defaults");
+                                        break;
                                     }
 
-                                    break;
-                                }
-
-                            case GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1:
-                            case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1:
-                                {
-                                    // Act according to the number of updated leap second values that are available
-                                    switch (Parameters.DownloadedLeapSeconds.Count)
+                                case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1:
+                                case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1:
                                     {
-                                        case 0: // No values have been downloaded so run with built-in SOFA leap second values
+                                        TL.LogMessage("New-Manual", "No leap second values available so use SOFA's built-in defaults. UpdateType: " + Parameters.UpdateType);
+
+                                        if (!UsingUpdatedData()) // First time round so add the manual value at the end of the list
+                                        {
+                                            RecordCount = GetLeapSecondData(LeapSecondArray, ref HasBeenUpdated);
+                                            UTCNow = DateTime.UtcNow; // Save the UTC time so that the year month and day values are consistent if SOFA is run across a day/month/year change point
+
+                                            // Add today's month to the end of the list with the configured number of leap seconds. This will force SOFA to use the configured value for today's calculations
+                                            LeapSecondArray[RecordCount].Year = UTCNow.Year;
+                                            LeapSecondArray[RecordCount].Month = UTCNow.Month;
+                                            LeapSecondArray[RecordCount].DelAt = Parameters.ManualLeapSeconds;
+
+                                            LastError = UpdateLeapSecondData(LeapSecondArray); // Send the revised data to the SOFA DLL
+                                            if (LastError == 0) // First time initialisation of the DLL data
                                             {
-                                                TL.LogMessage("New-AutoUpdate", "No leap second values in Parameters.HistoricLeapSeconds - Relying on SOFA's built-in defaults");
-                                                break;
+                                                TL.LogMessage("New-Manual", "SOFA leap second data initialised. Return code: " + LastError);
+                                            }
+                                            else if (LastError == 1)
+                                            {
+                                                TL.LogMessage("New-Manual", "SOFA leap second data already initialised - no action taken. Return code: " + LastError);
+                                            }
+                                            else if (LastError == 2)
+                                            {
+                                                TL.LogMessage("New-Manual", "SOFA leap second data rejected because 100 or more records were supplied. Using built-in leap second values. Return code: " + LastError);
+                                            }
+                                            else // Initialisation has already been made for this instance oif the DLL - no need to do it again
+                                            {
+                                                TL.LogMessage("New-Manual", "Unknown return code: " + LastError);
                                             }
 
-                                        case var @case when 1 <= @case && @case <= NumberOfSOFALeapSecondValues: // The same or less number of values have been downloaded compared to the builtin number in the SOFA DLL so run with the built-in SOFA leap second values
-                                            {
-                                                TL.LogMessage("AutoUpdate", string.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is less or equal to than the number built-in to SOFA ({1}) - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues));
-                                                break;
-                                            }
+                                        }
 
-                                        case var case1 when NumberOfSOFALeapSecondValues + 1 <= case1 && case1 <= MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES: // We have sufficient values to warrant overriding the SOFA vaslues
-                                            {
-                                                foreach (KeyValuePair<double, double> LeapSecond in Parameters.DownloadedLeapSeconds) // Retrieve each individual leap second record
-                                                {
-                                                    JulianDateUtc = DateTime.FromOADate(LeapSecond.Key - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET); // Turn the Julian date into a DateTime value
-                                                    LeapSecondArray[Count].Year = JulianDateUtc.Year; // Save the year and month from the JulianDate DateTime value
-                                                    LeapSecondArray[Count].Month = JulianDateUtc.Month;
-                                                    LeapSecondArray[Count].DelAt = LeapSecond.Value; // Save the number of leap seconds
-                                                    Count += 1; // Increment the count ready for the next leap second value
-                                                }
-
-                                                LastError = UpdateLeapSecondData(LeapSecondArray); // Send the revised data to the SOFA DLL
-                                                if (LastError == 0) // First time initialisation of the DLL data
-                                                {
-                                                    TL.LogMessage("AutoUpdate", "SOFA leap second data initialised. Return code: " + LastError);
-                                                }
-                                                else if (LastError == 1)
-                                                {
-                                                    TL.LogMessage("AutoUpdate", "SOFA leap second data already initialised - no action taken. Return code: " + LastError);
-                                                }
-                                                else if (LastError == 2)
-                                                {
-                                                    TL.LogMessage("AutoUpdate", "SOFA leap second data rejected because 100 or more records were supplied. Using built-in leap second values. Return code: " + LastError);
-                                                }
-                                                else // Initialisation has already been made for this instance oif the DLL - no need to do it again
-                                                {
-                                                    TL.LogMessage("AutoUpdate", "Unknown return code: " + LastError);
-                                                } // We have more values than can be stored in the allocated capacity within the SOFA DLL so don't try!
-
-                                                break;
-                                            }
-
-                                        default:
-                                            {
-                                                TL.LogMessage("AutoUpdate", string.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is greater than the cpacity of the SOFA's leap second array({1}), data not sent - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues));
-                                                break;
-                                            }
-
+                                        break;
                                     }
 
-                                    break;
-                                }
+                                case GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1:
+                                case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1:
+                                    {
+                                        // Act according to the number of updated leap second values that are available
+                                        switch (Parameters.DownloadedLeapSeconds.Count)
+                                        {
+                                            case 0: // No values have been downloaded so run with built-in SOFA leap second values
+                                                {
+                                                    TL.LogMessage("New-AutoUpdate", "No leap second values in Parameters.HistoricLeapSeconds - Relying on SOFA's built-in defaults");
+                                                    break;
+                                                }
 
-                            default:
-                                {
-                                    try
-                                    {
-                                        MessageBox.Show("SOFA.New - Unknown Parameters.UpdateType value: " + Parameters.UpdateType);
+                                            case var @case when 1 <= @case && @case <= NumberOfSOFALeapSecondValues: // The same or less number of values have been downloaded compared to the builtin number in the SOFA DLL so run with the built-in SOFA leap second values
+                                                {
+                                                    TL.LogMessage("AutoUpdate", string.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is less or equal to than the number built-in to SOFA ({1}) - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues));
+                                                    break;
+                                                }
+
+                                            case var case1 when NumberOfSOFALeapSecondValues + 1 <= case1 && case1 <= MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES: // We have sufficient values to warrant overriding the SOFA vaslues
+                                                {
+                                                    foreach (KeyValuePair<double, double> LeapSecond in Parameters.DownloadedLeapSeconds) // Retrieve each individual leap second record
+                                                    {
+                                                        JulianDateUtc = DateTime.FromOADate(LeapSecond.Key - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET); // Turn the Julian date into a DateTime value
+                                                        LeapSecondArray[Count].Year = JulianDateUtc.Year; // Save the year and month from the JulianDate DateTime value
+                                                        LeapSecondArray[Count].Month = JulianDateUtc.Month;
+                                                        LeapSecondArray[Count].DelAt = LeapSecond.Value; // Save the number of leap seconds
+                                                        Count += 1; // Increment the count ready for the next leap second value
+                                                    }
+
+                                                    LastError = UpdateLeapSecondData(LeapSecondArray); // Send the revised data to the SOFA DLL
+                                                    if (LastError == 0) // First time initialisation of the DLL data
+                                                    {
+                                                        TL.LogMessage("AutoUpdate", "SOFA leap second data initialised. Return code: " + LastError);
+                                                    }
+                                                    else if (LastError == 1)
+                                                    {
+                                                        TL.LogMessage("AutoUpdate", "SOFA leap second data already initialised - no action taken. Return code: " + LastError);
+                                                    }
+                                                    else if (LastError == 2)
+                                                    {
+                                                        TL.LogMessage("AutoUpdate", "SOFA leap second data rejected because 100 or more records were supplied. Using built-in leap second values. Return code: " + LastError);
+                                                    }
+                                                    else // Initialisation has already been made for this instance oif the DLL - no need to do it again
+                                                    {
+                                                        TL.LogMessage("AutoUpdate", "Unknown return code: " + LastError);
+                                                    } // We have more values than can be stored in the allocated capacity within the SOFA DLL so don't try!
+
+                                                    break;
+                                                }
+
+                                            default:
+                                                {
+                                                    TL.LogMessage("AutoUpdate", string.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is greater than the cpacity of the SOFA's leap second array({1}), data not sent - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues));
+                                                    break;
+                                                }
+
+                                        }
+
+                                        break;
                                     }
-                                    catch
+
+                                default:
                                     {
+                                        try
+                                        {
+                                            MessageBox.Show("SOFA.New - Unknown Parameters.UpdateType value: " + Parameters.UpdateType);
+                                        }
+                                        catch
+                                        {
+                                        }
+                                        Console.WriteLine($"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}");
+                                        Utilities.Global.LogEvent("SOFA.New", $"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}", EventLogEntryType.Error, Global.EventLogErrors.Sofa, "");
+                                        break;
                                     }
-                                    Console.WriteLine($"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}");
-                                    Utilities.Global.LogEvent("SOFA.New", $"SOFA.New - Unknown Parameters.UpdateType value: {Parameters.UpdateType}", EventLogEntryType.Error, Global.EventLogErrors.Sofa, "");
-                                    break;
-                                }
+                            }
+
                         }
 
+                        TL.LogMessage("New", string.Format("After HasUpdatedData: {0}", UsingUpdatedData().ToString()));
                     }
 
-                    TL.LogMessage("New", string.Format("After HasUpdatedData: {0}", UsingUpdatedData().ToString()));
+                    catch (Exception ex)
+                    {
+                        TL.LogMessageCrLf("New", "Exception: " + ex.ToString());
+                        throw new HelperException($"SOFA Initialisation Exception - {ex.Message} (See inner exception for details)", ex);
+                    }
                 }
 
-                catch (Exception ex)
+                else // Did not load 
                 {
-                    TL.LogMessageCrLf("New", "Exception: " + ex.ToString());
-                    throw new HelperException($"SOFA Initialisation Exception - {ex.Message} (See inner exception for details)", ex);
+                    TL.LogMessage("New", $"Error code {LastError:X8} returned while loading SOFA library from {SofaDllFile}");
+                    throw new HelperException($"SOFA Initialisation - Error code {LastError:X8} returned from LoadLibrary when loading SOFA library: {SofaDllFile}");
                 }
-            }
 
-            else // Did not load 
+                TL.LogMessage("New", "SOFA Initialised OK");
+            }
+            catch (Exception ex)
             {
-                TL.LogMessage("New", $"Error code {LastError:X8} returned while loading SOFA library from {SofaDllFile}");
-                throw new HelperException($"SOFA Initialisation - Error code {LastError:X8} returned from LoadLibrary when loading SOFA library: {SofaDllFile}");
+                // Something went wrong in the static constructor so log the exception
+                using (TraceLogger logger = new("SOFAInstanceInit"))
+                {
+                    logger.Enabled = true;
+                    logger.LogMessageCrLf("InstanceConstructor", $"Exception: {ex.Message}\r\n{ex}");
+                    logger.Enabled = false;
+                }
+                throw;
             }
-
-            TL.LogMessage("New", "SOFA Initialised OK");
         }
 
         private bool disposedValue = false;        // To detect redundant calls

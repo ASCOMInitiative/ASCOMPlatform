@@ -7,71 +7,8 @@
     </summary>
     -->
 		<introduction>
-			<para>The following Platform versions have been released:</para>
+			<para>Please use the navigation links to the left to explore the Platform release notes.</para>
 		</introduction>
-		<!-- Add one or more top-level section elements.  These are collapsible.
-         If using <autoOutline />, add an address attribute to identify it
-         and specify a title so that it can be jumped to with a hyperlink. -->
-		<section address="Versions">
-			<title>Versions</title>
-			<content>
-				<para>
-					<link xlink:href="4eb05978-d9b4-4465-896b-e9ed09bff8c1" />
-				</para>
-				<para>
-					<link xlink:href="aa55983a-7030-4db2-a5b0-b24480703726" />
-				</para>
-				<para>
-					<link xlink:href="81df3663-6fff-439a-8c64-5ca3989126d8" />
-				</para>
-				<para>
-					<link xlink:href="2c6cb374-9a44-4bc4-b3a5-f867033a3b93" />
-				</para>
-				<para>
-					<link xlink:href="FC49CB34-01CF-4D01-BE66-6D55796512D5" />
-				</para>
-				<para>
-					<link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" />
-				</para>
-				<para>
-					<link xlink:href="3417e177-f705-497d-8127-fb30e8519d50" />
-				</para>
-				<para>
-					<link xlink:href="EF4E9405-610F-4353-B4C5-11885BF24898" />
-				</para>
-				<para>
-					<link xlink:href="cc21f341-2809-4353-8b71-66a0277153ac" />
-				</para>
-				<para>
-					<link xlink:href="f6d76cb9-e638-4d8a-83eb-def459a0e258" />
-				</para>
-				<para>
-					<link xlink:href="c70b2e72-ab62-4dbb-b7c6-eed3cd523c14" />
-				</para>
-				<para>
-					<link xlink:href="99a131c6-8a85-43e8-b98a-5fa81ed108ec" />
-				</para>
-				<para>
-					<link xlink:href="d1cc108a-fbcd-43a3-91fa-1ddda1981968" />
-				</para>
-				<para>
-					<link xlink:href="1e3bf165-13dc-4a16-8bff-5fdc0d3da1c7" />
-				</para>
-				<para>
-					<link xlink:href="6e5a0102-2a1d-4b4d-8cbd-59d2076e5c7d" />
-				</para>
-				<para>
-					<link xlink:href="6c2d0f0d-6460-494e-9c1f-08545fcff623" />
-				</para>
-				<para>
-					<link xlink:href="1fe76099-cb79-4c76-bb26-55d4e7305a3d" />
-				</para>
-				<para>
-					<link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" />
-				</para>
-			</content>
-
-		</section>
 
 	</developerConceptualDocument>
 </topic>

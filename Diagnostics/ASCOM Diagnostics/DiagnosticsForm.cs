@@ -576,11 +576,11 @@ namespace ASCOM.Utilities
                         // List Platform 6 and 7 install logs
                         try
                         {
-                            ScanPlatform6Logs();
+                            ScanPlatformLogs();
                         }
                         catch (Exception ex)
                         {
-                            LogException("ScanPlatform6Logs", ex.ToString());
+                            LogException("ScanPlatformLogs", ex.ToString());
                         }
 
                         // Scan event log messages
@@ -9501,7 +9501,7 @@ namespace ASCOM.Utilities
             }
         }
 
-        private void ScanPlatform6Logs()
+        private void ScanPlatformLogs()
         {
 
             string[] fileList;
@@ -9511,11 +9511,11 @@ namespace ASCOM.Utilities
 
             try
             {
-                Status("Scanning Platform 7 install logs");
-                TL.LogMessage("ScanPlatform6Logs", "Starting scan");
+                Status("Scanning Platform install logs");
+                TL.LogMessage("ScanPlatformLogs", "Starting scan");
 
                 // Get a list of setup files in the ASCOM directory in creation date order
-                fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ASCOM", "ASCOMPlatform6*.txt", SearchOption.TopDirectoryOnly);
+                fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ASCOM", "ASCOMPlatform*.txt", SearchOption.TopDirectoryOnly);
                 foreach (var foundFile in fileList)
                 {
                     fileInfo = new FileInfo(foundFile);
@@ -9575,9 +9575,9 @@ namespace ASCOM.Utilities
                 // Sort into inverse date order i.e. latest file first
                 setupFiles = [.. setupFiles.OrderBy(o => DateTime.MaxValue - o.Key)];
 
-                TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:");
+                TL.LogMessage("ScanPlatformLogs", "Found the following installation logs:");
                 foreach (var foundFile in setupFiles)
-                    TL.LogMessage("ScanPlatform6Logs", $"  Date: {foundFile.Key:dd MMM yyyy HH:mm:ss} Log: {foundFile.Value}");
+                    TL.LogMessage("ScanPlatformLogs", $"  Date: {foundFile.Key:dd MMM yyyy HH:mm:ss} Log: {foundFile.Value}");
                 TL.BlankLine();
 
                 // Iterate over results
@@ -9600,8 +9600,8 @@ namespace ASCOM.Utilities
                     }
                     catch (Exception ex1)
                     {
-                        LogException("ScanPlatform6Logs", "Exception 1: " + ex1.ToString());
-                        if (streamReader is not null) // Clean up streamreader
+                        LogException("ScanPlatformLogs", "Exception 1: " + ex1.ToString());
+                        if (streamReader is not null) // Clean up stream reader
                         {
                             streamReader.Close();
                             streamReader.Dispose();
@@ -9636,8 +9636,8 @@ namespace ASCOM.Utilities
                     }
                     catch (Exception ex2)
                     {
-                        LogException("ScanPlatform6Logs", "Exception 2: " + ex2.ToString());
-                        if (streamReader is not null) // Clean up streamreader
+                        LogException("ScanPlatformLogs", "Exception 2: " + ex2.ToString());
+                        if (streamReader is not null) // Clean up stream reader
                         {
                             streamReader.Close();
                             streamReader.Dispose();
@@ -9646,13 +9646,13 @@ namespace ASCOM.Utilities
                     }
                 }
 
-                TL.LogMessage("ScanPlatform6Logs", "Completed scan");
+                TL.LogMessage("ScanPlatformLogs", "Completed scan");
                 TL.BlankLine();
                 TL.BlankLine();
             }
             catch (Exception ex)
             {
-                LogException("ScanPlatform6Logs", "Exception: " + ex.ToString());
+                LogException("ScanPlatformLogs", "Exception: " + ex.ToString());
             }
         }
 

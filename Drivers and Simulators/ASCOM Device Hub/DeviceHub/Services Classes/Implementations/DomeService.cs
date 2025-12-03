@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using ASCOM.Astrometry;
+using ASCOM.DeviceHub.MvvmMessenger;
 using ASCOM.DeviceInterface;
+using System;
+using System.Collections;
+using System.Threading.Tasks;
 
 namespace ASCOM.DeviceHub
 {
     public class DomeService : IDomeService
     {
+        private DateTime lastSlewCompleted;
+        private bool lastSlewingState = false;
+
         private string DeviceID { get; set; }
         private ASCOM.DriverAccess.Dome Dome { get; set; }
 
@@ -107,7 +113,28 @@ namespace ASCOM.DeviceHub
             get => Dome.Slaved;
             set => Dome.Slaved = value;
         }
-        public bool Slewing => Dome.Slewing;
+        public bool Slewing
+        {
+            get
+            {
+                // Retrieve the dome slewing state
+                bool retval = Dome.Slewing;
+                LogMessage($"Dome.Slewing returned {retval}, Last slewing state: {lastSlewingState}, Insert slew delay: {DelaySlewToAzimuth}");
+
+                // Check whether the dome has just transitioned from slewing to stationary
+                if (lastSlewingState & !retval) // Dome was slewing but is now reporting not slewing
+                {
+                    DelaySlewToAzimuth = true; // Flag that we may need to insert a delay on the next SlewToAzimuth call
+                    lastSlewCompleted = DateTime.UtcNow; // Save the time at which the end of slew was recorded
+                    LogMessage("Dome has just stopped slewing, will insert delay on next SlewToAzimuth command if necessary.");
+                }
+
+                // Save the current slewing state as the last seen slewing state
+                lastSlewingState = retval;
+
+                return retval;
+            }
+        }
 
         #endregion IDomeV2 Properties
 
@@ -185,7 +212,39 @@ namespace ASCOM.DeviceHub
 
         public void SlewToAzimuth(double azimuth)
         {
+            LogMessage($"SlewToAzimuth - Received SlewToAzimuth command.");
+            // Check whether we need to insert a delay before issuing the slew command
+            if (DelaySlewToAzimuth) // We do need to insert a delay
+            {
+                // Reset the insert delay flag
+                DelaySlewToAzimuth = false;
+
+                // Check whether enough time has passed in order not to wait
+                TimeSpan timeSinceLastSlew = DateTime.UtcNow - lastSlewCompleted;
+
+                if (timeSinceLastSlew.TotalSeconds >= Globals.SlewDelay) // Sufficient time has passed so no delay required
+                {
+                    LogMessage($"SlewToAzimuth - {timeSinceLastSlew.TotalSeconds:0.0} seconds have passed since the last slew (minimum: {Globals.SlewDelay} seconds), so no need to delay sending the SlewToAzimuth command.");
+                }
+                else // Insufficient time has passed, so we need to wait before sending the SlewToAzimuth command.
+                {
+                    // Calculate the remaining time to wait
+                    double waitTime = Globals.SlewDelay - timeSinceLastSlew.TotalSeconds;
+
+                    // Wait for the remaining time to complete the required delay
+                    LogMessage($"SlewToAzimuth - The minimum time to pass ({Globals.SlewDelay} seconds) has not been exceeded, waiting {waitTime:0.0} seconds before issuing SlewToAzimuth command...");
+                    Task.Delay(TimeSpan.FromSeconds(waitTime)).Wait();
+                    LogMessage("SlewToAzimuth - Completed wait before SlewToAzimuth command.");
+                }
+            }
+            else
+            {
+                LogMessage("SlewToAzimuth - No wait required before SlewToAzimuth command.");
+            }
+
+            LogMessage($"SlewToAzimuth - Sending SlewToAzimuth command to Dome.");
             Dome.SlewToAzimuth(azimuth);
+            LogMessage($"SlewToAzimuth - Received control back from SlewToAzimuth command.");
         }
 
         public void SyncToAzimuth(double azimuth)
@@ -213,6 +272,15 @@ namespace ASCOM.DeviceHub
 
         #endregion
 
+        #region Private Methods
 
+        private void LogMessage(string message)
+        {
+            Messenger.Default.Send(new ActivityMessage(DeviceTypeEnum.Dome, ActivityMessageTypes.Other, $"{DateTime.Now:HH:mm:ss.fff}: Dome - Others:       DomeService - {message}\r\n"));
+        }
+
+        private bool DelaySlewToAzimuth { get; set; } = false;
+
+        #endregion
     }
 }
