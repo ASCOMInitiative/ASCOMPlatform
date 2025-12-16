@@ -57,6 +57,7 @@ namespace ASCOM.DynamicClients
         public bool IpV6Enabled { get; set; }
         public int DiscoveryPort { get; set; }
         public bool TrustUserGeneratedSslCertificates { get; set; }
+        public bool Request100Continue { get; set; }
 
         #endregion
 
@@ -131,6 +132,7 @@ namespace ASCOM.DynamicClients
                 NumDiscoveryPort.Value = Convert.ToDecimal(DiscoveryPort);
 
                 ChkTrustSelfSignedCertificates.Checked = TrustUserGeneratedSslCertificates;
+                ChkRequest100Continue.Checked = Request100Continue;
 
                 // Set the IP v4 / v6 radio boxes
                 if (IpV4Enabled & IpV6Enabled) // Both IPv4 and v6 are enabled so set the "both" button
@@ -236,6 +238,7 @@ namespace ASCOM.DynamicClients
                 EnableRediscovery = ChkEnableRediscovery.Checked;
                 DiscoveryPort = Convert.ToInt32(NumDiscoveryPort.Value);
                 TrustUserGeneratedSslCertificates = ChkTrustSelfSignedCertificates.Checked;
+                Request100Continue = ChkRequest100Continue.Checked;
 
                 // Set the IP v4 and v6 variables as necessary
                 if (RadIpV4.Checked) // The IPv4 radio button is checked so set the IP v4 and IP v6 variables accordingly

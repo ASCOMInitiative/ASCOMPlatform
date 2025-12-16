@@ -1015,6 +1015,7 @@ namespace ASCOM.DynamicClients
                     setupForm.IpV6Enabled = state.IpV6Enabled;
                     setupForm.DiscoveryPort = state.DiscoveryPort;
                     setupForm.TrustUserGeneratedSslCertificates = state.TrustUserGeneratedSslCertificates;
+                    setupForm.Request100Continue= state.Request100Continue;
 
                     TL?.LogMessage("SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -1043,6 +1044,7 @@ namespace ASCOM.DynamicClients
                         state.IpV6Enabled = setupForm.IpV6Enabled;
                         state.DiscoveryPort = setupForm.DiscoveryPort;
                         state.TrustUserGeneratedSslCertificates = setupForm.TrustUserGeneratedSslCertificates;
+                        state.Request100Continue= setupForm.Request100Continue;
 
                         // Write the changed values to the Profile
                         TL?.LogMessage("SetupDialog", "Writing new values to profile");
