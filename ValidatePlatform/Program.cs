@@ -15,7 +15,7 @@ namespace ValidatePlatform
     internal class Program
     {
         const string SOFA_CLSID = @"{DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E}";
-        const string ASTROMETRY_CLSID= @"{7F3582E3-9AA8-42CA-845C-2E6B13F362C1}";
+        const string ASTROMETRY_CLSID = @"{7F3582E3-9AA8-42CA-845C-2E6B13F362C1}";
 
         static int returnCode = 0;
         static TraceLogger TL;
@@ -58,7 +58,7 @@ namespace ValidatePlatform
                     Enabled = true
                 };
                 LogMessage("Main", $"Successfully created TraceLogger.");
-                LogMessage("Main", $"Operating in X{osMode} mode.");
+                LogMessage("Main", $"Operating in X{osMode} mode on an {System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} OS using an {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture} processor.");
                 LogBlankLine();
             }
             catch (Exception ex)
@@ -132,6 +132,7 @@ namespace ValidatePlatform
             }
             LogBlankLine();
 
+            // Confirm that we can load the ASCOM.Astrometr assembly by name
             try
             {
                 Assembly astrometry = Assembly.Load("ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
@@ -149,8 +150,6 @@ namespace ValidatePlatform
             // Basic tests for NOVAS and SOFA to ensure that they work OK
             try
             {
-
-
                 // Create a Utilities component
                 try
                 {
@@ -163,40 +162,47 @@ namespace ValidatePlatform
                 }
                 LogBlankLine();
 
-                // Test the SOFA COM object
+                // Test the SOFA COM object (32bit only, 64bit is known to fail on SnapDragon ARM processors)
                 try
                 {
-                    LogMessage("Main", "About to create SOFA component type...");
-                    Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
-
-                    // Test whether we got the SOFA component's Type
-                    if (sofaType != null) // Found the SOFA component OK
+                    if (Environment.Is64BitProcess)
                     {
-                        LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
-
-                        dynamic sofa = Activator.CreateInstance(sofaType);
-                        LogMessage("Main", "Successfully created SOFA component");
-
-                        double tt1 = 2459773.0;
-                        double tt2 = 0.99093;
-                        double tai1 = 0.0;
-                        double tai2 = 0.0;
-                        int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
-                        double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
-                        LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
-
-                        if (Math.Abs(difference - 32.184) < 0.01)
-                        {
-                            LogMessage("Main", $"Received expected result from TtTai.");
-                        }
-                        else
-                        {
-                            LogError("Main", $"Received bad result from TtTai.", null);
-                        }
+                        LogMessage("Main", "Skipping 64bit SOFA COM component test.");
                     }
-                    else // Did not find the SOFA components type
+                    else
                     {
-                        LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
+                        LogMessage("Main", "About to create SOFA component type...");
+                        Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
+
+                        // Test whether we got the SOFA component's Type
+                        if (sofaType != null) // Found the SOFA component OK
+                        {
+                            LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
+
+                            dynamic sofa = Activator.CreateInstance(sofaType);
+                            LogMessage("Main", "Successfully created SOFA component");
+
+                            double tt1 = 2459773.0;
+                            double tt2 = 0.99093;
+                            double tai1 = 0.0;
+                            double tai2 = 0.0;
+                            int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
+                            double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
+                            LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
+
+                            if (Math.Abs(difference - 32.184) < 0.01)
+                            {
+                                LogMessage("Main", $"Received expected result from TtTai.");
+                            }
+                            else
+                            {
+                                LogError("Main", $"Received bad result from TtTai.", null);
+                            }
+                        }
+                        else // Did not find the SOFA components type
+                        {
+                            LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
+                        }
                     }
                 }
                 catch (Exception ex)
