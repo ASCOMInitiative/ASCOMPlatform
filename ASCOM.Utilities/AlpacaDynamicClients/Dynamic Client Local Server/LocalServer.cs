@@ -968,6 +968,7 @@ namespace ASCOM.DynamicClients
             client.ClientConfiguration.StrictCasing = true;
             client.ClientConfiguration.ImageArrayCompression = state.ImageArrayCompression;
             client.ClientConfiguration.ImageArrayTransferType = state.ImageArrayTransferType;
+            client.ClientConfiguration.Request100Continue=state.Request100Continue;
 
             // Refresh the HTTP client with the updated values set above.
             client.RefreshClient();

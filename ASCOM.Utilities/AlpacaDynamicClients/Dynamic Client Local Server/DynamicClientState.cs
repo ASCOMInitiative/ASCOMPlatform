@@ -42,6 +42,7 @@ namespace ASCOM.DynamicClients
             IpV6Enabled = Convert.ToBoolean(Profile.GetValue(DeviceType, ProgId, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, IpV6Enabled.ToString()));
             DiscoveryPort = Convert.ToInt32(Profile.GetValue(DeviceType, ProgId, SharedConstants.DISCOVERY_PORT_PROFILENAME, DiscoveryPort.ToString()));
             TrustUserGeneratedSslCertificates = Convert.ToBoolean(Profile.GetValue(DeviceType, ProgId, SharedConstants.TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME, TrustUserGeneratedSslCertificates.ToString()));
+            Request100Continue= Convert.ToBoolean(Profile.GetValue(DeviceType, ProgId, SharedConstants.REQUEST_100_CONTINUE_PROFILENAME, Request100Continue.ToString()));
             DriverDisplayName = driverDisplayName;
         }
 
@@ -66,6 +67,7 @@ namespace ASCOM.DynamicClients
         public bool IpV6Enabled { get; set; } = SharedConstants.ENABLE_IPV6_DISCOVERY_DEFAULT;
         public int DiscoveryPort { get; set; } = SharedConstants.DISCOVERY_PORT_DEFAULT;
         public bool TrustUserGeneratedSslCertificates { get; set; } = SharedConstants.TRUST_UNSIGNED_CERTIFICATES_DEFAULT;
+        public bool Request100Continue { get; set; } = SharedConstants.REQUEST_100_CONTINUE_DEFAULT;
 
         // Additional Properties
         public DeviceTypes DeviceType { get; set; } = DeviceTypes.Video; // Deliberately initialised to a value that is invalid for Alpaca to detect failure to initialise later in the client!
@@ -101,6 +103,7 @@ namespace ASCOM.DynamicClients
             Profile.SetValue(DeviceType, ProgId, SharedConstants.ENABLE_IPV6_DISCOVERY_PROFILENAME, IpV6Enabled.ToString());
             Profile.SetValue(DeviceType, ProgId, SharedConstants.DISCOVERY_PORT_PROFILENAME, DiscoveryPort.ToString());
             Profile.SetValue(DeviceType, ProgId, SharedConstants.TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME, TrustUserGeneratedSslCertificates.ToString());
+            Profile.SetValue(DeviceType, ProgId, SharedConstants.REQUEST_100_CONTINUE_PROFILENAME, Request100Continue.ToString());
 
             // DriverDisplayName is not persisted because it is already held in the Profile in the default key field
         }

@@ -444,6 +444,12 @@ namespace ASCOM.DynamicClients
             PopulateAddressList();
         }
 
+        private void ChkRequest100Continue_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
         #endregion
 
         #region Support Code
