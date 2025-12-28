@@ -280,15 +280,17 @@
     <ClInclude Include="novascon.h" />
     <ClInclude Include="nutation.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="solarsystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version64Bit.rc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="('$(Configuration)|$(Platform)'=='Release|Win32') Or ('$(Configuration)|$(Platform)'=='Release|ARM64')">true</ExcludedFromBuild>
     </ResourceCompile>
     <ResourceCompile Include="Version32Bit.rc">
       <ExcludedFromBuild Condition="('$(Configuration)|$(Platform)'=='Release|x64') Or ('$(Configuration)|$(Platform)'=='Release|ARM64')">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="Version64BitARM.rc">
+      <ExcludedFromBuild Condition="('$(Configuration)|$(Platform)'=='Release|Win32') Or ('$(Configuration)|$(Platform)'=='Release|x64')">true</ExcludedFromBuild>
     </ResourceCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

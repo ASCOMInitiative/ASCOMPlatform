@@ -235,6 +235,7 @@
     <ClInclude Include="..\ASCOM Sofa  Files\ASCOMDat.h" />
     <ClInclude Include="..\Currrent Source Code\sofa.h" />
     <ClInclude Include="..\Currrent Source Code\sofam.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c" />
@@ -486,10 +487,21 @@
     <ClCompile Include="..\Currrent Source Code\zr.c" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Sofa Library.rc" />
+    <Text Include="..\README - ASCOM SOFA Code Conversion Notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\README - ASCOM SOFA Code Conversion Notes.txt" />
+    <ResourceCompile Include="Version32Bit.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="Version64Bit.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="Version64BitARM.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ResourceCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
