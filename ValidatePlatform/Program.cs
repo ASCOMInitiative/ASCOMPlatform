@@ -1,9 +1,12 @@
-﻿using ASCOM.Astrometry.NOVAS;
+﻿using ASCOM.Astrometry;
+using ASCOM.Astrometry.NOVAS;
+using ASCOM.Astrometry.Transform;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using System;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Windows.Forms;
 
@@ -64,6 +67,15 @@ namespace ValidatePlatform
             catch (Exception ex)
             {
                 LogError("Main", $"Unable to create trace logger.", ex);
+            }
+            try
+            {
+                util = new Util();
+                LogMessage("Main", $"Successfully created Utilities component.");
+            }
+            catch (Exception ex)
+            {
+                LogError("Main", $"Unable to create Utilities component.", ex);
             }
 
             // Report on the SOFA ProgID COM registration
@@ -132,7 +144,7 @@ namespace ValidatePlatform
             }
             LogBlankLine();
 
-            // Confirm that we can load the ASCOM.Astrometr assembly by name
+            // Confirm that we can load the ASCOM.Astrometry assembly by name
             try
             {
                 Assembly astrometry = Assembly.Load("ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
@@ -159,55 +171,6 @@ namespace ValidatePlatform
                 catch (Exception ex)
                 {
                     LogError("Main", $"Unable to create Utilities component.", ex);
-                }
-                LogBlankLine();
-
-                // Test the SOFA COM object (32bit only, 64bit is known to fail on SnapDragon ARM processors)
-                try
-                {
-                    if (Environment.Is64BitProcess)
-                    {
-                        LogMessage("Main", "Skipping 64bit SOFA COM component test.");
-                    }
-                    else
-                    {
-                        LogMessage("Main", "About to create SOFA component type...");
-                        Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
-
-                        // Test whether we got the SOFA component's Type
-                        if (sofaType != null) // Found the SOFA component OK
-                        {
-                            LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
-
-                            dynamic sofa = Activator.CreateInstance(sofaType);
-                            LogMessage("Main", "Successfully created SOFA component");
-
-                            double tt1 = 2459773.0;
-                            double tt2 = 0.99093;
-                            double tai1 = 0.0;
-                            double tai2 = 0.0;
-                            int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
-                            double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
-                            LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
-
-                            if (Math.Abs(difference - 32.184) < 0.01)
-                            {
-                                LogMessage("Main", $"Received expected result from TtTai.");
-                            }
-                            else
-                            {
-                                LogError("Main", $"Received bad result from TtTai.", null);
-                            }
-                        }
-                        else // Did not find the SOFA components type
-                        {
-                            LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogError("Main", $"Unable to create SOFA COM component.", ex);
                 }
                 LogBlankLine();
 
@@ -312,13 +275,140 @@ namespace ValidatePlatform
                     {
                         LogError("Main", $"Received bad Julian date {jd} from NOVAS31.JulianDate. Expected: {EXPECTED_JULIAN_DATE}", null);
                     }
+
+                   const double WALLACE_EXPECTED_DEC = 52.29549062657d;
+
+                    // Site (ITRS)
+                    double siteLonE_Deg = 9.712156d;      // East longitude, degrees
+                    double siteLatN_Deg = 52.385639d;     // North latitude, degrees
+                    double siteHeight_m = 200.0d;         // meters
+
+                    // Star (ICRS, epoch 2000)
+                    double ra2000_deg = 353.22987757d;
+                    double dec2000_deg = 52.27730247d;
+                    double pmRAstar_masPerYr = 22.9d;     // μα cosδ  (mas/yr)  <-- IMPORTANT: use as given
+                    double pmDec_masPerYr = -2.1d;        // μδ       (mas/yr)
+                    double plx_mas = 23.0d;               // parallax (mas)
+                    double rv_kmps = 25.0d;               // radial velocity (km/s)
+
+                    // UTC date/time
+                    short y = 2003;
+                    short m = 8;
+                    short d = 26;
+                    double hh = 0;
+                    double mm = 37;
+                    double ss = 38.97381d;
+
+                    // IERS values (Wallace)
+                    double dut1 = -0.349535d;            // UT1-UTC (seconds)
+                    double dX_mas = 0.038d;              // celestial pole offsets (mas)
+                    double dY_mas = -0.118d;             // celestial pole offsets (mas)
+
+                    // For this epoch (2003-08-26): TAI-UTC = 32s, so TT-UTC = 32 + 32.184 = 64.184s
+                    double ttMinusUtc_s = 64.184d;
+
+                    double raTopo_h = 0.0d;
+                    double decTopo_deg = 0.0d;
+
+                    double jdUtc = novas31.JulianDate(y, m, d, hh + mm / 60.0 + ss / 3600.0);
+                    double jdUt1 = jdUtc + dut1 / 86400.0d;
+                    double jdTt = jdUtc + ttMinusUtc_s / 86400.0d;
+                    double deltaT = ttMinusUtc_s - dut1;   // TT-UT1 seconds
+
+                    // Observer on Earth (OnSurface)
+                    var obs = new OnSurface();
+                    obs.Latitude = siteLatN_Deg;
+                    obs.Longitude = siteLonE_Deg;
+                    obs.Height = siteHeight_m;
+                    obs.Temperature = 10.0d;      // Celsius
+                    obs.Pressure = 1010.0d;       // mbar (hPa)
+
+                    // Star catalog entry (CatEntry3)
+                    var star = new CatEntry3();
+                    star.RA = ra2000_deg / 15.0d;              // HOURS (not degrees!)
+                    star.Dec = dec2000_deg;                   // degrees
+                    star.ProMoRA = pmRAstar_masPerYr;         // mas/year (this is μα cosδ as given)
+                    star.ProMoDec = pmDec_masPerYr;           // mas/year
+                    star.Parallax = plx_mas;                  // mas
+                    star.RadialVelocity = rv_kmps;            // km/s
+
+                    novas31.CelPole(jdTt, PoleOffsetCorrection.ReferredToGCRSAxes, dX_mas, dY_mas);
+
+                    short rc = novas31.TopoStar(jdTt, deltaT, star, obs, Accuracy.Full, ref raTopo_h, ref decTopo_deg);
+
+                    double decErrorArcSec = Math.Abs(decTopo_deg - 52.29549062657d) * 3600d;
+
+                    Util util = new Util();
+                    LogMessage("Main", $"Wallace: {util?.DegreesToDMS(WALLACE_EXPECTED_DEC, ":", ":", "", 2)}");
+                    double differenceFromWallace_arcSec = Math.Abs(decTopo_deg - WALLACE_EXPECTED_DEC) * 3600d;
+                    LogMessage("Main", $"NOVAS:   {util?.DegreesToDMS(decTopo_deg, ":", ":", "", 2)}, Difference from Wallace: {differenceFromWallace_arcSec:0.00} arcsec");
+
+                    Transform transform = new Transform();
+                    transform.SitePressure = 1010.0;
+                    transform.SiteTemperature = 10.0;
+                    transform.SiteElevation = siteHeight_m;
+                    transform.SiteLatitude = siteLatN_Deg;
+                    transform.SiteLongitude = siteLonE_Deg;
+                    transform.JulianDateTT = jdTt;
+                    transform.Refraction = false;
+                    transform.SetJ2000(ra2000_deg * 24.0 / 360.0, dec2000_deg);
+                    LogMessage("Main", $"SOFA:    {util?.DegreesToDMS(transform.DECTopocentric, ":", ":", "", 2)}, Difference from Wallace: {Math.Abs(transform.DECTopocentric - WALLACE_EXPECTED_DEC) * 3600d:0.00} arcsec");
                 }
                 catch (Exception ex)
                 {
                     LogError("Main", $"Unable to create NOVAS .NET component.", ex);
                 }
 
-                // DIsplay error log if necessary, otherwise continue silently.
+                // Test the SOFA COM object (Except 64bit, which is known to fail on SnapDragon ARM processors)
+                try
+                {
+                    if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+                    {
+                        LogMessage("Main", "Skipping 64bit SOFA COM component test on ARM processors.");
+                    }
+                    else
+                    {
+                        LogMessage("Main", "About to create SOFA component type...");
+                        Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
+
+                        // Test whether we got the SOFA component's Type
+                        if (sofaType != null) // Found the SOFA component OK
+                        {
+                            LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
+
+                            dynamic sofa = Activator.CreateInstance(sofaType);
+                            LogMessage("Main", "Successfully created SOFA component");
+
+                            double tt1 = 2459773.0;
+                            double tt2 = 0.99093;
+                            double tai1 = 0.0;
+                            double tai2 = 0.0;
+                            int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
+                            double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
+                            LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
+
+                            if (Math.Abs(difference - 32.184) < 0.01)
+                            {
+                                LogMessage("Main", $"Received expected result from TtTai.");
+                            }
+                            else
+                            {
+                                LogError("Main", $"Received bad result from TtTai.", null);
+                            }
+                        }
+                        else // Did not find the SOFA components type
+                        {
+                            LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogError("Main", $"Unable to create SOFA COM component.", ex);
+                }
+                LogBlankLine();
+
+                // Display error log if necessary, otherwise continue silently.
                 if (errorLog != "")
                 {
                     errorLog = $"The issues below occurred while validating operation of the Platform. Please zip up all the files and sub-folders in your Documents\\ASCOM folder and post a message together with the zip on the ASCOM Talk Groups.Io forum.\r\n\r\n{errorLog}";
