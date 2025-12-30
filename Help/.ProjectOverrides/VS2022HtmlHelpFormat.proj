@@ -1,0 +1,15 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <HelpFileFormat>Website</HelpFileFormat>
+    <PresentationStyle>VS2022</PresentationStyle>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Add the overridden properties as the value of the SubstitutionTags property -->
+    <SubstitutionTags>
+      $(SubstitutionTags);
+      HelpFileFormat=$(HelpFileFormat);
+      PresentationStyle=$(PresentationStyle)
+    </SubstitutionTags>
+  </PropertyGroup>
+</Project>

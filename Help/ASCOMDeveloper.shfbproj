@@ -202,6 +202,7 @@
     <Folder Include="Developer Information\" />
     <Folder Include="css" />
     <Folder Include="icons" />
+    <Folder Include=".ProjectOverrides" />
     <Folder Include="styles\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Examples\" />
@@ -361,6 +362,8 @@
       <ImageId>RemoteSetupIp</ImageId>
       <AlternateText>Remote Setup Ip</AlternateText>
     </Image>
+    <None Include=".ProjectOverrides\VS2013ChmHelpFormat.proj" />
+    <None Include=".ProjectOverrides\VS2022HtmlHelpFormat.proj" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Developer Information\ConnectionProtocol.aml" />
     <None Include="Developer Information\Developer Links.aml" />
