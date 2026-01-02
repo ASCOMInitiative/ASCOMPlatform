@@ -1359,6 +1359,11 @@ namespace ASCOM.DeviceInterface
         /// In this example the mount is still physically on the east side of the pier but the pointing state
         /// will have changed when the declination axis moved through the celestial pole.
         /// </para>
+        /// <h3>ASCOM Library Implementation</h3>
+        /// <para>
+        /// Since we had the opportunity of a fresh start with the ASCOM Library, we decided to give the Library enum a name that better reflected its actual meaning: PointingState.
+        /// The enums have equivalent members and meanings, with the Library's PointingState enum intended for use with Library components and the PierSide enum intended for use with Platform components.
+        /// </para>
         /// </remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ITelescopeV2" version="Platform 4.0">Member added.</revision>
