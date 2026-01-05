@@ -10725,7 +10725,7 @@ FALSE
 FALSE
 FALSE
 {C37C183E-22F7-4D3E-8A5E-3A6B5F0ACD8B}
-..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.pdb
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -10790,7 +10790,7 @@ FALSE
 FALSE
 FALSE
 {AFFAC2E3-131B-42AB-A0DB-6055EB18D1FC}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.pdb
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -10803,7 +10803,7 @@ FALSE
 FALSE
 FALSE
 {0808F9DA-4556-4B78-8A2F-902825998095}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -11297,7 +11297,7 @@ FALSE
 FALSE
 FALSE
 {2E058EE3-6E21-466C-90E1-EB7F757D2D2B}
-..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v6
 FALSE
@@ -13156,7 +13156,7 @@ FALSE
 FALSE
 FALSE
 {3AEFF8D5-6DEC-4611-8A46-39D94477658A}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.xml
 FALSE|
 $VSREFERENCEPLATFORM6$\Platform6
 FALSE
@@ -13169,7 +13169,7 @@ FALSE
 FALSE
 FALSE
 {C7C4FC9D-224C-4C65-A6B4-117DB4C53F72}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll
 FALSE|
 $VSREFERENCEPLATFORM6$\Platform6
 FALSE
@@ -13286,7 +13286,7 @@ FALSE
 FALSE
 FALSE
 {B063E892-173B-4168-8A4D-2BAA9934D84F}
-..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml
+..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.xml
 FALSE|
 $VSREFERENCEPLATFORM6$\Platform6
 FALSE
@@ -13299,7 +13299,7 @@ FALSE
 FALSE
 FALSE
 {CACF80D4-F8D7-4AF8-8CBD-8216E0B82094}
-..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll
 FALSE|
 $VSREFERENCEPLATFORM6$\Platform6
 FALSE
@@ -13351,7 +13351,7 @@ FALSE
 FALSE
 FALSE
 {F2C85491-49A4-4319-840F-A998190A8B2A}
-..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll
 FALSE|
 $VSREFERENCEPLATFORM6$\Platform6
 FALSE
@@ -13585,7 +13585,7 @@ FALSE
 FALSE
 FALSE
 {7C19C65E-5A4B-4976-A0BB-74A84BBB4AC6}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.xml
 FALSE|
 $VSREFERENCEFILES$\Platform
 FALSE
@@ -13598,7 +13598,7 @@ FALSE
 FALSE
 FALSE
 {20D3C337-D0B4-42DB-896E-91AEDA98E146}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll
 FALSE|
 $VSREFERENCEFILES$\Platform
 FALSE
@@ -13715,7 +13715,7 @@ FALSE
 FALSE
 FALSE
 {86EDDC9D-0533-45A6-B39D-783AFE9D2CB6}
-..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml
+..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.xml
 FALSE|
 $VSREFERENCEFILES$\Platform
 FALSE
@@ -13728,7 +13728,7 @@ FALSE
 FALSE
 FALSE
 {50452986-7C8E-4275-BB37-C603F1A05192}
-..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll
 FALSE|
 $VSREFERENCEFILES$\Platform
 FALSE
@@ -13780,7 +13780,7 @@ FALSE
 FALSE
 FALSE
 {CDCFFC66-826E-4D30-944F-35B608291815}
-..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll
 FALSE|
 $VSREFERENCEFILES$\Platform
 FALSE
@@ -18751,7 +18751,7 @@ TRUE
 TRUE
 $COMMONFILES$\ASCOM\Platform
 {B411CB5E-8BF2-4378-AFA4-BA43829901BC}
-..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll
 TRUE
 
 {32AB87FC-C903-4904-A34C-6143CA7580A7}
@@ -18767,11 +18767,11 @@ TRUE
 TRUE
 
 {9D6171F5-D1AF-4295-936D-1D9FF8E5AB1F}
-..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll
 TRUE
 
 {1F7F0B19-8C68-4676-8D62-2733FBD50DD8}
-..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll
 TRUE
 
 {BEE12C15-363C-46CF-92A0-8892203E4E35}
@@ -18819,7 +18819,7 @@ TRUE
 TRUE
 
 {7594F31C-D397-45C2-A90F-22A1500BB104}
-..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll
 TRUE
 
 {98BACA05-91F9-4946-9493-3097BF70F897}
@@ -20009,7 +20009,7 @@ C
 
 
 
-
+C
 
 
 

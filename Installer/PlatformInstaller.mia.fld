@@ -1,7 +1,6 @@
 ﻿Check Application Requirements
 Main Setup Dialogue
 Start installation
-Check Application Pre-Requisites
 Set Registry Keys
 Remove Previous Platform install if present
 Uninstall items installed by this installer
@@ -12,9 +11,5 @@ Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
-Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and clean up any left-overs from other installers.
 Set Profile ACL
-Uninstall previous Platform
-Install Platform files
-Set up log file and variables
 Post install activities - 32bit only

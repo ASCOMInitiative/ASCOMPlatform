@@ -495,7 +495,7 @@ Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
 Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to 
 Include Script: checkmsi31
-Include Script: checknet351
+Comment: Include Script: checknet351
 Include Script: checknet4.8_x86 
  
 Comment: Install setup pre-requisites
@@ -1529,11 +1529,11 @@ Comment: Install Assembly ..\ASCOM.DeviceInterface\bin\Release\net481\ASCOM.Devi
 Comment: Platform 6 core components
 Install Assembly ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
-Install Assembly ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to Global Assembly Cache
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Assembly ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll to Global Assembly Cache
+Install Files ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+Install Files ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
@@ -1543,9 +1543,9 @@ Install Assembly ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
 Install Assembly ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
 Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll to Global Assembly Cache
-Install Files ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
-Install Assembly ..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll to Global Assembly Cache
+Install Assembly ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll to Global Assembly Cache
+Install Files ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+Install Assembly ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll to Global Assembly Cache
  
 Comment: Platform 6 Astrometry
 Install Assembly ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
@@ -1851,12 +1851,12 @@ Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to 
 Comment: Platform 6 references
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEFILES$\Platform
-Install Files ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform
+Install Files ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEFILES$\Platform
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$\Platform
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$\Platform
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll to $VSREFERENCEFILES$\Platform
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.xml to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEFILES$\Platform
@@ -1865,8 +1865,8 @@ Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions
 Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEFILES$\Platform
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEFILES$\Platform
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform
+Install Files ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll to $VSREFERENCEFILES$\Platform
+Install Files ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.xml to $VSREFERENCEFILES$\Platform
  
 Comment: Platform 5.5 references
 Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $VSREFERENCEFILES$\Platform55
@@ -1896,12 +1896,12 @@ Install Files ..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to 
 Comment: Platform 6 references
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $VSREFERENCEPLATFORM6$\Platform6
-Install Files ..\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $VSREFERENCEPLATFORM6$\Platform6
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll to $VSREFERENCEPLATFORM6$\Platform6
-Install Files ..\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.DeviceInterface\bin\Release\net472\ASCOM.DeviceInterfaces.xml to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $VSREFERENCEPLATFORM6$\Platform6
@@ -1910,8 +1910,8 @@ Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions
 Install Files ..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $VSREFERENCEPLATFORM6$\Platform6
 Install Files ..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $VSREFERENCEPLATFORM6$\Platform6
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll to $VSREFERENCEPLATFORM6$\Platform6
-Install Files ..\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.xml to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.dll to $VSREFERENCEPLATFORM6$\Platform6
+Install Files ..\ASCOM.Exceptions\bin\Release\net472\ASCOM.Exceptions.xml to $VSREFERENCEPLATFORM6$\Platform6
  
 Comment: Platform 5.5 references
 Install Files ..\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll to $VSREFERENCEPLATFORM6$\Platform55
