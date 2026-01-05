@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProductVersion>9.0.30729</ProductVersion>
     <ProjectGuid>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</ProjectGuid>
-    <TargetFrameworks>net35;net481</TargetFrameworks>
+    <TargetFrameworks>net472</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\ASCOM.snk</AssemblyOriginatorKeyFile>
     <AssemblyTitle>ASCOM.Attributes</AssemblyTitle>
