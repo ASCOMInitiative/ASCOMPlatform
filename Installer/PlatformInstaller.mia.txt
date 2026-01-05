@@ -1838,8 +1838,8 @@ Delete Files $TARGETDIR$\Tools\*.avi (when uninstalling)
 Comment: Visual Studio assembly references for current Platform version
  
 Comment: Platform 7.1 references
-Install Files ..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform7
-Install Files ..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform7
+Install Files ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll to $VSREFERENCEFILES$\Platform7
+Install Files ..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.xml to $VSREFERENCEFILES$\Platform7
  
 Comment: Platform 6.4 references
 Install Files ..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $VSREFERENCEFILES$\Platform

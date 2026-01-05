@@ -14209,7 +14209,7 @@ FALSE
 FALSE
 FALSE
 {71F67185-A1B0-4A73-98E5-93068ECA2D4C}
-..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.dll
 FALSE|
 $VSREFERENCEFILES$\Platform7
 FALSE
@@ -14222,7 +14222,7 @@ FALSE
 FALSE
 FALSE
 {9329D787-6539-4BA9-8EF9-DFFA287AC44D}
-..\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.xml
+..\ASCOM.Attributes\bin\Release\net472\ASCOM.Attributes.xml
 FALSE|
 $VSREFERENCEFILES$\Platform7
 FALSE
