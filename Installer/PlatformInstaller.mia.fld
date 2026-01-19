@@ -3,13 +3,10 @@ Main Setup Dialogue
 Start installation
 Set Registry Keys
 Remove Previous Platform install if present
-Uninstall items installed by this installer
 Remove Previous Platforms 4 and 5 if present
-Create shortcuts
 Remove 32bit components
 Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
 Set Profile ACL
-Post install activities - 32bit only
