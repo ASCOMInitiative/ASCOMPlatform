@@ -8335,7 +8335,7 @@ PROGRESSTEXT$MYAH$MYAH$FALSE
 Registering 64bit ASCOM.Astrometry.dll for COM
 {47167FD2-C44D-4E8E-ADC4-F1F1EF429225}
 ACTION$MYAH$MYAH$FALSE
-Register Omni-Simulators
+Register Omni-Simulators - 32bit
 {E10670AD-C32B-4D85-BFC7-5EECD3C1B289}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Installing additional Platform 5.5 files required for 64bit systems
@@ -8794,10 +8794,10 @@ ACTION$MYAH$MYAH$FALSE
 Display User Guide (Win 10)
 {55FB08F7-AB46-4F2D-9F4A-3A667D2FFAF7}
 ACTION$MYAH$MYAH$FALSE
-Set COM simulators to use OmniSimulators (32bit)
+Set COM simulators to use OmniSimulators - 32bit
 {E3CE2B83-9C1C-4DB5-8111-2706669D0EB9}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Setting default Platform simulators (32bit)
+Setting default Platform simulators - 32bit
 {2E00D7C0-D1D9-4CD6-868B-423E1DEB270B}
 MYPROGRESS$MYAH$MYAH$FALSE
 72
@@ -8956,31 +8956,31 @@ PROGRESSTEXT$MYAH$MYAH$FALSE
 Registering Dynamic Drivers
 {54CF9F0F-B864-40C5-BD4B-1A09614F010C}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Omni-Simulators (32bit)
+Registering Omni-Simulators - 32bit
 {8D9ADFB6-B96C-4575-AD93-CCBAE9FBDA8E}
 ACTION$MYAH$MYAH$FALSE
 Register Omni-Simulators COM Proxy - 32bit
 {A11C494B-3561-4ADF-8297-0B5622767022}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Omni-Simulators COM Proxy (32bit)
+Registering Omni-Simulators COM Proxy - 32bit
 {8E9C8D69-D545-46FA-871E-C1E63CF0C4D2}
 ACTION$MYAH$MYAH$FALSE
-Set COM simulators to use OmniSimulators (64bit)
+Set COM simulators to use OmniSimulators - 64bit
 {9E557BA2-95ED-4331-8F3D-6A2F8DCB1758}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Setting default Platform simulators (64bit)
+Setting default Platform simulators - 64bit
 {C09BC600-A0F3-40B2-9ECD-CE2416958F2E}
 ACTION$MYAH$MYAH$FALSE
 Register Omni-Simulators COM Proxy - 64bit
 {25572300-1B86-4F1C-9694-077CA4D21161}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Omni-Simulators COM Proxy (64bit)
+Registering Omni-Simulators COM Proxy - 64bit
 {BD8ECA9D-ABC1-4D3F-B8DB-A832CD7146C2}
 ACTION$MYAH$MYAH$FALSE
 Register Omni-Simulators - 64bit
 {415936F1-F0D4-4020-A37D-3855F740F622}
 PROGRESSTEXT$MYAH$MYAH$FALSE
-Registering Omni-Simulators (64bit)
+Registering Omni-Simulators - 64bit
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -22164,6 +22164,10 @@ C
 
 
 
+C
+C
+C
+C
 
 
 
@@ -22294,14 +22298,10 @@ C
 
 
 
-
-
-
-
-
-
-
-
+C
+C
+C
+C
 
 
 
