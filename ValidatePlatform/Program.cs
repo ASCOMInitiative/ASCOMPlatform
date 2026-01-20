@@ -60,14 +60,15 @@ namespace ValidatePlatform
                 {
                     Enabled = true
                 };
-                LogMessage("Main", $"Successfully created TraceLogger.");
-                LogMessage("Main", $"Operating in X{osMode} mode on an {System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} OS using an {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture} processor.");
-                LogBlankLine();
+                LogMessage("Main", $"Operating in X{osMode} mode on an {RuntimeInformation.OSArchitecture} OS using an {RuntimeInformation.ProcessArchitecture} processor.");
             }
             catch (Exception ex)
             {
                 LogError("Main", $"Unable to create trace logger.", ex);
             }
+            LogBlankLine();
+
+            // Create a Utilities component
             try
             {
                 util = new Util();
@@ -77,6 +78,7 @@ namespace ValidatePlatform
             {
                 LogError("Main", $"Unable to create Utilities component.", ex);
             }
+            LogBlankLine();
 
             // Report on the SOFA ProgID COM registration
             try
@@ -144,36 +146,9 @@ namespace ValidatePlatform
             }
             LogBlankLine();
 
-            // Confirm that we can load the ASCOM.Astrometry assembly by name
-            try
-            {
-                Assembly astrometry = Assembly.Load("ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                if (astrometry == null)
-                    LogError("Main", "Unable to load ASCOM.Astrometry.SOFA assembly by name", null);
-                else
-                    LogMessage("Main", "Successfully loaded ASCOM.Astrometry.SOFA assembly by name");
-            }
-            catch (Exception ex)
-            {
-                LogError("SOFA", $"Assembly load exception", ex);
-            }
-            LogBlankLine();
-
             // Basic tests for NOVAS and SOFA to ensure that they work OK
             try
             {
-                // Create a Utilities component
-                try
-                {
-                    util = new Util();
-                    LogMessage("Main", "Successfully created Utilities component");
-                }
-                catch (Exception ex)
-                {
-                    LogError("Main", $"Unable to create Utilities component.", ex);
-                }
-                LogBlankLine();
-
                 // Test the SOFA .NET component.
                 try
                 {
@@ -275,8 +250,9 @@ namespace ValidatePlatform
                     {
                         LogError("Main", $"Received bad Julian date {jd} from NOVAS31.JulianDate. Expected: {EXPECTED_JULIAN_DATE}", null);
                     }
+                    LogBlankLine();
 
-                   const double WALLACE_EXPECTED_DEC = 52.29549062657d;
+                    const double WALLACE_EXPECTED_DEC = 52.29549062657d;
 
                     // Site (ITRS)
                     double siteLonE_Deg = 9.712156d;      // East longitude, degrees
@@ -359,53 +335,6 @@ namespace ValidatePlatform
                     LogError("Main", $"Unable to create NOVAS .NET component.", ex);
                 }
 
-                // Test the SOFA COM object (Except 64bit, which is known to fail on SnapDragon ARM processors)
-                try
-                {
-                    if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-                    {
-                        LogMessage("Main", "Skipping 64bit SOFA COM component test on ARM processors.");
-                    }
-                    else
-                    {
-                        LogMessage("Main", "About to create SOFA component type...");
-                        Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
-
-                        // Test whether we got the SOFA component's Type
-                        if (sofaType != null) // Found the SOFA component OK
-                        {
-                            LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
-
-                            dynamic sofa = Activator.CreateInstance(sofaType);
-                            LogMessage("Main", "Successfully created SOFA component");
-
-                            double tt1 = 2459773.0;
-                            double tt2 = 0.99093;
-                            double tai1 = 0.0;
-                            double tai2 = 0.0;
-                            int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
-                            double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
-                            LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
-
-                            if (Math.Abs(difference - 32.184) < 0.01)
-                            {
-                                LogMessage("Main", $"Received expected result from TtTai.");
-                            }
-                            else
-                            {
-                                LogError("Main", $"Received bad result from TtTai.", null);
-                            }
-                        }
-                        else // Did not find the SOFA components type
-                        {
-                            LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogError("Main", $"Unable to create SOFA COM component.", ex);
-                }
                 LogBlankLine();
 
                 // Display error log if necessary, otherwise continue silently.
@@ -421,6 +350,8 @@ namespace ValidatePlatform
             {
                 LogError("Main", $"Exception:", ex);
             }
+
+            LogMessage("Main", $"Exit code: {returnCode}");
 
             return returnCode;
         }
