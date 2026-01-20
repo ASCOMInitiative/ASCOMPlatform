@@ -1211,8 +1211,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveWorker", FormatIDs(TData.TransactionID) + "< ");
                         Received = Conversions.ToString(ReadChar("ReceiveWorker", TData.TransactionID));
                         Received = Received + m_Port.ReadExisting();
                         if (DebugTrace)
@@ -1221,7 +1219,8 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Received);
+                            if (!DebugTrace)
+                                Logger.LogMessage("ReceiveWorker", FormatIDs(TData.TransactionID) + "< " + Received);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1335,8 +1334,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveByteWorker", FormatIDs(TData.TransactionID) + "< ");
                         RetVal = ReadByte("ReceiveByteWorker", TData.TransactionID);
                         if (DebugTrace)
                         {
@@ -1344,7 +1341,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Conversions.ToString(Strings.Chr(RetVal)), true);
+                            Logger.LogMessage("ReceiveByteWorker", FormatIDs(TData.TransactionID) + "< " + Conversions.ToString(Strings.Chr(RetVal)), true);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1461,8 +1458,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveCountedWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< ");
                         var loopTo = TData.Count;
                         for (i = 1; i <= loopTo; i++)
                             Received = Received + ReadChar("ReceiveCountedWorker", TData.TransactionID);
@@ -1472,7 +1467,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Received);
+                            Logger.LogMessage("ReceiveCountedWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< " + Received);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1596,8 +1591,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveCountedBinaryWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< ");
                         var loopTo = TData.Count - 1;
                         for (i = 0; i <= loopTo; i++)
                         {
@@ -1610,7 +1603,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(TextEncoding.GetString(Received), true);
+                            Logger.LogMessage("ReceiveCountedBinaryWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< " + TextEncoding.GetString(Received), true);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1732,8 +1725,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveTerminatedWorker " + TData.Terminator.ToString(), FormatIDs(TData.TransactionID) + "< ");
                         tLen = Strings.Len(TData.Terminator);
                         do
                         {
@@ -1751,7 +1742,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Received);
+                            Logger.LogMessage("ReceiveTerminatedWorker " + TData.Terminator.ToString(), FormatIDs(TData.TransactionID) + "< " + Received);
                         }
                     }
                     catch (InvalidValueException)
@@ -1864,7 +1855,6 @@ namespace ASCOM.Utilities
 
         private void ReceiveTerminatedBinaryWorker(object TDataObject)
         {
-            Logger.LogMessage("ReceiveTerminatedBinaryWorker ", "Starting ReceiveTerminatedBinaryWorker 6.0");
             ThreadData TData = (ThreadData)TDataObject;
             var Terminated = default(bool);
             int tLen;
@@ -1888,15 +1878,18 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveTerminatedBinaryWorker " + Terminator.ToString(), FormatIDs(TData.TransactionID) + "< ");
 
                         tLen = Strings.Len(Terminator);
                         do
                         {
-                            Received = Received + ReadChar("ReceiveTerminatedBinaryWorker ", TData.TransactionID); // Build up the string one char at a time
-                            if (!DebugTrace)
+                            Byte receivedByte = ReadByte("ReceiveTerminatedBinaryWorker ", TData.TransactionID);
+                            string receivedByteAsString = TextEncoding.GetString(new byte[] { receivedByte });
+
+                            Received = Received + receivedByteAsString; // Build up the string one char at a time
+
+                            if (DebugTrace)
                                 Logger.LogMessage("ReceiveTerminatedBinaryWorker ", $"Received {Strings.Len(Received)} characters, Terminator length: {tLen}");
+
                             if (Strings.Len(Received) >= tLen) // Check terminator when string is long enough
                             {
                                 if ((Strings.Right(Received, tLen) ?? "") == (Terminator ?? ""))
@@ -1904,13 +1897,14 @@ namespace ASCOM.Utilities
                             }
                         }
                         while (!Terminated);
+
                         if (DebugTrace)
                         {
                             Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "< " + Received, true);
                         }
                         else
                         {
-                            Logger.LogFinish(Received, true);
+                            Logger.LogMessage("ReceiveTerminatedBinaryWorker " + Terminator.ToString(), Received, true);
                         }
                     }
                     catch (InvalidValueException)
@@ -2574,7 +2568,7 @@ namespace ASCOM.Utilities
             var RxBytes = new byte[11];
             StartTime = DateTime.Now;
             if (DebugTrace)
-                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + "Entered ReadByte: " + UseReadPolling);
+                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + $"Entered ReadByte - Use read polling: {UseReadPolling}");
             if (UseReadPolling)
             {
                 while (m_Port.BytesToRead == 0)
@@ -2587,9 +2581,14 @@ namespace ASCOM.Utilities
                     Sleep(1);
                 }
             }
-            RxByte = (byte)m_Port.ReadByte();
+
             if (DebugTrace)
-                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + "ReadByte returning result - \"" + RxByte.ToString() + "\"");
+                Logger.LogMessage(p_Caller, $"ReadByte - About to read byte from COM port...");
+            RxByte = (byte)m_Port.ReadByte();
+
+            if (DebugTrace)
+                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + $"ReadByte - Byte read OK, returning result - {RxByte:X4}");
+
             return RxByte;
         }
 
@@ -2601,7 +2600,7 @@ namespace ASCOM.Utilities
             StartTime = DateTime.Now;
 
             if (DebugTrace)
-                Logger.LogMessage(p_Caller, $"{FormatIDs(TransactionID)} Entered ReadChar, Use read polling: {UseReadPolling}");
+                Logger.LogMessage(p_Caller, $"{FormatIDs(TransactionID)} Entered ReadChar - Use read polling: {UseReadPolling}");
 
             if (UseReadPolling)
             {
