@@ -30,16 +30,6 @@ namespace ValidatePlatform
             // Set up assembly load and resolve event handlers
             try
             {
-                AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
-                {
-                    LogMessage("AssemblyLoad", $"Loaded assembly: {e.LoadedAssembly.FullName}");
-                };
-                AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
-                {
-                    LogMessage("AssemblyResolve", $"Failed to resolve assembly: {e.Name}, Called from: {e.RequestingAssembly.FullName}");
-                    return null;
-                };
-
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
                 {
                     LogError("UnhandledException", "Unhandled exception occurred.", e.ExceptionObject as Exception);
