@@ -1754,7 +1754,7 @@ namespace ASCOM.Utilities
                             Logger.LogFinish(Received);
                         }
                     }
-                    catch (InvalidValueException )
+                    catch (InvalidValueException)
                     {
                         Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(TData.TransactionID) + "EXCEPTION - Terminator cannot be a null string");
                         throw;
@@ -1877,11 +1877,12 @@ namespace ASCOM.Utilities
                 TextEncoding = System.Text.Encoding.GetEncoding(1252);
                 Terminator = TextEncoding.GetString(TData.TerminatorBytes);
 
-                if (DebugTrace)
-                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "Start - terminator: \"" + Terminator.ToString() + "\"");
                 // Check for bad terminator string
                 if (string.IsNullOrEmpty(Terminator))
                     throw new InvalidValueException("ReceiveTerminatedBinary Terminator", "Null or empty string", "Character or character string");
+
+                if (DebugTrace)
+                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "Start - Terminator: \"" + Terminator.ToString() + $"\", length: {Terminator.Length}");
 
                 if (GetSemaphore("ReceiveTerminatedBinaryWorker ", TData.TransactionID))
                 {
@@ -1894,6 +1895,8 @@ namespace ASCOM.Utilities
                         do
                         {
                             Received = Received + ReadChar("ReceiveTerminatedBinaryWorker ", TData.TransactionID); // Build up the string one char at a time
+                            if (!DebugTrace)
+                                Logger.LogMessage("ReceiveTerminatedBinaryWorker ", $"Received {Strings.Len(Received)} characters, Terminator length: {tLen}");
                             if (Strings.Len(Received) >= tLen) // Check terminator when string is long enough
                             {
                                 if ((Strings.Right(Received, tLen) ?? "") == (Terminator ?? ""))
@@ -1910,7 +1913,7 @@ namespace ASCOM.Utilities
                             Logger.LogFinish(Received, true);
                         }
                     }
-                    catch (InvalidValueException )
+                    catch (InvalidValueException)
                     {
                         Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "EXCEPTION - Terminator cannot be a null string");
                         throw;
@@ -2375,7 +2378,7 @@ namespace ASCOM.Utilities
                             else if (DebugTrace)
                                 Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Skipping probe as port  " + PortName + " is already known to exist");
                         }
-                        catch (UnauthorizedAccessException )
+                        catch (UnauthorizedAccessException)
                         {
                             // Port exists but is in use so add it to the list
                             RetVal.Add(PortName);
@@ -2620,10 +2623,10 @@ namespace ASCOM.Utilities
             if (DebugTrace)
                 Logger.LogMessage(p_Caller, $"Got byte from port {receivedByte} ({receivedByte:X4}), about to call Strings.Chr...");
             RxChar = Strings.Chr(receivedByte);
-            
+
             if (DebugTrace)
                 Logger.LogMessage(p_Caller, FormatIDs(TransactionID) + "ReadChar returning result - \"" + RxChar + "\"");
-            
+
             return RxChar;
         }
 
