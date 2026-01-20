@@ -345,6 +345,8 @@ namespace ASCOM.Utilities
 
                 // Get debug trace level on / off
                 DebugTrace = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT);
+                Logger.IdentifierWidth = 35;
+
 
                 // Get the type of wait to use
                 TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT);
@@ -1826,7 +1828,7 @@ namespace ASCOM.Utilities
                 try
                 {
                     if (DebugTrace)
-                        Logger.LogMessage("ReceiveTerminatedBinary", "Start");
+                        Logger.LogMessage("ReceiveTerminatedBinary", "Start 6.0");
                     TData.SerialCommand = SerialCommandType.ReceiveCounted;
                     TData.TerminatorBytes = TerminatorBytes;
                     TData.TransactionID = GetTransactionID("ReceiveTerminatedBinary");
@@ -1862,6 +1864,7 @@ namespace ASCOM.Utilities
 
         private void ReceiveTerminatedBinaryWorker(object TDataObject)
         {
+            Logger.LogMessage("ReceiveTerminatedBinaryWorker ", "Starting ReceiveTerminatedBinaryWorker 6.0");
             ThreadData TData = (ThreadData)TDataObject;
             var Terminated = default(bool);
             int tLen;

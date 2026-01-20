@@ -17,8 +17,8 @@ Imports System.Runtime.Remoting.Contexts
 ''' Enumeration of serial port speeds for use with the Serial port
 ''' </summary>
 ''' <remarks>This contains an additional speed 230,400 baud that the COM component doesn't support.</remarks>
-<Guid("06BB25BA-6E75-4d1b-8BB4-BA629454AE38"), _
-ComVisible(True)> _
+<Guid("06BB25BA-6E75-4d1b-8BB4-BA629454AE38"),
+ComVisible(True)>
 Public Enum SerialSpeed As Integer 'Defined at ACOM.Utilities level
     ps300 = 300
     ps1200 = 1200
@@ -43,8 +43,8 @@ End Enum
 ''' The None option is not supported. Setting the StopBits property to None raises an 
 ''' ArgumentOutOfRangeException. 
 ''' </remarks>
-<Guid("17D30DAA-C767-43fd-8AF4-5E149D5C771F"), _
-ComVisible(True)> _
+<Guid("17D30DAA-C767-43fd-8AF4-5E149D5C771F"),
+ComVisible(True)>
 Public Enum SerialStopBits
     ''' <summary>
     ''' No stop bits are used. This value is not supported. Setting the StopBits property to None raises an ArgumentOutOfRangeException. 
@@ -77,8 +77,8 @@ End Enum
 ''' Parity is one of the parameters that must be 
 ''' agreed upon by both sending and receiving parties before transmission can take place. 
 ''' </remarks>
-<Guid("92B19711-B44F-4642-9F96-5A20397B8FD1"), _
-ComVisible(True)> _
+<Guid("92B19711-B44F-4642-9F96-5A20397B8FD1"),
+ComVisible(True)>
 Public Enum SerialParity
     ''' <summary>
     ''' Sets the parity bit so that the count of bits set is an even number. 
@@ -111,8 +111,8 @@ End Enum
 ''' The control protocol used by the serial port
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("55A24A18-02C8-47df-A048-2E0982E1E4FE"), _
-ComVisible(True)> _
+<Guid("55A24A18-02C8-47df-A048-2E0982E1E4FE"),
+ComVisible(True)>
 Public Enum SerialHandshake
     ''' <summary>
     ''' No control is used for the handshake. 
@@ -154,9 +154,9 @@ End Enum
 ''' source="..\..\ASCOM Platform Examples\Examples\SerialExamples.vb"
 ''' />
 '''</example>
-<ClassInterface(ClassInterfaceType.None), _
-Guid("0B8E6DC4-7451-4484-BE15-0D0727569FB8"), _
-ComVisible(True)> _
+<ClassInterface(ClassInterfaceType.None),
+Guid("0B8E6DC4-7451-4484-BE15-0D0727569FB8"),
+ComVisible(True)>
 Public Class Serial
     Implements ISerial, IDisposable
 
@@ -404,14 +404,14 @@ Public Class Serial
             Dim SerPorts As String()
             '5.0.2 added port enumeration to log
             SerPorts = AvailableCOMPorts ' This causes log entries tobe written
-            Logger.LogMessage("Set Connected", "Using COM port: " & m_PortName & _
-                              " Baud rate: " & m_Speed.ToString & _
-                              " Timeout: " & m_ReceiveTimeout.ToString & _
-                              " DTR: " & m_DTREnable.ToString & _
-                              " Handshake: " & m_Handshake.ToString & _
+            Logger.LogMessage("Set Connected", "Using COM port: " & m_PortName &
+                              " Baud rate: " & m_Speed.ToString &
+                              " Timeout: " & m_ReceiveTimeout.ToString &
+                              " DTR: " & m_DTREnable.ToString &
+                              " Handshake: " & m_Handshake.ToString &
                               " Encoding: " & SERIALPORT_ENCODING.ToString)
-            Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits & _
-                              " Parity: " & [Enum].GetName(m_Parity.GetType, m_Parity) & _
+            Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits &
+                              " Parity: " & [Enum].GetName(m_Parity.GetType, m_Parity) &
                               " Stop bits: " & [Enum].GetName(m_StopBits.GetType, m_StopBits))
 
             Logger.LogStart("Set Connected", TData.Connecting.ToString & " ")
@@ -1099,7 +1099,7 @@ Public Class Serial
         Dim Result() As Byte
         Dim TData As New ThreadData
         Try
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start")
+            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start - 556")
             TData.SerialCommand = SerialCommandType.ReceiveCounted
             TData.TerminatorBytes = TerminatorBytes
             ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedBinaryWorker, TData)
@@ -1124,6 +1124,7 @@ Public Class Serial
         Dim TextEncoding As System.Text.Encoding
         Dim MyTransactionID As Long
 
+        Logger.LogMessage("ReceiveTerminatedBinaryWorker ", "Starting ReceiveTerminatedBinaryWorker 6.0")
         Try
             TextEncoding = System.Text.Encoding.GetEncoding(1252)
             Terminator = TextEncoding.GetString(TData.TerminatorBytes)
