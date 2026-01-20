@@ -88,6 +88,6 @@
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ASCOM.Common.Components" Version="3.0.0-rc.2" />
+    <PackageReference Include="ASCOM.Common.Components" Version="3.0.0-rc.21" />
   </ItemGroup>
 </Project>

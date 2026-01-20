@@ -22,7 +22,7 @@
 		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
 		<UseApplicationTrust>false</UseApplicationTrust>
 		<BootstrapperEnabled>true</BootstrapperEnabled>
-		<AssemblyTitle>ASCOM.AlpacaSim.LocalServer</AssemblyTitle>
+		<AssemblyTitle>ASCOM.DynamicDriver.LocalServer</AssemblyTitle>
 		<Company>The ASCOM Initiative</Company>
 		<Product>Alpaca Simulators Local Server</Product>
 		<Description>ASCOM Local Server for Alpaca Simulators</Description>
@@ -80,10 +80,10 @@
 		<None Include="LocalServer.snk" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Alpaca.Components" Version="3.0.0-rc.2" />
-	  <PackageReference Include="ASCOM.Com.Components" Version="3.0.0-rc.2" />
-	  <PackageReference Include="ASCOM.Common.Components" Version="3.0.0-rc.2" />
-	  <PackageReference Include="ASCOM.Tools" Version="3.0.0-rc.2" />
+	  <PackageReference Include="ASCOM.Alpaca.Components" Version="3.0.0-rc.21" />
+	  <PackageReference Include="ASCOM.Com.Components" Version="3.0.0-rc.21" />
+	  <PackageReference Include="ASCOM.Common.Components" Version="3.0.0-rc.21" />
+	  <PackageReference Include="ASCOM.Tools" Version="3.0.0-rc.21" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
