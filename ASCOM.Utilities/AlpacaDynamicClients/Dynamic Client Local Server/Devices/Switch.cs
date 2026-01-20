@@ -73,7 +73,7 @@ namespace ASCOM.DynamicClients
             catch (Exception ex)
             {
                 LogMessage(deviceType.ToString(), $"Initialisation exception: {ex}");
-                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.AlpacaSim.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Exception creating ASCOM.DynamicDriver.SafetyMonitor", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -57,7 +57,7 @@ namespace ASCOM.DynamicClients
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             // Create a trace logger for the local server.
-            TL = new TraceLogger("AlpacaSim.LocalServer", true)
+            TL = new TraceLogger("DynamicDriver.LocalServer", true)
             {
                 Enabled = true // Enable to debug local server operation (not usually required). Drivers have their own independent trace loggers.
             };
@@ -76,7 +76,7 @@ namespace ASCOM.DynamicClients
             driversInUseCount = 0;
             serverLockCount = 0;
             mainThreadId = GetCurrentThreadId();
-            Thread.CurrentThread.Name = "AlpacaSim Local Server Thread";
+            Thread.CurrentThread.Name = "DynamicDriver Local Server Thread";
 
             // Create and configure the local server host form that runs the Windows message loop required to support driver operation
             TL?.LogMessage("Main", $"Creating host form");
@@ -369,7 +369,7 @@ namespace ASCOM.DynamicClients
             List<Type> types = new List<Type>()
             {
                 // GenerateTypeWithAttributes("SafetyMonitor", new Guid("612961b5-b611-4de2-970f-847eafa18fee"), "ASCOM.Dynamic1.SafetyMonitor",
-                //    "ASCOM SafetyMonitor Driver for DynamicDemo", typeof(ASCOM.AlpacaSim.SafetyMonitor.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
+                //    "ASCOM SafetyMonitor Driver for DynamicDemo", typeof(ASCOM.DynamicDriver.SafetyMonitor.SafetyMonitor), typeof(ASCOM.DeviceInterface.ISafetyMonitor)),
             };
 
             // Iterate over all ASCOM device types
@@ -545,7 +545,7 @@ namespace ASCOM.DynamicClients
             catch (Exception ex)
             {
                 TL?.LogMessage("RegisterObjects", $"Setting AppID exception: {ex}");
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.DynamicDriver.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
@@ -630,7 +630,7 @@ namespace ASCOM.DynamicClients
                 catch (Exception ex)
                 {
                     TL?.LogMessage("RegisterObjects", $"Driver registration exception: {ex}");
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(), "ASCOM.DynamicDriver.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
 
@@ -729,13 +729,13 @@ namespace ASCOM.DynamicClients
                 }
                 catch (System.ComponentModel.Win32Exception)
                 {
-                    TL?.LogMessage("IsAdministrator", $"The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
-                    MessageBox.Show("The ASCOM.AlpacaSim.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                    TL?.LogMessage("IsAdministrator", $"The ASCOM.DynamicDriver.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it."));
+                    MessageBox.Show("The ASCOM.DynamicDriver.LocalServer was not " + (argument == "/register" ? "registered" : "unregistered because you did not allow it.", "ASCOM.DynamicDriver.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Warning));
                 }
                 catch (Exception ex)
                 {
                     TL?.LogMessage("IsAdministrator", $"Exception: {ex}");
-                    MessageBox.Show(ex.ToString(), "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show(ex.ToString(), "ASCOM.DynamicDriver.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
             }
 
@@ -765,7 +765,7 @@ namespace ASCOM.DynamicClients
                 if (!factory.RegisterClassObject())
                 {
                     TL?.LogMessage("RegisterClassFactories", $"  Failed to register class factory for " + driverType.Name);
-                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to register class factory for " + driverType.Name, "ASCOM.DynamicDriver.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
                 TL?.LogMessage("RegisterClassFactories", $"  Registered class factory OK for: {driverType.Name}");
@@ -835,7 +835,7 @@ namespace ASCOM.DynamicClients
 
                     default:
                         TL?.LogMessage("ProcessArguments", $"Unknown argument: {args[0]}");
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.AlpacaSim.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding", "ASCOM.DynamicDriver.LocalServer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }
