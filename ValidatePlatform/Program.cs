@@ -27,118 +27,117 @@ namespace ValidatePlatform
 
         static int Main(string[] args)
         {
-            // Set up assembly load and resolve event handlers
             try
             {
-                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                // Set up assembly load and resolve event handlers
+                try
                 {
-                    LogError("UnhandledException", "Unhandled exception occurred.", e.ExceptionObject as Exception);
-                    SetReturnCode(2);
-                };
-            }
-            catch (Exception ex)
-            {
-                LogError("Main", "Issue creating event handlers.", ex);
-            }
-
-            // Create a TraceLogger component
-            try
-            {
-                string osMode = Environment.Is64BitProcess ? "64" : "86";
-
-                TL = new TraceLogger("", $"ValidatePlatform{osMode}")
+                    AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                    {
+                        LogError("UnhandledException", "Unhandled exception occurred.", e.ExceptionObject as Exception);
+                        SetReturnCode(2);
+                    };
+                }
+                catch (Exception ex)
                 {
-                    Enabled = true
-                };
-                LogMessage("Main", $"Operating in X{osMode} mode on an {RuntimeInformation.OSArchitecture} OS using an {RuntimeInformation.ProcessArchitecture} processor.");
-            }
-            catch (Exception ex)
-            {
-                LogError("Main", $"Unable to create trace logger.", ex);
-            }
-            LogBlankLine();
+                    LogError("Main", "Issue creating event handlers.", ex);
+                }
 
-            // Create a Utilities component
-            try
-            {
-                util = new Util();
-                LogMessage("Main", $"Successfully created Utilities component.");
-            }
-            catch (Exception ex)
-            {
-                LogError("Main", $"Unable to create Utilities component.", ex);
-            }
-            LogBlankLine();
+                // Create a TraceLogger component
+                try
+                {
+                    string osMode = Environment.Is64BitProcess ? "64" : "86";
 
-            // Report on the SOFA ProgID COM registration
-            try
-            {
-                ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA");
-                ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA\CLSID");
-                ValidateSofaValue(@"ASCOM.Astrometry.SOFA.SOFA\CLSID", "", SOFA_CLSID);
-            }
-            catch (Exception ex)
-            {
-                LogError("SOFA", $"SOFA COM registration exception", ex);
-            }
-            LogBlankLine();
-
-            // Report on the SOFA CLSID COM registration
-            try
-            {
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}", "", "ASCOM.Astrometry.SOFA.SOFA");
+                    TL = new TraceLogger("", $"ValidatePlatform{osMode}")
+                    {
+                        Enabled = true
+                    };
+                    LogMessage("Main", $"Operating in X{osMode} mode on an {RuntimeInformation.OSArchitecture} OS using an {RuntimeInformation.ProcessArchitecture} processor.");
+                }
+                catch (Exception ex)
+                {
+                    LogError("Main", $"Issue creating trace logger.", ex);
+                }
                 LogBlankLine();
 
-                // Validate that expected sub-keys exist with the correct values
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories");
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}");
+                // Create a Utilities component
+                try
+                {
+                    util = new Util();
+                    LogMessage("Main", $"Successfully created Utilities component.");
+                }
+                catch (Exception ex)
+                {
+                    LogError("Main", $"Issue creating Utilities component.", ex);
+                }
                 LogBlankLine();
 
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "", "mscoree.dll");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Class", "ASCOM.Astrometry.SOFA.SOFA");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "RuntimeVersion", "v2.0.50727");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "ThreadingModel", "Both");
+                // Report on the SOFA ProgID COM registration
+                try
+                {
+                    ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA");
+                    ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA\CLSID");
+                    ValidateSofaValue(@"ASCOM.Astrometry.SOFA.SOFA\CLSID", "", SOFA_CLSID);
+                }
+                catch (Exception ex)
+                {
+                    LogError("SOFA", $"SOFA COM registration exception", ex);
+                }
                 LogBlankLine();
 
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Class", "ASCOM.Astrometry.SOFA.SOFA");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "RuntimeVersion", "v2.0.50727");
+                // Report on the SOFA CLSID COM registration
+                try
+                {
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}", "", "ASCOM.Astrometry.SOFA.SOFA");
+                    LogBlankLine();
+
+                    // Validate that expected sub-keys exist with the correct values
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories");
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "", "mscoree.dll");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Class", "ASCOM.Astrometry.SOFA.SOFA");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "RuntimeVersion", "v2.0.50727");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "ThreadingModel", "Both");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Class", "ASCOM.Astrometry.SOFA.SOFA");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "RuntimeVersion", "v2.0.50727");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\ProgId");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\ProgId", "", "ASCOM.Astrometry.SOFA.SOFA");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0");
+                    ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0", "", "ASCOM Astrometry");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32");
+                    ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32", "", @"ASCOM.Astrometry\6.0.0.0__565de7938946fba7\ASCOM.Astrometry.tlb");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS");
+                    ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS", "", @"0");
+                }
+                catch (Exception ex)
+                {
+                    LogError("SOFA", $"SOFA CLSID COM registration exception", ex);
+                }
                 LogBlankLine();
 
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\ProgId");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\ProgId", "", "ASCOM.Astrometry.SOFA.SOFA");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0");
-                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0", "", "ASCOM Astrometry");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32");
-                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32", "", @"ASCOM.Astrometry\6.0.0.0__565de7938946fba7\ASCOM.Astrometry.tlb");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS");
-                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS", "", @"0");
-            }
-            catch (Exception ex)
-            {
-                LogError("SOFA", $"CLSID COM registration exception", ex);
-            }
-            LogBlankLine();
-
-            // Basic tests for NOVAS and SOFA to ensure that they work OK
-            try
-            {
                 // Test the SOFA .NET component.
                 try
                 {
@@ -216,7 +215,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA .NET component.", ex);
+                    LogError("Main", $"SOFA test exception.", ex);
                 }
                 LogBlankLine();
 
@@ -291,7 +290,7 @@ namespace ValidatePlatform
 
                     // Star catalog entry (CatEntry3)
                     var star = new CatEntry3();
-                    star.RA = ra2000_deg / 15.0d;              // HOURS (not degrees!)
+                    star.RA = ra2000_deg / 15.0d;             // HOURS (not degrees!)
                     star.Dec = dec2000_deg;                   // degrees
                     star.ProMoRA = pmRAstar_masPerYr;         // mas/year (this is μα cosδ as given)
                     star.ProMoDec = pmDec_masPerYr;           // mas/year
@@ -322,7 +321,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create NOVAS .NET component.", ex);
+                    LogError("Main", $"NOVAS test exception.", ex);
                 }
 
                 LogBlankLine();
@@ -334,11 +333,10 @@ namespace ValidatePlatform
                     MessageBox.Show(errorLog, "Issues Validating Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SetReturnCode(1);
                 }
-
             }
             catch (Exception ex)
             {
-                LogError("Main", $"Exception:", ex);
+                LogError("Main", $"Overall exception:", ex);
             }
 
             LogMessage("Main", $"Exit code: {returnCode}");
