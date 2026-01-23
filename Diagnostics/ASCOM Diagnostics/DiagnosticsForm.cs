@@ -350,14 +350,93 @@ namespace ASCOM.Utilities
                     TL.LogMessageCrLf("OS Version", $"Exception reading OS version information: {ex}");
                 }
 
-                if (RunningInVM(true))
+                try
                 {
-                    TL.LogMessage("Environment", "Diagnostics is running in a virtual machine");
-                }
+                    if (RunningInVM(true))
+                    {
+                        TL.LogMessage("Environment", "Diagnostics is running in a virtual machine");
+                    }
 
-                else
+                    else
+                    {
+                        TL.LogMessage("Environment", "Diagnostics is running on a real PC");
+                    }
+
+                    // Gets the process architecture of the currently running app
+                    Architecture processArchitecture = RuntimeInformation.ProcessArchitecture;
+
+                    switch (processArchitecture)
+                    {
+                        case Architecture.Arm64:
+                            TL.LogMessage("Environment", "Application is running as an ARM 64bit application");
+                            break;
+
+                        case Architecture.Arm:
+                            TL.LogMessage("Environment", "Application is running as an ARM 32bit application");
+                            break;
+
+                        case Architecture.X64:
+                            TL.LogMessage("Environment", "Application is running as an Intel/AMD 64bit application");
+                            break;
+
+                        case Architecture.X86:
+                            TL.LogMessage("Environment", "Application is running as an Intel/AMD 32bit application");
+                            break;
+
+                        default:
+                            TL.LogMessage("Environment", $"Application is running as an unrecognised application architecture: {processArchitecture}");
+                            break;
+                    }
+
+                    // Get the underlying real machine architecture
+                    var searcher = new ManagementObjectSearcher("SELECT Architecture FROM Win32_Processor");
+                    foreach (ManagementObject managementObject in searcher.Get())
+                    {
+                        ushort architecture = (ushort)managementObject["Architecture"];
+                        //TL.LogMessage("Environment", $"Win32_Processor Architecture: {architecture}");
+                        switch (architecture)
+                        {
+                            case 0:
+                                TL.LogMessage("Environment", "Real processor is Intel x86");
+                                break;
+
+                            case 1:
+                                TL.LogMessage("Environment", "Real processor is MIPS");
+                                break;
+
+                            case 2:
+                                TL.LogMessage("Environment", "Real processor is Alpha");
+                                break;
+
+                            case 3:
+                                TL.LogMessage("Environment", "Real processor is PowerPC");
+                                break;
+
+                            case 5:
+                                TL.LogMessage("Environment", "Real processor is ARM 32bit");
+                                break;
+
+                            case 6:
+                                TL.LogMessage("Environment", "Real processor is Itanium");
+                                break;
+
+                            case 9:
+                                TL.LogMessage("Environment", "Real processor is Intel/AMD x64");
+                                break;
+
+                            case 12:
+                                TL.LogMessage("Environment", "Real processor is ARM 64bit");
+                                break;
+
+                            default:
+                                TL.LogMessage("Environment", $"Unrecognised processor architecture: {architecture}");
+                                break;
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
-                    TL.LogMessage("Environment", "Diagnostics is running on a real PC");
+                    TL.LogMessageCrLf("Environment", $"Exception reading environment: {ex.Message}\r\n{ex}");
                 }
 
                 TL.BlankLine();
@@ -11498,7 +11577,7 @@ namespace ASCOM.Utilities
         /// <param name="e"></param>
         private void ReportNET35ComponentUseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Net35CompopnentUseForm Net35Form=new();
+            Net35CompopnentUseForm Net35Form = new();
             Net35Form.ShowDialog(); // Show the dialogue
         }
 
@@ -11942,7 +12021,7 @@ namespace ASCOM.Utilities
                         string manufacturer = item["Manufacturer"].ToString().ToLowerInvariant();
                         string model = item["Model"].ToString().ToLowerInvariant();
                         if (WriteToLog)
-                            TL.LogMessage("RunningInVM", $"Found Manufacturer: {manufacturer}, Model: {model}");
+                            TL.LogMessage("Environment", $"PC Manufacturer: {manufacturer}, Model: {model}");
                         // Determine whether we are in a VM
                         if ((manufacturer == "microsoft corporation" && model.Contains("virtual"))
                             || manufacturer.Contains("vmware")
