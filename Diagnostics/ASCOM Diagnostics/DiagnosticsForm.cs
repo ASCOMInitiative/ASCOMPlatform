@@ -329,6 +329,7 @@ namespace ASCOM.Utilities
                 TL.LogMessage("CurrentUICulture", CultureInfo.CurrentUICulture.EnglishName + " " + CultureInfo.CurrentUICulture.Name + " Decimal Separator \"" + CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator + "\"" + " Number Group Separator \"" + CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator + "\"");
                 TL.BlankLine();
 
+                // Log OS version information
                 try
                 {
                     regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"); // Open the OS version registry key
@@ -350,6 +351,7 @@ namespace ASCOM.Utilities
                     TL.LogMessageCrLf("OS Version", $"Exception reading OS version information: {ex}");
                 }
 
+                // Log Application environment information
                 try
                 {
                     if (RunningInVM(true))
@@ -362,25 +364,25 @@ namespace ASCOM.Utilities
                         TL.LogMessage("Environment", "Diagnostics is running on a real PC");
                     }
 
-                    // Gets the process architecture of the currently running app
+                    // Get the process architecture of the currently running app
                     Architecture processArchitecture = RuntimeInformation.ProcessArchitecture;
 
                     switch (processArchitecture)
                     {
                         case Architecture.Arm64:
-                            TL.LogMessage("Environment", "Application is running as an ARM 64bit application");
+                            TL.LogMessage("Environment", "Application architecture: ARM 64bit");
                             break;
 
                         case Architecture.Arm:
-                            TL.LogMessage("Environment", "Application is running as an ARM 32bit application");
+                            TL.LogMessage("Environment", "Application architecture: ARM 32bit");
                             break;
 
                         case Architecture.X64:
-                            TL.LogMessage("Environment", "Application is running as an Intel/AMD 64bit application");
+                            TL.LogMessage("Environment", "Application architecture: Intel/AMD X64");
                             break;
 
                         case Architecture.X86:
-                            TL.LogMessage("Environment", "Application is running as an Intel/AMD 32bit application");
+                            TL.LogMessage("Environment", "Application architecture: Intel X86");
                             break;
 
                         default:
@@ -388,44 +390,43 @@ namespace ASCOM.Utilities
                             break;
                     }
 
-                    // Get the underlying real machine architecture
+                    // Get the underlying real machine architecture usig WMI
                     var searcher = new ManagementObjectSearcher("SELECT Architecture FROM Win32_Processor");
                     foreach (ManagementObject managementObject in searcher.Get())
                     {
                         ushort architecture = (ushort)managementObject["Architecture"];
-                        //TL.LogMessage("Environment", $"Win32_Processor Architecture: {architecture}");
                         switch (architecture)
                         {
                             case 0:
-                                TL.LogMessage("Environment", "Real processor is Intel x86");
+                                TL.LogMessage("Environment", "Real processor: Intel X86");
                                 break;
 
                             case 1:
-                                TL.LogMessage("Environment", "Real processor is MIPS");
+                                TL.LogMessage("Environment", "Real processor: MIPS");
                                 break;
 
                             case 2:
-                                TL.LogMessage("Environment", "Real processor is Alpha");
+                                TL.LogMessage("Environment", "Real processor: Alpha");
                                 break;
 
                             case 3:
-                                TL.LogMessage("Environment", "Real processor is PowerPC");
+                                TL.LogMessage("Environment", "Real processor: PowerPC");
                                 break;
 
                             case 5:
-                                TL.LogMessage("Environment", "Real processor is ARM 32bit");
+                                TL.LogMessage("Environment", "Real processor: ARM 32bit");
                                 break;
 
                             case 6:
-                                TL.LogMessage("Environment", "Real processor is Itanium");
+                                TL.LogMessage("Environment", "Real processor: Itanium");
                                 break;
 
                             case 9:
-                                TL.LogMessage("Environment", "Real processor is Intel/AMD x64");
+                                TL.LogMessage("Environment", "Real processor: Intel/AMD X64");
                                 break;
 
                             case 12:
-                                TL.LogMessage("Environment", "Real processor is ARM 64bit");
+                                TL.LogMessage("Environment", "Real processor: ARM 64bit");
                                 break;
 
                             default:
