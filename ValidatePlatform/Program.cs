@@ -5,7 +5,10 @@ using ASCOM.Utilities;
 using Microsoft.Win32;
 using System;
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
+using System.Management;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Windows.Forms;
@@ -46,19 +49,18 @@ namespace ValidatePlatform
                 // Create a TraceLogger component
                 try
                 {
-                    string osMode = Environment.Is64BitProcess ? "64" : "86";
-
-                    TL = new TraceLogger("", $"ValidatePlatform{osMode}")
+                    TL = new TraceLogger("", $"ValidatePlatform{(Environment.Is64BitProcess ? "64" : "86")}")
                     {
                         Enabled = true
                     };
-                    LogMessage("Main", $"Operating in X{osMode} mode on an {RuntimeInformation.OSArchitecture} OS using an {RuntimeInformation.ProcessArchitecture} processor.");
+                    LogMessage("Main", $"Validate Platform");
+                    LogBlankLine();
+                    LogMessage("Main", $"Successfully created TraceLogger component.");
                 }
                 catch (Exception ex)
                 {
                     LogError("Main", $"Issue creating trace logger.", ex);
                 }
-                LogBlankLine();
 
                 // Create a Utilities component
                 try
@@ -69,6 +71,134 @@ namespace ValidatePlatform
                 catch (Exception ex)
                 {
                     LogError("Main", $"Issue creating Utilities component.", ex);
+                }
+                LogBlankLine();
+
+                // Report environment
+                try
+                {
+                    LogMessage("Version", $"{Assembly.GetExecutingAssembly().GetName().Version}, {Application.ProductVersion}");
+                    LogBlankLine();
+                    LogMessage("Date", DateTime.Now.ToString());
+                    LogMessage("TimeZoneName", GetTimeZoneName());
+                    LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours.ToString());
+                    LogMessage("UTCDate", DateTime.UtcNow.ToString());
+                    LogBlankLine();
+                    LogMessage("CurrentCulture", $"{CultureInfo.CurrentCulture.EnglishName} {CultureInfo.CurrentCulture.Name} Decimal Separator '{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}' " +
+                        $"Number Group Separator '{CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator}'");
+                    LogMessage("CurrentUICulture", $"{CultureInfo.CurrentUICulture.EnglishName} {CultureInfo.CurrentUICulture.Name} Decimal Separator '{CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator}' " +
+                        $"Number Group Separator '{CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator}'");
+                }
+                catch (Exception ex)
+                {
+                    LogError("Environment", $"Exception", ex);
+                }
+                LogBlankLine();
+
+                // Log OS version information
+                try
+                {
+                    using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
+                    {
+                        // Open the OS version registry key
+                        string productName = regKey.GetValue("ProductName", "").ToString();
+                        string currentMajorVersionNumber = regKey.GetValue("CurrentMajorVersionNumber", "").ToString();
+                        string currentMinorVersionNumber = regKey.GetValue("CurrentMinorVersionNumber", "").ToString();
+                        string currentType = regKey.GetValue("CurrentType", "").ToString();
+                        string currentBuildNumber = regKey.GetValue("currentBuildNumber", "").ToString();
+                        string ubr = regKey.GetValue("UBR", "").ToString();
+                        LogMessage("OS Version", $"{currentType} {currentMajorVersionNumber}.{currentMinorVersionNumber}.{currentBuildNumber}.{ubr}");
+                        LogBlankLine();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogError("OS Version", $"Exception reading OS version information.", ex);
+                }
+
+                // Log Application environment information
+                try
+                {
+                    // Determine if we are running in a VM or on a real PC
+                    if (RunningInVM(true))
+                        LogMessage("Environment", "Running in a virtual machine");
+                    else
+                        LogMessage("Environment", "Running on a real PC");
+
+                    // Get the process architecture of the currently running app
+                    Architecture processArchitecture = RuntimeInformation.ProcessArchitecture;
+
+                    switch (processArchitecture)
+                    {
+                        case Architecture.Arm64:
+                            LogMessage("Application Architecture", "ARM 64bit");
+                            break;
+
+                        case Architecture.Arm:
+                            LogMessage("Application Architecture", "ARM 32bit");
+                            break;
+
+                        case Architecture.X64:
+                            LogMessage("Application Architecture", "Intel/AMD X64");
+                            break;
+
+                        case Architecture.X86:
+                            LogMessage("Application Architecture", "Intel X86");
+                            break;
+
+                        default:
+                            LogMessage("Application Architecture", $"Unrecognised architecture: {processArchitecture}");
+                            break;
+                    }
+
+                    // Get the underlying real machine architecture usig WMI
+                    var searcher = new ManagementObjectSearcher("SELECT Architecture FROM Win32_Processor");
+                    foreach (ManagementObject managementObject in searcher.Get())
+                    {
+                        ushort architecture = (ushort)managementObject["Architecture"];
+                        switch (architecture)
+                        {
+                            case 0:
+                                LogMessage("Processor Architecture", "Intel X86");
+                                break;
+
+                            case 1:
+                                LogMessage("Processor Architecture", "MIPS");
+                                break;
+
+                            case 2:
+                                LogMessage("Processor Architecture", "Alpha");
+                                break;
+
+                            case 3:
+                                LogMessage("Processor Architecture", "PowerPC");
+                                break;
+
+                            case 5:
+                                LogMessage("Processor Architecture", "ARM 32bit");
+                                break;
+
+                            case 6:
+                                LogMessage("Processor Architecture", "Itanium");
+                                break;
+
+                            case 9:
+                                LogMessage("Processor Architecture", "Intel/AMD X64");
+                                break;
+
+                            case 12:
+                                LogMessage("Processor Architecture", "ARM 64bit");
+                                break;
+
+                            default:
+                                LogMessage("Processor Architecture", $"Unrecognised architecture: {architecture}");
+                                break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogError("Environment", $"Exception reading environment.", ex);
                 }
                 LogBlankLine();
 
@@ -344,6 +474,43 @@ namespace ValidatePlatform
             return returnCode;
         }
 
+        private static bool RunningInVM(bool WriteToLog)
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * from Win32_ComputerSystem"))
+            {
+                using (ManagementObjectCollection items = searcher.Get())
+                {
+                    foreach (ManagementBaseObject item in items)
+                    {
+                        // Extract manufacturer and model
+                        string manufacturer = item["Manufacturer"].ToString().ToLowerInvariant();
+                        string model = item["Model"].ToString().ToLowerInvariant();
+                        if (WriteToLog)
+                            LogMessage("Manufacturer", $"{manufacturer}, Model: {model}");
+                        // Determine whether we are in a VM
+                        if ((manufacturer == "microsoft corporation" && model.Contains("virtual"))
+                            || manufacturer.Contains("vmware")
+                            || model == "virtualbox")
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static string GetTimeZoneName()
+        {
+            if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(DateTime.Now))
+            {
+                return TimeZone.CurrentTimeZone.DaylightName;
+            }
+            else
+            {
+                return TimeZone.CurrentTimeZone.StandardName;
+            }
+        }
         private static void ValidateSofaSubKey(string keyName)
         {
             try
