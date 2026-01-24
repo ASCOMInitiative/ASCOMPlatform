@@ -1286,6 +1286,9 @@ if Variable REMOVE Equals TRUE
    
   Comment: Bypass the installation code and go to the finish dialogue
   GoTo Label: Finish Setup
+   
+  Comment: ##### END OF UNINSTALL PLATFORM CODE #####
+   
 end
  
 [END REGION]
@@ -1361,6 +1364,8 @@ Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Pl
 Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\SetNetworkPermissions
  
 Set Variable NATIVE_ENGINE to FALSE
+ 
+[END REGION]
  
 [END REGION]
  

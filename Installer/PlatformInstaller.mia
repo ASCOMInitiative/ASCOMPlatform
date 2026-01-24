@@ -1371,6 +1371,22 @@ Code Folding Region
 Comment
 Code Folding Region
 Comment
+Check Process
+Write to Text File
+If
+Write to Text File
+Terminate Process
+If
+Write to Text File
+Else
+Comment
+End
+End
+Comment
+Code Folding Region
+Comment
+Code Folding Region
+Comment
 Comment
 Set Variable
 Save Feature Selections
@@ -4375,6 +4391,22 @@ $
 {7DF41E93-FCED-44A1-8771-3756BC07F70E}
 {071969B4-64DE-48D1-AF1A-9297C6304361}
 {556A9ADA-B9AF-4040-9B4C-A791F3B62627}
+{7DB6F688-581A-4C88-ACF0-C10B17E2F982}
+{DE798F6E-C7DE-4CEE-B48D-941DA4390568}
+{72446465-1C03-46E2-87F2-DED3016C0D24}
+{DDEEDCB7-483B-4476-B795-6C1887EBF755}
+{6A5B238F-2D17-4C1D-84F7-4D3F3C1C05F2}
+{8895EAAD-1B93-43DD-80A0-5571E1921CA7}
+{2AE75879-E234-46E5-A655-787851024CD4}
+{0CE53F5A-331F-4BD2-AB95-74B7245FE86C}
+{98E1B8CF-432F-42A3-8E4C-25E9C4AAA2EF}
+{33B316BD-CF49-4109-AD19-BD561637CD01}
+{5829B5A4-4493-4C83-B4EA-B52AB5F09DBA}
+{BB30FD63-4C88-43EE-B6EF-88BC107FB3BE}
+{8722D5B0-57C3-4B81-BE0A-2E68DCEA723D}
+{44DF953D-BF59-436C-8671-E2C596869772}
+{D54F84E9-F002-459D-8775-74753B4D7462}
+{54F9D712-B113-4DD4-B051-392FE4146440}
 {8C8A77ED-1B6D-4AA5-9936-759C18A2B7C1}
 {7265407D-FE2D-4FF0-B6F6-564F3F4984C4}
 {ADD99306-CEB7-4FFC-8B00-ECB0B2CCFE11}
@@ -7470,6 +7502,14 @@ Register 64bit Omni-Simulators
 
 {BEB29CC0-22A4-48B8-9CA0-BF7325247839}
 ##### END OF UNINSTALL PLATFORM CODE #####
+{7DB6F688-581A-4C88-ACF0-C10B17E2F982}
+
+{D54F84E9-F002-459D-8775-74753B4D7462}
+
+{72446465-1C03-46E2-87F2-DED3016C0D24}
+
+{BB30FD63-4C88-43EE-B6EF-88BC107FB3BE}
+
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -9707,6 +9747,16 @@ INSTALL_HUBS
 0
 TRUE
 TRUE
+{8895EAAD-1B93-43DD-80A0-5571E1921CA7}
+OMNISIMS_RUNNING
+0
+TRUE
+FALSE
+{98E1B8CF-432F-42A3-8E4C-25E9C4AAA2EF}
+OMNISIMS_RUNNING
+0
+FALSE
+FALSE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -18682,6 +18732,21 @@ $SETUPLOG$
 $TIME$ Generate Native Assemblies - $GENERATE_NATIVE_ASSEMBLIES$
 FALSE
 TRUE
+{6A5B238F-2D17-4C1D-84F7-4D3F3C1C05F2}
+$SETUPLOG$
+$TIME$  Omni-simulators are running: $OMNISIMS_RUNNING$
+FALSE
+TRUE
+{2AE75879-E234-46E5-A655-787851024CD4}
+$SETUPLOG$
+$TIME$  Killing Omni-simulators process...
+FALSE
+TRUE
+{33B316BD-CF49-4109-AD19-BD561637CD01}
+$SETUPLOG$
+$TIME$  Omni-simulators are no longer running.
+FALSE
+TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 2|
 SOFTWARE\ASCOM\Astrometry
@@ -18994,6 +19059,12 @@ Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {556A9ADA-B9AF-4040-9B4C-A791F3B62627}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{DE798F6E-C7DE-4CEE-B48D-941DA4390568}
+TRUE
+Close OmniSims if running
+{54F9D712-B113-4DD4-B051-392FE4146440}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {1092A0D5-2A44-44ED-A0BF-E78001F6D95A}
 $UNINSTALLER$
 FALSE
@@ -19205,6 +19276,12 @@ UpdateAscomError|
 UpdateAscomError|
 {7E9A67DE-7BA2-41ED-84D9-4859BEFEE5BF}
 UpdateAscomError|
+{DDEEDCB7-483B-4476-B795-6C1887EBF755}
+ascom.alpaca.simulators.exe
+OMNISIMS_RUNNING
+{0CE53F5A-331F-4BD2-AB95-74B7245FE86C}
+ascom.alpaca.simulators
+OMNISIMS_RUNNING
 {BE6F0167-47F0-4C0A-B473-33DB75546DE3}
 SUCCESS
 TRUE
@@ -21001,6 +21078,22 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -22475,6 +22568,22 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1369,6 +1369,22 @@ Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
  
+[DEFINE REGION: Close OmniSims if running]
+ 
+Check for Process "ascom.alpaca.simulators.exe", get result into variable OMNISIMS_RUNNING
+Write into Text File $SETUPLOG$ from Value $TIME$  Omni-simulators are running: $OMNISIMS_RUNNING$ (at end of file)
+if Variable OMNISIMS_RUNNING Equals TRUE
+  Write into Text File $SETUPLOG$ from Value $TIME$  Killing Omni-simulators process... (at end of file)
+  Safely Terminate Process "ascom.alpaca.simulators", get result into variable OMNISIMS_RUNNING
+  if Variable OMNISIMS_RUNNING Equals FALSE
+    Write into Text File $SETUPLOG$ from Value $TIME$  Omni-simulators are no longer running. (at end of file)
+  else
+     
+  end
+end
+ 
+[END REGION]
+ 
 [DEFINE REGION: Log user configuration options]
  
 Comment: ***** Start of Platform Installation Activities *****

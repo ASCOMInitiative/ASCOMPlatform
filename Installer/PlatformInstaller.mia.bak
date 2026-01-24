@@ -1286,6 +1286,9 @@ End
 Comment
 Comment
 GoTo Label
+Comment
+Comment
+Comment
 End
 Comment
 Code Folding Region
@@ -1361,6 +1364,8 @@ Remove Directory
 Remove Directory
 Comment
 Set Variable
+Comment
+Code Folding Region
 Comment
 Code Folding Region
 Comment
@@ -4288,6 +4293,9 @@ $
 {CA8B9313-4B93-40C6-A625-3B25075A6D88}
 {BA1E29B5-7B6A-440A-B62F-DAE786877D4F}
 {5A2A32BE-2155-440D-A472-04B8F3FA0F63}
+{C8FFD212-C8EA-4515-B78D-AE4B87D33143}
+{BEB29CC0-22A4-48B8-9CA0-BF7325247839}
+{A083CE39-1795-4DC6-8883-C361E5065FF8}
 {665B134F-37F5-4EDB-9D6B-BAF14701B42C}
 {B1F637FE-575B-49DE-91B3-0F16AFBCB263}
 {445575A8-6ECD-423B-A4C8-890E26979259}
@@ -4365,6 +4373,8 @@ $
 {7B790B69-B200-4B14-B0B8-6262A65F1A87}
 {1355BDFE-C750-454B-9D08-C7339C5F2708}
 {7DF41E93-FCED-44A1-8771-3756BC07F70E}
+{071969B4-64DE-48D1-AF1A-9297C6304361}
+{556A9ADA-B9AF-4040-9B4C-A791F3B62627}
 {8C8A77ED-1B6D-4AA5-9936-759C18A2B7C1}
 {7265407D-FE2D-4FF0-B6F6-564F3F4984C4}
 {ADD99306-CEB7-4FFC-8B00-ECB0B2CCFE11}
@@ -7452,6 +7462,14 @@ Register 64bit Omni-Simulators
 
 {D4F4C36B-D973-41FF-8B79-3284DF830CB8}
 
+{071969B4-64DE-48D1-AF1A-9297C6304361}
+
+{C8FFD212-C8EA-4515-B78D-AE4B87D33143}
+
+{A083CE39-1795-4DC6-8883-C361E5065FF8}
+
+{BEB29CC0-22A4-48B8-9CA0-BF7325247839}
+##### END OF UNINSTALL PLATFORM CODE #####
 {3FDCB84F-CB74-4A3D-8649-C2FB2EFB7985}
 PRELIST
 
@@ -18973,6 +18991,9 @@ Log user configuration options
 {DACD8D2C-6001-4F2C-B728-85F51B2B8CB4}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{556A9ADA-B9AF-4040-9B4C-A791F3B62627}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {1092A0D5-2A44-44ED-A0BF-E78001F6D95A}
 $UNINSTALLER$
 FALSE
@@ -20975,6 +20996,11 @@ C
 
 
 
+
+
+
+
+
 C
 
 
@@ -22449,6 +22475,11 @@ C
 
 
 $
+
+
+
+
+
 
 
 
