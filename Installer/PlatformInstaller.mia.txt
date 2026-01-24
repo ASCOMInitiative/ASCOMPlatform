@@ -45,6 +45,7 @@ Set Variable ACTION to
 Set Variable CLEARCACHE to 
 Set Variable DEVICEHUB_DOME_RADIUS to 
 Set Variable CONFIGURATION_DIRECTORY to 
+Set Variable OMNISIMS_RUNNING to 
  
 Comment: Set a variable indicating whether the installer was started from a stand alone exe or from the control panel
 Set Variable STARTEDFROMCONTROLPANEL to FALSE
@@ -685,10 +686,16 @@ GoTo Label: Modify Maintenance
  
 [END REGION]
  
-[DEFINE REGION: Start installation]
- 
 label: Main Install
-Comment: Save Feature Selections into file j:\features.txt
+ 
+[DEFINE REGION: Close OmniSims if running]
+ 
+Run Program taskkill /f /t /im "ascom.alpaca.simulators.exe" (WAIT, get result into variable OMNISIMS_RUNNING)
+Write into Text File $SETUPLOG$ from Value $TIME$ Task kill - Exit code: $OMNISIMS_RUNNING$ (at end of file)
+ 
+[END REGION]
+ 
+[DEFINE REGION: Start installation]
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
@@ -1366,22 +1373,6 @@ Remove Directory (including all its files and subfolders) $PROGRAMFILES$ASCOM\Se
 Set Variable NATIVE_ENGINE to FALSE
  
 [END REGION]
- 
-[END REGION]
- 
-[DEFINE REGION: Close OmniSims if running]
- 
-Check for Process "ascom.alpaca.simulators.exe", get result into variable OMNISIMS_RUNNING
-Write into Text File $SETUPLOG$ from Value $TIME$  Omni-simulators are running: $OMNISIMS_RUNNING$ (at end of file)
-if Variable OMNISIMS_RUNNING Equals TRUE
-  Write into Text File $SETUPLOG$ from Value $TIME$  Killing Omni-simulators process... (at end of file)
-  Safely Terminate Process "ascom.alpaca.simulators", get result into variable OMNISIMS_RUNNING
-  if Variable OMNISIMS_RUNNING Equals FALSE
-    Write into Text File $SETUPLOG$ from Value $TIME$  Omni-simulators are no longer running. (at end of file)
-  else
-     
-  end
-end
  
 [END REGION]
  
