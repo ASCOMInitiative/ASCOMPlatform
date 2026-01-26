@@ -691,7 +691,7 @@ label: Main Install
 [DEFINE REGION: Close OmniSims if running]
  
 Run Program taskkill /f /t /im "ascom.alpaca.simulators.exe" (WAIT, get result into variable OMNISIMS_RUNNING)
-Write into Text File $SETUPLOG$ from Value $TIME$ Task kill - Omni-simulators are running: $OMNISIMS_RUNNING$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Task kill - Exit code: $OMNISIMS_RUNNING$ (at end of file)
  
 [END REGION]
  

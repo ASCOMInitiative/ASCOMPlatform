@@ -541,6 +541,11 @@ Comment
 Write to Text File
 MessageBox
 Terminate Install
+End
+If
+Write to Text File
+MessageBox
+Terminate Install
 Else
 Comment
 Write to Text File
@@ -3555,6 +3560,11 @@ $
 {04458785-22B3-4A4B-B0B2-EFA1217ADBB9}
 {232E0D9D-E2FF-41B0-AB34-ABD6C4157E10}
 {469FEDEE-A521-440D-ABA3-14DEBA5FAB57}
+{FE8FD9B6-8D6A-4D57-8C2B-183941375DFD}
+{BA393341-B848-494F-8C41-B97E8882338E}
+{2072A3E0-267B-46A3-B519-75EB62930123}
+{09C0CFF8-0DED-46C7-B7A2-F5BDFE16B8A1}
+{F6365534-3B90-4FF4-AC58-122F3553DD4D}
 {30CC7C02-B82F-4755-9A96-144F3206C6AF}
 {0045D232-50A1-47E9-BC53-71E38D4851F3}
 {C3F8E55F-79A2-4591-A4D7-1C33B7141F00}
@@ -9730,6 +9740,11 @@ INSTALL_HUBS
 0
 TRUE
 TRUE
+{BA393341-B848-494F-8C41-B97E8882338E}
+RC
+0
+-2146498548
+FALSE
 {B3EB30C5-5686-4186-96B5-86C9FC5D6576}
 $TITLE$ Setup Error
 This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -9844,6 +9859,12 @@ Your PC needs to reboot in order to complete the install or uninstall.$NEWLINE$$
 0
 2
 REBOOTNOW
+{09C0CFF8-0DED-46C7-B7A2-F5BDFE16B8A1}
+Pre-requisites
+.NET 3.5 installation failed, possibly because you are running Windows 26H1 or later.$NEWLINE$$NEWLINE$In this case you need to install .NET 3.5 using the Windows 26H1 and later version of the .NET 3.5 installer from the Micorosft web site.$NEWLINE$$NEWLINE$The Platform installer will now close.
+0
+1
+RC
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
 welcome
 WIZARD
@@ -18721,6 +18742,11 @@ $SETUPLOG$
 $TIME$ Task kill - Exit code: $OMNISIMS_RUNNING$
 FALSE
 TRUE
+{2072A3E0-267B-46A3-B519-75EB62930123}
+$SETUPLOG$
+$TIME$ Completed - DISM cannot find the NetFX3 option, likely Win 26H1 or later. Return code: $RC$.
+FALSE
+TRUE
 {C27DD540-EC7D-462C-9EE8-5D0F21EB2997}
 2|
 SOFTWARE\ASCOM\Astrometry
@@ -21051,6 +21077,11 @@ C
 
 
 
+
+
+
+
+
 C
 
 
@@ -22525,6 +22556,11 @@ C
 
 
 $
+
+
+
+
+
 
 
 
