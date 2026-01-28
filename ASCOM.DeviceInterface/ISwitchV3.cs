@@ -46,18 +46,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
-        /// <para>The Connected property sets and reports the state of connection to the device hardware.
-        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
-        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-        /// hardware connection is still true.</para>
-        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-        /// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="ISwitchV3"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
-        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="ISwitchV3"/> or later devices.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connected">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ISwitchV3 or later devices.</revision>
@@ -70,10 +59,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
-        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Description">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -83,12 +69,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
-        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-        /// See the <see cref="Description" /> property for information on the device itself.
-        /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DriverInfo">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -98,10 +79,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
-        /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
-        /// driver.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DriverVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -111,10 +89,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Must return 3 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
-        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
-        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.InterfaceVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -124,7 +99,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Name">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -135,7 +110,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetupDialog">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -147,8 +122,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The number of devices managed by this driver.</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="PropertyNotImplementedException"/></b></p>
-        /// <p>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitch">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -162,8 +136,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchName">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -178,9 +151,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Can throw a <see cref="ASCOM.MethodNotImplementedException"/> if the device name can not be set by the application.</b></p>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchName">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -195,17 +166,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If there is a temporary condition that prevents the device value being returned.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minimum
-        /// and either true or false as specified by the driver developer for intermediate values.</para>
-        /// <para>Some devices do not support reading their state although they do allow state to be set. In these cases, on startup, the driver can not know the hardware state and it is recommended that the
-        /// driver either:</para>
-        /// <list type="bullet">
-        /// <item><description>Sets the device to a known state on connection</description></item>
-        /// <item><description>Throws an <see cref="ASCOM.InvalidOperationException"/> until the client software has set the device state for the first time</description></item>
-        /// </list>
-        /// <para>In both cases the driver should save a local copy of the state which it last set and return this through <see cref="GetSwitch" /> and <see cref="GetSwitchValue" /></para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitch">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -220,9 +181,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If <see cref="CanWrite"/> is false.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Can throw a <see cref="ASCOM.MethodNotImplementedException"/> if <see cref="CanWrite"/> is False.</b></p>
-        /// <para><see cref="GetSwitchValue"/> must return <see cref="MaxSwitchValue" /> if the set state is true and <see cref="MinSwitchValue" /> if the set state is false.</para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitch">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -244,10 +203,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented.</b></p>
-        /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
-        /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Action">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -264,10 +220,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
-        /// <para>This is a Version 2 method, version 1 switch devices can be assumed to be writable.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CanWrite">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -285,13 +238,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandBlind">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -313,13 +260,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandBool">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -341,13 +282,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandString">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -359,6 +294,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Dispose">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -375,10 +311,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchDescription">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -394,17 +327,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>Some devices do not support reading their state although they do allow state to be set. In these cases, on startup, the driver can not know the hardware state and it is recommended that the
-        /// driver either:</para>
-        /// <list type="bullet">
-        /// <item><description>Sets the device to a known state on connection</description></item>
-        /// <item><description>Throws an <see cref="ASCOM.InvalidOperationException"/> until the client software has set the device state for the first time</description></item>
-        /// </list>
-        /// <para>In both cases the driver should save a local copy of the state which it last set and return this through <see cref="GetSwitch" /> and <see cref="GetSwitchValue" /></para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchValue">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -418,11 +341,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>If a two state device cannot report its state,  <see cref="MaxSwitchValue"/> must return the value 1.0.</para>
-        /// <para> Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitchValue">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -436,11 +355,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>If a two state device cannot report its state, <see cref="MinSwitchValue"/> must return the value 0.0.</para>
-        /// <para> Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MinSwitchValue">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -456,13 +371,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="ASCOM.MethodNotImplementedException">If <see cref="CanWrite"/> is false.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Can throw a <see cref="ASCOM.MethodNotImplementedException"/> if <see cref="CanWrite"/> is False.</b></p>
-        /// <para>If the value is more than <see cref="MaxSwitchValue"/> or less than <see cref="MinSwitchValue"/>
-        /// then the method must throw an <see cref="ASCOM.InvalidValueException"/>.</para>
-        /// <para>A set value that is intermediate between the values specified by <see cref="SwitchStep"/> must result in the device being set to an achievable value close to the requested set value.</para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchValue">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -476,16 +385,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw <see cref="ASCOM.MethodNotImplementedException"/>.</b></p>
-        /// <para>SwitchStep, MinSwitchValue and MaxSwitchValue can be used to determine the way the device is controlled and/or displayed,
-        /// for example by setting the number of decimal places or number of states for a display.</para>
-        /// <para><see cref="SwitchStep"/> must be greater than zero and the number of steps can be calculated as:
-        /// ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1.</para>
-        /// <para>The switch range (<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) must be an exact multiple of <see cref="SwitchStep"/>.</para>
-        /// <para>If a two state device cannot report its state, <see cref="SwitchStep"/> must return the value 1.0.</para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SwitchStep">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -495,13 +395,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p>
-        /// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-        /// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
-        /// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
-        /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
-        /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SupportedActions">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -515,7 +409,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -525,7 +419,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Disconnect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -535,7 +429,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connecting">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -546,19 +440,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
-        /// <para><b>Devices</b></para>
-        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
-        /// Devices must not throw exceptions / return errors when values are not known.</para>
-        /// <para>An empty list must be returned if no values are known.</para>
-        /// <para><b>Client Applications</b></para>
-        /// <para>
-        /// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
-        /// </para>
-        /// <para><b>Further Information</b></para>
-        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DeviceState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -570,19 +452,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
         /// <param name="id">Switch number.</param>
         /// <param name="state">New boolean state.</param>
-        /// <remarks>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
-        /// <para>
-        /// This is an asynchronous method that must return as soon as the state change operation has been successfully started, with
-        /// <see cref="StateChangeComplete(short)"/> for the given switch Id = False. After the state change has completed <see cref="StateChangeComplete(short)"/> becomes True.
-        /// </para>
-        /// <para>
-        /// <see cref="GetSwitchValue"/> must return <see cref="MaxSwitchValue" /> if the set state is true and <see cref="MinSwitchValue" /> if the set state is false.
-        /// </para>
-        /// <para>
-        /// Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetAsync">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -595,15 +465,7 @@ namespace ASCOM.DeviceInterface
         /// <param name="value">New double value.</param>
         /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
         /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
-        /// <para>This is an asynchronous method that must return as soon as the state change operation has been successfully started, with
-        /// <see cref="StateChangeComplete(short)"/> for the given switch Id = False. After the state change has completed <see cref="StateChangeComplete(short)"/> becomes True.</para>
-        /// <para>If the value is more than <see cref="MaxSwitchValue"/> or less than <see cref="MinSwitchValue"/> the method must throw an <see cref="ASCOM.InvalidValueException"/>.</para>
-        /// <para>A set value that is intermediate between the values specified by <see cref="SwitchStep"/> must result in the device being set to an achievable value close to the requested set value.</para>
-        /// <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-        /// <para>This is a Version 2 method.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetAsyncValue">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -614,9 +476,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="id">Switch number.</param>
         /// <returns>True if the switch can operate asynchronously.</returns>
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CanAsync">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -628,9 +488,7 @@ namespace ASCOM.DeviceInterface
         /// <param name="id">Switch number.</param>
         /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
         /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.StateChangeComplete">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -640,10 +498,7 @@ namespace ASCOM.DeviceInterface
         /// Cancels an in-progress asynchronous state change operation.
         /// </summary>
         /// <param name="id">Switch number.</param>
-        /// <remarks>
-        /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/>.</b></p>
-        /// This method must be implemented if it is possible for the device to cancel an asynchronous state change operation, otherwise it must throw a <see cref="MethodNotImplementedException"/>.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CancelAsync">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
