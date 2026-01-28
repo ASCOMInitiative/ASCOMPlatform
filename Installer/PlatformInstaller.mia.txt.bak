@@ -541,6 +541,11 @@ if Variable PREREQ not Equals FALSE
             Write into Text File $SETUPLOG$ from Value $TIME$ Completed - DISM requires a reboot. Return code: $RC$. (at end of file)
             MessageBox: Pre-requisites, .NET 3.5 installation is complete but your PC must be rebooted in order to take effect.$NEWLINE$$NEWLINE$The Platform installer will now close.$NEWLINE$$NEWLINE$Please reboot your PC and re-run the Platform installer.
             Terminate Installation
+          end
+          if Variable RC Equals -2146498548
+            Write into Text File $SETUPLOG$ from Value $TIME$ Completed - DISM cannot find the NetFX3 option, likely Win 26H1 or later. Return code: $RC$. (at end of file)
+            MessageBox: Pre-requisites, .NET 3.5 installation failed, possibly because you are running Windows 26H1 or later.$NEWLINE$$NEWLINE$In this case you need to install .NET 3.5 using the Windows 26H1 and later version of the .NET 3.5 installer from the Micorosft web site.$NEWLINE$$NEWLINE$The Platform installer will now close.
+            Terminate Installation
           else
             Comment: Something went wrong during installation of .NET 3.5.
             Write into Text File $SETUPLOG$ from Value $TIME$ Completed - DISM failed and returned error code: $RC$. (at end of file)

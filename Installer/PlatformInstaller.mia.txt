@@ -1963,7 +1963,7 @@ Install Files ..\Doc\tip.gif to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Doc\Bug72T-sm.jpg to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Script Help Files\Script56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Script Help Files\wsh-56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\Help\Output\Developer\PlatformDeveloperHelp.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Install Files ..\Help\Output\Developer\*.* to $DEVELOPERTARGETDIR$\Developer Documentation\Platform, include subfolders
  
 Comment: Platform 6 SP1 Documentation
 Install Files ..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -2326,7 +2326,7 @@ else
 end
  
 Comment: Developer shortcuts
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to $DEVELOPERTARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to $DEVELOPERTARGETDIR$\Developer Documentation\Platform\index.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOMLibrary.chm
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver installer Inno script generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe

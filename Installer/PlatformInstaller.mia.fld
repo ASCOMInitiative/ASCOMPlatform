@@ -1,6 +1,5 @@
 ﻿Check Application Requirements
 Set Registry Keys
-Create shortcuts
 Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
@@ -9,9 +8,8 @@ Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and c
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
-Install Platform files
 Post install activities - 64bit only
 Post install activities - 32bit only
+Set up log file and variables
 Validate installation
 Post install activities - 32bit and 64bit
-Set up log file and variables
