@@ -7,7 +7,7 @@ namespace ASCOM.DeviceInterface
     /// <summary>
     /// Defines the ICameraV3 Interface
     /// </summary>
-    /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera</remarks>
+    /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera">Canonical definition</see></remarks>
     [Guid("8819D7AA-6B86-4CE7-8C07-2B083745CEDE")]
     [ComVisible(true)]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
@@ -22,7 +22,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
 		/// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-		/// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Connected</remarks>
+		/// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connected">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ICameraV4 or later devices.</revision>
@@ -35,7 +35,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Description</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Description">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -45,7 +45,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.DriverInfo</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DriverInfo">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -58,7 +58,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions.Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.DriverVersion</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DriverVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -71,7 +71,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 4 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.InterfaceVersion</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.InterfaceVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -81,7 +81,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Name</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Name">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -92,7 +92,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.SetupDialog</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SetupDialog">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -110,7 +110,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Action</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Action">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -120,7 +120,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.SupportedActions</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SupportedActions">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -138,7 +138,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CommandBlind</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandBlind">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -160,7 +160,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CommandBool</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandBool">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -182,7 +182,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CommandString</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandString">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ICameraV4" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -194,7 +194,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Dispose</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Dispose">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -211,7 +211,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
         /// <exception cref="NotConnectedException">Thrown If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.AbortExposure</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.AbortExposure">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -224,7 +224,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">Must throw an exception for illegal binning values</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.BinX</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.BinX">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -237,7 +237,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">Must throw an exception for illegal binning values</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.BinY</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.BinY">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -249,7 +249,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The state of the camera.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CameraState</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CameraState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -261,7 +261,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The size of the camera X.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CameraXSize</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CameraXSize">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -273,7 +273,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The size of the camera Y.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CameraYSize</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CameraYSize">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -287,7 +287,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">Thrown If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanAbortExposure</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanAbortExposure">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -301,7 +301,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanAsymmetricBin</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanAsymmetricBin">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -315,7 +315,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanGetCoolerPower</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanGetCoolerPower">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -329,7 +329,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanPulseGuide</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanPulseGuide">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -343,7 +343,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanSetCCDTemperature</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanSetCCDTemperature">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -357,7 +357,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanStopExposure</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanStopExposure">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -371,7 +371,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Must throw exception if not supported.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CCDTemperature</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CCDTemperature">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -387,7 +387,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">not supported</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CoolerOn</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CoolerOn">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -400,7 +400,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Not supported</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CoolerPower</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CoolerPower">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -412,7 +412,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The electrons per ADU.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ElectronsPerADU</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ElectronsPerADU">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -424,7 +424,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The full well capacity.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.FullWellCapacity</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.FullWellCapacity">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -438,7 +438,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.HasShutter</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.HasShutter">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -450,7 +450,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The heat sink temperature.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.HeatSinkTemperature</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.HeatSinkTemperature">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -463,7 +463,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ImageArray</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ImageArray">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -476,7 +476,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ImageArrayVariant</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ImageArrayVariant">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -488,7 +488,7 @@ namespace ASCOM.DeviceInterface
         /// <value><c>true</c> if [image ready]; otherwise, <c>false</c>.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ImageReady</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ImageReady">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -502,7 +502,7 @@ namespace ASCOM.DeviceInterface
         /// </value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.IsPulseGuiding</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.IsPulseGuiding">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -516,7 +516,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If called before any exposure has been taken</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.LastExposureDuration</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.LastExposureDuration">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -531,7 +531,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If called before any exposure has been taken</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.LastExposureStartTime</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.LastExposureStartTime">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="ICameraV2" version="Platform 6.3">Clarified that the value must be in UTC.</revision>
@@ -544,7 +544,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The maximum ADU.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.MaxADU</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.MaxADU">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -556,7 +556,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The max bin X.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.MaxBinX</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.MaxBinX">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -568,7 +568,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The max bin Y.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.MaxBinY</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.MaxBinY">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -580,7 +580,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The num X.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.NumX</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.NumX">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -592,7 +592,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The num Y.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.NumY</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.NumY">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -604,7 +604,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The pixel size X.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.PixelSizeX</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.PixelSizeX">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -616,7 +616,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The pixel size Y.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.PixelSizeY</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.PixelSizeY">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -630,7 +630,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">PulseGuide command is unsupported</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.PulseGuide</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.PulseGuide">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -644,7 +644,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Must throw exception if <see cref="CanSetCCDTemperature" /> is <c>false</c>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.SetCCDTemperature</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SetCCDTemperature">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -659,7 +659,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref=" InvalidOperationException"><see cref="CanAsymmetricBin" /> is <c>false</c> and <see cref="BinX" /> != <see cref="BinY" /></exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.StartExposure</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.StartExposure">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -670,7 +670,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.StartX</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.StartX">Canonical definition</see></remarks>
         /// <value>The start X.</value>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
@@ -682,7 +682,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.StartY</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.StartY">Canonical definition</see></remarks>
         /// <value>The start Y.</value>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
@@ -695,7 +695,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">Must throw an exception if CanStopExposure is <c>false</c></exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.StopExposure</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.StopExposure">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICamera" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -712,7 +712,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Monochrome cameras must throw this exception, colour cameras must not.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.BayerOffsetX</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.BayerOffsetX">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -725,7 +725,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Monochrome cameras must throw this exception, colour cameras must not.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.BayerOffsetY</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.BayerOffsetY">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -737,7 +737,7 @@ namespace ASCOM.DeviceInterface
         /// <returns><c>true</c> when the camera supports a fast readout mode</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.CanFastReadout</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CanFastReadout">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -754,7 +754,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">When the supplied value is not valid.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Gain</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Gain">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -767,7 +767,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAINS INDEX</b> mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.GainMax</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.GainMax">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -780,7 +780,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAINS INDEX</b> mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.GainMin</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.GainMin">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -793,7 +793,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Gain"/> property is not implemented or is operating in <b>GAIN VALUE</b> mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Gains</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Gains">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -807,7 +807,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">Thrown when it is inappropriate to call <see cref="PercentCompleted" /></exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.PercentCompleted</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.PercentCompleted">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -822,7 +822,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">Must throw an exception if set to an illegal or unavailable mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ReadoutMode</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ReadoutMode">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -835,7 +835,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Must throw an exception if CanFastReadout is <see langword="false"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ReadoutModes</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ReadoutModes">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -847,7 +847,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The name of the sensor used within the camera.</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.SensorName</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SensorName">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -861,7 +861,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.SensorType</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SensorType">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -877,7 +877,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The maximum exposure time, in seconds, that the camera supports</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ExposureMax</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ExposureMax">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -889,7 +889,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The minimum exposure time, in seconds, that the camera supports through <see cref="StartExposure">StartExposure</see></returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ExposureMin</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ExposureMin">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -901,7 +901,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The smallest increment in exposure time supported by <see cref="StartExposure">StartExposure</see>.</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.ExposureResolution</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ExposureResolution">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -914,7 +914,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Thrown if <see cref="CanFastReadout" /> is <c>false</c>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.FastReadout</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.FastReadout">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -931,7 +931,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When neither <b>OFFSETS INDEX</b> mode nor <b>OFFSET VALUE</b> mode are supported.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Offset</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Offset">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -944,7 +944,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.OffsetMax</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.OffsetMax">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -957,7 +957,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSETS INDEX</b> mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.OffsetMin</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.OffsetMin">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -970,7 +970,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the <see cref="Offset"/> property is not implemented or is operating in <b>OFFSET VALUE</b> mode.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Offsets</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Offsets">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -983,7 +983,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When the camera does not support sub exposure configuration.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.SubExposureDuration</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SubExposureDuration">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -997,7 +997,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Connect</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
         /// </revisionHistory>
@@ -1007,7 +1007,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Disconnect</remarks>
+		/// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Disconnect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
         /// </revisionHistory>
@@ -1017,7 +1017,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.Connecting</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connecting">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
         /// </revisionHistory>
@@ -1028,7 +1028,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for further details: https://ascom-standards.org/newdocs/camera.html#Camera.DeviceState</remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DeviceState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICameraV4" version="Platform 7">Member added.</revision>
         /// </revisionHistory>
