@@ -363,6 +363,7 @@
       <AlternateText>Remote Setup Ip</AlternateText>
     </Image>
     <None Include=".ProjectOverrides\VS2013ChmHelpFormat.proj" />
+    <None Include=".ProjectOverrides\VS2013HtmlHelpFormat.proj" />
     <None Include=".ProjectOverrides\VS2022HtmlHelpFormat.proj" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Developer Information\ConnectionProtocol.aml" />
