@@ -224,7 +224,8 @@ namespace ASCOM.DriverAccess
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Action">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Action">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public string Action(string ActionName, string ActionParameters)
         {
             return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
@@ -242,7 +243,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandBlind">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandBlind">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public void CommandBlind(string Command, bool Raw)
         {
             memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
@@ -263,7 +265,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandBool">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandBool">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public bool CommandBool(string Command, bool Raw)
         {
             return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
@@ -284,7 +287,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandString">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.CommandString">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public string CommandString(string Command, bool Raw)
         {
             return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
@@ -294,7 +298,8 @@ namespace ASCOM.DriverAccess
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connect">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public void Connect()
         {
             // Call the device's Connect method if this is a Platform 7 or later device, otherwise simulate the connect call
@@ -349,7 +354,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connected">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connected">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public bool Connected
         {
             get
@@ -389,7 +395,8 @@ namespace ASCOM.DriverAccess
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connecting">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Connecting">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public bool Connecting
         {
             get
@@ -420,7 +427,8 @@ namespace ASCOM.DriverAccess
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Description">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Description">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public string Description
         {
             get
@@ -459,7 +467,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DeviceState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DeviceState">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public IStateValueCollection DeviceState
         {
             get
@@ -482,7 +491,8 @@ namespace ASCOM.DriverAccess
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Disconnect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Disconnect">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public void Disconnect()
         {
             // Call the device's Disconnect method if this is a Platform 7 or later device, otherwise simulate the connect call
@@ -529,7 +539,8 @@ namespace ASCOM.DriverAccess
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DriverInfo">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DriverInfo">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public string DriverInfo
         {
             get
@@ -568,7 +579,8 @@ namespace ASCOM.DriverAccess
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DriverVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.DriverVersion">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public string DriverVersion
         {
             get
@@ -608,7 +620,8 @@ namespace ASCOM.DriverAccess
         /// The interface version number that this device supports.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.InterfaceVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.InterfaceVersion">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public short InterfaceVersion
         {
             get
@@ -629,7 +642,8 @@ namespace ASCOM.DriverAccess
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Name">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.Name">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public string Name
         {
             get
@@ -669,7 +683,8 @@ namespace ASCOM.DriverAccess
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SetupDialog">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SetupDialog">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public void SetupDialog()
         {
             memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
@@ -679,7 +694,8 @@ namespace ASCOM.DriverAccess
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. The device did not successfully complete the request.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SupportedActions">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.SupportedActions">Canonical definition.</see>.
+        /// <para><b>Please Note</b>: The Camera definition in the link applies to all device types.</para></remarks>
         public ArrayList SupportedActions
         {
             get
