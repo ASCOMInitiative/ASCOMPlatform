@@ -26,18 +26,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</para>
-        /// <para>The Connected property sets and reports the state of connection to the device hardware.
-        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
-        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-        /// hardware connection is still true.</para>
-        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-		/// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="ICoverCalibratorV2"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
-        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="ICoverCalibratorV2"/> or later devices.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connected">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ICoverCalibratorV2 or later devices.</revision>
@@ -50,10 +39,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
-        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Description">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -63,12 +49,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
-        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-        /// See the <see cref="Description" /> property for information on the device itself.
-        /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DriverInfo">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -78,11 +59,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
-        /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
-        /// driver.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DriverVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -92,11 +69,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 2 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
-        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
-        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.InterfaceVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -106,22 +79,18 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Name">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
         string Name { get; }
 
         /// <summary>
-        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// Launches a configuration dialogue box for the driver.  The call will not return
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.SetupDialog">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -140,11 +109,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented.</b></p>
-        /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
-        /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Action">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -154,14 +119,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-        /// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
-        /// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
-        /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
-        /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.SupportedActions">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -179,13 +137,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandBlind">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -207,13 +159,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandBool">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -235,13 +181,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandString">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -253,6 +193,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Dispose">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -267,16 +208,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This is a mandatory property that must return a value, it must not throw a <see cref="PropertyNotImplementedException"/>.</para>
-        /// <para>Whenever the cover is moving both <see cref="CoverMoving"/> must be True and CoverState must be <see cref="CoverStatus.Moving"/>.</para>
-        /// <para>The <see cref="CoverStatus.Unknown"/> state must only be returned if the device is unaware of the cover's state e.g. if the hardware does not report the open / closed state and the cover has just been powered on.
-        /// Clients do not need to take special action if this state is returned, they must carry on as usual, issuing  <see cref="OpenCover"/> or <see cref="CloseCover"/> commands as required.</para>
-        /// <para>If the cover hardware cannot report its state, the device could mimic this by recording the last configured state and returning this. Driver authors or device manufacturers may also wish to offer users
-        /// the capability of powering up in a known state e.g. Open or Closed and driving the hardware to this state when Connected is set <see langword="true"/>.</para>
-        /// <para>This property is intended to be available under all but the most disastrous driver conditions.If something has gone wrong, the CoverState must be <see cref="CoverStatus.Error"/>
-        /// rather than throwing an exception.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CoverState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -288,11 +220,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>While the cover is opening <see cref="CoverState"/> must return <see cref="CoverStatus.Moving"/>.</para>
-        /// <para>When the cover is open <see cref="CoverState"/> must return <see cref="CoverStatus.Open"/>.</para>
-        /// <para>If an error condition arises while moving between states, <see cref="CoverState"/> must be set to <see cref="CoverStatus.Error"/> rather than <see cref="CoverStatus.Unknown"/>.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.OpenCover">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -304,11 +232,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>While the cover is closing <see cref="CoverState"/> must return <see cref="CoverStatus.Moving"/>.</para>
-        /// <para>When the cover is closed <see cref="CoverState"/> must return <see cref="CoverStatus.Closed"/>.</para>
-        /// <para>If an error condition arises while moving between states, <see cref="CoverState"/> must be set to <see cref="CoverStatus.Error"/> rather than <see cref="CoverStatus.Unknown"/>.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CloseCover">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -320,11 +244,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/> or if cover movement cannot be interrupted.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This must stop any cover movement as soon as possible and set a <see cref="CoverState"/> of <see cref="CoverStatus.Open"/>, <see cref="CoverStatus.Closed"/> 
-        /// or <see cref="CoverStatus.Unknown"/> as appropriate.</para>
-        /// <para>If cover movement cannot be interrupted, a <see cref="MethodNotImplementedException"/> must be thrown.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.HaltCover">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -335,17 +255,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This is a mandatory property that must return a value, it must not throw a <see cref="PropertyNotImplementedException"/>.</para>
-        /// <para>Whenever the calibrator is changing both <see cref="CalibratorChanging"/> must be True and CalibratorState must be <see cref="CalibratorStatus.NotReady"/>.</para>
-        /// <para>The <see cref="CalibratorStatus.Unknown"/> state must only be returned if the device is unaware of the calibrator's state e.g. if the hardware does not report the device's state and 
-        /// the calibrator has just been powered on. Clients do not need to take special action if this state is returned, they must carry on as usual, issuing <see cref="CalibratorOn(int)"/> and 
-        /// <see cref="CalibratorOff"/> commands as required.</para>
-        /// <para>If the calibrator hardware cannot report its state, the device could mimic this by recording the last configured state and returning this. Driver authors or device manufacturers may also wish to offer users
-        /// the capability of powering up in a known state and driving the hardware to this state when Connected is set <see langword="true"/>.</para>
-        /// <para>This property is intended to be available under all but the most disastrous driver conditions.If something has gone wrong, the CoverState must be <see cref="CalibratorStatus.Error"/>
-        /// rather than throwing an exception.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -357,10 +267,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This is a mandatory property that must always return a value for a calibrator device </para>
-        /// <para>The brightness value must be 0 when the <see cref="CalibratorState"/> is <see cref="CalibratorStatus.Off"/></para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Brightness">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -372,12 +279,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This is a mandatory property for a calibrator device and must always return a value within the integer range 1 to 2,147,483,647</para>
-        /// <para>A value of 1 indicates that the calibrator can only be "off" or "on".</para>
-        /// <para>A value of 10 indicates that the calibrator has 10 discreet illumination levels in addition to "off".</para>
-        /// <para>The value for this parameter should be determined by the driver author or device manufacturer based on the capabilities of the hardware used in the calibrator.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.MaxBrightness">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -391,13 +293,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This is a mandatory method for a calibrator device that must be implemented.</para>
-        /// <para>If the calibrator takes some time to stabilise, the <see cref="CalibratorState"/> must return <see cref="CalibratorStatus.NotReady"/>. When the 
-        /// calibrator is ready for use <see cref="CalibratorState"/> must return <see cref="CalibratorStatus.Ready"/>.</para>
-        /// <para>For devices with both cover and calibrator capabilities, this method may change the <see cref="CoverState"/>, if required.</para>
-        /// <para>If an error condition arises while turning on the calibrator, <see cref="CalibratorState"/> must be set to <see cref="CalibratorStatus.Error"/> rather than <see cref="CalibratorStatus.Unknown"/>.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorOn">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -409,13 +305,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>
-        /// <para>This is a mandatory method for a calibrator device.</para>
-        /// <para>If the calibrator requires time to safely stabilise after use, <see cref="CalibratorState"/> must return <see cref="CalibratorStatus.NotReady"/>. When the 
-        /// calibrator is safely off <see cref="CalibratorState"/> must return <see cref="CalibratorStatus.Off"/>.</para>
-        /// <para>For devices with both cover and calibrator capabilities, this method will return the <see cref="CoverState"/> to its status prior to calling <see cref="CalibratorOn(int)"/>.</para>
-        /// <para>If an error condition arises while turning off the calibrator, <see cref="CalibratorState"/> must be set to <see cref="CalibratorStatus.Error"/> rather than <see cref="CalibratorStatus.Unknown"/>.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorOff">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -429,10 +319,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
-        /// <revisionHistory visible="true">
-        /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
-        /// </revisionHistory>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -442,7 +329,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Disconnect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -452,7 +339,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connecting">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -463,19 +350,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
-        /// <para><b>Devices</b></para>
-        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
-        /// Devices must not throw exceptions / return errors when values are not known.</para>
-        /// <para>An empty list must be returned if no values are known.</para>
-        /// <para><b>Client Applications</b></para>
-        /// <para>
-        /// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
-        /// </para>
-        /// <para><b>Further Information</b></para>
-        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DeviceState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -489,12 +364,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>
         /// True while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
         /// </returns>
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
-        /// <para>
-        /// This property must throw an exception ff an issue arises while changing calibrator brightness. The exception must continue to be thrown until a new <see cref="CalibratorOn(int)"/> or
-        /// <see cref="CalibratorOff"/> command is received.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorChanging">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -508,9 +378,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>
         /// True while the cover is in motion following an <see cref="OpenCover"/> or <see cref="CloseCover"/> command.
         /// </returns>
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CoverMoving">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
