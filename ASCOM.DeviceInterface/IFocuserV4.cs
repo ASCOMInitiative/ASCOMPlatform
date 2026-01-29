@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
-
 
 #if NET35
 using ASCOM.Utilities;
 #elif NET472
 using ASCOM.Utilities;
+#elif NET481
+using ASCOM.Utilities;
+#else
 #endif
 
 namespace ASCOM.DeviceInterface
