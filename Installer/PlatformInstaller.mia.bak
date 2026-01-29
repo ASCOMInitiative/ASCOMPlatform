@@ -12867,9 +12867,9 @@ FALSE
 FALSE
 FALSE
 {98F885D5-687E-48BB-9C37-C50661CF375B}
-..\Help\Output\Developer\PlatformDeveloperHelp.chm
-FALSE|
-$DEVELOPERTARGETDIR$\Developer Documentation
+..\Help\Output\Developer\*.*
+TRUE|
+$DEVELOPERTARGETDIR$\Developer Documentation\Platform
 FALSE
 FALSE
 FALSE
@@ -15352,7 +15352,7 @@ $SHORTCUTFILESALL$\$DEVELOPERMENU$|FALSE
 |
 0|
 {DEAFEC00-8197-49BF-B59A-1DBD6A370E91}
-$DEVELOPERTARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm|FALSE
+$DEVELOPERTARGETDIR$\Developer Documentation\Platform\index.html|FALSE
 ASCOM Developer Help
 $SHORTCUTFILESALL$\$DEVELOPERMENU$|FALSE
 

@@ -1750,7 +1750,7 @@ Install Files ..\InstallerContent\Internet.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\InstallerContent\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
 Install Files ..\InstallerContent\Compatible Software (web).url to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Drivers and Downloads (web).url to $TARGETDIR$\Docs
-Install Files ..\Help\Output\Platform\PlatformHelp.chm to $TARGETDIR$\Docs
+Comment: Install Files ..\Help\Output\Platform\PlatformHelp.chm to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Support (web).url to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\ASCOM User Guide.pdf to $TARGETDIR$\Docs
 Install Files ..\InstallerContent\Supported Devices (web).url to $TARGETDIR$\Docs
@@ -1963,7 +1963,7 @@ Install Files ..\Doc\tip.gif to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Doc\Bug72T-sm.jpg to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Script Help Files\Script56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Script Help Files\wsh-56.chm to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\Help\Output\Developer\*.* to $DEVELOPERTARGETDIR$\Developer Documentation\Platform, include subfolders
+Comment: Install Files ..\Help\Output\Developer\*.* to $DEVELOPERTARGETDIR$\Developer Documentation\Platform, include subfolders
  
 Comment: Platform 6 SP1 Documentation
 Install Files ..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
@@ -1980,7 +1980,7 @@ Install Files ..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to 
 Comment: Miscellaneous Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\InstallerContent\ASCOMInterfaceRevisions.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
  
@@ -2264,7 +2264,7 @@ Create Shortcut $SHORTCUTFILESALL$\ASCOM Profile Explorer to $TARGETDIR$\Tools\P
 Create Shortcut $SHORTCUTFOLDER$\Compatible Software to https://ascom-standards.org/Community/Partners.htm
 Create Shortcut $SHORTCUTFOLDER$\Drivers and Downloads to https://www.ascom-standards.org/Downloads/Index.htm
 Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM User Guide.pdf
-Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to $TARGETDIR$\Docs\PlatformHelp.chm
+Create Shortcut $SHORTCUTFOLDER$\ASCOM Platform Help to https://www.ascom-standards.org/help
 Create Shortcut $SHORTCUTFOLDER$\How to get support to https://ascom-standards.org/Support/Index.htm
  
 Comment: Install simulator shortcuts if required
@@ -2326,8 +2326,8 @@ else
 end
  
 Comment: Developer shortcuts
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to $DEVELOPERTARGETDIR$\Developer Documentation\Platform\index.html
-Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to $DEVELOPERTARGETDIR$\Developer Documentation\ASCOMLibrary.chm
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Developer Help to https://ascom-standards.org/help
+Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\ASCOM Library Help to https://ascom-standards.org/library
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Creating Driver Installers with Inno to $DEVELOPERTARGETDIR$\Developer Documentation\DriverInstallers.html
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\Driver installer Inno script generator to $DEVELOPERTARGETDIR$\Installer Generator\InstallerGen.exe
 Create Shortcut $SHORTCUTFILESALL$\$DEVELOPERMENU$\How to Migrate from Astro32 to $DEVELOPERTARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
