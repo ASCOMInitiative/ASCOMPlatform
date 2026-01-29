@@ -1981,7 +1981,7 @@ Comment: Miscellaneous Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Comment: Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\InstallerContent\ASCOMInterfaceRevisions.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
  
 Comment: Inno - Driver installer creator
