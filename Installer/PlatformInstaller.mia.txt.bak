@@ -1981,7 +1981,7 @@ Comment: Miscellaneous Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
 Comment: Install Files ..\AscomLibrary\Help\LibraryHelp\Help\ASCOMLibrary.chm to $DEVELOPERTARGETDIR$\Developer Documentation
-Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
+Comment: Install Files ..\AscomLibrary\Help\ChooserSAHelp\Help\choosersa.chm to $DEVELOPERTARGETDIR$\Developer Documentation
 Install Files ..\InstallerContent\ASCOMInterfaceRevisions.pdf to $DEVELOPERTARGETDIR$\Developer Documentation
  
 Comment: Inno - Driver installer creator
@@ -2800,6 +2800,12 @@ if Variable SUCCESS not Equals ERROR
     Set Variable PROGRESSTEXT to Setting default Platform simulators - 64bit
     Run Program $TARGETDIR$\Tools\SetSimulators\SetSimulators.exe OmniSimulators-RespectExisting (WAIT, get result into variable RC)
     Set Variable ACTION to Set COM simulators to use OmniSimulators - 64bit
+    Include Script: UpdateAscomError
+     
+    Comment: Kill the start menu cache to ensure icons refresh - it will self restart.
+    Set Variable PROGRESSTEXT to Refreshing Start menu
+    Run Program TaskKill /IM StartMenuExperienceHost.exe /F (WAIT, get result into variable RC)
+    Set Variable ACTION to Refresh Start Menu
     Include Script: UpdateAscomError
      
     Comment: Restore 32bit install mode
