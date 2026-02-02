@@ -1,4 +1,8 @@
 ﻿Check Application Requirements
+Main Setup Dialogue
+Check Application Pre-Requisites
+Remove Previous Platform install if present
+Remove Previous Platforms 4 and 5 if present
 Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
@@ -7,14 +11,9 @@ Uninstall any Device Hub, ASCOM Remote or OmniSimulator Inno installations and c
 Remove Platform update checker scheduled task
 Remove the earth rotation update scheduled job.
 Set Profile ACL
+Uninstall previous Platform
 Post install activities - 32bit only
 Set up log file and variables
 Validate installation
-Main Setup Dialogue
-Close OmniSims if running
-Remove Previous Platform install if present
-Remove Previous Platforms 4 and 5 if present
-Uninstall previous Platform
-Log user configuration options
-Check Application Pre-Requisites
 Post install activities - 32bit and 64bit
+Log user configuration options
