@@ -22,6 +22,7 @@ here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform 
 HTTP PUT commands are now sent directly in one packet, eliminating an un-necessary network round trip.
 * The <codeEntityReference linkText="Utilities.Serial.ReceiveTerminatedBinary">M:ASCOM.Utilities.Serial.ReceiveTerminatedBinary(System.Byte[])</codeEntityReference>
 method now operates correctly in locales that use double byte character sets such as Japan, Korea and China.
+* The Profile Explorer about box now displays corr3ect information about the version installed.
 ## Changes in 7.1 Update 2 - For Developers
 * Developer and Library help are now online links to the ASCOM website rather than local files.
 ## Issues Fixed in 7.1 Update 2 - For Developers
