@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace ASCOM.Utilities
 {
@@ -16,17 +17,13 @@ namespace ASCOM.Utilities
         private void AboutBox1_Load(object sender, EventArgs e)
         {
             // Set the title of the form.
-            string ApplicationTitle;
-            ApplicationTitle = Assembly.GetExecutingAssembly().FullName;
-            Text = string.Format("About {0}", ApplicationTitle);
-            // Initialize all of the text displayed on the About Box.
-            // TODO: Customize the application's assembly information in the "Application" pane of the project 
-            // properties dialog (under the "Project" menu).
-            LabelProductName.Text = "";
-            LabelVersion.Text = "";
-            LabelCopyright.Text = "";
-            LabelCompanyName.Text = "";
-            TextBoxDescription.Text = "";
+            Text = $"Profile Explorer";
+
+            LabelProductName.Text = Application.ProductName;
+            LabelVersion.Text = Application.ProductVersion;
+            LabelCopyright.Text = "Copyright (c) Peter Simpson 2026;";
+            LabelCompanyName.Text = "ASCOM Initiative";
+            TextBoxDescription.Text = "Profile Explorer enables you to edit the ASCOM profile directly through a graphical interface.";
         }
 
         private void OKButton_Click(object sender, EventArgs e)
