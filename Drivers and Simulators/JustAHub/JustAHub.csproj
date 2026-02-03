@@ -11,7 +11,7 @@
     <Company>The ASCOM Initiative</Company>
     <Product>ASCOM JustAHub 32bit</Product>
     <Description>ASCOM Local Server for JustAHub</Description>
-    <Copyright>Copyright © The ASCOM Initiative 2025</Copyright>
+    <Copyright>Copyright © The ASCOM Initiative 2026</Copyright>
     <AssemblyVersion>7.0.0.0</AssemblyVersion>
     <FileVersion>7.0.0.0</FileVersion>
     <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>

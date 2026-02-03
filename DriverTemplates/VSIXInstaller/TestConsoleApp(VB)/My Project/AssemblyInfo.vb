@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("Peter Simpson")>
 <Assembly: AssemblyProduct("TestConsoleApp(VB)")>
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

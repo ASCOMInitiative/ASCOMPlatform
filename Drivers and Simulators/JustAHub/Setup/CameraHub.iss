@@ -8,7 +8,7 @@
 #define MyAppUpdatesURL "https://github.com/ASCOMInitiative"
 #define MyAppExeName "ASCOM.CameraHub.exe"
 #define MyAppAuthor "Peter Simpson"
-#define MyAppCopyright "Copyright © 2023 " + MyAppAuthor
+#define MyAppCopyright "Copyright © 2026 " + MyAppAuthor
 #define MyAppVersion GetVersionNumbersString("..\bin\Release\ASCOM.CameraHub.exe")  ; Create version number variable
 
 [Setup]

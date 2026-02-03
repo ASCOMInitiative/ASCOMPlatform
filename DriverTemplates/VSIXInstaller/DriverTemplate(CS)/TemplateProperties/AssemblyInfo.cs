@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM TEMPLATEDEVICECLASS driver for TEMPLATEDEVICENAME")]
-[assembly: AssemblyCopyright("Copyright © $year$ The ASCOM Initiative")]
+[assembly: AssemblyCopyright("Copyright © The ASCOM Initiative 2026.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

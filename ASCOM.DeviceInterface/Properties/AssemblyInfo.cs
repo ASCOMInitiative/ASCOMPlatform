@@ -26,6 +26,6 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")]
 [assembly: AssemblyDescription("ASCOM device interfaces for Platform 7")]
 [assembly: AssemblyProduct("ASCOM.DeviceInterfaces")]
