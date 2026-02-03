@@ -279,6 +279,7 @@ namespace ASCOM.DeviceInterface
         /// Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
         /// </summary>
         /// <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
+        /// <exception cref="InvalidValueException">If Position would result in a movement beyond <see cref="MaxStep"/> or otherwise out of range for the focuser.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/focuser.html#Focuser.Move">Canonical definition</see></remarks>

@@ -410,6 +410,7 @@ namespace ASCOM.DeviceInterface
         /// Returns the gain of the camera in photoelectrons per A/D unit.
         /// </summary>
         /// <value>The electrons per ADU.</value>
+        /// <exception cref="PropertyNotImplementedException">Not supported</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.ElectronsPerADU">Canonical definition</see></remarks>
@@ -436,6 +437,7 @@ namespace ASCOM.DeviceInterface
         /// <value>
         /// <c>true</c> if this instance has shutter; otherwise, <c>false</c>.
         /// </value>
+        /// <exception cref="PropertyNotImplementedException">Not supported</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.HasShutter">Canonical definition</see></remarks>
@@ -448,6 +450,7 @@ namespace ASCOM.DeviceInterface
         /// Returns the current heat sink temperature (called "ambient temperature" by some manufacturers) in degrees Celsius.
         /// </summary>
         /// <value>The heat sink temperature.</value>
+        /// <exception cref="PropertyNotImplementedException">Not supported</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/camera.html#Camera.HeatSinkTemperature">Canonical definition</see></remarks>
@@ -473,6 +476,7 @@ namespace ASCOM.DeviceInterface
         /// Returns an array of COM-Variant of size <see cref="NumX" /> * <see cref="NumY" /> containing the pixel values from the last exposure.
         /// </summary>
         /// <value>The image array variant.</value>
+        /// <exception cref="PropertyNotImplementedException">Not supported</exception>
         /// <exception cref="InvalidOperationException">If no image data is available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>

@@ -465,6 +465,7 @@ namespace ASCOM.DeviceInterface
         /// </param>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="InvalidValueException">If the supplied altitude is out of range.</exception>
+        /// <exception cref="SlavedException">Thrown if slaving is enabled.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
         /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SlewToAltitude">Canonical definition</see></remarks>
