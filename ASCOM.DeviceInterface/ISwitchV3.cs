@@ -46,7 +46,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connected">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connected">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ISwitchV3 or later devices.</revision>
@@ -59,7 +59,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Description">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Description">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -69,7 +69,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DriverInfo">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DriverInfo">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -79,7 +79,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DriverVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DriverVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -89,7 +89,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Must return 3 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.InterfaceVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.InterfaceVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -99,7 +99,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Name">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Name">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -110,7 +110,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetupDialog">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetupDialog">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -122,7 +122,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>The number of devices managed by this driver.</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitch">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitch">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -136,7 +136,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchName">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchName">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -151,7 +151,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchName">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchName">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -166,7 +166,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidOperationException">If there is a temporary condition that prevents the device value being returned.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitch">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitch">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -181,7 +181,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If <see cref="CanWrite"/> is false.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitch">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitch">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitch" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -203,7 +203,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Action">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Action">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -220,7 +220,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CanWrite">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CanWrite">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -238,7 +238,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandBlind">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandBlind">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -260,7 +260,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandBool">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandBool">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -282,7 +282,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandString">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CommandString">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -294,7 +294,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Dispose">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Dispose">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -311,7 +311,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchDescription">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchDescription">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -327,7 +327,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchValue">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.GetSwitchValue">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -341,7 +341,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitchValue">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MaxSwitchValue">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -355,7 +355,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MinSwitchValue">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.MinSwitchValue">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -371,7 +371,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="ASCOM.MethodNotImplementedException">If <see cref="CanWrite"/> is false.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchValue">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetSwitchValue">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -385,7 +385,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SwitchStep">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SwitchStep">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -395,7 +395,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SupportedActions">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SupportedActions">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV2" version="Platform 6.1">Member added.</revision>
         /// </revisionHistory>
@@ -409,7 +409,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -419,7 +419,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Disconnect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Disconnect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -429,7 +429,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connecting">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.Connecting">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -440,7 +440,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DeviceState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.DeviceState">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -452,7 +452,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
         /// <param name="id">Switch number.</param>
         /// <param name="state">New boolean state.</param>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetAsync">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetAsync">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -465,7 +465,7 @@ namespace ASCOM.DeviceInterface
         /// <param name="value">New double value.</param>
         /// <p style="color:red"><b>This is an optional method and can throw a <see cref="MethodNotImplementedException"/> when <see cref="CanAsync(short)"/> is <see langword="false"/>.</b></p>
         /// <exception cref="MethodNotImplementedException">When CanAsync(id) is false.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetAsyncValue">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.SetAsyncValue">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -476,7 +476,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="id">Switch number.</param>
         /// <returns>True if the switch can operate asynchronously.</returns>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CanAsync">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CanAsync">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -488,7 +488,7 @@ namespace ASCOM.DeviceInterface
         /// <param name="id">Switch number.</param>
         /// <exception cref="OperationCancelledException">When an in-progress operation is cancelled by the <see cref="CancelAsync(short)"/> method.</exception>
         /// <returns>False while an asynchronous operation is underway and true when it has completed.</returns>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.StateChangeComplete">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.StateChangeComplete">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -498,7 +498,7 @@ namespace ASCOM.DeviceInterface
         /// Cancels an in-progress asynchronous state change operation.
         /// </summary>
         /// <param name="id">Switch number.</param>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CancelAsync">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/switch.html#Switch.CancelAsync">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISwitchV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>

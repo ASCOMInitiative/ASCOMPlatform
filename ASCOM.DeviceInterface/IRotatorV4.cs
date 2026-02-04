@@ -34,7 +34,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Connected">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Connected">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV4" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing IRotatorV4 or later devices.</revision>
@@ -46,7 +46,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.SetupDialog">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.SetupDialog">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -58,7 +58,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">Throw a MethodNotImplementedException if the rotator cannot halt.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Halt">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Halt">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -70,7 +70,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>True if the Rotator is moving to a new position. False if the Rotator is stationary.</returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.IsMoving">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.IsMoving">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Implementation is now mandatory, see note above.</revision>
@@ -84,7 +84,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If Position is invalid.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Move">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Move">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Implementation is now mandatory, see note above.</revision>
@@ -98,7 +98,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If Position is invalid.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.MoveAbsolute">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.MoveAbsolute">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Implementation is now mandatory, see note above.</revision>
@@ -111,7 +111,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If Position is invalid.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Position">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Position">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Implementation is now mandatory, see note above.</revision>
@@ -124,7 +124,7 @@ namespace ASCOM.DeviceInterface
         /// <value>True if the rotation and angular direction must be reversed for the optics</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Reverse">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Reverse">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Implementation is now mandatory, see note above.</revision>
@@ -137,7 +137,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator does not know its step size.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.StepSize">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.StepSize">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -149,7 +149,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The destination position angle for<see cref="Move">Move</see> and <see cref="MoveAbsolute">MoveAbsolute</see>.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.TargetPosition">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.TargetPosition">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotator" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Implementation is now mandatory, see note above.</revision>
@@ -172,7 +172,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Action">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Action">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -186,7 +186,7 @@ namespace ASCOM.DeviceInterface
         /// </returns>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CanReverse">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CanReverse">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -204,7 +204,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CommandBlind">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CommandBlind">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -226,7 +226,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CommandBool">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CommandBool">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -248,7 +248,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CommandString">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.CommandString">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="IRotatorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -261,7 +261,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Description">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Description">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -272,7 +272,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Dispose">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Dispose">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -282,7 +282,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.DriverInfo">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.DriverInfo">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -292,7 +292,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.DriverVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.DriverVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -302,7 +302,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 4 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.InterfaceVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.InterfaceVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -312,7 +312,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Name">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Name">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -322,7 +322,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.SupportedActions">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.SupportedActions">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -337,7 +337,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.MechanicalPosition">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.MechanicalPosition">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -350,7 +350,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If Position is invalid.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.MoveMechanical">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.MoveMechanical">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -363,7 +363,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If Position is invalid.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Sync">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Sync">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV3" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -377,7 +377,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Connect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Connect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV4" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -387,7 +387,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Disconnect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Disconnect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV4" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -397,7 +397,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Connecting">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.Connecting">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV4" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -408,7 +408,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.DeviceState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/rotator.html#Rotator.DeviceState">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IRotatorV4" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
