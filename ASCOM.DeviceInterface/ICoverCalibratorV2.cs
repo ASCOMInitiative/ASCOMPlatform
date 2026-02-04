@@ -26,7 +26,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connected">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connected">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ICoverCalibratorV2 or later devices.</revision>
@@ -39,7 +39,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Description">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Description">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -49,7 +49,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DriverInfo">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DriverInfo">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -59,7 +59,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DriverVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DriverVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -69,7 +69,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 2 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.InterfaceVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.InterfaceVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -79,7 +79,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Name">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Name">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -90,7 +90,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.SetupDialog">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.SetupDialog">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -109,7 +109,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Action">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Action">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -119,7 +119,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.SupportedActions">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.SupportedActions">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -137,7 +137,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandBlind">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandBlind">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -159,7 +159,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandBool">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandBool">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -181,7 +181,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandString">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CommandString">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -193,7 +193,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Dispose">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Dispose">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -208,7 +208,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CoverState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CoverState">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -220,7 +220,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.OpenCover">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.OpenCover">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -232,7 +232,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CloseCover">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CloseCover">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -244,7 +244,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CoverState"/> returns <see cref="CoverStatus.NotPresent"/> or if cover movement cannot be interrupted.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.HaltCover">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.HaltCover">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -255,7 +255,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorState">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -267,7 +267,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Brightness">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Brightness">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -279,7 +279,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.MaxBrightness">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.MaxBrightness">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -293,7 +293,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorOn">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorOn">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -305,7 +305,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">When <see cref="CalibratorState"/> returns <see cref="CalibratorStatus.NotPresent"/>.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>         
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorOff">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorOff">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV1" version="Platform 6.5">Member added.</revision>
         /// </revisionHistory>
@@ -319,7 +319,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -329,7 +329,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Disconnect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Disconnect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -339,7 +339,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connecting">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.Connecting">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -350,7 +350,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DeviceState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.DeviceState">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -364,7 +364,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>
         /// True while the calibrator brightness is not stable following a <see cref="CalibratorOn(int)"/> or <see cref="CalibratorOff"/> command.
         /// </returns>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorChanging">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CalibratorChanging">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -378,7 +378,7 @@ namespace ASCOM.DeviceInterface
         /// <returns>
         /// True while the cover is in motion following an <see cref="OpenCover"/> or <see cref="CloseCover"/> command.
         /// </returns>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CoverMoving">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/covercalibrator.html#CoverCalibrator.CoverMoving">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ICoverCalibratorV2" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>

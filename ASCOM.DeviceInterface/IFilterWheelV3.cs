@@ -21,7 +21,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Connected">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Connected">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheel" version="Platform 5.0">Member added.</revision>
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing IFilterWheelV3 or later devices.</revision>
@@ -33,7 +33,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.FocusOffsets">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.FocusOffsets">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheel" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -44,7 +44,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Names">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Names">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheel" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -56,7 +56,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an invalid position is set</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.&#80;osition">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.&#80;osition">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheel" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -67,7 +67,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.SetupDialog">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.SetupDialog">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheel" version="Platform 5.0">Member added.</revision>
         /// </revisionHistory>
@@ -89,7 +89,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Action">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Action">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -107,7 +107,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.CommandBlind">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.CommandBlind">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -129,7 +129,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.CommandBool">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.CommandBool">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -151,7 +151,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.CommandString">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.CommandString">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -164,7 +164,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Description">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Description">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -174,7 +174,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.DriverInfo">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.DriverInfo">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -184,7 +184,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.DriverVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.DriverVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -195,7 +195,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Dispose">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Dispose">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -205,7 +205,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 3 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.InterfaceVersion">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.InterfaceVersion">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -215,7 +215,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Name">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Name">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -225,7 +225,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.SupportedActions">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.SupportedActions">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -239,7 +239,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Connect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Connect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -249,7 +249,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Disconnect">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Disconnect">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -259,7 +259,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Connecting">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.Connecting">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -270,7 +270,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.DeviceState">Canonical definition</see></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/filterwheel.html#FilterWheel.DeviceState">Canonical Definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IFilterWheelV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
