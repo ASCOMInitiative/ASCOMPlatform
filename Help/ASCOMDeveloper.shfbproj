@@ -370,6 +370,10 @@
     <None Include="Developer Information\Developer Links.aml" />
     <None Include="Developer Information\DeviceState.aml" />
     <None Include="Developer Information\SynchronousAndAsynchronousSlewing.aml" />
+    <Content Include="icons\favicon.ico">
+      <ImageId>favicon</ImageId>
+      <AlternateText>favicon</AlternateText>
+    </Content>
     <None Include="Version History\Version 7.1 Update 2.md" />
     <None Include="Tools and Features\ASCOMRemote.aml" />
     <None Include="Tools and Features\OmniSimulators.aml" />
