@@ -1,0 +1,13 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PresentationStyle>VS2013</PresentationStyle>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Add the overridden properties as the value of the SubstitutionTags property -->
+    <SubstitutionTags>
+      $(SubstitutionTags);
+      PresentationStyle=$(PresentationStyle)
+    </SubstitutionTags>
+  </PropertyGroup>
+</Project>

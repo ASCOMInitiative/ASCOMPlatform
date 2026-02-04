@@ -254,7 +254,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
 
         }
@@ -306,7 +306,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
         }
 
@@ -339,7 +339,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
 
         }
@@ -382,7 +382,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
         }
 
@@ -570,7 +570,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
         }
 
@@ -608,7 +608,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
         }
 
@@ -650,7 +650,7 @@ namespace ASCOM.Utilities
             }
             finally
             {
-                mut.ReleaseMutex();
+                ReleaseTraceLoggerMutex();
             }
         }
 
@@ -886,6 +886,26 @@ namespace ASCOM.Utilities
             {
                 LogEvent(Method, "Timed out waiting for TraceLogger mutex in " + Method + ", parameters: " + Parameters, EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
                 throw new ProfilePersistenceException("Timed out waiting for TraceLogger mutex in " + Method + ", parameters: " + Parameters);
+            }
+        }
+
+        // Release the trace logger mutex
+        private void ReleaseTraceLoggerMutex()
+        {
+            // Release the mutex if we have it
+            if (GotMutex) // We have the mutex so try to release it, ignoring any errors
+            {
+                try
+                {
+                    // Release the mutex
+                    mut.ReleaseMutex();
+                }
+                catch { } // Ignore any errors
+                finally
+                {
+                    // Set the flag to show we no longer have the mutex
+                    GotMutex = false;
+                }
             }
         }
 

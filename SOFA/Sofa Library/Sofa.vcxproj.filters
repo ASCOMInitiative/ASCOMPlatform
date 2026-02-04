@@ -30,6 +30,9 @@
     <ClInclude Include="..\Currrent Source Code\sofam.h">
       <Filter>SOFA Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>SOFA Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c">
@@ -775,11 +778,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Sofa Library.rc">
-      <Filter>ASCOM Resource Files</Filter>
-    </ResourceCompile>
+    <Text Include="..\README - ASCOM SOFA Code Conversion Notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\README - ASCOM SOFA Code Conversion Notes.txt" />
+    <ResourceCompile Include="Version64Bit.rc">
+      <Filter>ASCOM Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Version32Bit.rc">
+      <Filter>ASCOM Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Version64BitARM.rc">
+      <Filter>ASCOM Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

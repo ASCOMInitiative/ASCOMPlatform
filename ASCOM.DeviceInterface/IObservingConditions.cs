@@ -9,6 +9,9 @@ using System.Runtime.InteropServices;
 using ASCOM.Utilities;
 #elif NET472
 using ASCOM.Utilities;
+#elif NET481
+using ASCOM.Utilities;
+#else
 #endif
 
 namespace ASCOM.DeviceInterface

@@ -1,9 +1,15 @@
-﻿using ASCOM.Astrometry.NOVAS;
+﻿using ASCOM.Astrometry;
+using ASCOM.Astrometry.NOVAS;
+using ASCOM.Astrometry.Transform;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using System;
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
+using System.Management;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Windows.Forms;
 
@@ -15,7 +21,7 @@ namespace ValidatePlatform
     internal class Program
     {
         const string SOFA_CLSID = @"{DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E}";
-        const string ASTROMETRY_CLSID= @"{7F3582E3-9AA8-42CA-845C-2E6B13F362C1}";
+        const string ASTROMETRY_CLSID = @"{7F3582E3-9AA8-42CA-845C-2E6B13F362C1}";
 
         static int returnCode = 0;
         static TraceLogger TL;
@@ -24,184 +30,241 @@ namespace ValidatePlatform
 
         static int Main(string[] args)
         {
-            // Set up assembly load and resolve event handlers
             try
             {
-                AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
+                // Set up assembly load and resolve event handlers
+                try
                 {
-                    LogMessage("AssemblyLoad", $"Loaded assembly: {e.LoadedAssembly.FullName}");
-                };
-                AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
+                    AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                    {
+                        LogError("UnhandledException", "Unhandled exception occurred.", e.ExceptionObject as Exception);
+                        SetReturnCode(2);
+                    };
+                }
+                catch (Exception ex)
                 {
-                    LogMessage("AssemblyResolve", $"Failed to resolve assembly: {e.Name}, Called from: {e.RequestingAssembly.FullName}");
-                    return null;
-                };
+                    LogError("Main", "Issue creating event handlers.", ex);
+                }
 
-                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                // Create a TraceLogger component
+                try
                 {
-                    LogError("UnhandledException", "Unhandled exception occurred.", e.ExceptionObject as Exception);
-                    SetReturnCode(2);
-                };
-            }
-            catch (Exception ex)
-            {
-                LogError("Main", "Issue creating event handlers.", ex);
-            }
-
-            // Create a TraceLogger component
-            try
-            {
-                string osMode = Environment.Is64BitProcess ? "64" : "86";
-
-                TL = new TraceLogger("", $"ValidatePlatform{osMode}")
+                    TL = new TraceLogger("", $"ValidatePlatform{(Environment.Is64BitProcess ? "64" : "86")}")
+                    {
+                        Enabled = true
+                    };
+                    LogMessage("Main", $"Validate Platform");
+                    LogBlankLine();
+                    LogMessage("Main", $"Successfully created TraceLogger component.");
+                }
+                catch (Exception ex)
                 {
-                    Enabled = true
-                };
-                LogMessage("Main", $"Successfully created TraceLogger.");
-                LogMessage("Main", $"Operating in X{osMode} mode.");
-                LogBlankLine();
-            }
-            catch (Exception ex)
-            {
-                LogError("Main", $"Unable to create trace logger.", ex);
-            }
-
-            // Report on the SOFA ProgID COM registration
-            try
-            {
-                ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA");
-                ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA\CLSID");
-                ValidateSofaValue(@"ASCOM.Astrometry.SOFA.SOFA\CLSID", "", SOFA_CLSID);
-            }
-            catch (Exception ex)
-            {
-                LogError("SOFA", $"SOFA COM registration exception", ex);
-            }
-            LogBlankLine();
-
-            // Report on the SOFA CLSID COM registration
-            try
-            {
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}", "", "ASCOM.Astrometry.SOFA.SOFA");
-                LogBlankLine();
-
-                // Validate that expected sub-keys exist with the correct values
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories");
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "", "mscoree.dll");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Class", "ASCOM.Astrometry.SOFA.SOFA");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "RuntimeVersion", "v2.0.50727");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "ThreadingModel", "Both");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Class", "ASCOM.Astrometry.SOFA.SOFA");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "RuntimeVersion", "v2.0.50727");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\ProgId");
-                ValidateSofaValue($@"CLSID\{SOFA_CLSID}\ProgId", "", "ASCOM.Astrometry.SOFA.SOFA");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0");
-                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0", "", "ASCOM Astrometry");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32");
-                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32", "", @"ASCOM.Astrometry\6.0.0.0__565de7938946fba7\ASCOM.Astrometry.tlb");
-                LogBlankLine();
-
-                ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS");
-                ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS", "", @"0");
-            }
-            catch (Exception ex)
-            {
-                LogError("SOFA", $"CLSID COM registration exception", ex);
-            }
-            LogBlankLine();
-
-            try
-            {
-                Assembly astrometry = Assembly.Load("ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                if (astrometry == null)
-                    LogError("Main", "Unable to load ASCOM.Astrometry.SOFA assembly by name", null);
-                else
-                    LogMessage("Main", "Successfully loaded ASCOM.Astrometry.SOFA assembly by name");
-            }
-            catch (Exception ex)
-            {
-                LogError("SOFA", $"Assembly load exception", ex);
-            }
-            LogBlankLine();
-
-            // Basic tests for NOVAS and SOFA to ensure that they work OK
-            try
-            {
-
+                    LogError("Main", $"Issue creating trace logger.", ex);
+                }
 
                 // Create a Utilities component
                 try
                 {
                     util = new Util();
-                    LogMessage("Main", "Successfully created Utilities component");
+                    LogMessage("Main", $"Successfully created Utilities component.");
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create Utilities component.", ex);
+                    LogError("Main", $"Issue creating Utilities component.", ex);
                 }
                 LogBlankLine();
 
-                // Test the SOFA COM object
+                // Report environment
                 try
                 {
-                    LogMessage("Main", "About to create SOFA component type...");
-                    Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
+                    LogMessage("Version", $"{Assembly.GetExecutingAssembly().GetName().Version}, {Application.ProductVersion}");
+                    LogBlankLine();
+                    LogMessage("Date", DateTime.Now.ToString());
+                    LogMessage("TimeZoneName", GetTimeZoneName());
+                    LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours.ToString());
+                    LogMessage("UTCDate", DateTime.UtcNow.ToString());
+                    LogBlankLine();
+                    LogMessage("CurrentCulture", $"{CultureInfo.CurrentCulture.EnglishName} {CultureInfo.CurrentCulture.Name} Decimal Separator '{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}' " +
+                        $"Number Group Separator '{CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator}'");
+                    LogMessage("CurrentUICulture", $"{CultureInfo.CurrentUICulture.EnglishName} {CultureInfo.CurrentUICulture.Name} Decimal Separator '{CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator}' " +
+                        $"Number Group Separator '{CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator}'");
+                }
+                catch (Exception ex)
+                {
+                    LogError("Environment", $"Exception", ex);
+                }
+                LogBlankLine();
 
-                    // Test whether we got the SOFA component's Type
-                    if (sofaType != null) // Found the SOFA component OK
+                // Log OS version information
+                try
+                {
+                    using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
                     {
-                        LogMessage("Main", $"Successfully created SOFA component type, about to create instance...");
-
-                        dynamic sofa = Activator.CreateInstance(sofaType);
-                        LogMessage("Main", "Successfully created SOFA component");
-
-                        double tt1 = 2459773.0;
-                        double tt2 = 0.99093;
-                        double tai1 = 0.0;
-                        double tai2 = 0.0;
-                        int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
-                        double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
-                        LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
-
-                        if (Math.Abs(difference - 32.184) < 0.01)
-                        {
-                            LogMessage("Main", $"Received expected result from TtTai.");
-                        }
-                        else
-                        {
-                            LogError("Main", $"Received bad result from TtTai.", null);
-                        }
-                    }
-                    else // Did not find the SOFA components type
-                    {
-                        LogError("Main", $"Unable to get SOFA component's type, further SOFA tests abandoned.", null);
+                        // Open the OS version registry key
+                        string productName = regKey.GetValue("ProductName", "").ToString();
+                        string currentMajorVersionNumber = regKey.GetValue("CurrentMajorVersionNumber", "").ToString();
+                        string currentMinorVersionNumber = regKey.GetValue("CurrentMinorVersionNumber", "").ToString();
+                        string currentType = regKey.GetValue("CurrentType", "").ToString();
+                        string currentBuildNumber = regKey.GetValue("currentBuildNumber", "").ToString();
+                        string ubr = regKey.GetValue("UBR", "").ToString();
+                        LogMessage("OS Version", $"{currentType} {currentMajorVersionNumber}.{currentMinorVersionNumber}.{currentBuildNumber}.{ubr}");
+                        LogBlankLine();
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA COM component.", ex);
+                    LogError("OS Version", $"Exception reading OS version information.", ex);
+                }
+
+                // Log Application environment information
+                try
+                {
+                    // Determine if we are running in a VM or on a real PC
+                    if (RunningInVM(true))
+                        LogMessage("Environment", "Running in a virtual machine");
+                    else
+                        LogMessage("Environment", "Running on a real PC");
+
+                    // Get the process architecture of the currently running app
+                    Architecture processArchitecture = RuntimeInformation.ProcessArchitecture;
+
+                    switch (processArchitecture)
+                    {
+                        case Architecture.Arm64:
+                            LogMessage("Application Architecture", "ARM 64bit");
+                            break;
+
+                        case Architecture.Arm:
+                            LogMessage("Application Architecture", "ARM 32bit");
+                            break;
+
+                        case Architecture.X64:
+                            LogMessage("Application Architecture", "Intel/AMD X64");
+                            break;
+
+                        case Architecture.X86:
+                            LogMessage("Application Architecture", "Intel X86");
+                            break;
+
+                        default:
+                            LogMessage("Application Architecture", $"Unrecognised architecture: {processArchitecture}");
+                            break;
+                    }
+
+                    // Get the underlying real machine architecture usig WMI
+                    var searcher = new ManagementObjectSearcher("SELECT Architecture FROM Win32_Processor");
+                    foreach (ManagementObject managementObject in searcher.Get())
+                    {
+                        ushort architecture = (ushort)managementObject["Architecture"];
+                        switch (architecture)
+                        {
+                            case 0:
+                                LogMessage("Processor Architecture", "Intel X86");
+                                break;
+
+                            case 1:
+                                LogMessage("Processor Architecture", "MIPS");
+                                break;
+
+                            case 2:
+                                LogMessage("Processor Architecture", "Alpha");
+                                break;
+
+                            case 3:
+                                LogMessage("Processor Architecture", "PowerPC");
+                                break;
+
+                            case 5:
+                                LogMessage("Processor Architecture", "ARM 32bit");
+                                break;
+
+                            case 6:
+                                LogMessage("Processor Architecture", "Itanium");
+                                break;
+
+                            case 9:
+                                LogMessage("Processor Architecture", "Intel/AMD X64");
+                                break;
+
+                            case 12:
+                                LogMessage("Processor Architecture", "ARM 64bit");
+                                break;
+
+                            default:
+                                LogMessage("Processor Architecture", $"Unrecognised architecture: {architecture}");
+                                break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogError("Environment", $"Exception reading environment.", ex);
+                }
+                LogBlankLine();
+
+                // Report on the SOFA ProgID COM registration
+                try
+                {
+                    ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA");
+                    ValidateSofaSubKey(@"ASCOM.Astrometry.SOFA.SOFA\CLSID");
+                    ValidateSofaValue(@"ASCOM.Astrometry.SOFA.SOFA\CLSID", "", SOFA_CLSID);
+                }
+                catch (Exception ex)
+                {
+                    LogError("SOFA", $"SOFA COM registration exception", ex);
+                }
+                LogBlankLine();
+
+                // Report on the SOFA CLSID COM registration
+                try
+                {
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}", "", "ASCOM.Astrometry.SOFA.SOFA");
+                    LogBlankLine();
+
+                    // Validate that expected sub-keys exist with the correct values
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories");
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\Implemented Categories\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "", "mscoree.dll");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "Class", "ASCOM.Astrometry.SOFA.SOFA");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "RuntimeVersion", "v2.0.50727");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32", "ThreadingModel", "Both");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Assembly", "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "Class", "ASCOM.Astrometry.SOFA.SOFA");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\InprocServer32\6.0.0.0", "RuntimeVersion", "v2.0.50727");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"CLSID\{SOFA_CLSID}\ProgId");
+                    ValidateSofaValue($@"CLSID\{SOFA_CLSID}\ProgId", "", "ASCOM.Astrometry.SOFA.SOFA");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0");
+                    ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0", "", "ASCOM Astrometry");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32");
+                    ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\0\win32", "", @"ASCOM.Astrometry\6.0.0.0__565de7938946fba7\ASCOM.Astrometry.tlb");
+                    LogBlankLine();
+
+                    ValidateSofaSubKey($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS");
+                    ValidateSofaValue($@"TypeLib\{ASTROMETRY_CLSID}\6.0\FLAGS", "", @"0");
+                }
+                catch (Exception ex)
+                {
+                    LogError("SOFA", $"SOFA CLSID COM registration exception", ex);
                 }
                 LogBlankLine();
 
@@ -282,7 +345,7 @@ namespace ValidatePlatform
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create SOFA .NET component.", ex);
+                    LogError("Main", $"SOFA test exception.", ex);
                 }
                 LogBlankLine();
 
@@ -306,29 +369,148 @@ namespace ValidatePlatform
                     {
                         LogError("Main", $"Received bad Julian date {jd} from NOVAS31.JulianDate. Expected: {EXPECTED_JULIAN_DATE}", null);
                     }
+                    LogBlankLine();
+
+                    const double WALLACE_EXPECTED_DEC = 52.29549062657d;
+
+                    // Site (ITRS)
+                    double siteLonE_Deg = 9.712156d;      // East longitude, degrees
+                    double siteLatN_Deg = 52.385639d;     // North latitude, degrees
+                    double siteHeight_m = 200.0d;         // meters
+
+                    // Star (ICRS, epoch 2000)
+                    double ra2000_deg = 353.22987757d;
+                    double dec2000_deg = 52.27730247d;
+                    double pmRAstar_masPerYr = 22.9d;     // μα cosδ  (mas/yr)  <-- IMPORTANT: use as given
+                    double pmDec_masPerYr = -2.1d;        // μδ       (mas/yr)
+                    double plx_mas = 23.0d;               // parallax (mas)
+                    double rv_kmps = 25.0d;               // radial velocity (km/s)
+
+                    // UTC date/time
+                    short y = 2003;
+                    short m = 8;
+                    short d = 26;
+                    double hh = 0;
+                    double mm = 37;
+                    double ss = 38.97381d;
+
+                    // IERS values (Wallace)
+                    double dut1 = -0.349535d;            // UT1-UTC (seconds)
+                    double dX_mas = 0.038d;              // celestial pole offsets (mas)
+                    double dY_mas = -0.118d;             // celestial pole offsets (mas)
+
+                    // For this epoch (2003-08-26): TAI-UTC = 32s, so TT-UTC = 32 + 32.184 = 64.184s
+                    double ttMinusUtc_s = 64.184d;
+
+                    double raTopo_h = 0.0d;
+                    double decTopo_deg = 0.0d;
+
+                    double jdUtc = novas31.JulianDate(y, m, d, hh + mm / 60.0 + ss / 3600.0);
+                    double jdUt1 = jdUtc + dut1 / 86400.0d;
+                    double jdTt = jdUtc + ttMinusUtc_s / 86400.0d;
+                    double deltaT = ttMinusUtc_s - dut1;   // TT-UT1 seconds
+
+                    // Observer on Earth (OnSurface)
+                    var obs = new OnSurface();
+                    obs.Latitude = siteLatN_Deg;
+                    obs.Longitude = siteLonE_Deg;
+                    obs.Height = siteHeight_m;
+                    obs.Temperature = 10.0d;      // Celsius
+                    obs.Pressure = 1010.0d;       // mbar (hPa)
+
+                    // Star catalog entry (CatEntry3)
+                    var star = new CatEntry3();
+                    star.RA = ra2000_deg / 15.0d;             // HOURS (not degrees!)
+                    star.Dec = dec2000_deg;                   // degrees
+                    star.ProMoRA = pmRAstar_masPerYr;         // mas/year (this is μα cosδ as given)
+                    star.ProMoDec = pmDec_masPerYr;           // mas/year
+                    star.Parallax = plx_mas;                  // mas
+                    star.RadialVelocity = rv_kmps;            // km/s
+
+                    novas31.CelPole(jdTt, PoleOffsetCorrection.ReferredToGCRSAxes, dX_mas, dY_mas);
+
+                    short rc = novas31.TopoStar(jdTt, deltaT, star, obs, Accuracy.Full, ref raTopo_h, ref decTopo_deg);
+
+                    double decErrorArcSec = Math.Abs(decTopo_deg - 52.29549062657d) * 3600d;
+
+                    Util util = new Util();
+                    LogMessage("Main", $"Wallace: {util?.DegreesToDMS(WALLACE_EXPECTED_DEC, ":", ":", "", 2)}");
+                    double differenceFromWallace_arcSec = Math.Abs(decTopo_deg - WALLACE_EXPECTED_DEC) * 3600d;
+                    LogMessage("Main", $"NOVAS:   {util?.DegreesToDMS(decTopo_deg, ":", ":", "", 2)}, Difference from Wallace: {differenceFromWallace_arcSec:0.00} arcsec");
+
+                    Transform transform = new Transform();
+                    transform.SitePressure = 1010.0;
+                    transform.SiteTemperature = 10.0;
+                    transform.SiteElevation = siteHeight_m;
+                    transform.SiteLatitude = siteLatN_Deg;
+                    transform.SiteLongitude = siteLonE_Deg;
+                    transform.JulianDateTT = jdTt;
+                    transform.Refraction = false;
+                    transform.SetJ2000(ra2000_deg * 24.0 / 360.0, dec2000_deg);
+                    LogMessage("Main", $"SOFA:    {util?.DegreesToDMS(transform.DECTopocentric, ":", ":", "", 2)}, Difference from Wallace: {Math.Abs(transform.DECTopocentric - WALLACE_EXPECTED_DEC) * 3600d:0.00} arcsec");
                 }
                 catch (Exception ex)
                 {
-                    LogError("Main", $"Unable to create NOVAS .NET component.", ex);
+                    LogError("Main", $"NOVAS test exception.", ex);
                 }
 
-                // DIsplay error log if necessary, otherwise continue silently.
+                LogBlankLine();
+
+                // Display error log if necessary, otherwise continue silently.
                 if (errorLog != "")
                 {
                     errorLog = $"The issues below occurred while validating operation of the Platform. Please zip up all the files and sub-folders in your Documents\\ASCOM folder and post a message together with the zip on the ASCOM Talk Groups.Io forum.\r\n\r\n{errorLog}";
                     MessageBox.Show(errorLog, "Issues Validating Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SetReturnCode(1);
                 }
-
             }
             catch (Exception ex)
             {
-                LogError("Main", $"Exception:", ex);
+                LogError("Main", $"Overall exception:", ex);
             }
+
+            LogMessage("Main", $"Exit code: {returnCode}");
 
             return returnCode;
         }
 
+        private static bool RunningInVM(bool WriteToLog)
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * from Win32_ComputerSystem"))
+            {
+                using (ManagementObjectCollection items = searcher.Get())
+                {
+                    foreach (ManagementBaseObject item in items)
+                    {
+                        // Extract manufacturer and model
+                        string manufacturer = item["Manufacturer"].ToString().ToLowerInvariant();
+                        string model = item["Model"].ToString().ToLowerInvariant();
+                        if (WriteToLog)
+                            LogMessage("Manufacturer", $"{manufacturer}, Model: {model}");
+                        // Determine whether we are in a VM
+                        if ((manufacturer == "microsoft corporation" && model.Contains("virtual"))
+                            || manufacturer.Contains("vmware")
+                            || model == "virtualbox")
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static string GetTimeZoneName()
+        {
+            if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(DateTime.Now))
+            {
+                return TimeZone.CurrentTimeZone.DaylightName;
+            }
+            else
+            {
+                return TimeZone.CurrentTimeZone.StandardName;
+            }
+        }
         private static void ValidateSofaSubKey(string keyName)
         {
             try

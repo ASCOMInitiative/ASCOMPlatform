@@ -12,12 +12,11 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyDescription("Attributes that can be applied to ASCOM objects.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("This source code may be freely used for any purpose whatsoever on condition that no liability shall be attached to any of the authors.")]
+[assembly: AssemblyCopyright("Copyright (c) ASCOM Initiative 2026.")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
+// Setting ComVisible to false makes the types in this assembly not visible to COM components.
+// If you need to access a type in this assembly from COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 

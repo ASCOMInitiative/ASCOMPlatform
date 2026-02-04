@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("ASCOM Dome Simulator Driver")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("")>
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(True)> 

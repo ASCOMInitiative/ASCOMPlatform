@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM.Simulator.SafetyMonitor")]
 [assembly: AssemblyDescription("ASCOM SafetyMonitor Simulator Driver")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")]
 [assembly: AssemblyCulture("")]
 
 [assembly: CLSCompliant(true)]

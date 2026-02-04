@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Peter Simpson")]
 [assembly: AssemblyProduct("ASCOMLocalServer")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

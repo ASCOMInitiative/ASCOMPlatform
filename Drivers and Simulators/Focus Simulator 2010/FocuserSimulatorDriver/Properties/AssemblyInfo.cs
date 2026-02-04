@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM.Simulator.Focuser")]
 [assembly: AssemblyDescription("ASCOM Focuser Simulator Driver")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

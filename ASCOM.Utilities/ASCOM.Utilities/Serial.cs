@@ -323,7 +323,7 @@ namespace ASCOM.Utilities
 
             SerSemaphore = new Semaphore(1, 1); // Create a new semaphore to control access to the serial port
 
-            m_Connected = false; // Set inital values
+            m_Connected = false; // Set initial values
             m_PortName = SERIALPORT_DEFAULT_NAME;
             m_ReceiveTimeout = SERIALPORT_DEFAULT_TIMEOUT;
             m_Speed = SERIALPORT_DEFAULT_SPEED;
@@ -334,10 +334,10 @@ namespace ASCOM.Utilities
             m_Parity = SERIALPORT_DEFAULT_PARITY;
             m_StopBits = SERIALPORT_DEFAULT_STOPBITS;
 
-            TextEncoding = System.Text.Encoding.GetEncoding(SERIALPORT_ENCODING); // Initialise text encoding for use by transmitbinary
+            TextEncoding = System.Text.Encoding.GetEncoding(SERIALPORT_ENCODING); // Initialise text encoding for use by transmit binary
             try
             {
-                SerialProfile = new RegistryAccess(); // Profile class that can retrieve the value of tracefile
+                SerialProfile = new RegistryAccess(); // Profile class that can retrieve the value of trace file
                 string TraceFileName = SerialProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME);
                 Logger = new TraceLogger(TraceFileName, "Serial");
                 if (!string.IsNullOrEmpty(TraceFileName))
@@ -345,6 +345,8 @@ namespace ASCOM.Utilities
 
                 // Get debug trace level on / off
                 DebugTrace = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT);
+                Logger.IdentifierWidth = 35;
+
 
                 // Get the type of wait to use
                 TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT);
@@ -598,7 +600,7 @@ namespace ASCOM.Utilities
 
                 TS = Stopwatch.StartNew(); // Initialise stopwatch
 
-                // Foorce RTS if required
+                // Force RTS if required
                 buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS + @"\" + m_PortName, "RTSEnable");
                 if (bool.TryParse(buf, out b))
                 {
@@ -781,7 +783,7 @@ namespace ASCOM.Utilities
         /// </summary>
         /// <value>Integer, serial port timeout in seconds</value>
         /// <returns>Integer, serial port timeout in seconds.</returns>
-        /// <remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
+        /// <remarks>The minimum delay timeout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
         /// <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid (outside the range 1 to 120 seconds.)</exception>
         public int ReceiveTimeout
         {
@@ -1019,7 +1021,7 @@ namespace ASCOM.Utilities
         /// <remarks>This is modelled on the COM component with possible values enumerated in the PortSpeed enum.</remarks>
         public SerialSpeed Speed
         {
-            // Get and set the port speed using the portspeed enum
+            // Get and set the port speed using the port speed enum
             get
             {
                 return m_Speed;
@@ -1209,8 +1211,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveWorker", FormatIDs(TData.TransactionID) + "< ");
                         Received = Conversions.ToString(ReadChar("ReceiveWorker", TData.TransactionID));
                         Received = Received + m_Port.ReadExisting();
                         if (DebugTrace)
@@ -1219,7 +1219,8 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Received);
+                            if (!DebugTrace)
+                                Logger.LogMessage("ReceiveWorker", FormatIDs(TData.TransactionID) + "< " + Received);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1333,8 +1334,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveByteWorker", FormatIDs(TData.TransactionID) + "< ");
                         RetVal = ReadByte("ReceiveByteWorker", TData.TransactionID);
                         if (DebugTrace)
                         {
@@ -1342,7 +1341,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Conversions.ToString(Strings.Chr(RetVal)), true);
+                            Logger.LogMessage("ReceiveByteWorker", FormatIDs(TData.TransactionID) + "< " + Conversions.ToString(Strings.Chr(RetVal)), true);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1459,8 +1458,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveCountedWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< ");
                         var loopTo = TData.Count;
                         for (i = 1; i <= loopTo; i++)
                             Received = Received + ReadChar("ReceiveCountedWorker", TData.TransactionID);
@@ -1470,7 +1467,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Received);
+                            Logger.LogMessage("ReceiveCountedWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< " + Received);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1594,8 +1591,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveCountedBinaryWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< ");
                         var loopTo = TData.Count - 1;
                         for (i = 0; i <= loopTo; i++)
                         {
@@ -1608,7 +1603,7 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(TextEncoding.GetString(Received), true);
+                            Logger.LogMessage("ReceiveCountedBinaryWorker " + TData.Count.ToString(), FormatIDs(TData.TransactionID) + "< " + TextEncoding.GetString(Received), true);
                         }
                     }
                     catch (TimeoutException ex)
@@ -1730,8 +1725,6 @@ namespace ASCOM.Utilities
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveTerminatedWorker " + TData.Terminator.ToString(), FormatIDs(TData.TransactionID) + "< ");
                         tLen = Strings.Len(TData.Terminator);
                         do
                         {
@@ -1749,10 +1742,10 @@ namespace ASCOM.Utilities
                         }
                         else
                         {
-                            Logger.LogFinish(Received);
+                            Logger.LogMessage("ReceiveTerminatedWorker " + TData.Terminator.ToString(), FormatIDs(TData.TransactionID) + "< " + Received);
                         }
                     }
-                    catch (InvalidValueException )
+                    catch (InvalidValueException)
                     {
                         Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(TData.TransactionID) + "EXCEPTION - Terminator cannot be a null string");
                         throw;
@@ -1826,7 +1819,7 @@ namespace ASCOM.Utilities
                 try
                 {
                     if (DebugTrace)
-                        Logger.LogMessage("ReceiveTerminatedBinary", "Start");
+                        Logger.LogMessage("ReceiveTerminatedBinary", "Start 6.0");
                     TData.SerialCommand = SerialCommandType.ReceiveCounted;
                     TData.TerminatorBytes = TerminatorBytes;
                     TData.TransactionID = GetTransactionID("ReceiveTerminatedBinary");
@@ -1874,23 +1867,29 @@ namespace ASCOM.Utilities
                 TextEncoding = System.Text.Encoding.GetEncoding(1252);
                 Terminator = TextEncoding.GetString(TData.TerminatorBytes);
 
-                if (DebugTrace)
-                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "Start - terminator: \"" + Terminator.ToString() + "\"");
                 // Check for bad terminator string
                 if (string.IsNullOrEmpty(Terminator))
                     throw new InvalidValueException("ReceiveTerminatedBinary Terminator", "Null or empty string", "Character or character string");
+
+                if (DebugTrace)
+                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "Start - Terminator: \"" + Terminator.ToString() + $"\", length: {Terminator.Length}");
 
                 if (GetSemaphore("ReceiveTerminatedBinaryWorker ", TData.TransactionID))
                 {
                     try
                     {
-                        if (!DebugTrace)
-                            Logger.LogStart("ReceiveTerminatedBinaryWorker " + Terminator.ToString(), FormatIDs(TData.TransactionID) + "< ");
 
                         tLen = Strings.Len(Terminator);
                         do
                         {
-                            Received = Received + ReadChar("ReceiveTerminatedBinaryWorker ", TData.TransactionID); // Build up the string one char at a time
+                            Byte receivedByte = ReadByte("ReceiveTerminatedBinaryWorker ", TData.TransactionID);
+                            string receivedByteAsString = TextEncoding.GetString(new byte[] { receivedByte });
+
+                            Received = Received + receivedByteAsString; // Build up the string one char at a time
+
+                            if (DebugTrace)
+                                Logger.LogMessage("ReceiveTerminatedBinaryWorker ", $"Received {Strings.Len(Received)} characters, Terminator length: {tLen}");
+
                             if (Strings.Len(Received) >= tLen) // Check terminator when string is long enough
                             {
                                 if ((Strings.Right(Received, tLen) ?? "") == (Terminator ?? ""))
@@ -1898,16 +1897,17 @@ namespace ASCOM.Utilities
                             }
                         }
                         while (!Terminated);
+
                         if (DebugTrace)
                         {
                             Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "< " + Received, true);
                         }
                         else
                         {
-                            Logger.LogFinish(Received, true);
+                            Logger.LogMessage("ReceiveTerminatedBinaryWorker " + Terminator.ToString(), Received, true);
                         }
                     }
-                    catch (InvalidValueException )
+                    catch (InvalidValueException)
                     {
                         Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(TData.TransactionID) + "EXCEPTION - Terminator cannot be a null string");
                         throw;
@@ -2180,7 +2180,7 @@ namespace ASCOM.Utilities
         #endregion
 
         #region ISerialExtensions Implementation
-        // These are additional funcitons not provided in the original Helper and Helper2 components
+        // These are additional functions not provided in the original Helper and Helper2 components
         /// <summary>
         /// Sets the ASCOM serial port name as a string
         /// </summary>
@@ -2370,16 +2370,16 @@ namespace ASCOM.Utilities
                                     Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Port " + PortNumber + " exists, elapsed time: " + SWatch.ElapsedMilliseconds + "ms");
                             }
                             else if (DebugTrace)
-                                Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Skiping probe as port  " + PortName + " is already known to exist");
+                                Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Skipping probe as port  " + PortName + " is already known to exist");
                         }
-                        catch (UnauthorizedAccessException )
+                        catch (UnauthorizedAccessException)
                         {
                             // Port exists but is in use so add it to the list
                             RetVal.Add(PortName);
                             if (DebugTrace)
                                 Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Port " + PortNumber + " UnauthorisedAccessException, elapsed time: " + SWatch.ElapsedMilliseconds + "ms");
                         }
-                        catch (Exception ex) // Ignore other exceptions as these indicate port not present or not openable
+                        catch (Exception ex) // Ignore other exceptions as these indicate port not present or not open-able
                         {
                             if (DebugTrace)
                                 Logger.LogMessage("AvailableCOMPortsWorker", FormatIDs(TData.TransactionID) + "Port " + PortNumber + " Exception, found is, elapsed time: " + SWatch.ElapsedMilliseconds + "ms " + ex.Message);
@@ -2568,22 +2568,27 @@ namespace ASCOM.Utilities
             var RxBytes = new byte[11];
             StartTime = DateTime.Now;
             if (DebugTrace)
-                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + "Entered ReadByte: " + UseReadPolling);
+                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + $"Entered ReadByte - Use read polling: {UseReadPolling}");
             if (UseReadPolling)
             {
                 while (m_Port.BytesToRead == 0)
                 {
                     if ((DateTime.Now - StartTime).TotalMilliseconds > m_ReceiveTimeout)
                     {
-                        Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + "ReadByte timed out waitng for a byte to read, throwing TimeoutException");
+                        Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + "ReadByte timed out waiting for a byte to read, throwing TimeoutException");
                         throw new TimeoutException("Serial port timed out waiting to read a byte");
                     }
                     Sleep(1);
                 }
             }
-            RxByte = (byte)m_Port.ReadByte();
+
             if (DebugTrace)
-                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + "ReadByte returning result - \"" + RxByte.ToString() + "\"");
+                Logger.LogMessage(p_Caller, $"ReadByte - About to read byte from COM port...");
+            RxByte = (byte)m_Port.ReadByte();
+
+            if (DebugTrace)
+                Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) + $"ReadByte - Byte read OK, returning result - {RxByte:X4}");
+
             return RxByte;
         }
 
@@ -2593,23 +2598,34 @@ namespace ASCOM.Utilities
             char RxChar;
             var RxChars = new char[11];
             StartTime = DateTime.Now;
+
             if (DebugTrace)
-                Logger.LogMessage(p_Caller, FormatIDs(TransactionID) + "Entered ReadChar: " + UseReadPolling);
+                Logger.LogMessage(p_Caller, $"{FormatIDs(TransactionID)} Entered ReadChar - Use read polling: {UseReadPolling}");
+
             if (UseReadPolling)
             {
                 while (m_Port.BytesToRead == 0)
                 {
                     if ((DateTime.Now - StartTime).TotalMilliseconds > m_ReceiveTimeout)
                     {
-                        Logger.LogMessage(p_Caller, FormatIDs(TransactionID) + "ReadByte timed out waitng for a character to read, throwing TimeoutException");
+                        Logger.LogMessage(p_Caller, FormatIDs(TransactionID) + "ReadByte timed out waiting for a character to read, throwing TimeoutException");
                         throw new TimeoutException("Serial port timed out waiting to read a character");
                     }
                     Sleep(1);
                 }
             }
-            RxChar = Strings.Chr(m_Port.ReadByte());
+
+            if (DebugTrace)
+                Logger.LogMessage(p_Caller, $"About to read byte from COM port...");
+            int receivedByte = m_Port.ReadByte();
+
+            if (DebugTrace)
+                Logger.LogMessage(p_Caller, $"Got byte from port {receivedByte} ({receivedByte:X4}), about to call Strings.Chr...");
+            RxChar = Strings.Chr(receivedByte);
+
             if (DebugTrace)
                 Logger.LogMessage(p_Caller, FormatIDs(TransactionID) + "ReadChar returning result - \"" + RxChar + "\"");
+
             return RxChar;
         }
 
@@ -2676,7 +2692,7 @@ namespace ASCOM.Utilities
         /// <summary>
         /// OS level blocking wait for an event 
         /// </summary>
-        /// <param name="handle">The triggering even't handle</param>
+        /// <param name="handle">The triggering event handle</param>
         /// <param name="milliseconds">Length of time to wait before timing out</param>
         /// <returns>Status, 0 = success</returns>
         /// <remarks></remarks>
@@ -2699,7 +2715,7 @@ namespace ASCOM.Utilities
 
             // It is vital that the primary thread is fully blocked in order for VB6 drivers to work as expected. This means that some .NET sync primitives
             // such as ManualResetEvent CANNOT be used because they have been designed by MS to pump messages in the background while waiting
-            // and this results in behaviur described above!
+            // and this results in behaviour described above!
 
             // Execute the correct wait according to the set configuration
             switch (TypeOfWait)
@@ -2799,7 +2815,7 @@ namespace ASCOM.Utilities
 
             }
 
-            // Check whether we are propcessing out of order, which is a bad thing!
+            // Check whether we are processing out of order, which is a bad thing!
             if (DebugTrace & TData.TransactionID != CallCount)
                 LogMessage("***WaitForThread***", "Transactions out of order! TransactionID CurrentCallCount: " + TData.TransactionID + " " + CallCount);
 

@@ -10,7 +10,7 @@ namespace ASCOM.DeviceInterface
     // </summary>
     // 
     // <copyright company="The ASCOM Initiative" author="Timothy P. Long">
-    // Copyright © ASCOM Initiative 2025
+    // Copyright © ASCOM Initiative 2026
     // </copyright>
     // 
     // <license>
@@ -282,6 +282,11 @@ namespace ASCOM.DeviceInterface
     /// As of Platform 6, the PierSide property is defined to refer to the telescope pointing state. 
     /// Please see <see cref="ITelescopeV4.SideOfPier" /> for more information on this topic.</para>
     /// <para>Only used with telescope interface versions 2 and later.</para>
+    /// <h3>ASCOM Library Implementation</h3>
+    /// <para>
+    /// Since we had the opportunity of a fresh start with the ASCOM Library, we decided to give the Library enum a name that better reflected its actual meaning: PointingState.
+    /// The enums have equivalent members and meanings, with the Library's PointingState enum intended for use with Library components and the PierSide enum intended for use with Platform components.
+    /// </para>
     /// </remarks>
     [Guid("6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB")]
     [ComVisible(true)]

@@ -41,7 +41,7 @@ namespace ASCOM.Internal.SuppressWinErrors
                 // Help requested so print message
                 Console.WriteLine("SuppressWinErrors sets or clears a flag that suppresses the default \"An application has stopped working\" message dialogue");
                 Console.WriteLine("");
-                Console.WriteLine("Usage: SuppressWinErrors True - Sets the supporess flag");
+                Console.WriteLine("Usage: SuppressWinErrors True - Sets the suppress flag");
                 Console.WriteLine("       SuppressWinErrors False - Clears the suppress flag");
                 Console.WriteLine("       SuppressWinErrors Remove - Completely removes the flag");
             }

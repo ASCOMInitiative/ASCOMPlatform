@@ -1512,6 +1512,25 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 B
 
 
@@ -2330,21 +2349,7 @@ B
 
 
 
-
-
-
-
-
 B
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3179,12 +3184,12 @@ ASCOMPlatformName
 ASCOMPlatformName
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{9674FC45-6BE0-43A3-BD64-142970B27DB3}
+{4A90A7FB-BB38-4BF7-AA77-333BFF54C4A0}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
 https://ascom-standards.org/Downloads/Index.htm
-Copyright © 1998-2024, The ASCOM Initiative. All rights reserved. 
+Copyright © 1998-2026, The ASCOM Initiative. All rights reserved. 
 FALSE
 AscomPlatformInstaller
 TRUE

@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Test Forms App")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("Driver Test Forms Application Template VB")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2014")> 
+<Assembly: AssemblyProduct("Driver Test Forms Application Template VB")>
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

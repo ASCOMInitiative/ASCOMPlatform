@@ -27,10 +27,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ASCOM.ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented.</b></p>
-        /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
-        /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Action">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -48,13 +45,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.CommandBlind">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ISafetyMonitorV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -76,13 +67,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.CommandBool">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ISafetyMonitorV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -104,13 +89,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.CommandString">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ISafetyMonitorV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -122,6 +101,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Dispose">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -133,18 +113,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>Do not use a NotConnectedException here. That exception is for use in other methods that require a connection in order to succeed.</para>
-        /// <para>The Connected property sets and reports the state of connection to the device hardware.
-        /// For a hub this means that Connected will be true when the first driver connects and will only be set to false
-        /// when all drivers have disconnected.  A second driver may find that Connected is already true and
-        /// setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
-        /// hardware connection is still true.</para>
-        /// <para>Multiple calls setting Connected to true or false will not cause an error.</para>
-        /// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="ISafetyMonitorV3"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
-        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="ISafetyMonitorV3"/> or later devices.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Connected">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// <revision visible="true" date="ISafetyMonitorV3" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing ISafetyMonitorV3 or later devices.</revision>
@@ -157,10 +126,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
-        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Description">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -170,12 +136,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
-        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-        /// See the <see cref="Description" /> property for information on the device itself.
-        /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.DriverInfo">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -185,10 +146,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
-        /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the
-        /// driver.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.DriverVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -198,10 +156,7 @@ namespace ASCOM.DeviceInterface
         /// The interface version number that this device supports. Should return 3 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read this property.
-        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
-        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.InterfaceVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -213,9 +168,7 @@ namespace ASCOM.DeviceInterface
         /// <value>True if the state is safe, False if it is unsafe.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red;margin-bottom:0"><b>Must be implemented and must not throw a PropertyNotImplementedException. </b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.IsSafe">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -225,7 +178,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Name">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -236,7 +189,7 @@ namespace ASCOM.DeviceInterface
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.SetupDialog">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -246,13 +199,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>Must be implemented</b></p>
-        /// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-        /// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
-        /// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
-        /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
-        /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.SupportedActions">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -266,7 +213,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+		/// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Connect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -276,7 +223,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-		/// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+		/// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Disconnect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -286,7 +233,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.Connecting">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -297,19 +244,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
-        /// <para><b>Devices</b></para>
-        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
-        /// Devices must not throw exceptions / return errors when values are not known.</para>
-        /// <para>An empty list must be returned if no values are known.</para>
-        /// <para><b>Client Applications</b></para>
-        /// <para>
-        /// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
-        /// </para>
-        /// <para><b>Further Information</b></para>
-        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/safetymonitor.html#SafetyMonitor.DeviceState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="ISafetyMonitor" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>

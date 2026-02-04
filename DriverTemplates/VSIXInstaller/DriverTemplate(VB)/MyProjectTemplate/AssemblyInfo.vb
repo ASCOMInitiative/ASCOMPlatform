@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")> 
 <Assembly: AssemblyDescription("ASCOM TEMPLATEDEVICECLASS driver for TEMPLATEDEVICENAME")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("ASCOM TEMPLATEDEVICECLASS driver for TEMPLATEDEVICENAME")> 
-<Assembly: AssemblyCopyright("Copyright © $year$, The ASCOM Intiative")> 
+<Assembly: AssemblyProduct("ASCOM TEMPLATEDEVICECLASS driver for TEMPLATEDEVICENAME")>
+<Assembly: AssemblyCopyright("Copyright © The ASCOM Initiative 2026.")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(True)> 

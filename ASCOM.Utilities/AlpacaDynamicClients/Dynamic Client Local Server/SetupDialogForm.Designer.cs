@@ -76,6 +76,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ChkTrustSelfSignedCertificates = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.ChkRequest100Continue = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteDeviceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStandardTimeout)).BeginInit();
@@ -142,7 +144,8 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(745, 414);
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.Location = new System.Drawing.Point(745, 430);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 12;
@@ -152,8 +155,9 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(745, 443);
+            this.btnCancel.Location = new System.Drawing.Point(745, 459);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 13;
@@ -221,7 +225,8 @@
             // 
             // numStandardTimeout
             // 
-            this.numStandardTimeout.Location = new System.Drawing.Point(53, 312);
+            this.numStandardTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numStandardTimeout.Location = new System.Drawing.Point(53, 328);
             this.numStandardTimeout.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -244,7 +249,8 @@
             // 
             // numLongTimeout
             // 
-            this.numLongTimeout.Location = new System.Drawing.Point(53, 338);
+            this.numLongTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numLongTimeout.Location = new System.Drawing.Point(53, 354);
             this.numLongTimeout.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -267,8 +273,9 @@
             // 
             // label8
             // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(146, 314);
+            this.label8.Location = new System.Drawing.Point(146, 330);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(322, 13);
             this.label8.TabIndex = 20;
@@ -276,8 +283,9 @@
             // 
             // label9
             // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(146, 340);
+            this.label9.Location = new System.Drawing.Point(146, 356);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(302, 13);
             this.label9.TabIndex = 21;
@@ -285,7 +293,8 @@
             // 
             // numEstablishCommunicationsTimeout
             // 
-            this.numEstablishCommunicationsTimeout.Location = new System.Drawing.Point(53, 286);
+            this.numEstablishCommunicationsTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numEstablishCommunicationsTimeout.Location = new System.Drawing.Point(53, 302);
             this.numEstablishCommunicationsTimeout.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -308,8 +317,9 @@
             // 
             // label10
             // 
+            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(146, 288);
+            this.label10.Location = new System.Drawing.Point(146, 304);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(222, 13);
             this.label10.TabIndex = 23;
@@ -358,8 +368,9 @@
             // 
             // label6
             // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(50, 270);
+            this.label6.Location = new System.Drawing.Point(50, 286);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(128, 13);
             this.label6.TabIndex = 29;
@@ -387,9 +398,10 @@
             // 
             // groupBoxConnectDisconnect
             // 
+            this.groupBoxConnectDisconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxConnectDisconnect.Controls.Add(this.radManageConnectRemotely);
             this.groupBoxConnectDisconnect.Controls.Add(this.radManageConnectLocally);
-            this.groupBoxConnectDisconnect.Location = new System.Drawing.Point(53, 407);
+            this.groupBoxConnectDisconnect.Location = new System.Drawing.Point(53, 423);
             this.groupBoxConnectDisconnect.Name = "groupBoxConnectDisconnect";
             this.groupBoxConnectDisconnect.Size = new System.Drawing.Size(415, 66);
             this.groupBoxConnectDisconnect.TabIndex = 11;
@@ -424,17 +436,19 @@
             // 
             // CmbImageArrayTransferType
             // 
+            this.CmbImageArrayTransferType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CmbImageArrayTransferType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CmbImageArrayTransferType.FormattingEnabled = true;
-            this.CmbImageArrayTransferType.Location = new System.Drawing.Point(545, 288);
+            this.CmbImageArrayTransferType.Location = new System.Drawing.Point(545, 304);
             this.CmbImageArrayTransferType.Name = "CmbImageArrayTransferType";
             this.CmbImageArrayTransferType.Size = new System.Drawing.Size(159, 21);
             this.CmbImageArrayTransferType.TabIndex = 30;
             // 
             // LabImageArrayConfiguration1
             // 
+            this.LabImageArrayConfiguration1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LabImageArrayConfiguration1.AutoSize = true;
-            this.LabImageArrayConfiguration1.Location = new System.Drawing.Point(542, 270);
+            this.LabImageArrayConfiguration1.Location = new System.Drawing.Point(542, 286);
             this.LabImageArrayConfiguration1.Name = "LabImageArrayConfiguration1";
             this.LabImageArrayConfiguration1.Size = new System.Drawing.Size(138, 13);
             this.LabImageArrayConfiguration1.TabIndex = 31;
@@ -442,17 +456,19 @@
             // 
             // cmbImageArrayCompression
             // 
+            this.cmbImageArrayCompression.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbImageArrayCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbImageArrayCompression.FormattingEnabled = true;
-            this.cmbImageArrayCompression.Location = new System.Drawing.Point(545, 340);
+            this.cmbImageArrayCompression.Location = new System.Drawing.Point(545, 356);
             this.cmbImageArrayCompression.Name = "cmbImageArrayCompression";
             this.cmbImageArrayCompression.Size = new System.Drawing.Size(159, 21);
             this.cmbImageArrayCompression.TabIndex = 32;
             // 
             // LabImageArrayConfiguration2
             // 
+            this.LabImageArrayConfiguration2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LabImageArrayConfiguration2.AutoSize = true;
-            this.LabImageArrayConfiguration2.Location = new System.Drawing.Point(542, 324);
+            this.LabImageArrayConfiguration2.Location = new System.Drawing.Point(542, 340);
             this.LabImageArrayConfiguration2.Name = "LabImageArrayConfiguration2";
             this.LabImageArrayConfiguration2.Size = new System.Drawing.Size(162, 13);
             this.LabImageArrayConfiguration2.TabIndex = 33;
@@ -569,9 +585,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.BtnSetupUrlDevice);
             this.groupBox1.Controls.Add(this.BtnSetupUrlMain);
-            this.groupBox1.Location = new System.Drawing.Point(520, 395);
+            this.groupBox1.Location = new System.Drawing.Point(520, 411);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(186, 78);
             this.groupBox1.TabIndex = 56;
@@ -598,13 +615,36 @@
             this.label15.TabIndex = 58;
             this.label15.Text = "(Only for use by developers who understand the risks)";
             // 
+            // ChkRequest100Continue
+            // 
+            this.ChkRequest100Continue.AutoSize = true;
+            this.ChkRequest100Continue.Location = new System.Drawing.Point(53, 250);
+            this.ChkRequest100Continue.Name = "ChkRequest100Continue";
+            this.ChkRequest100Continue.Size = new System.Drawing.Size(204, 17);
+            this.ChkRequest100Continue.TabIndex = 59;
+            this.ChkRequest100Continue.Text = "Request 100-continue HTTP protocol";
+            this.ChkRequest100Continue.UseVisualStyleBackColor = true;
+            this.ChkRequest100Continue.CheckedChanged += new System.EventHandler(this.ChkRequest100Continue_CheckedChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.Red;
+            this.label16.Location = new System.Drawing.Point(253, 251);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(269, 13);
+            this.label16.TabIndex = 60;
+            this.label16.Text = "(Slows communications, only enable if advised to do so)";
+            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(832, 483);
+            this.ClientSize = new System.Drawing.Size(832, 499);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.ChkRequest100Continue);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.ChkTrustSelfSignedCertificates);
             this.Controls.Add(this.groupBox1);
@@ -713,5 +753,7 @@
         private System.Windows.Forms.Button BtnSetupUrlMain;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.CheckBox ChkTrustSelfSignedCertificates;
+        private System.Windows.Forms.CheckBox ChkRequest100Continue;
+        private System.Windows.Forms.Label label16;
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.11205.157
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36705.20
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Utilities Projects", "ASCOM Utilities Projects", "{0B492F73-66F9-460E-BD84-A6CB1FC588C6}"
 EndProject
@@ -102,11 +102,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchServer", "Drivers and Simulators\SwitchV2 Simulator\SwitchServer\SwitchServer.csproj", "{D6AAFB5F-7D10-4517-99A1-49FA584E8CF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagnostics", "Diagnostics", "{37ED9238-1D79-45FC-941E-18848BA6056D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Master Platform Version Number", "Master Platform Version Number", "{94891499-3A68-4E4D-B9E7-2F2B7A59A2AB}"
-	ProjectSection(SolutionItems) = preProject
-		Installer\MasterPlatformVersion.txt = Installer\MasterPlatformVersion.txt
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hubs", "Hubs", "{81D7DF5D-E6AF-420E-9CC5-B6CA823ED048}"
 EndProject
@@ -230,6 +225,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solutio
 		CustomDictionary.xml = CustomDictionary.xml
 		Directory.Build.props = Directory.Build.props
 		LicenseExceptions.txt = LicenseExceptions.txt
+		Installer\MasterPlatformVersion.txt = Installer\MasterPlatformVersion.txt
 		NuGet.config = NuGet.config
 		SolutionInfo.cs = SolutionInfo.cs
 		SolutionInfo.vb = SolutionInfo.vb

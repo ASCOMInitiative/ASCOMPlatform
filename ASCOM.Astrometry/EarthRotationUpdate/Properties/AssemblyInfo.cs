@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM")]
 [assembly: AssemblyProduct("EarthRotationUpdate")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

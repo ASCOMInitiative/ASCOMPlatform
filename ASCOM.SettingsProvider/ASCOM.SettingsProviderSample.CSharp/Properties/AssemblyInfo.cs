@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("ASCOM.SettingsProviderSample.CSharp")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright (c) ASCOM Initiative 2026.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

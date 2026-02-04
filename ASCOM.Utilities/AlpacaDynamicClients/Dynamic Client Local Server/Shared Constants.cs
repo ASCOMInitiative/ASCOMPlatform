@@ -28,6 +28,7 @@ namespace ASCOM.DynamicClients
         public const string ENABLE_IPV6_DISCOVERY_PROFILENAME = "Enable IPv6 Discovery"; public const bool ENABLE_IPV6_DISCOVERY_DEFAULT = true;
         public const string DISCOVERY_PORT_PROFILENAME = "Discovery Port"; public const int DISCOVERY_PORT_DEFAULT = 32227;
         public const string TRUST_UNSIGNED_SSL_CERTIFICATES_PROFILENAME = "Trust Unsigned SSL Certificates"; public const bool TRUST_UNSIGNED_CERTIFICATES_DEFAULT = false;
+        public const string REQUEST_100_CONTINUE_PROFILENAME = "Request 100 Continue"; public const bool REQUEST_100_CONTINUE_DEFAULT = false;
 
         // Trace logger naming template
         public const string TRACELOGGER_NAME_FORMAT_STRING = "AlpacaDynamic{0}.{1}";

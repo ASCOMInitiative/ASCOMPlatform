@@ -483,7 +483,7 @@ namespace PlatformUpdateChecker
                     if (newRelease.Patch == 0) // This is not a service pack release
                         toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor}");
                     else // This is a service pack release
-                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Service Pack {newRelease.Patch}");
+                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Update {newRelease.Patch}");
                 }
                 else // This is a release candidate release 
                 {
@@ -493,7 +493,7 @@ namespace PlatformUpdateChecker
                     if (newRelease.Patch == 0) // This is not a service pack release
                         toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor}");
                     else // This is a service pack release
-                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Service Pack {newRelease.Patch}");
+                        toastMessage.AppendLine($"ASCOM Platform {newRelease.Major}.{newRelease.Minor} Update {newRelease.Patch}");
 
                     toastMessage.AppendLine($"Release candidate {newRelease.Prerelease.Trim('-', 'r', 'c', '.')}");
                 }

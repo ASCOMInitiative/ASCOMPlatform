@@ -67,28 +67,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <value><see langword="true" /> if connected to the hardware; otherwise, <see langword="false" />.</value>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color: red;"><b>Must be implemented.</b></p>
-        /// <para>
-        /// Do not use a <c>NotConnectedException</c> here. That exception is for use in other methods
-        /// that require a connection in order to succeed.
-        /// </para>
-        /// <para>
-        /// The Connected property sets and reports the state of the hardware connection. For a hub
-        /// this means that <see cref="Connected" /> will be <see langword="true" /> when the first
-        /// driver connects and will only return <see langword="false" /> when all drivers have
-        /// disconnected.  A second driver may find that Connected is already true and setting
-        /// <see cref="Connected" /> to <see langword="false" /> does not report
-        /// <see cref="Connected" /> as <see langword="false" />. This is not an error because the
-        /// physical state is that the hardware connection is still active.
-        /// </para>
-        /// <para>
-        /// The property is idempotent; writing to the property multiple times will not cause an
-        /// error.
-        /// </para>
-        /// <para><legacyBold>ICameraV4 Behaviour Clarification</legacyBold> - <see cref="IDomeV3"/> and later clients should use the asynchronous <see cref="Connect"/> / <see cref="Disconnect"/> mechanic 
-        /// rather than setting Connected <see langword="true"/> when communicating with <see cref="IDomeV3"/> or later devices.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Connected">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Clients should use the Connect() / Disconnect() mechanic rather than setting Connected TRUE when accessing IDomeV3 or later devices.</revision>
@@ -102,10 +81,7 @@ namespace ASCOM.DeviceInterface
         /// <value>The description.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p> 
-        /// <para>The description length must be a maximum of 64 characters so that it can be used in FITS image headers, which are limited to 80 characters including the header name.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Description">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -115,16 +91,7 @@ namespace ASCOM.DeviceInterface
         /// Descriptive and version information about this ASCOM driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>
-        /// This string may contain line endings and may be hundreds to thousands of characters long.
-        /// It is intended to display detailed information on the ASCOM driver, including version and
-        /// copyright data. See the <see cref="Description" /> property for information on the device
-        /// itself. To get the driver version in a parseable string, use the
-        /// <see cref="DriverVersion" /> property.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.DriverInfo">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -134,22 +101,7 @@ namespace ASCOM.DeviceInterface
         /// A string containing only the major and minor version of the driver.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented.</b></p>
-        /// <para>
-        /// This must be in the form "n.n". The major and minor versions are positive decimal integers
-        /// and are separated by a period. Drivers should <b>not</b> format this as a real number with
-        /// a decimal point. The driver version should not to be confused with the
-        /// <see cref="InterfaceVersion" /> property, which is the version of this specification
-        /// supported by the driver.
-        /// </para>
-        /// <para>
-        /// Note: client applications should <b>NOT</b> treat this as a real number with a decimal
-        /// point, it is a string containing two integers with a separator character. Take care when
-        /// parsing this string, as a culture-sensitive parser may be confused by the period; Specify
-        /// <c>InvariantCulture</c> if necessary.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.DriverVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -160,9 +112,7 @@ namespace ASCOM.DeviceInterface
         /// version.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented.</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.InterfaceVersion">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -172,9 +122,7 @@ namespace ASCOM.DeviceInterface
         /// The short name of the driver, for display purposes
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented.</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Name">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -185,9 +133,7 @@ namespace ASCOM.DeviceInterface
         /// clicks OK or cancel manually.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented.</b></p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SetupDialog">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -205,15 +151,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CommandBlind">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -233,13 +171,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CommandBool">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -259,13 +191,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks><p style="color:red"><b>May throw a NotImplementedException.</b></p>
-        /// <para>The CommandXXX methods are a historic mechanic that provides clients with direct and unimpeded access to change device hardware configuration. While highly enabling for clients, this mechanic is inherently risky
-        /// because clients can fundamentally change hardware operation without the driver being aware that a change is taking / has taken place.</para>
-        /// <para>The newer Action / SupportedActions mechanic provides discrete, named, functions that can deliver any functionality required.They do need driver authors to make provision for them within the 
-        /// driver, but this approach is much lower risk than using the CommandXXX methods because it enables the driver to resolve conflicts between standard device interface commands and extended commands 
-        /// provided as Actions.The driver is always aware of what is happening and can adapt more effectively to client needs.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CommandString">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Deprecated, see note above.</revision>
@@ -277,19 +203,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a MethodNotImplementedException.</b>
-        /// </p>
-        /// <para>
-        /// Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will become <see langword="false" />). Raises an error if a communications failure occurs, or if the command is known to have failed.
-        /// </para>
-        /// <para>
-        /// <legacyBold>IDomeV3 Behaviour Clarification</legacyBold> - Historically this method could operate synchronously or asynchronously with <see cref="Slewing"/> = <see langword="false"/> indicating that movement had ceased.
-        /// In IDomeV3 and later, <see cref="AbortSlew"/> is required to operate asynchronously using <see cref="Slewing"/> as the completion property. Synchronous behaviour is no longer supported and will be flagged 
-        /// as an issue by Conform Universal.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.AbortSlew">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">AbortSlew must behave asynchronously, see note above.</revision>
@@ -302,16 +216,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <para>
-        /// The specified altitude is the position on the sky that the observer wishes to observe. It is up to the driver to determine how best to locate the dome aperture in order to expose that part of the sky to the telescope.
-        /// This means that the mechanical position to which the Dome moves may not correspond exactly to requested observing altitude because the driver must coordinate
-        /// multiple shutters, clamshell segments or roof mechanisms to provide the required aperture on the sky.
-        /// </para>
-        /// <para>
-        /// Raises an error only if no altitude control. If actual dome altitude can not be read, then reports back the altitude of the last slew position.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Altitude">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -333,40 +238,19 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <para>
-        /// The home position is normally defined by a hardware sensor positioned around the dome circumference and represents a fixed, known azimuth reference.
-        /// </para>
-        /// <para>
-        /// Applications should not rely on the reported azimuth position being identical each time <see cref="AtHome" /> is set <see langword="true" />.
-        /// For some devices, the home position may encompass a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the home position sensor
-        /// and/or the azimuth encoder may be insufficient to return the exact same azimuth value on each occasion. On the other hand some dome controllers always force the azimuth
-        /// reading to a fixed value whenever the home position sensor is active.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.AtHome">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
         bool AtHome { get; }
 
-        // [ToDo] There is no Unpark method which is inconsistent with other interfaces. Consider adding to a future interface version.
         /// <summary>
         /// <see langword="true" /> if the dome is in the programmed park position.
         /// </summary>
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <para>
-        /// Set only following a <see cref="Park" /> operation and reset with any slew operation. Raises an error if not supported.
-        /// </para>
-        /// <para>
-        /// Applications should not rely on the reported azimuth position being identical each time <see cref="AtPark" /> is set <see langword="true" />.
-        /// For some devices, the park position may encompass a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the park position sensor
-        /// and/or the azimuth encoder may be insufficient to return the exact same azimuth value on each occasion. On the other hand some dome controllers always force the azimuth
-        /// reading to a fixed value whenever the park position sensor is active.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.AtPark">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -378,20 +262,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <para>
-        /// The specified azimuth is the position on the sky that the observer wishes to observe. It is up to the driver to determine how best to locate the dome in order to expose that part of the sky to the telescope.
-        /// This means that the mechanical position to which the Dome moves may not correspond exactly to requested observing azimuth because the driver must coordinate
-        /// multiple shutters, clamshell segments or roof mechanisms to provide the required aperture on the sky.
-        /// </para>
-        /// <para>
-        /// Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back the azimuth of the last slew position.
-        /// </para>
-        /// <para>
-        /// The supplied azimuth value is the final azimuth for the dome, not the telescope azimuth. ASCOM Dome drivers do not perform slaving calculations i.e. they do not take account of mount geometry and simply 
-        /// move where they are instructed. Any such slaving calculations must be done by the application.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Azimuth">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -402,11 +273,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanFindHome">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -417,11 +284,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanPark">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -432,11 +295,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanSetAltitude">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -448,14 +307,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// <para>
-        /// This property typically returns <see langword="true" /> for rotating structures and <see langword="false" /> for non-rotating structures.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanSetAzimuth">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -466,11 +318,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanSetPark">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -482,11 +330,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanSetShutter">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -497,15 +341,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// <para>
-        /// See the notes for the <see cref="Slaved" /> property. This should only be <see langword="true" /> if the dome hardware has its own built-in slaving mechanism. 
-        /// It is not permitted for a dome driver to query a telescope driver directly.
-        /// </para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanSlave">Canonical definition</see></remarks>
         /// <seealso cref="Slaved" />
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
@@ -518,11 +354,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red">
-        /// <b>Must be implemented, must not throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CanSyncAzimuth">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -534,6 +366,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.CloseShutter">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -546,11 +379,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="SlavedException">Thrown if slaving is enabled.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// The method should not block and the homing operation should complete asynchronously. After the
-        /// home position is established, <see cref="Azimuth" /> is synchronized to the appropriate value
-        /// and the <see cref="AtHome" /> property becomes <see langword="true" />.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.FindHome">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -562,9 +391,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// Raises an error if not supported or if a communications failure occurs.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.OpenShutter">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -576,10 +403,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// After assuming the programmed park position, sets the <see cref="AtPark" /> flag. Raises an error if <see cref="Slaved" /> is <see langword="true" />, if not supported 
-        /// or if a communications failure occurred.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Park">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -591,9 +415,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the operation cannot be completed.</exception>
-        /// <remarks>
-        /// Raises an error if not supported or if a communications failure occurs.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SetPark">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -605,10 +427,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// Raises an error only if no shutter control. If actual shutter status can not be read, then
-        /// reports back the last shutter state.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.ShutterStatus">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -620,17 +439,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="PropertyNotImplementedException">If Slaved can not be set.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red;margin-bottom:0">
-        /// <b>Slaved Read must be implemented and must not throw a PropertyNotImplementedException. </b>
-        /// </p>
-        /// <p style="color:red;margin-top:0">
-        /// <b>Slaved Write can throw a PropertyNotImplementedException.</b>
-        /// </p>
-        /// Set this property to <see langword="true"/> to enable dome-telescope hardware slaving, if supported (see
-        /// <see cref="CanSlave" />). Raises an exception on any attempt to set this property if hardware
-        /// slaving is not supported). Always returns <see langword="false"/> if hardware slaving is not supported.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Slaved">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -642,11 +451,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red;margin-bottom:0">
-        /// <b>Slewing must be implemented and must not throw a PropertyNotImplementedException. </b>
-        /// </p>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Slewing">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -660,12 +465,10 @@ namespace ASCOM.DeviceInterface
         /// </param>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="InvalidValueException">If the supplied altitude is out of range.</exception>
+        /// <exception cref="SlavedException">Thrown if slaving is enabled.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// The requested altitude should be interpreted by the driver as the position on the sky that the observer wishes to observe. The driver has detailed knowledge of the physical structure and
-        /// must coordinate shutters, roofs or clamshell segments to open an aperture on the sky that satisfies the observer's request.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SlewToAltitude">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -684,10 +487,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="SlavedException">Thrown if <see cref="Slaved" /> is <see langword="true" /></exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// The requested azimuth should be interpreted by the driver as the position on the sky that the observer wishes to observe. The driver has detailed knowledge of the physical structure and
-        /// must coordinate shutters, roofs or clamshell segments to open an aperture on the sky that satisfies the observer's request.
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SlewToAzimuth">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -704,6 +504,7 @@ namespace ASCOM.DeviceInterface
         /// <exception cref="InvalidValueException">If the supplied azimuth is outside the range 0..360 degrees.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SyncToAzimuth">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDome" version="Platform 3.0">Member added.</revision>
         /// </revisionHistory>
@@ -727,11 +528,7 @@ namespace ASCOM.DeviceInterface
         /// an <see cref="ActionNotImplementedException"/> exception  if it is asked to perform an action that it does not support.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented.</b></p>
-        /// <para>Action names are case insensitive, so SelectWheel, selectwheel and SELECTWHEEL all refer to the same action.</para>
-        /// <para>The names of all supported actions must be returned in the <see cref="SupportedActions" /> property.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Action">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -742,6 +539,7 @@ namespace ASCOM.DeviceInterface
         /// runtime garbage collection mechanic. Driver authors should take care to ensure that a client or runtime calling Dispose() does not adversely affect other connected clients.
         /// Applications should not call this method.
         /// </summary>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Dispose">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -753,14 +551,7 @@ namespace ASCOM.DeviceInterface
         /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception>
-        /// <remarks>
-        /// <p style="color:red"><b>Must be implemented</b></p>
-        /// <para>This method must return an empty <see cref="ArrayList" /> if no actions are supported. Do not throw a <see cref="ASCOM.PropertyNotImplementedException" />.</para>
-        /// <para>SupportedActions is a "discovery" mechanism that enables clients to know which Actions a device supports without having to exercise the Actions themselves. This mechanism is necessary because there could be
-        /// people / equipment safety issues if actions are called unexpectedly or out of a defined process sequence.
-        /// It follows from this that SupportedActions must return names that match the spelling of Action names exactly, without additional descriptive text. However, returned names may use any casing
-        /// because the <see cref="Action" /> ActionName parameter is case insensitive.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.SupportedActions">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV2" version="Platform 6.0">Member added.</revision>
         /// </revisionHistory>
@@ -774,7 +565,7 @@ namespace ASCOM.DeviceInterface
         /// Connect to the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Connect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -784,7 +575,7 @@ namespace ASCOM.DeviceInterface
         /// Disconnect from the device asynchronously
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory method and must not throw a <see cref="MethodNotImplementedException"/>.</b></p></remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Disconnect">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -794,10 +585,7 @@ namespace ASCOM.DeviceInterface
         /// Returns True while the device is undertaking an asynchronous connect or disconnect operation.
         /// </summary>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks><p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p></remarks>
-        /// <revisionHistory visible="true">
-        /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Member added.</revision>
-        /// </revisionHistory>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.Connecting">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>
@@ -808,19 +596,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
-        /// <remarks>
-        /// <p style="color:red"><b>This is a mandatory property and must not throw a <see cref="PropertyNotImplementedException"/>.</b></p>
-        /// <para><b>Devices</b></para>
-        /// <para>Devices must return all operational values that are definitively known but can omit entries where values are unknown.
-        /// Devices must not throw exceptions / return errors when values are not known.</para>
-        /// <para>An empty list must be returned if no values are known.</para>
-        /// <para><b>Client Applications</b></para>
-        /// <para>
-        /// Applications must expect that, from time to time, some operational state values may not be present in the device response and must be prepared to handle “missing” values.
-        /// </para>
-        /// <para><b>Further Information</b></para>
-        /// <para>See <conceptualLink target="320982e4-105d-46d8-b5f9-efce3f4dafd4"/> for further information on how to implement DeviceState, which properties to include, and the implementation support provided by the Platform.</para>
-        /// </remarks>
+        /// <remarks>See this link for the canonical definition, which may include further information: <see href="https://ascom-standards.org/newdocs/dome.html#Dome.DeviceState">Canonical definition</see></remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IDomeV3" version="Platform 7.0">Member added.</revision>
         /// </revisionHistory>

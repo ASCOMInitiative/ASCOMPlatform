@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Platform Update Checker")]
-[assembly: AssemblyCopyright("Copyright © The ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © The ASCOM Initiative 2026")]
 [assembly: AssemblyTrademark("ASCOM")]
 [assembly: AssemblyCulture("")]
 

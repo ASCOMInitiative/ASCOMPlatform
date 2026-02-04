@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM ObservingConditions driver for OpenWeatherMap")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2025")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
