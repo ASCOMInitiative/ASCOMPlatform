@@ -893,7 +893,7 @@ namespace ASCOM.Utilities
         private void ReleaseTraceLoggerMutex()
         {
             // Release the mutex if we have it
-            if (GotMutex) // We have the mutex so try to release it, ignoring any errors
+            if ((GotMutex)| (mut.)) // We have the mutex so try to release it, ignoring any errors
             {
                 try
                 {

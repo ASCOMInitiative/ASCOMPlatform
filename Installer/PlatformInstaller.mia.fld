@@ -3,7 +3,6 @@ Main Setup Dialogue
 Check Application Pre-Requisites
 Remove Previous Platform install if present
 Remove Previous Platforms 4 and 5 if present
-Maintenance Dialogue
 Clean up any remaining simulator COM entries
 Install MSI support if required
 Remove any items left from previous instals
@@ -15,5 +14,4 @@ Uninstall previous Platform
 Post install activities - 32bit only
 Set up log file and variables
 Validate installation
-Post install activities - 32bit and 64bit
 Log user configuration options

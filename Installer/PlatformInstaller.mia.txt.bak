@@ -696,7 +696,7 @@ label: Main Install
 [DEFINE REGION: Close OmniSims if running]
  
 Run Program taskkill /f /t /im "ascom.alpaca.simulators.exe" (WAIT, get result into variable OMNISIMS_RUNNING)
-Write into Text File $SETUPLOG$ from Value $TIME$ Task kill - Exit code: $OMNISIMS_RUNNING$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Shut down Omni-Simulators if running - Exit code: $OMNISIMS_RUNNING$ (at end of file)
  
 [END REGION]
  
@@ -2627,11 +2627,6 @@ if Variable SUCCESS not Equals ERROR
   Set Variable ACTION to Register JustAHub (32 bit)
   Include Script: UpdateAscomError
    
-  Set Variable ABORT to Registering JustAHub (64 bit)
-  Run Program $COMMONFILES$\ASCOM\JustAHub64\ASCOM.JustAHub64.exe /regserver (WAIT, get result into variable RC)
-  Set Variable ACTION to Register JustAHub (64 bit)
-  Include Script: UpdateAscomError
-   
   Comment: Tidy up COM registration (add AppID for DCOM etc.) 
   Set Variable PROGRESSTEXT to Finalising install
   Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
@@ -2784,6 +2779,12 @@ if Variable SUCCESS not Equals ERROR
     else
       Write into Text File $SETUPLOG$ from Value $TIME$       Omitting 64bit NGEN (at end of file)
     end
+     
+    Comment: Register 64bit JustAHub
+    Set Variable ABORT to Registering JustAHub (64 bit)
+    Run Program $COMMONFILES$\ASCOM\JustAHub64\ASCOM.JustAHub64.exe /regserver (WAIT, get result into variable RC)
+    Set Variable ACTION to Register JustAHub (64 bit)
+    Include Script: UpdateAscomError
      
     Comment: Register 64bit Omni-Simulators
     Set Variable PROGRESSTEXT to Registering Omni-Simulators - 64bit
