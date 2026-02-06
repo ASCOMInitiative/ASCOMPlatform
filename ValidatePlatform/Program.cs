@@ -28,6 +28,25 @@ namespace ValidatePlatform
         static Util util;
         static string errorLog = "";
 
+        // SOFA test values
+        const double DEGREES_TO_RADIANS = Math.PI / 180.0;
+        const double HOURS_TO_RADIANS = Math.PI / 12.0;
+        const double RADIANS_TO_DEGREES = 180.0 / Math.PI;
+        const double RADIANS_TO_HOURS = 12.0 / Math.PI;
+
+        const double JULIAN_UTC_DATE = 2459774.0; // 12:00 UTC 13th July 2022
+        const double SITE_LONGITUDE = 51.0; // 51 degrees north
+        const double SITE_LATITUDE = 0.0; // 0 degrees west
+        const double SITE_ELEVATION = 0.0; // 80m height
+
+        const double SITE_TEMPERATURE = 10.0; // Celsius
+        const double SITE_PRESSURE = 0.0; // Millibar
+        const double SITE_RH = 50; // Percent
+
+        const double OBSERVING_WAVELENGTH = 0.51; //Microns
+
+        static double aob = 0.0, zob = 0.0, hob = 0.0, dob = 0.0, rob = 0.0, eo = 0.0;
+
         static int Main(string[] args)
         {
             try
@@ -275,23 +294,8 @@ namespace ValidatePlatform
                     ASCOM.Astrometry.SOFA.SOFA sofaComponent = new ASCOM.Astrometry.SOFA.SOFA();
                     LogMessage("Main", "Successfully created SOFA .NET component.");
 
-                    const double DEGREES_TO_RADIANS = Math.PI / 180.0; ;
-                    const double HOURS_TO_RADIANS = Math.PI / 12.0; ;
-                    const double RADIANS_TO_DEGREES = 180.0 / Math.PI;
-                    const double RADIANS_TO_HOURS = 12.0 / Math.PI;
-
                     double TARGET_RA = util.HMSToHours("05:16:41.3591");  // Capella: 05h 16m 41.3591s
                     double TARGET_DEC = util.DMSToDegrees("+45:59:52.768"); // Capella: +45° 59' 52.768" 
-                    const double JULIAN_UTC_DATE = 2459774.0; // 12:00 UTC 13th July 2022
-                    const double SITE_LONGITUDE = 51.0; // 51 degrees north
-                    const double SITE_LATITUDE = 0.0; // 0 degrees west
-                    const double SITE_ELEVATION = 0.0; // 80m height
-
-                    const double SITE_TEMPERATURE = 10.0; // Celsius
-                    const double SITE_PRESSURE = 0.0; // Millibar
-                    const double SITE_RH = 50; // Percent
-
-                    const double OBSERVING_WAVELENGTH = 0.51; //Microns
 
                     double aob = 0.0, zob = 0.0, hob = 0.0, dob = 0.0, rob = 0.0, eo = 0.0;
 
@@ -346,6 +350,95 @@ namespace ValidatePlatform
                 catch (Exception ex)
                 {
                     LogError("Main", $"SOFA test exception.", ex);
+                }
+                LogBlankLine();
+
+                // Test the SOFA COM component.
+                try
+                {
+                    double TARGET_RA = util.HMSToHours("05:16:41.3591");  // Capella: 05h 16m 41.3591s
+                    double TARGET_DEC = util.DMSToDegrees("+45:59:52.768"); // Capella: +45° 59' 52.768" 
+
+                    Type sofaType = Type.GetTypeFromProgID("ASCOM.Astrometry.SOFA.SOFA");
+                    if (sofaType is null)
+                    {
+                        throw new Exception("Unable to get SOFA COM object type from ProgID.");
+                    }
+
+                    LogMessage("Main", "About to create SOFA COM component...");
+                    dynamic sofa = Activator.CreateInstance(sofaType);
+                    LogMessage("Main", "Successfully created SOFA component");
+                    LogBlankLine();
+
+                    double tt1 = 2459773.0;
+                    double tt2 = 0.99093;
+                    double tai1 = 0.0;
+                    double tai2 = 0.0;
+                    int rc = sofa.TtTai(tt1, tt2, ref tai1, ref tai2);
+                    double difference = (tt1 + tt2 - tai1 - tai2) * 24.0 * 60.0 * 60.0;
+                    LogMessage("Main", $"TtTai called successfully. Input terrestrial time: {tt1 + tt2}, output atomic time: {tai1 + tai2}. Difference: {difference} seconds.");
+
+                    if (Math.Abs(difference - 32.184) < 0.01)
+                    {
+                        LogMessage("Main", $"Received expected result from TtTai.");
+                    }
+                    else
+                    {
+                        LogError("Main", $"Received bad result from TtTai.", null);
+                    }
+                    LogBlankLine();
+
+                    // Call the Sofa component CelestialToObserved method.
+                    int sofaRc = sofa.Atco13(
+                        TARGET_RA * HOURS_TO_RADIANS,
+                        TARGET_DEC * DEGREES_TO_RADIANS,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        JULIAN_UTC_DATE,
+                        0.0,
+                        0.0,
+                        SITE_LONGITUDE * DEGREES_TO_RADIANS,
+                        SITE_LATITUDE * DEGREES_TO_RADIANS,
+                        SITE_ELEVATION,
+                        0.0,
+                        0.0,
+                        SITE_PRESSURE,
+                        SITE_TEMPERATURE,
+                        SITE_RH / 100.0,
+                        OBSERVING_WAVELENGTH,
+                        ref aob,
+                        ref zob,
+                        ref hob,
+                        ref dob,
+                        ref rob,
+                        ref eo
+                        );
+
+                    LogMessage("Main", $"RA: {util.HoursToHMS((rob - eo) * RADIANS_TO_HOURS, ":", ":", "", 3)}, Dec: {util.DegreesToDMS(dob * RADIANS_TO_DEGREES, ":", ":", "", 3)}");
+                    difference = Math.Abs(((rob - eo) * RADIANS_TO_HOURS) - 5.30514362725635);
+                    if (difference < 0.01)
+                    {
+                        LogMessage("Main", $"Received expected result from CelestialToObserved - RA.");
+                    }
+                    else
+                    {
+                        LogError("Main", $"Received bad result from CelestialToObserved - RA.", null);
+                    }
+
+                    if (Math.Abs((dob * RADIANS_TO_DEGREES) - 46.0209960277937) < 0.01)
+                    {
+                        LogMessage("Main", $"Received expected result from CelestialToObserved - DEC.");
+                    }
+                    else
+                    {
+                        LogError("Main", $"Received bad result from CelestialToObserved - DEC.", null);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogError("Main", $"Exception", ex);
                 }
                 LogBlankLine();
 
@@ -453,7 +546,6 @@ namespace ValidatePlatform
                 {
                     LogError("Main", $"NOVAS test exception.", ex);
                 }
-
                 LogBlankLine();
 
                 // Display error log if necessary, otherwise continue silently.
