@@ -785,15 +785,19 @@ namespace ASCOM.Simulator
                 }
 
                 binX = value;
+                Log.LogMessage("BinX", "set {0}", binX);
                 if (!canAsymmetricBin)
+                {
                     binY = value;
+                    Log.LogMessage("BinY", "Also set {0} because the camera does not support asymmetric binning.", binY);
+                }
             }
         }
 
         /// <summary>
         /// Sets the binning factor for the Y axis  Also returns the current value.  Should
         /// default to 1 when the camera link is established.  Note:  driver does not check
-        /// for compatible subframe values when this value is set; rather they are checked
+        /// for compatible sub-frame values when this value is set; rather they are checked
         /// upon StartExposure.
         /// </summary>
         /// <exception>Must throw an exception for illegal binning values</exception>
@@ -816,8 +820,12 @@ namespace ASCOM.Simulator
                 }
 
                 binY = value;
+                Log.LogMessage("BinY", "set {0}", binY);
                 if (!canAsymmetricBin)
+                {
                     binX = value;
+                    Log.LogMessage("BinX", "Also set {0} because the camera does not support asymmetric binning.", binX);
+                }
             }
         }
 
@@ -1277,7 +1285,7 @@ namespace ASCOM.Simulator
                 if (!imageReady)
                 {
                     Log.LogMessage("ImageArray", "No Image Available");
-                    throw new ASCOM.InvalidOperationException("There is no image available");
+                    throw new InvalidOperationException("There is no image available");
                 }
 
                 Log.LogMessage("ImageArray", "get");
@@ -1298,25 +1306,6 @@ namespace ASCOM.Simulator
                 }
                 else
                 {
-                    // Test code to demonstrate the order of returned array values. Not required in production code!
-                    //for (int j = 0; j < numY; j++)
-                    //{
-                    //    for (int i = 0; i < numX; i++)
-                    //    {
-                    //        imageArray[i, j] = i + 10 * j;
-                    //    }
-                    //}
-                    // Test code to provide a consistent array every time. Not required in production code!
-                    //for (int i = 0; i < numX; i++)
-                    //{
-                    //    for (int j = 0; j < numY; j++)
-                    //    {
-                    //        imageArray[i, j] = i + j;
-                    //    }
-                    //}
-                    Log.LogMessage("ReadImageFile", $"Image data Red rectangle RGGB - {imageArray[500, 20]:000} {imageArray[501, 20]:000} {imageArray[500, 21]:000} {imageArray[501, 21]:000}");
-                    Log.LogMessage("ReadImageFile", $"Image data Blue rectangle RGGB - {imageArray[600, 20]:000} {imageArray[601, 20]:000} {imageArray[600, 21]:000} {imageArray[601, 21]:000}");
-
                     return imageArray;
                 }
             }
@@ -1355,7 +1344,6 @@ namespace ASCOM.Simulator
                 {
                     imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
                     Parallel.For(0, imageArrayColour.GetLength(0), i =>
-                    //for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArrayColour.GetLength(1); j++)
                         {
@@ -1370,7 +1358,6 @@ namespace ASCOM.Simulator
                 {
                     imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
                     Parallel.For(0, imageArray.GetLength(0), i =>
-                    //for (int i = 0; i < imageArray.GetLength(1); i++)
                     {
                         for (int j = 0; j < imageArray.GetLength(1); j++)
                         {

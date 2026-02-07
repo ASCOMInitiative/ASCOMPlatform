@@ -15,6 +15,7 @@ here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform 
 * Alpaca Dynamic Driver log files are now named ASCOM.DynamicDriver... rather than ASCOM.AlpacaSim...
 * Update checker messages now refer to 'Updates' rather than 'Service Packs'.
 * Platform help is now an online link to the ASCOM website rather than a local file.
+
 ## Issues Fixed in 7.1 Update 2 - For Everyone
 * Fixed an installer issue that caused some installs to stop while registering the Omni-Simulators.
 * Fixed an installer issue where an attempt was made to register the 64bit JustAHub driver on a 32bit system.
@@ -24,12 +25,17 @@ HTTP PUT commands are now sent directly in one packet, eliminating an un-necessa
 * Fixed the <codeEntityReference linkText="Utilities.Serial.ReceiveTerminatedBinary">M:ASCOM.Utilities.Serial.ReceiveTerminatedBinary(System.Byte[])</codeEntityReference>
 method so it now operates correctly in locales that use double byte character sets such as Japan, Korea and China.
 * Fixed the Profile Explorer about dialogue so that it displays correct information about the version installed.
+* Fixed a camera simulator array index out of bounds error when returning images smaller than 601 pixels wide that was introduced in Platform 7.1.
+
 ## Changes in 7.1 Update 2 - For Developers
 * Developer and Library help are now online links to the ASCOM website rather than local files.
+
 ## Issues Fixed in 7.1 Update 2 - For Developers
 * None
+
 ## Breaking Changes (For Developers) in Platform 7.1 Update 2
 * None
+
 ## Known Limitations - Developers
 The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully
 accessible through COM from scripting languages because a number of parameters are passed by reference or use
