@@ -1723,8 +1723,17 @@ namespace ASCOM.Simulator
             {
                 try
                 {
+                    Log.LogMessage("SetupDialog", "About to call InitProperties...");
                     F.InitProperties(this);
-                    if (F.ShowDialog() == DialogResult.OK) SaveToProfile();
+                    Log.LogMessage("SetupDialog", "Returned from InitProperties. Calling ShowDialog...");
+                    DialogResult dr = F.ShowDialog();
+                    Log.LogMessage("SetupDialog", $"Returned from ShowDialog. Result: {dr}");
+                    if (dr == DialogResult.OK)
+                    {
+                        Log.LogMessage("SetupDialog", $"Saving to profile...");
+                        SaveToProfile();
+                        Log.LogMessage("SetupDialog", $"Returned from saving profile.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -2764,9 +2773,12 @@ namespace ASCOM.Simulator
         /// </summary>
         private void SaveToProfile()
         {
+            Log.LogMessage("SaveToProfile", $"Entered SaveToProfile.");
             using (Profile profile = new Profile(true))
             {
+                Log.LogMessage("SaveToProfile", $"Created Profile object.");
                 profile.DeviceType = "Camera";
+                Log.LogMessage("SaveToProfile", $"Set device type.");
 
                 // Save camera configuration to the Profile
                 profile.WriteValue(s_csDriverID, "Trace", Log.Enabled.ToString(CultureInfo.InvariantCulture));
@@ -2777,6 +2789,7 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_FullWellCapacity, fullWellCapacity.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_MaxADU, maxADU.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_ElectronsPerADU, electronsPerADU.ToString(CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set first set of properties.");
 
                 profile.WriteValue(s_csDriverID, STR_CameraXSize, cameraXSize.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_CameraYSize, cameraYSize.ToString(CultureInfo.InvariantCulture));
@@ -2789,10 +2802,12 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_BayerOffsetX, bayerOffsetX.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_BayerOffsetY, bayerOffsetY.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_OmitOddBins, omitOddBins.ToString(CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set second set of properties.");
 
                 profile.WriteValue(s_csDriverID, STR_HasCooler, hasCooler.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_CanSetCCDTemperature, canSetCcdTemperature.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_CanGetCoolerPower, canGetCoolerPower.ToString(CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set third set of properties.");
 
                 profile.WriteValue(s_csDriverID, STR_CanAbortExposure, canAbortExposure.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_CanStopExposure, canStopExposure.ToString(CultureInfo.InvariantCulture));
@@ -2803,6 +2818,7 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_ApplyNoise, applyNoise.ToString(CultureInfo.InvariantCulture));
 
                 profile.WriteValue(s_csDriverID, STR_CanPulseGuide, canPulseGuide.ToString(CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set fourth set of properties.");
 
                 // Write gain variables
                 profile.WriteValue(s_csDriverID, STR_GainMode, ((int)gainMode).ToString(CultureInfo.InvariantCulture));
@@ -2817,16 +2833,19 @@ namespace ASCOM.Simulator
                     gainStringBuilder.Append(gainItem.ToString());
                 }
                 profile.WriteValue(s_csDriverID, STR_Gains, gainStringBuilder.ToString());
+                Log.LogMessage("SaveToProfile", $"Set fifth set of properties.");
 
                 // Write offset variables
                 profile.WriteValue(s_csDriverID, STR_OffsetMode, ((int)offsetMode).ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_Offset, Convert.ToString(offset, CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_OffsetMin, Convert.ToString(offsetMin, CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_OffsetMax, Convert.ToString(offsetMax, CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set sixth set of properties.");
 
                 // Write sub exposure values
                 profile.WriteValue(s_csDriverID, STR_HasSubExposure, hasSubExposure.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_SubExposureInterval, subExposureInterval.ToString(CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set seventh set of properties.");
 
                 System.Text.StringBuilder offsetStringBuilder = new System.Text.StringBuilder();
                 foreach (string offsetItem in offsets)
@@ -2835,27 +2854,38 @@ namespace ASCOM.Simulator
                     offsetStringBuilder.Append(offsetItem.ToString());
                 }
                 profile.WriteValue(s_csDriverID, STR_Offsets, offsetStringBuilder.ToString());
+                Log.LogMessage("SaveToProfile", $"Set eighth set of properties.");
 
                 profile.WriteValue(s_csDriverID, STR_CanFastReadout, canFastReadout.ToString(CultureInfo.InvariantCulture));
+                Log.LogMessage("SaveToProfile", $"Set eighth set of properties. A");
 
                 if (readoutModes == null || readoutModes.Count <= 1)
                 {
+                    Log.LogMessage("SaveToProfile", $"Set eighth set of properties. B");
                     profile.DeleteValue(s_csDriverID, "ReadoutModes");
+                    Log.LogMessage("SaveToProfile", $"Set eighth set of properties. C");
                 }
                 else
                 {
+                    Log.LogMessage("SaveToProfile", $"Set eighth set of properties. D");
                     // Readout Modes use string array
                     gainStringBuilder = new System.Text.StringBuilder();
                     foreach (var item in readoutModes)
                     {
+                        Log.LogMessage("SaveToProfile", $"Set eighth set of properties. E");
                         if (gainStringBuilder.Length > 0)
                             gainStringBuilder.Append(",");
                         gainStringBuilder.Append(item.ToString());
                     }
+                    Log.LogMessage("SaveToProfile", $"Set eighth set of properties. F");
                     profile.WriteValue(s_csDriverID, "ReadoutModes", gainStringBuilder.ToString());
+                    Log.LogMessage("SaveToProfile", $"Set eighth set of properties. G");
                 }
+                Log.LogMessage("SaveToProfile", $"Set ninth set of properties.");
             }
+            Log.LogMessage("SaveToProfile", $"Calling SaveCoolerToProfile...");
             SaveCoolerToProfile(); // Save the cooler profile as well
+            Log.LogMessage("SaveToProfile", $"Exiting SaveToProfile.");
         }
 
         /// <summary>
@@ -2863,9 +2893,12 @@ namespace ASCOM.Simulator
         /// </summary>
         internal void SaveCoolerToProfile()
         {
+            Log.LogMessage("SaveCoolerToProfile", $"Entered SaveCoolerToProfile.");
+
             using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
+                Log.LogMessage("SaveCoolerToProfile", $"Set device type.");
 
                 // Save the cooler configuration to the Profile
                 profile.WriteValue(s_csDriverID, STR_CoolerAmbientTemperature, heatSinkTemperature.ToString(CultureInfo.InvariantCulture), "Cooler");
@@ -2881,6 +2914,7 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_CoolerSetPointMinimum, coolerSetPointMinimum.ToString(CultureInfo.InvariantCulture), "Cooler");
                 profile.WriteValue(s_csDriverID, STR_CoolerGraphRange, coolerGraphRange.ToString(CultureInfo.InvariantCulture), "Cooler");
             }
+            Log.LogMessage("SaveCoolerToProfile", $"Exiting SaveCoolerToProfile.");
         }
 
         /// <summary>
