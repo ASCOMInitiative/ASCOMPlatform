@@ -12,14 +12,16 @@ Platform releases and service packs. The Platform environment pre-requisites are
 here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform Prerequisites</link>.
 
 ## Changes in 7.1 Update 2 - For Everyone
+* Platform help is now an online link to the ASCOM website rather than a local file.
 * Alpaca Dynamic Driver log files are now named ASCOM.DynamicDriver... rather than ASCOM.AlpacaSim...
 * Update checker messages now refer to 'Updates' rather than 'Service Packs'.
-* Platform help is now an online link to the ASCOM website rather than a local file.
+
 
 ## Issues Fixed in 7.1 Update 2 - For Everyone
+* Fixed an issue, introduced in Platform 7.1, that caused drivers that use ASCOM COM objects to fail in some environments, including Windows ARM 64bit.
+The issue also caused the 64bit Platform installer validation test to report a -1073741819 error.
 * Fixed an installer issue that caused some installs to stop while registering the Omni-Simulators.
 * Fixed an installer issue where an attempt was made to register the 64bit JustAHub driver on a 32bit system.
-* Fixed an issue that caused the Platform installer validation tests to report an error on some systems.
 * Fixed the Alpaca Dynamic Clients so they no longer use the HTTP 100-Continue protocol when sending commands to Alpaca devices.
 HTTP PUT commands are now sent directly in one packet, eliminating an un-necessary network round trip.
 * Fixed the <codeEntityReference linkText="Utilities.Serial.ReceiveTerminatedBinary">M:ASCOM.Utilities.Serial.ReceiveTerminatedBinary(System.Byte[])</codeEntityReference>
