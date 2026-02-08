@@ -134,7 +134,7 @@ namespace ASCOM.Utilities
         {
             string PlatformVersion;
 
-            TL = new TraceLogger("RegistryAccess",true); // Create a new trace logger
+            TL = new TraceLogger("RegistryAccess", true); // Create a new trace logger
             TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT); // Get enabled / disabled state from the user registry
 
             //RunningVersions(TL); // Include version information
@@ -238,7 +238,7 @@ namespace ASCOM.Utilities
                         }
                 }
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             finally
             {
@@ -253,6 +253,8 @@ namespace ASCOM.Utilities
             // Delete a key
             try
             {
+                bool keyExists;
+
                 GetProfileMutex("DeleteKey", p_SubKeyName);
                 sw.Reset();
                 sw.Start(); // Start timing this call
@@ -260,14 +262,39 @@ namespace ASCOM.Utilities
 
                 try
                 {
-                    ProfileRegKey.DeleteSubKeyTree(CleanSubKey(p_SubKeyName));
-                    ProfileRegKey.Flush();
+                    // This code was revised to avoid NullReferenceExceptions and ArgumentExceptions when the specified sub-key does not exist or when the requested value is missing.
+                    // February 2026 - This was done because .NET suddenly started throwing stack overflow exceptions in code that had run fine for over 10 years.
+                    TL.LogMessage("DeleteKey", $"  About to create key...");
+                    using (RegistryKey key = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName), true))
+                    {
+                        // Check whether the key exists. If not, there is nothing to delete so exit gracefully. 
+                        if (key is null) // Key does not exist so nothing to delete
+                        {
+                            keyExists = false;
+                            TL.LogMessage("DeleteKey", $"  Key does not exist so nothing to delete");
+                        }
+                        else // Key exists so note this. 
+                        {
+                            keyExists = true;
+                        }
+                    }
+
+                    // Check whether the key exists before trying to delete it. If the key does not exist, there is nothing to delete so exit gracefully. If it does exist, delete it.
+                    if (keyExists) // Key does exist so delete it
+                    {
+                        TL.LogMessage("DeleteKey", $"  Deleting subkey {p_SubKeyName}");
+                        ProfileRegKey.DeleteSubKeyTree(CleanSubKey(p_SubKeyName));
+                        ProfileRegKey.Flush();
+                    }
                 }
-                catch
+                catch(Exception ex)
                 {
-                } // Remove it if at all possible but don't throw any errors
+                    // Remove the key if at all possible but don't throw any errors, just log them.
+                    TL.LogMessageCrLf("DeleteKey", $"  Exception: {ex.Message}\r\n{ex}");
+                }
+
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             finally
             {
@@ -338,17 +365,45 @@ namespace ASCOM.Utilities
                 sw.Start(); // Start timing this call
                 TL.LogMessage("DeleteProfile", "SubKey: \"" + p_SubKeyName + "\" Name: \"" + p_ValueName + "\"");
 
-                try // Remove value if it exists
+                // Remove value if it exists
+                try
                 {
-                    ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName), true).DeleteValue(p_ValueName);
-                    ProfileRegKey.Flush();
+                    // This code was revised to avoid NullReferenceExceptions and ArgumentExceptions when the specified sub-key does not exist or when the requested value is missing.
+                    // February 2026 - This was done because .NET suddenly started throwing stack overflow exceptions in code that had run fine for over 10 years.
+                    TL.LogMessage("DeleteProfile", $"  About to create key...");
+                    using (RegistryKey key = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName), true))
+                    {
+                        // Check whether the key exists. If not, there is nothing to delete so exit gracefully. 
+                        if (key is null) // Key does not exist so nothing to delete
+                        {
+                            TL.LogMessage("DeleteProfile", $"  Key did not exist so nothing to delete");
+                        }
+                        else // Key exists so check whether the value exists. 
+                        {
+                            TL.LogMessage("DeleteProfile", $"  Key created. Is null: {key is null}");
+
+                            // Check whether the value exists. If not, there is nothing to delete so exit gracefully. If it does exist, delete it.  
+                            object value = key.GetValue(p_ValueName); // Get the current value, if anything
+                            if (value is null) // Value does not exist so nothing to delete
+                            {
+                                TL.LogMessage("DeleteProfile", $"  Value does not exist so nothing to delete");
+                            }
+                            else // Value exists so delete it
+                            {
+                                TL.LogMessage("DeleteProfile", $"  Value exists so deleting it.");
+                                key.DeleteValue(p_ValueName);
+                                TL.LogMessage("DeleteProfile", $"  Flushing key");
+                                key.Flush();
+                            }
+                        }
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    TL.LogMessage("DeleteProfile", "  Value did not exist");
+                    TL.LogMessageCrLf("DeleteProfile", $"  Exception. {ex.Message}\r\n{ex}");
                 }
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             finally
             {
@@ -402,7 +457,7 @@ namespace ASCOM.Utilities
                     }
                 }
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             finally
             {
@@ -450,7 +505,7 @@ namespace ASCOM.Utilities
                 } // The sub-key doesn't exist
 
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             finally
             {
@@ -554,7 +609,7 @@ namespace ASCOM.Utilities
                 }
 
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             finally
             {
@@ -595,7 +650,7 @@ namespace ASCOM.Utilities
                 ProfileRegKey.Flush();
 
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             catch (Exception ex) // Any other exception
             {
@@ -653,7 +708,7 @@ namespace ASCOM.Utilities
                 }
 
                 sw.Stop();
-                LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             catch (Exception ex)
             {
@@ -713,7 +768,7 @@ namespace ASCOM.Utilities
                 ProfileRegKey = OpenSubKey3264(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, true, RegistryAccessRights.Wow64_32Key);
 
                 sw.Stop();
-                LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
+                LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds");
             }
             catch (Exception ex)
             {
@@ -739,7 +794,7 @@ namespace ASCOM.Utilities
 
                 GetSubKey(p_SubKeyName, "", ref ProfileContents); // Read the requested profile into a ProfileKey object
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds ");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds ");
             }
             finally
             {
@@ -803,7 +858,7 @@ namespace ASCOM.Utilities
                 ProfileRegKey.Flush();
 
                 sw.Stop();
-                TL.LogMessage("  ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds ");
+                TL.LogMessage("ElapsedTime", "  " + sw.ElapsedMilliseconds + " milliseconds ");
             }
             finally
             {
