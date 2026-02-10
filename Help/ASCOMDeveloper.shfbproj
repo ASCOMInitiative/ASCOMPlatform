@@ -365,6 +365,7 @@
     <None Include=".ProjectOverrides\VS2013ChmHelpFormat.proj" />
     <None Include=".ProjectOverrides\VS2013HtmlHelpFormat.proj" />
     <None Include=".ProjectOverrides\VS2022HtmlHelpFormat.proj" />
+    <None Include="Version History\Version 7.1 Update 3.md" />
     <None Include="Developer Information\Astronomical Coordinates.aml" />
     <None Include="Developer Information\ConnectionProtocol.aml" />
     <None Include="Developer Information\Developer Links.aml" />
