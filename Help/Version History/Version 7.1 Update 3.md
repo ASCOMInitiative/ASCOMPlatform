@@ -15,4 +15,4 @@ here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform 
 * Fixed - TraceLogger occasionally threw `ProfilePersistenceException - Timed out waiting for TraceLogger mutex` exceptions.
 
 ## Changes in 7.1 Update 2
-See this link for changes and fixes in Platform 7.1 Update 2: <link xlink:href="Version_7.1.2">
+See this link for changes and fixes in <link xlink:href="Version_7.1.2">Platform 7.1 Update 2</link>.
