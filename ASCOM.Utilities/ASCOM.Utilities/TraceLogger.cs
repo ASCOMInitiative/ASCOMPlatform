@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -47,6 +48,11 @@ namespace ASCOM.Utilities
 
         private System.Threading.Mutex mut;
         private bool GotMutex;
+
+        private bool traceUtil = false;
+        private bool continueAnyway = false; // Used to allow continuation of logging even if we have a problem getting the mutex
+
+        private object lockObject = new object();
 
         #region New and IDisposable Support
 
@@ -139,6 +145,12 @@ namespace ASCOM.Utilities
 
             // Set default behaviour for handling Unicode characters
             UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
+
+            // Determine whether to include enhanced trace information in the event log.
+            traceUtil = Global.GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT);
+
+            // Determine whether to continue with logging even if we have a problem getting the mutex. This is to allow logging of issues that may be causing problems with the mutex itself.
+            continueAnyway = Global.GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT);
         }
 
         #region IDisposable Support
@@ -666,103 +678,106 @@ namespace ASCOM.Utilities
         {
             int FileNameSuffix = 0;
             string FileNameBase, TodaysLogFilePath;
-            switch (g_LogFileName ?? "")
+            lock (lockObject)
             {
-                case var @case when @case == "":
+                switch (g_LogFileName ?? "")
+                {
+                    case var @case when @case == "":
 
-                // No filename has been specified so use the automatically generated name
-                case SERIAL_AUTO_FILENAME:
-                    if (string.IsNullOrEmpty(g_LogFileType))
-                        throw new ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set");
+                    // No filename has been specified so use the automatically generated name
+                    case SERIAL_AUTO_FILENAME:
+                        if (string.IsNullOrEmpty(g_LogFileType))
+                            throw new ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log file type has been set");
 
-                    if (autoLogFilePath) // Default behaviour using the current user's Document directory
-                    {
-                        Directory.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
-                        FileNameBase = g_DefaultLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
-                    }
-                    else // User has given a specific path so use that
-                    {
-                        TodaysLogFilePath = g_LogFilePath + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT); // Append Logs yyyy-mm-dd to the user supplied log file
-                        Directory.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
-                        FileNameBase = TodaysLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
-                    }
+                        if (autoLogFilePath) // Default behaviour using the current user's Document directory
+                        {
+                            Directory.CreateDirectory(g_DefaultLogFilePath); // Create the directory if it doesn't exist
+                            FileNameBase = g_DefaultLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
+                        }
+                        else // User has given a specific path so use that
+                        {
+                            TodaysLogFilePath = g_LogFilePath + TRACE_LOGGER_FILENAME_BASE + Strings.Format(DateTime.Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT); // Append Logs yyyy-mm-dd to the user supplied log file
+                            Directory.CreateDirectory(TodaysLogFilePath); // Create the directory if it doesn't exist
+                            FileNameBase = TodaysLogFilePath + @"\ASCOM." + g_LogFileType + "." + Strings.Format(DateTime.Now, "HHmm.ssfff");
+                        }
 
-                    do // Create a unique log file name based on date, time and required name
-                    {
-                        g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
-                        FileNameSuffix += 1; // Increment counter that ensures that no log file can have the same name as any other
-                    }
-                    while (File.Exists(g_LogFileActualName));
+                        do // Create a unique log file name based on date, time and required name
+                        {
+                            g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
+                            FileNameSuffix += 1; // Increment counter that ensures that no log file can have the same name as any other
+                        }
+                        while (File.Exists(g_LogFileActualName));
 
-                    try
-                    {
-                        g_LogFile = new StreamWriter(g_LogFileActualName, false);
-                        g_LogFile.AutoFlush = true;
-                    }
-                    catch (IOException ex)
-                    {
-                        bool ok = false;
-                        do
+                        try
+                        {
+                            g_LogFile = new StreamWriter(g_LogFileActualName, false);
+                            g_LogFile.AutoFlush = true;
+                        }
+                        catch (IOException ex)
+                        {
+                            bool ok = false;
+                            do
+                            {
+                                try
+                                {
+                                    g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
+                                    g_LogFile = new StreamWriter(g_LogFileActualName, false);
+                                    g_LogFile.AutoFlush = true;
+                                    ok = true;
+                                }
+                                catch (IOException)
+                                {
+                                    // Ignore IO exceptions and try the next filename
+                                }
+                                FileNameSuffix += 1;
+                            }
+                            while (!(ok | FileNameSuffix == 20));
+
+                            if (!ok)
+                            {
+                                Console.WriteLine($"TraceLogger:CreateLogFile - Unable to create log file: {ex}");
+                                throw new HelperException("TraceLogger:CreateLogFile - IOException - Unable to create log file", ex);
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             try
                             {
-                                g_LogFileActualName = FileNameBase + FileNameSuffix.ToString() + ".txt";
-                                g_LogFile = new StreamWriter(g_LogFileActualName, false);
-                                g_LogFile.AutoFlush = true;
-                                ok = true;
+                                Interaction.MsgBox("CreateLogFile Auto filename exception - #" + g_LogFileName + "# " + ex.ToString());
                             }
-                            catch (IOException)
+                            catch (Exception ex1)
                             {
-                                // Ignore IO exceptions and try the next filename
+                                Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception trying to show message box: {ex1}");
                             }
-                            FileNameSuffix += 1;
-                        }
-                        while (!(ok | FileNameSuffix == 20));
+                            Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception creating trace logger: {ex}");
+                            throw;
 
-                        if (!ok)
-                        {
-                            Console.WriteLine($"TraceLogger:CreateLogFile - Unable to create log file: {ex}");
-                            throw new HelperException("TraceLogger:CreateLogFile - IOException - Unable to create log file", ex);
                         }
-                    }
-                    catch (Exception ex)
-                    {
+                        break;
+
+                    // The user has provided a specific filename so create log file based on supplied name
+                    default:
                         try
                         {
-                            Interaction.MsgBox("CreateLogFile Auto filename exception - #" + g_LogFileName + "# " + ex.ToString());
+                            g_LogFile = new StreamWriter(g_LogFileName + ".txt", false);
+                            g_LogFile.AutoFlush = true;
+                            g_LogFileActualName = g_LogFileName + ".txt";
                         }
-                        catch (Exception ex1)
+                        catch (Exception ex)
                         {
-                            Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception trying to show message box: {ex1}");
+                            try
+                            {
+                                Interaction.MsgBox("CreateLogFile Manual filename exception - #" + g_LogFileName + "# " + ex.ToString());
+                            }
+                            catch (Exception ex1)
+                            {
+                                Console.WriteLine($"TraceLogger:CreateLogFile - Manual filename exception trying to show message box: {ex1}");
+                            }
+                            Console.WriteLine($"TraceLogger:CreateLogFile - Manual  filename exception creating trace logger: {ex}");
+                            throw;
                         }
-                        Console.WriteLine($"TraceLogger:CreateLogFile - Auto filename exception creating trace logger: {ex}");
-                        throw;
-
-                    }
-                    break;
-
-                // The user has provided a specific filename so create log file based on supplied name
-                default:
-                    try
-                    {
-                        g_LogFile = new StreamWriter(g_LogFileName + ".txt", false);
-                        g_LogFile.AutoFlush = true;
-                        g_LogFileActualName = g_LogFileName + ".txt";
-                    }
-                    catch (Exception ex)
-                    {
-                        try
-                        {
-                            Interaction.MsgBox("CreateLogFile Manual filename exception - #" + g_LogFileName + "# " + ex.ToString());
-                        }
-                        catch (Exception ex1)
-                        {
-                            Console.WriteLine($"TraceLogger:CreateLogFile - Manual filename exception trying to show message box: {ex1}");
-                        }
-                        Console.WriteLine($"TraceLogger:CreateLogFile - Manual  filename exception creating trace logger: {ex}");
-                        throw;
-                    }
-                    break;
+                        break;
+                }
             }
         }
 
@@ -838,15 +853,18 @@ namespace ASCOM.Utilities
                 string l_Msg = Strings.Format(DateTime.Now, "HH:mm:ss.fff") + " " + MakePrintable(p_Test, p_RespectCrLf) + " " + MakePrintable(p_Msg, p_RespectCrLf);
                 if (g_LogFile is not null)
                 {
-                    if (p_NewLine)
+                    lock (lockObject) // Ensure that the log file is not being written to by another thread while we are trying to write to it
                     {
-                        g_LogFile.WriteLine(l_Msg); // Update log file with newline terminator
+                        if (p_NewLine)
+                        {
+                            g_LogFile.WriteLine(l_Msg); // Update log file with newline terminator
+                        }
+                        else
+                        {
+                            g_LogFile.Write(l_Msg);
+                        } // Update log file without newline terminator
+                        g_LogFile.Flush();
                     }
-                    else
-                    {
-                        g_LogFile.Write(l_Msg);
-                    } // Update log file without newline terminator
-                    g_LogFile.Flush();
                 }
             }
             catch (Exception ex)
@@ -858,55 +876,126 @@ namespace ASCOM.Utilities
 
         private void GetTraceLoggerMutex(string Method, string Parameters)
         {
+            return; // Temporarily disable mutex acquisition to try to track down a deadlock issue
             // Get the profile mutex or log an error and throw an exception that will terminate this profile call and return to the calling application
             try
             {
+                // Log that we are trying to get the mutex if configured to do so
+                if (traceUtil)
+                {
+                    string stackTrace = GetStackWithLines();
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - About to get mutex for method {Method} - {Parameters}\r\n{stackTrace}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+                }
+
                 // Try to acquire the mutex
-                GotMutex = mut.WaitOne(PROFILE_MUTEX_TIMEOUT, false);
+                GotMutex = true; // mut.WaitOne(PROFILE_MUTEX_TIMEOUT, false);
             }
-            // Catch the AbandonedMutexException but not any others, these are passed to the calling routine
-            catch (System.Threading.AbandonedMutexException ex)
+            catch (System.Threading.AbandonedMutexException ex) // Catch the AbandonedMutexException but not any others, these are passed to the calling routine
             {
                 // We've received this exception but it indicates an issue in a PREVIOUS thread not this one. Log it and we have also got the mutex; so continue!
-                LogEvent("TraceLogger", "AbandonedMutexException in " + Method + ", parameters: " + Parameters, EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, ex.ToString());
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, ex.ToString());
                 if (GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT))
                 {
-                    LogEvent("TraceLogger", "AbandonedMutexException in " + Method + ": Throwing exception to application", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}. Throwing exception to application", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, null);
                     throw; // Throw the exception in order to report it
                 }
                 else
                 {
-                    LogEvent("TraceLogger", "AbandonedMutexException in " + Method + ": Absorbing exception, continuing normal execution", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
+                    // Flag that we have got the mutex.
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}: Absorbing exception, continuing normal execution", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
                     GotMutex = true;
-                } // Flag that we have got the mutex.
+                }
+            }
+            catch (Exception ex) // Log any other exception and then throw to the calling application.
+            {
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while waiting for TraceLogger mutex in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
+                throw;
             }
 
             // Check whether we have the mutex, throw an error if not
             if (!GotMutex)
             {
-                LogEvent(Method, "Timed out waiting for TraceLogger mutex in " + Method + ", parameters: " + Parameters, EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
-                throw new ProfilePersistenceException("Timed out waiting for TraceLogger mutex in " + Method + ", parameters: " + Parameters);
+                if (continueAnyway)
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"Timed out waiting for TraceLogger mutex in {Method} - {Parameters} - Continuing anyway as configured", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexTimeOut, null);
+                else
+                {
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
+                    throw new ProfilePersistenceException($"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}");
+                }
             }
+
+            // Log that we got the mutex if configured to do so
+            if (traceUtil)
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - Got the mutex OK!", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
         }
 
         // Release the trace logger mutex
         private void ReleaseTraceLoggerMutex()
         {
+            return; // Temporarily disable mutex release to try to track down a deadlock issue
+            LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"About to release mutex, GotMutex: {GotMutex}...", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+
             // Release the mutex if we have it
             if (GotMutex) // We have the mutex so try to release it, ignoring any errors
             {
                 try
                 {
                     // Release the mutex
-                    mut.ReleaseMutex();
+                    //mut.ReleaseMutex();
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Released mutex OK!", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
                 }
-                catch { } // Ignore any errors
+                catch (Exception ex) // Ignore any errors
+                {
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while releasing mutex", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
+                }
                 finally
                 {
                     // Set the flag to show we no longer have the mutex
                     GotMutex = false;
                 }
             }
+
+            LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Final GotMutex state: {GotMutex}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+        }
+
+        private static string GetStackWithLines()
+        {
+            string stackTrace = string.Empty;
+            try
+            {
+                StackTrace trace = new StackTrace(skipFrames: 1, fNeedFileInfo: true);
+
+                if (trace is null)
+                    return "The stack trace was null";
+
+                StackFrame[] frames = trace.GetFrames();
+
+                if (frames == null)
+                    return "The stack trace Frames property was null";
+
+                if (frames.Length == 0)
+                    return "There were no frames in the stack trace Frames property";
+
+                foreach (var frame in frames)
+                {
+                    MethodBase method = frame.GetMethod();
+                    if (method == null)
+                        continue;
+
+                    string typeName = method.DeclaringType?.FullName ?? "<no type>";
+                    string file = frame.GetFileName();
+                    int line = frame.GetFileLineNumber();
+                    string fileDisplay = string.IsNullOrEmpty(file) ? "<no file>" : Path.GetFileName(file);
+                    string lineDisplay = line > 0 ? line.ToString() : "?";
+                    stackTrace += $"{typeName}.{method.Name} ({fileDisplay}:{lineDisplay}){Environment.NewLine}";
+                }
+            }
+            catch (Exception ex) // Something went wrong so return the exception information as the stack trace in order to have some information about what went wrong
+            {
+                stackTrace = $"TraceLogger - Exception getting stack trace: {ex.Message}\r\n{ex}";
+            }
+
+            return stackTrace;
         }
 
         #endregion
