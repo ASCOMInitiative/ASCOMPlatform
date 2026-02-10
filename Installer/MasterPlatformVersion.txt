@@ -1,6 +1,6 @@
 7
 1
-2
+3
 Release
 
 The first line of this file must contain the major Platform version number
