@@ -50,6 +50,7 @@ namespace ASCOM.Utilities
             this.ChooserNETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ListAvailableCOMPortsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EarthRotationDataUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ReportNET35ComponentUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTrace = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLeaveUnset = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -81,12 +82,12 @@ namespace ASCOM.Utilities
             this.OptionsUseOmniSimulators = new System.Windows.Forms.ToolStripMenuItem();
             this.SetLogFileLocationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.DisplayUnicodeInTraceLoggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OptionsUseTraceLoggerMutex = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAction = new System.Windows.Forms.Label();
             this.btnViewLastLog = new System.Windows.Forms.Button();
             this.SerialTraceFileName = new System.Windows.Forms.SaveFileDialog();
             this.BtnUpdateAvailable = new System.Windows.Forms.Button();
-            this.ReportNET35ComponentUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -223,6 +224,13 @@ namespace ASCOM.Utilities
             this.EarthRotationDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.EarthRotationDataUpdateToolStripMenuItem.Text = "Manage Earth Rotation Data";
             this.EarthRotationDataUpdateToolStripMenuItem.Click += new System.EventHandler(this.EarthRotationDataUpdateToolStripMenuItem_Click);
+            // 
+            // ReportNET35ComponentUseToolStripMenuItem
+            // 
+            this.ReportNET35ComponentUseToolStripMenuItem.Name = "ReportNET35ComponentUseToolStripMenuItem";
+            this.ReportNET35ComponentUseToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.ReportNET35ComponentUseToolStripMenuItem.Text = "Report .NET 3.5 Component Use";
+            this.ReportNET35ComponentUseToolStripMenuItem.Click += new System.EventHandler(this.ReportNET35ComponentUseToolStripMenuItem_Click);
             // 
             // mnuTrace
             // 
@@ -423,7 +431,8 @@ namespace ASCOM.Utilities
             this.OptionsCheckForPlatformPreReleases,
             this.OptionsUseOmniSimulators,
             this.SetLogFileLocationToolStripMenuItem1,
-            this.DisplayUnicodeInTraceLoggerMenuItem});
+            this.DisplayUnicodeInTraceLoggerMenuItem,
+            this.OptionsUseTraceLoggerMutex});
             this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
             this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.OptionsToolStripMenuItem.Text = "Options";
@@ -470,6 +479,13 @@ namespace ASCOM.Utilities
             this.DisplayUnicodeInTraceLoggerMenuItem.Text = "Display Unicode characters in TraceLogger files";
             this.DisplayUnicodeInTraceLoggerMenuItem.Click += new System.EventHandler(this.DisplayUnicodeInTraceLoggerMenuItem_Click);
             // 
+            // OptionsTraceLoggerMutex
+            // 
+            this.OptionsUseTraceLoggerMutex.Name = "OptionsTraceLoggerMutex";
+            this.OptionsUseTraceLoggerMutex.Size = new System.Drawing.Size(321, 22);
+            this.OptionsUseTraceLoggerMutex.Text = "Use TraceLogger mutex synchronisation";
+            this.OptionsUseTraceLoggerMutex.Click += new System.EventHandler(this.OptionsTraceLoggerMutex_Click);
+            // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
@@ -514,13 +530,6 @@ namespace ASCOM.Utilities
             this.BtnUpdateAvailable.UseVisualStyleBackColor = false;
             this.BtnUpdateAvailable.Visible = false;
             this.BtnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
-            // 
-            // ReportNET35ComponentUseToolStripMenuItem
-            // 
-            this.ReportNET35ComponentUseToolStripMenuItem.Name = "ReportNET35ComponentUseToolStripMenuItem";
-            this.ReportNET35ComponentUseToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.ReportNET35ComponentUseToolStripMenuItem.Text = "Report .NET 3.5 Component Use";
-            this.ReportNET35ComponentUseToolStripMenuItem.Click += new System.EventHandler(this.ReportNET35ComponentUseToolStripMenuItem_Click);
             // 
             // DiagnosticsForm
             // 
@@ -601,5 +610,6 @@ namespace ASCOM.Utilities
         private ToolStripMenuItem SetLogFileLocationToolStripMenuItem1;
         private ToolStripMenuItem DisplayUnicodeInTraceLoggerMenuItem;
         private ToolStripMenuItem ReportNET35ComponentUseToolStripMenuItem;
+        private ToolStripMenuItem OptionsUseTraceLoggerMutex;
     }
 }
