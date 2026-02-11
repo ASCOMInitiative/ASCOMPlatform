@@ -84,6 +84,13 @@ namespace ASCOM.Utilities
         internal const string REGISTRY_5_BACKUP_SUBKEY = "Platform5Original"; // Location that the original Platform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
         internal const string REGISTRY_55_BACKUP_SUBKEY = "Platform55Original"; // Location that the original Platform 5.5 Profile will be copied to before removing Platform 5 and 5.5
         internal const string PLATFORM_VERSION_NAME = "PlatformVersion";
+
+        // TraceLogger constants
+        internal const string USE_TRACELOGGER_MUTEX = "Use TraceLogger Mutex";
+        internal const bool USE_TRACELOGGER_MUTEX_DEFAULT = false;
+        internal const string TRACELOGGER_DEBUG = "TraceLogger Debug"; // This is not exposed in the Diagnostics UI, values must be changed by editing the registry.
+        internal const bool TRACELOGGER_DEBUG_DEFAULT = false;
+
         // XML constants used by XMLAccess and RegistryAccess classes
         internal const string COLLECTION_DEFAULT_VALUE_NAME = "***** DefaultValueName *****"; // Name identifier label
         internal const string COLLECTION_DEFAULT_UNSET_VALUE = "===== ***** UnsetValue ***** ====="; // Value identifier label
@@ -570,77 +577,77 @@ namespace ASCOM.Utilities
             // It is wrong that an error in logging code should cause a client process to fail, so this code has been 
             // made more robust and ultimately will swallow exceptions silently rather than throwing an unexpected exception back to the caller
 
-                try
+            try
+            {
+                if (!EventLog.SourceExists(EVENT_SOURCE)) // Create the event log if it doesn't exist
                 {
-                    if (!EventLog.SourceExists(EVENT_SOURCE)) // Create the event log if it doesn't exist
-                    {
-                        EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME);
-                        ELog = new EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE); // Create a pointer to the event log
-                        ELog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 0); // Force the policy to overwrite oldest
-                        ELog.MaximumKilobytes = 1024L; // Set the maximum log size to 1024kb, the Win 7 minimum size
-                        ELog.Close(); // Force the log file to be created by closing the log
-                        ELog.Dispose();
-                        ELog = null;
-
-                        // MSDN documentation advises waiting before writing, first time to a newly created event log file but doesn't say how long...
-                        // Waiting 3 seconds to allow the log to be created by the OS
-                        System.Threading.Thread.Sleep(3000);
-
-                        // Try and create the initial log message
-                        ELog = new EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE); // Create a pointer to the event log
-                        ELog.WriteEntry("Successfully created event log - Policy: " + ELog.OverflowAction.ToString() + ", Size: " + ELog.MaximumKilobytes + "kb", EventLogEntryType.Information, (int)EventLogErrors.EventLogCreated);
-                        ELog.Close();
-                        ELog.Dispose();
-                    }
-
-                    // Write the event to the log
+                    EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME);
                     ELog = new EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE); // Create a pointer to the event log
+                    ELog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 0); // Force the policy to overwrite oldest
+                    ELog.MaximumKilobytes = 1024L; // Set the maximum log size to 1024kb, the Win 7 minimum size
+                    ELog.Close(); // Force the log file to be created by closing the log
+                    ELog.Dispose();
+                    ELog = null;
 
-                    MsgTxt = Caller + " - " + Msg; // Format the message to be logged
-                    if (Except is not null)
-                        MsgTxt += Microsoft.VisualBasic.Constants.vbCrLf + Except;
-                    ELog.WriteEntry(MsgTxt, Severity, (int)Id); // Write the message to the error log
+                    // MSDN documentation advises waiting before writing, first time to a newly created event log file but doesn't say how long...
+                    // Waiting 3 seconds to allow the log to be created by the OS
+                    System.Threading.Thread.Sleep(3000);
 
+                    // Try and create the initial log message
+                    ELog = new EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE); // Create a pointer to the event log
+                    ELog.WriteEntry("Successfully created event log - Policy: " + ELog.OverflowAction.ToString() + ", Size: " + ELog.MaximumKilobytes + "kb", EventLogEntryType.Information, (int)EventLogErrors.EventLogCreated);
                     ELog.Close();
                     ELog.Dispose();
                 }
-                catch (System.ComponentModel.Win32Exception ex) // Special handling because these exceptions contain error codes we may want to know
+
+                // Write the event to the log
+                ELog = new EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE); // Create a pointer to the event log
+
+                MsgTxt = Caller + " - " + Msg; // Format the message to be logged
+                if (Except is not null)
+                    MsgTxt += Microsoft.VisualBasic.Constants.vbCrLf + Except;
+                ELog.WriteEntry(MsgTxt, Severity, (int)Id); // Write the message to the error log
+
+                ELog.Close();
+                ELog.Dispose();
+            }
+            catch (System.ComponentModel.Win32Exception ex) // Special handling because these exceptions contain error codes we may want to know
+            {
+                try
                 {
-                    try
-                    {
-                        string TodaysDateTime = Strings.Format(DateTime.Now, "dd MMMM yyyy HH:mm:ss.fff");
-                        string ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_ERRORS;
-                        string MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_MESSAGES;
+                    string TodaysDateTime = Strings.Format(DateTime.Now, "dd MMMM yyyy HH:mm:ss.fff");
+                    string ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_ERRORS;
+                    string MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_MESSAGES;
 
-                        // Write to backup event log message and error logs
-                        File.AppendAllText(ErrorLog, TodaysDateTime + " ErrorCode: 0x" + Conversion.Hex(ex.ErrorCode) + " NativeErrorCode: 0x" + Conversion.Hex(ex.NativeErrorCode) + " " + ex.ToString() + Microsoft.VisualBasic.Constants.vbCrLf);
-                        File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + Microsoft.VisualBasic.Constants.vbCrLf);
-                    }
-                    catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
-                    {
-
-                    }
+                    // Write to backup event log message and error logs
+                    File.AppendAllText(ErrorLog, TodaysDateTime + " ErrorCode: 0x" + Conversion.Hex(ex.ErrorCode) + " NativeErrorCode: 0x" + Conversion.Hex(ex.NativeErrorCode) + " " + ex.ToString() + Microsoft.VisualBasic.Constants.vbCrLf);
+                    File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + Microsoft.VisualBasic.Constants.vbCrLf);
                 }
-                catch (Exception ex) // Catch all other exceptions
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
                 {
-                    // Something bad happened when writing to the event log so try and log it in a log file on the file system
-                    try
-                    {
-                        string TodaysDateTime = Strings.Format(DateTime.Now, "dd MMMM yyyy HH:mm:ss.fff");
-                        string ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_ERRORS;
-                        string MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_MESSAGES;
 
-                        // Write to backup event log message and error logs
-                        File.AppendAllText(ErrorLog, TodaysDateTime + " " + ex.ToString() + Microsoft.VisualBasic.Constants.vbCrLf);
-                        File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + Microsoft.VisualBasic.Constants.vbCrLf);
-                    }
-                    catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
-                    {
-
-                    }
                 }
             }
-        
+            catch (Exception ex) // Catch all other exceptions
+            {
+                // Something bad happened when writing to the event log so try and log it in a log file on the file system
+                try
+                {
+                    string TodaysDateTime = Strings.Format(DateTime.Now, "dd MMMM yyyy HH:mm:ss.fff");
+                    string ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_ERRORS;
+                    string MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + EVENTLOG_MESSAGES;
+
+                    // Write to backup event log message and error logs
+                    File.AppendAllText(ErrorLog, TodaysDateTime + " " + ex.ToString() + Microsoft.VisualBasic.Constants.vbCrLf);
+                    File.AppendAllText(MessageLog, TodaysDateTime + " " + Caller + " " + Msg + " " + Severity.ToString() + " " + Id.ToString() + " " + Except + Microsoft.VisualBasic.Constants.vbCrLf);
+                }
+                catch (Exception) // Ignore exceptions here, the PC seems to be in a catastrophic failure!
+                {
+
+                }
+            }
+        }
+
         #endregion
 
         #region Version Code

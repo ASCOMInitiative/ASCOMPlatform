@@ -265,6 +265,7 @@ namespace ASCOM.Utilities
                 RefreshTraceItems(); // Get current values for the trace menu settings
                 MenuAutoViewLog.Checked = Utilities.Global.GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT); // Get the auto view log setting
                 DisplayUnicodeInTraceLoggerMenuItem.Checked = Utilities.Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT); // Get the TraceLogger display Unicode state
+                OptionsUseTraceLoggerMutex.Checked = Utilities.Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT); // Get the TraceLogger Mutex setting
 
                 // Define the update checker task
                 LogInternal("Load", "About to define update task");
@@ -358,7 +359,6 @@ namespace ASCOM.Utilities
                     {
                         TL.LogMessage("Environment", "Diagnostics is running in a virtual machine");
                     }
-
                     else
                     {
                         TL.LogMessage("Environment", "Diagnostics is running on a real PC");
@@ -441,6 +441,18 @@ namespace ASCOM.Utilities
                 }
 
                 TL.BlankLine();
+
+                // Log the enabled / disabled state of the traceLogger mutex mechanic
+                try
+                {
+                    TL.LogMessage("Environment", $"TraceLogger is {(Utilities.Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT) ? "" : "not ")}using the Mutex mechanic");
+                    TL.LogMessage("Environment", $"TraceLogger debug is {(Utilities.Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT) ? "enabled" : "disabled")}.");
+                    TL.LogMessage("", "");
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("Environment", $"Exception getting state of TraceLogger Mutex mechanic: {ex.Message}\r\n{ex}");
+                }
 
                 LastLogFile = TL.LogFileName;
                 try
@@ -11570,6 +11582,18 @@ namespace ASCOM.Utilities
         #endregion
 
         #region Other menu event handlers
+
+        /// <summary>
+        /// Handles the Click event for the OptionsTraceLoggerMutex menu item.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the menu item that was clicked.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
+        private void OptionsTraceLoggerMutex_Click(object sender, EventArgs e)
+        {
+            OptionsUseTraceLoggerMutex.Checked = !OptionsUseTraceLoggerMutex.Checked;
+            Utilities.Global.SetName(USE_TRACELOGGER_MUTEX, OptionsUseTraceLoggerMutex.Checked.ToString()); // Set the new value in the registry
+
+        }
 
         /// <summary>
         /// Show the .NET 3.5 component use dialogue.
