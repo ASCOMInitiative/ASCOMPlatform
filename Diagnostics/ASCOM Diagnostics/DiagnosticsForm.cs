@@ -220,7 +220,7 @@ namespace ASCOM.Utilities
 
         #endregion
 
-        #region Initialisation, Form load and overall process
+        #region Initialisation and form load
 
         /// <summary>
         /// Diagnostics form initiator
@@ -290,11 +290,16 @@ namespace ASCOM.Utilities
             }
         }
 
+        #endregion
+
+        #region Main Diagnostics test process
+
         private void RunDiagnostics(object sender, EventArgs e)
         {
             string ASCOMPath;
             string ApplicationPath = "Path Not Set!";
             string SuccessMessage;
+            DateTime startTime = DateTime.Now;
 
             try
             {
@@ -455,6 +460,8 @@ namespace ASCOM.Utilities
                 }
 
                 LastLogFile = TL.LogFileName;
+
+                // Run diagnostic tests
                 try
                 {
                     try
@@ -917,6 +924,8 @@ namespace ASCOM.Utilities
                     }
                     transform = null;
 
+                    TL.BlankLine();
+                    TL.LogMessage("Diagnostics", $"Time for diagnostics run: {DateTime.Now.Subtract(startTime):mm\\:ss\\.fff}");
                     TL.BlankLine();
                     TL.LogMessage("Diagnostics", SuccessMessage);
                     TL.Enabled = false;
