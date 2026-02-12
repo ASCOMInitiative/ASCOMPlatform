@@ -11,8 +11,33 @@ In line with previous Platform installers, Platform 7.1 Update 3 is a cumulative
 Platform releases and service packs. The Platform environment pre-requisites are listed 
 here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform Prerequisites</link>.
 
+## Changes in 7.1 Update 3 - For Everyone
+* Logging is now faster and there will be reduced exceptions due to issues in TraceLogger.
+* A new option has been added to the Diagnostics application (`Use TraceLogger mutex synchronisation`) so you can revert to previous logging behaviour if issues arise due to the logging improvements.
+
 ## Issues Fixed in 7.1 Update 3 - For Everyone
 * Fixed - TraceLogger occasionally threw `ProfilePersistenceException - Timed out waiting for TraceLogger mutex` exceptions.
+  * This fixes an issue that manifested in the Voyager application as well as very occasional and sporadic issues in other applications.
 
-## Changes in 7.1 Update 2
+## Changes in 7.1 Update 3 - For Developers
+* The default locking in TraceLogger has been changed to use an instance local lock() instead of a global mutex.
+  * Historically, since its introduction in 2009, TraceLogger has used a global Windows mutex to synchronise writing to log files. 
+The impact was that only one log message could be written at a time across all instances of TraceLogger.
+  * The default locking mechanic has now been changed to an instance local lock() because this is sufficient to protect the file being written and allows concurrent writing of log files.
+  * This fixes issues manifesting in the Voyager application as well as occasional exceptions from TraceLogger instances when they could not get the global mutex within 5 seconds.
+  * It is strongly recommended that the new default lock() synchronisation is used as it is faster and does not cause application issues due to mutex timeouts.
+  * However, the original global mutex synchronisation can be re-enabled if required for use cases such as synchronisation between multiple processes using the 
+same TraceLogger instance.
+* A new TraceLogger option <codeEntityReference linkText="TraceLogger.UseMutexSynchronisation">P:ASCOM.Utilities.TraceLogger.UseMutexSynchronisation</codeEntityReference>
+has been added so you can use the global mutex mechanic in any TraceLogger instance you create if required.
+* Additionally a new option has been added to the Diagnostics application that enables the end-user to revert all ASCOM TraceLogger activity to the original 
+global mutex synchronisation without requiring code changes.
+
+## Issues Fixed in 7.1 Update 3 - For Developers
+* None
+
+## Breaking Changes (For Developers) in Platform 7.1 Update 3
+* None are expected, but developers should be aware of the change to the default locking mechanic in TraceLogger described above.
+
+## Changes in the previous update
 See this link for changes and fixes in <link xlink:href="Version_7.1.2">Platform 7.1 Update 2</link>.
