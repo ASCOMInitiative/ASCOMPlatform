@@ -46,11 +46,10 @@ namespace ASCOM.Utilities
         private int g_IdentifierWidth; // Variable to hold the current identifier field width
         private bool autoLogFilePath;
 
-        private System.Threading.Mutex mut;
-        private bool GotMutex;
+        private System.Threading.Mutex globalMutex;
 
         private object lockObject = new object();
-        private bool debugLoggingEnabled = false; // Set to true to enable debug logging of the TraceLogger's internal operations to the eventlog. This is not intended for general use and is not recommended as it can cause performance issues and very large event logs if left enabled.
+        private bool debugLoggingEnabled = false; // Set to true to enable debug logging of the TraceLogger's internal operations to the event log. This is not intended for general use and is not recommended as it can cause performance issues and very large event logs if left enabled.
 
         #region New and IDisposable Support
 
@@ -148,11 +147,16 @@ namespace ASCOM.Utilities
             // Set default behaviour for handling Unicode characters
             UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
 
+            // Create the global TraceLogger mutex if required.
+            lock (lockObject)
+            {
+                if (globalMutex is null)
+                    globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
+            }
         }
 
         #region IDisposable Support
 
-        // IDisposable
         /// <summary>
         /// Disposes of the TraceLogger object
         /// </summary>
@@ -190,17 +194,16 @@ namespace ASCOM.Utilities
                         }
                         g_LogFile = null;
                     }
-                    if (mut is not null)
+                    if (globalMutex is not null)
                     {
-                        // Try : mut.ReleaseMutex() : Catch : End Try
                         try
                         {
-                            mut.Close();
+                            globalMutex.Close();
                         }
                         catch
                         {
                         }
-                        mut = null;
+                        globalMutex = null;
                     }
                 }
             }
@@ -907,23 +910,17 @@ namespace ASCOM.Utilities
             if (!UseMutexSynchronisation)
                 return;
 
+            bool gotMutex;
+
             // Get the profile mutex or log an error and throw an exception that will terminate this profile call and return to the calling application
             try
             {
                 // Log that we are trying to get the mutex if configured to do so
                 if (debugLoggingEnabled)
-                {
-                    string stackTrace = GetStackWithLines();
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - About to get mutex for method {Method} - {Parameters}\r\n{stackTrace}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
-                }
-
-                // Create the global TraceLogger mutex if required.
-                if (mut is null)
-                    mut = new System.Threading.Mutex(false, "TraceLoggerMutex");
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - About to get mutex for method {Method} - {Parameters}\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
 
                 // Try to acquire the mutex
-                mut.WaitOne(PROFILE_MUTEX_TIMEOUT, false);
-                GotMutex = true;
+                gotMutex = globalMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, false);
             }
             catch (System.Threading.AbandonedMutexException ex) // Catch the AbandonedMutexException but not any others, these are passed to the calling routine
             {
@@ -931,35 +928,34 @@ namespace ASCOM.Utilities
                 LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, ex.ToString());
                 if (GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT))
                 {
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}. Throwing exception to application", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, null);
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}. Throwing exception to application.\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, null);
                     throw; // Throw the exception in order to report it
                 }
                 else
                 {
                     // Flag that we have got the mutex.
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}: Absorbing exception, continuing normal execution", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
-                    GotMutex = true;
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}: Absorbing exception, continuing normal execution.\r\n{GetStackWithLines()}", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
+                    gotMutex = true;
                 }
             }
             catch (Exception ex) // Log any other exception and then throw to the calling application.
             {
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while waiting for TraceLogger mutex in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while waiting for TraceLogger mutex in {Method} - {Parameters}.\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
                 throw;
             }
 
             // Check whether we have the mutex, throw an error if not
-            if (!GotMutex)
+            if (!gotMutex)
             {
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
                 throw new ProfilePersistenceException($"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}");
             }
 
             // Log that we got the mutex if configured to do so
             if (debugLoggingEnabled)
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - Got the mutex OK!", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - Got the mutex OK!\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
         }
 
-        // Release the trace logger mutex
         private void ReleaseTraceLoggerMutex()
         {
             // Return immediately if we are not using mutex synchronisation
@@ -968,27 +964,15 @@ namespace ASCOM.Utilities
 
             try
             {
-                // Release the mutex if we have it
-                if (GotMutex) // We have the mutex so try to release it, ignoring any errors
-                {
-                    // Release the mutex
-                    mut.ReleaseMutex();
-                    if (debugLoggingEnabled)
-                        LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Released mutex OK!", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
-                }
-                else
-                {
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"ReleaseTraceLoggerMutex called when we do not have the mutex! GotMutex: {GotMutex}\r\n{GetStackWithLines()}", EventLogEntryType.Warning, EventLogErrors.TraceLogger, null);
-                }
+                // Release the mutex
+                globalMutex.ReleaseMutex();
+                if (debugLoggingEnabled)
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Released mutex OK!\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
             }
-            catch (Exception ex) // Ignore any errors
+            catch (Exception ex) // Log any exceptions
             {
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while releasing mutex", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
-            }
-            finally
-            {
-                // Set the flag to show we no longer have the mutex
-                GotMutex = false;
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while releasing mutex.\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
+                throw;
             }
         }
 
