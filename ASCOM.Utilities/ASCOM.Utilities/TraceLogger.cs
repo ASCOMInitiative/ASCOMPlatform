@@ -50,11 +50,25 @@ namespace ASCOM.Utilities
         private static object mutexCreationLock = new object();
 
         private object lockObject = new object();
-        private bool debugLoggingEnabled = false; // Set to true to enable debug logging of the TraceLogger's internal operations to the event log. This is not intended for general use and is not recommended as it can cause performance issues and very large event logs if left enabled.
+        private static bool debugLoggingEnabled = false; // Set to true to enable debug logging of the TraceLogger's internal operations to the event log. This is not intended for general use and is not recommended as it can cause performance issues and very large event logs if left enabled.
 
         #region New and IDisposable Support
 
         private bool traceLoggerHasBeenDisposed = false;        // To detect redundant calls
+
+        static TraceLogger()
+        {
+            // Create the global TraceLogger mutex if required (once per process)
+            if (Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT))
+            {
+                lock (mutexCreationLock)
+                {
+                    if (globalMutex is null)
+                        globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
+                }
+            }
+            debugLoggingEnabled = Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT); // This is not exposed in the Diagnostics UI, values must be changed by editing the registry.
+        }
 
         /// <summary>
         /// Creates a new TraceLogger instance
@@ -143,20 +157,11 @@ namespace ASCOM.Utilities
 
             // Determine whether to use the global TraceLogger mutex and log debug information to the event log.
             UseMutexSynchronisation = Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT);
-            debugLoggingEnabled = Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT); // This is not exposed in the Diagnostics UI, values must be changed by editing the registry.
+
 
             // Set default behaviour for handling Unicode characters
             UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
 
-            // Create the global TraceLogger mutex if required (once per process)
-            if (UseMutexSynchronisation)
-            {
-                lock (mutexCreationLock)
-                {
-                    if (globalMutex is null)
-                        globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
-                }
-            }
         }
 
         #region IDisposable Support
@@ -197,17 +202,6 @@ namespace ASCOM.Utilities
                         {
                         }
                         g_LogFile = null;
-                    }
-                    if (globalMutex is not null)
-                    {
-                        try
-                        {
-                            globalMutex.Close();
-                        }
-                        catch
-                        {
-                        }
-                        globalMutex = null;
                     }
                 }
             }
