@@ -18,9 +18,9 @@ namespace ASCOM.Utilities
     /// </remarks>
     public static class Log
     {
-        static TraceLogger TL;
-        static bool? _enabled = null;
-        static string _netVersion = "Unknown";
+        private static TraceLogger logger = null;
+        private static bool componentUseLoggingEnabled = false;
+        private static string dotNetRuntimeVersion = "Unknown";
 
         /// <summary>
         /// Initializes static members of the <see cref="Log"/> class.
@@ -33,7 +33,9 @@ namespace ASCOM.Utilities
             try
             {
                 // Retrieve the .NET runtime version from the environment
-                _netVersion = $"{System.Environment.Version.ToString(3)}";
+                dotNetRuntimeVersion = $"{System.Environment.Version.ToString(3)}";
+                if (dotNetRuntimeVersion is null)
+                    dotNetRuntimeVersion = "Unknown";
             }
             catch { }
 
@@ -44,11 +46,50 @@ namespace ASCOM.Utilities
 
                 // Exit if the entry assembly returns null (can happen if the class is called from "unmanaged code" e.g. the .NET COM wrapper code.)
                 if (entryAssembly is null)
+                    dotNetRuntimeVersion = "Unmanaged code";
+                else
                 {
-                    return;
+                    // Attempt to get the .NET runtime version from the entry assembly
+                    try
+                    {
+                        string imageRuntimetVersion = $"{entryAssembly.ImageRuntimeVersion.Trim('v')}";
+                        if (!string.IsNullOrEmpty(imageRuntimetVersion))
+                            dotNetRuntimeVersion = imageRuntimetVersion;
+                    }
+                    catch { } // Ignore errors and just use the version retrieved from the environment, which is better than nothing.
                 }
+            }
+            catch { }
 
-                _netVersion = $"{entryAssembly.ImageRuntimeVersion.Trim('v')}";
+            // Get the logging enabled/disabled state from the registry
+            try
+            {
+                componentUseLoggingEnabled = Global.GetBool(Global.DOTNET35_COMPONENT_USE_LOGGING, Global.DOTNET35_COMPONENT_USE_LOGGING_DEFAULT);
+            }
+            catch { }
+
+            // Enable logging and set up logging to file if configured to do so
+            try
+            {
+                // Check whether we have to create a log file because Utilities trace is enabled
+                if (componentUseLoggingEnabled) // Framework logging is enabled
+                {
+                    // Check whether Utilities logging is enabled
+                    if (Global.GetBool(Global.TRACE_UTIL, Global.TRACE_UTIL_DEFAULT) == true) // Utilities logging is enabled, so create one.
+                    {
+                        try
+                        {
+                            // Create a new, enabled, TraceLogger instance using an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
+                            logger = new TraceLogger("Net35use", true) { Enabled = true };
+                            LogMessage("Initialiser", $"TraceLogger created OK. .NET runtime version: {dotNetRuntimeVersion}");
+                            LogMessage("", $"");
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.LogEvent("ASCOM.Utilities.Log", "Failed to create TraceLogger instance, logging is disabled.", EventLogEntryType.Error, Global.EventLogErrors.TraceLoggerException, ex.ToString());
+                        }
+                    }
+                }
             }
             catch { }
         }
@@ -63,39 +104,17 @@ namespace ASCOM.Utilities
         public static void Component(Assembly assembly, string componentName)
         {
             // Check whether logging is enabled or disabled
-            switch (_enabled)
-            {
-                case null: // First time use, determine whether logging is required and create logger if required.
-                    lock (typeof(Log))
-                    {
-                        // Get the logging enabled/disabled state from the registry
-                        _enabled = Global.GetBool(Global.DOTNET35_COMPONENT_USE_LOGGING, Global.DOTNET35_COMPONENT_USE_LOGGING_DEFAULT);
+            if (!componentUseLoggingEnabled)
+                return; // Logging is disabled so exit early
 
-                        // Exit if logging is disabled
-                        if (!_enabled.Value)
-                            return;
-
-                        // Logging is enabled so create a new TraceLogger instance if Utilities logging is enabled
-                        // Use an internal constructor that avoids the infinite loop created if TraceLogger logged its own use.
-                        TL = new TraceLogger("Net35use", true);
-                        TL.Enabled = Global.GetBool(Global.TRACE_UTIL, Global.TRACE_UTIL_DEFAULT);
-                    }
-                    break;
-
-                case false: // Second or later use, logging is disabled so exit early
-                    return;
-
-                case true: // Second or later use, logging is enabled, use the existing TraceLogger instance. No action required, just continue
-                    break;
-            }
-
+            // Logging is enabled, so attempt to log the component information, but catch and log any exceptions that occur to avoid breaking the calling code.
             try
             {
                 // SPECIAL HANDLING FOR FINALISEINSTALL
                 // For some unknown reason this reports as CLR2 even though it is actually CLR4 so fix that here...
                 if (string.Equals(Process.GetCurrentProcess().ProcessName, "FinaliseInstall", StringComparison.OrdinalIgnoreCase))
                 {
-                    _netVersion = "4.0.30319";
+                    dotNetRuntimeVersion = "4.0.30319";
                 }
 
                 string fullAssemblyName = assembly.FullName;
@@ -103,13 +122,13 @@ namespace ASCOM.Utilities
                 // Validate input parameters
                 if (string.IsNullOrEmpty(fullAssemblyName))
                 {
-                    TL.LogMessage("Component", $"Assembly name cannot be null or empty - {fullAssemblyName}");
+                    LogMessage("Component", $"Assembly name cannot be null or empty - {fullAssemblyName}");
                     return;
                 }
 
                 if (string.IsNullOrEmpty(componentName))
                 {
-                    TL.LogMessage("Component", $"Component name cannot be null or empty - {componentName}");
+                    LogMessage("Component", $"Component name cannot be null or empty - {componentName}");
                     return;
                 }
 
@@ -117,7 +136,7 @@ namespace ASCOM.Utilities
                 string[] assemblyNameElements = fullAssemblyName.Split(',').Select(part => part.Trim()).Select(part2 => part2.Replace("Version=", "")).ToArray();
                 if (assemblyNameElements.Length < 2)
                 {
-                    TL.LogMessage("Component", $"Unable to parse assembly name format - {fullAssemblyName}");
+                    LogMessage("Component", $"Unable to parse assembly name format - {fullAssemblyName}");
                     return;
                 }
 
@@ -125,26 +144,33 @@ namespace ASCOM.Utilities
                 string assemblyName = assemblyNameElements[0] is not null ? assemblyNameElements[0] : "Unknown assembly name";
                 string assemblyVersion = assemblyNameElements[1] is not null ? assemblyNameElements[1] : "Unknown Version";
 
-                TL.LogMessage("Component", $"Assembly: {assemblyName}, Version: {assemblyVersion} - {componentName}");
-                TL.LogMessage("Component", $"Friendly name: {AppDomain.CurrentDomain.FriendlyName}");
-                TL.LogMessage("Component", $"Process name: {Process.GetCurrentProcess().ProcessName}");
-                TL.LogMessage("Component", $"File name: {Process.GetCurrentProcess().MainModule.FileName}");
+                LogMessage("Component", $"Process name: {Process.GetCurrentProcess().ProcessName}");
+                LogMessage("Component", $"Application domain name: {AppDomain.CurrentDomain.FriendlyName}");
+                LogMessage("Component", $"File name: {Process.GetCurrentProcess().MainModule.FileName}");
+                LogMessage("Component", $"Called assembly: {assemblyName}, Version: {assemblyVersion} - {componentName}");
+                LogMessage("", "");
 
                 string processName = @$"Applications\{Process.GetCurrentProcess().ProcessName} - {Process.GetCurrentProcess().MainModule.FileName.Replace(@"\", "/")}";
                 string keyName = assembly.GetName().Name;
 
                 StackFrame[] frames = new StackTrace().GetFrames();
-                TL.LogMessage("Component", $"Number of frames: {frames.Length}");
+                LogMessage("StackTrace", $"Number of frames: {frames.Length - 1}"); // -1 because we always take off the Log.Component frame at the end of the stack trace, which is not useful information and just adds noise to the log.
+                LogMessage("", "");
 
-                string declaringMethodName = "";
+                string declaringTypeName = "";
                 string methodName = "";
                 string lastDeclaringMethodName = "";
-                foreach (StackFrame frame in frames)
+                foreach (StackFrame frame in frames.Reverse())
                 {
                     frame.GetType();
-                    declaringMethodName = frame.GetMethod().DeclaringType.FullName;
+                    declaringTypeName = frame.GetMethod().DeclaringType.FullName;
                     methodName = frame.GetMethod().Name;
-                    TL.LogMessage("StackTrace", $"Declaring type full name: {declaringMethodName} method: {methodName}");
+
+                    // Ignore frames from the logging code itself
+                    if (declaringTypeName == "ASCOM.Utilities.Log")
+                        continue;
+
+                    LogMessage("StackTrace", $"Declaring type: {declaringTypeName} method: {methodName}");
 
                     if (methodName == "CreateInstance")
                     {
@@ -154,7 +180,7 @@ namespace ASCOM.Utilities
                             Type type = Type.GetTypeFromProgID(lastDeclaringMethodName);
                             if (type != null)
                             {
-                                TL.LogMessage("StackTrace", $"Type from ProgID: {type.FullName}");
+                                LogMessage("StackTrace", $"Type from ProgID: {type.FullName}");
                                 string location = Assembly.GetAssembly(type).Location;
 
                                 if (location != null)
@@ -168,68 +194,78 @@ namespace ASCOM.Utilities
                             }
                             else
                             {
-                                TL.LogMessage("StackTrace", $"Type from ProgID not found: {lastDeclaringMethodName}");
+                                LogMessage("StackTrace", $"Type from ProgID not found: {lastDeclaringMethodName}");
                             }
                         }
                         catch (Exception ex)
                         {
-                            TL.LogMessage("StackTrace", $"Exception while getting type from ProgID: {lastDeclaringMethodName} - {ex.Message}");
+                            LogMessage("StackTrace", $"Exception while getting type from ProgID: {lastDeclaringMethodName} - {ex.Message}");
                         }
                         break;
                     }
 
-                    lastDeclaringMethodName = declaringMethodName;
+                    lastDeclaringMethodName = declaringTypeName;
                 }
-                TL.LogMessage("StackTrace", $"Process name is: {processName}");
+
+                LogMessage("", "");
+                LogMessage("StackTrace", $"Process name: {processName}");
+                LogMessage("", "");
 
                 // Write the log entry to the registry
                 using (RegistryAccess ra = new())
                 {
                     // string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{keyName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
                     string key = @$"{Global.NET35_REGISTRY_BASE}\{processName}\{assemblyNameElements[0]} - {assemblyNameElements[1]}";
-                    TL.LogMessage("Registry", $"Writing to registry key: {key}");
+                    LogMessage("Registry", $"Writing to registry key: {key}");
                     ra.WriteProfile(key, componentName, componentName);
 
                     // Add the currently running Framework CLR version
                     string frameworkKey = @$"{Global.NET35_REGISTRY_BASE}\{processName}";
-                    TL.LogMessage("Registry", $"Writing CLR version {_netVersion} to registry key: {frameworkKey}");
-                    ra.WriteProfile(frameworkKey, "Framework", _netVersion);
+                    LogMessage("Registry", $"Writing CLR version {dotNetRuntimeVersion} to registry key: {frameworkKey}");
+                    ra.WriteProfile(frameworkKey, "Framework", dotNetRuntimeVersion);
                 }
 
 
                 // Attempt to get the .NET runtime version of the primary process from the entry assembly
                 try
                 {
-                    TL.LogMessage("Information", $"{System.Environment.Version.ToString()} (Environment)");
+                    LogMessage("Information", $"{System.Environment.Version.ToString()} (Environment)");
 
                     Assembly entryAssembly = Assembly.GetEntryAssembly();
                     if (entryAssembly is null)
-                        TL.LogMessage("Information", "Entry assembly is null");
+                        LogMessage("Information", "Entry assembly is null");
                     else
                     {
-                        TL.LogMessage("Information", $"Entry assembly: {entryAssembly.FullName}");
-                        TL.LogMessage("Information", $"Entry assembly location: {entryAssembly.Location}");
-                        TL.LogMessage("Information", $"Entry assembly code base: {entryAssembly.CodeBase}");
+                        LogMessage("Information", $"Entry assembly: {entryAssembly.FullName}");
+                        LogMessage("Information", $"Entry assembly location: {entryAssembly.Location}");
+                        LogMessage("Information", $"Entry assembly code base: {entryAssembly.CodeBase}");
 
                         // Retrieve the .NET runtime version from the entry assembly
                         object imageRunTimeversion = Assembly.GetEntryAssembly().ImageRuntimeVersion;
                         if (imageRunTimeversion is null)
-                            TL.LogMessage("Information", "ImageRuntimeVersion is null");
+                            LogMessage("Information", "ImageRuntimeVersion is null");
                         else
-                            TL.LogMessage("Information", $"{Assembly.GetEntryAssembly().ImageRuntimeVersion} (ImageRuntimeVersion)");
+                            LogMessage("Information", $"{Assembly.GetEntryAssembly().ImageRuntimeVersion} (ImageRuntimeVersion)");
                     }
-                    TL.LogMessage("Information", $"System version: {RuntimeEnvironment.GetSystemVersion()}");
+                    LogMessage("Information", $"System version: {RuntimeEnvironment.GetSystemVersion()}");
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessage("Information", ex.Message);
+                    LogMessage("Information", ex.Message);
                 }
-                TL.LogMessage("", "");
+                LogMessage("", "");
+                LogMessage("==========", "==================================================================");
+                LogMessage("", "");
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf(componentName, $"Exception in Log.Component: {ex.Message}\r\n{ex}");
+                LogMessage(componentName, $"Exception in Log.Component: {ex.Message}\r\n{ex}");
             }
+        }
+
+        static void LogMessage(string source, string message)
+        {
+            logger?.LogMessageCrLf(source, message);
         }
     }
 }
