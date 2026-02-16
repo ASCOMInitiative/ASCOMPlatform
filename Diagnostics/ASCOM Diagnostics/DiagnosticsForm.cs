@@ -452,6 +452,7 @@ namespace ASCOM.Utilities
                 {
                     TL.LogMessage("Environment", $"TraceLogger is {(Utilities.Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT) ? "" : "not ")}using the Mutex mechanic");
                     TL.LogMessage("Environment", $"TraceLogger debug is {(Utilities.Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT) ? "enabled" : "disabled")}.");
+                    TL.LogMessage("Environment", $".NET component use logging is {(Utilities.Global.GetBool(DOTNET35_COMPONENT_USE_LOGGING, DOTNET35_COMPONENT_USE_LOGGING_DEFAULT) ? "enabled" : "disabled")}.");
                     TL.LogMessage("", "");
                 }
                 catch (Exception ex)
