@@ -970,29 +970,22 @@ namespace ASCOM.Utilities
             {
                 // Release the mutex
                 globalMutex.ReleaseMutex();
+
+                // Log the release if configured to do so
                 if (debugLoggingEnabled)
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", 
-                        $"Released mutex OK!\r\n{GetStackWithLines()}", 
-                        EventLogEntryType.Information, 
-                        EventLogErrors.TraceLogger, null);
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Released mutex OK!\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
             }
             catch (ApplicationException ex)
             {
                 // This occurs when trying to release a mutex not owned by this thread
                 // Log but don't throw - this is not critical and shouldn't break the application
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", 
-                    $"Attempted to release mutex not owned by current thread: {ex.Message}\r\n{GetStackWithLines()}", 
-                    EventLogEntryType.Warning, 
-                    EventLogErrors.TraceLogger, null);
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Attempted to release mutex not owned by current thread: {ex.Message}\r\n{GetStackWithLines()}", EventLogEntryType.Warning, EventLogErrors.TraceLogger, null);
             }
             catch (Exception ex)
             {
                 // Log other unexpected exceptions but don't throw them
                 // We're in a finally block - throwing here will mask the original exception
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", 
-                    $"Unexpected exception while releasing mutex: {ex.Message}\r\n{GetStackWithLines()}", 
-                    EventLogEntryType.Error, 
-                    EventLogErrors.TraceLogger, ex.ToString());
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Unexpected exception while releasing mutex: {ex.Message}\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
             }
         }
 
