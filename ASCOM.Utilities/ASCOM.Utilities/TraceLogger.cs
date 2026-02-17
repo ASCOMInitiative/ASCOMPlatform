@@ -46,17 +46,44 @@ namespace ASCOM.Utilities
         private int g_IdentifierWidth; // Variable to hold the current identifier field width
         private bool autoLogFilePath;
 
-        private System.Threading.Mutex mut;
-        private bool GotMutex;
+        // These are static variables so there is only one mutex wrapper per AppDomain rather than one per TraceLogger instance. 
+        // The underlying named mutex "TraceLoggerMutex" is a system-wide OS mutex shared across all AppDomains and processes.
+        private static System.Threading.Mutex globalMutex;
+        private static object mutexCreationLock = new object();
 
-        private bool useMutex = false; // Enables the original mutex synchronisation mechanic if required (this is not advised, the new lock() mechanic is faster and does not sync between processes.)
-
-        private object lockObject = new object();
-        private bool debugLoggingEnabled = false; // Set to true to enable debug logging of the TraceLogger's internal operations to the eventlog. This is not intended for general use and is not recommended as it can cause performance issues and very large event logs if left enabled.
+        private object methodLockObject = new object();
+        private static bool debugLoggingEnabled = false;
+        private static bool useMutexSynchronisation;
 
         #region New and IDisposable Support
 
-        private bool traceLoggerHasBeenDisposed = false;        // To detect redundant calls
+        private bool traceLoggerHasBeenDisposed = false; // To detect redundant calls
+
+        /// <summary>
+        /// Initializes static resources for the TraceLogger class.
+        /// </summary>
+        /// <remarks>Creates a global mutex for all TraceLogger instances in this appdomain, if required, and initialises the debug logging setting based on registry values.
+        /// </remarks>
+        static TraceLogger()
+        {
+            // Determine whether to use the global TraceLogger mutex
+            useMutexSynchronisation = Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT);
+
+            // Create the global TraceLogger mutex if required (once per process)
+            if (useMutexSynchronisation)
+            {
+                lock (mutexCreationLock)
+                {
+                    if (globalMutex is null)
+                        globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
+                }
+            }
+
+            // Determine whether to enable debug logging for all TraceLogger instances in this AppDomain.
+            // This is not intended for production use as it can cause performance issues and very large event logs if left enabled.
+            // The setting is not exposed in the Diagnostics UI, values must be changed by editing the registry.
+            debugLoggingEnabled = Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT);
+        }
 
         /// <summary>
         /// Creates a new TraceLogger instance
@@ -143,22 +170,12 @@ namespace ASCOM.Utilities
             // Initialise the log file path to the default value
             g_LogFilePath = g_DefaultLogFilePath;
 
-            // Determine whether to use the global TraceLogger mutex and log debug information to the event log.
-            useMutex = Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT);
-            debugLoggingEnabled = Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT); // This is not exposed in the Diagnostics UI, values must be changed by editing the registry.
-
-            // Create the global TraceLogger mutex if required.
-            if (useMutex)
-                mut = new System.Threading.Mutex(false, "TraceLoggerMutex");
-
             // Set default behaviour for handling Unicode characters
             UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
-
         }
 
         #region IDisposable Support
 
-        // IDisposable
         /// <summary>
         /// Disposes of the TraceLogger object
         /// </summary>
@@ -173,46 +190,15 @@ namespace ASCOM.Utilities
                 {
                     if (g_LogFile is not null)
                     {
-                        try
-                        {
-                            g_LogFile.Flush();
-                        }
-                        catch
-                        {
-                        }
-                        try
-                        {
-                            g_LogFile.Close();
-                        }
-                        catch
-                        {
-                        }
-                        try
-                        {
-                            g_LogFile.Dispose();
-                        }
-                        catch
-                        {
-                        }
+                        try { g_LogFile.Flush(); } catch { }
+                        try { g_LogFile.Close(); } catch { }
+                        try { g_LogFile.Dispose(); } catch { }
                         g_LogFile = null;
-                    }
-                    if (mut is not null)
-                    {
-                        // Try : mut.ReleaseMutex() : Catch : End Try
-                        try
-                        {
-                            mut.Close();
-                        }
-                        catch
-                        {
-                        }
-                        mut = null;
                     }
                 }
             }
         }
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
         /// <summary>
         /// Disposes of the TraceLogger object
         /// </summary>
@@ -238,6 +224,7 @@ namespace ASCOM.Utilities
 
         #endregion
 
+        #region ITraceLogger Implementation
 
         /// <summary>
         /// Logs an issue, closing any open line and opening a continuation line if necessary after the 
@@ -247,27 +234,24 @@ namespace ASCOM.Utilities
         /// <param name="Message">Message to log</param>
         /// <remarks>Use this for reporting issues that you don't want to appear on a line already opened 
         /// with StartLine</remarks>
-        #region ITraceLogger Implementation
         public void LogIssue(string Identifier, string Message)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             try
             {
                 GetTraceLoggerMutex("LogIssue", "\"" + Identifier + "\", \"" + Message + "\"");
-                if (g_Enabled)
+                lock (methodLockObject) // Ensure that the message
                 {
-                    lock (lockObject) // Ensure that the message
-                    {
-                        if (g_LogFile is null)
-                            CreateLogFile();
-                        if (g_LineStarted)
-                            g_LogFile.WriteLine();
-                        LogMsgFormatter(Identifier, Message, true, false);
-                        if (g_LineStarted)
-                            LogMsgFormatter("Continuation", "", false, false);
-                    }
+                    if (g_LogFile is null)
+                        CreateLogFile();
+                    if (g_LineStarted)
+                        g_LogFile.WriteLine();
+                    LogMsgFormatter(Identifier, Message, true, false);
+                    if (g_LineStarted)
+                        LogMsgFormatter("Continuation", "", false, false);
                 }
             }
             finally
@@ -283,8 +267,9 @@ namespace ASCOM.Utilities
         /// <remarks></remarks>
         public void BlankLine()
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             LogMessage("", "", false);
         }
@@ -304,8 +289,9 @@ namespace ASCOM.Utilities
         {
             string Msg = Message;
 
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             try
             {
@@ -313,16 +299,13 @@ namespace ASCOM.Utilities
                 if (g_LineStarted)
                     LogFinish(" "); // 1/10/09 PWGS Silently close the open line
 
-                if (g_Enabled)
+                lock (methodLockObject) // Ensure that the message
                 {
-                    lock (lockObject) // Ensure that the message
-                    {
-                        if (g_LogFile is null)
-                            CreateLogFile();
-                        if (HexDump)
-                            Msg = Message + "  (HEX" + MakeHex(Message) + ")";
-                        LogMsgFormatter(Identifier, Msg, true, false);
-                    }
+                    if (g_LogFile is null)
+                        CreateLogFile();
+                    if (HexDump)
+                        Msg = Message + "  (HEX" + MakeHex(Message) + ")";
+                    LogMsgFormatter(Identifier, Msg, true, false);
                 }
             }
             finally
@@ -342,8 +325,9 @@ namespace ASCOM.Utilities
         /// </remarks>
         public void LogMessageCrLf(string Identifier, string Message)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             try
             {
@@ -351,14 +335,11 @@ namespace ASCOM.Utilities
                 if (g_LineStarted)
                     LogFinish(" "); // 1/10/09 PWGS Silently close the open line
 
-                if (g_Enabled)
+                lock (methodLockObject) // Ensure that the message
                 {
-                    lock (lockObject) // Ensure that the message
-                    {
-                        if (g_LogFile is null)
-                            CreateLogFile();
-                        LogMsgFormatter(Identifier, Message, true, true);
-                    }
+                    if (g_LogFile is null)
+                        CreateLogFile();
+                    LogMsgFormatter(Identifier, Message, true, true);
                 }
             }
             finally
@@ -383,8 +364,9 @@ namespace ASCOM.Utilities
         /// </remarks>
         public void LogStart(string Identifier, string Message)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             try
             {
@@ -395,15 +377,12 @@ namespace ASCOM.Utilities
                 }
                 else
                 {
-                    lock (lockObject) // Ensure that the message
+                    lock (methodLockObject) // Ensure that the message
                     {
                         g_LineStarted = true;
-                        if (g_Enabled)
-                        {
-                            if (g_LogFile is null)
-                                CreateLogFile();
-                            LogMsgFormatter(Identifier, Message, false, false);
-                        }
+                        if (g_LogFile is null)
+                            CreateLogFile();
+                        LogMsgFormatter(Identifier, Message, false, false);
                     }
                 }
             }
@@ -425,8 +404,9 @@ namespace ASCOM.Utilities
         /// </remarks>
         public void LogContinue(string Message, bool HexDump)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             // Append a full hex dump of the supplied string if p_Hex is true
             string Msg = Message;
@@ -446,8 +426,9 @@ namespace ASCOM.Utilities
         /// </remarks>
         public void LogFinish(string Message, bool HexDump)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             // Append a full hex dump of the supplied string if p_Hex is true
             string Msg = Message;
@@ -560,6 +541,7 @@ namespace ASCOM.Utilities
                 g_IdentifierWidth = value;
             }
         }
+
         #endregion
 
         #region ITraceLoggerExtra Implementation
@@ -580,22 +562,20 @@ namespace ASCOM.Utilities
         [ComVisible(false)]
         public void LogMessage(string Identifier, string Message)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             try
             {
                 GetTraceLoggerMutex("LogMessage", "\"" + Identifier + "\", \"" + Message + "\"");
                 if (g_LineStarted)
                     LogFinish(" "); // 1/10/09 PWGS Made line closure silent
-                if (g_Enabled)
+                lock (methodLockObject) // Ensure that the message
                 {
-                    lock (lockObject) // Ensure that the message
-                    {
-                        if (g_LogFile is null)
-                            CreateLogFile();
-                        LogMsgFormatter(Identifier, Message, true, false);
-                    }
+                    if (g_LogFile is null)
+                        CreateLogFile();
+                    LogMsgFormatter(Identifier, Message, true, false);
                 }
             }
             finally
@@ -619,8 +599,9 @@ namespace ASCOM.Utilities
         [ComVisible(false)]
         public void LogContinue(string Message)
         {
-            if (traceLoggerHasBeenDisposed)
-                return; // Ignore this call if the trace logger has been disposed
+            // Ignore this call if the trace logger has been disposed or return quickly if logging is not enabled
+            if (traceLoggerHasBeenDisposed | !g_Enabled)
+                return;
 
             try
             {
@@ -629,9 +610,9 @@ namespace ASCOM.Utilities
                 {
                     LogMessage("LOGISSUE", "LogContinue has been called before LogStart. Parameter: " + Message);
                 }
-                else if (g_Enabled)
+                else
                 {
-                    lock (lockObject) // Ensure that the message
+                    lock (methodLockObject) // Ensure that the message
                     {
                         if (g_LogFile is null)
                             CreateLogFile();
@@ -672,7 +653,7 @@ namespace ASCOM.Utilities
                 }
                 else
                 {
-                    lock (lockObject) // Ensure that the message
+                    lock (methodLockObject) // Ensure that the message
                     {
                         g_LineStarted = false;
                         if (g_Enabled)
@@ -697,7 +678,52 @@ namespace ASCOM.Utilities
 
         #endregion
 
+        #region Public static methods
+
+        /// <summary>
+        /// Enables TraceLogger's historic mutex-based synchronization mechanic (not recommended, see remarks).
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Since introduction in 2009, TraceLogger used a global Windows mutex to synchronise writing to log files. The impact was that only one write could occur at a time across the whole PC.
+        /// </para>
+        /// <para>
+        /// Due to a variety of stability issues reported after release of Platform 7.1 Update 2 in February 2026, the default locking mechanic was changed to an 
+        /// instance local lock() because it is sufficient to protect the file being written and because it engineers out any possibility of unintended inter-process synchronisation.
+        /// </para>
+        /// <para>
+        /// It is strongly recommended that the new default lock() synchronisation is used as it is faster and does not have the potential to cause application issues due to mutex timeouts.
+        /// </para>
+        /// <para>
+        /// Only set true if inter-process synchronisation is essential.
+        /// </para>
+        /// </remarks>
+        public static bool UseMutexSynchronisation
+        {
+            get
+            {
+                return useMutexSynchronisation;
+            }
+
+            set
+            {
+                useMutexSynchronisation = value;
+
+                // If synchronisation is being enabled and the global mutex has not yet been created then create it
+                if (useMutexSynchronisation && (globalMutex is null))
+                {
+                    lock (mutexCreationLock)
+                    {
+                        globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region TraceLogger Support
+
         private void CreateLogFile()
         {
             int FileNameSuffix = 0;
@@ -895,22 +921,20 @@ namespace ASCOM.Utilities
         private void GetTraceLoggerMutex(string Method, string Parameters)
         {
             // Return immediately if we are not using mutex synchronisation
-            if (!useMutex)
+            if (!useMutexSynchronisation)
                 return;
+
+            bool gotMutex;
 
             // Get the profile mutex or log an error and throw an exception that will terminate this profile call and return to the calling application
             try
             {
                 // Log that we are trying to get the mutex if configured to do so
                 if (debugLoggingEnabled)
-                {
-                    string stackTrace = GetStackWithLines();
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - About to get mutex for method {Method} - {Parameters}\r\n{stackTrace}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
-                }
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - About to get mutex for method {Method} - {Parameters}\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
 
                 // Try to acquire the mutex
-                mut.WaitOne(PROFILE_MUTEX_TIMEOUT, false);
-                GotMutex = true;
+                gotMutex = globalMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, false);
             }
             catch (System.Threading.AbandonedMutexException ex) // Catch the AbandonedMutexException but not any others, these are passed to the calling routine
             {
@@ -918,67 +942,61 @@ namespace ASCOM.Utilities
                 LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, ex.ToString());
                 if (GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT))
                 {
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}. Throwing exception to application", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, null);
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}. Throwing exception to application.\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, null);
                     throw; // Throw the exception in order to report it
                 }
                 else
                 {
                     // Flag that we have got the mutex.
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}: Absorbing exception, continuing normal execution", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
-                    GotMutex = true;
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"AbandonedMutexException in {Method} - {Parameters}: Absorbing exception, continuing normal execution.\r\n{GetStackWithLines()}", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, null);
+                    gotMutex = true;
                 }
             }
             catch (Exception ex) // Log any other exception and then throw to the calling application.
             {
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while waiting for TraceLogger mutex in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while waiting for TraceLogger mutex in {Method} - {Parameters}.\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
                 throw;
             }
 
             // Check whether we have the mutex, throw an error if not
-            if (!GotMutex)
+            if (!gotMutex)
             {
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, null);
                 throw new ProfilePersistenceException($"Timed out waiting for TraceLogger mutex in {Method} - {Parameters}");
             }
 
             // Log that we got the mutex if configured to do so
             if (debugLoggingEnabled)
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - Got the mutex OK!", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} {Method}", $"TraceLogger - Got the mutex OK!\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
         }
 
-        // Release the trace logger mutex
         private void ReleaseTraceLoggerMutex()
         {
             // Return immediately if we are not using mutex synchronisation
-            if (!useMutex)
+            if (!useMutexSynchronisation)
                 return;
 
-            if (debugLoggingEnabled)
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"About to release mutex, GotMutex: {GotMutex}...", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
-
-            // Release the mutex if we have it
-            if (GotMutex) // We have the mutex so try to release it, ignoring any errors
+            try
             {
-                try
-                {
-                    // Release the mutex
-                    mut.ReleaseMutex();
-                    if (debugLoggingEnabled)
-                        LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Released mutex OK!", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
-                }
-                catch (Exception ex) // Ignore any errors
-                {
-                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Exception while releasing mutex", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
-                }
-                finally
-                {
-                    // Set the flag to show we no longer have the mutex
-                    GotMutex = false;
-                }
-            }
+                // Release the mutex
+                globalMutex.ReleaseMutex();
 
-            if (debugLoggingEnabled)
-                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Final GotMutex state: {GotMutex}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+                // Log the release if configured to do so
+                if (debugLoggingEnabled)
+                    LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Released mutex OK!\r\n{GetStackWithLines()}", EventLogEntryType.Information, EventLogErrors.TraceLogger, null);
+            }
+            catch (ApplicationException ex)
+            {
+                // This occurs when trying to release a mutex not owned by this thread
+                // Log but don't throw - this is not critical and shouldn't break the application
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Attempted to release mutex not owned by current thread: {ex.Message}\r\n{GetStackWithLines()}", EventLogEntryType.Warning, EventLogErrors.TraceLogger, null);
+            }
+            catch (Exception ex)
+            {
+                // Log other unexpected exceptions but don't throw them
+                // We're in a finally block - throwing here will mask the original exception
+                LogEvent($"{DateTime.Now:HH:mm:ss.fff} TraceLogger", $"Unexpected exception while releasing mutex: {ex.Message}\r\n{GetStackWithLines()}", EventLogEntryType.Error, EventLogErrors.TraceLogger, ex.ToString());
+            }
         }
 
         private static string GetStackWithLines()

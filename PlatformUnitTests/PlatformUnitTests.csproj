@@ -46,6 +46,7 @@
     <Compile Include="ComDeviceStateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchAsync.cs" />
+    <Compile Include="TraceLoggerTests.cs" />
     <Compile Include="Utilities.Util EdgeCaseTests.cs" />
   </ItemGroup>
   <ItemGroup>

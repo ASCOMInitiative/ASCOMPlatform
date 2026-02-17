@@ -16,7 +16,6 @@ here <link xlink:href="7d9253c2-fdfd-4c0d-8225-a96bddb49731#PreReqs70">Platform 
 * Alpaca Dynamic Driver log files are now named ASCOM.DynamicDriver... rather than ASCOM.AlpacaSim...
 * Update checker messages now refer to 'Updates' rather than 'Service Packs'.
 
-
 ## Issues Fixed in 7.1 Update 2 - For Everyone
 * Fixed an issue, introduced in Platform 7.1, that caused drivers that use ASCOM COM objects to fail in some environments, including Windows ARM 64bit.
 The issue also caused the 64bit Platform installer validation test to report a -1073741819 error.
