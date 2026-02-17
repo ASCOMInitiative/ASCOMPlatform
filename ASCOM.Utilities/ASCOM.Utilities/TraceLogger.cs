@@ -46,20 +46,31 @@ namespace ASCOM.Utilities
         private int g_IdentifierWidth; // Variable to hold the current identifier field width
         private bool autoLogFilePath;
 
+        // These are static variables so there is only one mutex wrapper per AppDomain rather than one per TraceLogger instance. 
+        // The underlying named mutex "TraceLoggerMutex" is a system-wide OS mutex shared across all AppDomains and processes.
         private static System.Threading.Mutex globalMutex;
         private static object mutexCreationLock = new object();
 
-        private object lockObject = new object();
-        private static bool debugLoggingEnabled = false; // Set to true to enable debug logging of the TraceLogger's internal operations to the event log. This is not intended for general use and is not recommended as it can cause performance issues and very large event logs if left enabled.
+        private object methodLockObject = new object();
+        private static bool debugLoggingEnabled = false;
+        private static bool useMutexSynchronisation;
 
         #region New and IDisposable Support
 
-        private bool traceLoggerHasBeenDisposed = false;        // To detect redundant calls
+        private bool traceLoggerHasBeenDisposed = false; // To detect redundant calls
 
+        /// <summary>
+        /// Initializes static resources for the TraceLogger class.
+        /// </summary>
+        /// <remarks>Creates a global mutex for all TraceLogger instances in this appdomain, if required, and initialises the debug logging setting based on registry values.
+        /// </remarks>
         static TraceLogger()
         {
+            // Determine whether to use the global TraceLogger mutex
+            useMutexSynchronisation = Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT);
+
             // Create the global TraceLogger mutex if required (once per process)
-            if (Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT))
+            if (useMutexSynchronisation)
             {
                 lock (mutexCreationLock)
                 {
@@ -67,7 +78,11 @@ namespace ASCOM.Utilities
                         globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
                 }
             }
-            debugLoggingEnabled = Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT); // This is not exposed in the Diagnostics UI, values must be changed by editing the registry.
+
+            // Determine whether to enable debug logging for all TraceLogger instances in this AppDomain.
+            // This is not intended for production use as it can cause performance issues and very large event logs if left enabled.
+            // The setting is not exposed in the Diagnostics UI, values must be changed by editing the registry.
+            debugLoggingEnabled = Global.GetBool(TRACELOGGER_DEBUG, TRACELOGGER_DEBUG_DEFAULT);
         }
 
         /// <summary>
@@ -155,13 +170,8 @@ namespace ASCOM.Utilities
             // Initialise the log file path to the default value
             g_LogFilePath = g_DefaultLogFilePath;
 
-            // Determine whether to use the global TraceLogger mutex and log debug information to the event log.
-            UseMutexSynchronisation = Global.GetBool(USE_TRACELOGGER_MUTEX, USE_TRACELOGGER_MUTEX_DEFAULT);
-
-
             // Set default behaviour for handling Unicode characters
             UnicodeEnabled = Global.GetBool(OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER, OPTIONS_DISPLAY_UNICODE_CHARACTERS_IN_TRACELOGGER_DEFAULT);
-
         }
 
         #region IDisposable Support
@@ -180,34 +190,15 @@ namespace ASCOM.Utilities
                 {
                     if (g_LogFile is not null)
                     {
-                        try
-                        {
-                            g_LogFile.Flush();
-                        }
-                        catch
-                        {
-                        }
-                        try
-                        {
-                            g_LogFile.Close();
-                        }
-                        catch
-                        {
-                        }
-                        try
-                        {
-                            g_LogFile.Dispose();
-                        }
-                        catch
-                        {
-                        }
+                        try { g_LogFile.Flush(); } catch { }
+                        try { g_LogFile.Close(); } catch { }
+                        try { g_LogFile.Dispose(); } catch { }
                         g_LogFile = null;
                     }
                 }
             }
         }
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
         /// <summary>
         /// Disposes of the TraceLogger object
         /// </summary>
@@ -252,7 +243,7 @@ namespace ASCOM.Utilities
             try
             {
                 GetTraceLoggerMutex("LogIssue", "\"" + Identifier + "\", \"" + Message + "\"");
-                lock (lockObject) // Ensure that the message
+                lock (methodLockObject) // Ensure that the message
                 {
                     if (g_LogFile is null)
                         CreateLogFile();
@@ -308,7 +299,7 @@ namespace ASCOM.Utilities
                 if (g_LineStarted)
                     LogFinish(" "); // 1/10/09 PWGS Silently close the open line
 
-                lock (lockObject) // Ensure that the message
+                lock (methodLockObject) // Ensure that the message
                 {
                     if (g_LogFile is null)
                         CreateLogFile();
@@ -344,7 +335,7 @@ namespace ASCOM.Utilities
                 if (g_LineStarted)
                     LogFinish(" "); // 1/10/09 PWGS Silently close the open line
 
-                lock (lockObject) // Ensure that the message
+                lock (methodLockObject) // Ensure that the message
                 {
                     if (g_LogFile is null)
                         CreateLogFile();
@@ -386,7 +377,7 @@ namespace ASCOM.Utilities
                 }
                 else
                 {
-                    lock (lockObject) // Ensure that the message
+                    lock (methodLockObject) // Ensure that the message
                     {
                         g_LineStarted = true;
                         if (g_LogFile is null)
@@ -580,7 +571,7 @@ namespace ASCOM.Utilities
                 GetTraceLoggerMutex("LogMessage", "\"" + Identifier + "\", \"" + Message + "\"");
                 if (g_LineStarted)
                     LogFinish(" "); // 1/10/09 PWGS Made line closure silent
-                lock (lockObject) // Ensure that the message
+                lock (methodLockObject) // Ensure that the message
                 {
                     if (g_LogFile is null)
                         CreateLogFile();
@@ -621,7 +612,7 @@ namespace ASCOM.Utilities
                 }
                 else
                 {
-                    lock (lockObject) // Ensure that the message
+                    lock (methodLockObject) // Ensure that the message
                     {
                         if (g_LogFile is null)
                             CreateLogFile();
@@ -662,7 +653,7 @@ namespace ASCOM.Utilities
                 }
                 else
                 {
-                    lock (lockObject) // Ensure that the message
+                    lock (methodLockObject) // Ensure that the message
                     {
                         g_LineStarted = false;
                         if (g_Enabled)
@@ -686,7 +677,7 @@ namespace ASCOM.Utilities
         public bool UnicodeEnabled { get; set; }
 
         /// <summary>
-        /// Enables "global PC" mutex-based synchronization in place of the new default "instance local" lock() synchronisation.
+        /// Enables "global PC" mutex-based synchronization in place of the new default "instance local" lock() synchronisation for all TraceLogger instances in this AppDomain.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -702,7 +693,25 @@ namespace ASCOM.Utilities
         /// If you are not sure, you should leave this set to False to use the new default lock() synchronisation.
         /// </para>
         /// </remarks>
-        public bool UseMutexSynchronisation { get; set; }
+        public static bool UseMutexSynchronisation
+        {
+            get
+            {
+                return useMutexSynchronisation;
+            }
+
+            set
+            {
+                useMutexSynchronisation = value;
+                if (useMutexSynchronisation && globalMutex is null) // If synchronisation is being enabled and the global mutex has not yet been created then create it
+                {
+                    lock (mutexCreationLock)
+                    {
+                        globalMutex = new System.Threading.Mutex(false, @"TraceLoggerMutex");
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -905,7 +914,7 @@ namespace ASCOM.Utilities
         private void GetTraceLoggerMutex(string Method, string Parameters)
         {
             // Return immediately if we are not using mutex synchronisation
-            if (!UseMutexSynchronisation)
+            if (!useMutexSynchronisation)
                 return;
 
             bool gotMutex;
@@ -957,7 +966,7 @@ namespace ASCOM.Utilities
         private void ReleaseTraceLoggerMutex()
         {
             // Return immediately if we are not using mutex synchronisation
-            if (!UseMutexSynchronisation)
+            if (!useMutexSynchronisation)
                 return;
 
             try

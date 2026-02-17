@@ -519,25 +519,6 @@ namespace ASCOM.Utilities.Interfaces
         /// Controls whether non-ASCII Unicode characters are printed or displayed as hex
         /// </summary>
         bool UnicodeEnabled { get; set; }
-
-        /// <summary>
-        /// Enables "global PC" mutex-based synchronization in place of the new default "instance local" lock() synchronisation.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Historically TraceLogger used a global Windows mutex to synchronise writing to log files. The impact was that only one write could occur at a time across the whole PC.
-        /// </para>
-        /// <para>
-        /// In February 2026 the default locking mechanic was changed to an instance local lock() because this is sufficient to protect the file being written.
-        /// This also fixed issues manifesting in the Voyager application as well as occasional exceptions from TraceLocker instances when they could not get the global mutex within 5 seconds.
-        /// </para>
-        /// <para>
-        /// It is strongly recommended that the new default lock() synchronisation is used as it is faster and does not have the potential to cause application issues due to mutex timeouts.
-        /// However, the original global mutex synchronisation can be re-enabled if required for use cases such as synchronisation between multiple processes using the same TraceLogger instance.
-        /// If you are not sure, you should leave this set to False to use the new default lock() synchronisation.
-        /// </para>
-        /// </remarks>
-        bool UseMutexSynchronisation { get; set; }
     }
 
     /// <summary>

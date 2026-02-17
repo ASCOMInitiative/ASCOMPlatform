@@ -22,8 +22,8 @@ namespace PlatformUnitTests
         public void UseMutexSynchronisationDefault()
         {
             TraceLogger TL = new TraceLogger();
-            Assert.False(TL.UseMutexSynchronisation);
-            output.WriteLine($"UseMutexSynchronisation: {TL.UseMutexSynchronisation}");
+            Assert.False(TraceLogger.UseMutexSynchronisation);
+            output.WriteLine($"UseMutexSynchronisation: {TraceLogger.UseMutexSynchronisation}");
         }
 
         [Fact]
@@ -31,10 +31,10 @@ namespace PlatformUnitTests
         {
             TraceLogger TL = new TraceLogger("","UseMutexSynchronisationFalse");
             TL.Enabled= true; 
-            TL.UseMutexSynchronisation = false;
+            TraceLogger.UseMutexSynchronisation = false;
 
-            TL.LogMessage("", $"UseMutexSynchronisation is {TL.UseMutexSynchronisation}");
-            Assert.False(TL.UseMutexSynchronisation);
+            TL.LogMessage("", $"UseMutexSynchronisation is {TraceLogger.UseMutexSynchronisation}");
+            Assert.False(TraceLogger.UseMutexSynchronisation);
             TL.Dispose();
         }
 
@@ -43,10 +43,10 @@ namespace PlatformUnitTests
         {
             TraceLogger TL = new TraceLogger("", "UseMutexSynchronisationTrue");
             TL.Enabled = true;
-            TL.UseMutexSynchronisation = true;
+            TraceLogger.UseMutexSynchronisation = true;
 
-            TL.LogMessage("", $"UseMutexSynchronisation is {TL.UseMutexSynchronisation}");
-            Assert.True(TL.UseMutexSynchronisation);
+            TL.LogMessage("", $"UseMutexSynchronisation is {TraceLogger.UseMutexSynchronisation}");
+            Assert.True(TraceLogger.UseMutexSynchronisation);
             TL.Dispose();
         }
     }
