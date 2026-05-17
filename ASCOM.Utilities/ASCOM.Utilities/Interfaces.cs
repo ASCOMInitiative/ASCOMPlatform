@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Net;
 // Public and private interfaces for the ASCOM.Utilities namespace
 
@@ -570,6 +571,11 @@ namespace ASCOM.Utilities.Interfaces
         /// with an empty string parameter to achieve this effect.</para>
         /// </remarks>
         string Choose();
+
+        /// <summary>
+        /// The screen x, y location at which the Chooser dialogue will be displayed when the Choose method is called. (Default is the center of the screen)
+        /// </summary>
+        Point Location { get; set; }
     }
 
     /// <summary>

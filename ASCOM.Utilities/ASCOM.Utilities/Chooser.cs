@@ -3,8 +3,10 @@ using ASCOM.Utilities.Interfaces;
 using Microsoft.VisualBasic;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using static ASCOM.Utilities.Global;
 
 namespace ASCOM.Utilities
@@ -148,22 +150,32 @@ namespace ASCOM.Utilities
         public string Choose(string DriverProgID)
         {
             string selectedProgId;
-            ChooserForm chooserFormInstance;
 
             try
             {
 
                 if (string.IsNullOrEmpty(deviceTypeValue))
                     throw new Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set");
-                chooserFormInstance = new ChooserForm(); // Initially hidden
 
-                chooserFormInstance.DeviceType = deviceTypeValue;
-                chooserFormInstance.SelectedProgId = DriverProgID;
-                chooserFormInstance.ShowDialog(); // Display MODAL Chooser dialogue
+                using (ChooserForm chooserFormInstance = new ChooserForm()) // Initially hidden. Use of Using ensures that the form instance is disposed when finished with, even if an exception is thrown.
+                {
+                    // Set the position if the caller has specified one, otherwise the form will default to center of the screen
+                    if (Location.X >= 0 && Location.Y >= 0)
+                    {
+                        chooserFormInstance.StartPosition = FormStartPosition.Manual;
+                        chooserFormInstance.Location = Location;
+                    }
 
-                selectedProgId = chooserFormInstance.SelectedProgId;
+                    // Set the device type and ProgID
+                    chooserFormInstance.DeviceType = deviceTypeValue;
+                    chooserFormInstance.SelectedProgId = DriverProgID;
 
-                chooserFormInstance.Dispose();
+                    // Display MODAL Chooser dialogue
+                    chooserFormInstance.ShowDialog();
+
+                    // Save the selected ProgID to return to caller
+                    selectedProgId = chooserFormInstance.SelectedProgId;
+                }
             }
 
             catch (DriverNotRegisteredException ex)
@@ -185,8 +197,9 @@ namespace ASCOM.Utilities
         #endregion
 
         #region IChooserExtra Implementation
+
         /// <summary>
-        /// Select ASCOM driver to use without pre-selecting in the dropdown list
+        /// Select ASCOM driver to use without pre-selecting in the drop-down list
         /// </summary>
         /// <returns>Driver ID of chosen driver</returns>
         /// <exception cref="Exceptions.InvalidValueException">Thrown if the Chooser.DeviceType property has not been set before Choose is called. 
@@ -200,6 +213,14 @@ namespace ASCOM.Utilities
         {
             return Choose("");
         }
+
+        /// <summary>
+        /// The screen x, y location at which the Chooser dialogue will be displayed when the Choose method is called. (Default is the center of the screen)
+        /// </summary>
+        /// <remarks>This property is only available to .NET clients and is not available through COM.</remarks>
+        [ComVisible(false)]
+        public Point Location { get; set; } = new(-1, -1);
+
         #endregion
 
     }

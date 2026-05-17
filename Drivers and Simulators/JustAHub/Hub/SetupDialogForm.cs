@@ -1,6 +1,8 @@
 using ASCOM.Utilities;
 using System;
 using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -23,6 +25,8 @@ namespace ASCOM.JustAHub
 
         readonly string callingDeviceType;
 
+        private static Screen screen; // Placeholder for the screen dimensions to be used in positioning the device chooser dialogue
+
         #region Initialisation and form load
 
         public SetupDialogForm(TraceLogger tlDriver, string callingDeviceType)
@@ -38,6 +42,9 @@ namespace ASCOM.JustAHub
             {
                 MessageBox.Show($"JustAHub SetupDialogForm (calling device: {callingDeviceType}) exception: {ex.Message}\r\n{ex}");
             }
+
+            // Save the screen dimensions for use in positioning the device chooser dialogue
+            screen = Screen.FromControl(this);
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
@@ -372,7 +379,13 @@ namespace ASCOM.JustAHub
 
             using (Chooser chooser = new Chooser())
             {
+                // Set the position for the chooser to appear. This must be offset from the screen centre to avoid confusion with the client application's chooser dialogue.
+                chooser.Location = new Point(screen.Bounds.Width / 2, screen.Bounds.Height + 220);
+
+                // Set the device type
                 chooser.DeviceType = deviceType;
+
+                // Get the selected ProgID from the chooser dialogue
                 newProgId = chooser.Choose(currentProgId);
             }
 
