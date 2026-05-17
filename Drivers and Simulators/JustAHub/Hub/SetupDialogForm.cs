@@ -45,6 +45,12 @@ namespace ASCOM.JustAHub
 
             // Save the screen dimensions for use in positioning the device chooser dialogue
             screen = Screen.FromControl(this);
+
+            // Set the form's start position to manual to allow for custom positioning of the device dialogue.
+            StartPosition = FormStartPosition.Manual;
+
+            // Locate the form slightly offset from the centre of the screen.  
+            Location = new Point((screen.Bounds.Width / 2) + 40, (screen.Bounds.Height / 2) + 40);
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
@@ -371,7 +377,7 @@ namespace ASCOM.JustAHub
 
         #region Support code
 
-        private static string HandleChooserClick(TraceLogger TL, string deviceType, string currentProgId, Label label)
+        private string HandleChooserClick(TraceLogger TL, string deviceType, string currentProgId, Label label)
         {
             string newProgId = null;
 
@@ -380,7 +386,19 @@ namespace ASCOM.JustAHub
             using (Chooser chooser = new Chooser())
             {
                 // Set the position for the chooser to appear. This must be offset from the screen centre to avoid confusion with the client application's chooser dialogue.
-                chooser.Location = new Point(screen.Bounds.Width / 2, (screen.Bounds.Height / 2) + 220);
+                //chooser.Location = new Point(screen.Bounds.Width / 2, (screen.Bounds.Height / 2) + 220);
+
+                // Calculate the position for the chooser to appear based on the setup dialogue's current position, offset to avoid overlap with the client application's chooser dialogue.
+                int xPosition = this.Location.X + (int)(this.Width * 0.7);
+                if (xPosition + 600 > screen.Bounds.Width)
+                    xPosition = this.Location.X;
+
+                int yPosition = this.Location.Y + (int)(this.Height * 0.7);
+                if (yPosition + 220 > screen.Bounds.Height)
+                    yPosition = this.Location.Y;
+
+                chooser.Location = new Point(xPosition, yPosition);
+
                 TL.LogMessage("HandleChooserClick", $"Chooser location: {chooser.Location.X}, {chooser.Location.Y}");
 
                 // Set the chooser background to light blue to differentiate it from the client's Chooser dialogue.

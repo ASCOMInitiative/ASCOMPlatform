@@ -228,7 +228,6 @@ namespace ASCOM.Utilities
         {
             try
             {
-
                 // Initialise form title and message text
                 Text = string.IsNullOrEmpty(Title) ? $"ASCOM {deviceTypeValue} Chooser" : Title;
                 lblTitle.Text = "Select the type of " + Strings.LCase(deviceTypeValue) + " you have, then be " + "sure to click the Properties... button to configure the driver for your " + Strings.LCase(deviceTypeValue) + ".";
