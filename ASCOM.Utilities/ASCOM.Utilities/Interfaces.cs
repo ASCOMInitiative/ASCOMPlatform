@@ -576,6 +576,16 @@ namespace ASCOM.Utilities.Interfaces
         /// The screen x, y location at which the Chooser dialogue will be displayed when the Choose method is called. (Default is the center of the screen)
         /// </summary>
         Point Location { get; set; }
+
+        /// <summary>
+        /// The background color of the Chooser dialogue.
+        /// </summary>
+        Color BackgroundColor { get; set; }
+
+        /// <summary>
+        /// The title string for the Chooser form
+        /// </summary>
+        string Title { get; set; }
     }
 
     /// <summary>

@@ -166,6 +166,12 @@ namespace ASCOM.Utilities
                         chooserFormInstance.Location = Location;
                     }
 
+                    // Set the background color of the form to the value specified by the caller, it defaults to the standard Windows dialog background color unless changed.
+                    chooserFormInstance.SetBackGroundColour(BackgroundColor);
+
+                    // Set the title of the form to the value specified by the caller, it defaults to "ASCOM [DeviceType] Chooser" unless Title is set.
+                    chooserFormInstance.Title = Title;
+
                     // Set the device type and ProgID
                     chooserFormInstance.DeviceType = deviceTypeValue;
                     chooserFormInstance.SelectedProgId = DriverProgID;
@@ -220,6 +226,18 @@ namespace ASCOM.Utilities
         /// <remarks>This property is only available to .NET clients and is not available through COM.</remarks>
         [ComVisible(false)]
         public Point Location { get; set; } = new(-1, -1);
+
+        /// <summary>
+        /// The background color of the Chooser dialogue. (Default is the standard Windows dialog background color)
+        /// </summary>
+        [ComVisible(false)]
+        public Color BackgroundColor { get; set; } = SystemColors.Control;
+
+        /// <summary>
+        /// The title of the Chooser dialogue. (Default is "ASCOM [DeviceType] Chooser")
+        /// </summary>
+        [ComVisible(false)]
+        public string Title { get; set; } = null;
 
         #endregion
 

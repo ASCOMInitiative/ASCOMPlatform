@@ -222,17 +222,15 @@ namespace ASCOM.Utilities
             TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT); // Enable the trace logger if Utility trace is enabled
 
             profile = new Profile();
-
         }
 
         private void ChooserForm_Load(object eventSender, EventArgs eventArgs)
         {
-
             try
             {
 
                 // Initialise form title and message text
-                Text = "ASCOM " + deviceTypeValue + " Chooser";
+                Text = string.IsNullOrEmpty(Title) ? $"ASCOM {deviceTypeValue} Chooser" : Title;
                 lblTitle.Text = "Select the type of " + Strings.LCase(deviceTypeValue) + " you have, then be " + "sure to click the Properties... button to configure the driver for your " + Strings.LCase(deviceTypeValue) + ".";
 
                 // Initialise the Profile component with the supplied device type
@@ -465,6 +463,15 @@ namespace ASCOM.Utilities
             }
         }
 
+        public void SetBackGroundColour(Color colour)
+        {
+            BackColor = colour;
+            lblTitle.BackColor = colour;
+            Label1.BackColor = colour;
+        }
+
+        public string Title = null;
+
         #endregion
 
         #region Form, button, control and timer event handlers
@@ -618,7 +625,7 @@ namespace ASCOM.Utilities
                     {
                         Interaction.MsgBox($"{ex.InnerException.GetType().Name} - {ex.InnerException.Message}\r\n\r\n" +
                             $"The SetupDialog method of driver \"{progID}\" threw an exception when called.\r\n\r\n" +
-                            $"This means that the setup dialogue would not start properly.\r\n\r\n" + 
+                            $"This means that the setup dialogue would not start properly.\r\n\r\n" +
                             $"Please screen print or use CTRL+C to copy all of this message and report it to the driver author with a request for assistance.",
                             MsgBoxStyle.OkOnly | MsgBoxStyle.Critical | MsgBoxStyle.MsgBoxSetForeground, SETUP_DIALOGUE_ERROR_MESSAGEBOX_TITLE);
                         LogEvent("ChooserForm", "Driver setup method failed for driver: \"" + progID + "\"", EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, $"{ex.InnerException.GetType().Name} - {ex.InnerException.Message}");

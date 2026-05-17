@@ -380,7 +380,14 @@ namespace ASCOM.JustAHub
             using (Chooser chooser = new Chooser())
             {
                 // Set the position for the chooser to appear. This must be offset from the screen centre to avoid confusion with the client application's chooser dialogue.
-                chooser.Location = new Point(screen.Bounds.Width / 2, screen.Bounds.Height + 220);
+                chooser.Location = new Point(screen.Bounds.Width / 2, (screen.Bounds.Height / 2) + 220);
+                TL.LogMessage("HandleChooserClick", $"Chooser location: {chooser.Location.X}, {chooser.Location.Y}");
+
+                // Set the chooser background to light blue to differentiate it from the client's Chooser dialogue.
+                chooser.BackgroundColor = Color.LightSkyBlue;
+
+                // Set the chooser title to include the device type for clarity.
+                chooser.Title = $"JUST A HUB {deviceType} Chooser";
 
                 // Set the device type
                 chooser.DeviceType = deviceType;
