@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComDeviceStateTests.cs" />
+    <Compile Include="FinderDiscoveryCasingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchAsync.cs" />
     <Compile Include="TraceLoggerTests.cs" />
