@@ -7,7 +7,14 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web.Script.Serialization;
 using ASCOM.Utilities.Interfaces;
-//using Newtonsoft.Json;
+
+// ***** important Serialisation note!
+
+// NOTE - The System.Web.Script.Serialization.JavaScriptSerializer class is used for JSON de-serialization in this class because it is supported in .NET Framework 3.5.
+// NOTE - The JsonScriptingSerializer class is case INSENSITIVE to JSON names. This means that it accepts names in any casing.
+// NOTE - If this is replaced, the current behaviour should be retained to ensure backward compatibility.
+
+// note - The Alpaca clients use the ASCOM Library's Alpaca clients that are used in the Dynam,ic Drivers are used
 
 namespace ASCOM.Utilities
 {
