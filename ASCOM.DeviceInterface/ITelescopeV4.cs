@@ -18,7 +18,7 @@ namespace ASCOM.DeviceInterface
         #region ITelescopeV1 members
 
         /// <summary>
-        /// Stops a slew in progress.
+        /// Stops any motion in progress: slewing, parking, find-home, and move-axis.
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
         /// <exception cref="ParkedException">If the telescope is parked</exception>
