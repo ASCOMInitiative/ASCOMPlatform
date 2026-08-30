@@ -291,39 +291,7 @@ namespace Simulator.VideoCameraImpl
 
 		private int[,] CopyBitmapPixels(Bitmap bmp)
 		{
-			var pixels = new int[bmp.Height, bmp.Width];
-
-			BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-			try
-			{
-				unsafe
-				{
-					int stride = bmData.Stride;
-					IntPtr Scan0 = bmData.Scan0;
-					byte* p = (byte*)(void*)Scan0;
-
-					int nOffset = stride - bmp.Width * 3;
-
-					for (int y = 0; y < bmp.Height; ++y)
-					{
-						for (int x = 0; x < bmp.Width; ++x)
-						{
-							byte red = p[2];
-
-							pixels[y, x] = red;
-
-							p += 3;
-						}
-						p += nOffset;
-					}
-				}
-			}
-			finally
-			{
-				bmp.UnlockBits(bmData);
-			}
-
-			return pixels;
+			return BitmapHelper.CopyBitmapPixels(bmp);
 		}
 
 		private void PrepareErrorMessage(string message)

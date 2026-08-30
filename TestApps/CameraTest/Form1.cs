@@ -10,6 +10,7 @@ using nom.tam.util;
 using System.Globalization;
 using System.Collections;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 //[assembly: CLSCompliant(true)]
 namespace CameraTest
@@ -374,90 +375,90 @@ namespace CameraTest
             int stepX = 1;
             int stepY = 1;
 
-            unsafe
+            DisplayProcess displayProcess = MonochromeProcess;
+            int width = iarr.GetLength(0);
+            int height = iarr.GetLength(1);
+            int stepH = 1;
+            int stepW = 1;
+
+            if (oCamera.InterfaceVersion >= 2)
             {
-                DisplayProcess displayProcess = MonochromeProcess;
-                int width = iarr.GetLength(0);
-                int height = iarr.GetLength(1);
-                int stepH = 1;
-                int stepW = 1;
-
-                if (oCamera.InterfaceVersion >= 2)
+                switch (oCamera.SensorType)
                 {
-                    switch (oCamera.SensorType)
+                    case ASCOM.DeviceInterface.SensorType.Monochrome:
+                        x0 = 0;
+                        y0 = 0;
+                        break;
+                    case ASCOM.DeviceInterface.SensorType.RGGB:
+                        displayProcess = RggbProcess;
+                        stepX = 2;
+                        stepY = 2;
+                        SetBayerOffsets(2, 2);
+                        break;
+                    case ASCOM.DeviceInterface.SensorType.CMYG:
+                        displayProcess = CmygProcess;
+                        stepX = 2;
+                        stepY = 2;
+                        SetBayerOffsets(2, 2);
+                        break;
+                    case ASCOM.DeviceInterface.SensorType.LRGB:
+                        displayProcess = LrgbProcess;
+                        x0 = (this.bayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
+                        y0 = (this.bayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
+                        stepX = 4;
+                        stepY = 4;
+                        stepH = 2;
+                        stepW = 2;
+                        SetBayerOffsets(4, 4);
+                        break;
+                    case ASCOM.DeviceInterface.SensorType.CMYG2:
+                        displayProcess = Cmyg2Process;
+                        stepX = 2;
+                        stepY = 4;
+                        stepH = 2;
+                        SetBayerOffsets(2, 4);
+                        break;
+                    case ASCOM.DeviceInterface.SensorType.Color:
+                        displayProcess = ColourProcess;
+                        break;
+                }
+                width /= (stepX/stepW);
+                height /= (stepY/stepH);
+            }
+
+            img = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+
+            BitmapData data = img.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            try
+            {
+                // black level
+                blackLevel = (int)imageControl.MinValue;
+                // scale, white-black
+                scale = (int)imageControl.MaxValue - blackLevel;
+                stride = data.Stride;
+
+                byte[] imgData = new byte[stride * height];
+                int imgOffset = 0;
+
+                int yy = 0;
+                for (int y = 0; y < height; y+= stepH)
+                {
+                    int xx = 0;
+                    for (int x = 0; x < width; x+=stepW)
                     {
-                        case ASCOM.DeviceInterface.SensorType.Monochrome:
-                            x0 = 0;
-                            y0 = 0;
-                            break;
-                        case ASCOM.DeviceInterface.SensorType.RGGB:
-                            displayProcess = RggbProcess;
-                            stepX = 2;
-                            stepY = 2;
-                            SetBayerOffsets(2, 2);
-                            break;
-                        case ASCOM.DeviceInterface.SensorType.CMYG:
-                            displayProcess = CmygProcess;
-                            stepX = 2;
-                            stepY = 2;
-                            SetBayerOffsets(2, 2);
-                            break;
-                        case ASCOM.DeviceInterface.SensorType.LRGB:
-                            displayProcess = LrgbProcess;
-                            x0 = (this.bayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
-                            y0 = (this.bayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
-                            stepX = 4;
-                            stepY = 4;
-                            stepH = 2;
-                            stepW = 2;
-                            SetBayerOffsets(4, 4);
-                            break;
-                        case ASCOM.DeviceInterface.SensorType.CMYG2:
-                            displayProcess = Cmyg2Process;
-                            stepX = 2;
-                            stepY = 4;
-                            stepH = 2;
-                            SetBayerOffsets(2, 4);
-                            break;
-                        case ASCOM.DeviceInterface.SensorType.Color:
-                            displayProcess = ColourProcess;
-                            break;
+                        displayProcess(xx, yy, imgData, imgOffset);
+                        xx += stepX;
+                        imgOffset += (3 * stepW);
                     }
-                    width /= (stepX/stepW);
-                    height /= (stepY/stepH);
+                    imgOffset += data.Stride - data.Width * 3 + (stepH - 1) * data.Stride;
+                    yy += stepY;
                 }
 
-                img = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-
-                BitmapData data = img.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-                try
-                {
-                    // pointer to locked bitmap data
-                    var imgPtr = (byte*)(data.Scan0);
-                    // black level
-                    blackLevel = (int)imageControl.MinValue;
-                    // scale, white-black
-                    scale = (int)imageControl.MaxValue - blackLevel;
-                    stride = data.Stride;
-
-                    int yy = 0;
-                    for (int y = 0; y < height; y+= stepH)
-                    {
-                        int xx = 0;
-                        for (int x = 0; x < width; x+=stepW)
-                        {
-                            displayProcess(xx, yy, imgPtr);
-                            xx += stepX;
-                            imgPtr += (3 * stepW);
-                        }
-                        imgPtr += data.Stride - data.Width * 3 + (stepH - 1) * data.Stride;
-                        yy += stepY;
-                    }
-                }
-                finally
-                {
-                    img.UnlockBits(data);
-                }
+                Marshal.Copy(imgData, 0, data.Scan0, imgData.Length);
+            }
+            finally
+            {
+                img.UnlockBits(data);
             }
             imageControl.Histogram(histogram);
             zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
@@ -465,7 +466,7 @@ namespace CameraTest
             splitContainer1.Panel2.Invalidate();
         }
 
-        unsafe private void SetBayerOffsets(int stepX, int stepY)
+        private void SetBayerOffsets(int stepX, int stepY)
         {
             // set the bayer offsets
             x0 = (this.bayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
@@ -494,28 +495,28 @@ namespace CameraTest
         int y3;
 
         // use delegates to select display process
-        private unsafe delegate void DisplayProcess(int x, int y, byte* imgPtr);
+        private delegate void DisplayProcess(int x, int y, byte[] imgData, int offset);
 
         // these processes take one cell of the image and generate the rgb values from the contents of the cell
         // then use loadRGB to put the RGB values in the image
 
-        private unsafe void MonochromeProcess(int x, int y, byte* imgPtr)
+        private void MonochromeProcess(int x, int y, byte[] imgData, int offset)
         {
             int k = Convert.ToInt32(iarr.GetValue(x, y), CultureInfo.InvariantCulture);
-            LoadRgb(k, k, k, imgPtr);
+            LoadRgb(k, k, k, imgData, offset);
         }
 
-        private unsafe void RggbProcess(int x, int y, byte* imgPtr)
+        private void RggbProcess(int x, int y, byte[] imgData, int offset)
         {
             int r = Convert.ToInt32(iarr.GetValue(x + x0, y + y0), CultureInfo.InvariantCulture);
             int g = Convert.ToInt32(iarr.GetValue(x + x0, y + y1), CultureInfo.InvariantCulture);
             int b = Convert.ToInt32(iarr.GetValue(x + x1, y + y1), CultureInfo.InvariantCulture);
             g += Convert.ToInt32(iarr.GetValue(x + x1, y + y0), CultureInfo.InvariantCulture);
             g /= 2;
-            LoadRgb(r, g, b, imgPtr);
+            LoadRgb(r, g, b, imgData, offset);
         }
 
-        private unsafe void CmygProcess(int x, int h, byte* imgPtr)
+        private void CmygProcess(int x, int h, byte[] imgData, int offset)
         {
             // get the cmyg values
             int y = Convert.ToInt32(iarr.GetValue(x + x0, h + y0), CultureInfo.InvariantCulture);
@@ -526,10 +527,10 @@ namespace CameraTest
             int r = y + m - c;
             int b = c + m - y;
             g += (c + y - m);
-            LoadRgb(r, g/2, b, imgPtr);
+            LoadRgb(r, g/2, b, imgData, offset);
         }
 
-        private unsafe void Cmyg2Process(int x, int h, byte* imgPtr)
+        private void Cmyg2Process(int x, int h, byte[] imgData, int offset)
         {
             // get the cmyg values for the top pixel
             int g = Convert.ToInt32(iarr.GetValue(x + x0, h + y0), CultureInfo.InvariantCulture);
@@ -540,7 +541,7 @@ namespace CameraTest
             int r = y + m - c;
             int b = c + m - y;
             g += (c + y - m);
-            LoadRgb(r, g/2, b, imgPtr);
+            LoadRgb(r, g/2, b, imgData, offset);
             // and the bottom pixel
             m = Convert.ToInt32(iarr.GetValue(x + x0, h + y2), CultureInfo.InvariantCulture);
             g = Convert.ToInt32(iarr.GetValue(x + x1, h + y2), CultureInfo.InvariantCulture);
@@ -550,10 +551,10 @@ namespace CameraTest
             r = y + m - c;
             b = c + m - y;
             g += (c + y - m);
-            LoadRgb(r, g/2, b, imgPtr + stride);
+            LoadRgb(r, g/2, b, imgData, offset + stride);
         }
 
-        private unsafe void LrgbProcess(int x, int y, byte* imgPtr)
+        private void LrgbProcess(int x, int y, byte[] imgData, int offset)
         {
             // convert a 4 x 4 grid of input pixels to a 2 x2 grid of output pixels
             // get the lrgb values
@@ -564,11 +565,11 @@ namespace CameraTest
             int g = Convert.ToInt32(iarr.GetValue(x + x0, y + y3), CultureInfo.InvariantCulture);
             g += Convert.ToInt32(iarr.GetValue(x + x2, y + y1), CultureInfo.InvariantCulture);
             int b = l - r - g;
-            LoadRgb(r/2, g/2, b/2, imgPtr);     // top left
+            LoadRgb(r/2, g/2, b/2, imgData, offset);          // top left
             l = Convert.ToInt32(iarr.GetValue(x + x2, y + y0), CultureInfo.InvariantCulture);
             l += Convert.ToInt32(iarr.GetValue(x + x3, y + y1), CultureInfo.InvariantCulture);
             b = l - r - g;
-            LoadRgb(r/2, g/2, b/2, imgPtr+3);     // top right
+            LoadRgb(r/2, g/2, b/2, imgData, offset + 3);      // top right
             l = Convert.ToInt32(iarr.GetValue(x + x0, y + y2), CultureInfo.InvariantCulture);
             l += Convert.ToInt32(iarr.GetValue(x + x1, y + y3), CultureInfo.InvariantCulture);
             g = Convert.ToInt32(iarr.GetValue(x + x1, y + y2), CultureInfo.InvariantCulture);
@@ -576,23 +577,23 @@ namespace CameraTest
             b = Convert.ToInt32(iarr.GetValue(x + x3, y + y2), CultureInfo.InvariantCulture);
             b += Convert.ToInt32(iarr.GetValue(x + x2, y + y3), CultureInfo.InvariantCulture);
             r = l - g - b;
-            LoadRgb(r/2, g/2, b/2, imgPtr+stride);     // bottom left
+            LoadRgb(r/2, g/2, b/2, imgData, offset + stride);      // bottom left
             l = Convert.ToInt32(iarr.GetValue(x + x2, y + y2), CultureInfo.InvariantCulture);
             l += Convert.ToInt32(iarr.GetValue(x + x3, y + y3), CultureInfo.InvariantCulture);
             r = l - b - g;
-            LoadRgb(r/2, g/2, b/2, imgPtr+stride+3);     // bottom right
+            LoadRgb(r/2, g/2, b/2, imgData, offset + stride + 3);  // bottom right
         }
 
-        private unsafe void ColourProcess(int w, int h, byte* imgPtr)
+        private void ColourProcess(int w, int h, byte[] imgData, int offset)
         {
             // get the rgb values from the three image planes
             int r = Convert.ToInt32(iarr.GetValue(w, h, 0), CultureInfo.InvariantCulture);
             int g = Convert.ToInt32(iarr.GetValue(w, h, 1), CultureInfo.InvariantCulture);
             int b = Convert.ToInt32(iarr.GetValue(w, h, 2), CultureInfo.InvariantCulture);
-            LoadRgb(r, g, b, imgPtr);
+            LoadRgb(r, g, b, imgData, offset);
         }
 
-        private unsafe void LoadRgb(int r, int g, int b, byte *imgPtr)
+        private void LoadRgb(int r, int g, int b, byte[] imgData, int offset)
         {
             // convert 16 bit signed to 16 bit unsigned
             if (r < 0) r += 65535;
@@ -607,11 +608,9 @@ namespace CameraTest
             g = (int)(g * 255.0 / scale);
             b = (int)(b * 255.0 / scale);
             // truncate to byte range, apply gamma and put into the image
-            *imgPtr = (byte) gamma[Math.Min(Math.Max(b, 0), 255)];
-            imgPtr++;
-            *imgPtr = (byte) gamma[Math.Min(Math.Max(g, 0), 255)];
-            imgPtr++;
-            *imgPtr = (byte) gamma[Math.Min(Math.Max(r, 0), 255)];
+            imgData[offset]     = (byte)gamma[Math.Min(Math.Max(b, 0), 255)];
+            imgData[offset + 1] = (byte)gamma[Math.Min(Math.Max(g, 0), 255)];
+            imgData[offset + 2] = (byte)gamma[Math.Min(Math.Max(r, 0), 255)];
         }
 
         #endregion
@@ -728,48 +727,15 @@ namespace CameraTest
             max = 0;
             min = oCamera.MaxADU;
             int num = 0;
-            unsafe
+            int[] flat = new int[iarr.Length];
+            Buffer.BlockCopy(iarr, 0, flat, 0, iarr.Length * sizeof(int));
+            foreach (int rawV in flat)
             {
-                if (iarr.Rank == 3)
-                {
-                    // 3 plane colour image
-                    fixed (int* pArr = (int[,,])iarr)
-                    {
-                        var pA = pArr;
-
-                        for (int i = 0; i < iarr.Length; i++)
-                        {
-                            //int v = Convert.ToInt32(iarr.GetValue(i, j));
-                            int v = *pA;
-                            if (v < 0) v = 65536 + v;
-                            if (max < v) max = v;
-                            if (min > v) min = v;
-                            sum += *pA;
-                            num++;
-                            pA++;
-                        }
-                    }
-                }
-                else
-                {
-                    // 1 plane monochrome or bayered image
-                    fixed (int* pArr = (int[,])iarr)
-                    {
-                        var pA = pArr;
-
-                        for (int i = 0; i < iarr.GetLength(0) * iarr.GetLength(1); i++)
-                        {
-                            //int v = Convert.ToInt32(iarr.GetValue(i, j));
-                            int v = *pA;
-                            if (v < 0) v = 65536 + v;
-                            if (max < v) max = v;
-                            if (min > v) min = v;
-                            sum += *pA;
-                            num++;
-                            pA++;
-                        }
-                    }
-                }
+                int v = rawV < 0 ? 65536 + rawV : rawV;
+                if (max < v) max = v;
+                if (min > v) min = v;
+                sum += rawV;
+                num++;
             }
             //decimal var = (sumsq - (sum * sum) / num) / num;
             //double sd = Math.Sqrt((double)var);
@@ -786,40 +752,14 @@ namespace CameraTest
             histogram = new int[256];
             double s = (double)255/(max-min);
             if (max <= min) s = 1;
-            unsafe
+            int[] flat = new int[iarr.Length];
+            Buffer.BlockCopy(iarr, 0, flat, 0, iarr.Length * sizeof(int));
+            foreach (int rawV in flat)
             {
-                switch (iarr.Rank)
-	            {
-                    case 2:
-                        fixed (int* pArr = (int[,])iarr)
-                        {
-                            int* pA = pArr;
-                            for (int i = 0; i < iarr.Length; i++)
-                            {
-                                int v = *pA++;
-                                if (v < 0) v = 65536 + v;
-                                var idx = (int)((v - min) * s);
-                                if (idx >= 0 && idx <= 255)
-                                    histogram[idx]++;
-                            }
-                        }
-                        break;
-                    case 3:
-                        fixed (int* pArr = (int[,,])iarr)
-                        {
-                            int* pA = pArr;
-                            for (int i = 0; i < iarr.Length; i++)
-                            {
-                                int v = *pA++;
-                                if (v < 0) v = 65536 + v;
-                                var idx = (int)((v - min) * s);
-                                if (idx >= 0 && idx <= 255)
-                                    histogram[idx]++;
-                            }
-                        }
-                        break;
-	            } 
-
+                int v = rawV < 0 ? 65536 + rawV : rawV;
+                var idx = (int)((v - min) * s);
+                if (idx >= 0 && idx <= 255)
+                    histogram[idx]++;
             }
         }
 
@@ -1103,19 +1043,19 @@ namespace CameraTest
             }
             if (oCamera.CanSetCCDTemperature)
                 imageHdu.AddValue("SET-TEMP", oCamera.SetCCDTemperature, "CCD temperature setpoint in degrees C");
-            // OBJECT – name or catalog number of object being imaged
+            // OBJECT ï¿½ name or catalog number of object being imaged
 
             //imageHdu.AddValue("TELESCOP", "", "");        // user-entered information about the telescope used.
-            //imageHdu.AddValue("OBSERVER", "", "");        // user-entered information; the observer’s name.
+            //imageHdu.AddValue("OBSERVER", "", "");        // user-entered information; the observerï¿½s name.
 
-      //DARKTIME – dark current integration time, if recorded. May be longer than exposure time.
+      //DARKTIME ï¿½ dark current integration time, if recorded. May be longer than exposure time.
 
-      //IMAGETYP – type of image: Light Frame, Bias Frame, Dark Frame, Flat Frame, or Tricolor Image.
-            //ISOSPEED – ISO camera setting, if camera uses ISO speeds.
-            //JD_GEO – records the geocentric Julian Day of the start of exposure.
-            //JD_HELIO – records the Heliocentric Julian Date at the exposure midpoint.
-            //NOTES – user-entered information; free-form notes.
-            //READOUTM – records the selected Readout Mode (if any) for the camera.
+      //IMAGETYP ï¿½ type of image: Light Frame, Bias Frame, Dark Frame, Flat Frame, or Tricolor Image.
+            //ISOSPEED ï¿½ ISO camera setting, if camera uses ISO speeds.
+            //JD_GEO ï¿½ records the geocentric Julian Day of the start of exposure.
+            //JD_HELIO ï¿½ records the Heliocentric Julian Date at the exposure midpoint.
+            //NOTES ï¿½ user-entered information; free-form notes.
+            //READOUTM ï¿½ records the selected Readout Mode (if any) for the camera.
 
             imageHdu.AddValue("SBSTDVER", "SBFITSEXT Version 1.0", "version of the SBIG FITS extensions supported");
 
