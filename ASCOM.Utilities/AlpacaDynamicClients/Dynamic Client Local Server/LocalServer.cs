@@ -712,7 +712,7 @@ namespace ASCOM.DynamicClients
         /// <param name="argument">Argument to pass to ourselves</param>
         private static void ElevateSelf(string argument)
         {
-            DialogResult dialogResult = MessageBox.Show("Admin restart required, do you want to restart?","Elevate Self",MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Admin restart required, do you want to restart?", "Elevate Self", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -968,7 +968,11 @@ namespace ASCOM.DynamicClients
             client.ClientConfiguration.StrictCasing = true;
             client.ClientConfiguration.ImageArrayCompression = state.ImageArrayCompression;
             client.ClientConfiguration.ImageArrayTransferType = state.ImageArrayTransferType;
-            client.ClientConfiguration.Request100Continue=state.Request100Continue;
+            client.ClientConfiguration.Request100Continue = state.Request100Continue;
+
+            // Enable rediscovery if configured to do so
+            if (state.EnableRediscovery) // User has enabled rediscovery
+                client.ClientConfiguration.UniqueId = state.UniqueId;
 
             // Refresh the HTTP client with the updated values set above.
             client.RefreshClient();
@@ -1015,7 +1019,7 @@ namespace ASCOM.DynamicClients
                     setupForm.IpV6Enabled = state.IpV6Enabled;
                     setupForm.DiscoveryPort = state.DiscoveryPort;
                     setupForm.TrustUserGeneratedSslCertificates = state.TrustUserGeneratedSslCertificates;
-                    setupForm.Request100Continue= state.Request100Continue;
+                    setupForm.Request100Continue = state.Request100Continue;
 
                     TL?.LogMessage("SetupDialog", "Showing Dialogue");
                     var result = setupForm.ShowDialog();
@@ -1044,7 +1048,7 @@ namespace ASCOM.DynamicClients
                         state.IpV6Enabled = setupForm.IpV6Enabled;
                         state.DiscoveryPort = setupForm.DiscoveryPort;
                         state.TrustUserGeneratedSslCertificates = setupForm.TrustUserGeneratedSslCertificates;
-                        state.Request100Continue= setupForm.Request100Continue;
+                        state.Request100Continue = setupForm.Request100Continue;
 
                         // Write the changed values to the Profile
                         TL?.LogMessage("SetupDialog", "Writing new values to profile");

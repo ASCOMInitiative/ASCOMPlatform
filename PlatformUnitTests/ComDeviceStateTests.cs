@@ -2,7 +2,6 @@
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ASCOM.DriverAccess;
 using System.Collections.Generic;
-using Xunit.Abstractions;
 using Xunit;
 
 namespace PlatformUnitTests

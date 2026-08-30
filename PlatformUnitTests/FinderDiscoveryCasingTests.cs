@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace PlatformUnitTests
 {
