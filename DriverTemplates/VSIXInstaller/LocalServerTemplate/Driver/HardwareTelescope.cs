@@ -681,7 +681,6 @@ static class TelescopeHardware
     /// </summary>
     /// <param name="Azimuth">Azimuth to which to move</param>
     /// <param name="Altitude">Altitude to which to move to</param>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "internal static method name used for many years.")]
     internal static void SlewToAltAzAsync(double Azimuth, double Altitude)
     {
         LogMessage("SlewToAltAzAsync", "Not implemented");
@@ -701,7 +700,6 @@ static class TelescopeHardware
     /// <summary>
     /// Move the telescope to the given equatorial coordinates, return with Slewing set to True immediately after starting the slew.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "internal static method name used for many years.")]
     internal static void SlewToCoordinatesAsync(double RightAscension, double Declination)
     {
         LogMessage("SlewToCoordinatesAsync", "Not implemented");
@@ -721,7 +719,6 @@ static class TelescopeHardware
     /// Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
     /// returns immediately after starting the slew with Slewing set to True.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "internal static method name used for many years.")]
     internal static void SlewToTargetAsync()
     {
         LogMessage("SlewToTargetAsync", "Not implemented");

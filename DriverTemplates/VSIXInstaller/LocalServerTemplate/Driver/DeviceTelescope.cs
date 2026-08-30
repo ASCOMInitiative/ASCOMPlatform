@@ -1259,7 +1259,6 @@ class DeviceTelescope
     /// </summary>
     /// <param name="Azimuth">Azimuth to which to move</param>
     /// <param name="Altitude">Altitude to which to move to</param>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToAltAzAsync(double azimuth, double altitude)
     {
         try
@@ -1302,7 +1301,6 @@ class DeviceTelescope
     /// This method must be implemented if <see cref="CanSlewAsync" /> returns True.
     /// It returns immediately, with <see cref="Slewing" /> set to True
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToCoordinatesAsync(double rightAscension, double declination)
     {
         try
@@ -1345,7 +1343,6 @@ class DeviceTelescope
     /// This method must be implemented if <see cref="CanSlewAsync" /> returns True.
     /// It returns immediately, with <see cref="Slewing" /> set to True
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public method name used for many years.")]
     public void SlewToTargetAsync()
     {
         try
