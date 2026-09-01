@@ -975,7 +975,9 @@ namespace ASCOM.DynamicClients
                 client.ClientConfiguration.UniqueId = state.UniqueId;
 
             // Refresh the HTTP client with the updated values set above.
+            TL?.LogMessage("GetClient", $"Refreshing client...");
             client.RefreshClient();
+            TL?.LogMessage("GetClient", $"Client refreshed.");
 
             // Return the configured Alpaca client as the required type
             return (T)(object)client;
