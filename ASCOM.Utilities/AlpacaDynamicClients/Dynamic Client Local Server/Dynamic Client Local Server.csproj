@@ -80,10 +80,10 @@
 		<None Include="LocalServer.snk" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="ASCOM.Alpaca.Components" Version="4.1.0-rc.15" />
-	  <PackageReference Include="ASCOM.Com.Components" Version="4.1.0-rc.15" />
-	  <PackageReference Include="ASCOM.Common.Components" Version="4.1.0-rc.15" />
-	  <PackageReference Include="ASCOM.Tools" Version="4.1.0-rc.15" />
+	  <PackageReference Include="ASCOM.Alpaca.Components" Version="4.1.0-rc.18" />
+	  <PackageReference Include="ASCOM.Com.Components" Version="4.1.0-rc.18" />
+	  <PackageReference Include="ASCOM.Common.Components" Version="4.1.0-rc.18" />
+	  <PackageReference Include="ASCOM.Tools" Version="4.1.0-rc.18" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.csproj" />
