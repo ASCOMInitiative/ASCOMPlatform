@@ -477,7 +477,6 @@ namespace ASCOM.Astrometry
                 {
                     case GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1:
                     case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1:
-                        {
                             // Approach to returning a leap second value:
                             // Test whether the Next Leap Second Date is available
                             // If yes then test whether we are past the next leap second date - measured in UTC time because leap seconds are applied at 00:00:00 UTC. 
@@ -535,33 +534,24 @@ namespace ASCOM.Astrometry
                             }
 
                             break;
-                        }
                     case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1:
-                        {
                             ReturnValue = ManualLeapSecondsValue;
                             LogDebugMessage("LeapSeconds(JD)", string.Format("Manual leap seconds and delta UT1 are required, returning the manual leap seconds value: {0} for JD {1} ({2})", ReturnValue, RequiredLeapSecondJulianDate, DateTime.FromOADate(RequiredLeapSecondJulianDate - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                             break;
-                        }
                     case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                        {
                             ReturnValue = ManualLeapSecondsValue;
                             LogDebugMessage("LeapSeconds(JD)", string.Format("Manual leap seconds and predicted delta UT1 are required, returning the manual leap seconds value: {0} for JD {1} ({2})", ReturnValue, RequiredLeapSecondJulianDate, DateTime.FromOADate(RequiredLeapSecondJulianDate - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                             break;
-                        }
                     case GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                        {
                             // Find the leap second value from the built-in table of historic values
                             ReturnValue = BuiltInLeapSeconds(RequiredLeapSecondJulianDate);
                             LogDebugMessage("LeapSeconds(JD)", string.Format("Built-in leap seconds and delta UT1 are required, returning the built-in leap seconds value: {0} for JD {1} ({2})", ReturnValue, RequiredLeapSecondJulianDate, DateTime.FromOADate(RequiredLeapSecondJulianDate - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                             break;
-                        }
 
                     default:
-                        {
                             LogDebugMessage("LeapSeconds(JD)", "Unknown UpdateTypeValue: " + UpdateTypeValue);
                             MessageBox.Show("EarthRotationParameters.LeapSeconds(JD) - Unknown UpdateTypeValue: " + UpdateTypeValue);
                             break;
-                        }
                 }
             }
 
@@ -729,23 +719,17 @@ namespace ASCOM.Astrometry
                     break;
 
                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                    {
                         LogDebugMessage("DeltaT(JD)", string.Format("Manual leap seconds and predicted delta UT1 are required, so falling through to the predicted approach for Julian day: {0} ({1})", RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         break;
-                    }
 
                 case GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                    {
                         LogDebugMessage("DeltaT(JD)", string.Format("Built-in leap seconds and predicted delta UT1 are required, so falling through to the predicted approach for Julian day: {0} ({1})", RequiredDeltaTJulianDateUTC, DateTime.FromOADate(RequiredDeltaTJulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         break;
-                    }
 
                 default:
-                    {
                         LogDebugMessage("DeltaT(JD)", "Unknown UpdateTypeValue: " + UpdateTypeValue);
                         MessageBox.Show("AstroUtils.DeltaT(JD) - Unknown UpdateTypeValue: " + UpdateTypeValue);
                         break;
-                    }
             }
 
             // Calculate the predicted value and return it
@@ -809,7 +793,6 @@ namespace ASCOM.Astrometry
             {
                 case GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1:
                 case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1:
-                    {
                         LogDebugMessage("DeltaUT1(JD)", string.Format("Automatic DeltaUT1 is required for Julian date: {0} ({1})", RequiredDeltaUT1JulianDateUTC, DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         // Approach
                         // Determine whether a downloaded DeltaUT1 value exists for the specified Julian Day (in UTC time)
@@ -857,37 +840,28 @@ namespace ASCOM.Astrometry
                         }
 
                         break;
-                    }
 
                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1: // This was the method in Platform 6.3 and earlier
-                    {
                         LogDebugMessage("DeltaUT1(JD)", string.Format("Predicted DeltaUT1 is required so returning value determined from DeltaT calculation at Julian date: {0} ({1})", RequiredDeltaUT1JulianDateUTC, DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         ReturnValue = LeapSeconds(RequiredDeltaUT1JulianDateUTC) + GlobalItems.TT_TAI_OFFSET - DeltaT(RequiredDeltaUT1JulianDateUTC);
                         LogDebugMessage("DeltaUT1(JD)", string.Format("Return value: {0} for Julian day: {1} ({2})", ReturnValue, RequiredDeltaUT1JulianDateUTC, DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         break;
-                    }
 
                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1:
-                    {
                         ReturnValue = ManualDeltaUT1Value;
                         LogDebugMessage("DeltaUT1(JD)", string.Format("Manual DeltaUT1 is required so returning manually configured value {0} at Julian date: {1} ({2})", ReturnValue, RequiredDeltaUT1JulianDateUTC, DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         break;
-                    }
 
                 case GlobalItems.UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1:
-                    {
                         LogDebugMessage("DeltaUT1(JD)", string.Format("Built-in DeltaUT1 is required so returning value determined from DeltaT calculation at Julian date: {0} ({1})", RequiredDeltaUT1JulianDateUTC, DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         ReturnValue = LeapSeconds(RequiredDeltaUT1JulianDateUTC) + GlobalItems.TT_TAI_OFFSET - DeltaT(RequiredDeltaUT1JulianDateUTC);
                         LogDebugMessage("DeltaUT1(JD)", string.Format("Return value: {0} for Julian day: {1} ({2})", ReturnValue, RequiredDeltaUT1JulianDateUTC, DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(GlobalItems.DOWNLOAD_TASK_TIME_FORMAT)));
                         break;
-                    }
 
                 default:
-                    {
                         LogMessage("DeltaUT1(JD)", "Unknown Parameters.UpdateType: " + UpdateTypeValue);
                         MessageBox.Show("AstroUtils.DeltaUT1 - Unknown Parameters.UpdateType: " + UpdateTypeValue);
                         break;
-                    }
 
             }
 
@@ -1296,7 +1270,6 @@ namespace ASCOM.Astrometry
                                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1:
                                 case GlobalItems.UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1:
                                 case GlobalItems.UPDATE_ON_DEMAND_LEAP_SECONDS_AND_DELTAUT1: // Just remove the update job if it exists so that it can't run
-                                    {
                                         if (ASCOMTask is not null)
                                         {
                                             LogScheduledTaskMessage("ManageScheduledTask", string.Format("Update type is {0} and {1} task exists so it will be deleted.", UpdateTypeValue, GlobalItems.DOWNLOAD_TASK_NAME));
@@ -1309,10 +1282,8 @@ namespace ASCOM.Astrometry
                                         }
 
                                         break;
-                                    }
 
                                 case GlobalItems.UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1: // Create a new or Update the existing scheduled job
-                                    {
                                         // Get the task definition to work on, either a new one or the existing task, if it exists
                                         if (ASCOMTask is not null)
                                         {
@@ -1358,72 +1329,51 @@ namespace ASCOM.Astrometry
                                         switch (DownloadTaskRepeatFrequencyValue ?? "")
                                         {
                                             case GlobalItems.SCHEDULE_REPEAT_NONE: // Execute once at the specified day and time
-                                                {
                                                     timeTrigger = new TimeTrigger();
                                                     timeTrigger.StartBoundary = DownloadTaskScheduledTimeValue; // Add the user supplied date / time to the trigger
                                                     taskDefinition.Triggers.Add(timeTrigger);
                                                     LogScheduledTaskMessage("ManageScheduledTask", string.Format("Set trigger to run the job once at the specified time."));
                                                     break;
-                                                }
 
                                             case GlobalItems.SCHEDULE_REPEAT_DAILY: // Execute daily at the specified time
-                                                {
                                                     dailyTrigger = new DailyTrigger();
                                                     dailyTrigger.StartBoundary = DownloadTaskScheduledTimeValue; // Add the user supplied date / time to the trigger
                                                     taskDefinition.Triggers.Add(dailyTrigger);
                                                     LogScheduledTaskMessage("ManageScheduledTask", string.Format("Set trigger to repeat the job daily at the specified time."));
                                                     break;
-                                                }
 
                                             case GlobalItems.SCHEDULE_REPEAT_WEEKLY: // Execute once per week on the specified day of week
-                                                {
                                                     weeklyTrigger = new WeeklyTrigger();
                                                     weeklyTrigger.StartBoundary = DownloadTaskScheduledTimeValue; // Add the user supplied date / time to the trigger
                                                     switch (DownloadTaskScheduledTimeValue.DayOfWeek)
                                                     {
                                                         case DayOfWeek.Sunday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Sunday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                         case DayOfWeek.Monday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Monday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                         case DayOfWeek.Tuesday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Tuesday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                         case DayOfWeek.Wednesday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Wednesday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                         case DayOfWeek.Thursday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Thursday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                         case DayOfWeek.Friday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Friday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                         case DayOfWeek.Saturday:
-                                                            {
                                                                 weeklyTrigger.DaysOfWeek = DaysOfTheWeek.Saturday; // Set the specific day of the week when the task is required to run
                                                                 break;
-                                                            }
                                                     }
                                                     taskDefinition.Triggers.Add(weeklyTrigger);
                                                     LogScheduledTaskMessage("ManageScheduledTask", string.Format("Set trigger to repeat the job weekly on day {0} at the specified time.", DownloadTaskScheduledTimeValue.DayOfWeek.ToString()));
                                                     break;
-                                                }
 
                                             case GlobalItems.SCHEDULE_REPEAT_MONTHLY: // Execute once per month on the specified day number of the month
-                                                {
                                                     monthlyTrigger = new MonthlyTrigger();
                                                     monthlyTrigger.StartBoundary = DownloadTaskScheduledTimeValue; // Add the user supplied date / time to the trigger
                                                     dayOfMonth[0] = DownloadTaskScheduledTimeValue.Day; // Save the specific day on which the task is to run
@@ -1432,13 +1382,10 @@ namespace ASCOM.Astrometry
                                                     taskDefinition.Triggers.Add(monthlyTrigger);
                                                     LogScheduledTaskMessage("ManageScheduledTask", string.Format("Set trigger to repeat the job monthly on day {0} of the month at the specified time.", dayOfMonth[0]));
                                                     break;
-                                                }
 
                                             default:
-                                                {
                                                     MessageBox.Show(string.Format("ManageScheduledTask - Unknown type of DownloadTaskRepeatFrequencyValue: {0}", DownloadTaskRepeatFrequencyValue));
                                                     break;
-                                                }
 
                                         }
 
@@ -1447,13 +1394,10 @@ namespace ASCOM.Astrometry
                                         service.RootFolder.RegisterTaskDefinition(GlobalItems.DOWNLOAD_TASK_NAME, taskDefinition, TaskCreation.CreateOrUpdate, "SYSTEM", null, TaskLogonType.ServiceAccount);
                                         LogScheduledTaskMessage("ManageScheduledTask", string.Format("New task registered OK."));
                                         break;
-                                    }
 
                                 default:
-                                    {
                                         MessageBox.Show(string.Format("UpdateType - Unknown type of EarthRotationDataUpdateType: {0}", UpdateTypeValue));
                                         break;
-                                    }
                             }
 
                         }
