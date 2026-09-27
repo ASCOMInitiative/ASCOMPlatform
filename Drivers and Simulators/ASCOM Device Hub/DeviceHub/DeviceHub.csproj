@@ -530,6 +530,9 @@
       <Name>MvvmMessenger</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="DeviceManagers\DomeManager-declination-fix.patch" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /b /Y "$(ProjectDir)..\Documents\ASCOM Device Hub User and Technical Information.pdf" "$(TargetDir)"</PostBuildEvent>

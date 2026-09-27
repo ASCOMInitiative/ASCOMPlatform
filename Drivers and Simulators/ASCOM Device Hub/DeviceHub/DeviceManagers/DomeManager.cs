@@ -647,7 +647,7 @@ namespace ASCOM.DeviceHub
                             double localHourAngle = TelescopeStatus.CalculateHourAngle(telescopeSlewState.RightAscension);
 
                             // Slave the dome to the target Alt/Az. The dome may or may not actually move depending on how far the new dome Alt/Az is from the current dome Alt/Az
-                            SlaveDomePointing(scopeTargetPosition, localHourAngle, telescopeSlewState.SideOfPier);
+                            SlaveDomePointing(scopeTargetPosition, localHourAngle, telescopeSlewState.SideOfPier, telescopeSlewState.Declination);
                             retval = true;
                         }
                         catch (TransformUninitialisedException xcp)
@@ -684,7 +684,7 @@ namespace ASCOM.DeviceHub
 
                             try
                             {
-                                SlaveDomePointing(new Point(TelescopeStatus.Azimuth, TelescopeStatus.Altitude), TelescopeStatus.LocalHourAngle, TelescopeStatus.SideOfPier);
+                                SlaveDomePointing(new Point(TelescopeStatus.Azimuth, TelescopeStatus.Altitude), TelescopeStatus.LocalHourAngle, TelescopeStatus.SideOfPier, TelescopeStatus.Declination);
                                 retval = true;
                             }
                             catch (Exception xcp)
@@ -727,7 +727,9 @@ namespace ASCOM.DeviceHub
         /// and positive values indicate positions west of the meridian.</param>
         /// <param name="sideOfPier">The telescope's reported pointing state. If <see cref="PierSide.pierUnknown"/>
         /// is provided, the method will attempt to calculate the side of the pier based on the local hour angle.</param>
-        private void SlaveDomePointing(Point scopePosition, double localHourAngle, PierSide sideOfPier)
+        /// <param name="declination">The declination (degrees) belonging to the position being computed. During a telescope slew this must be the
+        /// slew's target declination; the mount's live declination is still in transit and would produce an incorrect dome target.</param>
+        private void SlaveDomePointing(Point scopePosition, double localHourAngle, PierSide sideOfPier, double declination)
         {
             if (sideOfPier == PierSide.pierUnknown)
             {
@@ -747,7 +749,7 @@ namespace ASCOM.DeviceHub
             LogActivityLine(ActivityMessageTypes.Other, $"Slaving the dome to telescope Az: {scopePosition.X.ToDMS()}, El: {scopePosition.Y.ToDMS()}, HA: {localHourAngle.ToHMS()}, SOP: {sideOfPier}.");
 
             // Calculate the dome target Az/El coordinates given the telescope Az/El coordinates, current hour angle and side of pier
-            Point domeAltAz = GetDomeCoord(scopePosition, localHourAngle, sideOfPier);
+            Point domeAltAz = GetDomeCoord(scopePosition, localHourAngle, sideOfPier, declination);
 
             // Validate the calculated azimuth appears sane.
             // If the scope position is NaN or any other input to the slaving calculation is NaN then
@@ -939,8 +941,10 @@ namespace ASCOM.DeviceHub
         /// <param name="scopePosition">the azimuth and altitude of the telescope</param>
         /// <param name="hourAngle">the hour angle in decimal hours</param>
         /// <param name="sideOfPier">the side of pier of the telescope</param>
+        /// <param name="declination">the declination (degrees) belonging to the position being computed - the slew target's declination while a
+        /// telescope slew is in progress, the mount's reported declination otherwise</param>
         /// <returns>Point struct containing the azimuth and altitude of the dome</returns>
-        private Point GetDomeCoord(Point scopePosition, double hourAngle, PierSide sideOfPier)
+        private Point GetDomeCoord(Point scopePosition, double hourAngle, PierSide sideOfPier, double declination)
         {
             Point domePoth = new Point(0, 0), domeHub = new Point(0, 0), domeRevised = new Point(0, 0), domePosition = new Point(0, 0);
 
@@ -970,7 +974,7 @@ namespace ASCOM.DeviceHub
             try
             {
                 // Calculate the dome position using the new Device Hub method.
-                domeRevised = DomePosition(scopePosition, hourAngle, sideOfPier);
+                domeRevised = DomePosition(scopePosition, hourAngle, sideOfPier, declination);
             }
             catch (Exception ex)
             {
@@ -1017,8 +1021,10 @@ namespace ASCOM.DeviceHub
         /// <param name="scopePosition">The current position of the telescope, where <c>X</c> represents the azimuth or right ascension, and <c>Y</c> represents the altitude or declination.</param>
         /// <param name="hourAngle">The hour angle of the telescope, in hours.</param>
         /// <param name="sideOfPier">The pointing state of the telescope.</param>
+        /// <param name="declination">The declination (degrees) belonging to the position being computed. Used to derive the mechanical declination for
+        /// equatorial mounts; must be the slew target's declination while a telescope slew is in progress, not the mount's live declination.</param>
         /// <returns>A <see cref="Point"/> representing the calculated dome position, where <c>X</c> is the azimuth and <c>Y</c> is the altitude.</returns>
-        private Point DomePosition(Point scopePosition, double hourAngle, PierSide sideOfPier)
+        private Point DomePosition(Point scopePosition, double hourAngle, PierSide sideOfPier, double declination)
         {
             Point domeCoordinates = new Point(0.0, 0.0);
 
@@ -1059,11 +1065,11 @@ namespace ASCOM.DeviceHub
                         double mechanicalDeclination;
                         if (PHI >= 0.0) // Northern hemisphere
                         {
-                            mechanicalDeclination = sideOfPier == PierSide.pierEast ? TelescopeStatus.Declination : 180.0 - TelescopeStatus.Declination;
+                            mechanicalDeclination = sideOfPier == PierSide.pierEast ? declination : 180.0 - declination;
                         }
                         else // Southern hemisphere
                         {
-                            mechanicalDeclination = sideOfPier == PierSide.pierEast ? TelescopeStatus.Declination : -180.0 - TelescopeStatus.Declination;
+                            mechanicalDeclination = sideOfPier == PierSide.pierEast ? declination : -180.0 - declination;
                         }
 
                         // Determine the roll and pitch angles of the scope
@@ -1071,7 +1077,7 @@ namespace ASCOM.DeviceHub
                         scopePitchAngle = mechanicalDeclination;
 
                         LogActivityLine(ActivityMessageTypes.Other, $"  Alignment Mode: {TelescopeParameters.AlignmentMode}, Hour Angle: {hourAngle.ToHMS()}, Mechanical hour angle: {mechanicalHourAngle.ToHMS()}");
-                        LogActivityLine(ActivityMessageTypes.Other, $"  Declination: {TelescopeStatus.Declination.ToDMS()}, Mechanical declination: {mechanicalDeclination.ToDMS()}");
+                        LogActivityLine(ActivityMessageTypes.Other, $"  Declination: {declination.ToDMS()}, Mechanical declination: {mechanicalDeclination.ToDMS()}");
 
                         LogActivityLine(ActivityMessageTypes.Other, $"  SideOfPier: {sideOfPier}, Roll angle (hours): {scopeRollAngle} ({scopeRollAngle.ToHMS()})");
                         LogActivityLine(ActivityMessageTypes.Other, $"  Pitch angle (degrees): {scopePitchAngle} ({scopePitchAngle.ToDMS()})");
