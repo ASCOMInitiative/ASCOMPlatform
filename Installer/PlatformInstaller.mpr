@@ -1522,15 +1522,6 @@ $
 
 
 
-
-
-
-
-
-
-
-
-
 B
 
 
@@ -3188,7 +3179,7 @@ ASCOMPlatformName
 ASCOMPlatformName
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{97DA70B3-D8CC-4154-8561-9203A89CE56E}
+{D23A5B89-1467-4C19-8069-88D07F3907E4}
 ASCOM Initiative
 ASCOM Initiative
 https://ascomtalk.groups.io/g/Help
@@ -3197,12 +3188,12 @@ Copyright © 1998-2026, The ASCOM Initiative. All rights reserved.
 FALSE
 AscomPlatformInstaller
 TRUE
-TRUE
+FALSE
 |Sectigo_20231013130838
 |
 http://timestamp.digicert.com|C:\CodeSigningCertificate\peter2023.cer
 https://ascom-standards.org
-UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE,CACHESOURCES=TRUE,SINGLEINSTANCE=FALSE,LONGCOMPONENTS=TRUE,MIN_EXTRACT=AUTO,"POST-BUILD-EVENT-COMMANDS=""#PROJDIR#\SignMsi.cmd"" ""#PROJDIR#"""
+UAC=requireAdministrator,CACHESOURCES=TRUE,MSI_ALL=FALSE,SIGN_ALL=DEFAULT,SHA256ONLY=TRUE,NODROP=TRUE,CACHESOURCES=TRUE,SINGLEINSTANCE=FALSE,LONGCOMPONENTS=TRUE,MIN_EXTRACT=AUTO,"POST-BUILD-EVENT-COMMANDS=""#PROJDIR#\SignMsi.cmd"" ""#PROJDIR#""","CODE-SIGN-HOOKS=c:\codesign\codesign.exe sign ""%1"""
 $
 $
 
@@ -3218,8 +3209,6 @@ FALSE
 FALSE
 
 checknet351.mia
-checkmsi31.mia
-setupmsi31.mia
 checknet4.8_x86 .mia
 CleanRegistry.mia
 UpdateAscomError.mia
@@ -3228,5 +3217,5 @@ FALSE
 
 TRUE
 TRUE
-false
-TRUE
+FALSE
+true
