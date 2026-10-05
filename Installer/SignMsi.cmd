@@ -4,7 +4,7 @@ if not defined VSCMD_VER (
 )
 
 REM Sign the MSI in the top level build folder
-signtool sign /v /tr http://timestamp.acs.microsoft.com/ /td sha256 /fd sha256 /n "Peter Simpson" "%1\Release\Single\*.msi"
+c:\codesign\codesign.exe sign "%1\Release\Single\*.msi"
 
 REM Sign the MSI in the data folder under the top level build folder
-signtool sign /v /tr http://timestamp.acs.microsoft.com/ /td sha256 /fd sha256 /n "Peter Simpson" "%1\Release\Single\data\*.msi"
+c:\codesign\codesign.exe sign  "%1\Release\Single\data\*.msi"

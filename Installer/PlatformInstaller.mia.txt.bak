@@ -285,7 +285,7 @@ else
 end
  
 Comment: Setup up further global variables
-Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008 (R2), 7, 8.x, 2012 (R2), 10, 2016, 2019, 11, 2022) into ISNT
+Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008 (R2), 7, 8.x, 2012 (R2), 10, 2016, 2019, 11, 2022, 2025) into ISNT
 Get Folder Location System->Program Files Directory into PROGRAMFILES
 Get Common Folder Location System->Application Data Directory into PROGRAMDATA
 Get Common Folder Location System->Program Files Directory into COMMONFILES
@@ -495,7 +495,6 @@ Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
 Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to 
-Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
  
@@ -704,14 +703,6 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Shut down Omni-Simulators if r
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
- 
-[END REGION]
- 
-[DEFINE REGION: Install MSI support if required]
- 
-Comment: Install pre-requisites included in this installer
-Include Script: setupmsi31
-Set Variable MYPROGRESS to 3
  
 [END REGION]
  
