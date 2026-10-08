@@ -1,0 +1,228 @@
+C:\ASCOM Build\Export\InstallerContent\RegTlb.exe
+C:\ASCOM Build\Export\InstallerContent\mscomctl.OCX
+C:\ASCOM Build\Export\InstallerContent\MSComm32.Ocx
+C:\ASCOM Build\Export\InstallerContent\msvbvm60.dll
+C:\ASCOM Build\Export\InstallerContent\ComDlg32.OCX
+C:\ASCOM Build\Export\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\InstallerContent\CCDSimulator.dll
+C:\ASCOM Build\Export\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll
+C:\ASCOM Build\Export\Drivers and Simulators\Dome Simulator\DomeSim.exe
+C:\ASCOM Build\Export\InstallerContent\Astro32.dll
+C:\ASCOM Build\Export\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe
+C:\ASCOM Build\Export\Drivers and Simulators\Focus Simulator\FocusSim.exe
+C:\ASCOM Build\Export\Drivers and Simulators\Switch Simulator\SwitchSim.exe
+C:\ASCOM Build\Export\Drivers and Simulators\Scope Simulator\ScopeSim.exe
+C:\ASCOM Build\Export\InstallerContent\Astro32.dll
+C:\ASCOM Build\Export\Drivers and Simulators\ASCOMDome\ASCOMDome.exe
+C:\ASCOM Build\Export\Pipe\Pipe.exe
+C:\ASCOM Build\Export\Pipe\Hub.exe
+C:\ASCOM Build\Export\POTH\Source\POTH\POTH.exe
+C:\ASCOM Build\Export\ASCOM.Utilities\VB6Helper\Helper.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\VB6Helper2\Helper2.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\InstallerSupport\RedirectionPolicies\policy.1.0.ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\InstallerSupport\RedirectionPolicies\policy.1.1.ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\InstallerSupport\RedirectionPolicies\policy.5.5.ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+C:\ASCOM Build\Export\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\InstallerSupport\RedirectionPolicies\policy.5.5.ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll
+C:\ASCOM Build\Export\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll
+C:\ASCOM Build\Export\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll
+C:\ASCOM Build\Export\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll
+C:\ASCOM Build\Export\NOVAS\NOVAS-31\NOVAS3\Win32\Release\NOVAS31.dll
+C:\ASCOM Build\Export\NOVAS\NOVAS-31\NOVAS3\x64\Release\NOVAS31-64.dll
+C:\ASCOM Build\Export\InstallerSupport\GACInstall\bin\Release\GACInstall.exe
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Cache.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Com.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Common.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.DeviceInterfaces.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Internal.FusionLib.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Tools.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\ASCOM.Utilities.Video.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.Registry.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\Octokit.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\Semver.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Buffers.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.IO.Pipelines.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Memory.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Numerics.Vectors.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Security.AccessControl.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Security.Principal.Windows.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Text.Encodings.Web.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Text.Json.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\System.Threading.Tasks.Extensions.dll
+C:\ASCOM Build\Export\Diagnostics\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe
+C:\ASCOM Build\Export\Diagnostics\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe
+C:\ASCOM Build\Export\Profile Explorer\bin\x86\Release\ProfileExplorer.exe
+C:\ASCOM Build\Export\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\net481\ASCOM.Simulator.Camera.dll
+C:\ASCOM Build\Export\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.FilterWheelSim.exe
+C:\ASCOM Build\Export\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\x86\Release\ASCOM.Simulator.FilterWheel.dll
+C:\ASCOM Build\Export\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll
+C:\ASCOM Build\Export\Drivers and Simulators\CoverCalibrator Simulator\bin\Release\ASCOM.Simulator.CoverCalibrator.dll
+C:\ASCOM Build\Export\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
+C:\ASCOM Build\Export\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.TelescopeSimulator.exe
+C:\ASCOM Build\Export\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\x86\Release\ASCOM.Simulator.Telescope.dll
+C:\ASCOM Build\Export\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
+C:\ASCOM Build\Export\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll
+C:\ASCOM Build\Export\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll
+C:\ASCOM Build\Export\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
+C:\ASCOM Build\Export\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll
+C:\ASCOM Build\Export\InstallerContent\DirectShowLib\DirectShowLib-2005.dll
+C:\ASCOM Build\Export\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll
+C:\ASCOM Build\Export\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.dll
+C:\ASCOM Build\Export\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe
+C:\ASCOM Build\Export\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll
+C:\ASCOM Build\Export\SOFA\SOFA Library\Win32\Release\SOFA.dll
+C:\ASCOM Build\Export\SOFA\Sofa Test Application\Win32\Release\SofaTestApplication-32.exe
+C:\ASCOM Build\Export\SOFA\SOFA Library\x64\Release\SOFA-64.dll
+C:\ASCOM Build\Export\SOFA\SOFA Test Application\x64\Release\SofaTestApplication-64.exe
+C:\ASCOM Build\Export\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll
+C:\ASCOM Build\Export\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe
+C:\ASCOM Build\Export\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe
+C:\ASCOM Build\Export\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Driver\bin\Release\ASCOM.Simulator.ObservingConditions.dll
+C:\ASCOM Build\Export\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe
+C:\ASCOM Build\Export\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe
+C:\ASCOM Build\Export\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
+C:\ASCOM Build\Export\ASCOM.Astrometry\EarthRotationUpdate\bin\Release\EarthRotationUpdate.exe
+C:\ASCOM Build\Export\Diagnostics\ASCOM Diagnostics\bin\Release\Microsoft.Win32.TaskScheduler.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\ASCOM.AlpacaDynamicClientManager.exe
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\ASCOM.Com.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\ASCOM.Common.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\ASCOM.Tools.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\Microsoft.Bcl.AsyncInterfaces.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\Microsoft.Win32.Registry.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Buffers.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.IO.Pipelines.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Memory.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Numerics.Vectors.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Runtime.CompilerServices.Unsafe.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Security.AccessControl.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Security.Principal.Windows.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Text.Encodings.Web.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Text.Json.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\ASCOM.AlpacaDynamicClientManager\bin\Release\net472\System.Threading.Tasks.Extensions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Alpaca.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Com.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Common.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.DeviceInterfaces.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\ASCOM.Tools.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\DynamicClientServer.exe
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\Microsoft.Bcl.AsyncInterfaces.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\Microsoft.Win32.Registry.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Buffers.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.IO.Pipelines.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Memory.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Numerics.Vectors.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Runtime.CompilerServices.Unsafe.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Security.AccessControl.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Security.Principal.Windows.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Text.Encodings.Web.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Text.Json.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\AlpacaDynamicClients\Dynamic Client Local Server\bin\Release\net472\System.Threading.Tasks.Extensions.dll
+C:\ASCOM Build\Export\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\ASCOM.DeviceHub.exe
+C:\ASCOM Build\Export\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\MvvmMessenger.dll
+C:\ASCOM Build\Export\Drivers and Simulators\ASCOM Device Hub\DeviceHub\bin\Release\PresentationFramework.Aero.dll
+C:\ASCOM Build\Export\ValidatePlatform\bin\Release\ValidatePlatform.exe
+C:\ASCOM Build\Export\ValidatePlatform\bin\x64\Release\ValidatePlatform64.exe
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\PlatformUpdateChecker.exe
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\IndexRange.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\Microsoft.Bcl.HashCode.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\Microsoft.Extensions.Primitives.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\Microsoft.Toolkit.Uwp.Notifications.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\Microsoft.Win32.TaskScheduler.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\Octokit.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\Semver.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+C:\ASCOM Build\Export\PlatformUpdateChecker\bin\Release\System.ValueTuple.dll
+C:\ASCOM Build\Export\Drivers and Simulators\JustAHub\bin\Release\AnyCPU\net48\ASCOM.JustAHub.exe
+C:\ASCOM Build\Export\Drivers and Simulators\JustAHub\bin\Release\AnyCPU\net48\ASCOM.Common.dll
+C:\ASCOM Build\Export\Drivers and Simulators\JustAHub\bin\Release\X64\net48\ASCOM.JustAHub64.exe
+C:\ASCOM Build\Export\Drivers and Simulators\JustAHub\bin\Release\X64\net48\ASCOM.Common.dll
+C:\ASCOM Build\Export\Diagnostics\SetSimulators\bin\Release\SetSimulators.exe
+C:\ASCOM Build\Export\OmniSimulators\publish\x64\ascom.alpaca.simulators.exe
+C:\ASCOM Build\Export\OmniSimulators\publish\x64\aspnetcorev2_inprocess.dll
+C:\ASCOM Build\Export\OmniSimulators\publish\x64\libnovas.dll
+C:\ASCOM Build\Export\OmniSimulators\publish\x64\libsofa.dll
+C:\ASCOM Build\Export\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe
+C:\ASCOM Build\Export\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x64\D3DCompiler_47_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x64\PenImc_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x64\PresentationNative_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x64\RemoteServer.exe
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x64\vcruntime140_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x64\wpfgfx_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\D3DCompiler_47_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\PenImc_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\PresentationNative_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\RemoteServer.exe
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\vcruntime140_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\wpfgfx_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\SetNetworkPermissions\x86\ASCOM.SetNetworkPermissions.exe
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\OmniSimulators\publish\x86\ascom.alpaca.simulators.exe
+C:\ASCOM Build\Export\OmniSimulators\publish\x86\aspnetcorev2_inprocess.dll
+C:\ASCOM Build\Export\OmniSimulators\publish\x86\libnovas.dll
+C:\ASCOM Build\Export\OmniSimulators\publish\x86\libsofa.dll
+C:\ASCOM Build\Export\OmniSimulators\OmniSimCOMProxy\bin\Release\net48\OmniSim.COMProxy.exe
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\D3DCompiler_47_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\PenImc_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\PresentationNative_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\RemoteServer.exe
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\vcruntime140_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\AscomRemote\x86\wpfgfx_cor3.dll
+C:\ASCOM Build\Export\AscomRemote\publish\SetNetworkPermissions\x86\ASCOM.SetNetworkPermissions.exe
+C:\ASCOM Build\Export\ASCOM.Attributes\bin\Release\net481\ASCOM.Attributes.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
+C:\ASCOM Build\Export\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
+C:\ASCOM Build\Export\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll
+C:\ASCOM Build\Export\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
+C:\ASCOM Build\Export\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+C:\ASCOM Build\Export\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll
+C:\ASCOM Build\Export\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Attributes.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\InstallerContent\ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\InstallerContent\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll
+C:\ASCOM Build\Export\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
+C:\ASCOM Build\Export\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\ASCOM.Attributes\bin\Release\net35\ASCOM.Attributes.dll
+C:\ASCOM Build\Export\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
+C:\ASCOM Build\Export\ASCOM.DeviceInterface\bin\Release\net35\ASCOM.DeviceInterfaces.dll
+C:\ASCOM Build\Export\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll
+C:\ASCOM Build\Export\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll
+C:\ASCOM Build\Export\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\ASCOM.Exceptions\bin\Release\net35\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Astrometry.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Attributes.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\InstallerContent\Platform 5.5\ASCOM.Utilities.dll
+C:\ASCOM Build\Export\InstallerContent\ASCOM.DriverAccess.dll
+C:\ASCOM Build\Export\InstallerContent\ASCOM.Exceptions.dll
+C:\ASCOM Build\Export\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe
+C:\ASCOM Build\Export\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll
