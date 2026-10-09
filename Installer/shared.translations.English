@@ -20,8 +20,8 @@ General setup failure
 Runtime error in setup script:
 % complete
 bytes received
-ASCOM Platform Installation Wizard
-ASCOM is preparing the Wizard which will install this application. Please wait.
+InstallAware Wizard
+InstallAware is preparing the InstallAware Wizard which will install this application. Please wait.
 Retry Download?
 Downloading of installation data from the web has failed. Would you like to try again?
  Proxy Information (optional) 
@@ -89,7 +89,7 @@ A previously executed setup still has pending operations on the system. Please r
 Select Setup Language
 Select the language for this installation from the choices below.
 Cannot create folder '{0}'
-ASCOM Platform Installation Wizard
+InstallAware Wizard
 Unable to remove temporary files
 Unable to create file
 Internal error (unknown compression)
@@ -104,11 +104,11 @@ Can not find archive file
 File is not correct archive
 Can not create output folder
 Are you sure you want to cancel?
-ASCOM Platform Installation Wizard
+InstallAware Wizard
 &OK
 &Cancel
 This installation is password protected. Please &enter the password to begin:
-The ASCOM Wizard is verifying the contents of this setup package. This may take a moment...
+The InstallAware Wizard is verifying the contents of this setup package. This may take a moment.
 Unable to play Flash movie
 Will be &installed on local hard drive
 &Entire feature will be installed on local hard drive

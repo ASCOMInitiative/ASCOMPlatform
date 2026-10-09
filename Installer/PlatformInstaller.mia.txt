@@ -495,7 +495,6 @@ Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
 Set Variable INSTALLED_MICROSOFT.NETFRAMEWORK4.8(X86ANDX64) to 
-Include Script: checkmsi31
 Include Script: checknet351
 Include Script: checknet4.8_x86 
  
@@ -704,14 +703,6 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Shut down Omni-Simulators if r
  
 Comment: Prepare to install
 Display Dialog: progress, use as progress dialog (non-modal)
- 
-[END REGION]
- 
-[DEFINE REGION: Install MSI support if required]
- 
-Comment: Install pre-requisites included in this installer
-Include Script: setupmsi31
-Set Variable MYPROGRESS to 3
  
 [END REGION]
  

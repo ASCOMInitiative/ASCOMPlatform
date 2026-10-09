@@ -2800,6 +2800,10 @@ if Variable SUCCESS not Equals ERROR
     Comment: Kill the start menu cache to ensure icons refresh - it will self restart.
     Set Variable PROGRESSTEXT to Refreshing Start menu
     Run Program TaskKill /IM StartMenuExperienceHost.exe /F (WAIT, get result into variable RC)
+    Comment: Accept RC=128 as OK, it means it couldn't find the specified task, which is harmless in this case.
+    if Variable RC Equals 128
+      Set Variable RC to 0
+    end
     Set Variable ACTION to Refresh Start Menu
     Include Script: UpdateAscomError
      
