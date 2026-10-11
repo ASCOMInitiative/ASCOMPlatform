@@ -1,7 +1,7 @@
 # Sign the MSI and LIB file in the top level build folder
-\Release\Single\*.exe
-\Release\Single\*.msi
-\Release\Single\*.lib
+C:\ASCOM Build\Export\Installer\Release\Single\*.exe
+C:\ASCOM Build\Export\Installer\Release\Single\*.msi
+C:\ASCOM Build\Export\Installer\Release\Single\*.lib
 
 # Sign the MSI in the data folder under the top level build folder
-Release\Single\data\*.msi
+C:\ASCOM Build\Export\InstallerRelease\Single\data\*.msi
