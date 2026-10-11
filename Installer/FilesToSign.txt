@@ -1,0 +1,7 @@
+# Sign the MSI and LIB file in the top level build folder
+Release\Single\*.exe
+Release\Single\*.msi
+Release\Single\*.lib
+
+# Sign the MSI in the data folder under the top level build folder
+Release\Single\data\*.msi
