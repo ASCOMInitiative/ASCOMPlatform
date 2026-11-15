@@ -34,6 +34,7 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// The alignment mode of the mount (Alt/Az, Polar, German Polar).
         /// </summary>
+        /// <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
         /// <exception cref="NotConnectedException">If the device is not connected</exception>
         /// <exception cref="DriverException">An error occurred that is not described by one of the more specific ASCOM exceptions. Include sufficient detail in the message text to enable the issue to be accurately diagnosed by someone other than yourself.</exception> 
         /// <remarks>See this link for the canonical definition, which may include further information and implementation requirements: <see href="https://ascom-standards.org/newdocs/telescope.html#Telescope.AlignmentMode">Canonical Definition</see></remarks>
@@ -358,7 +359,7 @@ namespace ASCOM.DeviceInterface
         /// </summary>
         /// <param name="Direction">The direction in which the guide-rate motion is to be made</param>
         /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
-        /// <exception cref="PropertyNotImplementedException">If the method is not implemented and <see cref="CanPulseGuide" /> is False</exception>
+        /// <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPulseGuide" /> is False</exception>
         /// <exception cref="InvalidValueException">If an invalid direction or duration is given.</exception>
         /// <exception cref="InvalidOperationException">If the pulse guide cannot be effected e.g. if the telescope is slewing or is not tracking or a pulse guide is already in progress and a second cannot be started asynchronously.</exception>
         /// <exception cref="NotConnectedException">When <see cref="Connected"/> is False.</exception>
