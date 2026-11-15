@@ -10,7 +10,7 @@ namespace ASCOM.DeviceInterface
     [Guid("19D8AEA3-212D-4BCE-B3F5-AA10808E566E")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class AlignerConfigurationV2 : IAlignerConfigurationV2
+    public class AlignerConfigurationV2 : IAlignerConfigurationV2, IAlignerConfigurationV1
     {
         /// <inheritdoc/>
         public string NewMember { get { return "This is the new member string!"; } }
