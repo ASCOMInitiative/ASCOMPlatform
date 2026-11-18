@@ -307,10 +307,12 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Halts movement on all axes.
         /// </summary>
-        /// <exception cref="MethodNotImplementedException">When <see cref="IAlignerConfigurationV1.CanHalt"/> is false.</exception>
         /// <exception cref="NotConnectedException">When the device is not connected.</exception>
         /// <exception cref="DriverException">When a driver error occurs.</exception>
-        /// <remarks><para>Operates synchronously, returning when all motion has stopped. IsMoving must be False on return. Calling <see cref="Halt"/> while idle does nothing and does not throw.</para></remarks>
+        /// <remarks>
+        /// <para><b style="color:red">Must be implemented</b> Cannot throw a <see cref="MethodNotImplementedException"/>.</para>
+        /// <para>Operates synchronously, returning when all motion has stopped. IsMoving must be False on return. Calling <see cref="Halt"/> while idle does nothing and does not throw.</para>
+        /// </remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IAlignerV1" version="Platform 7.4">Member added.</revision>
         /// </revisionHistory>
@@ -319,15 +321,33 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Starts a relative move of every axis by the given amounts in <see cref="AlignerUnits"/> units.
         /// </summary>
-        /// <param name="X">The amount to move the X axis in <see cref="AlignerUnits"/> units. Use 0.0 if no movement in this direction is desired.</param>
-        /// <param name="Y">The amount to move the Y axis in <see cref="AlignerUnits"/> units. Use 0.0 if no movement in this direction is desired.</param>
-        /// <param name="Z">The amount to move the Z axis in <see cref="AlignerUnits"/> units. Use 0.0 if no movement in this direction is desired.</param>
+        /// <param name="X">The amount to move the X axis in <see cref="AlignerUnits"/> units. Use 0.0 if there is no movement on this axis. See Remarks for purpose specific implementation requirements.</param>
+        /// <param name="Y">The amount to move the Y axis in <see cref="AlignerUnits"/> units. Use 0.0 if there is no movement on this axis. See Remarks for purpose specific implementation requirements.</param>
+        /// <param name="Z">The amount to move the Z axis in <see cref="AlignerUnits"/> units. Use 0.0 if there is no movement on this axis. See Remarks for purpose specific implementation requirements.</param>
         /// <exception cref="InvalidValueException">When any of the requested movements cannot be achieved.</exception>
+        /// <exception cref="InvalidOperationException">When the operation cannot be performed e.g., when the device is already moving or when it is uncalibrated.</exception>
         /// <exception cref="NotConnectedException">When the device is not connected.</exception>
         /// <exception cref="DriverException">When a driver error occurs.</exception>
         /// <remarks>
         /// <para><b style="color:red">Must be implemented</b> Cannot throw a <see cref="MethodNotImplementedException"/>.</para>
         /// <para>Operates asynchronously, setting IsMoving true before returning. On completion IsMoving becomes false. A device that cannot move axes concurrently moves them one after another within the same operation.</para>
+        /// <para>For a device whose <see cref="AlignerPurpose"/> is <see cref="AlignerPurpose.PolarAligner">PolarAligner</see>:
+        /// <list type="bullet">
+        /// <item>X is the aligner's azimuth axis. 
+        /// <list type="bullet">
+        /// <item>Making X more positive turns the mount's polar axis clockwise, seen from above, in both hemispheres. This is the same sense in which Telescope.Azimuth increases.</item>
+        /// <item>Positions are measured from the device's own zero, not from north: the device does not know where north is, and the client, which knows the site, converts its measured error into the move.</item>
+        /// </list> 
+        /// </item>
+        /// <item>Y is the aligner's altitude axis.
+        /// <list type="bullet">
+        /// <item> Making Y more positive raises the mount's polar axis, in both hemispheres.</item>
+        /// <item>Positions are measured from the device's own zero and the client converts its measured error into the move.</item>
+        /// </list> 
+        /// </item>
+        /// <item>The Z axis is not used and a value of 0.0 should be given for this axis.</item>
+        /// </list>
+        /// </para>
         /// </remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IAlignerV1" version="Platform 7.4">Member added.</revision>
@@ -337,18 +357,52 @@ namespace ASCOM.DeviceInterface
         /// <summary>
         /// Starts a move of every axis to the given positions in <see cref="AlignerUnits"/> units.
         /// </summary>
-        /// <param name="X">The amount to move the X axis in <see cref="AlignerUnits"/> units. Use 0.0 if no movement in this direction is desired.</param>
-        /// <param name="Y">The amount to move the Y axis in <see cref="AlignerUnits"/> units. Use 0.0 if no movement in this direction is desired.</param>
-        /// <param name="Z">The amount to move the Z axis in <see cref="AlignerUnits"/> units. Use 0.0 if no movement in this direction is desired.</param>
+        /// <param name="X">The amount to move the X axis in <see cref="AlignerUnits"/> units. Use 0.0 if there is no movement on this axis. See Remarks for purpose specific implementation requirements.</param>
+        /// <param name="Y">The amount to move the Y axis in <see cref="AlignerUnits"/> units. Use 0.0 if there is no movement on this axis. See Remarks for purpose specific implementation requirements.</param>
+        /// <param name="Z">The amount to move the Z axis in <see cref="AlignerUnits"/> units. Use 0.0 if there is no movement on this axis. See Remarks for purpose specific implementation requirements.</param>
         /// <exception cref="MethodNotImplementedException">When <see cref="IAlignerConfigurationV1.CanMoveAbsolute"/> is false.</exception>
         /// <exception cref="InvalidValueException">When any of the requested positions cannot be reached.</exception>
+        /// <exception cref="InvalidOperationException">When the operation cannot be performed e.g., when the device is already moving or when it is uncalibrated.</exception>
         /// <exception cref="NotConnectedException">When the device is not connected.</exception>
         /// <exception cref="DriverException">When a driver error occurs.</exception>
+        /// <remarks>
         /// <para>Operates asynchronously, setting IsMoving true before returning. On completion IsMoving becomes false. A device that cannot move axes concurrently moves them one after another within the same operation.</para>
+        /// <para>For a device whose <see cref="AlignerPurpose"/> is <see cref="AlignerPurpose.PolarAligner">PolarAligner</see>:
+        /// <list type="bullet">
+        /// <item>X is the aligner's azimuth axis. 
+        /// <list type="bullet">
+        /// <item>Making X more positive turns the mount's polar axis clockwise, seen from above, in both hemispheres. This is the same sense in which Telescope.Azimuth increases.</item>
+        /// <item>Positions are measured from the device's own zero, not from north: the device does not know where north is, and the client, which knows the site, converts its measured error into the move.</item>
+        /// </list> 
+        /// </item>
+        /// <item>Y is the aligner's altitude axis.
+        /// <list type="bullet">
+        /// <item> Making Y more positive raises the mount's polar axis, in both hemispheres.</item>
+        /// <item>Positions are measured from the device's own zero and the client converts its measured error into the move.</item>
+        /// </list> 
+        /// </item>
+        /// <item>The Z axis is not used and a value of 0.0 should be given for this axis.</item>
+        /// </list>
+        /// </para>
+        /// </remarks>
         /// <revisionHistory visible="true">
         /// <revision visible="true" date="IAlignerV1" version="Platform 7.4">Member added.</revision>
         /// </revisionHistory>
         void MoveAbsolute(double X, double Y, double Z);
+
+        /// <summary>
+        /// Enable or turn off backlash compensation.
+        /// </summary>
+        /// <param name="state">True to enable compensation, false to turn off compensation.</param>
+        /// <exception cref="MethodNotImplementedException">When <see cref="IAlignerConfigurationV1.CanSetBacklash"/> is false.</exception>
+        /// <exception cref="InvalidOperationException">When the operation cannot be performed e.g., when the device is already moving.</exception>
+        /// <exception cref="NotConnectedException">When the device is not connected.</exception>
+        /// <exception cref="DriverException">When a driver error occurs.</exception>
+        /// <remarks><para>Operates synchronously. IsMoving must be False on return.</para></remarks>
+        /// <revisionHistory visible="true">
+        /// <revision visible="true" date="IAlignerV1" version="Platform 7.4">Member added.</revision>
+        /// </revisionHistory>
+        void SetBacklashCompensation(bool state);
 
         /// <summary>
         /// Sets the device coordinates to the provided values in <see cref="AlignerUnits"/> without moving the device.
@@ -358,6 +412,7 @@ namespace ASCOM.DeviceInterface
         /// <param name="Z">The Z axis value of the current device position in <see cref="AlignerUnits"/> units.</param>
         /// <exception cref="MethodNotImplementedException">When <see cref="IAlignerConfigurationV1.CanSync"/> is false.</exception>
         /// <exception cref="InvalidValueException">When any of the requested coordinates cannot be set.</exception>
+        /// <exception cref="InvalidOperationException">When the operation cannot be performed e.g., when the device is already moving or when it is uncalibrated.</exception>
         /// <exception cref="NotConnectedException">When the device is not connected.</exception>
         /// <exception cref="DriverException">When a driver error occurs.</exception>
         /// <remarks><para>Operates synchronously. IsMoving must be False on return.</para></remarks>
